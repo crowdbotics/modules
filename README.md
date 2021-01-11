@@ -2,5 +2,7 @@
 
 # React Native
 
-[Articles](react-native/articles)
-[Maps](react-native/maps)
+Modules:
+
+- [Articles](react-native/articles)
+- [Maps](react-native/maps)
