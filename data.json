@@ -1,0 +1,71 @@
+{
+  "articles": {
+    "README.md": {
+      "code": "# Article List and Detail\n\n## Requirements\n\nThis module requires `react-native-maps`.\n\n## Setup\n\nOpen '/src/navigator/mainNavigator.js' and add the the stack navigator defined in 'navigator.js'.\n\nOpen 'store/services.js' and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.\n\nAdd the module reducer and saga to your '/src/store/index.js' file:\n\n1. Add the imports\n\n```\nimport articlesReducer from '../features/<module_directory>/store/reducers'\nimport articlesSagas from '../features/<module_directory>/store/sagas'\n```\n\n2. Add the reducer\n\n```\n   combineReducers({\n     apiReducer: apiReducer,\n     customReducer: customReducer,\n+    articlesReducer: articlesReducer\n   }),\n```\n\n3. Add the root saga\n\n```\n   sagaMiddleware.run(rootSaga);\n   sagaMiddleware.run(customRootSaga);\n+  sagaMiddleware.run(articlesSagas);\n```\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "article.js": {
+      "code": "import React from 'react';\nimport { Text, View, ImageBackground } from 'react-native';\nimport { connect } from \"react-redux\";\nimport { styles } from \"./styles\";\n\nfunction Article(props) {\n  return (\n    <View>\n      <ImageBackground source={{ uri: props.article.image }} style={styles.image}>\n        <View style={styles.card}>\n          <Text style={styles.text}>\n            {props.article.title}\n          </Text>\n          <Text style={styles.author}>\n            {props.article.author}\n          </Text>\n        </View>\n      </ImageBackground>\n      <Text style={styles.body}>\n        {props.article.body}\n      </Text>\n    </View>\n  );\n}\n\nconst mapStateToProps = (state, ownProps) => {\n  const id = ownProps.navigation.getParam(\"id\", null);\n\n  return {\n    article: state.articlesReducer.articles.find(record => record.id == id)\n  }\n}\n\nconst mapDispatchToProps = dispatch => ({})\n\nexport default connect(mapStateToProps, mapDispatchToProps)(Article)\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "index.js": {
+      "code": "import React, { Component } from 'react';\nimport {\n  Text,\n  FlatList,\n  View,\n  TouchableOpacity,\n  ImageBackground\n} from 'react-native';\nimport { styles } from \"./styles\";\nimport { connect } from \"react-redux\";\nimport { article_list } from \"./store/actions\";\n\nclass ArticleList extends Component {\n  componentDidMount() {\n    this.props.load();\n  }\n\n  renderItem = ({ item }) => (\n    <TouchableOpacity\n      onPress={() => {\n        this.props.navigation.navigate(this.props.detail, { id: item.id })\n      }}>\n      <ImageBackground source={{ uri: item.image }} style={styles.image}>\n        <View style={styles.card}>\n          <Text style={styles.text}>\n            {item.title}\n          </Text>\n          <Text style={styles.author}>\n            {item.author}\n          </Text>\n        </View>\n      </ImageBackground>\n    </TouchableOpacity>\n  );\n\n  render() {\n    const { articles } = this.props;\n    return (\n      <FlatList\n        data={articles}\n        renderItem={this.renderItem}\n        keyExtractor={item => `${item.id}`}\n      />\n    );\n\n  }\n}\n\nconst mapStateToProps = (state, ownProps) => {\n  const detail = ownProps.navigation.getParam(\"detail\", \"Article\");\n\n  return {\n    detail: detail,\n    articles: state.articlesReducer.articles,\n  }\n}\n\nconst mapDispatchToProps = dispatch => {\n  return {\n    load: () => dispatch(article_list())\n  }\n}\n\nexport default connect(mapStateToProps, mapDispatchToProps)(ArticleList)\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "navigator.js": {
+      "code": "import React from 'react';\nimport { SlideMenuIcon } from '../../navigator/slideMenuIcon';\nimport { createStackNavigator } from \"react-navigation-stack\";\n\nimport Articles from \"./index\";\nimport Article from \"./article\";\n\nexport default ArticlesNavigator = createStackNavigator({\n  Articles: {\n    screen: Articles,\n    navigationOptions: ({ navigation }) => ({\n      title: \"Article List\",\n      headerLeft: <SlideMenuIcon navigationProps={navigation} />,\n    }),\n    params: {\n      detail: \"Article\"\n    }\n  },\n  Article: {\n    screen: Article,\n  },\n});\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "store/actions.js": {
+      "code": "import * as types from \"./constants\"\n\nexport const article_list = () => ({ type: types.ARTICLE_LIST })\nexport const article_listSucceeded = (response, starter) => ({\n  type: types.ARTICLE_LIST_SUCCEEDED,\n  response,\n  starter\n})\nexport const article_listFailed = (response, starter) => ({\n  type: types.ARTICLE_LIST_FAILED,\n  response,\n  starter\n})\nexport const article_read = () => ({ type: types.ARTICLE_READ })\nexport const article_readSucceeded = (response, starter) => ({\n  type: types.ARTICLE_READ_SUCCEEDED,\n  response,\n  starter\n})\nexport const article_readFailed = (response, starter) => ({\n  type: types.ARTICLE_READ_FAILED,\n  response,\n  starter\n})\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "store/constants.js": {
+      "code": "export const ARTICLE_LIST = \"ARTICLE_LIST\"\nexport const ARTICLE_LIST_SUCCEEDED = \"ARTICLE_LIST_SUCCEEDED\"\nexport const ARTICLE_LIST_FAILED = \"ARTICLE_LIST_FAILED\"\nexport const ARTICLE_READ = \"ARTICLE_READ\"\nexport const ARTICLE_READ_SUCCEEDED = \"ARTICLE_READ_SUCCEEDED\"\nexport const ARTICLE_READ_FAILED = \"ARTICLE_READ_FAILED\"\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "store/reducers.js": {
+      "code": "import * as types from \"./constants\"\n\nconst initialState = {\n  api: {\n    isFetching: false,\n  },\n  articles: [],\n}\n\nexport default function reducer(state = initialState, action) {\n  switch (action.type) {\n    case types.ARTICLE_LIST:\n      return Object.assign({}, state, {\n        api: {\n          isFetching: true,\n        },\n      })\n    case types.ARTICLE_LIST_SUCCEEDED:\n      return Object.assign({}, state, {\n        api: {\n          isFetching: false,\n        },\n        articles: [...state.articles, ...action.response]\n      })\n    case types.ARTICLE_LIST_FAILED:\n      return Object.assign({}, state, {\n        api: {\n          isFetching: false,\n          errors: action.response\n        }\n      })\n    case types.ARTICLE_READ:\n      return Object.assign({}, state, {\n        api: {\n          isFetching: true,\n        },\n      })\n    case types.ARTICLE_READ_SUCCEEDED:\n      return Object.assign({}, state, {\n        api: {\n          isFetching: false,\n        },\n        articles: [\n          ...state.articles.filter(record => record.id !== action.response.id),\n          action.response\n        ]\n      })\n    case types.ARTICLE_LIST_FAILED:\n      return Object.assign({}, state, {\n        api: {\n          isFetching: false,\n          errors: action.response\n        }\n      })\n    default:\n      return state\n  }\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "store/sagas.js": {
+      "code": "import { all, call, put, spawn, takeEvery } from \"redux-saga/effects\";\nimport * as types from \"./constants\"\nimport * as actions from \"./actions\"\nimport { article_list, article_read } from \"./services\"\n\nfunction* article_listWorker(action) {\n  try {\n    const result = yield call(article_list, action)\n    yield put(actions.article_listSucceeded(result.data, action))\n  } catch (err) {\n    yield put(actions.article_listFailed(err, action))\n  }\n}\n\nfunction* article_listWatcher() {\n  yield takeEvery(types.ARTICLE_LIST, article_listWorker)\n}\n\nfunction* article_readWorker(action) {\n  try {\n    const result = yield call(article_read, action)\n    yield put(actions.article_readSucceeded(result.data, action))\n  } catch (err) {\n    yield put(actions.article_readFailed(err, action))\n  }\n}\n\nfunction* article_readWatcher() {\n  yield takeEvery(types.ARTICLE_READ, article_readWorker)\n}\n\nexport default function* rootSaga() {\n  const sagas = [\n    article_listWatcher,\n    article_readWatcher\n  ]\n  yield all(\n    sagas.map(saga =>\n      spawn(function*() {\n        while (true) {\n          try {\n            yield call(saga)\n            break\n          } catch (e) {\n            console.log(e)\n          }\n        }\n      })\n    )\n  )\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "store/services.js": {
+      "code": "import axios from \"axios\";\n\nconst articlesAPI = axios.create({\n  baseURL: \"https://app.botics.co/modules/articles\",\n  headers: {\n    Accept: \"application/json\",\n    \"Content-Type\": \"application/json\"\n  }\n});\n\nexport function article_list(action) {\n  return articlesAPI.get(`/article`)\n}\n\nexport function article_read(action) {\n  return articlesAPI.get(`/article/${action.id}/`)\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "styles.js": {
+      "code": "import { StyleSheet } from \"react-native\";\n\nexport const styles = StyleSheet.create({\n  card: {\n    padding: 10,\n  },\n  text: {\n    fontSize: 28,\n    color: '#ffffff',\n  },\n  author: {\n    fontSize: 18,\n    color: '#f2f2f2',\n  },\n  image: {\n    height: 250,\n    width: '100%',\n    justifyContent: 'flex-end',\n    backgroundColor: 'lightslategray',\n  },\n  body: {\n    padding: 10,\n    fontSize: 16\n  }\n});\n",
+      "parentDir": null,
+      "newFile": true
+    }
+  },
+  "maps": {
+    "index.js": {
+      "code": "import React from \"react\";\nimport { View } from \"react-native\";\nimport { styles } from './styles'\nimport MapView, { PROVIDER_GOOGLE } from \"react-native-maps\";\n\nexport default function MapsScreen() {\n  const region = {\n    latitude: 37.78825,\n    longitude: -122.4324,\n    latitudeDelta: 0.0922,\n    longitudeDelta: 0.0421\n  }\n\n  return (\n    <View style={styles.view}>\n      <MapView\n        provider={PROVIDER_GOOGLE}\n        style={styles.map}\n        initialRegion={region}\n      />\n    </View>\n  );\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "navigator.js": {
+      "code": "import React from 'react';\nimport { SlideMenuIcon } from '../../navigator/slideMenuIcon';\nimport { createStackNavigator } from \"react-navigation-stack\";\n\nimport Maps from \"./index\";\n\nexport default MapsNavigator = createStackNavigator({\n  Maps: {\n    screen: Maps,\n    navigationOptions: ({ navigation }) => ({\n      title: \"Maps\",\n      headerLeft: <SlideMenuIcon navigationProps={navigation} />,\n    })\n  }\n});\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "styles.js": {
+      "code": "import { StyleSheet } from 'react-native'\n\nimport { scale, scaleVertical } from '../../utils/scale'\n\nexport const styles = StyleSheet.create({\n  view: {\n    height: \"100%\"\n  },\n  container: {\n    ...StyleSheet.absoluteFillObject,\n    height: 400,\n    width: 400,\n    justifyContent: \"flex-end\",\n    alignItems: \"center\"\n  },\n  map: {\n    ...StyleSheet.absoluteFillObject\n  },\n  searchbar: {\n    backgroundColor: 'white',\n    marginLeft: scale(10),\n    marginRight: scale(10),\n    marginTop: scaleVertical(5),\n    marginBottom: scaleVertical(5),\n    borderRadius: 12,\n    borderColor: '#E5E5E5',\n  },\n});\n",
+      "parentDir": null,
+      "newFile": true
+    }
+  }
+}
