@@ -10,6 +10,11 @@ Run the command to generate the JSON data, ready to be pasted in the Admin:
 npm run parse
 ```
 
+In our `crowdbotics-slack-app` backend we support two flags on each file:
+
+- `parentDir` - default to `src/features/<module_name>` if null, or use it otherwise
+- `newFile` - undocumented/unimplemented?
+
 # Modules Available
 
 ## React Native
