@@ -1,12 +1,21 @@
 # Article List and Detail
 
-## Requirements
-
-This module requires `react-native-maps`.
-
 ## Setup
 
-Open '/src/navigator/mainNavigator.js' and add the the stack navigator defined in 'navigator.js'.
+Open '/src/navigator/mainNavigator.js' and import the stack navigator defined in 'navigator.js'.
+
+```javascript
+import Articles from "../features/<module_directory>/navigator";
+```
+
+And then add it to the navigation:
+
+```javascript
+//@BlueprintImportInsertion
+ Articles: {
+   screen: Articles
+ },
+```
 
 Open 'store/services.js' and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
 
@@ -14,9 +23,9 @@ Add the module reducer and saga to your '/src/store/index.js' file:
 
 1. Add the imports
 
-```
-import articlesReducer from '../features/<module_directory>/store/reducers'
-import articlesSagas from '../features/<module_directory>/store/sagas'
+```javascript
+import articlesReducer from "../features/<module_directory>/store/reducers";
+import articlesSagas from "../features/<module_directory>/store/sagas";
 ```
 
 2. Add the reducer
@@ -32,7 +41,7 @@ import articlesSagas from '../features/<module_directory>/store/sagas'
 3. Add the root saga
 
 ```
-   sagaMiddleware.run(rootSaga);
-   sagaMiddleware.run(customRootSaga);
-+  sagaMiddleware.run(articlesSagas);
+  sagaMiddleware.run(rootSaga);
+  sagaMiddleware.run(customRootSaga);
++ sagaMiddleware.run(articlesSagas);
 ```
