@@ -12,9 +12,9 @@ And then add it to the navigation:
 
 ```javascript
 //@BlueprintImportInsertion
- Articles: {
-   screen: Articles
- },
+Articles: {
+  screen: Articles
+},
 ```
 
 Open 'store/services.js' and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
