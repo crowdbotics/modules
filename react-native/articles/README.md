@@ -2,7 +2,7 @@
 
 ## Setup
 
-Open '/src/navigator/mainNavigator.js' and import the stack navigator defined in 'navigator.js'.
+Open `/src/navigator/mainNavigator.js` and import the stack navigator defined in `navigator.js`.
 
 ```javascript
 import Articles from "../features/<module_directory>/navigator";
@@ -17,9 +17,9 @@ Articles: {
 },
 ```
 
-Open 'store/services.js' and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
+Open `store/services.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
 
-Add the module reducer and saga to your '/src/store/index.js' file:
+Add the module reducer and saga to your `/src/store/index.js` file:
 
 1. Add the imports
 
