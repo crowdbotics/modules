@@ -1,6 +1,7 @@
 # Crowdbotics Modules
 
-This is a monorepo which holds the source code for the various modules we built.
+This is a monorepo which holds the source code for the various modules we built,
+for tracking purposes and to ease the creation of new ones.
 
 # Generate data
 
@@ -19,5 +20,6 @@ In our `crowdbotics-slack-app` backend we support two flags on each file:
 
 ## React Native
 
+- [User Profile](react-native/user-profile)
 - [Articles](react-native/articles)
 - [Maps](react-native/maps)
