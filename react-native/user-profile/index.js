@@ -25,17 +25,18 @@ export class UserDetail extends Component {
       return;
     }
 
-    const id = navigation.getParam('id', 'UserProfile') || auth_user.id;
+    const id = navigation.getParam('id', null) || auth_user.id;
     if (id === auth_user.id) this.setState({ isEdit: true });
     this.props.getUser(id, token);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { loading } = this.state;
-    const { user, api } = this.props;
+    const { api } = this.props;
 
-    if (loading && !api.isLoading && user !== {})
+    if (loading && prevProps.api.isLoading && !api.isLoading) {
       this.setState({ loading: false });
+    }
   }
 
   render() {
@@ -55,14 +56,14 @@ export class UserDetail extends Component {
             <ActivityIndicator color={Color.steel} />
           </View>
         ) : (
-            <View>
-              {isEdit ? (
-                <EditUser {...this.props} />
-              ) : (
-                  <ViewUser {...this.props} />
-                )}
-            </View>
-          )}
+          <View>
+            {isEdit ? (
+              <EditUser {...this.props} />
+            ) : (
+              <ViewUser {...this.props} />
+            )}
+          </View>
+        )}
       </ScrollView>
     );
   }
@@ -70,8 +71,8 @@ export class UserDetail extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const id =
-    ownProps.navigation.getParam('id', 'UserProfile') ||
-    state.authReducer.user.id;
+    ownProps.navigation.getParam('id', null) || state.authReducer.user.id;
+
   return {
     token: state.authReducer.token,
     auth_user: state.authReducer.user,
