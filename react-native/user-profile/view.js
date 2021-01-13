@@ -21,23 +21,34 @@ export default class ViewUser extends Component {
 
   render() {
     const { user } = this.props;
-    const birthday = user.birth_date ? moment(birthday).format('LL') : null;
+    const birthday = user.birth_date
+      ? moment(user.birth_date, 'YYYY-MM-DD').format('LL')
+      : null;
     const initials = getInitials(user);
     return (
       <View>
-        <View style={styles.profileIcon}>
-          <Avatar
-            size="large"
-            rounded
-            icon={{ name: 'user', type: 'font-awesome' }}
-            title={initials}
-            containerStyle={{ backgroundColor: Color.pink }}
-          />
-        </View>
-        <UserInfo label="Name" value={`${user.first_name} ${user.last_name}`} />
-        <UserInfo label="Email" value={user.email} />
-        <UserInfo label="Birthday" value={birthday} />
-        <UserInfo label="Biography" value={user.bio} />
+        {user.id ? (
+          <View>
+            <View style={styles.profileIcon}>
+              <Avatar
+                size="large"
+                rounded
+                icon={{ name: 'user', type: 'font-awesome' }}
+                title={initials}
+                containerStyle={{ backgroundColor: Color.pink }}
+              />
+            </View>
+            <UserInfo
+              label="Name"
+              value={`${user.first_name} ${user.last_name}`}
+            />
+            <UserInfo label="Email" value={user.email} />
+            <UserInfo label="Birthday" value={birthday} />
+            <UserInfo label="Biography" value={user.bio} />
+          </View>
+        ) : (
+          <Text style={styles.label}>No user information available.</Text>
+        )}
       </View>
     );
   }
