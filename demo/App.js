@@ -1,11 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Provider as ReduxProvider} from 'react-redux';
-
-import SplashScreen from './src/features/SplashScreen';
-import {store} from './src/store';
-import NavigatorProvider from './src/navigator/mainNavigator';
-import {setupHttpConfig} from './src/utils/http';
+import { View, Text, StyleSheet } from 'react-native';
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from './src/store';
+import NavigatorProvider, { splash } from './src/navigator/mainNavigator';
+import { setupHttpConfig } from './src/utils/http';
 import * as NavigationService from './src/navigator/NavigationService';
 
 export default class App extends React.Component {
@@ -32,7 +30,7 @@ export default class App extends React.Component {
 
   loadAssets = async () => {
     // add any loading assets here
-    this.setState({isLoaded: true});
+    this.setState({ isLoaded: true });
   };
 
   renderLoading = () => (
@@ -49,7 +47,7 @@ export default class App extends React.Component {
           this.navigator = nav;
         }}>
         <View style={[styles.flex]}>
-          <SplashScreen />
+          <splash />
         </View>
       </NavigatorProvider>
     </ReduxProvider>
@@ -60,5 +58,5 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  flex: {flex: 1},
+  flex: { flex: 1 },
 });
