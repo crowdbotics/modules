@@ -12,7 +12,6 @@ export class UserDetail extends Component {
     super(props);
     this.state = {
       loading: false,
-      isEdit: false,
     };
   }
 
@@ -26,7 +25,6 @@ export class UserDetail extends Component {
     }
 
     const id = navigation.getParam('id', null) || auth_user.id;
-    if (id === auth_user.id) this.setState({ isEdit: true });
     this.props.getUser(id, token);
   }
 
@@ -40,14 +38,14 @@ export class UserDetail extends Component {
   }
 
   render() {
-    const { isEdit, loading } = this.state;
+    const { loading } = this.state;
+    const { isEdit } = this.props;
     return (
       <ScrollView style={styles.container} contentStyle={styles.content}>
         <NavigationEvents
           onDidFocus={() => this.load()}
           onWillFocus={() => this.setState({ loading: true })}
           onDidBlur={() => {
-            this.setState({ isEdit: false });
             this.props.navigation.setParams({ id: null });
           }}
         />
@@ -78,6 +76,7 @@ const mapStateToProps = (state, ownProps) => {
     auth_user: state.authReducer.user,
     api: state.userReducer.api,
     user: state.userReducer.users.find(user => user.id == id) || {},
+    isEdit: id === state.authReducer.user.id
   };
 };
 
