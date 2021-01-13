@@ -26,7 +26,7 @@ const parseModules = dir => {
   })
 }
 
-const parseData = data => {
+const parseData = (data, file) => {
   let map = {};
   Object.keys(data).map(key => {
     let paths = key.split("/");
@@ -43,8 +43,8 @@ const parseData = data => {
       }
     });
   })
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(map, null, 2));
+  fs.writeFileSync(file, JSON.stringify(map, null, 2));
 }
 
-parseModules(MODULES_DIR);
-parseData(data);
+parseModules(REACT_NATIVE_MODULES);
+parseData(data, OUTPUT_FILE);
