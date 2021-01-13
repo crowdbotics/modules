@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-const MODULES_DIR = path.join("react-native");
-const OUTPUT_FILE = "data.json";
+const REACT_NATIVE_MODULES = path.join("react-native");
+const REACT_NATIVE_OUTPUT_FILE = "data.json";
 
 let data = {};
 
@@ -47,4 +47,4 @@ const parseData = (data, file) => {
 }
 
 parseModules(REACT_NATIVE_MODULES);
-parseData(data, OUTPUT_FILE);
+parseData(data, REACT_NATIVE_OUTPUT_FILE);
