@@ -1,22 +1,19 @@
 import React, { Component } from "react";
-import { StyleSheet, Image, Text, ScrollView, TouchableOpacity } from "react-native";
+import { Text, ScrollView, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
-
-import LogoIcon from "../../assets/images/backgroundLoginV1.png";
-import { installed_blueprints } from "../../config/installed_blueprints";
 import { styles } from './styles'
 
 export default class App extends Component {
-
   static navigationOptions = {
     title: 'Installed blueprints',
-
   };
 
   renderItems() {
     const {
       navigation: { navigate },
     } = this.props;
+
+    const installed_blueprints = [];
 
     return installed_blueprints.map(item => {
       if (item.hasOwnProperty('access_route')) {
