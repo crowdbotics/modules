@@ -4,7 +4,13 @@
  *
  * @format
  */
-
+const path = require('path');
+const extraNodeModules = {
+  'modules': path.resolve(__dirname + '/../react-native'),
+};
+const watchFolders = [
+  path.resolve(__dirname + '/../react-native')
+];
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
@@ -14,5 +20,12 @@ module.exports = {
       },
     }),
   },
-  maxWorkers: 2,
+  resolver: {
+    extraNodeModules: new Proxy(extraNodeModules, {
+      get: (target, name) =>
+        //redirects dependencies referenced from react-native/ to local node_modules
+        name in target ? target[name] : path.join(process.cwd(), `node_modules/${name}`),
+    }),
+  },
+  watchFolders,
 };
