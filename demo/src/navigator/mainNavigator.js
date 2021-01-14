@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React from "react";
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
+import { SlideMenuIcon } from './slideMenuIcon';
 
 import splash from "modules/splash";
 
@@ -18,7 +18,11 @@ const AppNavigator = {
 
   /** new navigators can be added here */
   Splash: {
-    screen: splash
+    screen: splash,
+    navigationOptions: ({ navigation }) => ({
+      title: "Installed modules",
+      headerLeft: <SlideMenuIcon navigationProps={navigation} />,
+    })
   }
 };
 
