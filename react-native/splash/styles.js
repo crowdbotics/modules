@@ -1,6 +1,16 @@
 import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
+  empty: {
+    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  emptyText: {
+    fontSize: 22,
+    textAlign: 'center'
+  },
   container: {
     alignItems: "center",
     justifyContent: "space-between",
@@ -30,7 +40,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     padding: 10
   },
-
   logo: {
     width: "100%"
   },
