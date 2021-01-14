@@ -12,7 +12,6 @@ export class UserDetail extends Component {
     super(props);
     this.state = {
       loading: false,
-      isEdit: false,
     };
   }
 
@@ -25,28 +24,28 @@ export class UserDetail extends Component {
       return;
     }
 
-    const id = navigation.getParam('id', 'UserProfile') || auth_user.id;
-    if (id === auth_user.id) this.setState({ isEdit: true });
+    const id = navigation.getParam('id', null) || auth_user.id;
     this.props.getUser(id, token);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const { loading } = this.state;
-    const { user, api } = this.props;
+    const { api } = this.props;
 
-    if (loading && !api.isLoading && user !== {})
+    if (loading && prevProps.api.isLoading && !api.isLoading) {
       this.setState({ loading: false });
+    }
   }
 
   render() {
-    const { isEdit, loading } = this.state;
+    const { loading } = this.state;
+    const { isEdit } = this.props;
     return (
       <ScrollView style={styles.container} contentStyle={styles.content}>
         <NavigationEvents
           onDidFocus={() => this.load()}
           onWillFocus={() => this.setState({ loading: true })}
           onDidBlur={() => {
-            this.setState({ isEdit: false });
             this.props.navigation.setParams({ id: null });
           }}
         />
@@ -55,14 +54,14 @@ export class UserDetail extends Component {
             <ActivityIndicator color={Color.steel} />
           </View>
         ) : (
-            <View>
-              {isEdit ? (
-                <EditUser {...this.props} />
-              ) : (
-                  <ViewUser {...this.props} />
-                )}
-            </View>
-          )}
+          <View>
+            {isEdit ? (
+              <EditUser {...this.props} />
+            ) : (
+              <ViewUser {...this.props} />
+            )}
+          </View>
+        )}
       </ScrollView>
     );
   }
@@ -70,13 +69,14 @@ export class UserDetail extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   const id =
-    ownProps.navigation.getParam('id', 'UserProfile') ||
-    state.authReducer.user.id;
+    ownProps.navigation.getParam('id', null) || state.authReducer.user.id;
+
   return {
     token: state.authReducer.token,
     auth_user: state.authReducer.user,
     api: state.userReducer.api,
     user: state.userReducer.users.find(user => user.id == id) || {},
+    isEdit: id === state.authReducer.user.id
   };
 };
 
