@@ -1,6 +1,5 @@
-import React, {PureComponent} from 'react';
-import {View, Platform, StyleSheet} from 'react-native';
-import {Text, Button} from 'react-native-ui-kitten';
+import React, { PureComponent } from 'react';
+import { Button, View, Platform, StyleSheet } from 'react-native';
 
 export default class Root extends PureComponent {
   static navigationOptions = {
@@ -34,7 +33,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   statusbar: {
-    height: Platform.select({ios: 20, android: 0}),
+    height: Platform.select({ ios: 20, android: 0 }),
   },
   item: {
     borderBottomWidth: 1,
