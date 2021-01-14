@@ -3,13 +3,7 @@ import { View, Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
-export function splash() {
-  return (
-    <View>
-      <Text>Your app starts here</Text>
-    </View>
-  )
-}
+import splash from "modules/splash";
 
 import SideMenu from './sideMenu';
 //@BlueprintImportInsertion
