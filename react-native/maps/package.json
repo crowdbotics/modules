@@ -1,0 +1,14 @@
+{
+  "name": "maps",
+  "version": "1.0.0",
+  "description": "## Setup",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-maps": "^0.27.1"
+  }
+}
