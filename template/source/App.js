@@ -7,27 +7,12 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import Entry from './src/config';
 
 const App: () => React$Node = () => {
   return (
-    <>
-      <Text>
-        Your app
-      </Text>
-    </>
+    <Entry />
   );
 };
-
-const styles = StyleSheet.create({
-  flex: { flex: 1 },
-});
 
 export default App;
