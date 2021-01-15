@@ -1,7 +1,8 @@
 import { configureStore, createReducer } from "@reduxjs/toolkit";
 
 const appState = {
-  name: "ProjectName"
+  name: "ProjectName",
+  version: "1.0.0"
 }
 
 const appReducer = createReducer(appState, _ => {
