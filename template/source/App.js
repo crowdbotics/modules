@@ -19,6 +19,9 @@ import {
 const App: () => React$Node = () => {
   return (
     <>
+      <Text>
+        Your app
+      </Text>
     </>
   );
 };
