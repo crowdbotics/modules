@@ -104,6 +104,6 @@ dist
 .tern-port
 
 # crowdbotics@modules ignores
-.demo/
-.demo.*/
+demo/
+demo.*/
 */node_modules
