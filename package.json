@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "demo": "node scripts/demo.js",
+    "demo:add": "node scripts/demo-add.js",
+    "demo:remove": "node scripts/demo-remove.js",
     "parse": "node scripts/parse.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/crowdbotics/modules/issues"
   },
-  "homepage": "https://github.com/crowdbotics/modules#readme"
+  "homepage": "https://github.com/crowdbotics/modules#readme",
+  "dependencies": {
+    "maps": "file:/home/daniel/code/crowdbotics@modules/demo/src/modules/maps"
+  }
 }
