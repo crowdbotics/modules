@@ -2,13 +2,11 @@
   "name": "@modules/maps",
   "version": "1.0.0",
   "description": "## Setup",
+  "private": true,
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "x-dependencies": {
+    "react-native-maps": "0.27.1"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "react-native-maps": "^0.27.1"
-  }
+  "author": "Crowdbotics",
+  "license": "ISC"
 }
