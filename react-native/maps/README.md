@@ -30,3 +30,38 @@ const region = {
   longitudeDelta: 0.0421,
 };
 ```
+
+# Maps Module
+
+# Android
+
+## Add Google Maps Key Update android/app/src/mainAndroidManifest.xml
+
+```xml
+    <application>
+        <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="Your Google maps API Key Here"/>
+
+        <!-- You will also only need to add this uses-library tag -->
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+    </application>
+```
+
+# iOS
+
+## Build configuration on iOS
+
+```sh
+cd ios
+pod install
+```
+
+## App Store Submission
+
+> The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission.
+
+## Enabling Google Maps on iOS
+
+https://github.com/react-native-maps/react-native-maps/blob/master/docs/installation.md#enabling-google-maps-on-ios-react-native-all-versions
