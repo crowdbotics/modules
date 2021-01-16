@@ -7,7 +7,7 @@
 
 const path = require('path');
 const extraNodeModules = {
-  'modules': path.resolve(__dirname + '/src/modules'),
+  '@modules': path.resolve(__dirname + '/src/modules'),
 };
 const watchFolders = [
   path.resolve(__dirname + '/src/modules')
