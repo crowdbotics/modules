@@ -1,4 +1,4 @@
-import { configureStore, createReducer } from "@reduxjs/toolkit";
+import { configureStore, createReducer, combineReducers } from "@reduxjs/toolkit";
 
 const appState = {
   name: "ProjectName",
@@ -9,9 +9,9 @@ const appReducer = createReducer(appState, _ => {
   return appState;
 })
 
-const reducer = {
+const reducer = combineReducers({
   app: appReducer
-}
+});
 
 const store = configureStore({
   reducer: reducer,
