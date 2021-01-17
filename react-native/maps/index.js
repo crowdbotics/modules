@@ -3,7 +3,7 @@ import { View } from "react-native";
 import { styles } from './styles'
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
-export default function MapsScreen() {
+const Maps = () => {
   const region = {
     latitude: 37.78825,
     longitude: -122.4324,
@@ -20,4 +20,11 @@ export default function MapsScreen() {
       />
     </View>
   );
+}
+
+export default {
+  name: "Maps",
+  screen: Maps,
+  reducer: null,
+  actions: null
 }
