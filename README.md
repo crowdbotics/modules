@@ -16,6 +16,8 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [Metro config](#metro-config)
   - [Using @modules](#using-modules)
   - [Manifest](#manifest)
+- [Custom React Native template](#custom-react-native-template)
+  - [What's included](#whats-included)
 - [Authoring Modules](#authoring-modules)
   - [package.json](#packagejson)
   - [Adding dependencies to your module](#adding-dependencies-to-your-module)
@@ -291,6 +293,14 @@ export class ManifestTransformer {
   }
 }
 ```
+
+# Custom React Native template
+
+**TODO**. Used in `npx react-native init`.
+
+## What's included
+
+[template/source](template/source)
 
 # Authoring Modules
 
