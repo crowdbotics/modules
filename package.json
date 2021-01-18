@@ -22,6 +22,13 @@
   },
   "homepage": "https://github.com/crowdbotics/modules#readme",
   "dependencies": {
-    "maps": "file:/home/daniel/code/crowdbotics@modules/demo/src/modules/maps"
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/generator": "^7.12.11",
+    "@babel/parser": "^7.12.11",
+    "@babel/preset-env": "^7.12.11",
+    "@babel/template": "^7.12.7",
+    "@babel/types": "^7.12.12",
+    "prettier": "^2.2.1"
   }
 }
