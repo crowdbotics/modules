@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { styles } from "./styles";
 import { connect } from "react-redux";
+import reducer from "./store/reducers"
 import { article_list } from "./store/actions";
 
 class ArticleList extends Component {
@@ -61,4 +62,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArticleList)
+export default {
+  name: "Articles",
+  screen: connect(mapStateToProps, mapDispatchToProps)(ArticleList),
+  reducer: reducer,
+  actions: [article_list]
+}
