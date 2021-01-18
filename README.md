@@ -129,8 +129,9 @@ This gives us three main benefits:
 
 Notice the `@modules` key above, which means that we can import `src/modules/index.js` like this:
 
+[template/source/src/config/index.js](template/source/src/config/index.js)
+
 ```javascript
-// [template/source/src/config/index.js](template/source/src/config/index.js)
 import modules from "@modules";
 ```
 
