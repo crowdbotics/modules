@@ -1,7 +1,7 @@
 # Crowdbotics Modules
 
 This is a monorepo which holds the source code for the various modules we built,
-for tracking purposes and to ease the creation of new ones.
+for tracking purposes and to ease the creation of new ones. There's a complete React Native custom template in [template](template). It also includes utilities for modules installation and removal.
 
 # Modules Available
 
