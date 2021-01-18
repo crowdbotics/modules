@@ -143,9 +143,9 @@ We make use of the Metro's Resolver [extraNodeModules](https://facebook.github.i
 
 This gives us three main benefits:
 
-- Modularity - We can author modules as npm packages and include their own dependencies that get installed when installing the module.
-- Developer Experience - Making changes to those files also work with the metro [hot reload](https://facebook.github.io/metro/docs/configuration/#watchfolders).
-- Imports redirects - Because managing `node_modules` on every `src/modules` folder isn't the best user experience, we redirect any import to the main app's `node_modules`. This means that a module can import from its own files or from any library, without issues.
+- **Modularity** - We can author modules as npm packages and include their own dependencies that get installed when installing the module.
+- **Developer Experience** - Making changes to those files also work with the metro [hot reload](https://facebook.github.io/metro/docs/configuration/#watchfolders).
+- **Imports redirects** - Because managing `node_modules` on every `src/modules` folder isn't the best user experience, we redirect any import to the main app's `node_modules`. This means that a module can import from its own files or from any library, without issues.
 
 ## Using @modules
 
