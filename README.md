@@ -14,7 +14,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [Remove a module](#remove-a-module)
 - [Auto loading and setting up modules](#auto-loading-and-setting-up-modules)
 - [Authoring Modules](#authoring-modules)
-  - [package.json](#package.json)
+  - [package.json](#packagejson)
   - [Adding dependencies to your module](#adding-dependencies-to-your-module)
   - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
 
