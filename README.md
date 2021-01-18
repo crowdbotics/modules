@@ -53,20 +53,7 @@ In our `crowdbotics-slack-app` backend we support two flags on each file:
 npm run demo
 ```
 
-This command runs `npx react-native init` with [`--template`](https://github.com/react-native-community/cli/tree/master/packages/global-cli#--template) pointing to our own [custom React Native template](template).
-
-Our template is on the latest React Native version (v0.63):
-
-```json
-  "dependencies": {
-    "@reduxjs/toolkit": "^1.5.0",
-    "react": "16.13.1",
-    "react-native": "0.63.4",
-    "react-native-dotenv": "^2.5.0",
-    "react-redux": "^7.2.2",
-    "redux": "^4.0.5"
-  },
-```
+This command runs `npx react-native init` with [`--template`](https://github.com/react-native-community/cli/tree/master/packages/global-cli#--template) pointing to our own [Custom React Native template](#custom-react-native-template).
 
 ## Install a module
 
@@ -300,7 +287,19 @@ export class ManifestTransformer {
 
 ## What's included
 
-[template/source](template/source)
+Our template is on the latest React Native version (v0.63):
+[template/source/package.json](template/source/package.json)
+
+```json
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.5.0",
+    "react": "16.13.1",
+    "react-native": "0.63.4",
+    "react-native-dotenv": "^2.5.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5"
+  },
+```
 
 # Authoring Modules
 
