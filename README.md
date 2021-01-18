@@ -6,9 +6,17 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 # Table of contents
 
 - [Modules Available](#modules-available)
+  - [React Native](#react-native)
 - [Commands](#commands)
+  - [Generate modules data JSON](#generate-modules-data-json)
+  - [Create a local demo app](#create-a-local-demo-app)
+  - [Install a module](#install-a-module)
+  - [Remove a module](#remove-a-module)
 - [Auto loading and setting up modules](#auto-loading-and-setting-up-modules)
 - [Authoring Modules](#authoring-modules)
+  - [package.json](#package.json)
+  - [Adding dependencies to your module](#adding-dependencies-to-your-module)
+  - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
 
 # Modules Available
 
