@@ -1,6 +1,13 @@
-import fs from "fs";
 import path from "path";
-import { execShellCommand } from "./utils.js";
+import {
+  ManifestTransformer,
+  execShellCommand,
+  read,
+  generate,
+  pretty,
+  write,
+  parse
+} from "./utils.js";
 
 const module = process.argv.slice(2)[0];
 const demoDir = path.join(process.cwd(), "demo");
@@ -14,7 +21,7 @@ execShellCommand(`cp -r ${originModuleDir} ${targetModuleDir}`);
 
 // Install x-dependencies
 const packageJSON = JSON.parse(
-  fs.readFileSync(path.join(originModuleDir, "package.json"))
+  read(path.join(originModuleDir, "package.json"))
 );
 if (packageJSON.hasOwnProperty("x-dependencies")) {
   const deps = packageJSON["x-dependencies"];
@@ -26,3 +33,12 @@ if (packageJSON.hasOwnProperty("x-dependencies")) {
 // Install packages
 packages = packages.join(" ");
 execShellCommand(`cd ${demoDir} && yarn add ${packages}`);
+
+// Update manifest
+const manifest = path.join(targetModuleDir, "manifest.js");
+let code = read(manifest);
+const transformer = new ManifestTransformer({ add: true, module: module });
+let node = parse(code);
+node = transformer.visit(node);
+code = pretty(generate(node));
+write(manifest, code);
