@@ -13,6 +13,9 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [Install a module](#install-a-module)
   - [Remove a module](#remove-a-module)
 - [Auto loading and setting up modules](#auto-loading-and-setting-up-modules)
+  - [Metro config](#metro-config)
+  - [Using @modules](#using-modules)
+  - [Manifest](#manifest)
 - [Authoring Modules](#authoring-modules)
   - [package.json](#packagejson)
   - [Adding dependencies to your module](#adding-dependencies-to-your-module)
@@ -91,6 +94,8 @@ Removes a module from the demo app, performing the follow operations:
 
 # Auto loading and setting up modules
 
+## Metro config
+
 Our modules and template are written in a way that no user setup is required. We also make use of some simple scripts to update a manifest that lists the modules installed and we pick up from that to load them.
 
 This section explains the mechanisms of this setup.
@@ -141,6 +146,8 @@ This gives us three main benefits:
 - Modularity - We can author modules as npm packages and include their own dependencies that get installed when installing the module.
 - Developer Experience - Making changes to those files also work with the metro [hot reload](https://facebook.github.io/metro/docs/configuration/#watchfolders).
 - Imports redirects - Because managing `node_modules` on every `src/modules` folder isn't the best user experience, we redirect any import to the main app's `node_modules`. This means that a module can import from its own files or from any library, without issues.
+
+## Using @modules
 
 Notice the `@modules` key above, which means that we can import `src/modules/index.js` like this:
 
@@ -203,7 +210,9 @@ const store = configureStore({
 export default store;
 ```
 
-And this all dependends on the manifest defined here:
+## Manifest
+
+All of this dependends on the manifest defined here:
 
 [template/source/src/modules/manifest.js](template/source/src/modules/manifest.js)
 
