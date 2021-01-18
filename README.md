@@ -3,6 +3,13 @@
 This is a monorepo which holds the source code for the various modules we built,
 for tracking purposes and to ease the creation of new ones. There's a complete React Native custom template in [template](template). It also includes utilities for modules installation and removal.
 
+# Table of contents
+
+- [Modules Available](#Modules Available)
+- [Commands](#Commands)
+- [Auto loading and setting up modules](#Auto loading and setting up modules)
+- [Authoring Modules](#Authoring Modules)
+
 # Modules Available
 
 ## React Native
