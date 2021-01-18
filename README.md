@@ -5,10 +5,10 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 # Table of contents
 
-- [Modules Available](#Modules Available)
-- [Commands](#Commands)
-- [Auto loading and setting up modules](#Auto loading and setting up modules)
-- [Authoring Modules](#Authoring Modules)
+- [Modules Available](#modules-available)
+- [Commands](#commands)
+- [Auto loading and setting up modules](#auto-loading-and-setting-up-modules)
+- [Authoring Modules](#authoring-modules)
 
 # Modules Available
 
