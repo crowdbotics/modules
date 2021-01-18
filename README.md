@@ -82,9 +82,9 @@ This section explains the mechanisms of this setup.
 
 A good place to start is our `metro.config.js` config:
 
-```javascript
-// template/source/metro/config.js
+[template/source/metro/config.js](template/source/metro/config.js)
 
+```javascript
 /**
  * Metro configuration for React Native
  * https://github.com/facebook/react-native
@@ -137,8 +137,9 @@ import modules from "@modules";
 
 And the default export of that module is just the components themselves:
 
+[template/source/src/modules/index.js](template/source/src/modules/index.js)
+
 ```javascript
-// template/source/src/modules/index.js
 import { modules } from "./manifest.js";
 import { getPropertyMap } from "./utils.js";
 
@@ -155,8 +156,9 @@ export function getPropertyMap(source, prop) {
 
 The `reducers` get imported into our `store.js` setup
 
+[template/source/src/config/store.js](template/source/src/config/store.js)
+
 ```javascript
-// template/source/src/config/store.js
 import {
   configureStore,
   createReducer,
@@ -188,8 +190,9 @@ export default store;
 
 And this all dependends on the manifest defined here:
 
+[template/source/src/modules/manifest.js](template/source/src/modules/manifest.js)
+
 ```javascript
-// template/source/src/modules/manifest.js
 export const modules = [];
 ```
 
@@ -204,8 +207,9 @@ export const modules = [Maps];
 
 We make use of the `babel` and the transformer `ManifestTransformer` to manipulate this file content upon module's installations or removals.
 
+[scripts/utils.js](scripts/utils.js)
+
 ```javascript
-// scripts/utils.js
 export class ManifestTransformer {
   constructor({ add, module }) {
     this.add = add;
@@ -271,6 +275,8 @@ export class ManifestTransformer {
 Your module's `main` key should always point to `index.js`. We also suggest that you name your module with a namespace prefix `@modules` like in the example below.
 
 Your module can include its own dependencies, more on that in the following sections.
+
+[react-native/maps/package.json](react-native/maps/package.json)
 
 ```json
 {
