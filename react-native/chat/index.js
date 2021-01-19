@@ -11,7 +11,6 @@ import {
   InteractionManager,
   StyleSheet
 } from 'react-native';
-import { delay } from 'lodash';
 import { data } from './data';
 import { scale } from './utils.js';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -39,25 +38,22 @@ class _Chat extends React.Component {
     this.state = {
       data: data.getConversation(userId),
     };
+    this.listRef = React.createRef();
   }
 
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.listRef.scrollToEnd();
+      this.listRef.current.scrollToEnd();
     });
   }
-
-  setListRef = (ref) => {
-    this.listRef = ref;
-  };
 
   extractItemKey = (item) => `${item.id}`;
 
   scrollToEnd = () => {
     if (Platform.OS === 'ios') {
-      this.listRef.scrollToEnd();
+      this.listRef.current.scrollToEnd();
     } else {
-      delay(this.listRef.scrollToEnd, 100);
+      setTimeout(() => this.listRef.current.scrollToEnd(), 100);
     }
   };
 
@@ -129,7 +125,7 @@ class _Chat extends React.Component {
         style={styles.container}
         onResponderRelease={Keyboard.dismiss}>
         <FlatList
-          ref={this.setListRef}
+          ref={this.listRef}
           extraData={this.state}
           style={styles.list}
           data={this.state.data.messages}
