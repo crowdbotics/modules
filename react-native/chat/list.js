@@ -3,6 +3,7 @@ import { Text, TextInput, Image, FlatList, View, StyleSheet, TouchableOpacity } 
 import { filter } from 'lodash';
 import { data } from './data';
 import { NavigationType } from './utils.js';
+import { theme } from './index.js';
 
 const moment = require('moment');
 

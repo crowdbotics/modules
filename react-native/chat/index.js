@@ -128,7 +128,6 @@ class _Chat extends React.Component {
       <KeyboardAwareScrollView
         style={styles.container}
         onResponderRelease={Keyboard.dismiss}>
-        <Text>{this.state.data.messages.length}</Text>
         <FlatList
           ref={this.setListRef}
           extraData={this.state}
@@ -160,6 +159,35 @@ class _Chat extends React.Component {
   }
 }
 
+// https://akveo.github.io/react-native-ui-kitten/docs/design-system/design-system-theme#eva-design-system-theme
+export const theme = {
+  // ...
+  "color-danger-100": "#fff2f2",
+  "color-danger-200": "#ffd6d9",
+  "color-danger-300": "#ffa8b4",
+  "color-danger-400": "#ff708d",
+  // ...
+  "color-danger-900": "#700940",
+
+  /* Basic colors - for backgrounds and borders and texts */
+
+  "color-basic-100": "white",
+  "color-basic-200": "#f7f8fa",
+  "color-basic-300": "#edf0f4",
+  "color-basic-400": "#dde1eb",
+  // ...
+  "color-basic-1100": "#131729",
+
+  /* Status colors states - focus, hover, default, active, disabled  */
+
+  "color-primary-focus": "$color-primary-700",
+  "color-primary-hover": "$color-primary-400",
+  "color-primary-default": "$color-primary-500",
+  "color-primary-active": "$color-primary-600",
+  "color-primary-disabled": "$color-primary-300"
+  // ...
+};
+
 const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
@@ -169,7 +197,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    //backgroundColor: theme['color-basic-100'],
+    backgroundColor: theme['color-basic-100'],
   },
   list: {
     paddingHorizontal: 17,
@@ -178,7 +206,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     minHeight: 60,
     padding: 10,
-    //backgroundColor: theme['color-basic-300'],
+    backgroundColor: theme['color-basic-300'],
     alignItems: 'center',
 
   },
@@ -211,25 +239,25 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     marginLeft: 10,
-    //borderColor: theme["color-danger-400"],
-    //backgroundColor: theme["color-danger-400"],
+    borderColor: theme["color-danger-400"],
+    backgroundColor: theme["color-danger-400"],
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 25,
   },
   messageInBackground: {
-    //backgroundColor: theme['color-basic-300']
+    backgroundColor: theme['color-basic-300']
   },
   messageOutBackground: {
-    //backgroundColor: theme['color-basic-500']
+    backgroundColor: theme['color-basic-500']
   },
   text: {
-    //color: theme['color-basic-1000']
+    color: theme['color-basic-1000']
   },
   input: {
-    //backgroundColor: theme['color-basic-100'],
-    //borderColor: theme['color-basic-400'],
+    backgroundColor: theme['color-basic-100'],
+    borderColor: theme['color-basic-400'],
     borderRadius: 25,
     flex: 1,
 
