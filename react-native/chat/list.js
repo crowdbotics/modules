@@ -1,13 +1,12 @@
 import React from 'react';
-import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, TextInput, Image, FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { filter } from 'lodash';
-import { withStyles, Text, Input, Avatar } from 'react-native-ui-kitten';
 import { data } from './data';
 import { NavigationType } from './utils.js';
 
 const moment = require('moment');
 
-export class _ChatList extends React.Component {
+export default class _ChatList extends React.Component {
   static propTypes = {
     navigation: NavigationType.isRequired,
   };
@@ -49,17 +48,17 @@ export class _ChatList extends React.Component {
     this.props.navigation.navigate('Chat', navigationParams);
   };
 
-  renderSeparator = () => <View style={this.props.themedStyle.separator} />;
+  renderSeparator = () => <View style={styles.separator} />;
 
   renderHeader = () => (
-    <View style={this.props.themedStyle.searchContainer}>
-      <Input
+    <View style={styles.searchContainer}>
+      <TextInput
         autoCapitalize="none"
         autoCorrect={false}
         onChangeText={this.onInputChanged}
         placeholder="Search"
-        style={this.props.themedStyle.input}
-        textStyle={this.props.themedStyle.text}
+        style={styles.input}
+        textStyle={styles.text}
       />
     </View>
   );
@@ -68,23 +67,22 @@ export class _ChatList extends React.Component {
     const last = item.messages[item.messages.length - 1];
     return (
       <TouchableOpacity onPress={() => this.onItemPressed(item)}>
-        <View style={this.props.themedStyle.container}>
-          <Avatar
+        <View style={styles.container}>
+          <Image
             source={item.withUser.photo}
-            size="giant"
-            style={this.props.themedStyle.avatar}
+            style={styles.avatar}
           />
-          <View style={this.props.themedStyle.content}>
-            <View style={this.props.themedStyle.contentHeader}>
+          <View style={styles.content}>
+            <View style={styles.contentHeader}>
               <Text
                 category="s1"
                 style={
-                  this.props.themedStyle.text
+                  styles.text
                 }>{`${item.withUser.firstName} ${item.withUser.lastName}`}</Text>
               <Text
                 category="c1"
                 appearance="hint"
-                style={this.props.themedStyle.textTime}>
+                style={styles.textTime}>
                 {moment()
                   .add(last.time, 'seconds')
                   .format('LT')}
@@ -93,7 +91,7 @@ export class _ChatList extends React.Component {
             <Text
               numberOfLines={2}
               category="p2"
-              style={[{ paddingTop: 5 }, this.props.themedStyle.text]}>
+              style={[{ paddingTop: 5 }, styles.text]}>
               {last.text}
             </Text>
           </View>
@@ -105,7 +103,7 @@ export class _ChatList extends React.Component {
   render = () => {
     return (
       <FlatList
-        style={this.props.themedStyle.root}
+        style={styles.root}
         data={this.state.data.filtered}
         extraData={this.state}
         ListHeaderComponent={this.renderHeader}
@@ -117,7 +115,7 @@ export class _ChatList extends React.Component {
   };
 }
 
-export default ChatList = withStyles(_ChatList, theme => ({
+const styles = StyleSheet.create({
   root: {
     backgroundColor: theme['color-basic-100'],
   },
@@ -161,4 +159,4 @@ export default ChatList = withStyles(_ChatList, theme => ({
     borderColor: theme['color-basic-400'],
     borderRadius: 25
   },
-}));
+});
