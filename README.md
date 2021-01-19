@@ -31,6 +31,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 - [Articles](react-native/articles): `articles`
 - [Maps](react-native/maps): `maps`
 - [Chat](react-native/chat): `chat`
+  ![Chat preview](preview/chat.png)
 
 # Commands
 
