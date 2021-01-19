@@ -35,9 +35,9 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ### [Chat](react-native/chat): `chat`
 
-| Typing                            | Message list                         | Pubnub                            |
-| --------------------------------- | ------------------------------------ | --------------------------------- |
-| ![Chat preview](preview/chat.png) | ![Chat preview 2](preview/chat2.png) | ![Chat pubnub](preview/chat3.png) |
+| Typing                            | Message list                         | Pubnub version                       | Chats List                           |
+| --------------------------------- | ------------------------------------ | ------------------------------------ | ------------------------------------ |
+| ![chat preview](preview/chat.png) | ![chat preview 2](preview/chat2.png) | ![chat preview 3](preview/chat3.png) | ![chat preview 4](preview/chat4.png) |
 
 # Commands
 
