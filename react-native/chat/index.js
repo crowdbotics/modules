@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Button, View, Platform, StyleSheet } from 'react-native';
 
-export default class Root extends PureComponent {
+class Root extends PureComponent {
   static navigationOptions = {
     title: 'Messenger'.toUpperCase(),
     headerBackTitle: null,
@@ -41,3 +41,10 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
   },
 });
+
+export default {
+  name: "Chat",
+  screen: Root,
+  reducer: null,
+  actions: null
+}

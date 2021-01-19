@@ -1,0 +1,20 @@
+{
+  "name": "@modules/chat",
+  "version": "1.0.0",
+  "description": "## Setup",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {},
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "prop-types": "^15.7.2",
+    "pubnub-react": "^2.1.0",
+    "react-native-gifted-chat": "^0.16.3",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
+    "react-native-ui-kitten": "^4.4.1",
+    "uuid": "^8.3.2"
+  }
+}

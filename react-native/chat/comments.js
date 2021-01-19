@@ -10,8 +10,8 @@ import {
   Text,
   Avatar
 } from 'react-native-ui-kitten';
-import { data } from '../../../data';
-import NavigationType from '../../../config/navigation/propTypes';
+import { data } from './data';
+import NavigationType from './utils.js';
 
 const moment = require('moment');
 
@@ -21,7 +21,7 @@ export class _Comments extends React.Component {
   };
   static navigationOptions = {
     title: 'Comments'.toUpperCase(),
-    
+
   };
 
   constructor(props) {
@@ -42,36 +42,38 @@ export class _Comments extends React.Component {
 
   renderItem = ({ item }) => {
     const user = data.getUser(item.userId)
-    return(
-    <View style={this.props.themedStyle.container}>
-      <TouchableOpacity >
-        <Avatar source={user.photo} size='giant' style={this.props.themedStyle.avatar}/>
-      </TouchableOpacity>
-      <View style={this.props.themedStyle.content}>
-        <View style={this.props.themedStyle.contentHeader}>
-          <Text category='s1' style={this.props.themedStyle.text}>{`${user.firstName} ${user.lastName}`}</Text>
-          <Text category='c1' appearance='hint' style={this.props.themedStyle.textTime}>
-            {moment().add(item.time, 'seconds').format('LT')}
-          </Text>
+    return (
+      <View style={this.props.themedStyle.container}>
+        <TouchableOpacity >
+          <Avatar source={user.photo} size='giant' style={this.props.themedStyle.avatar} />
+        </TouchableOpacity>
+        <View style={this.props.themedStyle.content}>
+          <View style={this.props.themedStyle.contentHeader}>
+            <Text category='s1' style={this.props.themedStyle.text}>{`${user.firstName} ${user.lastName}`}</Text>
+            <Text category='c1' appearance='hint' style={this.props.themedStyle.textTime}>
+              {moment().add(item.time, 'seconds').format('LT')}
+            </Text>
+          </View>
+          <Text category='p2' style={this.props.themedStyle.text}>{item.text}</Text>
         </View>
-        <Text category='p2'  style={this.props.themedStyle.text}>{item.text}</Text>
       </View>
-    </View>
-  )};
+    )
+  };
 
   render = () => {
-   
+
 
     return (
-    <FlatList
-      style={this.props.themedStyle.root}
-      data={this.state.data}
-      extraData={this.state}
-      ItemSeparatorComponent={this.renderSeparator}
-      keyExtractor={this.extractItemKey}
-      renderItem={this.renderItem}
-    />
-  )};
+      <FlatList
+        style={this.props.themedStyle.root}
+        data={this.state.data}
+        extraData={this.state}
+        ItemSeparatorComponent={this.renderSeparator}
+        keyExtractor={this.extractItemKey}
+        renderItem={this.renderItem}
+      />
+    )
+  };
 }
 
 export default Comments = withStyles(_Comments, theme => ({
