@@ -1,9 +1,9 @@
 import React from 'react';
-import {FlatList, View, StyleSheet, TouchableOpacity} from 'react-native';
-import {filter} from 'lodash';
-import {withStyles, Text, Input, Avatar} from 'react-native-ui-kitten';
-import {data} from '../../../data';
-import NavigationType from '../../../config/navigation/propTypes';
+import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { filter } from 'lodash';
+import { withStyles, Text, Input, Avatar } from 'react-native-ui-kitten';
+import { data } from './data';
+import { NavigationType } from './utils.js';
 
 const moment = require('moment');
 
@@ -45,7 +45,7 @@ export class _ChatList extends React.Component {
   };
 
   onItemPressed = item => {
-    const navigationParams = {userId: item.withUser.id};
+    const navigationParams = { userId: item.withUser.id };
     this.props.navigation.navigate('Chat', navigationParams);
   };
 
@@ -64,7 +64,7 @@ export class _ChatList extends React.Component {
     </View>
   );
 
-  renderItem = ({item}) => {
+  renderItem = ({ item }) => {
     const last = item.messages[item.messages.length - 1];
     return (
       <TouchableOpacity onPress={() => this.onItemPressed(item)}>
@@ -93,7 +93,7 @@ export class _ChatList extends React.Component {
             <Text
               numberOfLines={2}
               category="p2"
-              style={[{paddingTop: 5}, this.props.themedStyle.text]}>
+              style={[{ paddingTop: 5 }, this.props.themedStyle.text]}>
               {last.text}
             </Text>
           </View>

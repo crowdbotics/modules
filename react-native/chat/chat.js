@@ -9,19 +9,16 @@ import {
   InteractionManager,
 } from 'react-native';
 import {
-  Button,
   Text,
   Input,
   Avatar,
   withStyles,
 } from 'react-native-ui-kitten';
 import { delay } from 'lodash';
-import { FontAwesome } from '../../../assets/icons';
-import { data } from '../../../data';
-import { scale } from '../../../utils/scale';
-import NavigationType from '../../../config/navigation/propTypes';
+import { data } from './data';
+import { scale } from './utils.js';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-// import Icon from "react-native-vector-icons/FontAwesome5";
+import { NavigationType } from './utils.js';
 
 const moment = require('moment');
 
@@ -35,7 +32,7 @@ export class _Chat extends React.Component {
     return ({
       headerTitle: _Chat.renderNavigationTitle(navigation, user),
       headerRight: _Chat.renderNavigationAvatar(navigation, user),
-      
+
     });
   };
 
@@ -92,16 +89,16 @@ export class _Chat extends React.Component {
 
   static renderNavigationTitle = (navigation, user) => (
     <TouchableOpacity onPress={() => _Chat.onNavigationTitlePressed(navigation, user)}>
-      <View style={{alignItems: 'center'}}>
-        <Text category='s1' style={{color: 'black'}}>{`${user.firstName} ${user.lastName}`}</Text>
-        <Text category='c1' style={{color: 'grey'}}>Online</Text>
+      <View style={{ alignItems: 'center' }}>
+        <Text category='s1' style={{ color: 'black' }}>{`${user.firstName} ${user.lastName}`}</Text>
+        <Text category='c1' style={{ color: 'grey' }}>Online</Text>
       </View>
     </TouchableOpacity>
   );
 
   static renderNavigationAvatar = (navigation, user) => (
     <TouchableOpacity onPress={() => _Chat.onNavigationAvatarPressed(navigation, user)}>
-      <Avatar source={user.photo} size='small' style={{marginRight: 16}}/>
+      <Avatar source={user.photo} size='small' style={{ marginRight: 16 }} />
     </TouchableOpacity>
   );
 
@@ -130,38 +127,39 @@ export class _Chat extends React.Component {
   };
 
   render = () => {
-    return(
-    <KeyboardAwareScrollView
-      style={this.props.themedStyle.container}
-      onResponderRelease={Keyboard.dismiss}>
-      <FlatList
-        ref={this.setListRef}
-        extraData={this.state}
-        style={this.props.themedStyle.list}
-        data={this.state.data.messages}
-        keyExtractor={this.extractItemKey}
-        renderItem={this.renderItem}
-      />
-      <View style={this.props.themedStyle.footer}>
-        <TouchableOpacity style={this.props.themedStyle.plus}>
-        <Text category='h1' status='success'>+</Text>
-        </TouchableOpacity>
-        <Input
-          onFocus={this.scrollToEnd}
-          onBlur={this.scrollToEnd}
-          onChangeText={this.onInputChanged}
-          value={this.state.message}
-          placeholder="Type a text..."
-          style={this.props.themedStyle.input}
-          textStyle={this.props.themedStyle.text}
+    return (
+      <KeyboardAwareScrollView
+        style={this.props.themedStyle.container}
+        onResponderRelease={Keyboard.dismiss}>
+        <FlatList
+          ref={this.setListRef}
+          extraData={this.state}
+          style={this.props.themedStyle.list}
+          data={this.state.data.messages}
+          keyExtractor={this.extractItemKey}
+          renderItem={this.renderItem}
         />
-        <TouchableOpacity onPress={this.onSendButtonPressed} style={this.props.themedStyle.send} >
-          <Image source={require('../../../assets/icons/sendIcon.png')} />
-        </TouchableOpacity>
-      </View>
-    </KeyboardAwareScrollView>
+        <View style={this.props.themedStyle.footer}>
+          <TouchableOpacity style={this.props.themedStyle.plus}>
+            <Text category='h1' status='success'>+</Text>
+          </TouchableOpacity>
+          <Input
+            onFocus={this.scrollToEnd}
+            onBlur={this.scrollToEnd}
+            onChangeText={this.onInputChanged}
+            value={this.state.message}
+            placeholder="Type a text..."
+            style={this.props.themedStyle.input}
+            textStyle={this.props.themedStyle.text}
+          />
+          <TouchableOpacity onPress={this.onSendButtonPressed} style={this.props.themedStyle.send} >
+            <Image source={require('../../../assets/icons/sendIcon.png')} />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAwareScrollView>
 
-  )}
+    )
+  }
 }
 
 export default Chat = withStyles(_Chat, theme => ({
