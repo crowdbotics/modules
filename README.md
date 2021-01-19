@@ -27,11 +27,17 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ## React Native
 
-- [User Profile](react-native/user-profile): `user-profile`
-- [Articles](react-native/articles): `articles`
-- [Maps](react-native/maps): `maps`
-- [Chat](react-native/chat): `chat`
-  ![Chat preview](preview/chat.png) ![Chat preview 2](preview/chat2.png)
+### [User Profile](react-native/user-profile): `user-profile`
+
+### [Articles](react-native/articles): `articles`
+
+### [Maps](react-native/maps): `maps`
+
+### [Chat](react-native/chat): `chat`
+
+| Typing                            | Message list                         |
+| --------------------------------- | ------------------------------------ |
+| ![Chat preview](preview/chat.png) | ![Chat preview 2](preview/chat2.png) |
 
 # Commands
 
