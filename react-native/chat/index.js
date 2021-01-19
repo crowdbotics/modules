@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button, View, Platform, StyleSheet } from 'react-native';
+import Chat from "./ChatScreen";
 
 class Root extends PureComponent {
   static navigationOptions = {
@@ -10,17 +11,7 @@ class Root extends PureComponent {
   render() {
     return (
       <View style={styles.container}>
-        <Button
-          onPress={() => this.props.navigation.navigate('ChatScreen')}
-          style={styles.item}>
-          Chat Screen
-        </Button>
-
-        <Button
-          onPress={() => this.props.navigation.navigate('SplashScreen')}
-          style={styles.item}>
-          Main Menu
-        </Button>
+        <Chat />
       </View>
     );
   }
