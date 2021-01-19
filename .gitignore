@@ -106,5 +106,3 @@ dist
 # crowdbotics@modules ignores
 demo/
 demo.*/
-*/node_modules
-*/yarn.lock
