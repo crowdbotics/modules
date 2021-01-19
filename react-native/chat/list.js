@@ -120,6 +120,11 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: theme['color-basic-100'],
   },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50
+  },
   searchContainer: {
     backgroundColor: theme['color-basic-300'],
     // paddingHorizontal: 16,
@@ -158,6 +163,8 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: theme['color-basic-100'],
     borderColor: theme['color-basic-400'],
-    borderRadius: 25
+    borderRadius: 25,
+    padding: 15,
+    width: "100 %"
   },
 });
