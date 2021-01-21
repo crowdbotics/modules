@@ -67,6 +67,11 @@ In our `crowdbotics-slack-app` backend we support two flags on each file:
 - `parentDir` - default to `src/features/<module_name>` if null, or use it otherwise
 - `newFile` - undocumented/unimplemented?
 
+The JSON is respectivelly saved in:
+
+- [django.json](django.json)
+- [react-native.json](react-native.json)
+
 ## Create a local demo app
 
 ```sh
