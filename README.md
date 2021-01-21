@@ -6,6 +6,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 # Table of contents
 
 - [Modules Available](#modules-available)
+  - [Django](#django)
   - [React Native](#react-native)
 - [Commands](#commands)
   - [Generate modules data JSON](#generate-modules-data-json)
