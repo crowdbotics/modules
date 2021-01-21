@@ -25,6 +25,10 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 # Modules Available
 
+## Django
+
+### [Articles](django/articles): `articles`
+
 ## React Native
 
 ### [Articles](react-native/articles): `articles`
