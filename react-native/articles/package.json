@@ -1,0 +1,9 @@
+{
+  "name": "@modules/articles",
+  "version": "1.0.0",
+  "description": "## Setup",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "license": "ISC"
+}
