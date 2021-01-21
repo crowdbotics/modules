@@ -3,6 +3,7 @@ import path from "path";
 
 const REACT_NATIVE_MODULES = path.join("react-native");
 const REACT_NATIVE_OUTPUT_FILE = "data.json";
+const ACCEPTED_EXTENSIONS = [".json", ".js", ".ts", ".jsx", ".tsx", ".md"];
 
 let data = {};
 
@@ -14,7 +15,9 @@ const parseDir = dir => {
     if (stats.isDirectory()) {
       parseDir(entryPath);
     } else {
-      data[entryPath] = fs.readFileSync(entryPath, "utf8");
+      if (ACCEPTED_EXTENSIONS.includes(path.extname(entryPath))) {
+        data[entryPath] = fs.readFileSync(entryPath, "utf8");
+      }
     }
   });
 }
