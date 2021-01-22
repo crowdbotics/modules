@@ -149,6 +149,35 @@ Removes a module from the demo app, performing the follow operations:
 
 # Auto loading and setting up modules
 
+## Welcome component
+
+Our template includes a placeholder splash screen that automatically lists installed modules links.
+
+![Modules preview](preview/modules.png)
+
+```javascript
+function Welcome({ navigation }) {
+  const links = modules.map((module) => {
+    return (
+      <View style={styles.button}>
+        <Button
+          key={module.screen}
+          title={module.name}
+          onPress={() => navigation.navigate(module.name)}
+        />
+      </View>
+    );
+  });
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Total modules installed: {modules.length}</Text>
+      <Text style={styles.text}>Screens available:</Text>
+      {links}
+    </View>
+  );
+}
+```
+
 ## Metro config
 
 Our modules and template are written in a way that no user setup is required. We also make use of some simple scripts to update a manifest that lists the modules installed and we pick up from that to load them.
