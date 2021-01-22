@@ -34,9 +34,9 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ### [Articles](react-native/articles): `articles`
 
-| Article list                            | Article detail                            |
-| --------------------------------------- | ----------------------------------------- |
-| ![Article preview](preview/article.png) | ![Article preview 2](preview/article.png) |
+| Article list                             | Article detail                             |
+| ---------------------------------------- | ------------------------------------------ |
+| ![Article preview](preview/articles.png) | ![Article preview 2](preview/articles.png) |
 
 ### [Chat](react-native/chat): `chat`
 
