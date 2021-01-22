@@ -1,7 +1,7 @@
 {
   "name": "@modules/terms-and-conditions",
   "version": "1.0.0",
-  "description": "## Setup",
+  "description": "Terms and Conditions Screen",
   "private": true,
   "main": "index.js",
   "x-dependencies": {
