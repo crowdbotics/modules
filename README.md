@@ -8,6 +8,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 - [Modules Available](#modules-available)
   - [Django](#django)
   - [React Native](#react-native)
+  - [Previews](#previews)
 - [Commands](#commands)
   - [Generate modules data JSON](#generate-modules-data-json)
   - [Create a local demo app](#create-a-local-demo-app)
@@ -26,11 +27,11 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 # Modules Available
 
-**Django**
+## Django
 
 - [Articles](django/articles): `articles`
 
-**React Native**
+## React Native
 
 - [Articles](react-native/articles): `articles`
 - [Chat](react-native/chat): `chat`
