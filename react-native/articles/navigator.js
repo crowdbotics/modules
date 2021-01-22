@@ -7,7 +7,7 @@ import Article from "./article";
 
 export default ArticlesNavigator = createStackNavigator({
   Articles: {
-    screen: Articles,
+    screen: Articles.screen,
     navigationOptions: ({ navigation }) => ({
       title: "Article List",
       headerLeft: <SlideMenuIcon navigationProps={navigation} />,
