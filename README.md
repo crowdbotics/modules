@@ -43,17 +43,17 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ## Previews
 
-| ![Articles](preview/articles.png) | ![Article](preview/article.png) | ![Chat list](preview/chat4.png) | ![Typing view](preview/chat.png) |
-| --------------------------------- | ------------------------------- | ------------------------------- | -------------------------------- |
 | Article list                      | Article detail                  | Chat list                       | Typing view                      |
+| --------------------------------- | ------------------------------- | ------------------------------- | -------------------------------- |
+| ![Articles](preview/articles.png) | ![Article](preview/article.png) | ![Chat list](preview/chat4.png) | ![Typing view](preview/chat.png) |
 
-| ![Login screen](preview/login.png) | ![Maps](preview/maps.png) | ![Maps 2](preview/maps2.png) | ![Pubnub integration](preview/chat3.png) | ![User Profile](preview/user-profile.png) |
-| ---------------------------------- | ------------------------- | ---------------------------- | ---------------------------------------- | ----------------------------------------- |
 | Login screen                       | Maps                      | Maps                         | Pubnub integration                       | User Profile                              |
+| ---------------------------------- | ------------------------- | ---------------------------- | ---------------------------------------- | ----------------------------------------- |
+| ![Login screen](preview/login.png) | ![Maps](preview/maps.png) | ![Maps 2](preview/maps2.png) | ![Pubnub integration](preview/chat3.png) | ![User Profile](preview/user-profile.png) |
 
-| ![Onboarding](preview/onboarding.png) | ![Maps](preview/splash.png) | ![Terms and Conditions](preview/terms.png) | ![Message List](preview/chat2.png) | ![User Profile 2](preview/user-profile2.png) |
-| ------------------------------------- | --------------------------- | ------------------------------------------ | ---------------------------------- | -------------------------------------------- |
 | Onboarding                            | Splash                      | Terms and Conditions                       | Message list                       | User Profile 2                               |
+| ------------------------------------- | --------------------------- | ------------------------------------------ | ---------------------------------- | -------------------------------------------- |
+| ![Onboarding](preview/onboarding.png) | ![Maps](preview/splash.png) | ![Terms and Conditions](preview/terms.png) | ![Message List](preview/chat2.png) | ![User Profile 2](preview/user-profile2.png) |
 
 # Commands
 
