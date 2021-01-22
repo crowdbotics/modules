@@ -26,35 +26,42 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 # Modules Available
 
-## Django
+**Django**
 
-### [Articles](django/articles): `articles`
+- [Articles](django/articles): `articles`
 
-## React Native
+**React Native**
 
-### [Articles](react-native/articles): `articles`
+- [Articles](react-native/articles): `articles`
+- [Chat](react-native/chat): `chat`
+- [Login](react-native/login): `login`
+- [Maps](react-native/maps): `maps`
+- [Onboarding](react-native/onboarding): `onboarding`
+- [Splash](react-native/splash): `splash`
+- [Terms and Conditions](react-native/terms-and-conditions): `terms-and-conditions`
+- [User Profile](react-native/user-profile): `user-profile`
 
-| Article list                             | Article detail                             |
-| ---------------------------------------- | ------------------------------------------ |
-| ![Article preview](preview/articles.png) | ![Article preview 2](preview/articles.png) |
+## Previews
 
-### [Chat](react-native/chat): `chat`
+| ![Articles](preview/articles.png) | ![Article](preview/article.png) | ![Chat list](preview/chat4.png) |
+| --------------------------------- | ------------------------------- | ------------------------------- |
+| Article list                      | Article detail                  | Chat list                       |
 
-| Typing                            | Message list                         | Pubnub version                       | Chats List                           |
-| --------------------------------- | ------------------------------------ | ------------------------------------ | ------------------------------------ |
-| ![chat preview](preview/chat.png) | ![chat preview 2](preview/chat2.png) | ![chat preview 3](preview/chat3.png) | ![chat preview 4](preview/chat4.png) |
+| ![Typing view](preview/chat.png) | ![Message List](preview/chat2.png) | ![Pubnub integration](preview/chat3.png) |
+| -------------------------------- | ---------------------------------- | ---------------------------------------- |
+| Typing view                      | Message list                       | Pubnub integration                       |
 
-### [Login](react-native/login): `login`
+| ![Login screen](preview/login.png) | ![Maps](preview/maps.png) | ![Maps 2](preview/maps2.png) |
+| ---------------------------------- | ------------------------- | ---------------------------- |
+| Login screen                       | Maps                      | Maps                         |
 
-### [Maps](react-native/maps): `maps`
+| ![Onboarding](preview/onboarding.png) | ![Maps](preview/splash.png) | ![Terms and Conditions](preview/terms.png) |
+| ------------------------------------- | --------------------------- | ------------------------------------------ |
+| Onboarding                            | Splash                      | Terms and Conditions                       |
 
-### [Onboarding](react-native/onboarding): `onboarding`
-
-### [Splash](react-native/splash): `splash`
-
-### [Terms and Conditions](react-native/terms-and-conditions): `terms-and-conditions`
-
-### [User Profile](react-native/user-profile): `user-profile`
+| ![User Profile](preview/user-profile.png) | ![User Profile 2](preview/user-profile2.png) |     |
+| ----------------------------------------- | -------------------------------------------- | --- |
+| User Profile                              | User Profile 2                               |     |
 
 # Commands
 
