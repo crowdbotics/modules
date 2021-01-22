@@ -11,7 +11,7 @@ yarn add react-native-maps
 Open `/src/navigator/mainNavigator.js` and import the stack navigator defined in `navigator.js`.
 
 ```javascript
-import Maps from "../features/<module_directory>";
+import Maps from "../features/<module_directory>/navigator.js";
 ```
 
 And then add it to the navigation:
@@ -19,7 +19,7 @@ And then add it to the navigation:
 ```javascript
 //@BlueprintImportInsertion
 Maps: {
-  screen: Maps.screen
+  screen: Maps
 },
 ```
 
