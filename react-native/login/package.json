@@ -4,7 +4,7 @@
   "description": "A simple login and signup screen with email and password.",
   "private": true,
   "main": "index.js",
-  "x-dependencies": {},
+  "x-dependencies": {"react-native-keyboard-aware-scroll-view": "0.9.1", "native-base": "^2.13.15"},
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {}
