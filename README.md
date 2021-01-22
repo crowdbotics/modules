@@ -34,6 +34,10 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ### [Articles](react-native/articles): `articles`
 
+| Article list                            | Article detail                            |
+| --------------------------------------- | ----------------------------------------- |
+| ![Article preview](preview/article.png) | ![Article preview 2](preview/article.png) |
+
 ### [Chat](react-native/chat): `chat`
 
 | Typing                            | Message list                         | Pubnub version                       | Chats List                           |
@@ -67,10 +71,38 @@ In our `crowdbotics-slack-app` backend we support two flags on each file:
 - `parentDir` - default to `src/features/<module_name>` if null, or use it otherwise
 - `newFile` - undocumented/unimplemented?
 
-The JSON is respectivelly saved in:
+### Create records in the admin panel
+
+- [Staging Admin](https://crowdbotics-slack-dev.herokuapp.com/admin)
+- [Production Admin](https://app.crowdbotics.com/admin)
+
+### Use the following Component field values
+
+**App Types:**
+
+```text
+3
+```
+
+Check **Auto build** and **Is screen**.
+
+**Options:**
+
+```json
+{ "x": 0, "y": 0, "domTree": "" }
+```
+
+**Code:**
+Copy from:
 
 - [django.json](django.json)
 - [react-native.json](react-native.json)
+
+**Setup step:**
+
+```text
+To properly configure this module, follow the instructions given in README.md inside the module folder.
+```
 
 ## Create a local demo app
 
