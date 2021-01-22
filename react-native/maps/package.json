@@ -1,7 +1,7 @@
 {
   "name": "@modules/maps",
   "version": "1.0.0",
-  "description": "## Setup",
+  "description": "Add interactive maps to your mobile app to make it easier for users to find your locations.",
   "private": true,
   "main": "index.js",
   "x-dependencies": {
