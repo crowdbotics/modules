@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
   View,
   ImageBackground,
@@ -10,41 +10,42 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
-} from 'react-native';
+} from "react-native";
 import {
   HOME_SCREEN_NAME,
   BACKGROUND_URL,
   emailValidationRegex,
   LOGO_URL,
-} from './constants.js';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Tab, Tabs} from 'native-base';
-import {styles, buttonStyles, textInputStyles, Color} from './styles';
-import {connect} from 'react-redux';
-import {apiLoginRequest, apiSignupRequest} from '../../../store/auth/actions';
+} from "./screens/constants.js";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Tab, Tabs } from "native-base";
+import { styles, buttonStyles, textInputStyles, Color } from "./screens/styles";
+import { connect } from "react-redux";
+import { apiLoginRequest, apiSignupRequest } from "./store/actions";
+import reducer from "./store/reducers";
 import {
   API_LOGIN_FAILED,
   API_SIGNUP_FAILED,
-} from '../../../store/auth/constants';
+} from "./store/constants";
 
 Tab.prototype.requestAnimationFrame = () => {};
 Tabs.prototype.requestAnimationFrame = () => {};
 
-const TextInputField = props => (
+const TextInputField = (props) => (
   <View>
     <Text style={[textInputStyles.label, props.labelStyle]}>{props.label}</Text>
     <TextInput
       autoCapitalize="none"
       style={[textInputStyles.textInput, props.textInputStyle]}
       placeholderTextColor={Color.steel}
-      underlineColorAndroid={'transparent'}
+      underlineColorAndroid={"transparent"}
       {...props}
     />
     {!!props.error && <Text style={textInputStyles.error}>{props.error}</Text>}
   </View>
 );
 
-const Button = props => (
+const Button = (props) => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={[buttonStyles.viewStyle, props.viewStyle]}>
       {props.loading ? (
@@ -65,53 +66,53 @@ class SignUpComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      confirmPassword: '',
-      emailError: '',
-      passwordError: '',
-      confirmPasswordError: '',
-      requestError: '',
-    }
+      email: "",
+      password: "",
+      confirmPassword: "",
+      emailError: "",
+      passwordError: "",
+      confirmPasswordError: "",
+      requestError: "",
+    };
   }
 
   componentDidUpdate(prevProps) {
-    const {requestError, user, success} = this.props;
+    const { requestError, user, success } = this.props;
     if (prevProps.isLoading && requestError?.type === API_SIGNUP_FAILED) {
       const error =
         requestError.code == 400
-          ? 'This email is already registered or password is too weak.'
+          ? "This email is already registered or password is too weak."
           : requestError.message;
 
-      Alert.alert('Error', error);
+      Alert.alert("Error", error);
       this.setState({
         requestError: error,
       });
     }
     if (prevProps.isLoading && success && user !== {}) {
       Alert.alert(
-        'Signup Success',
-        'Registration Successful. A confirmation will be sent to your e-mail address.',
+        "Signup Success",
+        "Registration Successful. A confirmation will be sent to your e-mail address."
       );
     }
   }
 
   onSignupPress = async () => {
-    const {email, password, confirmPassword} = this.state;
+    const { email, password, confirmPassword } = this.state;
     if (emailValidationRegex.test(email)) {
-      if (password != '') {
+      if (password != "") {
         if (password == confirmPassword) {
           this.props.signup(email, password);
         } else {
           this.setState({
-            confirmPasswordError: 'Confirm password and password do not match',
+            confirmPasswordError: "Confirm password and password do not match",
           });
         }
       } else {
-        this.setState({passwordError: 'Please enter a valid password'});
+        this.setState({ passwordError: "Please enter a valid password" });
       }
     } else {
-      this.setState({emailError: 'Please enter a valid email address'});
+      this.setState({ emailError: "Please enter a valid email address" });
     }
   };
 
@@ -126,12 +127,12 @@ class SignUpComponent extends Component {
     } = this.state;
     return (
       <KeyboardAvoidingView>
-        <View style={{marginVertical: 20, marginHorizontal: 15}}>
+        <View style={{ marginVertical: 20, marginHorizontal: 15 }}>
           <TextInputField
             keyboardType="email-address"
             label="Email address"
             placeholder="Email address"
-            onChangeText={email => this.setState({email})}
+            onChangeText={(email) => this.setState({ email })}
             value={email}
             error={emailError}
           />
@@ -139,7 +140,7 @@ class SignUpComponent extends Component {
             label="Password"
             placeholder="Password"
             secureTextEntry={true}
-            onChangeText={password => this.setState({password})}
+            onChangeText={(password) => this.setState({ password })}
             value={password}
             error={passwordError}
           />
@@ -147,7 +148,9 @@ class SignUpComponent extends Component {
             label="Confirm Password"
             placeholder="Confirm Password"
             secureTextEntry={true}
-            onChangeText={confirmPassword => this.setState({confirmPassword})}
+            onChangeText={(confirmPassword) =>
+              this.setState({ confirmPassword })
+            }
             value={confirmPassword}
             error={confirmPasswordError}
           />
@@ -171,19 +174,19 @@ class SignInComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      emailError: '',
-      passwordError: '',
+      email: "",
+      password: "",
+      emailError: "",
+      passwordError: "",
       authLoading: false,
       fbLoading: false,
     };
   }
 
   componentDidUpdate(prevProps) {
-    const {requestError, token} = this.props;
+    const { requestError, token } = this.props;
     if (prevProps.isLoading && requestError?.type === API_LOGIN_FAILED) {
-      Alert.alert('Login Error', requestError.message);
+      Alert.alert("Login Error", requestError.message);
     }
     if (token) {
       this.props.navigation.navigate(HOME_SCREEN_NAME);
@@ -191,28 +194,28 @@ class SignInComponent extends Component {
   }
 
   onSigninPress = () => {
-    const {email, password} = this.state;
+    const { email, password } = this.state;
     if (emailValidationRegex.test(email)) {
-      if (password != '') {
+      if (password != "") {
         this.props.login(email, password);
-        this.setState({authLoading: false});
+        this.setState({ authLoading: false });
       } else {
-        this.setState({passwordError: 'Please enter a valid password'});
+        this.setState({ passwordError: "Please enter a valid password" });
       }
     } else {
-      this.setState({emailError: 'Please enter a valid email address'});
+      this.setState({ emailError: "Please enter a valid email address" });
     }
   };
   render() {
-    const {email, password, emailError, passwordError} = this.state;
+    const { email, password, emailError, passwordError } = this.state;
     return (
       <KeyboardAvoidingView>
-        <View style={{marginVertical: 20, marginHorizontal: 15}}>
+        <View style={{ marginVertical: 20, marginHorizontal: 15 }}>
           <TextInputField
             keyboardType="email-address"
             label="Email address"
             placeholder="Email address"
-            onChangeText={email => this.setState({email})}
+            onChangeText={(email) => this.setState({ email })}
             value={email}
             error={emailError}
           />
@@ -220,7 +223,7 @@ class SignInComponent extends Component {
             label="Password"
             placeholder="Password"
             secureTextEntry={true}
-            onChangeText={password => this.setState({password})}
+            onChangeText={(password) => this.setState({ password })}
             value={password}
             error={passwordError}
           />
@@ -232,15 +235,17 @@ class SignInComponent extends Component {
         />
         <View
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             marginTop: 10,
-          }}>
+          }}
+        >
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => {
-              this.props.navigation.navigate('PasswordRecover');
-            }}>
+              this.props.navigation.navigate("PasswordRecover");
+            }}
+          >
             <Text>Forgot your password?</Text>
           </TouchableOpacity>
         </View>
@@ -256,9 +261,9 @@ export class Blank extends Component {
   render() {
     return (
       <ScrollView style={[styles.container]}>
-        <KeyboardAwareScrollView contentContainerStyle={{flex: 1}}>
+        <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
           <View style={[styles.container]}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
               <View style={styles.imageContainer}>
                 <ImageBackground
                   source={{
@@ -266,9 +271,10 @@ export class Blank extends Component {
                   }}
                   style={{
                     flex: 1,
-                    justifyContent: 'center',
-                    resizeMode: 'cover',
-                  }}>
+                    justifyContent: "center",
+                    resizeMode: "cover",
+                  }}
+                >
                   <Image
                     source={{
                       uri: LOGO_URL,
@@ -276,24 +282,26 @@ export class Blank extends Component {
                     style={{
                       width: 155,
                       height: 155,
-                      alignSelf: 'center',
-                      resizeMode: 'contain',
+                      alignSelf: "center",
+                      resizeMode: "contain",
                     }}
                   />
                 </ImageBackground>
               </View>
             </View>
             <View style={[styles.cardView]}>
-              <View style={{marginBottom: 20}}>
+              <View style={{ marginBottom: 20 }}>
                 <Tabs
                   tabBarUnderlineStyle={styles.tabBarUnderlineStyle}
-                  tabContainerStyle={styles.tabContainerStyle}>
+                  tabContainerStyle={styles.tabContainerStyle}
+                >
                   <Tab
                     heading="Sign In"
                     activeTabStyle={styles.activeTabStyle}
                     tabStyle={styles.tabStyle}
                     activeTextStyle={styles.activeTextStyle}
-                    textStyle={styles.textStyle}>
+                    textStyle={styles.textStyle}
+                  >
                     <SignInComponent {...this.props} />
                   </Tab>
                   <Tab
@@ -301,7 +309,8 @@ export class Blank extends Component {
                     activeTabStyle={styles.activeTabStyle}
                     tabStyle={styles.tabStyle}
                     activeTextStyle={styles.activeTextStyle}
-                    textStyle={styles.textStyle}>
+                    textStyle={styles.textStyle}
+                  >
                     <SignUpComponent {...this.props} />
                   </Tab>
                 </Tabs>
@@ -324,15 +333,20 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     login: (email, password) =>
-      dispatch(apiLoginRequest({username: email, password})),
-    signup: (email, password) => dispatch(apiSignupRequest({email, password})),
+      dispatch(apiLoginRequest({ username: email, password })),
+    signup: (email, password) =>
+      dispatch(apiSignupRequest({ email, password })),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Blank);
+const App = connect(mapStateToProps, mapDispatchToProps)(Blank);
+
+export default {
+  name: "BasicSignupLogin",
+  screen: connect(mapStateToProps, mapDispatchToProps)(App),
+  reducer: reducer,
+  actions: [apiLoginRequest, apiSignupRequest],
+};
