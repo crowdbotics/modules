@@ -1,11 +1,17 @@
 # Maps
 
-## Setup
+# Setup
+
+Install the required dependencies:
+
+```sh
+yarn add react-native-maps
+```
 
 Open `/src/navigator/mainNavigator.js` and import the stack navigator defined in `navigator.js`.
 
 ```javascript
-import Maps from "../features/<module_directory>/navigator";
+import Maps from "../features/<module_directory>";
 ```
 
 And then add it to the navigation:
@@ -13,7 +19,7 @@ And then add it to the navigation:
 ```javascript
 //@BlueprintImportInsertion
 Maps: {
-  screen: Maps
+  screen: Maps.screen
 },
 ```
 
@@ -31,11 +37,11 @@ const region = {
 };
 ```
 
-# Maps Module
-
 # Android
 
-## Add Google Maps Key Update android/app/src/mainAndroidManifest.xml
+## Add Google Maps Key
+
+Update `android/app/src/mainAndroidManifest.xml` with the following XML meta tags:
 
 ```xml
     <application>
