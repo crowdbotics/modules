@@ -1,0 +1,11 @@
+{
+  "name": "@modules/splash",
+  "version": "1.0.0",
+  "description": "Greet your users with an image or logo.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {},
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}
