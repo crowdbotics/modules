@@ -1,0 +1,11 @@
+{
+  "name": "@modules/onboarding",
+  "version": "1.0.0",
+  "description": "Help your users get started with an onboarding tutorial welcome set of screens.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {},
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}
