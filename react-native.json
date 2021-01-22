@@ -21,7 +21,7 @@
       "newFile": true
     },
     "package.json": {
-      "code": "{\n  \"name\": \"@modules/articles\",\n  \"version\": \"1.0.0\",\n  \"description\": \"## Setup\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\"\n}\n",
+      "code": "{\n  \"name\": \"@modules/articles\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Module for articles lists and details pages.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\"\n}\n",
       "parentDir": null,
       "newFile": true
     },
@@ -93,7 +93,7 @@
       "newFile": true
     },
     "package.json": {
-      "code": "{\n  \"name\": \"@modules/chat\",\n  \"version\": \"1.0.0\",\n  \"description\": \"## Setup\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"moment\": \"^2.29.1\",\n    \"prop-types\": \"^15.7.2\",\n    \"pubnub-react\": \"^1.3.2\",\n    \"react-native-gifted-chat\": \"^0.16.3\",\n    \"react-native-keyboard-aware-scroll-view\": \"^0.9.3\",\n    \"uuid\": \"^8.3.2\"\n  }\n}\n",
+      "code": "{\n  \"name\": \"@modules/chat\",\n  \"version\": \"1.0.0\",\n  \"description\": \"A set of screens to display chat conversations in a list and 1-to-1 messaging\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"moment\": \"^2.29.1\",\n    \"prop-types\": \"^15.7.2\",\n    \"pubnub-react\": \"^1.3.2\",\n    \"react-native-gifted-chat\": \"^0.16.3\",\n    \"react-native-keyboard-aware-scroll-view\": \"^0.9.3\",\n    \"uuid\": \"^8.3.2\"\n  }\n}\n",
       "parentDir": null,
       "newFile": true
     },
@@ -149,6 +149,11 @@
       "parentDir": null,
       "newFile": true
     },
+    "package.json": {
+      "code": "{\n  \"name\": \"@modules/login\",\n  \"version\": \"1.0.0\",\n  \"description\": \"A simple login and signup screen with email and password.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {}\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
     "screens/PasswordRecover/index.js": {
       "code": "import React, {Component} from 'react';\nimport {\n  Image,\n  Alert,\n  View,\n  TouchableOpacity,\n  TextInput,\n  Text,\n} from 'react-native';\nimport {connect} from 'react-redux';\nimport {styles} from '../styles';\nimport {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';\nimport {apiPasswordResetRequest} from '../../../../store/auth/actions';\nimport {API_PASSWORD_RESET_FAILED} from '../../../../store/auth/constants';\nimport {emailValidationRegex, LOGO_URL} from '../constants.js';\n\nclass PasswordRecover extends Component {\n  static navigationOptions = {\n    headerMode: 'none',\n  };\n\n  constructor(props) {\n    super(props);\n    this.state = {\n      email: '',\n      loading: false,\n    };\n  }\n\n  componentDidUpdate(prevProps) {\n    const {requestError, success} = this.props;\n    if (prevProps.isLoading) {\n      if (requestError?.type === API_PASSWORD_RESET_FAILED) {\n        let message =\n          requestError?.code === 400\n            ? 'This email is not registered\\nPlease signup'\n            : requestError.message;\n        Alert.alert('Error', message);\n      }\n\n      if (success) {\n        Alert.alert(\n          'Password Reset',\n          'Password reset link has been sent to your email address',\n        );\n        this.props.navigation.goBack();\n      }\n    }\n  }\n\n  renderImage = () => {\n    const imageSize = {\n      width: 365,\n      height: 161,\n    };\n    return (\n      <Image\n        style={[styles.image, imageSize]}\n        source={{\n          uri: LOGO_URL,\n        }}\n      />\n    );\n  };\n\n  submitPasswordReset = async () => {\n    const {email} = this.state;\n    if (!emailValidationRegex.test(email)) {\n      Alert.alert('Error', 'Please enter a valid email address.');\n      return;\n    }\n    this.props.reset(email);\n  };\n\n  render() {\n    const {email} = this.state;\n\n    return (\n      <View style={{flex: 1}}>\n        <KeyboardAwareScrollView contentContainerStyle={styles.screen}>\n          {this.renderImage()}\n          <Text style={styles.heading}>{'Password Recovery'}</Text>\n          <View style={styles.fieldContainer}>\n            <Text style={styles.label}>Email Address</Text>\n            <TextInput\n              value={email}\n              onChangeText={email => this.setState({email})}\n              placeholder=\"eg: yourname@gmail.com\"\n              size=\"small\"\n              style={styles.input}\n              keyboardType=\"email-address\"\n              textStyle={styles.text}\n              autoCapitalize=\"none\"\n            />\n          </View>\n          <TouchableOpacity\n            disabled={this.props.isLoading}\n            activeOpacity={0.7}\n            style={[styles.actionButon]}\n            onPress={this.submitPasswordReset}>\n            <Text\n              style={{\n                color: '#fff',\n                fontSize: 15,\n              }}>\n              {'Reset Password'}\n            </Text>\n          </TouchableOpacity>\n          <TouchableOpacity\n            activeOpacity={0.7}\n            onPress={() => {\n              this.props.navigation.goBack();\n            }}>\n            <Text style={[styles.textRow]}>Back to login?</Text>\n          </TouchableOpacity>\n        </KeyboardAwareScrollView>\n      </View>\n    );\n  }\n}\n\nfunction mapStateToProps(state) {\n  return {\n    requestError: state.authReducer.error,\n    isLoading: state.authReducer.isLoading,\n    success: state.authReducer.success,\n  };\n}\n\nconst mapDispatchToProps = dispatch => {\n  return {\n    reset: email => dispatch(apiPasswordResetRequest({email})),\n  };\n};\n\nexport default connect(\n  mapStateToProps,\n  mapDispatchToProps,\n)(PasswordRecover);\n",
       "parentDir": null,
@@ -192,7 +197,7 @@
       "newFile": true
     },
     "package.json": {
-      "code": "{\n  \"name\": \"@modules/maps\",\n  \"version\": \"1.0.0\",\n  \"description\": \"## Setup\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {\n    \"react-native-maps\": \"0.27.1\"\n  },\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\"\n}\n",
+      "code": "{\n  \"name\": \"@modules/maps\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Add interactive maps to your mobile app to make it easier for users to find your locations.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {\n    \"react-native-maps\": \"0.27.1\"\n  },\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\"\n}\n",
       "parentDir": null,
       "newFile": true
     },
@@ -218,6 +223,11 @@
       "parentDir": null,
       "newFile": true
     },
+    "package.json": {
+      "code": "{\n  \"name\": \"@modules/onboarding\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Help your users get started with an onboarding tutorial welcome set of screens.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {}\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
     "styles.js": {
       "code": "",
       "parentDir": null,
@@ -237,6 +247,11 @@
     },
     "navigator.js": {
       "code": "import { createStackNavigator } from \"react-navigation-stack\";\n\nimport Splash from \"./index.js\";\n\nexport default SplashBlueprintNavigator = createStackNavigator(\n  {\n    Splash: { screen: Splash }\n  },\n  {\n    initialRouteName: \"Splash\",\n    defaultNavigationOptions: ({ navigation }) => ({ header: null }),\n  }\n);\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "package.json": {
+      "code": "{\n  \"name\": \"@modules/splash\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Greet your users with an image or logo.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {}\n}\n",
       "parentDir": null,
       "newFile": true
     },
@@ -268,7 +283,7 @@
       "newFile": true
     },
     "package.json": {
-      "code": "{\n  \"name\": \"@modules/terms-and-conditions\",\n  \"version\": \"1.0.0\",\n  \"description\": \"## Setup\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {\n    \"react-native-webview\": \"^11.2.0\"\n  },\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"react-native-vector-icons\": \"^8.0.0\",\n    \"react-navigation-stack\": \"^2.10.2\"\n  }\n}\n",
+      "code": "{\n  \"name\": \"@modules/terms-and-conditions\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Terms and Conditions Screen\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {\n    \"react-native-webview\": \"^11.2.0\"\n  },\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"react-native-vector-icons\": \"^8.0.0\",\n    \"react-navigation-stack\": \"^2.10.2\"\n  }\n}\n",
       "parentDir": null,
       "newFile": true
     },
@@ -296,6 +311,11 @@
     },
     "navigator.js": {
       "code": "import React from \"react\";\nimport { createStackNavigator } from 'react-navigation-stack';\nimport { SlideMenuIcon } from '../../navigator/slideMenuIcon';\nimport UserProfile from './index';\n\nexport default (UserNavigator = createStackNavigator(\n  {\n    UserProfile: {\n      screen: UserProfile,\n      navigationOptions: ({ navigation }) => ({\n        title: 'User Profile',\n        headerLeft: <SlideMenuIcon navigationProps={navigation} />,\n      }),\n    },\n  },\n  {\n    initialRouteName: 'UserProfile',\n  },\n));\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "package.json": {
+      "code": "{\n  \"name\": \"@modules/user-profile\",\n  \"version\": \"1.0.0\",\n  \"description\": \"A screen to display user information like a profile picture, profile stats, action buttons, and images.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {}\n}\n",
       "parentDir": null,
       "newFile": true
     },
