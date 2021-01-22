@@ -11,6 +11,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [Previews](#previews)
 - [Commands](#commands)
   - [Generate modules data JSON](#generate-modules-data-json)
+  - [Get module info](#get-module-info)
   - [Create a local demo app](#create-a-local-demo-app)
   - [Install a module](#install-a-module)
   - [Remove a module](#remove-a-module)
