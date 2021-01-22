@@ -104,6 +104,14 @@ Copy from:
 To properly configure this module, follow the instructions given in README.md inside the module folder.
 ```
 
+## Get module info
+
+```sh
+npm run info <module_name>
+```
+
+Prints the module name, description and the respective data JSON.
+
 ## Create a local demo app
 
 ```sh
