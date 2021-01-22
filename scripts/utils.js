@@ -60,11 +60,18 @@ export const parse = code => {
   });
 };
 
+const camelSentence = str => {
+  return str.trim()
+    .toLowerCase()
+    .replace(/[^A-Z0-9]+(.)/gi, (_, char) => char.toUpperCase())
+    .replace(/^\w/, char => char.toUpperCase());
+}
+
 export class ManifestTransformer {
   constructor({ add, module }) {
     this.add = add;
     this.module = module;
-    this.capitalizedModule = module.trim().replace(/^\w/, (c) => c.toUpperCase());
+    this.capitalizedModule = camelSentence(module);
   }
 
   visit(node) {
