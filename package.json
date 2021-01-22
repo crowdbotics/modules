@@ -9,6 +9,7 @@
     "demo:add": "node scripts/demo-add.js",
     "demo:remove": "node scripts/demo-remove.js",
     "parse": "node scripts/parse.js",
+    "info": "node scripts/info.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
