@@ -154,7 +154,9 @@ Removes a module from the demo app, performing the follow operations:
 
 Our template includes a placeholder splash screen that automatically lists installed modules links.
 
-![Modules preview](preview/modules.png)
+| Chat and Articles installed             | No modules installed                             |
+| --------------------------------------- | ------------------------------------------------ |
+| ![Modules preview](preview/modules.png) | ![No modules preview](preview/modules-empty.png) |
 
 ```javascript
 function Welcome({ navigation }) {
