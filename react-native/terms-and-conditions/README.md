@@ -19,7 +19,7 @@ files in the github repository. Please note to replace ####### with the numeric 
 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
-TermsAndConditions8195458
+
 `import TermsAndConditions#######Navigator from '../features/TermsAndConditions#######/navigator';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
