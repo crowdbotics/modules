@@ -17,7 +17,7 @@ Articles: {
 },
 ```
 
-Open `store/services.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
+Open `store/services.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint (ie. demo0122202101-24002.botics.com/modules/articles). The initial piece is your project name and the numeric piece is your project number.
 
 Add the module reducer and saga to your `/src/store/index.js` file:
 
