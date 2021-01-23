@@ -34,7 +34,7 @@ import articlesSagas from "../features/<module_directory>/store/sagas";
    combineReducers({
      apiReducer: apiReducer,
      customReducer: customReducer,
-+    articlesReducer: articlesReducer
+     articlesReducer: articlesReducer
    }),
 ```
 
@@ -43,5 +43,5 @@ import articlesSagas from "../features/<module_directory>/store/sagas";
 ```
   sagaMiddleware.run(rootSaga);
   sagaMiddleware.run(customRootSaga);
-+ sagaMiddleware.run(articlesSagas);
+  sagaMiddleware.run(articlesSagas);
 ```
