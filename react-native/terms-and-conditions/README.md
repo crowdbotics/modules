@@ -19,12 +19,12 @@ files in the github repository. Please note to replace ####### with the numeric 
 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
-
-`import TermsScreen#######Navigator from '../features/TermsScreen#######/navigator';`
+TermsAndConditions8195458
+`import TermsAndConditions#######Navigator from '../features/TermsAndConditions#######/navigator';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`TermsScreen#######: { screen: TermsScreen#######Navigator },`
+`TermsAndConditions#######: { screen: TermsAndConditions#######Navigator },`
 
 ### STEP 3: Add Terms screen into the sidemenu navigation.
 
@@ -35,7 +35,7 @@ Make sure any screens that aren’t desired in the side menu are removed from th
 In installed_blueprints.js you need to add objects for every screen that you want to show in the sidemenu/splash screen.
 They have a specific format:
 
-`{ name: 'TermsScreen#######', human_name: 'Terms & Conditions', access_route: 'TermsScreen#######'}`
+`{ name: 'TermsAndConditions#######', human_name: 'Terms & Conditions', access_route: 'TermsAndConditions#######'}`
 
 **name:** doesn't matter much, its used as a unique key for the side menu and splash screens array of
 buttons, it must be unique, that's the only requirement
@@ -46,7 +46,7 @@ buttons, it must be unique, that's the only requirement
 
 ### STEP 4: Set the left arrow screen redirect.
 
-**/src/features/TermsScreen######/screens/index.js:**
+**/src/features/TermsAndConditions######/screens/index.js:**
 
 **MODIFY** Line 161 (replace HomeScreen177788 with your desired Home/return screen name:
 
