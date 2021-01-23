@@ -1,6 +1,6 @@
-# Basic Login Signup Screen
+# Login Signup Screen
 
-The Basic Login Signup Screen is a React Native-based screen that allows the user to login or signup.
+The Login Signup Screen is a React Native-based screen that allows the user to login or signup.
 
 ## Installation
 
@@ -21,11 +21,11 @@ After you have added the screen module into your project, you will need to confi
 **/src/navigator/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import BasicLoginSignup#######Navigator from '../features/BasicLoginSignup#######/navigator';`
+`import LoginAndSignup#######Navigator from '../features/LoginAndSignup#######/navigator';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`BasicLoginSignup: { screen: BasicLoginSignup#######Navigator },`
+`LoginAndSignup: { screen: LoginAndSignup#######Navigator },`
 
 ### STEP 3: Add reducers to store.
 
@@ -33,8 +33,8 @@ After you have added the screen module into your project, you will need to confi
 **ADD** after Line 4 (sagas import):
 
 ```js
-import authRootSaga from '../features/BasicLoginSignup#######/auth/sagas';
-import authReducer from '../features/BasicLoginSignup#######/auth/reducers;
+import authRootSaga from '../features/LoginAndSignup#######/auth/sagas';
+import authReducer from '../features/LoginAndSignup#######/auth/reducers;
 ```
 
 Locate the store creation with `createStore`, **ADD** comma at end of `customReducer` and **ADD** below the following code `authReducer: authReducer`.
