@@ -33,8 +33,8 @@ After you have added the screen module into your project, you will need to confi
 **ADD** after Line 4 (sagas import):
 
 ```js
-import authRootSaga from '../features/LoginAndSignup#######/auth/sagas';
-import authReducer from '../features/LoginAndSignup#######/auth/reducers;
+import authRootSaga from "../features/LoginAndSignup#######/auth/sagas";
+import authReducer from "../features/LoginAndSignup#######/auth/reducers";
 ```
 
 Locate the store creation with `createStore`, **ADD** comma at end of `customReducer` and **ADD** below the following code `authReducer: authReducer`.
