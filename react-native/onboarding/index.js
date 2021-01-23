@@ -52,7 +52,7 @@ export default class Blank extends React.Component {
   }
 
   _onDone = () => {
-    this.props.navigation.navigate('LoginSignupScreen177769') // Login/Sign up Screen
+    this.props.navigation.navigate('LoginAndSignup177769') // Login/Sign up Screen
   }
 
 
