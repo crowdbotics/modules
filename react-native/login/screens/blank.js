@@ -21,7 +21,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Tab, Tabs} from 'native-base';
 import {styles, buttonStyles, textInputStyles, Color} from './styles';
 import {connect} from 'react-redux';
-import {apiLoginRequest, apiSignupRequest} from '../../../store/auth/actions';
+import {apiLoginRequest, apiSignupRequest} from '../auth/actions';
 import {
   API_LOGIN_FAILED,
   API_SIGNUP_FAILED,
