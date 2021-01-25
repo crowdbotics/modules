@@ -255,6 +255,11 @@
       "parentDir": null,
       "newFile": true
     },
+    "package.json": {
+      "code": "{\n  \"name\": \"@modules/privacy-policy\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Privacy Policy Screen\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"dependencies\": {\n    \"react-native-parallax-scroll-view\": \"^0.21.3\",\n    \"react-native-cardview\": \"^2.0.5\"\n  },\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\"\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
     "styles.js": {
       "code": "import { StyleSheet, Dimensions } from 'react-native'\n\nimport { DimensionsStyle } from './utils';\n\nexport const styles = StyleSheet.create({\n  parallaxHeader: {\n    flex: 1,\n    flexDirection: 'column',\n    paddingTop: 15,\n    backgroundColor: '#F3F3F3',\n    borderRadius: 30\n  },\n  top: {\n    position: 'absolute',\n    top: -15,\n    left: 0,\n    right: 0,\n    width: Dimensions.width,\n    height: 50,\n    borderRadius: 20,\n    backgroundColor: \"#F3F3F3\"\n  },\n  header: {\n    height: 290,\n    flex: 1,\n    alignItems: 'flex-start',\n    justifyContent: 'space-between',\n    flexDirection: 'row',\n    paddingHorizontal: 20,\n    position: 'relative',\n    paddingTop: DimensionsStyle.safeAreaTopHeight + 20\n  },\n  heading: {\n    fontSize: 26,\n    color: '#7AA741',\n    fontFamily: 'Avenir Heavy'\n  },\n  inputContainer: {\n    justifyContent: 'center',\n    width: '100%',\n    marginBottom: 35\n  },\n  input: {\n    borderTopWidth: 0,\n    borderLeftWidth: 0,\n    borderRightWidth: 0,\n    borderWidth: 1,\n    width: '100%',\n    borderColor: '#000000',\n    fontSize: 17,\n    padding: 0,\n    paddingVertical: 7,\n    fontFamily: 'Avenir Book'\n  },\n  lable: {\n    fontSize: 17,\n    color: '#000000',\n    fontFamily: \"Avenir-Medium\"\n  },\n  help: {\n    fontSize: 16,\n    color: \"#8D8D8D\",\n    marginTop: 15,\n    fontFamily: 'Avenir Book'\n  },\n  vender_part_3: {\n    fontSize: 20,\n    color: \"#8D8D8D\"\n  },\n  lable_like: {\n    color: \"#A4A2A2\",\n    fontSize: 13\n  },\n  lable_count: {\n    color: \"#3C3C3C\",\n    fontSize: 13\n  }\n});\n",
       "parentDir": null,
