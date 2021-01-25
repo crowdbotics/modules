@@ -40,15 +40,16 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 - [Login](react-native/login): `login`
 - [Maps](react-native/maps): `maps`
 - [Onboarding](react-native/onboarding): `onboarding`
+- [Privacy Policy](react-native/privacy-policy): `privacy-policy`
 - [Splash](react-native/splash): `splash`
 - [Terms and Conditions](react-native/terms-and-conditions): `terms-and-conditions`
 - [User Profile](react-native/user-profile): `user-profile`
 
 ## Previews
 
-| Article list                      | Article detail                  | Chat list                       | Typing view                      |
-| --------------------------------- | ------------------------------- | ------------------------------- | -------------------------------- |
-| ![Articles](preview/articles.png) | ![Article](preview/article.png) | ![Chat list](preview/chat4.png) | ![Typing view](preview/chat.png) |
+| Article list                      | Article detail                  | Chat list                       | Typing view                      | Privacy Policy                                |
+| --------------------------------- | ------------------------------- | ------------------------------- | -------------------------------- | --------------------------------------------- |
+| ![Articles](preview/articles.png) | ![Article](preview/article.png) | ![Chat list](preview/chat4.png) | ![Typing view](preview/chat.png) | ![Privacy Policy](preview/privacy-policy.png) |
 
 | Login screen                       | Maps                      | Maps                         | Pubnub integration                       | User Profile                              |
 | ---------------------------------- | ------------------------- | ---------------------------- | ---------------------------------------- | ----------------------------------------- |
