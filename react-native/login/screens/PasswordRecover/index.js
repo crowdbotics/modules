@@ -10,8 +10,8 @@ import {
 import {connect} from 'react-redux';
 import {styles} from '../styles';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {apiPasswordResetRequest} from '../../../../../store/auth/actions';
-import {API_PASSWORD_RESET_FAILED} from '../../../../../store/auth/constants';
+import {apiPasswordResetRequest} from '../../../../store/auth/actions';
+import {API_PASSWORD_RESET_FAILED} from '../../../../store/auth/constants';
 import {emailValidationRegex, LOGO_URL} from '../constants.js';
 
 class PasswordRecover extends Component {
