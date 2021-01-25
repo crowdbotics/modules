@@ -25,7 +25,7 @@ import {apiLoginRequest, apiSignupRequest} from '../auth/actions';
 import {
   API_LOGIN_FAILED,
   API_SIGNUP_FAILED,
-} from '../../../store/auth/constants';
+} from '../auth/constants';
 
 Tab.prototype.requestAnimationFrame = () => {};
 Tabs.prototype.requestAnimationFrame = () => {};
