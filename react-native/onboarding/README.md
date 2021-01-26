@@ -1,6 +1,6 @@
-# CB Slide Onboarding Tutorial Screen
+# Onboarding Tutorial Screen
 
-The CB Slide Onboarding Tutorial Screen is a ReactNative based onboarding screen. It can be configured to have 1 or many
+The Onboarding Tutorial Screen is a ReactNative based onboarding screen. It can be configured to have 1 or many
 slide screens with content and expansion detailed in the file.
 
 ## Installation
@@ -21,11 +21,11 @@ files in the github repository. Please note to replace ####### with the numeric 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import OnboardingSlideScreen#######Navigator from '../features/OnboardingSlideScreen#######/navigator';`
+`import Onboarding#######Navigator from '../features/Onboarding#######/navigator';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`OnboardingSlideScreen#######: { screen: OnboardingSlideScreen#######Navigator },`
+`Onboarding#######: { screen: Onboarding#######Navigator },`
 
 ### STEP (OPTIONAL): do this if you do not have a splash and want the onboarding to load first.
 
@@ -38,14 +38,14 @@ const DrawerAppNavigator = createDrawerNavigator(
     },
     {
         contentComponent: SideMenu,
-        initialRouteName: "OnboardingSlideScreen#######", // Onboarding Slide Screen
+        initialRouteName: "Onboarding#######", // Onboarding Slide Screen
     },
 );
 ```
 
 ### STEP 3: Update the Onboarding Slide Screen content as desired, the navigated screen after done (typically the HOME screen) including the number of slide screens needed.
 
-**/src/features/OnboardingSlideScreen#######/index.js:**
+**/src/features/Onboarding#######/index.js:**
 
 **MODIFY** slides, update with your slides content/desired number of slides:
 
@@ -75,9 +75,9 @@ const slides = [
 ];
 ```
 
-**MODIFY** Line 64, Replace LoginSignupScreen177769 with desired destination home/screen:
+**MODIFY** Line 55, Replace LoginAndSignup177769 with desired destination home/screen:
 
-`this.props.navigation.navigate('LoginSignupScreen177769')`
+`this.props.navigation.navigate('LoginAndSignup177769')`
 
 ## Contributing
 

@@ -41,7 +41,7 @@ const region = {
 
 ## Add Google Maps Key
 
-Update `android/app/src/mainAndroidManifest.xml` with the following XML meta tags:
+Update `android/app/src/main/AndroidManifest.xml` with the following XML meta tags:
 
 ```xml
     <application>

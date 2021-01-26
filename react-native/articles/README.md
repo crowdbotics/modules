@@ -17,7 +17,7 @@ Articles: {
 },
 ```
 
-Open `store/services.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
+Open `store/services.js` in the /src/features/article#####/ folder and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint (ie. demo0122202101-24002.botics.com/modules/articles). The initial piece is your project name and the numeric piece is your project number.
 
 Add the module reducer and saga to your `/src/store/index.js` file:
 
@@ -34,7 +34,7 @@ import articlesSagas from "../features/<module_directory>/store/sagas";
    combineReducers({
      apiReducer: apiReducer,
      customReducer: customReducer,
-+    articlesReducer: articlesReducer
+     articlesReducer: articlesReducer
    }),
 ```
 
@@ -43,5 +43,5 @@ import articlesSagas from "../features/<module_directory>/store/sagas";
 ```
   sagaMiddleware.run(rootSaga);
   sagaMiddleware.run(customRootSaga);
-+ sagaMiddleware.run(articlesSagas);
+  sagaMiddleware.run(articlesSagas);
 ```

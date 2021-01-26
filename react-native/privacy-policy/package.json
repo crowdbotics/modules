@@ -1,0 +1,13 @@
+{
+  "name": "@modules/privacy-policy",
+  "version": "1.0.0",
+  "description": "Privacy Policy Screen",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "react-native-parallax-scroll-view": "^0.21.3",
+    "react-native-cardview": "^2.0.5"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC"
+}

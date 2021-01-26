@@ -24,6 +24,7 @@ const packageJSON = JSON.parse(
 );
 if (packageJSON.hasOwnProperty("x-dependencies")) {
   const deps = packageJSON["x-dependencies"];
+  // TODO: Do we want to remove blindly? What if the user installed that dep too?
   for (const [key, _] of Object.entries(deps)) {
     packages.push(`${key}`);
   }
