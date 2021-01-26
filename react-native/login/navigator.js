@@ -1,6 +1,6 @@
 import { createStackNavigator } from "react-navigation-stack";
 
-import LoginSignup from "./index";
+import LoginSignup from "./screens/";
 import PasswordRecover from "./screens/PasswordRecover";
 
 export default LoginSignupBlueprintNavigator = createStackNavigator(
