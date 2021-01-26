@@ -1,6 +1,6 @@
-# Terms & Conditions Screen
+# Privacy Policy
 
-The Terms and Conditions Screen is a ReactNative based screen that leverages the webview with a simple header.
+The Privacy Policy is a ReactNative based screen that leverages the paralax with a custom header.
 
 ## Installation
 
@@ -13,18 +13,21 @@ files in the github repository. Please note to replace ####### with the numeric 
 
 **ADD** Dependency after Line 16 (dependencies opening line "_"dependencies": {_ ")
 
-`"react-native-webview": "^10.8.2",`
+```
+"react-native-parallax-scroll-view": "^0.21.3",
+"react-native-cardview": "^2.0.5",
+```
 
 ### Step 2: Add screen into your project screen navigation.
 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import TermsAndConditions#######Navigator from '../features/TermsAndConditions#######/navigator';`
+`import PrivacyPolicy#######Navigator from '../features/PrivacyPolicy#######/navigator.js';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`TermsAndConditions#######: { screen: TermsAndConditions#######Navigator },`
+`TPrivacyPolicy#######: { screen: PrivacyPolicy#######Navigator },`
 
 ### STEP 3: Add Terms screen into the sidemenu navigation.
 
@@ -35,7 +38,7 @@ Make sure any screens that aren’t desired in the side menu are removed from th
 In installed_blueprints.js you need to add objects for every screen that you want to show in the sidemenu/splash screen.
 They have a specific format:
 
-`{ name: 'TermsAndConditions#######', human_name: 'Terms & Conditions', access_route: 'TermsAndConditions#######'}`
+`{ name: 'PrivacyPolicy#######', human_name: 'Privacy Policy', access_route: 'PrivacyPolicy#######'}`
 
 **name:** doesn't matter much, its used as a unique key for the side menu and splash screens array of
 buttons, it must be unique, that's the only requirement
@@ -44,13 +47,17 @@ buttons, it must be unique, that's the only requirement
 
 **access_route:** must be the name of the key in your mainNavigator setup
 
-### STEP 4: Set the left arrow screen redirect.
+### STEP 4: Set the left arrow screen redirect and website link.
 
-**/src/features/TermsAndConditions######/screens/index.js:**
+**/src/features/PrivacyPolicy#######/screens/index.js**
 
-**MODIFY** Line 161 (replace HomeScreen177788 with your desired Home/return screen name:
+**MODIFY** Line 82, (REPLACE HomeScreen177788 with your desired screen, likely your Home Screen)
 
-`<TouchableOpacity style={{ padding: 5 }} onPress={() => { this.props.navigation.navigate('HomeScreen177788') }}>`
+`onPress={() => { this.props.navigation.navigate('HomeScreen177788') }}>`
+
+**MODIFY** Line 124, (RREPLACE URL in onPress for READ FULL POLICY link to Website URL)
+
+`onPress={() => Linking.openURL('https://www.crowdbotics.com/privacy-policy')} `
 
 ## Contributing
 
