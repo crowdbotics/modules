@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A simple login and signup screen with email and password.",
   "private": true,
-  "main": "index.js",
+  "main": "screens/index.js",
   "x-dependencies": {"react-native-keyboard-aware-scroll-view": "0.9.1", "native-base": "^2.13.15"},
   "author": "Crowdbotics",
   "license": "ISC",

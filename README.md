@@ -139,7 +139,7 @@ Installs a module into the demo app, performing the follow operations:
 ## Remove a module
 
 ```sh
-npm run demo:add <module_name>
+npm run demo:remove <module_name>
 ```
 
 Removes a module from the demo app, performing the follow operations:
