@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { usePubNub } from "pubnub-react";
 
-  export defaultconst ChatView = ({ route }) => {
+const ChatView = ({ route }) => {
   // The `route` prop will be bassed to us thanks to React Navigation.
   // It will contain our emoji in `route.params.emoji`.
   const userEmoji = route.params.emoji;
@@ -25,7 +25,7 @@ import { usePubNub } from "pubnub-react";
 
   // First we need to set our PubNub UUID and subscribe to chat channel.
   // We will use `useEffect` hook for that.
-          t(() => {
+  useEffect(() => {
     // We need to make sure that PubNub is defined
     if (pubnub) {
       // Set the UUID of our user to their chosen emoji
@@ -174,3 +174,5 @@ const styles = StyleSheet.create({
     right: 32
   }
 });
+
+export default ChatView;

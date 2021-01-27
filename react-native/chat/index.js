@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, SafeAreaView, Button, View } from "react-native";
 import EmojiSelector from "react-native-emoji-selector";
-import Chat from "./chat";
 
 const EmojiPickerView = ({ navigation }) => {
   // In here we are soring our currently picked emoji.
@@ -25,7 +24,7 @@ const EmojiPickerView = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.hint}>
-                  Pick an emoji that will represent you in the chat
+          Pick an emoji that will represent you in the chat
         </Text>
         <View
           style={{
@@ -95,9 +94,7 @@ const styles = StyleSheet.create({
 
 export default {
   name: "Chat",
-  entry: EmojiPickerView,
-  screens: [
-
-  ],
-  slice: null
+  screen: EmojiPickerView,
+  reducer: null,
+  actions: null
 }
