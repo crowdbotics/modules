@@ -1,8 +1,10 @@
+import React from "react";
 import modules from "@modules";
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 function Welcome({ navigation }) {
-  const links = modules.map(module => {
+  const modulesList = modules.filter(module => module.name !== "Welcome");
+  const links = modulesList.map(module => {
     return (
       <Pressable
         onPress={() => navigation.navigate(module.name)}
@@ -15,14 +17,14 @@ function Welcome({ navigation }) {
   });
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Screens available ({modules.length})</Text>
+      <Text style={styles.text}>Screens available ({modulesList.length})</Text>
       {links}
     </View>
   )
 }
 
 const pressed = ({ pressed }) => [
-  { backgroundColor: pressed ? 'rgba(72, 61, 139, 0.75)' : 'rgba(72, 61, 139, 1)' },
+  pressed ? styles.buttonPressed : styles.buttonNotPressed,
   styles.button
 ];
 
@@ -34,6 +36,12 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20
+  },
+  buttonPressed: {
+    backgroundColor: 'rgba(72, 61, 139, 0.75)'
+  },
+  buttonNotPressed: {
+    backgroundColor: 'rgba(72, 61, 139, 1)'
   },
   button: {
     borderRadius: 4,
