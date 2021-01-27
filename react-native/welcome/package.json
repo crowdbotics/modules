@@ -1,0 +1,11 @@
+{
+  "name": "@modules/welcome",
+  "version": "1.0.0",
+  "description": "Welcome screen for developers",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {},
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}
