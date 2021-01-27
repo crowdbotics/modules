@@ -1,247 +1,176 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  FlatList,
-  View,
-  Platform,
-  Image,
-  TouchableOpacity,
+  StyleSheet,
   Text,
+  View,
+  Button,
+  SafeAreaView,
   TextInput,
-  Keyboard,
-  InteractionManager,
-  StyleSheet
-} from 'react-native';
-import { data } from './data';
-import { scale } from './utils.js';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { NavigationType } from './utils.js';
+  KeyboardAvoidingView,
+  Platform
+} from "react-native";
+import { usePubNub } from "pubnub-react";
 
-const moment = require('moment');
+  export defaultconst ChatView = ({ route }) => {
+  // The `route` prop will be bassed to us thanks to React Navigation.
+  // It will contain our emoji in `route.params.emoji`.
+  const userEmoji = route.params.emoji;
 
-class _Chat extends React.Component {
-  static propTypes = {
-    navigation: NavigationType.isRequired,
-  };
-  static navigationOptions = ({ navigation }) => {
-    const userId = navigation.state.params ? navigation.state.params.userId : undefined;
-    const user = data.getUser(userId);
-    return ({
-      headerTitle: _Chat.renderNavigationTitle(navigation, user),
-      headerRight: _Chat.renderNavigationAvatar(navigation, user),
+  // Here we obtain our PubNub instance thanks to using the provider
+  const pubnub = usePubNub();
 
-    });
-  };
+  // In next two statements we define the state needed for our chat
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
 
-  constructor(props) {
-    super(props);
-    const userId = undefined;
-    this.state = {
-      data: data.getConversation(userId),
+  // First we need to set our PubNub UUID and subscribe to chat channel.
+  // We will use `useEffect` hook for that.
+          t(() => {
+    // We need to make sure that PubNub is defined
+    if (pubnub) {
+      // Set the UUID of our user to their chosen emoji
+      pubnub.setUUID(userEmoji);
+
+      // Create a listener that will push new messages to our `messages` variable
+      // using the `setMessages` function.
+      const listener = {
+        message: envelope => {
+          setMessages(msgs => [
+            ...msgs,
+            {
+              id: envelope.message.id,
+              author: envelope.publisher,
+              content: envelope.message.content,
+              timetoken: envelope.timetoken
+            }
+          ]);
+        }
+      };
+
+      // Add the listener to pubnub instance and subscribe to `chat` channel.
+      pubnub.addListener(listener);
+      pubnub.subscribe({ channels: ["chat"] });
+
+      // We need to return a function that will handle unsubscription on unmount
+      return () => {
+        pubnub.removeListener(listener);
+        pubnub.unsubscribeAll();
+      };
+    }
+  }, [pubnub]);
+
+  // This function handles sending messages.
+  const handleSubmit = () => {
+    // Clear the input field.
+    setInput("");
+
+    // Create the message with random `id`.
+    const message = {
+      content: input,
+      id: Math.random()
+        .toString(16)
+        .substr(2)
     };
-    this.listRef = React.createRef();
-  }
 
-  componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      this.listRef.current.scrollToEnd();
-    });
-  }
-
-  extractItemKey = (item) => `${item.id}`;
-
-  scrollToEnd = () => {
-    if (Platform.OS === 'ios') {
-      this.listRef.current.scrollToEnd();
-    } else {
-      setTimeout(() => this.listRef.current.scrollToEnd(), 100);
-    }
+    // Publish our message to the channel `chat`
+    pubnub.publish({ channel: "chat", message });
   };
 
-  onInputChanged = (text) => {
-    this.setState({ message: text });
-  };
-
-  onSendButtonPressed = () => {
-    if (!this.state.message) {
-      return;
-    }
-    this.state.data.messages.push({
-      id: this.state.data.messages.length, time: 0, type: 'out', text: this.state.message,
-    });
-    this.setState({ message: '' });
-    this.scrollToEnd(true);
-  };
-
-  static onNavigationTitlePressed = (navigation, user) => {
-    navigation.navigate('ProfileV1', { id: user.id });
-  };
-
-  static onNavigationAvatarPressed = (navigation, user) => {
-    navigation.navigate('ProfileV1', { id: user.id });
-  };
-
-  static renderNavigationTitle = (navigation, user) => (
-    <TouchableOpacity onPress={() => _Chat.onNavigationTitlePressed(navigation, user)}>
-      <View style={{ alignItems: 'center' }}>
-        <Text category='s1' style={{ color: 'black' }}>{`${user.firstName} ${user.lastName}`}</Text>
-        <Text category='c1' style={{ color: 'grey' }}>Online</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
-  static renderNavigationAvatar = (navigation, user) => (
-    <TouchableOpacity onPress={() => _Chat.onNavigationAvatarPressed(navigation, user)}>
-      <Image source={user.photo} />
-    </TouchableOpacity>
-  );
-
-  renderDate = (date) => (
-    <Text style={styles.time} category='c2' appearance='hint'>
-      {moment().add(date, 'seconds').format('LT')}
-    </Text>
-  );
-
-  renderItem = ({ item }) => {
-    const isIncoming = item.type === 'in';
-    const backgroundColor = isIncoming
-      ? styles.messageInBackground
-      : styles.messageOutBackground;
-    const itemStyle = isIncoming ? styles.itemIn : styles.itemOut;
-
-    return (
-      <View style={[styles.item, itemStyle]}>
-        {!isIncoming && this.renderDate(item.time)}
-        <View style={[styles.balloon, backgroundColor]}>
-          <Text category='p1' style={styles.text} style={[{ paddingTop: 5 }, styles.text]}>{item.text}</Text>
+  return (
+    <SafeAreaView style={styles.outerContainer}>
+      <KeyboardAvoidingView
+        style={styles.innerContainer}
+        behavior="height"
+        keyboardVerticalOffset={Platform.select({
+          ios: 78,
+          android: 0
+        })}
+      >
+        <View style={styles.topContainer}>
+          {messages.map(message => (
+            <View key={message.timetoken} style={styles.messageContainer}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarContent}>{message.author}</Text>
+              </View>
+              <View style={styles.messageContent}>
+                <Text>{message.content}</Text>
+              </View>
+            </View>
+          ))}
         </View>
-        {isIncoming && this.renderDate(item.time)}
-      </View>
-    );
-  };
-
-  render = () => {
-    return (
-      <KeyboardAwareScrollView
-        style={styles.container}
-        onResponderRelease={Keyboard.dismiss}>
-        <FlatList
-          ref={this.listRef}
-          extraData={this.state}
-          style={styles.list}
-          data={this.state.data.messages}
-          keyExtractor={this.extractItemKey}
-          renderItem={this.renderItem}
-        />
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.plus}>
-            <Text category='h1' status='success'>+</Text>
-          </TouchableOpacity>
+        <View style={styles.bottomContainer}>
           <TextInput
-            onFocus={this.scrollToEnd}
-            onBlur={this.scrollToEnd}
-            onChangeText={this.onInputChanged}
-            value={this.state.message}
-            placeholder="Type a text..."
-            style={styles.input}
-            textStyle={styles.text}
+            style={styles.textInput}
+            value={input}
+            onChangeText={setInput}
+            onSubmitEditing={handleSubmit}
+            returnKeyType="send"
+            enablesReturnKeyAutomatically={true}
+            placeholder="Type your message here..."
           />
-          <TouchableOpacity onPress={this.onSendButtonPressed} style={styles.send} >
-            <Image source={require('./data/sendIcon.png')} />
-          </TouchableOpacity>
+          <View style={styles.submitButton}>
+            {input !== "" && <Button title="Send" onPress={handleSubmit} />}
+          </View>
         </View>
-      </KeyboardAwareScrollView>
-
-    )
-  }
-}
-
-export const theme = {
-  "color-danger-400": "#ff708d",
-  "color-basic-100": "white",
-  "color-basic-300": "#edf0f4",
-  "color-basic-400": "#dde1eb",
-  "color-basic-500": "#C5CEE0",
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    alignItems: 'center',
+  outerContainer: {
+    width: "100%",
+    height: "100%"
+  },
+  innerContainer: {
+    width: "100%",
+    height: "100%"
+  },
+  topContainer: {
+    flex: 1,
+    width: "100%",
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    paddingHorizontal: 16
+  },
+  messageContainer: {
+    flexDirection: "row",
+    marginTop: 16,
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: 8,
+    borderRadius: 4
   },
   avatar: {
-    marginRight: 16,
+    width: 38,
+    height: 38,
+    borderRadius: 50,
+    overflow: "hidden",
+    marginRight: 16
   },
-  container: {
+  avatarContent: {
+    fontSize: 30,
+    textAlign: "center",
+    textAlignVertical: "center"
+  },
+  messageContent: {
+    flex: 1
+  },
+  bottomContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16
+  },
+  textInput: {
     flex: 1,
-    backgroundColor: theme['color-basic-100'],
+    backgroundColor: "#fff",
+    borderRadius: 4,
+    padding: 16,
+    elevation: 2
   },
-  list: {
-    paddingHorizontal: 17,
-  },
-  footer: {
-    flexDirection: 'row',
-    minHeight: 60,
-    padding: 10,
-    backgroundColor: theme['color-basic-300'],
-    alignItems: 'center',
-
-  },
-  item: {
-    marginVertical: 14,
-    flex: 1,
-    flexDirection: 'row',
-  },
-  itemIn: {},
-  itemOut: {
-    alignSelf: 'flex-end',
-  },
-  balloon: {
-    maxWidth: scale(250),
-    paddingHorizontal: 15,
-    paddingTop: 10,
-    paddingBottom: 15,
-    borderRadius: 20,
-  },
-  time: {
-    alignSelf: 'flex-end',
-    margin: 15,
-  },
-  plus: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    marginRight: 7,
-  },
-  send: {
-    width: 40,
-    height: 40,
-    marginLeft: 10,
-    borderColor: theme["color-danger-400"],
-    backgroundColor: theme["color-danger-400"],
-    borderWidth: 2,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 25,
-  },
-  messageInBackground: {
-    backgroundColor: theme['color-basic-300']
-  },
-  messageOutBackground: {
-    backgroundColor: theme['color-basic-500']
-  },
-  text: {
-    color: theme['color-basic-1000']
-  },
-  input: {
-    backgroundColor: theme['color-basic-100'],
-    borderColor: theme['color-basic-400'],
-    borderRadius: 25,
-    flex: 1,
-
-  },
+  submitButton: {
+    position: "absolute",
+    right: 32
+  }
 });
-
-export default {
-  name: "Chat",
-  screen: _Chat,
-  reducer: null,
-  actions: null
-}
