@@ -96,18 +96,31 @@ const styles = StyleSheet.create({
   }
 });
 
-const navigator = () => {
+import PubNub from "pubnub";
+import { PubNubProvider } from "pubnub-react";
+
+const pubnub = new PubNub({
+  subscribeKey: "demo",
+  publishKey: "demo",
+  uuid: "0"
+});
+
+console.disableYellowBox = true;
+
+const ChatNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="EmojiPicker">
-      <Stack.Screen name="EmojiPicker" component={EmojiPicker} />
-      <Stack.Screen name="Chat" component={Chat} />
-    </Stack.Navigator>
+    <PubNubProvider client={pubnub}>
+      <Stack.Navigator headerMode="none" initialRouteName="EmojiPicker">
+        <Stack.Screen name="EmojiPicker" component={EmojiPicker} />
+        <Stack.Screen name="Chat" component={Chat} />
+      </Stack.Navigator>
+    </PubNubProvider>
   )
 }
 
 export default {
   name: "Chat",
-  navigator: navigator,
+  navigator: ChatNavigator,
   reducer: null,
   actions: null
 }
