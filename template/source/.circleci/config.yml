@@ -1,3 +1,4 @@
+{% raw -%}
 version: 2
 jobs:
   node:
@@ -92,7 +93,7 @@ jobs:
       - run:
           name: Add upload-key.keystore file
           working_directory: android
-          command: |
+          command:  |
             cd app
             echo "$ANDROID_KEYSTORE" | base64 --decode > upload-key.keystore
 
@@ -124,7 +125,7 @@ jobs:
 
   ios:
     macos:
-      xcode: '11.1.0'
+      xcode: "11.1.0"
     working_directory: ~/build
 
     # use a --login shell so our "set Ruby version" command gets picked up for later steps
@@ -133,8 +134,9 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
+{%- endraw %}
             - 'ProjectSSHKeyFingerPrint'
-
+{% raw %}
       - checkout
 
       - run:
@@ -256,3 +258,4 @@ workflows:
       - ios:
           requires:
             - node
+{%- endraw %}
