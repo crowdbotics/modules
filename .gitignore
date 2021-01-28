@@ -106,3 +106,4 @@ dist
 # crowdbotics@modules ignores
 demo/
 demo.*/
+cookiecutter/
