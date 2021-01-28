@@ -7,7 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 const EmojiPicker = ({ navigation }) => {
-  // In here we are soring our currently picked emoji.
+  // In here we are storing our currently picked emoji.
   const [chosenEmoji, setEmoji] = useState(null);
 
   // This method will be called when our user selects an emoji
