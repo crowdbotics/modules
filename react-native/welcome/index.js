@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 
 export default {
   name: "Welcome",
-  screen: Welcome,
+  navigator: Welcome,
   reducer: null,
   actions: null
 }
