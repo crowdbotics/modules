@@ -32,6 +32,7 @@ if (packageJSON.hasOwnProperty("x-dependencies")) {
 
 // Remove packages
 packages = packages.join(" ");
+// TODO -- add process.chdir
 execShellCommand(`cd ${demoDir} && yarn remove ${packages}`);
 const rmDir = path.join(targetModuleDir, module);
 execShellCommand(`rm -rf ${rmDir}`)
