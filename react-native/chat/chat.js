@@ -11,8 +11,8 @@ import {
 } from "react-native";
 import { usePubNub } from "pubnub-react";
 
-const ChatView = ({ route }) => {
-  // The `route` prop will be bassed to us thanks to React Navigation.
+const Chat = ({ route }) => {
+  // The `route` prop will be passed to us thanks to React Navigation.
   // It will contain our emoji in `route.params.emoji`.
   const userEmoji = route.params.emoji;
 
@@ -175,4 +175,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ChatView;
+export default Chat;
