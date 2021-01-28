@@ -9,7 +9,7 @@ function Welcome({ navigation }) {
       <Pressable
         onPress={() => navigation.navigate(module.name)}
         style={pressed}
-        key={module.screen}
+        key={module.name}
       >
         <Text style={styles.buttonText}>{module.name}</Text>
       </Pressable >
