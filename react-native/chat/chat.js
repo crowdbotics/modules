@@ -175,9 +175,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  name: "Chat",
-  screen: Chat,
-  reducer: null,
-  actions: null
-}
+export default ChatView;
