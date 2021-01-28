@@ -30,6 +30,14 @@ export const read = path => {
   return fs.readFileSync(path, "utf8");
 };
 
+export const remove = path => {
+  return fs.rmSync(path);
+}
+
+export const rename = (oldPath, newPath) => {
+  return fs.renameSync(oldPath, newPath);
+}
+
 export const write = (path, data) => {
   return fs.writeFileSync(path, data);
 }
