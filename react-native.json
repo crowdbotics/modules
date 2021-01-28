@@ -1,4 +1,16 @@
 {
+  "app-menu": {
+    "index.js": {
+      "code": "import React from \"react\";\nimport { View, Text, StyleSheet, Pressable } from 'react-native';\nimport { useNavigationState } from \"@react-navigation/native\";\n\nfunction AppMenu({ navigation }) {\n  const routes = useNavigationState(\n    state => state.routeNames.filter(name => name !== \"App Menu\")\n  );\n  const links = routes.map(route => {\n    return (\n      <Pressable\n        onPress={() => navigation.navigate(route)}\n        style={pressed}\n        key={route}\n      >\n        <Text style={styles.buttonText}>{route}</Text>\n      </Pressable >\n    )\n  });\n  return (\n    <View style={styles.container}>\n      <Text style={styles.text}>Screens available ({routes.length})</Text>\n      {links}\n    </View>\n  )\n}\n\nconst pressed = ({ pressed }) => [\n  pressed ? styles.buttonPressed : styles.buttonNotPressed,\n  styles.button\n];\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    height: 100,\n    padding: 13\n  },\n  text: {\n    fontSize: 20\n  },\n  buttonPressed: {\n    backgroundColor: 'rgba(72, 61, 139, 0.75)'\n  },\n  buttonNotPressed: {\n    backgroundColor: 'rgba(72, 61, 139, 1)'\n  },\n  button: {\n    borderRadius: 4,\n    padding: 15,\n    marginTop: 10\n  },\n  buttonText: {\n    color: \"white\",\n    textAlign: \"center\",\n    fontSize: 16\n  }\n})\n\nexport default {\n  name: \"App Menu\",\n  navigator: AppMenu,\n  reducer: null,\n  actions: null\n}\n",
+      "parentDir": null,
+      "newFile": true
+    },
+    "package.json": {
+      "code": "{\n  \"name\": \"@modules/app-menu\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Module that shows available routes in a menu with links\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {}\n}\n",
+      "parentDir": null,
+      "newFile": true
+    }
+  },
   "articles": {
     "README.md": {
       "code": "# Article List and Detail\n\n## Setup\n\nOpen `/src/navigator/mainNavigator.js` and import the stack navigator defined in `navigator.js`.\n\n```javascript\nimport Articles from \"../features/<module_directory>/navigator\";\n```\n\nAnd then add it to the navigation:\n\n```javascript\n//@BlueprintImportInsertion\nArticles: {\n  screen: Articles\n},\n```\n\nOpen `store/services.js` in the /src/features/article#####/ folder and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint (ie. demo0122202101-24002.botics.com/modules/articles). The initial piece is your project name and the numeric piece is your project number.\n\nAdd the module reducer and saga to your `/src/store/index.js` file:\n\n1. Add the imports\n\n```javascript\nimport articlesReducer from \"../features/<module_directory>/store/reducers\";\nimport articlesSagas from \"../features/<module_directory>/store/sagas\";\n```\n\n2. Add the reducer\n\n```\n   combineReducers({\n     apiReducer: apiReducer,\n     customReducer: customReducer,\n     articlesReducer: articlesReducer\n   }),\n```\n\n3. Add the root saga\n\n```\n  sagaMiddleware.run(rootSaga);\n  sagaMiddleware.run(customRootSaga);\n  sagaMiddleware.run(articlesSagas);\n```\n",
@@ -368,18 +380,6 @@
     },
     "view.js": {
       "code": "import React, { Component } from 'react';\nimport { View, Text } from 'react-native';\nimport { Avatar } from 'react-native-elements';\nimport { Color, styles } from './styles';\nimport { getInitials, transformLabel } from './utils';\nimport moment from 'moment';\n\nconst UserInfo = props => (\n  <View>\n    <Text style={styles.label}>{transformLabel(props.label)}</Text>\n    <Text style={styles.text}>\n      {props.value ? props.value : 'Not available'}\n    </Text>\n  </View>\n);\n\nexport default class ViewUser extends Component {\n  constructor(props) {\n    super(props);\n  }\n\n  render() {\n    const { user } = this.props;\n    const birthday = user.birth_date\n      ? moment(user.birth_date, 'YYYY-MM-DD').format('LL')\n      : null;\n    const initials = getInitials(user);\n    return (\n      <View>\n        {user.id ? (\n          <View>\n            <View style={styles.profileIcon}>\n              <Avatar\n                size=\"large\"\n                rounded\n                icon={{ name: 'user', type: 'font-awesome' }}\n                title={initials}\n                containerStyle={{ backgroundColor: Color.pink }}\n              />\n            </View>\n            <UserInfo\n              label=\"Name\"\n              value={`${user.first_name} ${user.last_name}`}\n            />\n            <UserInfo label=\"Email\" value={user.email} />\n            <UserInfo label=\"Birthday\" value={birthday} />\n            <UserInfo label=\"Biography\" value={user.bio} />\n          </View>\n        ) : (\n          <Text style={styles.label}>No user information available.</Text>\n        )}\n      </View>\n    );\n  }\n}\n",
-      "parentDir": null,
-      "newFile": true
-    }
-  },
-  "welcome": {
-    "index.js": {
-      "code": "import React from \"react\";\nimport modules from \"@modules\";\nimport { View, Text, StyleSheet, Pressable } from 'react-native';\n\nfunction Welcome({ navigation }) {\n  const modulesList = modules.filter(module => module.name !== \"Welcome\");\n  const links = modulesList.map(module => {\n    return (\n      <Pressable\n        onPress={() => navigation.navigate(module.name)}\n        style={pressed}\n        key={module.name}\n      >\n        <Text style={styles.buttonText}>{module.name}</Text>\n      </Pressable >\n    )\n  });\n  return (\n    <View style={styles.container}>\n      <Text style={styles.text}>Screens available ({modulesList.length})</Text>\n      {links}\n    </View>\n  )\n}\n\nconst pressed = ({ pressed }) => [\n  pressed ? styles.buttonPressed : styles.buttonNotPressed,\n  styles.button\n];\n\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    height: 100,\n    padding: 13\n  },\n  text: {\n    fontSize: 20\n  },\n  buttonPressed: {\n    backgroundColor: 'rgba(72, 61, 139, 0.75)'\n  },\n  buttonNotPressed: {\n    backgroundColor: 'rgba(72, 61, 139, 1)'\n  },\n  button: {\n    borderRadius: 4,\n    padding: 15,\n    marginTop: 10\n  },\n  buttonText: {\n    color: \"white\",\n    textAlign: \"center\",\n    fontSize: 16\n  }\n})\n\nexport default {\n  name: \"Welcome\",\n  navigator: Welcome,\n  reducer: null,\n  actions: null\n}\n",
-      "parentDir": null,
-      "newFile": true
-    },
-    "package.json": {
-      "code": "{\n  \"name\": \"@modules/welcome\",\n  \"version\": \"1.0.0\",\n  \"description\": \"Welcome screen for developers\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {}\n}\n",
       "parentDir": null,
       "newFile": true
     }
