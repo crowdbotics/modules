@@ -16,7 +16,7 @@ fastlane_require('httparty')
 
 default_platform(:android)
 
-base_name = 'modules_dev_18197'
+base_name = 'ProjectName'
 
 platform(:android) do
   desc('Runs all the tests')
