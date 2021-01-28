@@ -35,6 +35,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ## React Native
 
+- [App Menu](react-native/app-menu): `app-menu`
 - [Articles](react-native/articles): `articles`
 - [Chat](react-native/chat): `chat`
 - [Login](react-native/login): `login`
@@ -46,6 +47,10 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 - [User Profile](react-native/user-profile): `user-profile`
 
 ## Previews
+
+| Brand new App                     | App Menu                         | App Menu + modules                                  |
+| --------------------------------- | -------------------------------- | --------------------------------------------------- |
+| ![brandnew](preview/brandnew.png) | ![App Menu](preview/appmenu.png) | ![App Menu and Modules](preview/appmenumodules.png) |
 
 | Article list                      | Article detail                  | Chat list                       | Typing view                      | Privacy Policy                                |
 | --------------------------------- | ------------------------------- | ------------------------------- | -------------------------------- | --------------------------------------------- |
@@ -155,9 +160,9 @@ Removes a module from the demo app, performing the follow operations:
 
 We provide a module called "App Menu" that automatically lists available routes:
 
-| Chat and Articles installed             | No modules installed                             |
-| --------------------------------------- | ------------------------------------------------ |
-| ![Modules preview](preview/modules.png) | ![No modules preview](preview/modules-empty.png) |
+| Chat and Maps installed                        | No modules installed                       |
+| ---------------------------------------------- | ------------------------------------------ |
+| ![Modules preview](preview/appmenumodules.png) | ![No modules preview](preview/appmenu.png) |
 
 ```javascript
 function AppMenu({ navigation }) {
