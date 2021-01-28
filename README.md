@@ -20,6 +20,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [Metro config](#metro-config)
   - [Using @modules](#using-modules)
   - [Manifest](#manifest)
+  - [Generate cookiecutter](#generate-cookiecutter)
 - [Custom React Native template](#custom-react-native-template)
   - [What's included](#whats-included)
 - [Authoring Modules](#authoring-modules)
@@ -188,6 +189,22 @@ function AppMenu({ navigation }) {
   );
 }
 ```
+
+## Generate cookiecutter
+
+```sh
+npm run cookie
+```
+
+Generates cookiecutter template by replacing according to table:
+
+| Before                     | After                                    | Example            |
+| -------------------------- | ---------------------------------------- | ------------------ |
+| `ProjectName`              | `{{ cookiecutter.project_slug }}`        | `MyNewApp`         |
+| `projectname`              | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
+| `ProjectNameIdentifier`    | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
+| `ProjectOwnerEmail`        | `{{ cookiecutter.owner_email }}`         | `mail@example.com` |
+| `ProjectSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
 
 ## Metro config
 
