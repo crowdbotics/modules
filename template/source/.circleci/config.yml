@@ -92,7 +92,7 @@ jobs:
       - run:
           name: Add upload-key.keystore file
           working_directory: android
-          command:  |
+          command: |
             cd app
             echo "$ANDROID_KEYSTORE" | base64 --decode > upload-key.keystore
 
@@ -111,7 +111,7 @@ jobs:
 
       - store_artifacts:
           path: android/app/build/outputs/bundle/release/app-release.aab
-                
+
       - run:
           name: Webhook Success
           command: bash .circleci/webhook_callback.sh "success"
@@ -124,7 +124,7 @@ jobs:
 
   ios:
     macos:
-      xcode: "11.1.0"
+      xcode: '11.1.0'
     working_directory: ~/build
 
     # use a --login shell so our "set Ruby version" command gets picked up for later steps
@@ -133,7 +133,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "c5:bd:6d:0b:a1:39:97:83:ca:b5:13:59:14:ff:49:40"
+            - 'ProjectSSHKeyFingerPrint'
 
       - checkout
 
