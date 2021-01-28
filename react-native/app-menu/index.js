@@ -1,23 +1,25 @@
 import React from "react";
-import modules from "@modules";
 import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { useNavigationState } from "@react-navigation/native";
 
-function Welcome({ navigation }) {
-  const modulesList = modules.filter(module => module.name !== "Welcome");
-  const links = modulesList.map(module => {
+function AppMenu({ navigation }) {
+  const routes = useNavigationState(
+    state => state.routeNames.filter(name => name !== "App Menu")
+  );
+  const links = routes.map(route => {
     return (
       <Pressable
-        onPress={() => navigation.navigate(module.name)}
+        onPress={() => navigation.navigate(route)}
         style={pressed}
-        key={module.name}
+        key={route}
       >
-        <Text style={styles.buttonText}>{module.name}</Text>
+        <Text style={styles.buttonText}>{route}</Text>
       </Pressable >
     )
   });
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Screens available ({modulesList.length})</Text>
+      <Text style={styles.text}>Screens available ({routes.length})</Text>
       {links}
     </View>
   )
@@ -56,8 +58,8 @@ const styles = StyleSheet.create({
 })
 
 export default {
-  name: "Welcome",
-  navigator: Welcome,
+  name: "App Menu",
+  navigator: AppMenu,
   reducer: null,
   actions: null
 }
