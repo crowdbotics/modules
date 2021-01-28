@@ -35,7 +35,8 @@ const getModules = () => {
 
 export const reducers = getPropertyMap(getModules(), "reducer");
 export const actions = getPropertyMap(getModules(), "actions");
-export const navigators = Object.entries(getPropertyMap(getModules(), "navigator"));
+export const navigators = Object.entries(
+  getPropertyMap(getModules(), "navigator")
+);
 export const initialRoute = getModules()[0].name;
-
-export default modules;
+export default getModules();
