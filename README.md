@@ -151,31 +151,33 @@ Removes a module from the demo app, performing the follow operations:
 
 # Auto loading and setting up modules
 
-## Welcome component
+## App Menu module
 
-Our template includes a placeholder splash screen that automatically lists installed modules links.
+We provide a module called "App Menu" that automatically lists available routes:
 
 | Chat and Articles installed             | No modules installed                             |
 | --------------------------------------- | ------------------------------------------------ |
 | ![Modules preview](preview/modules.png) | ![No modules preview](preview/modules-empty.png) |
 
 ```javascript
-function Welcome({ navigation }) {
-  const links = modules.map((module) => {
+function AppMenu({ navigation }) {
+  const routes = useNavigationState((state) =>
+    state.routeNames.filter((name) => name !== "App Menu")
+  );
+  const links = routes.map((route) => {
     return (
-      <View style={styles.button}>
-        <Button
-          key={module.screen}
-          title={module.name}
-          onPress={() => navigation.navigate(module.name)}
-        />
-      </View>
+      <Pressable
+        onPress={() => navigation.navigate(route)}
+        style={pressed}
+        key={route}
+      >
+        <Text style={styles.buttonText}>{route}</Text>
+      </Pressable>
     );
   });
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Total modules installed: {modules.length}</Text>
-      <Text style={styles.text}>Screens available:</Text>
+      <Text style={styles.text}>Screens available ({routes.length})</Text>
       {links}
     </View>
   );
@@ -239,8 +241,6 @@ This gives us three main benefits:
 
 Notice the `@modules` key above, which means that we can import `src/modules/index.js` like this:
 
-[template/source/src/config/index.js](template/source/src/config/index.js)
-
 ```javascript
 import modules from "@modules";
 ```
@@ -250,18 +250,48 @@ And the default export of that module is just the components themselves:
 [template/source/src/modules/index.js](template/source/src/modules/index.js)
 
 ```javascript
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { modules } from "./manifest.js";
 import { getPropertyMap } from "./utils.js";
 
-export const reducers = getPropertyMap(modules, "reducer");
-export const actions = getPropertyMap(modules, "actions");
-export default getPropertyMap(modules, "screen"); // <-- Default export
-// template/source/src/modules/utils.js
-export function getPropertyMap(source, prop) {
-  let map = {};
-  source.map((mod) => (map[mod.name] = mod[prop]));
-  return map;
-}
+const YourApp = () => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Welcome to your brand new app!</Text>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: 100,
+    padding: 13,
+  },
+  text: {
+    fontSize: 20,
+  },
+});
+
+const YourAppModule = {
+  name: "Your App",
+  navigator: YourApp,
+  reducer: null,
+  actions: null,
+};
+
+const getModules = () => {
+  return modules.length ? modules : [YourAppModule];
+};
+
+export const reducers = getPropertyMap(getModules(), "reducer");
+export const actions = getPropertyMap(getModules(), "actions");
+export const navigators = Object.entries(
+  getPropertyMap(getModules(), "navigator")
+);
+export const initialRoute = getModules()[0].name;
+export default getModules();
 ```
 
 The `reducers` get imported into our `store.js` setup
