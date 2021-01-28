@@ -10,6 +10,7 @@
     "demo:remove": "node scripts/demo-remove.js",
     "parse": "node scripts/parse.js",
     "info": "node scripts/info.js",
+    "cookie": "node scripts/cookie.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,5 +32,9 @@
     "@babel/template": "^7.12.7",
     "@babel/types": "^7.12.12",
     "prettier": "^2.2.1"
+  },
+  "devDependencies": {
+    "@react-native-community/cli": "^4.13.1",
+    "ncp": "^2.0.0"
   }
 }
