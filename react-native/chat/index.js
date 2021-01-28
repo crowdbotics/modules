@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, SafeAreaView, Button, View } from "react-native";
 import EmojiSelector from "react-native-emoji-selector";
+import Chat from "./chat";
 
-const EmojiPickerView = ({ navigation }) => {
+import { createStackNavigator } from '@react-navigation/stack';
+const Stack = createStackNavigator();
+
+const EmojiPicker = ({ navigation }) => {
   // In here we are soring our currently picked emoji.
   const [chosenEmoji, setEmoji] = useState(null);
 
@@ -92,9 +96,18 @@ const styles = StyleSheet.create({
   }
 });
 
+const navigator = () => {
+  return (
+    <Stack.Navigator initialRouteName="EmojiPicker">
+      <Stack.Screen name="EmojiPicker" component={EmojiPicker} />
+      <Stack.Screen name="Chat" component={Chat} />
+    </Stack.Navigator>
+  )
+}
+
 export default {
   name: "Chat",
-  screen: EmojiPickerView,
+  navigator: navigator,
   reducer: null,
   actions: null
 }
