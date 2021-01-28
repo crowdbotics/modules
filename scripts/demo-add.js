@@ -32,6 +32,7 @@ if (packageJSON.hasOwnProperty("x-dependencies")) {
 
 // Install packages
 packages = packages.join(" ");
+// TODO -- add process.chdir
 execShellCommand(`cd ${demoDir} && yarn add ${packages}`);
 
 // Update manifest
