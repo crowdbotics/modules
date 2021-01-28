@@ -22,3 +22,7 @@ Chat: {
   screen: Chat
 },
 ```
+
+# Based on pubnub/tutorial-app-react-native
+
+https://github.com/pubnub/tutorial-app-react-native
