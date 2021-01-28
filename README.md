@@ -10,6 +10,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [React Native](#react-native)
   - [Previews](#previews)
 - [Commands](#commands)
+  - [Requirements](#requirements)
   - [Generate modules data JSON](#generate-modules-data-json)
   - [Get module info](#get-module-info)
   - [Create a local demo app](#create-a-local-demo-app)
