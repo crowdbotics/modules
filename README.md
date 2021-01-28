@@ -67,6 +67,10 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 # Commands
 
+## Requirements
+
+Node LTS (14.15.4) is required, we depend on relatively new `fs` calls.
+
 ## Generate modules data JSON
 
 ```sh
