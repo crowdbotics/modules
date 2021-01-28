@@ -24,7 +24,7 @@ const Maps = () => {
 
 export default {
   name: "Maps",
-  screen: Maps,
+  navigator: Maps,
   reducer: null,
   actions: null
 }
