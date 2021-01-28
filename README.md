@@ -16,7 +16,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [Install a module](#install-a-module)
   - [Remove a module](#remove-a-module)
 - [Auto loading and setting up modules](#auto-loading-and-setting-up-modules)
-  - [Welcome component](#welcome-component)
+  - [App Menu module](#app-menu-module)
   - [Metro config](#metro-config)
   - [Using @modules](#using-modules)
   - [Manifest](#manifest)
