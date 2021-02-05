@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "demo": "node scripts/demo.js",
-    "demo:add": "node scripts/demo-add.js",
-    "demo:remove": "node scripts/demo-remove.js",
+    "add": "node scripts/add.js",
+    "remove": "node scripts/remove.js",
     "parse": "node scripts/parse.js",
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
