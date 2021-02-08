@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { modules } from "./manifest.js";
+import { manifest } from "./manifest.js";
 import { getPropertyMap } from "./utils.js";
 
 const YourApp = () => {
@@ -25,18 +25,27 @@ const styles = StyleSheet.create({
 const YourAppModule = {
   name: "Your App",
   navigator: YourApp,
-  reducer: null,
-  actions: null
+  slice: null,
+}
+
+const validate = mod => {
+  return (
+    mod.hasOwnProperty("name") &&
+    mod.hasOwnProperty("navigator") &&
+    mod.hasOwnProperty("slice")
+  )
 }
 
 const getModules = () => {
+  let modules = manifest.filter(validate);
   return modules.length ? modules : [YourAppModule];
 }
 
-export const reducers = getPropertyMap(getModules(), "reducer");
-export const actions = getPropertyMap(getModules(), "actions");
+export const slices = Object.entries(
+  getPropertyMap(getModules(), "slice")
+);
 export const navigators = Object.entries(
   getPropertyMap(getModules(), "navigator")
 );
 export const initialRoute = getModules()[0].name;
-export default getModules();
+export default getModules;
