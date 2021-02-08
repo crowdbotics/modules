@@ -34,11 +34,14 @@ const validate = mod => {
 const getModules = () => {
   // normalize modules
   let modules = manifest.map(mod => {
-    if (!validate(mod))
+    if (validate(mod)) {
+      return mod;
+    } else {
       return {
         title: `${mod.name}`,
         navigator: mod
       }
+    }
   });
   return modules.length ? modules : [YourAppModule];
 }
