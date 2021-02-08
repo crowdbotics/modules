@@ -37,8 +37,7 @@ const getModules = () => {
     if (!validate(mod))
       return {
         title: `${mod.name}`,
-        navigator: mod,
-        slice: null
+        navigator: mod
       }
   });
   return modules.length ? modules : [YourAppModule];
