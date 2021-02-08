@@ -1,1 +1,1 @@
-export const modules = [];
+export const manifest = [];
