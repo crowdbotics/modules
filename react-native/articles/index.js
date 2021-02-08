@@ -63,7 +63,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default {
-  name: "Articles",
+  title: "Articles",
   navigator: connect(mapStateToProps, mapDispatchToProps)(ArticleList),
   reducer: reducer,
   actions: [article_list]

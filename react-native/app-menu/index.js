@@ -58,8 +58,6 @@ const styles = StyleSheet.create({
 })
 
 export default {
-  name: "App Menu",
-  navigator: AppMenu,
-  reducer: null,
-  actions: null
+  title: "App Menu",
+  navigator: AppMenu
 }
