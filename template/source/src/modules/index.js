@@ -75,5 +75,8 @@ export const slices = Object.entries(
 export const navigators = Object.entries(
   getPropertyMap(getModules(), "navigator")
 );
+export const hooks = Object.entries(
+  getPropertyMap(getModules(), "hook")
+);
 export const initialRoute = getModules()[0].title;
 export default getModules;
