@@ -489,19 +489,28 @@ It should look like this:
 ```javascript
 export default {
   title: "Maps", // required
-  navigator: Maps, // required
+  navigator: Maps, // optional
   slice: MapsSlice, // optional
 };
 ```
 
-We also support plain exports where we convert the export function name as the title:
+The key `title` is required, everything else is optional and can be ommited.
+We use this format to "auto-import" every module into the app automatically.
+
+We also support plain exports:
 
 ```javascript
 export default MapsNavigator;
 ```
 
-The keys `title` and `navigator` are required, everything else is optional and can be ommited.
-We use this format to "auto-import" every module into the app automatically.
+Which would be converted into this object:
+
+```javascript
+export default {
+  title: "MapsNavigator",
+  navigator: MapsNavigator,
+};
+```
 
 ## Adding dependencies to your module
 
