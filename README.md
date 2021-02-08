@@ -291,38 +291,19 @@ const YourApp = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: 100,
-    padding: 13,
-  },
-  text: {
-    fontSize: 20,
-  },
-});
+// ...
 
-const YourAppModule = {
-  name: "Your App",
-  navigator: YourApp,
-  reducer: null,
-  actions: null,
-};
-
-const getModules = () => {
-  return modules.length ? modules : [YourAppModule];
-};
-
-export const reducers = getPropertyMap(getModules(), "reducer");
-export const actions = getPropertyMap(getModules(), "actions");
+export const slices = Object.entries(getPropertyMap(getModules(), "slice"));
 export const navigators = Object.entries(
   getPropertyMap(getModules(), "navigator")
 );
-export const initialRoute = getModules()[0].name;
+export const hooks = Object.entries(getPropertyMap(getModules(), "hook"));
+export const initialRoute = getModules()[0].title;
+export default getModules;
 export default getModules();
 ```
 
-The `reducers` get imported into our `store.js` setup
+The `slices` get imported into our `store.js` setup
 
 [template/source/src/config/store.js](template/source/src/config/store.js)
 
@@ -332,10 +313,15 @@ import {
   createReducer,
   combineReducers,
 } from "@reduxjs/toolkit";
-import { reducers } from "@modules";
+import { slices } from "@modules";
+
+export const APP_URL = "https://ProjectNameIdentifier.botics.co";
+
+const reducers = slices.map((slice) => slice.reducer);
 
 const appState = {
   name: "ProjectName",
+  url: APP_URL,
   version: "1.0.0",
 };
 
