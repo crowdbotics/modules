@@ -28,6 +28,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [package.json](#packagejson)
   - [Adding dependencies to your module](#adding-dependencies-to-your-module)
   - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
+  - [Running code on app load](#running-code-on-app-load)
 
 # Modules Available
 
