@@ -280,7 +280,7 @@ And the default export of that module is just the components themselves:
 ```javascript
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { modules } from "./manifest.js";
+import { manifest } from "./manifest.js";
 import { getPropertyMap } from "./utils.js";
 
 const YourApp = () => {
@@ -358,7 +358,7 @@ After installing the `maps` module i.e. it will look like this:
 
 ```javascript
 import Maps from "./maps";
-export const modules = [Maps];
+export const manifest = [Maps];
 ```
 
 We make use of the `babel` and the transformer `ManifestTransformer` to manipulate this file content upon module's installations or removals.
