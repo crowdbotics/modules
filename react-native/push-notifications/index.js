@@ -62,7 +62,8 @@ const useOneSignal = () => {
       this.OSLog("OneSignal: permission changed:", event);
     });
     getDeviceState();
-  }, []);
+  });
+
   return isSubscribed;
 }
 
