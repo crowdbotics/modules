@@ -121,6 +121,5 @@ const ChatNavigator = () => {
 export default {
   name: "Chat",
   navigator: ChatNavigator,
-  reducer: null,
-  actions: null
+  slice: null
 }
