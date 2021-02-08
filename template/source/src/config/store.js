@@ -1,7 +1,9 @@
 import { configureStore, createReducer, combineReducers } from "@reduxjs/toolkit";
-import { reducers } from "@modules";
+import { slices } from "@modules";
 
 export const APP_URL = "https://ProjectNameIdentifier.botics.co";
+
+const reducers = slices.map(slice => slice.reducer);
 
 const appState = {
   name: "ProjectName",

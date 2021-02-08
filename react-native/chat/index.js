@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, SafeAreaView, Button, View } from "react-native";
+import { StyleSheet, Text, SafeAreaView, Button, View, LogBox } from "react-native";
 import EmojiSelector from "react-native-emoji-selector";
 import Chat from "./chat";
 
@@ -105,7 +105,7 @@ const pubnub = new PubNub({
   uuid: "0"
 });
 
-console.disableYellowBox = true;
+LogBox.ignoreAllLogs(true);
 
 const ChatNavigator = () => {
   return (
@@ -119,7 +119,6 @@ const ChatNavigator = () => {
 }
 
 export default {
-  name: "Chat",
+  title: "Chat",
   navigator: ChatNavigator,
-  slice: null
 }

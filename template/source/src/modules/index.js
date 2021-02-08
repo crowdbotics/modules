@@ -23,21 +23,24 @@ const styles = StyleSheet.create({
 })
 
 const YourAppModule = {
-  name: "Your App",
-  navigator: YourApp,
-  slice: null,
+  title: "Your App",
+  navigator: YourApp
 }
 
 const validate = mod => {
-  return (
-    mod.hasOwnProperty("name") &&
-    mod.hasOwnProperty("navigator") &&
-    mod.hasOwnProperty("slice")
-  )
-}
+  return mod.hasOwnProperty("title") && mod.hasOwnProperty("navigator")
+};
 
 const getModules = () => {
-  let modules = manifest.filter(validate);
+  // normalize modules
+  let modules = manifest.map(mod => {
+    if (!validate(mod))
+      return {
+        title: `${mod.name}`,
+        navigator: mod,
+        slice: null
+      }
+  });
   return modules.length ? modules : [YourAppModule];
 }
 
@@ -47,5 +50,5 @@ export const slices = Object.entries(
 export const navigators = Object.entries(
   getPropertyMap(getModules(), "navigator")
 );
-export const initialRoute = getModules()[0].name;
+export const initialRoute = getModules()[0].title;
 export default getModules;
