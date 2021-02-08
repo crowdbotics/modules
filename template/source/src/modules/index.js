@@ -28,7 +28,7 @@ const YourAppModule = {
 }
 
 const validate = mod => {
-  return mod.hasOwnProperty("title") && mod.hasOwnProperty("navigator")
+  return mod.hasOwnProperty("title");
 };
 
 const getModules = () => {
