@@ -539,3 +539,34 @@ https://github.com/react-native-community/cli/issues/1347
 https://github.com/react-native-maps/react-native-maps/issues/3427#issuecomment-627135604
 
 In order to include `react-native-maps` in your module, simply move the dependency from "dependencies" to "x-dependencies" in your module's `package.json`. Those will be installed alongside the app's "dependencies" avoiding the limitation above.
+
+## Running code on app load
+
+Multiple scenarios and libraries require you to wrap your screen or other components (even your root component) to create context providers or to run initialization code.
+
+Our auto-loading setup allows you to author a custom React hook on your module that gets automatically called in the app's root component.
+
+In other words, any code that you would write inside your root component `componentDidMount` function can be instead written as a custom Hook.
+
+To write the custom hook, please check the React documentation:
+https://reactjs.org/docs/hooks-custom.html
+
+And then export the hook in the module default export like below:
+
+```javascript
+const usePushNotifications = () => {
+  const [someState, setSomeState] = useState(false);
+
+  useEffect(() => {
+    // ...
+  });
+
+  return someState;
+};
+export default {
+  title: "Push Notifications",
+  hook: usePushNotifications,
+};
+```
+
+The example above is for an headless module (no screens), but you can export hooks in regular modules too.
