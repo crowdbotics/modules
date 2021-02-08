@@ -137,7 +137,7 @@ This command runs `npx react-native init` with [`--template`](https://github.com
 ## Install a module
 
 ```sh
-npm run add <module_name>
+npm run add <module_name> <supports_multiple_modules_syntax>
 ```
 
 Installs a module into the demo app, performing the follow operations:
@@ -150,7 +150,7 @@ Installs a module into the demo app, performing the follow operations:
 ## Remove a module
 
 ```sh
-npm run remove <module_name>
+npm run remove <module_name> <supports_multiple_modules_syntax>
 ```
 
 Removes a module from the demo app, performing the follow operations:
