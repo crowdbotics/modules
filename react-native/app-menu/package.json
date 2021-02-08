@@ -4,8 +4,6 @@
   "description": "Module that shows available routes in a menu with links",
   "private": true,
   "main": "index.js",
-  "x-dependencies": {},
   "author": "Crowdbotics",
-  "license": "ISC",
-  "dependencies": {}
+  "license": "ISC"
 }
