@@ -1,3 +1,16 @@
+// START @modules/push-notifications
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.9, 0.99.99]'
+    }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+// END @modules/push-notifications
+
 apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
@@ -129,7 +142,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.projectname"
+        applicationId "com.demo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
