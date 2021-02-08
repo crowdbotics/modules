@@ -1,0 +1,13 @@
+{
+  "name": "@modules/push-notifications",
+  "version": "1.0.0",
+  "description": "TODO",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {},
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "x-dependencies": {
+    "react-native-onesignal": "^4.0.3"
+  }
+}
