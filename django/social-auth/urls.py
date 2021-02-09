@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .viewset import FacebookConnect, GoogleConnect
+from .views import FacebookConnect, GoogleConnect
 
 urlpatterns = [
     path('facebook/connect/', FacebookConnect.as_view(), name='social_facebook_connect'),
