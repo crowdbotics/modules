@@ -29,21 +29,22 @@ You need to setup Facebook SDK to get social login properly configured in your a
 
 2. After that, access the [your facebook apps page](https://developers.facebook.com/apps/) and choose to create a Facebook app. FOr the purpose of social login, you could choose the `build connected experiences` upon facing the question "What do you need your app to do?" and click continue (as shown below). In the next page, type in the name of your app, contact email and, if existing, business manager account for the app and click `Create App`:
 
-![facebook-create-app]()
+![facebook-create-app](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/18906/15c9063c-6f5d-4afa-a77f-76f75c15e062.png)
+![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/18906/ff97ef37-8535-4f4b-958f-def310bf110d.png)
 
-3. After creation, go to your app's dashboard and look for an option to set up social login product to your app. The url should look like this: `https://developers.facebook.com/apps/<your_facebook_app_id>/fb-login/quickstart/`. There, choose the web option (to register a key to your backend).
+3. After creation, go to your Facebook app's dashboard and look for an option to set up social login product to your app. The url should look like this: `https://developers.facebook.com/apps/<your_facebook_app_id>/fb-login/quickstart/`. There, choose the web option (to register a key to your backend).
 
 4. Then, you will be prompted to add your website url (point 1 in the image below) and save (point 2) - your website url is where your backend is being served - you can find this url by clicking on `View App` at crowdbotics dashboard `Settings` page. Check out our knowledge base for more information.
 
 5. After saving, navigate to Facebook dashboard at `Settings -> Basic` (as shown in point 3 of image below).
-![]()
+![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/18906/596578e6-d64c-4d04-a4fa-712da80aa1f5.png)
 
 You need to keep this page open and navigate to another browser tab, as you will need to copy both `App ID` and `App Secret` to paste on your own project admin page. 
 
 6. Navigate to Crowdbotics dashboard for your app and access your app's admin panel. If you do not know what does this mean, please, check out our [Knowledge Base Article](https://knowledge.crowdbotics.com/what-is-the-admin-panel).
 
 At your app's admin page, try to find `Social Accounts` section and click on `Social Applications`: 
-![]()
+![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/18906/9babfe52-423f-40dc-afa0-a5d038782640.png)
 
 7. Then, click to `Add a social Application +` on the button at the right side of your screen. Fill out the form as follows and save:
 
@@ -55,7 +56,7 @@ At your app's admin page, try to find `Social Accounts` section and click on `So
 
 It should end up as something like this:
 
-![]()
+![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/18906/fc889f58-78a5-4828-abb2-4285acac560e.png)
 
 Your backend is now ready to accept facebook login. Redeploy your application so all changes are applied to the server.
 
