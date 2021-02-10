@@ -29,14 +29,12 @@ function apiResetPasswordRequest(action) {
 }
 
 function apiFacebookConnect(data) {
-  console.log(data)
   return authAPI.post(`/modules/social-auth/facebook/connect/`, null, {
     data
   });
 }
 
 function apiGoogleConnect(data) {
-  console.log(data)
   return authAPI.post(`/modules/social-auth/google/connect/`, null, {
     data
   });
