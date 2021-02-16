@@ -1,3 +1,15 @@
+# Requests config
+JSON_HEADER = {"Content-Type": "application/json; charset=utf-8"}
+
+
+def get_header(auth_key: str = None) -> Dict:
+    header = JSON_HEADER
+    if auth_key:
+        header["Authorization"] = f"Basic {auth_key}"
+    return header
+
+
+# Endpoints
 API_ROOT = "https://onesignal.com/api/v1"
 NOTIFICATIONS_PATH = "/notifications"
 NOTIFICATION_PATH = "/notifications/{id}"
