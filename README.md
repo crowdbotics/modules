@@ -35,6 +35,8 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 ## Django
 
 - [Articles](django/articles): `articles`
+- [Push Notifications](django/push-notifications): `push-notifications`
+- [Social Auth](django/social-auth): `social-auth`
 
 ## React Native
 
