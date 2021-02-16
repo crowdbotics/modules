@@ -45,7 +45,7 @@ const store = createStore(
   combineReducers({
     apiReducer: apiReducer,
     customReducer: customReducer,
-    socialLoginReducer: socialLoginReducer,
+    socialLogin: socialLoginReducer,
   }),
   composeEnhancers(applyMiddleware(...middlewares))
 );
@@ -125,7 +125,7 @@ Ultimately, you need to follow the [react-native-fbsdk instructions](https://git
 Upon entering the `Android` page on the Facebook login configuration, you can click next/continue for most steps. But you will need to pay attention to the following steps:
 - _3. Tell Us about Your Android Project_
 Here, they will ask for two things: `Package Name` and `Default Activity Class Name`. Your package name is located on `<your_project_name>/android/app/src/main/AndroidManifest.xml` file, at the first and second line of code as `<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="<your_package_name>">`. For my test app, this name is: `com.social_login_1234`, so it should look like this
+  package="<your_package_name>">`. For my test app, this name is: `com.social_login_1234`.
 
 For activity class name, just add a `.MainApplication` to your package name. For example, the tutorial application will have the follwing values:
 
@@ -139,6 +139,19 @@ At this step, you need to generate the key hash for your app. Consult the offici
 
 - _6. Edit Your Resources and Android Manifest_
 This step will tell you which files in your project to edit. `/app/res/values/strings.xml` is equivalent to `<your_project_name>/android/app/src/main/res/values/strings.xml`
+
+Update your Android manifest file (`/android/app/src/main/AndroidManifest.xml`) and add `<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>` code to the metadata section. It should look like this:
+
+```xml
+<meta-data
+  android:name="com.google.android.geo.API_KEY"
+  android:value="XXXXXXX"/>  
+  
+<!-- Add this line below:  -->
+<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
+
+```
 
 
 After everything, open the file `<your_project_name>/android/app/build.gradle` look for `defaultConfig` object and add `multiDexEnabled true`. It will look something like this:
