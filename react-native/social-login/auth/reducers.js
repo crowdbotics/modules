@@ -137,7 +137,7 @@ export default function authApiReducer(state = INITIAL_STATE, action) {
             error: null,
             success: true,
           },
-          token: action.response?.data?.token,
+          token: action.response?.data?.key,
           user: action.response?.data?.user,
         });
       case types.API_FACEBOOK_CONNECT_FAILED:
@@ -166,7 +166,7 @@ export default function authApiReducer(state = INITIAL_STATE, action) {
               error: null,
               success: true,
             },
-            token: action.response?.data?.token,
+            token: action.response?.data?.key,
             user: action.response?.data?.user,
           });
         case types.API_GOOGLE_CONNECT_FAILED:

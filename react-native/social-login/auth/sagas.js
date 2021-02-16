@@ -102,9 +102,10 @@ function* apiGoogleConnectWorker(action) {
   });
   try {
     yield GoogleSignin.hasPlayServices();
-    const userInfo = yield GoogleSignin.signIn();
+    yield GoogleSignin.signIn();
+    const tokens = yield GoogleSignin.getTokens();
     const result = yield call(authServices.apiGoogleConnect, {
-      access_token: userInfo.serverAuthCode,
+      access_token: tokens.accessToken,
     });
     yield put(actions.apiGoogleConnectSuccess(result, action));
   } catch (err) {

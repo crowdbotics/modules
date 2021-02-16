@@ -184,5 +184,5 @@ export const textInputStyles = {
     color: Color.black,
   },
   label: { color: '#6A6A6A', fontSize: 12 },
-  error: { color: Color.red, fontSize: 9 },
+  error: { color: Color.red, fontSize: 9, marginLeft: 12 },
 };
