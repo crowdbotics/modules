@@ -29,6 +29,9 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [Adding dependencies to your module](#adding-dependencies-to-your-module)
   - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
   - [Running code on app load](#running-code-on-app-load)
+- [Resources](#resources)
+  - [Google](#google)
+  - [Apple](#apple)
 
 # Modules Available
 
@@ -559,3 +562,16 @@ export default {
 ```
 
 The example above is for an headless module (no screens), but you can export hooks in regular modules too.
+
+# Resources
+
+## Google
+
+## Apple
+
+### App's Capabilities (Entitlements)
+
+> Key-value pairs that grant an executable permission to use a service or technology.
+
+Documentation - https://developer.apple.com/documentation/bundleresources/entitlements
+File - [ProjectName.entitlements](template/source/ios/ProjectName/ProjectName.entitlements)
