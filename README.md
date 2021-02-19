@@ -575,3 +575,18 @@ The example above is for an headless module (no screens), but you can export hoo
 
 Documentation - https://developer.apple.com/documentation/bundleresources/entitlements
 File - [ProjectName.entitlements](template/source/ios/ProjectName/ProjectName.entitlements)
+
+**Examples**
+
+iOS Push Notifications - `aps-environment`
+
+```xml-property-list
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>aps-environment</key>
+  <string>development</string>
+</dict>
+</plist>
+```
