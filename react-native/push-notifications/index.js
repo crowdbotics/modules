@@ -17,12 +17,12 @@ const useOneSignal = () => {
     OneSignal.setRequiresUserPrivacyConsent(false);
     if (Platform.OS === "ios") {
       OneSignal.promptForPushNotificationsWithUserResponse(response => {
-        this.OSLog("Prompt response:", response);
+        console.log("Prompt response:", response);
       });
     }
     /* O N E S I G N A L  H A N D L E R S */
     OneSignal.setNotificationWillShowInForegroundHandler(notifReceivedEvent => {
-      this.OSLog(
+      console.log(
         "OneSignal: notification will show in foreground:",
         notifReceivedEvent
       );
@@ -46,20 +46,20 @@ const useOneSignal = () => {
       );
     });
     OneSignal.setNotificationOpenedHandler(notification => {
-      this.OSLog("OneSignal: notification opened:", notification);
+      console.log("OneSignal: notification opened:", notification);
     });
     OneSignal.setInAppMessageClickHandler(event => {
-      this.OSLog("OneSignal IAM clicked:", event);
+      console.log("OneSignal IAM clicked:", event);
     });
     OneSignal.addEmailSubscriptionObserver((event) => {
-      this.OSLog("OneSignal: email subscription changed: ", event);
+      console.log("OneSignal: email subscription changed: ", event);
     });
     OneSignal.addSubscriptionObserver(event => {
-      this.OSLog("OneSignal: subscription changed:", event);
-      this.setState({ isSubscribed: event.to.isSubscribed })
+      console.log("OneSignal: subscription changed:", event);
+      setIsSubscribed(event.to.isSubscribed);
     });
     OneSignal.addPermissionObserver(event => {
-      this.OSLog("OneSignal: permission changed:", event);
+      console.log("OneSignal: permission changed:", event);
     });
     getDeviceState();
   });
