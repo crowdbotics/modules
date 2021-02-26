@@ -4,7 +4,6 @@
   "description": "TODO",
   "private": true,
   "main": "index.js",
-  "x-dependencies": {},
   "author": "Crowdbotics",
   "license": "ISC",
   "x-dependencies": {
