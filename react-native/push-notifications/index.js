@@ -1,5 +1,5 @@
 import OneSignal from 'react-native-onesignal';
-import { Platform } from "react-native";
+import { Platform, Alert } from "react-native";
 import { useState, useEffect } from "react";
 import { ONE_SIGNAL_APP_ID } from "@env";
 
