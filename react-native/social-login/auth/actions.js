@@ -59,30 +59,58 @@ export const apiPasswordResetFailed = response => ({
   response,
 });
 
-// FACEBOOK Connect data: {access_token: ''}
-export const apiFacebookConnect = data => ({
-  type: types.API_FACEBOOK_CONNECT,
-  data,
+// GET AUTH USER
+export const apiAuthUserRequest = token => ({
+  type: types.API_AUTH_USER_REQUEST,
+  token,
 });
-export const apiFacebookConnectSuccess = response => ({
-  type: types.API_FACEBOOK_CONNECT_SUCCESS,
+export const apiAuthUserSuccess = response => ({
+  type: types.API_AUTH_USER_SUCCESS,
   response,
 });
-export const apiFacebookConnectFailed = response => ({
-  type: types.API_FACEBOOK_CONNECT_FAILED,
+export const apiAuthUserFailed = response => ({
+  type: types.API_AUTH_USER_FAILED,
+  response,
+});
+
+// FACEBOOK Connect data: {access_token: ''}
+export const apiFacebookLogin = data => ({
+  type: types.API_FACEBOOK_LOGIN,
+  data,
+});
+export const apiFacebookLoginSuccess = response => ({
+  type: types.API_FACEBOOK_LOGIN_SUCCESS,
+  response,
+});
+export const apiFacebookLoginFailed = response => ({
+  type: types.API_FACEBOOK_LOGIN_FAILED,
   response,
 });
 
 // GOOGLE Connect data: {access_token: ''}
-export const apiGoogleConnect = data => ({
-  type: types.API_GOOGLE_CONNECT,
+export const apiGoogleLogin = data => ({
+  type: types.API_GOOGLE_LOGIN,
   data,
 });
-export const apiGoogleConnectSuccess = response => ({
-  type: types.API_GOOGLE_CONNECT_SUCCESS,
+export const apiGoogleLoginSuccess = response => ({
+  type: types.API_GOOGLE_LOGIN_SUCCESS,
   response,
 });
-export const apiGoogleConnectFailed = response => ({
-  type: types.API_GOOGLE_CONNECT_FAILED,
+export const apiGoogleLoginFailed = response => ({
+  type: types.API_GOOGLE_LOGIN_FAILED,
+  response,
+});
+
+// APPLE Connect data: {access_token: ''}
+export const apiAppleLogin = data => ({
+  type: types.API_APPLE_LOGIN,
+  data,
+});
+export const apiAppleLoginSuccess = response => ({
+  type: types.API_APPLE_LOGIN_SUCCESS,
+  response,
+});
+export const apiAppleLoginFailed = response => ({
+  type: types.API_APPLE_LOGIN_FAILED,
   response,
 });

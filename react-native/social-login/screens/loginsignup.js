@@ -7,19 +7,26 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
+  Platform,
 } from 'react-native';
 import { HOME_SCREEN_NAME, validateEmail } from './constants.js';
 import {
   apiLoginRequest,
   apiSignupRequest,
-  apiFacebookConnect,
-  apiGoogleConnect,
+  apiFacebookLogin,
+  apiGoogleLogin,
+  apiAppleLogin,
 } from '../auth/actions';
-import { styles, buttonStyles, textInputStyles, Color } from './styles';
+import { buttonStyles, textInputStyles, Color } from './styles';
 import { connect } from 'react-redux';
+import { GoogleSigninButton } from '@react-native-community/google-signin';
+import {
+  AppleButton,
+  appleAuthAndroid,
+} from '@invertase/react-native-apple-authentication';
 
 // Custom Text Input
-const TextInputField = props => (
+export const TextInputField = props => (
   <View>
     <Text style={[textInputStyles.label, props.labelStyle]}>{props.label}</Text>
     <TextInput
@@ -34,7 +41,7 @@ const TextInputField = props => (
 );
 
 // Custom Button
-const Button = props => (
+export const Button = props => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={[buttonStyles.viewStyle, props.viewStyle]}>
       {props.loading ? (
@@ -54,23 +61,41 @@ const Button = props => (
 // Grouped Social Buttons View
 const SocialButtonsView = props => (
   <View>
+    <Text style={{ textAlign: 'center', width: '100%', marginVertical: 5 }}>
+      - or -
+    </Text>
     <Button
-      title="Connect with Facebook"
+      title="Signin with Facebook"
       viewStyle={{
-        ...styles.socialButton,
+        backgroundColor: Color.facebook,
         borderColor: Color.facebook,
+        marginHorizontal: 5,
+        marginBottom: 2,
       }}
-      textStyle={{ color: Color.facebook }}
+      textStyle={{ color: Color.white }}
       loading={props.loading}
       onPress={props.onFacebookConnect}
     />
-    <Button
-      title="Connect with Google"
-      viewStyle={{ ...styles.socialButton, borderColor: Color.google }}
-      textStyle={{ color: Color.google }}
-      loading={props.loading}
+    <GoogleSigninButton
       onPress={props.onGoogleConnect}
+      size={GoogleSigninButton.Size.Wide}
+      color={GoogleSigninButton.Color.Dark}
+      disabled={props.loading}
+      style={{ width: '99%', height: 48, marginHorizontal: 2 }}
     />
+    {(Platform.OS === 'ios' || appleAuthAndroid.isSupported) && (
+      <AppleButton
+        onPress={props.onAppleConnect}
+        buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+        buttonType={AppleButton.Type.SIGN_IN}
+        style={{
+          width: '97%', // You must specify a width
+          height: 44, // You must specify a height
+          marginHorizontal: 5,
+          marginTop: 2,
+        }}
+      />
+    )}
   </View>
 );
 
@@ -177,6 +202,7 @@ export class SignUpComponent extends Component {
           loading={this.props.api.isLoading}
           onFacebookConnect={this.props.connect_to_facebook}
           onGoogleConnect={this.props.connect_to_google}
+          onAppleConnect={this.props.connect_to_apple}
         />
         {!!this.state.requestError && (
           <Text style={textInputStyles.error}>
@@ -259,6 +285,7 @@ export class SignInComponent extends Component {
           loading={this.props.api.isLoading}
           onFacebookConnect={this.props.connect_to_facebook}
           onGoogleConnect={this.props.connect_to_google}
+          onAppleConnect={this.props.connect_to_apple}
         />
         {!!api.error && (
           <Text style={textInputStyles.error}>{api.error.message}</Text>
@@ -284,7 +311,7 @@ export class SignInComponent extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
+  console.log(JSON.stringify(state));
   return {
     token: state.socialLogin.token,
     api: state.socialLogin.api,
@@ -298,10 +325,17 @@ const mapDispatchToProps = dispatch => {
       dispatch(apiLoginRequest({ username: email, password })),
     signup: (email, password) =>
       dispatch(apiSignupRequest({ email, password })),
-    connect_to_facebook: () => dispatch(apiFacebookConnect()),
-    connect_to_google: () => dispatch(apiGoogleConnect()),
+    connect_to_facebook: () => dispatch(apiFacebookLogin()),
+    connect_to_google: () => dispatch(apiGoogleLogin()),
+    connect_to_apple: () => dispatch(apiAppleLogin()),
   };
 };
 
-export const SignIn = connect(mapStateToProps, mapDispatchToProps)(SignInComponent);
-export const SignUp = connect(mapStateToProps, mapDispatchToProps)(SignUpComponent);
+export const SignIn = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignInComponent);
+export const SignUp = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUpComponent);
