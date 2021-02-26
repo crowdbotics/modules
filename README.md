@@ -25,6 +25,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 - [Custom React Native template](#custom-react-native-template)
   - [What's included](#whats-included)
 - [Authoring Modules](#authoring-modules)
+  - [Guidelines](#guidelines)
   - [package.json](#packagejson)
   - [Adding dependencies to your module](#adding-dependencies-to-your-module)
   - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
