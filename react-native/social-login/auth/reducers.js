@@ -47,7 +47,7 @@ export default function authApiReducer(state = INITIAL_STATE, action) {
           error: null,
           success: false,
         },
-        token: null
+        token: null,
       });
     case types.API_SIGNUP_SUCCESS:
       return Object.assign({}, state, {
@@ -67,25 +67,25 @@ export default function authApiReducer(state = INITIAL_STATE, action) {
         },
       });
 
-    case types.API_SIGNOUT_REQUEST:
+    case types.API_LOGOUT_REQUEST:
       return Object.assign({}, state, {
         api: {
           isLoading: true,
           error: null,
           success: false,
         },
-        token: null
+        token: null,
       });
-    case types.API_SIGNOUT_SUCCESS:
+    case types.API_LOGOUT_SUCCESS:
       return Object.assign({}, INITIAL_STATE, {
         api: {
           isLoading: false,
           error: null,
           success: true,
         },
-        user: {}
+        user: {},
       });
-    case types.API_SIGNOUT_FAILED:
+    case types.API_LOGOUT_FAILED:
       return Object.assign({}, state, {
         api: {
           isLoading: false,
@@ -101,7 +101,7 @@ export default function authApiReducer(state = INITIAL_STATE, action) {
           error: null,
           success: false,
         },
-        token: null
+        token: null,
       });
     case types.API_PASSWORD_RESET_SUCCESS:
       return Object.assign({}, state, {
@@ -109,7 +109,7 @@ export default function authApiReducer(state = INITIAL_STATE, action) {
           isLoading: false,
           error: null,
           success: true,
-        }
+        },
       });
     case types.API_PASSWORD_RESET_FAILED:
       return Object.assign({}, state, {
@@ -119,64 +119,116 @@ export default function authApiReducer(state = INITIAL_STATE, action) {
           success: false,
         },
       });
-  
-      case types.API_FACEBOOK_CONNECT:
-        return Object.assign({}, state, {
-          api: {
-            isLoading: true,
-            error: null,
-            success: false,
-          },
-          token: null
-        });
-      case types.API_FACEBOOK_CONNECT_SUCCESS:
-        console.log(state)
-        return Object.assign({}, state, {
-          api: {
-            isLoading: false,
-            error: null,
-            success: true,
-          },
-          token: action.response?.data?.key,
-          user: action.response?.data?.user,
-        });
-      case types.API_FACEBOOK_CONNECT_FAILED:
-        return Object.assign({}, state, {
-          api: {
-            isLoading: false,
-            error: mapErrorMessage(action),
-            success: false,
-          },
-        });
-    
-        case types.API_GOOGLE_CONNECT:
-          return Object.assign({}, state, {
-            api: {
-              isLoading: true,
-              error: null,
-              success: false,
-            },
-            token: null
-          });
-        case types.API_GOOGLE_CONNECT_SUCCESS:
-          console.log(state)
-          return Object.assign({}, state, {
-            api: {
-              isLoading: false,
-              error: null,
-              success: true,
-            },
-            token: action.response?.data?.key,
-            user: action.response?.data?.user,
-          });
-        case types.API_GOOGLE_CONNECT_FAILED:
-          return Object.assign({}, state, {
-            api: {
-              isLoading: false,
-              error: mapErrorMessage(action),
-              success: false,
-            },
-          });
+
+    case types.API_AUTH_USER_REQUEST:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: true,
+          error: null,
+          success: false,
+        }
+      });
+    case types.API_AUTH_USER_SUCCESS:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: null,
+          success: true,
+        },
+        user: action.response?.data,
+      });
+    case types.API_AUTH_USER_FAILED:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: mapErrorMessage(action),
+          success: false,
+        },
+      });
+
+    case types.API_FACEBOOK_LOGIN:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: true,
+          error: null,
+          success: false,
+        },
+        token: null,
+      });
+    case types.API_FACEBOOK_LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: null,
+          success: true,
+        },
+        token: action.response?.data?.key,
+        user: action.response?.data?.user,
+      });
+    case types.API_FACEBOOK_LOGIN_FAILED:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: mapErrorMessage(action),
+          success: false,
+        },
+      });
+
+    case types.API_GOOGLE_LOGIN:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: true,
+          error: null,
+          success: false,
+        },
+        token: null,
+      });
+    case types.API_GOOGLE_LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: null,
+          success: true,
+        },
+        token: action.response?.data?.key,
+        user: action.response?.data?.user,
+      });
+    case types.API_GOOGLE_LOGIN_FAILED:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: mapErrorMessage(action),
+          success: false,
+        },
+      });
+
+    case types.API_APPLE_LOGIN:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: true,
+          error: null,
+          success: false,
+        },
+        token: null,
+      });
+    case types.API_APPLE_LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: null,
+          success: true,
+        },
+        token: action.response?.data?.key,
+        user: action.response?.data?.user,
+      });
+    case types.API_APPLE_LOGIN_FAILED:
+      return Object.assign({}, state, {
+        api: {
+          isLoading: false,
+          error: mapErrorMessage(action),
+          success: false,
+        },
+      });
 
     default:
       return state;

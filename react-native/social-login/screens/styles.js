@@ -5,8 +5,8 @@ const { width, height } = Dimensions.get('window');
 const guidelineBaseWidth = 350;
 const guidelineBaseHeight = 680;
 
-const scale = (size) => (width / guidelineBaseWidth) * size;
-const scaleVertical = (size) => (height / guidelineBaseHeight) * size;
+const scale = size => (width / guidelineBaseWidth) * size;
+const scaleVertical = size => (height / guidelineBaseHeight) * size;
 
 export const Color = {
   malibu: '#46E1FD',
@@ -15,7 +15,7 @@ export const Color = {
   steel: '#CCCCCC',
   black: '#000',
   facebook: '#3b5998',
-  google: "#4285F4",
+  google: '#4285F4',
   red: 'red',
 };
 
@@ -26,9 +26,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingHorizontal: 26,
     alignItems: 'center',
-  },
-  socialButton: {
-    borderWidth: 1, backgroundColor: 'transparent'
   },
   input: {
     backgroundColor: 'white',
@@ -88,29 +85,15 @@ export const styles = StyleSheet.create({
   boldText: {
     fontWeight: 'bold',
   },
-  buttons: {
-    flexDirection: 'row',
-    marginBottom: scaleVertical(24),
-    justifyContent: 'center',
-    display: 'none',
-  },
-  button: {
-    marginHorizontal: 14,
-    marginTop: 27.5,
-    alignSelf: 'center',
-    borderColor: '#ED6854',
-    borderWidth: 2,
-    padding: 15,
-    borderRadius: 32,
-    width: 64,
-    height: 64,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   text: {
     color: 'black',
     fontSize: 14,
     paddingVertical: scaleVertical(5),
+  },
+  button: {
+    alignItems: 'center',
+    backgroundColor: Color.malibu,
+    padding: 10,
   },
   container: {
     flex: 1,
@@ -149,26 +132,26 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     margin: 10,
-    fontSize: 20,
+    fontSize: 18,
   },
 });
 
 export const buttonStyles = {
   viewStyle: {
     backgroundColor: Color.malibu,
-    borderRadius: 10,
+    borderRadius: 5,
     borderColor: Color.black,
     justifyContent: 'center',
     marginHorizontal: 10,
     marginBottom: 10,
-    height: 44,
+    height: 40,
   },
   textStyle: {
-    fontSize: 18,
+    fontSize: 16,
     textAlign: 'center',
     color: Color.white,
-    marginHorizontal: 40,
-    marginVertical: 12,
+    marginHorizontal: 20,
+    marginVertical: 10,
   },
 };
 

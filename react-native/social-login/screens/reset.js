@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Image,
   Alert,
@@ -12,18 +12,18 @@ import { styles } from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { apiPasswordResetRequest } from '../auth/actions';
 import { API_PASSWORD_RESET_FAILED } from '../auth/constants';
-import { validateEmail, LOGO_URL } from './constants.js';
+import { validateEmail, LOGO_URL, usePrevious } from './constants.js';
 
 // Custom use previous hook
-function usePrevious(value, initial={}) {
-  const targetRef = useRef(value);
-  const previousRef = useRef(initial);
-  if (targetRef.current !== value) {
-    previousRef.current = targetRef.current;
-    targetRef.current = value;
-  }
-  return previousRef.current;
-}
+// function usePrevious(value, initial={}) {
+//   const targetRef = useRef(value);
+//   const previousRef = useRef(initial);
+//   if (targetRef.current !== value) {
+//     previousRef.current = targetRef.current;
+//     targetRef.current = value;
+//   }
+//   return previousRef.current;
+// }
 
 const PasswordRecover = props => {
   const [email, setEmail] = useState('');
