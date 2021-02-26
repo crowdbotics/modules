@@ -1,10 +1,13 @@
 # Crowdbotics Social Login Module - Backend
-This module contains all needed resources and information to setup Social Login in your app backend.
+This module contains all needed resources and information to set up Social Login in your app backend.
+
+## Requirements
+- The project must have `django-allauth` with version 0.43.0 or higher in order to support Apple provider
 
 ## Extra installation steps
 After adding this module to your project, you need to include the facebook authentication third party app in your `settings.py` file. To do that, open your project's settings.py file - it should be in the path `/<your_repo_name>/backend/<your_repo_name>/settings.py`, where <your_repo_name> is the name of your project's repository. For example, if my repository name is `social_login_1234`, my file should be located at `social_login_1234/backend/social_login_1234/settings.py`.
 
-Once the file is opened, locate in the code a declaration for `THIRD_PARTY_APPS` and include `'allauth.socialaccount.providers.facebook',` and `'allauth.socialaccount.providers.apple',` at the end. Your app should ght already have `'allauth.socialaccount.providers.google'` added there, so you should verify; but if it is not there, then add it as well. Your code section should look roughly like this:
+Once the file is opened, locate in the code a declaration for `THIRD_PARTY_APPS` and include `'allauth.socialaccount.providers.facebook',` and `'allauth.socialaccount.providers.apple',` at the end. Your app should already have `'allauth.socialaccount.providers.google'` added there, so you should verify; but if it is not there, then add it as well. Your code section should look roughly like this:
 
 ```py
 THIRD_PARTY_APPS = [
@@ -21,10 +24,21 @@ THIRD_PARTY_APPS = [
 ]
 ```
 
+Go to the end of the file and add the following code:
+
+```js
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+}
+```
+
 You should now deploy your app's backend in order to proceed to the next step.
 
 ## Configuring Facebook
-You need to setup Facebook SDK to get social login properly configured in your app. Ideally, these steps should be done by the project owner or with an project owner account, as it needs to be properly configured for app store release, but it can be done with development configurion during development phase. 
+You need to setup Facebook SDK to get social login properly configured in your app. Ideally, these steps should be done by the project owner or with an project owner account, as it needs to be properly configured for app store release, but it can be done with debug configuration during the development phase. 
 
 1. First, access Facebook for developers at https://developers.facebook.com and register for a developer account, if you do not already have one.
 
@@ -42,7 +56,7 @@ You need to setup Facebook SDK to get social login properly configured in your a
 
 You need to keep this page open and navigate to another browser tab, as you will need to copy both `App ID` and `App Secret` to paste on your own project admin page. 
 
-6. Navigate to Crowdbotics dashboard for your app and access your app's admin panel. If you do not know what does this mean, please, check out our [Knowledge Base Article](https://knowledge.crowdbotics.com/what-is-the-admin-panel).
+6. Navigate to the Crowdbotics dashboard for your app and access your app's admin panel. If you do not know what this means, please, check out our [Knowledge Base Article](https://knowledge.crowdbotics.com/what-is-the-admin-panel).
 
 At your app's admin page, try to find `Social Accounts` section and click on `Social Applications`: 
 ![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/18906/9babfe52-423f-40dc-afa0-a5d038782640.png)
@@ -78,12 +92,12 @@ Finish up and `Download Client Configuration` (you will need this information la
 - Sites: your website url, just move it to the right panel. 
 
 ## Configuring Apple
-To be able to user signing with apple feature, it is required that you have access to a developer account with access for creating [certificates, identifiers and keys](https://developer.apple.com/support/certificates/). If you already have a Service Identifier, make sure to update your identifier with `Signin with Apple` capability (point e-g below).
+To be able to use Apple features, it is required that you have access to a developer account with access for creating [certificates, identifiers and keys](https://developer.apple.com/support/certificates/). If you already have a Service Identifier, make sure to update your identifier with `Signin with Apple` capability (point e-g below).
 
 1. First, create a app ID at `https://developer.apple.com/account/resources/certificates/list`. Go to `Identifiers`, click on the `+` sign beside Identifiers or click on this page: [Register new identifier](https://developer.apple.com/account/resources/identifiers/add/bundleId). 
 a) Choose App id and click Continue
 b) Choose App option and continue
-c) Add your apps name in `description` field. Add your bundle ID ([bundle identifier](https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids)) that can be found on the XCode page.
+c) Add your app's name in the `description` field. Add your bundle ID ([bundle identifier](https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids)) that can be found on the XCode page.
 d) Go to Capabilities and enable. 
 e) Click in the edit button, select `Enable as a primary App ID` and save
 f) Click continue. Verify all the input information and if everything is correct, click `Register`
