@@ -1,9 +1,12 @@
 
-// Please, update the value below with your backend's client id.
-export const GOOGLE_WEB_CLIENT_ID = '39330537799-kbek3v23psd9bkhkvovv47nvisq1fhpi.apps.googleusercontent.com'
-export const GOOGLE_IOS_CLIENT_ID = '39330537799-u0blpksbu34kffg2oadk1bescb4793g5.apps.googleusercontent.com'
-export const APPLE_SERVICE_ID = 'com.crowdbotics.test-deploy-0211-de-19317'
-export const APPLE_REDIRECT_CALLBACK = 'https://test-deploy-0211-de-19317.botics.co/accounts/apple/login/callback/'
+// Please, update the values below as instructed in the README.md file.
+export const GOOGLE_WEB_CLIENT_ID = 'XXXXXX.apps.googleusercontent.com'
+export const GOOGLE_IOS_CLIENT_ID = 'YYYYYY.apps.googleusercontent.com'
+export const APPLE_SERVICE_ID = 'com.crowdbotics.APP_NAME'
+export const APPLE_REDIRECT_CALLBACK = 'https://yur-app-here.com/accounts/apple/login/callback/'
+
+
+// -----------------------------------------------------
 
 const messageMap = {
   'Request failed with status code 400': {

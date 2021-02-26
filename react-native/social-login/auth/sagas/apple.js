@@ -47,7 +47,6 @@ export async function appleForAndroid() {
 }
 
 export async function appleForiOS() {
-  console.log("Begin signing")
   try {
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,
