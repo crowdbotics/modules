@@ -451,6 +451,19 @@ Our template is on the latest React Native version (v0.63):
 
 # Authoring Modules
 
+## Guidelines
+
+**DRAFT - work in progress section, and up to debate**
+
+Modern React Native components guidelines:
+
+- Prefer function components over class components
+- Prefer React Hooks over React.component APIs
+- Prefer react-redux Hooks over connect HOC
+- Prefer redux-toolkit over custom redux logic setups
+- Prefer redux-thunk over redux-saga
+- Prefer pure components
+
 ## package.json
 
 Your module's `main` key should always point to `index.js`. We also suggest that you name your module with a namespace prefix `@modules` like in the example below.
