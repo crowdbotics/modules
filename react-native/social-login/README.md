@@ -203,7 +203,7 @@ Go to step `4. Configure Your Info.plist` and follow all the instructions.
  
 Finally, open your project again on XCode, find the root folder of the XCode project, click on the right button of your mouse and select to create a `New File`. Choose it to be a `Swift` file and click create, as shown in the images below:
  
-![]()
+![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/19926/da0aa8c8-1779-46d9-8a2e-5e5665d6d15d.png)
  
 XCode will ask about Bridging Folder, just choose the option `Create Bridging Folder`.
 You are all set up for iOS deployment now!
