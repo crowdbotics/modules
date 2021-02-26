@@ -78,6 +78,70 @@ Finish up and `Download Client Configuration` (you will need this information la
 - Sites: your website url, just move it to the right panel. 
 
 ## Configuring Apple
-Similarly to Facebook, Apple login should ideally be configured in the Google account that is going to manage everything related to this project (usually, the project owner). But for development purposes, it can temporarily be configured by anyone.
+To be able to user signing with apple feature, it is required that you have access to a developer account with access for creating [certificates, identifiers and keys](https://developer.apple.com/support/certificates/). If you already have a Service Identifier, make sure to update your identifier with `Signin with Apple` capability (point e-g below).
 
-TODO
+1. First, create a app ID at `https://developer.apple.com/account/resources/certificates/list`. Go to `Identifiers`, click on the `+` sign beside Identifiers or click on this page: [Register new identifier](https://developer.apple.com/account/resources/identifiers/add/bundleId). 
+a) Choose App id and click Continue
+b) Choose App option and continue
+c) Add your apps name in `description` field. Add your bundle ID ([bundle identifier](https://developer.apple.com/documentation/appstoreconnectapi/bundle_ids)) that can be found on the XCode page.
+d) Go to Capabilities and enable. 
+e) Click in the edit button, select `Enable as a primary App ID` and save
+f) Click continue. Verify all the input information and if everything is correct, click `Register`
+
+2. Now, register for a Service ID.
+a) Go to the same page as before, but now choose `Service IDs` option.
+b) Insert your desired description and create an identifier (it could be your bundle ID)
+c) Enable `Signin with apple` and on clicking `Configure`, choose your Primary App ID.
+d) There, you will be asked to select your primary App ID (select the one created earlier). Then, add your app's domain to the `Website Urls` section available. Your domain should be the same that you use to access your web app (as was described before). For this tutorial, we have `social-login-1234.botics.co`. Also add a url that looks like `<your_app_domain_url>/accounts/apple/login/callback/`. In the tutorial, we have `https://social-login-1234.botics.co/accounts/apple/login/callback/`.
+e) Save everything
+f) Verify if information is correct and click Register.
+
+3. Now go to `Keys` tab and click on `+` to add a new key (or navigate to [Register a New Key](https://developer.apple.com/account/resources/authkeys/add) page).
+a) Add a name for your key (choose some unique name)
+b) Enable `Signin with Apple` and click in `Configure` button
+c) If asked about domains, insert the same values that you did for Service IDs website urls. 
+d) Save everything and __download the generated certificate__.
+
+4. Now, open your projects' `settings.py` file, and at the end of the file, add the following, replacing the existing values with what you just created on Apple website above:
+
+```py
+SOCIALACCOUNT_PROVIDERS = {
+    "apple": {
+        "APP": {
+            # Your service identifier.
+            "client_id": "com.crowdbotics.social-login-1234,
+
+            # The Key ID (visible in the "View Key Details" page).
+            "secret": "sociallogintest1234",
+
+             # Member ID/App ID Prefix -- you can find it below your name
+             # at the top right corner of the page, or it’s your App ID
+             # Prefix in your App ID.
+            "key": "ABCDEFG",
+
+            # The certificate you downloaded when generating the key.
+            "certificate_key": """-----BEGIN PRIVATE KEY-----
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
+-----END PRIVATE KEY-----
+"""
+        }
+    }
+}
+```
+
+4. Save the settings.py file and commit everything to Github
+5. On your apps admin panel, go to Social applications and create a new application for apple, adding the following values:
+- Provider: Apple
+- Name: A custom name, you can add it as `Apple API`
+- Client ID: Your service ID created in previous steps (e.g. com.crowdbotics.social-login-1234)
+- Secret Key: The KEY ID created previously (e.g. sociallogintest1234)
+- Key: Your app ID prefix, usually your team ID (e.g. ABCDEFG)
+- Sites: your website links
+
+6. Save everything and redeploy your app. Your backend is now ready to receive Apple Authentication.
+
+## References and Helpful Links
+- [Django-allauth and Apple signin](https://github.com/pennersr/django-allauth/pull/2424#issuecomment-670597679)
+- [Facebook Login Official Docs](https://developers.facebook.com/docs/facebook-login/web/)
+- [Google Login Official Docs](https://developers.google.com/identity/sign-in/web/server-side-flow)
