@@ -25,16 +25,22 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 - [Custom React Native template](#custom-react-native-template)
   - [What's included](#whats-included)
 - [Authoring Modules](#authoring-modules)
+  - [Guidelines](#guidelines)
   - [package.json](#packagejson)
   - [Adding dependencies to your module](#adding-dependencies-to-your-module)
   - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
   - [Running code on app load](#running-code-on-app-load)
+- [Resources](#resources)
+  - [Google](#google)
+  - [Apple](#apple)
 
 # Modules Available
 
 ## Django
 
 - [Articles](django/articles): `articles`
+- [Push Notifications](django/push-notifications): `push-notifications`
+- [Social Auth](django/social-auth): `social-auth`
 
 ## React Native
 
@@ -446,6 +452,19 @@ Our template is on the latest React Native version (v0.63):
 
 # Authoring Modules
 
+## Guidelines
+
+**DRAFT - work in progress section, and up to debate**
+
+Modern React Native components guidelines:
+
+- Prefer function components over class components
+- Prefer React Hooks over React.component APIs
+- Prefer react-redux Hooks over connect HOC
+- Prefer redux-toolkit over custom redux logic setups
+- Prefer redux-thunk over redux-saga
+- Prefer pure components
+
 ## package.json
 
 Your module's `main` key should always point to `index.js`. We also suggest that you name your module with a namespace prefix `@modules` like in the example below.
@@ -557,3 +576,31 @@ export default {
 ```
 
 The example above is for an headless module (no screens), but you can export hooks in regular modules too.
+
+# Resources
+
+## Google
+
+## Apple
+
+### App's Capabilities (Entitlements)
+
+> Key-value pairs that grant an executable permission to use a service or technology.
+
+Documentation - https://developer.apple.com/documentation/bundleresources/entitlements
+File - [ProjectName.entitlements](template/source/ios/ProjectName/ProjectName.entitlements)
+
+**Examples**
+
+iOS Push Notifications - `aps-environment`
+
+```xml-property-list
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>aps-environment</key>
+  <string>development</string>
+</dict>
+</plist>
+```
