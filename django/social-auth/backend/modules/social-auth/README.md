@@ -155,6 +155,9 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
 6. Save everything and redeploy your app. Your backend is now ready to receive Apple Authentication.
 
+The following endpoints are available to be used:
+![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/13307/a76bcdc2-320f-4c17-a47b-594551a2f24f.png)
+
 ## References and Helpful Links
 - [Django-allauth and Apple signin](https://github.com/pennersr/django-allauth/pull/2424#issuecomment-670597679)
 - [Facebook Login Official Docs](https://developers.facebook.com/docs/facebook-login/web/)
