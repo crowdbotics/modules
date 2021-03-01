@@ -6,10 +6,10 @@ from allauth.socialaccount.providers.apple.views import AppleOAuth2Adapter
 from allauth.socialaccount.providers.apple.client import AppleOAuth2Client
 from rest_auth.registration.views import SocialLoginView, SocialConnectView
 from .serializers import CustomAppleSocialLoginSerializer, CustomAppleConnectSerializer
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 
 try:
-    APP_DOMAIN = Site.objects.get(id=1).domain
+    APP_DOMAIN = f"https://{get_current_site(None)}"
 except Exception:
     APP_DOMAIN = ""
 
