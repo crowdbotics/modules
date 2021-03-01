@@ -135,7 +135,7 @@ export const SocialLoginNavigator = createStackNavigator(
     UserDemo,
   },
   {
-    initialRouteName: 'UserDemo',
+    initialRouteName: 'LoginSignup',
     defaultNavigationOptions: ({ navigation }) => ({ header: null }),
   },
 );

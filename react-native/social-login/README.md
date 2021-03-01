@@ -338,6 +338,12 @@ export const APPLE_REDIRECT_CALLBACK = 'https://social-login-1234.botics.co/acco
 If you enabled Signin with Apple on XCode, you are mostly done with Apple signing. Verify if your app is in a iOS version of 13.0 or higher, since this is the version where Apple Singin was introduced. You can do that by both checking your project on XCode in the `General` tab, under `Deployment Info` and searching across your code for `IPHONEOS_DEPLOYMENT_TARGET`, which should be targeted to 13.0 or higher.
  
 However, there could be a variety of issues during iOS deployment. Below you will see a list of helpful links to debug possible deployment issues on iOS.
+
+## Acknowledgements
+Note that the majority of the configuration here is to help you get started with all social login apps. You will need to properly configure your app further by checking the official documentation for all providers (Google, Facebook and Apple) in order to get your app ready for release. Such configurations include:
+- Explicitly activating or decativating Facebook tracking and other Facebook features to be compliant with iOS App Store
+- Changing Facebook app and Google Credentials for release, by updating the SHA-1 key from debug to release and including privacy policy according to their guidelines
+- Etc.
  
  
 ## References and XCode Troubleshooting
@@ -349,7 +355,8 @@ However, there could be a variety of issues during iOS deployment. Below you wil
 6.[Issues with architecture when building on simulator](https://stackoverflow.com/questions/63607158/xcode-12-building-for-ios-simulator-but-linking-in-object-file-built-for-ios)
 7. [React-Native signin with apple library & tutorial](https://github.com/invertase/react-native-apple-authentication/blob/master/docs/INITIAL_SETUP.md)
 8. [iOS Simulator stuck on password input](https://github.com/invertase/react-native-apple-authentication/issues/141)
- 
+9. [DEVELOPER_ERROR when trying to login on appetize, but working locally](https://github.com/react-native-google-signin/google-signin/issues/949#issuecomment-778070056)
+
 ## License
  
 [MIT](https://choosealicense.com/licenses/mit/)
