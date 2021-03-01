@@ -1,5 +1,5 @@
-import { configureStore, createReducer, combineReducers } from "@reduxjs/toolkit";
 import { slices } from "@modules";
+import { configureStore, createReducer, combineReducers } from "@reduxjs/toolkit";
 
 export const APP_URL = "https://ProjectNameIdentifier.botics.co";
 
