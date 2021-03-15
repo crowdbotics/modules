@@ -5,43 +5,15 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
-import { SlideMenuIcon } from '../../navigator/slideMenuIcon';
+import { slides } from "./slides";
 import AppIntroSlider from 'react-native-app-intro-slider';
 
-const slides = [
-  {
-    key: 'one',
-    title: 'Title 1',
-    text: 'Description.\nSay something cool',
-    image: { uri: "https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/cb-icon.png" },
-    backgroundColor: '#59b2ab',
-  },
-  {
-    key: 'two',
-    title: 'Title 2',
-    text: 'Other cool stuff',
-    image: { uri: "https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/cb-icon.png" },
-    backgroundColor: '#febe29',
-  },
-  // {
-  //   key: 'three',
-  //   title: 'Rocket guy',
-  //   text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
-  //   image: require('./assets/3.jpg'),
-  //   backgroundColor: '#22bcb5',
-  // }
-];
+const REDIRECT_SCREEN_NAME = 'LoginAndSignup177769'
 
-export default class Blank extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerLeft: <SlideMenuIcon navigationProps={navigation} />,
-    };
-  };
 
-  state = {};
+const Onboarding = ({ navigation }) =>  {
 
-  _renderItem = ({ item }) => {
+  const renderItem = ({ item }) => {
     return (
       <View style={[styles.slide, { backgroundColor: item.backgroundColor }]}>
         <Text style={styles.title}>{item.title}</Text>
@@ -51,14 +23,14 @@ export default class Blank extends React.Component {
     );
   }
 
-  _onDone = () => {
-    this.props.navigation.navigate('LoginAndSignup177769') // Login/Sign up Screen
+  const onDone = () => {
+    navigation.navigate(REDIRECT_SCREEN_NAME)
   }
 
 
-  render = () => (
+  return (
     <View style={{ flex: 1, }}>
-      <AppIntroSlider renderItem={this._renderItem} data={slides} onDone={this._onDone} />
+      <AppIntroSlider renderItem={renderItem} data={slides} onDone={onDone} />
     </View>
   );
 }
@@ -88,3 +60,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default {
+  title: 'Onboarding',
+  navigator: Onboarding
+}
