@@ -4,9 +4,6 @@
   "description": "Terms and Conditions Screen",
   "private": true,
   "main": "index.js",
-  "x-dependencies": {
-    "react-native-webview": "^11.2.0"
-  },
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {

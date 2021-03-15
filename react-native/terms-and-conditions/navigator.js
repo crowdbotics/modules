@@ -2,9 +2,9 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import Terms from "./index.js";
 
-export default TermsBlueprintNavigator = createStackNavigator(
+export default TermsAndConditionsNavigator = createStackNavigator(
   {
-    Terms: { screen: Terms }
+    Terms: { screen: Terms.navigator }
   },
   {
     initialRouteName: "Terms",
