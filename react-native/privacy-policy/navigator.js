@@ -4,7 +4,7 @@ import Privacy from "./index";
 
 export default PrivacyBlueprintNavigator = createStackNavigator(
   {
-    Privacy: { screen: Privacy }
+    Privacy: { screen: Privacy.navigator }
   },
   {
     initialRouteName: "Privacy",
