@@ -1,13 +1,17 @@
 import { createStackNavigator } from "react-navigation-stack";
+import { SlideMenuIcon } from '../../navigator/slideMenuIcon';
 
 import Splash from "./index.js";
 
 export default SplashBlueprintNavigator = createStackNavigator(
   {
-    Splash: { screen: Splash }
+    Splash: { screen: Splash.navigator }
   },
   {
     initialRouteName: "Splash",
-    defaultNavigationOptions: ({ navigation }) => ({ header: null }),
+    navigationOptions: ({ navigation }) => ({
+      title: "Splash Screen",
+      headerLeft: <SlideMenuIcon navigationProps={navigation} />,
+    }),
   }
 );

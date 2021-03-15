@@ -1,30 +1,21 @@
 # Terms & Conditions Screen
 
-The Terms and Conditions Screen is a ReactNative based screen that leverages the webview with a simple header.
+The Terms and Conditions Screen is a React Native based screen that renders terms and conditions with a simple header.
 
 ## Installation
 
-After you have added the screen module into your project, you will need to configure a few items by modifying the project
-files in the github repository. Please note to replace ####### with the numeric sequence for your screen (found in folder name under /src/features) and also that the @BluePrint tags for ImportInsertion and NavigationInsertion will be removed in future so placement is with other imports and inside the AppNavigator above other screens.
+After you have added the screen module into your project, you will need to configure a few items by modifying the project files in the github repository. Please note to replace ####### with the numeric sequence for your screen (found in folder name under `/src/features`) and also that the @BluePrint tags for ImportInsertion and NavigationInsertion will be removed in future so placement is with other imports and inside the AppNavigator above other screens.
 
-### STEP 1: Add dependency library to the project.
-
-**/PROJECT_ROOT_DIRECTORY/package.json:**
-
-**ADD** Dependency after Line 16 (dependencies opening line "_"dependencies": {_ ")
-
-`"react-native-webview": "^10.8.2",`
-
-### Step 2: Add screen into your project screen navigation.
+### Step 1: Add screen into your project screen navigation.
 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import TermsAndConditions#######Navigator from '../features/TermsAndConditions#######/navigator';`
+`import TermsAndConditionsNavigator from '../features/TermsAndConditions#######/navigator';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`TermsAndConditions#######: { screen: TermsAndConditions#######Navigator },`
+`TermsAndConditions#######: { screen: TermsAndConditionsNavigator },`
 
 ### STEP 3: Add Terms screen into the sidemenu navigation.
 
@@ -44,18 +35,9 @@ buttons, it must be unique, that's the only requirement
 
 **access_route:** must be the name of the key in your mainNavigator setup
 
-### STEP 4: Set the left arrow screen redirect.
-
-**/src/features/TermsAndConditions######/screens/index.js:**
-
-**MODIFY** Line 161 (replace HomeScreen177788 with your desired Home/return screen name:
-
-`<TouchableOpacity style={{ padding: 5 }} onPress={() => { this.props.navigation.navigate('HomeScreen177788') }}>`
-
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 Please make sure to update tests as appropriate.
 
 ## License

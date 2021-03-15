@@ -1,4 +1,4 @@
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import React from 'react';
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { htmlContent } from './content';
