@@ -1,13 +1,16 @@
-import { createStackNavigator } from "react-navigation-stack";
+import {createStackNavigator} from 'react-navigation-stack';
+import {SlideMenuIcon} from '../../navigator/slideMenuIcon';
 
-import Onboarding from "./index.js";
+import Onboarding from './index.js';
 
 export default OnboardingBlueprintNavigator = createStackNavigator(
   {
-    Onboarding: { screen: Onboarding }
+    Onboarding: {screen: Onboarding.navigator},
   },
   {
-    initialRouteName: "Onboarding",
-    defaultNavigationOptions: ({ navigation }) => ({ header: null }),
-  }
+    initialRouteName: 'Onboarding',
+    defaultNavigationOptions: ({navigation}) => (
+      <SlideMenuIcon navigationProps={navigation} />
+    ),
+  },
 );
