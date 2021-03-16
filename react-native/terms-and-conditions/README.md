@@ -11,11 +11,11 @@ After you have added the screen module into your project, you will need to confi
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import TermsAndConditionsNavigator from '../features/TermsAndConditions#######/navigator';`
+`import TermsAndConditions from '../features/TermsAndConditions#######/';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`TermsAndConditions#######: { screen: TermsAndConditionsNavigator },`
+`TermsAndConditions#######: { screen: TermsAndConditions.navigator },`
 
 ### STEP 3: Add Terms screen into the sidemenu navigation.
 

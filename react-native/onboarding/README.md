@@ -21,27 +21,12 @@ files in the github repository. Please note to replace ####### with the numeric 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import OnboardingNavigator from '../features/Onboarding#######/navigator';`
+`import Onboarding from '../features/Onboarding#######/';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`Onboarding#######: { screen: OnboardingNavigator },`
+`Onboarding#######: { screen: Onboarding.navigator },`
 
-### STEP (OPTIONAL): do this if you do not have a splash and want the onboarding to load first.
-
-**ADD** comma after **contentComponent: Sidemenu**, and initialRoutName so that your code looks like:
-
-```
-const DrawerAppNavigator = createDrawerNavigator(
-{
-    ...AppNavigator,
-    },
-    {
-        contentComponent: SideMenu,
-        initialRouteName: "Onboarding#######", // Onboarding Slide Screen
-    },
-);
-```
 
 ### STEP 3: Update the Onboarding Slide Screen content as desired, the navigated screen after done (typically the HOME screen) including the number of slide screens needed.
 
@@ -76,7 +61,7 @@ const slides = [
 ```
 **/src/features/Onboarding#######/index.js:**
 
-**MODIFY** the value of `REDIRECT_SCREEN_NAME` with the name of the screen you would like onbarding to redirect to (defined in `mainNavigator`):
+**MODIFY** the value of `REDIRECT_SCREEN_NAME` with the name of the screen you would like onbarding to redirect to (same name as defined in `mainNavigator`):
 
 ```js
 const REDIRECT_SCREEN_NAME = 'LoginAndSignup177769' // name of your screen to redirect

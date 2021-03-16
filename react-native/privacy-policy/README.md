@@ -1,6 +1,6 @@
 # Privacy Policy
 
-The Privacy Policy is a ReactNative based screen that leverages the paralax with a custom header.
+The Privacy Policy is a ReactNative based screen that leverages the parallax with a custom header.
 
 ## Installation
 
@@ -23,11 +23,11 @@ files in the github repository. Please note to replace ####### with the numeric 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import PrivacyPolicyNavigator from '../features/PrivacyPolicy#######/navigator.js';`
+`import PrivacyPolicy from '../features/PrivacyPolicy#######/';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`PrivacyPolicy#######: { screen: PrivacyPolicyNavigator },`
+`PrivacyPolicy#######: { screen: PrivacyPolicy.navigator },`
 
 ### STEP 3: Add Terms screen into the sidemenu navigation.
 
