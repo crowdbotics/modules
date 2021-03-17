@@ -9,7 +9,7 @@ import {
   parse
 } from "./utils.js";
 
-const modules = process.argv.slice(2)[0];
+const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), "demo");
 modules.map(module => {
@@ -19,7 +19,6 @@ modules.map(module => {
   const moduleName = `@modules/${module}`;
 
   let packages = [moduleName];
-
   // Remove x-dependencies
   const packageJSON = JSON.parse(
     read(path.join(originModuleDir, "package.json"))
