@@ -14,7 +14,7 @@ function* apiLoginRequestWorker(action) {
 }
 
 function* apiLoginRequestWatcher() {
-  yield takeEvery(types.API_LOGIN_REQUEST, apiLoginRequestWorker)
+  yield takeEvery(types.API_LOGIN_REQUEST, apiLoginRequestWorker);
 }
 
 // Logout
@@ -28,13 +28,15 @@ function* apiLogoutRequestWorker(action) {
 }
 
 function* apiLogoutRequestWatcher() {
-  yield takeEvery(types.API_LOGOUT_REQUEST, apiLogoutRequestWorker)
+  yield takeEvery(types.API_LOGOUT_REQUEST, apiLogoutRequestWorker);
 }
 
 // Signup
 function* apiSignupRequestWorker(action) {
   try {
+    console.log("Signing up...")
     const result = yield call(authServices.apiSignupRequest, action);
+    console.log(result)
     yield put(actions.apiSignupSuccess(result, action));
   } catch (err) {
     yield put(actions.apiSignupFailed(err, action));
@@ -42,7 +44,7 @@ function* apiSignupRequestWorker(action) {
 }
 
 function* apiSignupRequestWatcher() {
-  yield takeEvery(types.API_SIGNUP_REQUEST, apiSignupRequestWorker)
+  yield takeEvery(types.API_SIGNUP_REQUEST, apiSignupRequestWorker);
 }
 
 // Password Reset email
@@ -56,8 +58,23 @@ function* apiPasswordResetWorker(action) {
 }
 
 function* apiPasswordResetWatcher() {
-  yield takeEvery(types.API_PASSWORD_RESET_REQUEST, apiPasswordResetWorker)
+  yield takeEvery(types.API_PASSWORD_RESET_REQUEST, apiPasswordResetWorker);
 }
+
+// Get auth user
+function* apiAuthUserWorker(action) {
+  try {
+    const result = yield call(authServices.apiAuthUserRequest, action);
+    yield put(actions.apiAuthUserSuccess(result, action));
+  } catch (err) {
+    yield put(actions.apiAuthUserFailed(err, action));
+  }
+}
+
+function* apiAuthUserWatcher() {
+  yield takeEvery(types.API_AUTH_USER_REQUEST, apiAuthUserWorker);
+}
+
 
 // Read more information about root sagas in the documentation
 // https://redux-saga.js.org/docs/advanced/RootSaga.html
@@ -66,7 +83,8 @@ export default function* authRootSaga() {
     apiLoginRequestWatcher,
     apiLogoutRequestWatcher,
     apiSignupRequestWatcher,
-    apiPasswordResetWatcher
+    apiPasswordResetWatcher,
+    apiAuthUserWatcher,
   ];
   yield all(
     sagas.map(saga =>

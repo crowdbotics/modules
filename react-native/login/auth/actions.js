@@ -58,3 +58,17 @@ export const apiPasswordResetFailed = response => ({
   type: types.API_PASSWORD_RESET_FAILED,
   response,
 });
+
+// GET AUTH USER
+export const apiAuthUserRequest = token => ({
+  type: types.API_AUTH_USER_REQUEST,
+  token,
+});
+export const apiAuthUserSuccess = response => ({
+  type: types.API_AUTH_USER_SUCCESS,
+  response,
+});
+export const apiAuthUserFailed = response => ({
+  type: types.API_AUTH_USER_FAILED,
+  response,
+});

@@ -2,28 +2,36 @@ import axios from 'axios';
 import { appConfig } from "../../../config/app";
 
 const authAPI = axios.create({
-  baseURL: appConfig.emailAuthAPIEndPoint, // your app back-end url
+  baseURL: "https://mobile-march-15-dev-20577.botics.co", // your app back-end url
   headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
 });
 
 function apiLoginRequest(action) {
-  return authAPI.post(`/api/v1/login/`, null, {
+  return socialLoginAPI.post(`/api/v1/login/`, null, {
     data: action.data,
   });
 }
+
 function apiSignupRequest(action) {
-  return authAPI.post(`/api/v1/signup/`, null, {
+  return socialLoginAPI.post(`/api/v1/signup/`, {
     data: action.data,
   });
 }
+
 function apiLogoutRequest(action) {
-  return authAPI.post(`/rest-auth/logout/`, null, {
-    headers: {Authorization: `Token ${action.token}`},
+  return socialLoginAPI.post(`/rest-auth/logout/`, null, {
+    headers: { Authorization: `Token ${action.token}` },
+  });
+}
+
+function apiAuthUserRequest(action) {
+  return socialLoginAPI.get(`/rest-auth/user/`, null, {
+    headers: { Authorization: `Token ${action.token}` },
   });
 }
 
 function apiResetPasswordRequest(action) {
-  return authAPI.post(`/rest-auth/password/reset/`, null, {
+  return socialLoginAPI.post(`/rest-auth/password/reset/`, null, {
     data: action.data,
   });
 }
@@ -33,4 +41,5 @@ export const authServices = {
   apiSignupRequest,
   apiLogoutRequest,
   apiResetPasswordRequest,
+  apiAuthUserRequest,
 };
