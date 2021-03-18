@@ -12,7 +12,7 @@ files in the github repository. Please note to replace ####### with the numeric 
 
 **/PROJECT_ROOT_DIRECTORY/package.json:**
 
-**ADD** Dependency after Line 16 (dependencies opening line "_"dependencies": {_ ")
+**ADD** dependencies by updating the `package.json` and inserting the following after the dependencies opening line "_"dependencies": {_ ":
 
 `"react-native-app-intro-slider": "^4.0.4", `
 
@@ -21,31 +21,16 @@ files in the github repository. Please note to replace ####### with the numeric 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import Onboarding#######Navigator from '../features/Onboarding#######/navigator';`
+`import Onboarding from '../features/Onboarding#######/';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`Onboarding#######: { screen: Onboarding#######Navigator },`
+`Onboarding#######: { screen: Onboarding.navigator },`
 
-### STEP (OPTIONAL): do this if you do not have a splash and want the onboarding to load first.
-
-**ADD** comma after **contentComponent: Sidemenu**, and initialRoutName so that your code looks like:
-
-```
-const DrawerAppNavigator = createDrawerNavigator(
-{
-    ...AppNavigator,
-    },
-    {
-        contentComponent: SideMenu,
-        initialRouteName: "Onboarding#######", // Onboarding Slide Screen
-    },
-);
-```
 
 ### STEP 3: Update the Onboarding Slide Screen content as desired, the navigated screen after done (typically the HOME screen) including the number of slide screens needed.
 
-**/src/features/Onboarding#######/index.js:**
+**/src/features/Onboarding#######/slides.js:**
 
 **MODIFY** slides, update with your slides content/desired number of slides:
 
@@ -74,15 +59,17 @@ const slides = [
  // }
 ];
 ```
+**/src/features/Onboarding#######/index.js:**
 
-**MODIFY** Line 55, Replace LoginAndSignup177769 with desired destination home/screen:
+**MODIFY** the value of `REDIRECT_SCREEN_NAME` with the name of the screen you would like onbarding to redirect to (same name as defined in `mainNavigator`):
 
-`this.props.navigation.navigate('LoginAndSignup177769')`
+```js
+const REDIRECT_SCREEN_NAME = 'LoginAndSignup177769' // name of your screen to redirect
+```
 
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 Please make sure to update tests as appropriate.
 
 ## License
