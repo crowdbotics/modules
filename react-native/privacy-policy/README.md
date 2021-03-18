@@ -1,17 +1,17 @@
 # Privacy Policy
 
-The Privacy Policy is a ReactNative based screen that leverages the paralax with a custom header.
+The Privacy Policy is a ReactNative based screen that leverages the parallax with a custom header.
 
 ## Installation
 
 After you have added the screen module into your project, you will need to configure a few items by modifying the project
-files in the github repository. Please note to replace ####### with the numeric sequence for your screen (found in folder name under /src/features) and also that the @BluePrint tags for ImportInsertion and NavigationInsertion will be removed in future so placement is with other imports and inside the AppNavigator above other screens.
+files in the github repository. Please note to replace ####### with the numeric sequence for your screen (found in folder name under`/src/features`) and also that the @BluePrint tags for ImportInsertion and NavigationInsertion will be removed in future so placement is with other imports and inside the AppNavigator above other screens.
 
 ### STEP 1: Add dependency library to the project.
 
 **/PROJECT_ROOT_DIRECTORY/package.json:**
 
-**ADD** Dependency after Line 16 (dependencies opening line "_"dependencies": {_ ")
+**ADD** dependencies by updating the `package.json` and inserting the following after the dependencies opening line "_"dependencies": {_ ":
 
 ```
 "react-native-parallax-scroll-view": "^0.21.3",
@@ -23,11 +23,11 @@ files in the github repository. Please note to replace ####### with the numeric 
 **/src/mainNavigator.js:**
 **ADD** immediately below in the section labeled //@BlueprintImportInsertion:
 
-`import PrivacyPolicy#######Navigator from '../features/PrivacyPolicy#######/navigator.js';`
+`import PrivacyPolicy from '../features/PrivacyPolicy#######/';`
 
 **ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
 
-`TPrivacyPolicy#######: { screen: PrivacyPolicy#######Navigator },`
+`PrivacyPolicy#######: { screen: PrivacyPolicy.navigator },`
 
 ### STEP 3: Add Terms screen into the sidemenu navigation.
 
@@ -49,20 +49,18 @@ buttons, it must be unique, that's the only requirement
 
 ### STEP 4: Set the left arrow screen redirect and website link.
 
-**/src/features/PrivacyPolicy#######/screens/index.js**
+**/src/features/PrivacyPolicy#######/index.js**
 
-**MODIFY** Line 82, (REPLACE HomeScreen177788 with your desired screen, likely your Home Screen)
+Update the value of `PRIVACY_WEBSITE_URL` in `index.js` with the desired website you would like to redirect users to:
 
-`onPress={() => { this.props.navigation.navigate('HomeScreen177788') }}>`
+```js
+const PRIVACY_WEBSITE_URL = 'https://www.crowdbotics.com/privacy-policy'
+```
 
-**MODIFY** Line 124, (RREPLACE URL in onPress for READ FULL POLICY link to Website URL)
-
-`onPress={() => Linking.openURL('https://www.crowdbotics.com/privacy-policy')} `
 
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 Please make sure to update tests as appropriate.
 
 ## License

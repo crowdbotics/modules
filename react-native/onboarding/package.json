@@ -7,5 +7,7 @@
   "x-dependencies": {},
   "author": "Crowdbotics",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "react-native-app-intro-slider": "^4.0.4"
+  }
 }
