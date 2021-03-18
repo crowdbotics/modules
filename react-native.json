@@ -214,11 +214,6 @@
       "code": "export const slides = [\n  {\n    key: 'one',\n    title: 'Title 1',\n    text: 'Description.\\nSay something cool',\n    image: {\n      uri:\n        'https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/cb-icon.png',\n    },\n    backgroundColor: '#59b2ab',\n  },\n  {\n    key: 'two',\n    title: 'Title 2',\n    text: 'Other cool stuff',\n    image: {\n      uri:\n        'https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/cb-icon.png',\n    },\n    backgroundColor: '#febe29',\n  },\n  // {\n  //   key: 'three',\n  //   title: 'Rocket guy',\n  //   text: 'I\\'m already out of descriptions\\n\\nLorem ipsum bla bla bla',\n  //   image: require('./assets/3.jpg'),\n  //   backgroundColor: '#22bcb5',\n  // }\n];\n",
       "parentDir": null,
       "newFile": true
-    },
-    "styles.js": {
-      "code": "",
-      "parentDir": null,
-      "newFile": true
     }
   },
   "privacy-policy": {
