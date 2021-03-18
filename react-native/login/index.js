@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   ImageBackground,
@@ -6,22 +6,22 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
+} from "react-native";
 import {
   NavigationHelpersContext,
   useNavigationBuilder,
   TabRouter,
   TabActions,
   createNavigatorFactory,
-} from '@react-navigation/native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { createStackNavigator } from '@react-navigation/stack';
-import { BACKGROUND_URL, LOGO_URL } from './screens/constants.js';
-import { apiLoginRequest, apiSignupRequest } from './auth/actions';
-import reducer from './auth/reducers';
-import { styles } from './screens/styles';
-import { SignIn, SignUp } from './screens/loginsignup';
-import PasswordReset from './screens/reset';
+} from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { createStackNavigator } from "@react-navigation/stack";
+import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
+import { apiLoginRequest, apiSignupRequest } from "./auth/actions";
+import reducer from "./auth/reducers";
+import { styles } from "./screens/styles";
+import { SignIn, SignUp } from "./screens/loginsignup";
+import PasswordReset from "./screens/reset";
 
 const LoginTabBar = ({ navigation, state, descriptors }) => {
   const currentTab = state.routes[state.index];
@@ -30,11 +30,12 @@ const LoginTabBar = ({ navigation, state, descriptors }) => {
       {state.routes.map((route) => (
         <View
           key={route.key}
-          style={route.key == currentTab.key ? styles.activeTabStyle : null}>
+          style={route.key == currentTab.key ? styles.activeTabStyle : null}
+        >
           <TouchableOpacity
             onPress={() => {
               const event = navigation.emit({
-                type: 'tabPress',
+                type: "tabPress",
                 target: route.key,
                 canPreventDefault: true,
               });
@@ -44,7 +45,8 @@ const LoginTabBar = ({ navigation, state, descriptors }) => {
                   target: state.key,
                 });
               }
-            }}>
+            }}
+          >
             <Text style={styles.tabStyle}>
               {descriptors[route.key].options.title || route.name}
             </Text>
@@ -74,11 +76,12 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
                 }}
                 style={{
                   flex: 1,
-                  justifyContent: 'center',
-                  resizeMode: 'cover',
-                  height: '100%',
-                  width: '100%',
-                }}>
+                  justifyContent: "center",
+                  resizeMode: "cover",
+                  height: "100%",
+                  width: "100%",
+                }}
+              >
                 <Image
                   source={{
                     uri: LOGO_URL,
@@ -86,8 +89,8 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
                   style={{
                     width: 155,
                     height: 155,
-                    alignSelf: 'center',
-                    resizeMode: 'contain',
+                    alignSelf: "center",
+                    resizeMode: "contain",
                   }}
                 />
               </ImageBackground>
@@ -116,8 +119,16 @@ const LoginStack = createLoginNavigator();
 const LoginScreen = () => {
   return (
     <LoginStack.Navigator>
-      <LoginStack.Screen name="SignIn" component={SignIn} />
-      <LoginStack.Screen name="SignUp" component={SignUp} />
+      <LoginStack.Screen
+        name="SignIn"
+        component={SignIn}
+        options={{ title: "Sign Up" }}
+      />
+      <LoginStack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{ title: "Sign Up" }}
+      />
     </LoginStack.Navigator>
   );
 };
@@ -134,7 +145,7 @@ const LoginSignup = () => {
 };
 
 export default {
-  title: 'LoginSignup',
+  title: "LoginSignup",
   navigator: LoginSignup,
   slice: {
     reducer,

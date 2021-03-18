@@ -9,7 +9,6 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { HOME_SCREEN_NAME, validateEmail } from './constants.js';
 import {
   apiLoginRequest,
   apiSignupRequest,
@@ -17,16 +16,17 @@ import {
   apiGoogleLogin,
   apiAppleLogin,
 } from '../auth/actions';
-import { buttonStyles, textInputStyles, Color } from './styles';
-import { connect } from 'react-redux';
-import { GoogleSigninButton } from '@react-native-community/google-signin';
 import {
   AppleButton,
   appleAuthAndroid,
 } from '@invertase/react-native-apple-authentication';
+import { HOME_SCREEN_NAME, validateEmail } from './constants.js';
+import { buttonStyles, textInputStyles, Color } from './styles';
+import { connect } from 'react-redux';
+import { GoogleSigninButton } from '@react-native-community/google-signin';
 
 // Custom Text Input
-export const TextInputField = props => (
+export const TextInputField = (props) => (
   <View>
     <Text style={[textInputStyles.label, props.labelStyle]}>{props.label}</Text>
     <TextInput
@@ -41,7 +41,7 @@ export const TextInputField = props => (
 );
 
 // Custom Button
-export const Button = props => (
+export const Button = (props) => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={[buttonStyles.viewStyle, props.viewStyle]}>
       {props.loading ? (
@@ -59,7 +59,7 @@ export const Button = props => (
 );
 
 // Grouped Social Buttons View
-const SocialButtonsView = props => (
+const SocialButtonsView = (props) => (
   <View>
     <Text style={{ textAlign: 'center', width: '100%', marginVertical: 5 }}>
       - or -
@@ -116,12 +116,11 @@ export class SignUpComponent extends Component {
 
   componentDidUpdate(prevProps) {
     const { api, user } = this.props;
-    if (prevProps.api.isLoading && !api.success) {
+    if (prevProps.api.isLoading && !api.success && api.error.message) {
       const error =
-        api.error.code == 400
+        api.error.code === 400
           ? 'This email is already registered.'
           : api.error.message;
-
       Alert.alert('Error', error);
       this.setState({
         requestError: api.error,
@@ -172,7 +171,7 @@ export class SignUpComponent extends Component {
             keyboardType="email-address"
             label="Email address"
             placeholder="Email address"
-            onChangeText={email => this.setState({ email })}
+            onChangeText={(email) => this.setState({ email })}
             value={email}
             error={emailError}
           />
@@ -180,7 +179,7 @@ export class SignUpComponent extends Component {
             label="Password"
             placeholder="Password"
             secureTextEntry={true}
-            onChangeText={password => this.setState({ password })}
+            onChangeText={(password) => this.setState({ password })}
             value={password}
             error={passwordError}
           />
@@ -188,7 +187,9 @@ export class SignUpComponent extends Component {
             label="Confirm Password"
             placeholder="Confirm Password"
             secureTextEntry={true}
-            onChangeText={confirmPassword => this.setState({ confirmPassword })}
+            onChangeText={(confirmPassword) =>
+              this.setState({ confirmPassword })
+            }
             value={confirmPassword}
             error={confirmPasswordError}
           />
@@ -262,7 +263,7 @@ export class SignInComponent extends Component {
             keyboardType="email-address"
             label="Email address"
             placeholder="Email address"
-            onChangeText={email => this.setState({ email })}
+            onChangeText={(email) => this.setState({ email })}
             value={email}
             error={emailError}
           />
@@ -270,7 +271,7 @@ export class SignInComponent extends Component {
             label="Password"
             placeholder="Password"
             secureTextEntry={true}
-            onChangeText={password => this.setState({ password })}
+            onChangeText={(password) => this.setState({ password })}
             value={password}
             error={passwordError}
           />
@@ -310,7 +311,7 @@ export class SignInComponent extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   console.log(JSON.stringify(state));
   return {
     token: state.socialLogin.token,
@@ -319,7 +320,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
     login: (email, password) =>
       dispatch(apiLoginRequest({ username: email, password })),

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   ImageBackground,
@@ -6,47 +6,58 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
-import { BACKGROUND_URL, LOGO_URL } from './screens/constants.js';
+} from "react-native";
+import {
+  NavigationHelpersContext,
+  useNavigationBuilder,
+  TabRouter,
+  TabActions,
+  createNavigatorFactory,
+} from "@react-navigation/native";
 import {
   apiLoginRequest,
   apiSignupRequest,
   apiFacebookLogin,
   apiGoogleLogin,
   apiAppleLogin,
-} from './auth/actions';
-import reducer from './auth/reducers';
-import { styles } from './screens/styles';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {
-  createNavigator,
-  createAppContainer,
-  TabRouter,
-} from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
-
-import { SignIn, SignUp } from './screens/loginsignup';
-import PasswordReset from './screens/reset';
-import UserDemo from './screens/redirect-demo';
+} from "./auth/actions";
+import reducer from "./auth/reducers";
+import { styles } from "./screens/styles";
+import PasswordReset from "./screens/reset";
+import { SignIn, SignUp } from "./screens/loginsignup";
+import UserDemo from "./screens/redirect-demo";
+import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { createStackNavigator } from "@react-navigation/stack";
 
 // Tabs
-const LoginTabBar = ({ navigation }) => {
-  const { routes, index } = navigation.state;
-  const currentTab = routes[index];
+const LoginTabButtons = ({ navigation, state, descriptors }) => {
+  const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
-      {routes.map(route => (
+      {state.routes.map((route) => (
         <View
-          key={route.routeName}
-          style={
-            route.routeName == currentTab.routeName
-              ? styles.activeTabStyle
-              : null
-          }>
+          key={route.key}
+          style={route.key == currentTab.key ? styles.activeTabStyle : null}
+        >
           <TouchableOpacity
-            onPress={() => navigation.navigate(route.routeName)}
-            accessibilityLabel="{route.routeName}">
-            <Text style={styles.tabStyle}>{route.params.name}</Text>
+            onPress={() => {
+              const event = navigation.emit({
+                type: "tabPress",
+                target: route.key,
+                canPreventDefault: true,
+              });
+              if (!event.defaultPrevented) {
+                navigation.dispatch({
+                  ...TabActions.jumpTo(route.name),
+                  target: state.key,
+                });
+              }
+            }}
+          >
+            <Text style={styles.tabStyle}>
+              {descriptors[route.key].options.title || route.name}
+            </Text>
           </TouchableOpacity>
         </View>
       ))}
@@ -54,95 +65,86 @@ const LoginTabBar = ({ navigation }) => {
   );
 };
 
-// Main View
-const SocialLoginSignupView = ({ navigation }) => {
-  const { routes, index } = navigation.state;
-  const ActiveScreen = navigation.router.getComponentForState(navigation.state);
+const TabNavigator = ({ initialRouteName, children, screenOptions }) => {
+  const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
+    children,
+    screenOptions,
+    initialRouteName,
+  });
+
   return (
-    <ScrollView style={[styles.container]}>
+    <NavigationHelpersContext.Provider value={navigation}>
       <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
-          <View style={styles.imageContainer}>
-            <ImageBackground
-              source={{
-                uri: BACKGROUND_URL,
-              }}
-              style={{
-                flex: 1,
-                justifyContent: 'center',
-                resizeMode: 'cover',
-                height: '100%',
-                width: '100%',
-              }}>
-              <Image
+        <ScrollView style={[styles.container]}>
+          <View style={{ flex: 1 }}>
+            <View style={styles.imageContainer}>
+              <ImageBackground
                 source={{
-                  uri: LOGO_URL,
+                  uri: BACKGROUND_URL,
                 }}
-                style={{
-                  width: 155,
-                  height: 155,
-                  alignSelf: 'center',
-                  resizeMode: 'contain',
-                }}
-              />
-            </ImageBackground>
+                style={styles.imageBackground}
+              >
+                <Image
+                  source={{
+                    uri: LOGO_URL,
+                  }}
+                  style={styles.logo}
+                />
+              </ImageBackground>
+            </View>
           </View>
-        </View>
-        <View style={[styles.cardView]}>
-          <LoginTabBar navigation={navigation} />
-          <View style={styles.tabContainerStyle}>
-            <ActiveScreen
-              navigation={{
-                ...navigation,
-                state: routes[index],
-              }}
+          <View style={[styles.cardView]}>
+            <LoginTabButtons
+              navigation={navigation}
+              state={state}
+              descriptors={descriptors}
             />
+            <View style={styles.tabContainerStyle}>
+              {descriptors[state.routes[state.index].key].render()}
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </KeyboardAwareScrollView>
-    </ScrollView>
+    </NavigationHelpersContext.Provider>
   );
 };
 
-const LoginSignupRouter = TabRouter(
-  {
-    Login: {
-      screen: SignIn,
-      path: 'login',
-      params: { name: 'Sign In' },
-    },
-    SignUp: {
-      screen: SignUp,
-      path: 'signup',
-      params: { name: 'Sign Up' },
-    },
-  },
-  {
-    initialRouteName: 'Login',
-  },
-);
+const createLoginNavigator = createNavigatorFactory(TabNavigator);
 
-const SocialLoginSignup = createAppContainer(
-  createNavigator(SocialLoginSignupView, LoginSignupRouter, {}),
-);
+const LoginStack = createLoginNavigator();
 
-export const SocialLoginNavigator = createStackNavigator(
-  {
-    LoginSignup: {
-      screen: SocialLoginSignup,
-    },
-    PasswordReset,
-    UserDemo,
-  },
-  {
-    initialRouteName: 'LoginSignup',
-    defaultNavigationOptions: ({ navigation }) => ({ header: null }),
-  },
-);
+const LoginTabContainer = () => {
+  return (
+    <LoginStack.Navigator>
+      <LoginStack.Screen
+        name="SignIn"
+        component={SignIn}
+        options={{ title: "Sign Up" }}
+      />
+      <LoginStack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{ title: "Sign In" }}
+      />
+    </LoginStack.Navigator>
+  );
+};
+
+const Stack = createStackNavigator();
+
+const SocialLogin = () => {
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="LoginScreen" component={LoginTabContainer} />
+      <Stack.Screen name="PasswordReset" component={PasswordReset} />
+      <Stack.Screen name="UserDemo" component={UserDemo} />
+    </Stack.Navigator>
+  );
+};
 
 export default {
-  name: 'socialLogin',
-  navigator: SocialLoginNavigator,
+  title: "socialLogin",
+  navigator: SocialLogin,
   slice: {
     reducer,
     actions: [

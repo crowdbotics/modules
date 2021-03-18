@@ -12,23 +12,12 @@ import { styles } from './styles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { apiPasswordResetRequest } from '../auth/actions';
 import { API_PASSWORD_RESET_FAILED } from '../auth/constants';
-import { validateEmail, LOGO_URL, usePrevious } from './constants.js';
+import { validateEmail, LOGO_URL, usePrevious } from './constants';
 
-// Custom use previous hook
-// function usePrevious(value, initial={}) {
-//   const targetRef = useRef(value);
-//   const previousRef = useRef(initial);
-//   if (targetRef.current !== value) {
-//     previousRef.current = targetRef.current;
-//     targetRef.current = value;
-//   }
-//   return previousRef.current;
-// }
-
-const PasswordRecover = props => {
+const PasswordRecover = (props) => {
   const [email, setEmail] = useState('');
-  const { api } = props;
-  const prevProps = usePrevious({ api }, {api : {}});
+  const { api, navigation } = props;
+  const prevProps = usePrevious({ api }, { api: {} });
 
   useEffect(() => {
     if (prevProps?.api.isLoading) {
@@ -43,9 +32,9 @@ const PasswordRecover = props => {
       if (api.success) {
         Alert.alert(
           'Password Reset',
-          'Password reset link has been sent to your email address'
+          'Password reset link has been sent to your email address',
         );
-        props.navigation.goBack();
+        navigation.goBack();
       }
     }
   }, [api]);
@@ -58,7 +47,7 @@ const PasswordRecover = props => {
     props.reset(email);
   };
 
-  const handleEmail = email => {
+  const handleEmail = (email) => {
     setEmail(email);
   };
 
@@ -86,7 +75,7 @@ const PasswordRecover = props => {
           <Text style={styles.label}>Email Address</Text>
           <TextInput
             value={email}
-            onChangeText={email => handleEmail(email)}
+            onChangeText={(email) => handleEmail(email)}
             placeholder="eg: yourname@gmail.com"
             size="small"
             style={styles.input}
@@ -111,7 +100,7 @@ const PasswordRecover = props => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            props.navigation.goBack();
+            navigation.goBack();
           }}>
           <Text style={[styles.textRow]}>Back to login?</Text>
         </TouchableOpacity>
@@ -126,9 +115,9 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    reset: email => dispatch(apiPasswordResetRequest({ email })),
+    reset: (email) => dispatch(apiPasswordResetRequest({ email })),
   };
 };
 
