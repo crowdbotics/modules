@@ -48,7 +48,7 @@ const store = createStore(
  combineReducers({
    apiReducer: apiReducer,
    customReducer: customReducer,
-   socialLogin: socialLoginReducer,
+   login: socialLoginReducer,
  }),
  composeEnhancers(applyMiddleware(...middlewares))
 );
@@ -107,7 +107,7 @@ export const appConfig = {
 ```
  
  
-Note for developers: you can access the user token through the reducer state (i.e. `state.socialLogin.token` and user auth information like email at `state.socialLogin.user`)
+Note for developers: you can access the user token through the reducer state (i.e. `state.login.token` and user auth information like email at `state.login.user`)
  
  
 ## Configuring Facebook
@@ -143,7 +143,7 @@ At this step, you need to generate the key hash for your app. Consult the offici
 - _6. Edit Your Resources and Android Manifest_
 This step will tell you which files in your project to edit. `/app/res/values/strings.xml` is equivalent to `<your_project_name>/android/app/src/main/res/values/strings.xml`
  
-Update your Android manifest file (`/android/app/src/main/AndroidManifest.xml`) and add `<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>` code to the metadata section. It should look like this:
+Update your Android manifest file (`/android/app/src/main/AndroidManifest.xml`) and add `<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>` code to the metadata section (if it doesn't already exists). It should look like this:
  
 ```xml
 <meta-data
@@ -152,10 +152,8 @@ Update your Android manifest file (`/android/app/src/main/AndroidManifest.xml`) 
  <!-- Add this line below:  -->
 <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
  
- 
 ```
- 
- 
+
 After everything, open the file `<your_project_name>/android/app/build.gradle` look for `defaultConfig` object and add `multiDexEnabled true`. It will look something like this:
  
 ```js
@@ -166,7 +164,7 @@ After everything, open the file `<your_project_name>/android/app/build.gradle` l
        targetSdkVersion rootProject.ext.targetSdkVersion
        versionCode 1
        versionName "1.0"
-       multiDexEnabled true
+       multiDexEnabled true // <- add this here, if it doesnt already exists
    }
 ...
 ```
@@ -235,7 +233,7 @@ Finish up and `Download Client Configuration` (you will need this information la
 <string name="server_client_id">XXXXX-XXXXXXXX.apps.googleusercontent.com</string>
 ```
  
-4. Open the `<your_project_name>/android/app/build.gradle` file and find the line of code with `implementation "com.facebook.react:react-native:+"`. Below this line, add the google signing implementation `implementation(project(":react-native-community_google-signin"))` and save. It should look like this:
+4. Open the `<your_project_name>/android/app/build.gradle` file and find the line of code with `implementation "com.facebook.react:react-native:+"`. Below this line, if it doesn't already exist, add the Google signing implementation `implementation(project(":react-native-community_google-signin"))` and save. It should look like this:
  
 ```js
 ...
@@ -340,13 +338,12 @@ If you enabled Signin with Apple on XCode, you are mostly done with Apple signin
 However, there could be a variety of issues during iOS deployment. Below you will see a list of helpful links to debug possible deployment issues on iOS.
 
 ## Acknowledgements
-Note that the majority of the configuration here is to help you get started with all social login apps. You will need to properly configure your app further by checking the official documentation for all providers (Google, Facebook and Apple) in order to get your app ready for release. Such configurations include:
+Note that the majority of the configuration here is to help you get started with all social login apps. You will need to properly configure your app further by checking the official documentation for all providers (Google, Facebook and Apple) in order to get your app ready for release and accepted by the app store. Such configurations include:
 - Explicitly activating or decativating Facebook tracking and other Facebook features to be compliant with iOS App Store
 - Changing Facebook app and Google Credentials for release, by updating the SHA-1 key from debug to release and including privacy policy according to their guidelines
-- Etc.
+
  
- 
-## References and XCode Troubleshooting
+## References and Troubleshooting
 1. Error when building: [FBSDKCoreKit/FBSDKCoreKit.modulemap' not found](https://github.com/facebook/react-native-fbsdk/issues/780#issuecomment-672754083)
 2. [Official docs for Facebook and iOS](https://developers.facebook.com/docs/facebook-login/ios)
 3. [Official docs for Google and iOS](https://developers.google.com/identity/sign-in/ios)
@@ -358,5 +355,4 @@ Note that the majority of the configuration here is to help you get started with
 9. [DEVELOPER_ERROR when trying to login on appetize, but working locally](https://github.com/react-native-google-signin/google-signin/issues/949#issuecomment-778070056)
 
 ## License
- 
 [MIT](https://choosealicense.com/licenses/mit/)

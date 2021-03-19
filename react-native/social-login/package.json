@@ -11,6 +11,8 @@
     "@react-native-community/google-signin": "^5.0.0",
     "react-native-fbsdk": "1.1.2",
     "react-native-keyboard-aware-scroll-view": "0.9.1",
-    "@invertase/react-native-apple-authentication": "^2.1.0"
+    "@invertase/react-native-apple-authentication": "^2.1.0",
+    "@react-navigation/native": "^5.9.2",
+    "@react-navigation/stack": "^5.14.2"
   }
 }

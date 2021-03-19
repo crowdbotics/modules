@@ -7,5 +7,10 @@
   "x-dependencies": {},
   "author": "Crowdbotics",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "react-native-elements": "^2.3.2",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-vector-icons": "^6.6.0",
+    "@react-navigation/native": "^5.9.2"
+  }
 }

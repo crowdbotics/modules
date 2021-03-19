@@ -314,9 +314,9 @@ export class SignInComponent extends Component {
 const mapStateToProps = (state) => {
   console.log(JSON.stringify(state));
   return {
-    token: state.socialLogin.token,
-    api: state.socialLogin.api,
-    user: state.socialLogin.user,
+    token: state.login.token,
+    api: state.login.api,
+    user: state.login.user,
   };
 };
 

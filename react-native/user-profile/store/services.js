@@ -1,17 +1,15 @@
 import axios from 'axios';
 import { appConfig } from '../../../config/app';
 
+const SERVICE_URL = appConfig.emailAuthAPIEndPoint
+
 const usersAPI = axios.create({
-  baseURL: appConfig.emailAuthAPIEndPoint, // your app back-end url
+  baseURL: SERVICE_URL, // your app back-end url
   headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
 });
 
 function user_read(action) {
-  return usersAPI.get(`/api/v1/user/${action.id}/`, null, {
-    headers: {
-      Authorization: `Token ${action.token}`,
-    },
-  });
+  return usersAPI.get(`/api/v1/user/${action.id}/`);
 }
 
 function user_update(action) {

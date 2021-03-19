@@ -143,7 +143,7 @@ const SocialLogin = () => {
 };
 
 export default {
-  title: "socialLogin",
+  title: "login",
   navigator: SocialLogin,
   slice: {
     reducer,
