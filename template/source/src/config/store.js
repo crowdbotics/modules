@@ -3,7 +3,7 @@ import { configureStore, createReducer, combineReducers } from "@reduxjs/toolkit
 
 export const APP_URL = "https://ProjectNameIdentifier.botics.co";
 
-const reducers = slices.map(slice => slice.reducer);
+const reducers = Object.fromEntries(slices.map(([name, slice]) => [name, slice.reducer]));
 
 const appState = {
   name: "ProjectName",
