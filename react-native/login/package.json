@@ -8,7 +8,6 @@
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {
-    "native-base": "^2.13.15",
     "react-native-keyboard-aware-scroll-view": "^0.9.3"
   }
 }

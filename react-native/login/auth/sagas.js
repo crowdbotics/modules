@@ -34,7 +34,6 @@ function* apiLogoutRequestWatcher() {
 // Signup
 function* apiSignupRequestWorker(action) {
   try {
-    console.log("Signing up...")
     const result = yield call(authServices.apiSignupRequest, action);
     console.log(result)
     yield put(actions.apiSignupSuccess(result, action));

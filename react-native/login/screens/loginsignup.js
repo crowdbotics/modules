@@ -66,7 +66,7 @@ export class SignUpComponent extends Component {
     if (prevProps.api.isLoading && !api.success) {
       const error =
         api.error.code == 400
-          ? 'This email is already registered.'
+          ? 'This email might already be registered or entered data is wrong.'
           : api.error.message;
 
       Alert.alert('Error', error);
@@ -248,11 +248,10 @@ export class SignInComponent extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
-    token: state.LoginSignup.token,
-    api: state.LoginSignup.api,
-    user: state.LoginSignup.user,
+    token: state.login.token,
+    api: state.login.api,
+    user: state.login.user,
   };
 };
 

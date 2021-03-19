@@ -122,7 +122,7 @@ const LoginScreen = () => {
       <LoginStack.Screen
         name="SignIn"
         component={SignIn}
-        options={{ title: "Sign Up" }}
+        options={{ title: "Sign In" }}
       />
       <LoginStack.Screen
         name="SignUp"
@@ -145,7 +145,7 @@ const LoginSignup = () => {
 };
 
 export default {
-  title: "LoginSignup",
+  title: "login",
   navigator: LoginSignup,
   slice: {
     reducer,

@@ -111,7 +111,7 @@ const PasswordRecover = props => {
 
 function mapStateToProps(state) {
   return {
-    api: state.socialLogin.api,
+    api: state.login.api,
   };
 }
 
