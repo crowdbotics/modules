@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
-} from 'react-native';
-import { buttonStyles, textInputStyles, Color } from './styles';
-import { HOME_SCREEN_NAME, validateEmail } from './constants.js';
-import { apiLoginRequest, apiSignupRequest } from '../auth/actions';
-import { connect } from 'react-redux';
+} from "react-native";
+import { buttonStyles, textInputStyles, Color } from "./styles";
+import { HOME_SCREEN_NAME, validateEmail } from "./constants.js";
+import { apiLoginRequest, apiSignupRequest } from "../auth/actions";
+import { connect } from "react-redux";
 
 // Custom Text Input
 export const TextInputField = (props) => (
@@ -21,7 +21,7 @@ export const TextInputField = (props) => (
       autoCapitalize="none"
       style={[textInputStyles.textInput, props.textInputStyle]}
       placeholderTextColor={Color.steel}
-      underlineColorAndroid={'transparent'}
+      underlineColorAndroid={"transparent"}
       {...props}
     />
     {!!props.error && <Text style={textInputStyles.error}>{props.error}</Text>}
@@ -51,13 +51,13 @@ export class SignUpComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      confirmPassword: '',
-      emailError: '',
-      passwordError: '',
-      confirmPasswordError: '',
-      requestError: '',
+      email: "",
+      password: "",
+      confirmPassword: "",
+      emailError: "",
+      passwordError: "",
+      confirmPasswordError: "",
+      requestError: "",
     };
   }
 
@@ -66,40 +66,40 @@ export class SignUpComponent extends Component {
     if (prevProps.api.isLoading && !api.success) {
       const error =
         api.error.code == 400
-          ? 'This email might already be registered or entered data is wrong.'
+          ? "This email might already be registered or entered data is wrong."
           : api.error.message;
 
-      Alert.alert('Error', error);
+      Alert.alert("Error", error);
       this.setState({
         requestError: api.error,
       });
     }
     if (prevProps.api.isLoading && api.success && user !== {}) {
       Alert.alert(
-        'Signup Success',
-        'Registration Successful. A confirmation will be sent to your e-mail address.',
+        "Signup Success",
+        "Registration Successful. A confirmation will be sent to your e-mail address."
       );
     }
   }
 
   onSignupPress = async () => {
     const { email, password, confirmPassword } = this.state;
-    this.setState({ emailError: '' });
-    this.setState({ passwordError: '' });
+    this.setState({ emailError: "" });
+    this.setState({ passwordError: "" });
     if (validateEmail.test(email)) {
-      if (password != '') {
+      if (password != "") {
         if (password == confirmPassword) {
           this.props.signup(email, password);
         } else {
           this.setState({
-            confirmPasswordError: 'Confirm password and password do not match',
+            confirmPasswordError: "Confirm password and password do not match",
           });
         }
       } else {
-        this.setState({ passwordError: 'Please enter a valid password' });
+        this.setState({ passwordError: "Please enter a valid password" });
       }
     } else {
-      this.setState({ emailError: 'Please enter a valid email address' });
+      this.setState({ emailError: "Please enter a valid email address" });
     }
   };
 
@@ -162,10 +162,10 @@ export class SignInComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
-      emailError: '',
-      passwordError: '',
+      email: "",
+      password: "",
+      emailError: "",
+      passwordError: "",
       authLoading: false,
       fbLoading: false,
     };
@@ -174,7 +174,7 @@ export class SignInComponent extends Component {
   componentDidUpdate(prevProps) {
     const { api, token } = this.props;
     if (prevProps.api.isLoading && !api.success) {
-      Alert.alert('Login Error', api.error.message);
+      Alert.alert("Login Error", api.error.message);
     }
     if (token) {
       this.props.navigation.navigate(HOME_SCREEN_NAME);
@@ -184,14 +184,14 @@ export class SignInComponent extends Component {
   onSigninPress = () => {
     const { email, password } = this.state;
     if (validateEmail.test(email)) {
-      if (password != '') {
+      if (password != "") {
         this.props.login(email, password);
         this.setState({ authLoading: false });
       } else {
-        this.setState({ passwordError: 'Please enter a valid password' });
+        this.setState({ passwordError: "Please enter a valid password" });
       }
     } else {
-      this.setState({ emailError: 'Please enter a valid email address' });
+      this.setState({ emailError: "Please enter a valid email address" });
     }
   };
 
@@ -230,15 +230,17 @@ export class SignInComponent extends Component {
 
         <View
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             marginTop: 10,
-          }}>
+          }}
+        >
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => {
-              this.props.navigation.navigate('PasswordReset');
-            }}>
+              this.props.navigation.navigate("PasswordReset");
+            }}
+          >
             <Text>Forgot your password?</Text>
           </TouchableOpacity>
         </View>
@@ -266,9 +268,9 @@ const mapDispatchToProps = (dispatch) => {
 
 export const SignIn = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SignInComponent);
 export const SignUp = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SignUpComponent);

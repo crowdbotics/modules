@@ -1,7 +1,7 @@
-import {put, call, all, spawn, takeEvery} from 'redux-saga/effects';
-import {authServices} from './services';
-import * as types from './constants';
-import * as actions from './actions';
+import { put, call, all, spawn, takeEvery } from "redux-saga/effects";
+import { authServices } from "./services";
+import * as types from "./constants";
+import * as actions from "./actions";
 
 // Login
 function* apiLoginRequestWorker(action) {
@@ -35,7 +35,7 @@ function* apiLogoutRequestWatcher() {
 function* apiSignupRequestWorker(action) {
   try {
     const result = yield call(authServices.apiSignupRequest, action);
-    console.log(result)
+    console.log(result);
     yield put(actions.apiSignupSuccess(result, action));
   } catch (err) {
     yield put(actions.apiSignupFailed(err, action));
@@ -74,7 +74,6 @@ function* apiAuthUserWatcher() {
   yield takeEvery(types.API_AUTH_USER_REQUEST, apiAuthUserWorker);
 }
 
-
 // Read more information about root sagas in the documentation
 // https://redux-saga.js.org/docs/advanced/RootSaga.html
 export default function* authRootSaga() {
@@ -86,8 +85,8 @@ export default function* authRootSaga() {
     apiAuthUserWatcher,
   ];
   yield all(
-    sagas.map(saga =>
-      spawn(function*() {
+    sagas.map((saga) =>
+      spawn(function* () {
         while (true) {
           try {
             yield call(saga);
@@ -96,7 +95,7 @@ export default function* authRootSaga() {
             console.log(e);
           }
         }
-      }),
-    ),
+      })
+    )
   );
 }

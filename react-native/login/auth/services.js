@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 import { appConfig } from "../../../config/app";
 
 const authAPI = axios.create({
   baseURL: appConfig.emailAuthAPIEndPoint, // your app back-end url
-  headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+  headers: { Accept: "application/json", "Content-Type": "application/json" },
 });
 
 function apiLoginRequest(action) {

@@ -1,5 +1,5 @@
-import * as types from './constants';
-import { mapErrorMessage } from './utils';
+import * as types from "./constants";
+import { mapErrorMessage } from "./utils";
 
 const INITIAL_STATE = {
   token: null,

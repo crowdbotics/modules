@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Image,
   Alert,
@@ -6,33 +6,33 @@ import {
   TouchableOpacity,
   TextInput,
   Text,
-} from 'react-native';
-import { connect } from 'react-redux';
-import { styles } from './styles';
-import { apiPasswordResetRequest } from '../auth/actions';
-import { API_PASSWORD_RESET_FAILED } from '../auth/constants';
-import { validateEmail, LOGO_URL, usePrevious } from './constants.js';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+} from "react-native";
+import { connect } from "react-redux";
+import { styles } from "./styles";
+import { apiPasswordResetRequest } from "../auth/actions";
+import { API_PASSWORD_RESET_FAILED } from "../auth/constants";
+import { validateEmail, LOGO_URL, usePrevious } from "./constants.js";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-const PasswordRecover = props => {
-  const [email, setEmail] = useState('');
+const PasswordRecover = (props) => {
+  const [email, setEmail] = useState("");
   const { api } = props;
-  const prevProps = usePrevious({ api }, {api : {}});
+  const prevProps = usePrevious({ api }, { api: {} });
 
   useEffect(() => {
     if (prevProps?.api.isLoading) {
       if (api.error?.type === API_PASSWORD_RESET_FAILED) {
         let message =
           api.error?.code === 400
-            ? 'This email is not registered.\nPlease signup'
+            ? "This email is not registered.\nPlease signup"
             : api.error.message;
-        Alert.alert('Error', message);
+        Alert.alert("Error", message);
       }
 
       if (api.success) {
         Alert.alert(
-          'Password Reset',
-          'Password reset link has been sent to your email address'
+          "Password Reset",
+          "Password reset link has been sent to your email address"
         );
         props.navigation.goBack();
       }
@@ -41,13 +41,13 @@ const PasswordRecover = props => {
 
   const handlePasswordReset = () => {
     if (!validateEmail.test(email)) {
-      Alert.alert('Error', 'Please enter a valid email address.');
+      Alert.alert("Error", "Please enter a valid email address.");
       return;
     }
     props.reset(email);
   };
 
-  const handleEmail = email => {
+  const handleEmail = (email) => {
     setEmail(email);
   };
 
@@ -70,12 +70,12 @@ const PasswordRecover = props => {
     <View style={{ flex: 1 }}>
       <KeyboardAwareScrollView contentContainerStyle={styles.screen}>
         {renderImage()}
-        <Text style={styles.heading}>{'Password Recovery'}</Text>
+        <Text style={styles.heading}>{"Password Recovery"}</Text>
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Email Address</Text>
           <TextInput
             value={email}
-            onChangeText={email => handleEmail(email)}
+            onChangeText={(email) => handleEmail(email)}
             placeholder="eg: yourname@gmail.com"
             size="small"
             style={styles.input}
@@ -88,20 +88,23 @@ const PasswordRecover = props => {
           disabled={props.api.isLoading}
           activeOpacity={0.7}
           style={[styles.actionButon]}
-          onPress={handlePasswordReset}>
+          onPress={handlePasswordReset}
+        >
           <Text
             style={{
-              color: '#fff',
+              color: "#fff",
               fontSize: 15,
-            }}>
-            {'Reset Password'}
+            }}
+          >
+            {"Reset Password"}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
             props.navigation.goBack();
-          }}>
+          }}
+        >
           <Text style={[styles.textRow]}>Back to login?</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
@@ -115,9 +118,9 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    reset: email => dispatch(apiPasswordResetRequest({ email })),
+    reset: (email) => dispatch(apiPasswordResetRequest({ email })),
   };
 };
 
