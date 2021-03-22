@@ -53,14 +53,14 @@ replace({
 replace({
   projectName: "{{cookiecutter.project_owner_email}}",
   projectTitle: "{{cookiecutter.project_dash_slug}}",
-  placeholderName: "ProjectNameOwnerEmail",
+  placeholderName: "ProjectOwnerEmail",
   placeholderTitle: config.dist.builds.raw.titlePlaceholder
 });
 
 replace({
   projectName: "{{cookiecutter.ssh_key_fingerprint}}",
   projectTitle: "{{cookiecutter.project_dash_slug}}",
-  placeholderName: "ProjectNameSSHKeyFingerPrint",
+  placeholderName: "ProjectSSHKeyFingerPrint",
   placeholderTitle: config.dist.builds.raw.titlePlaceholder
 });
 

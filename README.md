@@ -219,13 +219,13 @@ npm run cookie
 
 Generates cookiecutter template by replacing according to table:
 
-| Before                         | After                                    | Example            |
-| ------------------------------ | ---------------------------------------- | ------------------ |
-| `ProjectName`                  | `{{ cookiecutter.project_slug }}`        | `MyNewApp`         |
-| `projectname`                  | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
-| `ProjectNameIdentifier`        | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
-| `ProjectNameOwnerEmail`        | `{{ cookiecutter.owner_email }}`         | `mail@example.com` |
-| `ProjectNameSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
+| Before                     | After                                    | Example            |
+| -------------------------- | ---------------------------------------- | ------------------ |
+| `ProjectName`              | `{{ cookiecutter.project_slug }}`        | `MyNewApp`         |
+| `projectname`              | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
+| `ProjectNameIdentifier`    | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
+| `ProjectOwnerEmail`        | `{{ cookiecutter.owner_email }}`         | `mail@example.com` |
+| `ProjectSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
 
 Ouput will be made to [dist/cookie](dist/cookie).
 
