@@ -17,6 +17,6 @@ npx react-native run-android
 ## iOS
 
 ```sh
-npm run pod
+pod install --repo-update --project-directory=ios
 npx react-native run-ios
 ```
