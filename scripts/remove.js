@@ -8,10 +8,12 @@ import {
   write,
   parse
 } from "./utils.js";
+import config from "../config.js";
 
 const modules = process.argv.slice(2);
 const cwd = process.cwd();
-const demoDir = path.join(process.cwd(), "demo");
+const demoDir = path.join(process.cwd(), config.demo.directory);
+
 modules.map(module => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "react-native", module);
