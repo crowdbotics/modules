@@ -6,6 +6,23 @@ This modules uses the [OneSignal](https://onesignal.com) service to provide push
 
 It includes the OneSignal SDK for React Native: [`react-native-onesignal`](https://www.npmjs.com/package/react-native-onesignal).
 
+## Gradle setup
+
+Add the following buildscript at the top of `android/app/build.gradle` file:
+
+```
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.9, 0.99.99]'
+    }
+}
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+```
+
 ## Setup
 
 [Requirements](https://documentation.onesignal.com/docs/react-native-sdk-setup#step-1---requirements) overview:
