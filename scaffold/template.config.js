@@ -8,6 +8,6 @@
 module.exports = {
   placeholderName: 'HelloWorld',
   titlePlaceholder: 'Hello App Display Name',
-  templateDir: './rn-template',
-  postInitScript: './install.js',
+  templateDir: './template',
+  postInitScript: './install.js'
 };
