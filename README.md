@@ -210,13 +210,13 @@ npm run cookie
 
 Generates cookiecutter template by replacing according to table:
 
-| Before                     | After                                    | Example            |
-| -------------------------- | ---------------------------------------- | ------------------ |
-| `ProjectName`              | `{{ cookiecutter.project_slug }}`        | `MyNewApp`         |
-| `projectname`              | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
-| `ProjectNameIdentifier`    | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
-| `ProjectOwnerEmail`        | `{{ cookiecutter.owner_email }}`         | `mail@example.com` |
-| `ProjectSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
+| Before                        | After                                    | Example            |
+| ----------------------------- | ---------------------------------------- | ------------------ |
+| `HelloWorld`                  | `{{ cookiecutter.project_slug }}`        | `MyNewApp`         |
+| `helloworld`                  | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
+| `HelloWorldIdentifier`        | `{{ cookiecutter.project_dash_slug }}`   | `mynewapp`         |
+| `HelloWorldOwnerEmail`        | `{{ cookiecutter.owner_email }}`         | `mail@example.com` |
+| `HelloWorldSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
 
 ## Metro config
 
@@ -321,12 +321,12 @@ import {
 } from "@reduxjs/toolkit";
 import { slices } from "@modules";
 
-export const APP_URL = "https://ProjectNameIdentifier.botics.co";
+export const APP_URL = "https://HelloWorldIdentifier.botics.co";
 
 const reducers = slices.map((slice) => slice.reducer);
 
 const appState = {
-  name: "ProjectName",
+  name: "HelloWorld",
   url: APP_URL,
   version: "1.0.0",
 };
@@ -588,7 +588,6 @@ The example above is for an headless module (no screens), but you can export hoo
 > Key-value pairs that grant an executable permission to use a service or technology.
 
 Documentation - https://developer.apple.com/documentation/bundleresources/entitlements
-File - [ProjectName.entitlements](template/source/ios/ProjectName/ProjectName.entitlements)
 
 **Examples**
 
