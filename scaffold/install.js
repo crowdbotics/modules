@@ -5,6 +5,9 @@ const cwd = process.cwd();
 const customFiles = path.join(cwd, "custom");
 const { execSync } = require("child_process");
 
+// docs
+fs.copyFileSync(path.join(customFiles, "README.md"), path.join(cwd, "README.md"));
+
 // Crowdbotics src files
 fs.renameSync(path.join(customFiles, "src"), path.join(cwd, "src"));
 fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
