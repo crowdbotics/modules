@@ -1,11 +1,12 @@
 import fs from "fs";
 import path from "path";
+import config from "../config.js";
 
 let data;
 const DJANGO_MODULES = path.join("django");
-const DJANGO_OUTPUT_FILE = "django.json";
+const DJANGO_OUTPUT_FILE = path.join(config.dist.directory, "django.json");
 const REACT_NATIVE_MODULES = path.join("react-native");
-const REACT_NATIVE_OUTPUT_FILE = "react-native.json";
+const REACT_NATIVE_OUTPUT_FILE = path.join(config.dist.directory, "react-native.json");
 const ACCEPTED_EXTENSIONS = [".json", ".js", ".ts", ".jsx", ".tsx", ".md", ".py"];
 
 const parseDir = dir => {
