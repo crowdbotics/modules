@@ -17,6 +17,8 @@ fs.copyFileSync(path.join(customFiles, "heroku.yml"), path.join(cwd, "heroku.yml
 fs.copyFileSync(path.join(customFiles, "metro.config.js"), path.join(cwd, "metro.config.js"));
 fs.copyFileSync(path.join(customFiles, ".env"), path.join(cwd, ".env"));
 fs.copyFileSync(path.join(customFiles, ".env.template"), path.join(cwd, ".env.template"));
+fs.copyFileSync(path.join(customFiles, "Gemfile"), path.join(cwd, "Gemfile"));
+fs.copyFileSync(path.join(customFiles, "Gemfile.lock"), path.join(cwd, "Gemfile.lock"));
 
 // react-native cli bug?
 // https://github.com/react-native-community/cli/blob/641b21f583c97e3d48ce87d5fe804f42db92fa5c/packages/cli/src/tools/generator/copyProjectTemplateAndReplace.ts#L144
