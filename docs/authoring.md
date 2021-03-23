@@ -25,7 +25,7 @@ Your module's `main` key should always point to `index.js`. We also suggest that
 
 Your module can include its own dependencies, more on that in the following sections.
 
-[react-native/maps/package.json](react-native/maps/package.json)
+[react-native/maps/package.json](/modules/react-native/maps/package.json)
 
 ```json
 {
@@ -82,11 +82,11 @@ npm install <dependency> -- save
 
 Whenever the module gets the installed the dependencies of your module get installed in the app via npm's sub-dependencies.
 
-If your library includes native code or depends on the [React Native's autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) feature please read the section below too.
+If your library includes native code or depends on the [React Native's autolinking](https://github.com/react-native-community/cli/blob/641b21f583c97e3d48ce87d5fe804f42db92fa5c/docs/autolinking.md) feature please read the section below too.
 
 ## Adding dependencies with Native code
 
-[React Native's autolinking](https://github.com/react-native-community/cli/blob/master/docs/autolinking.md) doesn't work yet with NPM's sub-dependencies.
+[React Native's autolinking](https://github.com/react-native-community/cli/blob/641b21f583c97e3d48ce87d5fe804f42db92fa5c/docs/autolinking.md) doesn't work yet with NPM's sub-dependencies.
 
 Example, including `react-native-maps` in the maps module will not link the native
 modules properly and results in

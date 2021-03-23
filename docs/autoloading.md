@@ -10,9 +10,9 @@
 
 We provide a module called "App Menu" that automatically lists available routes:
 
-| Chat and Maps installed                        | No modules installed                       |
-| ---------------------------------------------- | ------------------------------------------ |
-| ![Modules preview](preview/appmenumodules.png) | ![No modules preview](preview/appmenu.png) |
+| Chat and Maps installed                         | No modules installed                        |
+| ----------------------------------------------- | ------------------------------------------- |
+| ![Modules preview](/preview/appmenumodules.png) | ![No modules preview](/preview/appmenu.png) |
 
 ```javascript
 function AppMenu({ navigation }) {
@@ -47,7 +47,7 @@ This section explains the mechanisms of this setup.
 
 A good place to start is our `metro.config.js` config:
 
-[scaffold/template/metro.config.js](scaffold/template/metro.config.js)
+[scaffold/template/metro.config.js](/scaffold/template/metro.config.js)
 
 ```javascript
 /**
@@ -102,7 +102,7 @@ import modules from "@modules";
 
 And the default export of that module is just the components themselves:
 
-[scaffold/template/modules/index.js](scaffold/template/modules/index.js)
+[scaffold/template/modules/index.js](/scaffold/template/modules/index.js)
 
 ```javascript
 import { getPropertyMap, getModules } from "./utils.js";
