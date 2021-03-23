@@ -11,6 +11,7 @@
     "parse": "node scripts/parse.js",
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
+    "raw": "node scripts/raw.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -31,10 +32,10 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/template": "^7.12.7",
     "@babel/types": "^7.12.12",
+    "fs-extra": "^9.1.0",
     "prettier": "^2.2.1"
   },
   "devDependencies": {
-    "@react-native-community/cli": "^4.13.1",
-    "ncp": "^2.0.0"
+    "@react-native-community/cli": "^4.13.1"
   }
 }
