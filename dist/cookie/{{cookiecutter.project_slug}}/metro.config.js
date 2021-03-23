@@ -7,10 +7,10 @@
 
 const path = require('path');
 const extraNodeModules = {
-  '@modules': path.resolve(__dirname, 'src', 'modules'),
+  '@modules': path.resolve(__dirname, 'modules'),
 };
 const watchFolders = [
-  path.resolve(__dirname + '/src/modules')
+  path.resolve(__dirname, 'modules')
 ];
 module.exports = {
   transformer: {
@@ -24,7 +24,7 @@ module.exports = {
   resolver: {
     extraNodeModules: new Proxy(extraNodeModules, {
       get: (target, name) =>
-        //redirects dependencies referenced from src/modules to local node_modules
+        //redirects dependencies referenced from modules to local node_modules
         name in target ? target[name] : path.join(process.cwd(), "node_modules", name),
     }),
   },

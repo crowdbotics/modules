@@ -1,12 +1,10 @@
 import fs from "fs";
 import path from "path";
-import { clean, write } from "./utils.js";
+import fse from "fs-extra";
 import config from "./config.js";
 // https://github.com/react-native-community/cli/blob/22a3c2558c2e03cc61f088807d2b09d1567c07ca/packages/cli/src/commands/init/editTemplate.ts#L77
 import edit from "../node_modules/@react-native-community/cli/build/commands/init/editTemplate.js";
 const replace = edit.changePlaceholderInTemplate;
-
-import fse from "fs-extra";
 
 const source = path.join(
   process.cwd(),
@@ -16,7 +14,8 @@ const target = path.join(
   process.cwd(),
   config.dist.builds.cookie.directory
 );
-clean({ target: target });
+
+fs.rmdirSync(target, { recursive: true });
 fs.rmdirSync(
   path.join(source, config.dist.builds.raw.placeholderName, "node_modules"),
   { recursive: true }
@@ -64,4 +63,7 @@ replace({
   placeholderTitle: config.dist.builds.raw.titlePlaceholder
 });
 
-write(path.join(target, "cookiecutter.json"), JSON.stringify(config.dist.builds.cookie.config, null, 2));
+fs.writeFileSync(
+  path.join(target, "cookiecutter.json"),
+  JSON.stringify(config.dist.builds.cookie.config, null, 2)
+);

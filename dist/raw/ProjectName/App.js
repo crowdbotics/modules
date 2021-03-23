@@ -1,8 +1,6 @@
 import React from "react";
 import { Provider } from "react-redux";
-import store from "./config/store";
-import Navigation from "./config/navigation";
-import { hooks } from "@modules";
+import { hooks, Navigation, store } from "@modules";
 
 const App = () => {
   let effects = {};
