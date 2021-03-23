@@ -75,6 +75,19 @@ export const styles = StyleSheet.create({
     marginBottom: scale(10),
     marginTop: scaleVertical(63),
   },
+  logo: {
+    width: 155,
+    height: 155,
+    alignSelf: 'center',
+    resizeMode: 'contain',
+  },
+  imageBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    resizeMode: 'cover',
+    height: '100%',
+    width: '100%',
+  },
   textRow: {
     textAlign: 'center',
     color: '#707070',
