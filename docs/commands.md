@@ -46,8 +46,8 @@ Check **Auto build** and **Is screen**.
 **Code:**
 Copy from:
 
-- [django.json](django.json)
-- [react-native.json](react-native.json)
+- [django.json](/dist/django.json)
+- [react-native.json](/dist/react-native.json)
 
 **Setup step:**
 
@@ -120,4 +120,4 @@ Generates cookiecutter template by replacing according to table:
 | `ProjectOwnerEmail`        | `{{ cookiecutter.owner_email }}`         | `mail@example.com` |
 | `ProjectSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
 
-Ouput will be made to [dist/cookie](dist/cookie).
+Ouput will be made to [dist/cookie](/dist/cookie).
