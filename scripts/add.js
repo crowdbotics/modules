@@ -1,9 +1,7 @@
+import fs from "fs";
 import path from "path";
-import {
-  execShellCommand,
-  read
-} from "./utils.js";
 import config from "./config.js";
+import { execSync } from "child_process";
 
 const modules = process.argv.slice(2);
 const cwd = process.cwd();
@@ -16,11 +14,11 @@ modules.map(module => {
   const yarnPath = path.join("file:./modules", module);
 
   let packages = [yarnPath];
-  execShellCommand(`cp -r ${originModuleDir} ${targetModuleDir}`);
+  execSync(`cp -r ${originModuleDir} ${targetModuleDir}`);
 
   // Install x-dependencies
   const packageJSON = JSON.parse(
-    read(path.join(originModuleDir, "package.json"))
+    fs.readFileSync(path.join(originModuleDir, "package.json"), "utf8")
   );
   if (packageJSON.hasOwnProperty("x-dependencies")) {
     const deps = packageJSON["x-dependencies"];
@@ -32,5 +30,5 @@ modules.map(module => {
   // Install packages
   packages = packages.join(" ");
   process.chdir(demoDir);
-  execShellCommand(`cd ${demoDir} && yarn add ${packages}`);
+  execSync(`yarn add ${packages}`);
 });
