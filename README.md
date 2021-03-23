@@ -20,7 +20,6 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [App Menu module](#app-menu-module)
   - [Metro config](#metro-config)
   - [Using @modules](#using-modules)
-  - [Manifest](#manifest)
   - [Generate cookiecutter](#generate-cookiecutter)
 - [Custom React Native template](#custom-react-native-template)
   - [What's included](#whats-included)
@@ -149,10 +148,9 @@ npm run add <module_name> <supports_multiple_modules_syntax>
 
 Installs a module into the demo app, performing the follow operations:
 
-1. Copies the module directory from [react-native](react-native) into `demo/src/modules`.
+1. Copies the module directory from [react-native](react-native) into `demo/modules`.
 2. Runs `yarn add <module_name>` in the `demo` directory.
 3. Runs `yarn add <dependency>` for every `x-dependencies` in the module `package.json`.
-4. Adds the module to `demo/src/modules/manifest.js` - with an import and an array export.
 
 ## Remove a module
 
@@ -162,10 +160,9 @@ npm run remove <module_name> <supports_multiple_modules_syntax>
 
 Removes a module from the demo app, performing the follow operations:
 
-1. Removes the module folder from `demo/src/modules`.
+1. Removes the module folder from `demo/modules`.
 2. Runs `yarn remove <module_name>` in the `demo` directory.
 3. Runs `yarn remove <dependency>` for every `x-dependencies` in the module `package.json`.
-4. Remove the module from `demo/src/modules/manifest.js` - removing the import and the item from the export array.
 
 # Auto loading and setting up modules
 
@@ -204,6 +201,15 @@ function AppMenu({ navigation }) {
 
 ## Generate cookiecutter
 
+Start by generating a new app called ProjectName to serve as input for cookiecutter replacements:
+
+```sh
+npm run raw
+
+```
+
+Then run the cookie command to generate distribution cookiecutter.
+
 ```sh
 npm run cookie
 ```
@@ -218,9 +224,11 @@ Generates cookiecutter template by replacing according to table:
 | `ProjectOwnerEmail`        | `{{ cookiecutter.owner_email }}`         | `mail@example.com` |
 | `ProjectSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
 
+Ouput will be made to [dist/cookie](dist/cookie).
+
 ## Metro config
 
-Our modules and template are written in a way that no user setup is required. We also make use of some simple scripts to update a manifest that lists the modules installed and we pick up from that to load them.
+Our modules and template are written in a way that no user setup is required. We also make use of a babel plugin that allows glob imports from the modules directory.
 
 This section explains the mechanisms of this setup.
 
@@ -238,9 +246,9 @@ A good place to start is our `metro.config.js` config:
 
 const path = require("path");
 const extraNodeModules = {
-  "@modules": path.resolve(__dirname, "src", "modules"),
+  "@modules": path.resolve(__dirname, "modules"),
 };
-const watchFolders = [path.resolve(__dirname + "/src/modules")];
+const watchFolders = [path.resolve(__dirname, "modules")];
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
@@ -253,7 +261,7 @@ module.exports = {
   resolver: {
     extraNodeModules: new Proxy(extraNodeModules, {
       get: (target, name) =>
-        //redirects dependencies referenced from src/modules to local node_modules
+        //redirects dependencies referenced from modules to local node_modules
         name in target
           ? target[name]
           : path.join(process.cwd(), "node_modules", name),
@@ -263,17 +271,17 @@ module.exports = {
 };
 ```
 
-We make use of the Metro's Resolver [extraNodeModules](https://facebook.github.io/metro/docs/configuration/#extranodemodules) option to make use of local `npm` libraries installed into the app's `src/modules` directory (directory where modules get installed).
+We make use of the Metro's Resolver [extraNodeModules](https://facebook.github.io/metro/docs/configuration/#extranodemodules) option to make use of local `npm` libraries installed into the app's `modules` directory (directory where modules get installed).
 
 This gives us three main benefits:
 
 - **Modularity** - We can author modules as npm packages and include their own dependencies that get installed when installing the module.
 - **Developer Experience** - Making changes to those files also work with the metro [hot reload](https://facebook.github.io/metro/docs/configuration/#watchfolders).
-- **Imports redirects** - Because managing `node_modules` on every `src/modules` folder isn't the best user experience, we redirect any import to the main app's `node_modules`. This means that a module can import from its own files or from any library, without issues.
+- **Imports redirects** - Because managing `node_modules` on every `modules` folder isn't the best user experience, we redirect any import to the main app's `node_modules`. This means that a module can import from its own files or from any library, without issues.
 
 ## Using @modules
 
-Notice the `@modules` key above, which means that we can import `src/modules/index.js` like this:
+Notice the `@modules` key above, which means that we can import `modules/index.js` like this:
 
 ```javascript
 import modules from "@modules";
@@ -281,153 +289,21 @@ import modules from "@modules";
 
 And the default export of that module is just the components themselves:
 
-[template/source/src/modules/index.js](template/source/src/modules/index.js)
+[scaffold/template/modules/index.js](scaffold/template/modules/index.js)
 
 ```javascript
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { manifest } from "./manifest.js";
-import { getPropertyMap } from "./utils.js";
+import { getPropertyMap, getModules } from "./utils.js";
+import { getStore } from "./store.js";
+import { getNavigation } from "./navigation.js";
+import * as manifest from "glob:./**/index.js";
 
-const YourApp = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Welcome to your brand new app!</Text>
-    </View>
-  );
-};
-
-// ...
-
-export const slices = Object.entries(getPropertyMap(getModules(), "slice"));
-export const navigators = Object.entries(
-  getPropertyMap(getModules(), "navigator")
-);
-export const hooks = Object.entries(getPropertyMap(getModules(), "hook"));
-export const initialRoute = getModules()[0].title;
-export default getModules;
-export default getModules();
-```
-
-The `slices` get imported into our `store.js` setup
-
-[template/source/src/config/store.js](template/source/src/config/store.js)
-
-```javascript
-import {
-  configureStore,
-  createReducer,
-  combineReducers,
-} from "@reduxjs/toolkit";
-import { slices } from "@modules";
-
-export const APP_URL = "https://ProjectNameIdentifier.botics.co";
-
-const reducers = slices.map((slice) => slice.reducer);
-
-const appState = {
-  name: "ProjectName",
-  url: APP_URL,
-  version: "1.0.0",
-};
-
-const appReducer = createReducer(appState, (_) => {
-  return appState;
-});
-
-const reducer = combineReducers({
-  app: appReducer,
-  ...reducers,
-});
-
-const store = configureStore({
-  reducer: reducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-});
-
-export default store;
-```
-
-## Manifest
-
-All of this dependends on the manifest defined here:
-
-[template/source/src/modules/manifest.js](template/source/src/modules/manifest.js)
-
-```javascript
-export const modules = [];
-```
-
-This manifest dictates what modules are installed and by consequence get automatically setup with the mechanisms detailed above.
-
-After installing the `maps` module i.e. it will look like this:
-
-```javascript
-import Maps from "./maps";
-export const manifest = [Maps];
-```
-
-We make use of the `babel` and the transformer `ManifestTransformer` to manipulate this file content upon module's installations or removals.
-
-[scripts/utils.js](scripts/utils.js)
-
-```javascript
-export class ManifestTransformer {
-  constructor({ add, module }) {
-    this.add = add;
-    this.module = module;
-    this.capitalizedModule = module
-      .trim()
-      .replace(/^\w/, (c) => c.toUpperCase());
-  }
-
-  visit(node) {
-    if (this.add) {
-      traverse.default(node, {
-        // Push array element
-        ArrayExpression: (path) => {
-          let elements = path.node.elements;
-          elements.push(types.identifier(this.capitalizedModule));
-          path.replaceWith(types.arrayExpression(elements));
-          path.skip();
-        },
-      });
-      // Push Import
-      node.program.body = [
-        types.importDeclaration(
-          [
-            types.importDefaultSpecifier(
-              types.identifier(this.capitalizedModule)
-            ),
-          ],
-          types.stringLiteral(`./${this.module}`)
-        ),
-        ...node.program.body,
-      ];
-    } else {
-      traverse.default(node, {
-        // Filter array element
-        ArrayExpression: (path) => {
-          path.replaceWith(
-            types.arrayExpression(
-              path.node.elements.filter(
-                (ele) => ele.name != this.capitalizedModule
-              )
-            )
-          );
-          path.skip();
-        },
-        // Filter import
-        ImportDeclaration: (path) => {
-          if (path.node.source.value == `./${this.module}`) {
-            path.remove();
-          }
-        },
-      });
-    }
-    return node;
-  }
-}
+export const modules = getModules(manifest);
+export const initialRoute = modules[0].title;
+export const slices = Object.entries(getPropertyMap(modules, "slice"));
+export const navigators = Object.entries(getPropertyMap(modules, "navigator"));
+export const hooks = Object.entries(getPropertyMap(modules, "hook"));
+export const store = getStore(slices);
+export const Navigation = getNavigation(navigators, initialRoute);
 ```
 
 # Custom React Native template
@@ -588,7 +464,6 @@ The example above is for an headless module (no screens), but you can export hoo
 > Key-value pairs that grant an executable permission to use a service or technology.
 
 Documentation - https://developer.apple.com/documentation/bundleresources/entitlements
-File - [ProjectName.entitlements](template/source/ios/ProjectName/ProjectName.entitlements)
 
 **Examples**
 
