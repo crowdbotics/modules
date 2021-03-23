@@ -19,6 +19,8 @@ fs.renameSync(path.join(customFiles, ".circleci"), path.join(cwd, ".circleci"));
 fs.copyFileSync(path.join(customFiles, "babel.config.js"), path.join(cwd, "babel.config.js"));
 fs.copyFileSync(path.join(customFiles, "heroku.yml"), path.join(cwd, "heroku.yml"));
 fs.copyFileSync(path.join(customFiles, "metro.config.js"), path.join(cwd, "metro.config.js"));
+fs.copyFileSync(path.join(customFiles, ".eslintrc.js"), path.join(cwd, ".eslintrc.js"));
+fs.copyFileSync(path.join(customFiles, ".prettierrc.js"), path.join(cwd, ".prettierrc.js"));
 
 // dotenv
 fs.copyFileSync(path.join(customFiles, ".env"), path.join(cwd, ".env"));
