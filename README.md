@@ -152,7 +152,6 @@ Installs a module into the demo app, performing the follow operations:
 1. Copies the module directory from [react-native](react-native) into `demo/src/modules`.
 2. Runs `yarn add <module_name>` in the `demo` directory.
 3. Runs `yarn add <dependency>` for every `x-dependencies` in the module `package.json`.
-4. Adds the module to `demo/src/modules/manifest.js` - with an import and an array export.
 
 ## Remove a module
 
@@ -165,7 +164,6 @@ Removes a module from the demo app, performing the follow operations:
 1. Removes the module folder from `demo/src/modules`.
 2. Runs `yarn remove <module_name>` in the `demo` directory.
 3. Runs `yarn remove <dependency>` for every `x-dependencies` in the module `package.json`.
-4. Remove the module from `demo/src/modules/manifest.js` - removing the import and the item from the export array.
 
 # Auto loading and setting up modules
 
@@ -231,7 +229,7 @@ Ouput will be made to [dist/cookie](dist/cookie).
 
 ## Metro config
 
-Our modules and template are written in a way that no user setup is required. We also make use of some simple scripts to update a manifest that lists the modules installed and we pick up from that to load them.
+Our modules and template are written in a way that no user setup is required. We also make use of a babel plugin that allows glob imports from the modules directory.
 
 This section explains the mechanisms of this setup.
 
@@ -292,37 +290,26 @@ import modules from "@modules";
 
 And the default export of that module is just the components themselves:
 
-[template/source/src/modules/index.js](template/source/src/modules/index.js)
+[scaffold/template/src/modules/index.js](scaffold/template/src/modules/index.js)
 
 ```javascript
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { manifest } from "./manifest.js";
-import { getPropertyMap } from "./utils.js";
+import { getPropertyMap, getModules } from "./utils.js";
+import * as manifest from "glob:./**/index.js";
 
-const YourApp = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Welcome to your brand new app!</Text>
-    </View>
-  );
-};
+const modules = getModules(manifest);
 
-// ...
+export const slices = Object.entries(getPropertyMap(modules, "slice"));
+export const navigators = Object.entries(getPropertyMap(modules, "navigator"));
+export const hooks = Object.entries(getPropertyMap(modules, "hook"));
 
-export const slices = Object.entries(getPropertyMap(getModules(), "slice"));
-export const navigators = Object.entries(
-  getPropertyMap(getModules(), "navigator")
-);
-export const hooks = Object.entries(getPropertyMap(getModules(), "hook"));
-export const initialRoute = getModules()[0].title;
+export const initialRoute = modules[0].title;
+
 export default getModules;
-export default getModules();
 ```
 
 The `slices` get imported into our `store.js` setup
 
-[template/source/src/config/store.js](template/source/src/config/store.js)
+[scaffold/template/src/config/store.js](scaffold/template/src/config/store.js)
 
 ```javascript
 import {
@@ -357,88 +344,6 @@ const store = configureStore({
 });
 
 export default store;
-```
-
-## Manifest
-
-All of this dependends on the manifest defined here:
-
-[template/source/src/modules/manifest.js](template/source/src/modules/manifest.js)
-
-```javascript
-export const modules = [];
-```
-
-This manifest dictates what modules are installed and by consequence get automatically setup with the mechanisms detailed above.
-
-After installing the `maps` module i.e. it will look like this:
-
-```javascript
-import Maps from "./maps";
-export const manifest = [Maps];
-```
-
-We make use of the `babel` and the transformer `ManifestTransformer` to manipulate this file content upon module's installations or removals.
-
-[scripts/utils.js](scripts/utils.js)
-
-```javascript
-export class ManifestTransformer {
-  constructor({ add, module }) {
-    this.add = add;
-    this.module = module;
-    this.capitalizedModule = module
-      .trim()
-      .replace(/^\w/, (c) => c.toUpperCase());
-  }
-
-  visit(node) {
-    if (this.add) {
-      traverse.default(node, {
-        // Push array element
-        ArrayExpression: (path) => {
-          let elements = path.node.elements;
-          elements.push(types.identifier(this.capitalizedModule));
-          path.replaceWith(types.arrayExpression(elements));
-          path.skip();
-        },
-      });
-      // Push Import
-      node.program.body = [
-        types.importDeclaration(
-          [
-            types.importDefaultSpecifier(
-              types.identifier(this.capitalizedModule)
-            ),
-          ],
-          types.stringLiteral(`./${this.module}`)
-        ),
-        ...node.program.body,
-      ];
-    } else {
-      traverse.default(node, {
-        // Filter array element
-        ArrayExpression: (path) => {
-          path.replaceWith(
-            types.arrayExpression(
-              path.node.elements.filter(
-                (ele) => ele.name != this.capitalizedModule
-              )
-            )
-          );
-          path.skip();
-        },
-        // Filter import
-        ImportDeclaration: (path) => {
-          if (path.node.source.value == `./${this.module}`) {
-            path.remove();
-          }
-        },
-      });
-    }
-    return node;
-  }
-}
 ```
 
 # Custom React Native template

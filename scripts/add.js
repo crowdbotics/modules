@@ -1,12 +1,7 @@
 import path from "path";
 import {
-  ManifestTransformer,
   execShellCommand,
-  read,
-  generate,
-  pretty,
-  write,
-  parse
+  read
 } from "./utils.js";
 import config from "../config.js";
 
@@ -38,13 +33,4 @@ modules.map(module => {
   packages = packages.join(" ");
   process.chdir(demoDir);
   execShellCommand(`cd ${demoDir} && yarn add ${packages}`);
-
-  // Update manifest
-  const manifest = path.join(targetModuleDir, "manifest.js");
-  let code = read(manifest);
-  const transformer = new ManifestTransformer({ add: true, module: module });
-  let node = parse(code);
-  node = transformer.visit(node);
-  code = pretty(generate(node));
-  write(manifest, code);
 });

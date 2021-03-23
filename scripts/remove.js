@@ -1,12 +1,7 @@
 import path from "path";
 import {
-  ManifestTransformer,
   execShellCommand,
-  read,
-  generate,
-  pretty,
-  write,
-  parse
+  read
 } from "./utils.js";
 import config from "../config.js";
 
@@ -39,13 +34,4 @@ modules.map(module => {
   execShellCommand(`yarn remove ${packages}`);
   const rmDir = path.join(targetModuleDir, module);
   execShellCommand(`rm -rf ${rmDir}`)
-
-  // Update manifest
-  const manifest = path.join(targetModuleDir, "manifest.js");
-  let code = read(manifest);
-  const transformer = new ManifestTransformer({ add: false, module: module });
-  let node = parse(code);
-  node = transformer.visit(node);
-  code = pretty(generate(node));
-  write(manifest, code);
 });
