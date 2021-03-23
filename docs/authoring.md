@@ -10,8 +10,6 @@
 
 ## Guidelines
 
-**DRAFT - work in progress section, and up to debate**
-
 Modern React Native components guidelines:
 
 - Prefer function components over class components
@@ -36,11 +34,11 @@ Your module can include its own dependencies, more on that in the following sect
   "description": "## Setup",
   "private": true,
   "main": "index.js",
+  "dependencies": {},
   "x-dependencies": {
     "react-native-maps": "0.27.1"
   },
-  "author": "Crowdbotics",
-  "license": "ISC"
+  "author": "Crowdbotics"
 }
 ```
 
@@ -116,8 +114,8 @@ https://reactjs.org/docs/hooks-custom.html
 And then export the hook in the module default export like below:
 
 ```javascript
-const usePushNotifications = () => {
-  const [someState, setSomeState] = useState(false);
+const useOneSignal = () => {
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
     // ...
@@ -127,7 +125,7 @@ const usePushNotifications = () => {
 };
 export default {
   title: "Push Notifications",
-  hook: usePushNotifications,
+  hook: useOneSignal,
 };
 ```
 

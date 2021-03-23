@@ -47,7 +47,7 @@ This section explains the mechanisms of this setup.
 
 A good place to start is our `metro.config.js` config:
 
-[template/source/metro/config.js](template/source/metro/config.js)
+[scaffold/template/metro.config.js](scaffold/template/metro.config.js)
 
 ```javascript
 /**
