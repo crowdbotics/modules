@@ -79,7 +79,7 @@ npm run add <module_name> <supports_multiple_modules_syntax>
 
 Installs a module into the demo app, performing the follow operations:
 
-1. Copies the module directory from [react-native](react-native) into `demo/modules`.
+1. Copies the module directory from [react-native](/modules/react-native) into `demo/modules`.
 2. Runs `yarn add <module_name>` in the `demo` directory.
 3. Runs `yarn add <dependency>` for every `x-dependencies` in the module `package.json`.
 
