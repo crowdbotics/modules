@@ -1,6 +1,6 @@
 import path from "path";
 import { clean, execShellCommand } from "./utils.js";
-import config from "../config.js";
+import config from "./config.js";
 
 const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 const target = path.join(process.cwd(), config.dist.builds.raw.directory);

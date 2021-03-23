@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { clean, write } from "./utils.js";
-import config from "../config.js";
+import config from "./config.js";
 // https://github.com/react-native-community/cli/blob/22a3c2558c2e03cc61f088807d2b09d1567c07ca/packages/cli/src/commands/init/editTemplate.ts#L77
 import edit from "../node_modules/@react-native-community/cli/build/commands/init/editTemplate.js";
 const replace = edit.changePlaceholderInTemplate;

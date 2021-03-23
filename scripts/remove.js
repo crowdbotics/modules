@@ -3,7 +3,7 @@ import {
   execShellCommand,
   read
 } from "./utils.js";
-import config from "../config.js";
+import config from "./config.js";
 
 const modules = process.argv.slice(2);
 const cwd = process.cwd();
@@ -11,7 +11,7 @@ const demoDir = path.join(process.cwd(), config.demo.directory);
 
 modules.map(module => {
   process.chdir(cwd);
-  const originModuleDir = path.join(process.cwd(), "react-native", module);
+  const originModuleDir = path.join(process.cwd(), "modules", "react-native", module);
   const targetModuleDir = path.join(demoDir, "modules");
   const moduleName = `@modules/${module}`;
 
