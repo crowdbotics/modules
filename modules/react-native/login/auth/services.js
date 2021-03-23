@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 import { appConfig } from "../../../config/app";
 
 const authAPI = axios.create({
   baseURL: appConfig.emailAuthAPIEndPoint, // your app back-end url
-  headers: {Accept: 'application/json', 'Content-Type': 'application/json'},
+  headers: { Accept: "application/json", "Content-Type": "application/json" },
 });
 
 function apiLoginRequest(action) {
@@ -11,14 +11,22 @@ function apiLoginRequest(action) {
     data: action.data,
   });
 }
+
 function apiSignupRequest(action) {
-  return authAPI.post(`/api/v1/signup/`, null, {
-    data: action.data,
+  return authAPI.post(`/api/v1/signup/`, {
+    ...action.data,
   });
 }
+
 function apiLogoutRequest(action) {
   return authAPI.post(`/rest-auth/logout/`, null, {
-    headers: {Authorization: `Token ${action.token}`},
+    headers: { Authorization: `Token ${action.token}` },
+  });
+}
+
+function apiAuthUserRequest(action) {
+  return authAPI.get(`/rest-auth/user/`, null, {
+    headers: { Authorization: `Token ${action.token}` },
   });
 }
 
@@ -33,4 +41,5 @@ export const authServices = {
   apiSignupRequest,
   apiLogoutRequest,
   apiResetPasswordRequest,
+  apiAuthUserRequest,
 };

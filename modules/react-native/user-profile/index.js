@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ScrollView, ActivityIndicator, Text, Button } from 'react-native';
 import { user_read, user_update } from './store/actions';
-import { NavigationEvents } from 'react-navigation';
 import { styles, Color } from './styles';
 import { connect } from 'react-redux';
+import reducer from './store/reducers';
 import EditUser from './edit';
 import ViewUser from './view';
 
@@ -16,16 +16,24 @@ export class UserDetail extends Component {
   }
 
   load() {
-    const { navigation } = this.props;
-    const { token, auth_user } = this.props;
-
-    if (!token && auth_user !== {}) {
-      this.props.navigation.navigate('BasicLoginSignup');
-      return;
+    const { route } = this.props;
+    const { auth_user } = this.props;
+    const id = route.params?.id || auth_user.id;
+    if (id) {
+      this.props.getUser(id);
+    } else {
+      this.setState({ loading: false });
     }
+  }
 
-    const id = navigation.getParam('id', null) || auth_user.id;
-    this.props.getUser(id, token);
+  componentDidMount() {
+    this._unsubscribeFocus = this.props.navigation.addListener('focus', () => {
+      this.setState({ loading: true });
+      this.load();
+    });
+    this._unsubscribeBlur = this.props.navigation.addListener('blur', () => {
+      this.props.navigation.setParams({ id: null });
+    });
   }
 
   componentDidUpdate(prevProps) {
@@ -37,57 +45,75 @@ export class UserDetail extends Component {
     }
   }
 
+  componentWillUnmount() {
+    try{
+    this._unsubscribeFocus();
+    this._unsubscribeBlur();
+    } catch (err){
+      console.log(err)
+    }
+  }
+
   render() {
     const { loading } = this.state;
-    const { isEdit } = this.props;
+    const { isEdit, user } = this.props;
     return (
       <ScrollView style={styles.container} contentStyle={styles.content}>
-        <NavigationEvents
-          onDidFocus={() => this.load()}
-          onWillFocus={() => this.setState({ loading: true })}
-          onDidBlur={() => {
-            this.props.navigation.setParams({ id: null });
-          }}
-        />
         {loading ? (
           <View>
             <ActivityIndicator color={Color.steel} />
           </View>
         ) : (
           <View>
-            {isEdit ? (
-              <EditUser {...this.props} />
-            ) : (
-              <ViewUser {...this.props} />
+            <View>
+              {!user.id && <Text>No user to display information.</Text>}
+            </View>
+            {user.id && (
+              <View>
+                {isEdit ? (
+                  <EditUser {...this.props} />
+                ) : (
+                  <ViewUser {...this.props} />
+                )}
+              </View>
             )}
           </View>
         )}
+        <Button onPress={() => this.props.navigation.navigate('AppMenu')} title="Hello"/>
       </ScrollView>
     );
   }
 }
 
+// Either gets user id passed through navigation or attempts to check login reducer:
+// thats the reducer for either 'Login and Signup' or 'Social Login' modules.
+// Update this code accordingly if you are not using neither modules.
+// Check README.md for more information
 const mapStateToProps = (state, ownProps) => {
-  const id =
-    ownProps.navigation.getParam('id', null) || state.authReducer.user.id;
+  const id = ownProps.route.params?.id
+    ? ownProps.route.params?.id
+    : state.login?.user?.id;
 
   return {
-    token: state.authReducer.token,
-    auth_user: state.authReducer.user,
-    api: state.userReducer.api,
-    user: state.userReducer.users.find(user => user.id == id) || {},
-    isEdit: id === state.authReducer.user.id
+    token: state.login?.token,
+    api: state.userProfile.api,
+    user: state.userProfile.users.find((user) => user.id === id) || {},
+    auth_user: state.login?.user,
+    isEdit: id && state.login?.user.id && id === state.login?.user.id,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    getUser: (id, token) => dispatch(user_read(id, token)),
+    getUser: (id) => dispatch(user_read(id)),
     updateUser: (data, token) => dispatch(user_update(data, token)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(UserDetail);
+export default {
+  title: 'userProfile',
+  navigator: connect(mapStateToProps, mapDispatchToProps)(UserDetail),
+  slice: {
+    reducer,
+  },
+};

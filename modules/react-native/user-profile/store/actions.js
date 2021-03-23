@@ -1,10 +1,9 @@
 import * as types from './constants';
 
 
-export const user_read = (id, token) => ({
+export const user_read = (id) => ({
   type: types.USER_READ,
-  id,
-  token,
+  id
 });
 
 export const user_read_succeeded = (response, starter) => ({
