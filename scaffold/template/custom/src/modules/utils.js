@@ -48,17 +48,20 @@ const validate = (mod, prop) => {
 };
 
 export const getModules = (manifest) => {
-  // normalize modules
-  let modules = manifest.map(mod => {
-    if (validate(mod, "title")) {
-      return mod;
+  let modules = [];
+  for (const [name, definition] of Object.entries(manifest)) {
+    console.log(definition)
+    if (validate(definition, "title")) {
+      modules.push(definition)
     } else {
-      return {
-        title: `${mod.name}`,
-        navigator: mod
-      }
+      let title = name.replace(/([A-Z])/g, " $1");
+      title = title.charAt(0).toUpperCase() + title.slice(1);
+      modules.push({
+        title: title,
+        navigator: definition
+      });
     }
-  });
+  }
   modules = modules.sort(sortNavigators);
   modules = modules.sort(sortMenu);
   if (!(modules.length && modules[0].hasOwnProperty("navigator"))) {
