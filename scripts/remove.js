@@ -12,21 +12,22 @@ const demoDir = path.join(process.cwd(), config.demo.directory);
 modules.map(module => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "react-native", module);
-  const targetModuleDir = path.join(demoDir, "src", "modules");
+  const targetModuleDir = path.join(demoDir, "modules");
   const moduleName = `@modules/${module}`;
 
   let packages = [moduleName];
+
   // Remove x-dependencies
-  const packageJSON = JSON.parse(
-    read(path.join(originModuleDir, "package.json"))
-  );
-  if (packageJSON.hasOwnProperty("x-dependencies")) {
-    const deps = packageJSON["x-dependencies"];
-    // TODO: Do we want to remove blindly? What if the user installed that dep too?
-    for (const [key, _] of Object.entries(deps)) {
-      packages.push(`${key}`);
-    }
-  }
+  // TODO: Do we want to remove blindly? What if the user installed that dep too?
+  // const packageJSON = JSON.parse(
+  //   read(path.join(originModuleDir, "package.json"))
+  // );
+  // if (packageJSON.hasOwnProperty("x-dependencies")) {
+  //   const deps = packageJSON["x-dependencies"];
+  //   for (const [key, _] of Object.entries(deps)) {
+  //     packages.push(`${key}`);
+  //   }
+  // }
 
   // Remove packages
   packages = packages.join(" ");

@@ -8,8 +8,8 @@ const { execSync } = require("child_process");
 // docs
 fs.copyFileSync(path.join(customFiles, "README.md"), path.join(cwd, "README.md"));
 
-// Crowdbotics src files
-fs.renameSync(path.join(customFiles, "src"), path.join(cwd, "src"));
+// Crowdbotics modules files
+fs.renameSync(path.join(customFiles, "modules"), path.join(cwd, "modules"));
 fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
 
 // CircleCI
@@ -40,7 +40,8 @@ fs.renameSync(path.join(cwd, "_editorconfig"), path.join(cwd, ".editorconfig"))
 const packageFile = path.join(cwd, "package.json");
 const packageJson = require(packageFile);
 const dependencies = require(path.join(customFiles, "dependencies.json"));
-packageJson.dependencies = Object.assign(packageJson.dependencies, dependencies);
+packageJson.dependencies = Object.assign(packageJson.dependencies, dependencies.dependencies);
+packageJson.devDependencies = Object.assign(packageJson.devDependencies, dependencies.devDependencies);
 fs.writeFileSync(packageFile, JSON.stringify(packageJson, null, 2));
 
 // Cleanup

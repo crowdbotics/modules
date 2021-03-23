@@ -20,7 +20,6 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
   - [App Menu module](#app-menu-module)
   - [Metro config](#metro-config)
   - [Using @modules](#using-modules)
-  - [Manifest](#manifest)
   - [Generate cookiecutter](#generate-cookiecutter)
 - [Custom React Native template](#custom-react-native-template)
   - [What's included](#whats-included)
@@ -149,7 +148,7 @@ npm run add <module_name> <supports_multiple_modules_syntax>
 
 Installs a module into the demo app, performing the follow operations:
 
-1. Copies the module directory from [react-native](react-native) into `demo/src/modules`.
+1. Copies the module directory from [react-native](react-native) into `demo/modules`.
 2. Runs `yarn add <module_name>` in the `demo` directory.
 3. Runs `yarn add <dependency>` for every `x-dependencies` in the module `package.json`.
 
@@ -161,7 +160,7 @@ npm run remove <module_name> <supports_multiple_modules_syntax>
 
 Removes a module from the demo app, performing the follow operations:
 
-1. Removes the module folder from `demo/src/modules`.
+1. Removes the module folder from `demo/modules`.
 2. Runs `yarn remove <module_name>` in the `demo` directory.
 3. Runs `yarn remove <dependency>` for every `x-dependencies` in the module `package.json`.
 
@@ -247,9 +246,9 @@ A good place to start is our `metro.config.js` config:
 
 const path = require("path");
 const extraNodeModules = {
-  "@modules": path.resolve(__dirname, "src", "modules"),
+  "@modules": path.resolve(__dirname, "modules"),
 };
-const watchFolders = [path.resolve(__dirname + "/src/modules")];
+const watchFolders = [path.resolve(__dirname, "modules")];
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
@@ -262,7 +261,7 @@ module.exports = {
   resolver: {
     extraNodeModules: new Proxy(extraNodeModules, {
       get: (target, name) =>
-        //redirects dependencies referenced from src/modules to local node_modules
+        //redirects dependencies referenced from modules to local node_modules
         name in target
           ? target[name]
           : path.join(process.cwd(), "node_modules", name),
@@ -272,17 +271,17 @@ module.exports = {
 };
 ```
 
-We make use of the Metro's Resolver [extraNodeModules](https://facebook.github.io/metro/docs/configuration/#extranodemodules) option to make use of local `npm` libraries installed into the app's `src/modules` directory (directory where modules get installed).
+We make use of the Metro's Resolver [extraNodeModules](https://facebook.github.io/metro/docs/configuration/#extranodemodules) option to make use of local `npm` libraries installed into the app's `modules` directory (directory where modules get installed).
 
 This gives us three main benefits:
 
 - **Modularity** - We can author modules as npm packages and include their own dependencies that get installed when installing the module.
 - **Developer Experience** - Making changes to those files also work with the metro [hot reload](https://facebook.github.io/metro/docs/configuration/#watchfolders).
-- **Imports redirects** - Because managing `node_modules` on every `src/modules` folder isn't the best user experience, we redirect any import to the main app's `node_modules`. This means that a module can import from its own files or from any library, without issues.
+- **Imports redirects** - Because managing `node_modules` on every `modules` folder isn't the best user experience, we redirect any import to the main app's `node_modules`. This means that a module can import from its own files or from any library, without issues.
 
 ## Using @modules
 
-Notice the `@modules` key above, which means that we can import `src/modules/index.js` like this:
+Notice the `@modules` key above, which means that we can import `modules/index.js` like this:
 
 ```javascript
 import modules from "@modules";
@@ -290,60 +289,21 @@ import modules from "@modules";
 
 And the default export of that module is just the components themselves:
 
-[scaffold/template/src/modules/index.js](scaffold/template/src/modules/index.js)
+[scaffold/template/modules/index.js](scaffold/template/modules/index.js)
 
 ```javascript
 import { getPropertyMap, getModules } from "./utils.js";
+import { getStore } from "./store.js";
+import { getNavigation } from "./navigation.js";
 import * as manifest from "glob:./**/index.js";
 
-const modules = getModules(manifest);
-
+export const modules = getModules(manifest);
+export const initialRoute = modules[0].title;
 export const slices = Object.entries(getPropertyMap(modules, "slice"));
 export const navigators = Object.entries(getPropertyMap(modules, "navigator"));
 export const hooks = Object.entries(getPropertyMap(modules, "hook"));
-
-export const initialRoute = modules[0].title;
-
-export default getModules;
-```
-
-The `slices` get imported into our `store.js` setup
-
-[scaffold/template/src/config/store.js](scaffold/template/src/config/store.js)
-
-```javascript
-import {
-  configureStore,
-  createReducer,
-  combineReducers,
-} from "@reduxjs/toolkit";
-import { slices } from "@modules";
-
-export const APP_URL = "https://HelloWorldIdentifier.botics.co";
-
-const reducers = slices.map((slice) => slice.reducer);
-
-const appState = {
-  name: "HelloWorld",
-  url: APP_URL,
-  version: "1.0.0",
-};
-
-const appReducer = createReducer(appState, (_) => {
-  return appState;
-});
-
-const reducer = combineReducers({
-  app: appReducer,
-  ...reducers,
-});
-
-const store = configureStore({
-  reducer: reducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-});
-
-export default store;
+export const store = getStore(slices);
+export const Navigation = getNavigation(navigators, initialRoute);
 ```
 
 # Custom React Native template

@@ -12,8 +12,8 @@ const demoDir = path.join(process.cwd(), config.demo.directory);
 modules.map(module => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "react-native", module);
-  const targetModuleDir = path.join(demoDir, "src", "modules");
-  const yarnPath = path.join("file:./src", "modules", module);
+  const targetModuleDir = path.join(demoDir, "modules");
+  const yarnPath = path.join("file:./modules", module);
 
   let packages = [yarnPath];
   execShellCommand(`cp -r ${originModuleDir} ${targetModuleDir}`);
