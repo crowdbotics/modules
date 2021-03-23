@@ -1,16 +1,18 @@
-import { manifest } from "./manifest.js";
 import { getPropertyMap, getModules } from "./utils.js";
+import * as manifest from "glob:./**/index.js";
+
+const modules = getModules(manifest);
 
 export const slices = Object.entries(
-  getPropertyMap(getModules(manifest), "slice")
+  getPropertyMap(modules, "slice")
 );
 export const navigators = Object.entries(
-  getPropertyMap(getModules(manifest), "navigator")
+  getPropertyMap(modules, "navigator")
 );
 export const hooks = Object.entries(
-  getPropertyMap(getModules(manifest), "hook")
+  getPropertyMap(modules, "hook")
 );
 
-export const initialRoute = getModules(manifest)[0].title;
+export const initialRoute = modules[0].title;
 
 export default getModules;

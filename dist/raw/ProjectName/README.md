@@ -20,3 +20,7 @@ npx react-native run-android
 pod install --repo-update --project-directory=ios
 npx react-native run-ios
 ```
+
+## Setup react-native-vector-icons
+
+Follow instructions at their [README.md](https://github.com/oblador/react-native-vector-icons/blob/master/README.md#installation)
