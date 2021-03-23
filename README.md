@@ -7,9 +7,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 Node.js `v14.16.0` is required, we depend on relatively new `fs` calls.
 
-## What's included
-
-Our template is on the latest React Native version (v0.64):
+Our template is on the latest React Native and React versions.
 [scaffold/template/package.json](scaffold/template/package.json)
 
 ```json
@@ -18,3 +16,17 @@ Our template is on the latest React Native version (v0.64):
     "react-native": "0.64.0"
   },
 ```
+
+## Getting started
+
+```sh
+npm run demo
+```
+
+## Documentation
+
+- [Commands](docs/commands.md)
+- [Modules available](docs/modules.md)
+- [Autoloading modules](docs/autoloading.md)
+- [Authoring new modules](docs/authoring.md)
+- [Resources](docs/resources.md)
