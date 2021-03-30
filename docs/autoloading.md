@@ -97,10 +97,8 @@ This gives us three main benefits:
 Notice the `@modules` key above, which means that we can import `modules/index.js` like this:
 
 ```javascript
-import modules from "@modules";
+import { modules } from "@modules";
 ```
-
-And the default export of that module is just the components themselves:
 
 [scaffold/template/modules/index.js](/scaffold/template/modules/index.js)
 
@@ -108,8 +106,9 @@ And the default export of that module is just the components themselves:
 import { getPropertyMap, getModules } from "./utils.js";
 import { getStore } from "./store.js";
 import { getNavigation } from "./navigation.js";
-import * as manifest from "glob:./**/index.js";
+import * as mods from "glob:./**/index.js";
 
+const manifest = mods;
 export const modules = getModules(manifest);
 export const initialRoute = modules[0].title;
 export const slices = Object.entries(getPropertyMap(modules, "slice"));
