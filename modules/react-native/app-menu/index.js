@@ -2,9 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useNavigationState } from "@react-navigation/native";
 
+const title = "App Menu";
+
 function AppMenu({ navigation }) {
   const routes = useNavigationState(
-    state => state.routeNames.filter(name => name !== "App Menu")
+    state => state.routeNames.filter(name => name !== title)
   );
   const links = routes.map(route => {
     return (
@@ -58,6 +60,6 @@ const styles = StyleSheet.create({
 })
 
 export default {
-  title: "App Menu",
+  title: title,
   navigator: AppMenu
 }
