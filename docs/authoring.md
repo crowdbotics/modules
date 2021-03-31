@@ -54,6 +54,19 @@ export default {
 };
 ```
 
+Or like this:
+
+```javascript
+export default {
+  title: "Maps", // required
+  navigator: Maps, // optional
+  slice: {
+    reducer: MapsReducer, // optional
+    actions: [...MapsActions], // optional
+  },
+};
+```
+
 The key `title` is required, everything else is optional and can be ommited.
 We use this format to "auto-import" every module into the app automatically.
 

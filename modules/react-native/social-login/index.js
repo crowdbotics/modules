@@ -146,7 +146,7 @@ export default {
   title: "login",
   navigator: SocialLogin,
   slice: {
-    reducer,
+    reducer: reducer,
     actions: [
       apiLoginRequest,
       apiSignupRequest,
