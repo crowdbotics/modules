@@ -103,10 +103,10 @@ import { modules } from "@modules";
 [scaffold/template/modules/index.js](/scaffold/template/modules/index.js)
 
 ```javascript
-import { getPropertyMap, getModules } from "./utils.js";
 import * as mods from "glob:./**/index.js";
 
-const manifest = mods;
+/* ... */
+
 export const modules = getModules(manifest);
 export const initialRoute = modules[0].title;
 export const slices = Object.entries(getPropertyMap(modules, "slice"));
