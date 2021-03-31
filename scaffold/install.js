@@ -8,8 +8,9 @@ const { execSync } = require("child_process");
 // docs
 fs.copyFileSync(path.join(customFiles, "README.md"), path.join(cwd, "README.md"));
 
-// Crowdbotics modules files
+// Crowdbotics modules and screens files
 fs.renameSync(path.join(customFiles, "modules"), path.join(cwd, "modules"));
+fs.renameSync(path.join(customFiles, "screens"), path.join(cwd, "screens"));
 fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
 
 // CircleCI
