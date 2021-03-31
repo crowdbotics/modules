@@ -5,7 +5,7 @@ Welcome to your new Crowdbotics app.
 ## Metro
 
 ```sh
-npx react-native start --reset-cache
+npx react-native start
 ```
 
 ## Android
