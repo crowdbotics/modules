@@ -2,47 +2,23 @@
 
 ## Setup
 
-Open `/src/navigator/mainNavigator.js` and import the stack navigator defined in `navigator.js`.
+Open `modules/articles/store/services.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint (ie. demo0122202101-24002.botics.com/modules/articles). The initial piece is your project name and the numeric piece is your project number.
+
+## Manual Setup
+
+If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
 ```javascript
-//@BlueprintImportInsertion
-import Articles from "../features/<module_directory>/navigator";
+import Articles from "@modules/articles";
+
+const { title, navigator, slice } = Articles;
 ```
 
-And then add it to the navigation:
+## Contributing
 
-```javascript
-//@BlueprintNavigationInsertion
-Articles: {
-  screen: Articles
-},
-```
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
 
-Open `store/services.js` in the /src/features/<module_directory> folder and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint (ie. demo0122202101-24002.botics.com/modules/articles). The initial piece is your project name and the numeric piece is your project number.
+## License
 
-Add the module reducer and saga to your `/src/store/index.js` file:
-
-1. Add the imports
-
-```javascript
-import articlesReducer from "../features/<module_directory>/store/reducers";
-import articlesSagas from "../features/<module_directory>/store/sagas";
-```
-
-2. Add the reducer
-
-```
-   combineReducers({
-     apiReducer: apiReducer,
-     customReducer: customReducer,
-     articlesReducer: articlesReducer
-   }),
-```
-
-3. Add the root saga
-
-```
-  sagaMiddleware.run(rootSaga);
-  sagaMiddleware.run(customRootSaga);
-  sagaMiddleware.run(articlesSagas);
-```
+[MIT](https://choosealicense.com/licenses/mit/)

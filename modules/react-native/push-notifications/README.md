@@ -46,3 +46,22 @@ Setup steps:
 6. Add the `ONE_SIGNAL_APP_ID` env var value in your App's [Crowdbotics Dashboard](https://app.crowdbotics.com/dashboard/).
 
 7. Deploy your app.
+
+## Manual Setup
+
+If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import PushNotifications from "@modules/push-notifications";
+
+const { title, hook } = PushNotifications;
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

@@ -6,108 +6,15 @@ The user Profile Screen is a React Native-based screen that allows the user to v
 
 For this module to be fully functional, we recommend first installing and configuring the `Login and Signup` or `Social Login` module available in the storyboard's list of verified modules.
 
-## Installation
+### Update the file modules/user-profile/store/services.js
 
-After you have added the screen module into your project, you will need to configure a few items by modifying the project files in the github repository. Please note to replace ####### with the numeric sequence for your screen (found in folder name under /src/features) and also that the @BluePrint tags for ImportInsertion and NavigationInsertion will be removed in future so placement is with other imports and inside the AppNavigator above other screens.
-
-### STEP 1: Check if your project has the necessary dependencies
-
-The `react-native-elements` and `react-native-datepicker` dependencies are already available in all newly created mobile apps within Crowdbotics platform. However, make sure to double check if they exist in the `package.json` file at the root folder of your project directory. If they are not available, open this file (`package.json`) and add the dependency after the dependencies opening line "_"dependencies": {_. It should look like this:
+Update this file by replacing the `SERVICE_URL` url value with your apps' own backend url. For example, for a Crowdbotics app deployed at `https://my-app.botics.co/`, the change would look like:
 
 ```js
-"dependencies": {
-    "react-native-elements": "^2.3.2",
-    "react-native-datepicker": "^1.7.2",
-    "react-native-vector-icons": "^6.6.0",
-    "@react-navigation/native": "^5.9.2",
+SERVICE_URL = "https://my-app.botics.co/";
 ```
 
-### STEP 2: Add screen into your project screen navigation.
-
-#### Edit File /src/navigator/mainNavigator.js:
-
-**ADD** immediately below in the section labeled //@BlueprintImportInsertion:
-
-```js
-import UserProfile from "../features/UserProfile#######/navigator";
-```
-
-**ADD** immediately below in the section inside AppNavigator definition labeled //@BlueprintNavigationInsertion section:
-
-```js
-UserProfile: { screen: UserProfileNavigator },
-```
-
-#### Edit File /src/config/installed_blueprints.js: (optional)
-
-Open the file and add below the comment message `// access route is the route nate given to navigator`:
-
-```js
-{ name: 'UserProfile#######', human_name: 'User Profile', access_route: 'UserProfile' },
-```
-
-**name:** it is used as a unique key for the side menu and splash screens array of buttons, it must be unique, that's the only requirement
-
-**human_name:** it is what will be displayed in actual app
-
-**access_route:** must be the name of the key in your mainNavigator setup
-
-#### Update the file <module_name>/store/services.js
-Update this file by replacing the `SERVICE_URL` url value with your apps' own backend url. For example, for a Crowdbotics app deployed at  `https://my-app.botics.co/`, the change would look like:
-
-```js
-SERVICE_URL="https://my-app.botics.co/"
-```
-
-### STEP 3: Add reducers to store.
-
-**/src/store/index.js**
-**ADD** after Line 4 (sagas import):
-
-```js
-import {
-  userRootSaga,
-  userReducer,
-} from "../features/UserProfile#######/store";
-```
-
-Update your `createStore` code to include the `userReducer`. For example, if your store looks like this:
-
-```js
-const store = createStore(
-  combineReducers({
-    apiReducer: apiReducer,
-    customReducer: customReducer,
-    authReducer: authReducer,
-  }),
-  composeEnhancers(applyMiddleware(...middlewares))
-);
-```
-
-You should add the `userProfile: userReducer` after the authReducer, and it should then look like this:
-
-```js
-const store = createStore(
-  combineReducers({
-    apiReducer: apiReducer,
-    customReducer: customReducer,
-    authReducer: authReducer,
-    userProfile: userReducer,
-  }),
-  composeEnhancers(applyMiddleware(...middlewares))
-);
-```
-
-Near the end of the file, before the `export { store }` line, register the new sagas `sagaMiddleware` like this:
-
-```js
-sagaMiddleware.run(userRootSaga);
-```
-
-Open your "../features/UserProfile#######/store/services.js" file check if you need to update your back-end api url at `baseURL`. By default, we use the url defined in the file `src/config/app.js`. If you rename your or use custom domains, you might need to replace that value with the proper back-end url, something like:
-`baseURL: "https://mycustomdomain.com"`
-
-### Step 4: Update Data Models
+### Update Data Models
 
 Go to your Crowdbotics' app dashboard and navigate to the `Data Models` page. You will see a `User` model. Click on the user model, then click on `Edit Selected` to update the user model and edit the following:
 
@@ -128,7 +35,7 @@ After all the changes, click `save` for all the changes to be applied to your pr
 
 ## Module Usage
 
-There are two ways of using this module. First, as a logged in user profile page, where the user can view, edit and update their profile information. This module will behave like this by default (you must be logged in using one of the login modules mentioned). If you use a custom login method and reducer store, you might need to edit the code in `mapStateToProps` to match where both the `auth_user` and user `token` is stored at. 
+There are two ways of using this module. First, as a logged in user profile page, where the user can view, edit and update their profile information. This module will behave like this by default (you must be logged in using one of the login modules mentioned). If you use a custom login method and reducer store, you might need to edit the code in `mapStateToProps` to match where both the `auth_user` and user `token` is stored at.
 
 The second use case is for displaying **other** users' information. For example, if you have a screen that lists all the users available in the platform, and when you click in a user name, you would like to view that specific user details. For that, you need to add a navigation to the User Profile screen, and pass the user id as a parameter in the navigation call. In the code example below, whenever the button is clicked, it will navigate to the User Profile screen and load the information of the user which their id equals to `123`.
 
@@ -139,11 +46,17 @@ The second use case is for displaying **other** users' information. For example,
 />
 ```
 
+## Manual Setup
+
+If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import UserProfile from "@modules/user-profile";
+
+const { title, navigator, slice } = UserProfile;
+```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)

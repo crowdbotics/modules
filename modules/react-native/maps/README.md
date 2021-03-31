@@ -1,30 +1,9 @@
 # Maps
 
-# Setup
-
-Install the required dependencies:
-
-```sh
-yarn add react-native-maps
-```
-
-Open `/src/navigator/mainNavigator.js` and import the stack navigator defined in `navigator.js`.
-
-```javascript
-import Maps from "../features/<module_directory>/navigator.js";
-```
-
-And then add it to the navigation:
-
-```javascript
-//@BlueprintImportInsertion
-Maps: {
-  screen: Maps
-},
-```
+## Setup
 
 Update the map's initial location in:
-`src/features/<module_directory>/index.js`
+`modules/maps/index.js`
 
 This is the default value (San Francisco):
 
@@ -37,9 +16,9 @@ const region = {
 };
 ```
 
-# Android
+## Android
 
-## Add Google Maps Key
+### Add Google Maps Key
 
 Update `android/app/src/main/AndroidManifest.xml` with the following XML meta tags:
 
@@ -55,19 +34,38 @@ Update `android/app/src/main/AndroidManifest.xml` with the following XML meta ta
     </application>
 ```
 
-# iOS
+## iOS
 
-## Build configuration on iOS
+### Build configuration on iOS
 
 ```sh
 cd ios
 pod install
 ```
 
-## App Store Submission
+### App Store Submission
 
 > The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission.
 
-## Enabling Google Maps on iOS
+### Enabling Google Maps on iOS
 
 https://github.com/react-native-maps/react-native-maps/blob/master/docs/installation.md#enabling-google-maps-on-ios-react-native-all-versions
+
+## Manual Setup
+
+If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import Maps from "@modules/maps";
+
+const { title, navigator } = Maps;
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
