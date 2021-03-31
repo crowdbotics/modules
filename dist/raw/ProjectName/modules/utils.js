@@ -50,7 +50,6 @@ const validate = (mod, prop) => {
 export const getModules = (manifest) => {
   let modules = [];
   for (const [name, definition] of Object.entries(manifest)) {
-    console.log(definition)
     if (validate(definition, "title")) {
       modules.push(definition)
     } else {
