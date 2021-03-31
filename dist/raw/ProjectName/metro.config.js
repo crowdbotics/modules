@@ -29,4 +29,5 @@ module.exports = {
     }),
   },
   watchFolders,
+  resetCache: true
 };
