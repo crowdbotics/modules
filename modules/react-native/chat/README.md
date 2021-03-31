@@ -1,33 +1,26 @@
-# Maps
+# Chat
 
-# Setup
+## Documentation
 
-Install the required dependencies:
-
-```sh
-  "dependencies": {
-    "pubnub": "^4.29.11",
-    "pubnub-react": "^2.1.0",
-    "react-native-emoji-selector": "^0.2.0",
-    "react-native-keyboard-aware-scroll-view": "^0.9.3"
-  }
-```
-
-Open `/src/navigator/mainNavigator.js` and import the stack navigator defined in `index.js`.
-
-```javascript
-import Chat from "../features/<module_directory>";
-```
-
-And then add it to the navigation:
-
-```javascript
-//@BlueprintImportInsertion
-Chat: {
-  screen: Chat.navigator
-},
-```
-
-# Based on pubnub/tutorial-app-react-native
+Based on pubnub/tutorial-app-react-native
 
 https://github.com/pubnub/tutorial-app-react-native
+
+## Manual Setup
+
+If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import Chat from "@modules/chat";
+
+const { title, navigator } = Chat;
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
