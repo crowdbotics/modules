@@ -148,7 +148,7 @@ export default {
   title: "login",
   navigator: LoginSignup,
   slice: {
-    reducer,
+    reducer: reducer,
     actions: [apiLoginRequest, apiSignupRequest],
   },
 };

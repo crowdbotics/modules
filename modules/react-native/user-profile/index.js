@@ -46,10 +46,10 @@ export class UserDetail extends Component {
   }
 
   componentWillUnmount() {
-    try{
-    this._unsubscribeFocus();
-    this._unsubscribeBlur();
-    } catch (err){
+    try {
+      this._unsubscribeFocus();
+      this._unsubscribeBlur();
+    } catch (err) {
       console.log(err)
     }
   }
@@ -64,22 +64,22 @@ export class UserDetail extends Component {
             <ActivityIndicator color={Color.steel} />
           </View>
         ) : (
-          <View>
             <View>
-              {!user.id && <Text>No user to display information.</Text>}
-            </View>
-            {user.id && (
               <View>
-                {isEdit ? (
-                  <EditUser {...this.props} />
-                ) : (
-                  <ViewUser {...this.props} />
-                )}
+                {!user.id && <Text>No user to display information.</Text>}
               </View>
-            )}
-          </View>
-        )}
-        <Button onPress={() => this.props.navigation.navigate('AppMenu')} title="Hello"/>
+              {user.id && (
+                <View>
+                  {isEdit ? (
+                    <EditUser {...this.props} />
+                  ) : (
+                      <ViewUser {...this.props} />
+                    )}
+                </View>
+              )}
+            </View>
+          )}
+        <Button onPress={() => this.props.navigation.navigate('AppMenu')} title="Hello" />
       </ScrollView>
     );
   }
@@ -114,6 +114,6 @@ export default {
   title: 'userProfile',
   navigator: connect(mapStateToProps, mapDispatchToProps)(UserDetail),
   slice: {
-    reducer,
+    reducer: reducer
   },
 };
