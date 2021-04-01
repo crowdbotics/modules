@@ -5,13 +5,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from '@react-navigation/stack';
 import { configureStore, createReducer, combineReducers } from "@reduxjs/toolkit";
 
+import { screens } from "@screens";
 import { hooks, slices, navigators, initialRoute } from "@modules";
 
 const Stack = createStackNavigator();
 
-const getNavigation = (navigators, initialRoute) => {
+const getNavigation = (modules, screens, initialRoute) => {
   const Navigation = () => {
-    const screens = navigators.map(([name, navigator]) => {
+    const routes = modules.concat(screens).map(([name, navigator]) => {
       return (
         <Stack.Screen key={name} name={name} component={navigator} />
       )
@@ -19,7 +20,7 @@ const getNavigation = (navigators, initialRoute) => {
     return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName={initialRoute}>
-          {screens}
+          {routes}
         </Stack.Navigator>
       </NavigationContainer>
     )
@@ -53,7 +54,7 @@ const getStore = slices => {
 
 
 const App = () => {
-  const Navigation = getNavigation(navigators, initialRoute);
+  const Navigation = getNavigation(navigators, screens, initialRoute);
   const store = getStore(slices);
 
   let effects = {};

@@ -21,7 +21,7 @@ function AppMenu({ navigation }) {
   });
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Screens available ({routes.length})</Text>
+      <Text style={styles.text}>Routes available ({routes.length})</Text>
       {links}
     </View>
   )
