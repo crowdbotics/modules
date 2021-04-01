@@ -28,7 +28,7 @@ console.log("Options:");
 console.log("{ \"x\": 0, \"y\": 0, \"domTree\": \"\" }");
 console.log("");
 console.log("Code:");
-console.log(JSON.stringify(data[module]));
+console.log(JSON.stringify(data["react-native"][module]));
 console.log("");
 console.log("Setup step:");
 console.log("To properly configure this module, follow the instructions given in README.md inside the module folder.");
