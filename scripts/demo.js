@@ -1,13 +1,21 @@
 import path from "path";
-import { clean, execShellCommand } from "./utils.js";
+import fs from "fs";
+import config from "./config.js";
+import { generateCommand } from "./utils.js";
+import { execSync } from "child_process";
 
-const APP_NAME = "demo";
-const template = path.join("file:/", process.cwd(), "template");
+const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 
-clean({ target: APP_NAME });
-execShellCommand(
-  `npx react-native init ${APP_NAME} --template ${template}`
-).then(() => {
-  process.chdir(path.join(process.cwd(), APP_NAME));
-  execShellCommand("yarn install");
-});
+fs.rmdirSync(
+  path.join(process.cwd(), config.demo.directory),
+  { recursive: true }
+);
+
+const command = generateCommand([
+  `npx react-native`,
+  `init ${config.demo.placeholderName}`,
+  `--template ${template}`,
+  `--version ${config.versions.rn}`
+]);
+
+execSync(command);
