@@ -12,6 +12,7 @@
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
+    "bootstrap": "npm run demo; npm run raw; npm run cookie",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
