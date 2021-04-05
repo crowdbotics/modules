@@ -50,7 +50,7 @@ replace({
 });
 
 replace({
-  projectName: "{{cookiecutter.project_owner_email}}",
+  projectName: "{{cookiecutter.owner_email}}",
   projectTitle: "{{cookiecutter.project_dash_slug}}",
   placeholderName: "ProjectOwnerEmail",
   placeholderTitle: config.dist.builds.raw.titlePlaceholder
