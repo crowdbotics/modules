@@ -72,3 +72,12 @@ New CB developers should get access to the codesigning repo and run `bundle exec
 Not a CB developer? Create an [Apple developer](https://developer.apple.com)
 and follow the instructions on [codesigning guide](https://codesigning.guide/)
 to setup your certificates.
+
+## React Native Web
+
+It is to build and deploy your app as web platform which run on browser
+
+Please follow the steps
+
+- please run `yarn web-build`
+- the web_build folder is generated and copied to backend/ automatically. please commit/push the web_build folder to git
