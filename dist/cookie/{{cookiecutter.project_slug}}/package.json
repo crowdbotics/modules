@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "web": "react-app-rewired start",
+    "web-build": "react-app-rewired build && mkdir -p backend/web_build && cp -R build/* backend/web_build"
   },
   "dependencies": {
     "react": "17.0.1",
@@ -43,5 +45,17 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

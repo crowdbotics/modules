@@ -11,6 +11,7 @@ fs.copyFileSync(path.join(customFiles, "README.md"), path.join(cwd, "README.md")
 // Crowdbotics modules and screens files
 fs.renameSync(path.join(customFiles, "modules"), path.join(cwd, "modules"));
 fs.renameSync(path.join(customFiles, "screens"), path.join(cwd, "screens"));
+fs.renameSync(path.join(customFiles, "public"), path.join(cwd, "public"));
 fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
 
 // CircleCI
@@ -22,6 +23,8 @@ fs.copyFileSync(path.join(customFiles, "heroku.yml"), path.join(cwd, "heroku.yml
 fs.copyFileSync(path.join(customFiles, "metro.config.js"), path.join(cwd, "metro.config.js"));
 fs.copyFileSync(path.join(customFiles, ".eslintrc.js"), path.join(cwd, ".eslintrc.js"));
 fs.copyFileSync(path.join(customFiles, ".prettierrc.js"), path.join(cwd, ".prettierrc.js"));
+fs.copyFileSync(path.join(customFiles, "config-overrides.js"), path.join(cwd, "config-overrids.js"));
+fs.copyFileSync(path.join(customFiles, "package.json"), path.join(cwd, "package.json"));
 
 // dotenv
 fs.copyFileSync(path.join(customFiles, ".env"), path.join(cwd, ".env"));
