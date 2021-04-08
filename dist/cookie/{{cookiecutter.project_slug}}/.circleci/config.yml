@@ -54,6 +54,7 @@ jobs:
     working_directory: ~/build
     docker:
       - image: reactnativecommunity/react-native-android:3.2
+    resource_class: "medium+"
     environment:
       - TERM: "dumb"
       - ADB_INSTALL_TIMEOUT: 10
