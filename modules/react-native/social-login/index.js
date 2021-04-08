@@ -31,7 +31,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { createStackNavigator } from "@react-navigation/stack";
 
 // Tabs
-const LoginTabButtons = ({ navigation, state, descriptors }) => {
+
+const LoginTabBar = ({ navigation, state, descriptors }) => {
   const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
@@ -65,7 +66,7 @@ const LoginTabButtons = ({ navigation, state, descriptors }) => {
   );
 };
 
-const TabNavigator = ({ initialRouteName, children, screenOptions }) => {
+function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
@@ -82,19 +83,30 @@ const TabNavigator = ({ initialRouteName, children, screenOptions }) => {
                 source={{
                   uri: BACKGROUND_URL,
                 }}
-                style={styles.imageBackground}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  resizeMode: "cover",
+                  height: "100%",
+                  width: "100%",
+                }}
               >
                 <Image
                   source={{
                     uri: LOGO_URL,
                   }}
-                  style={styles.logo}
+                  style={{
+                    width: 155,
+                    height: 155,
+                    alignSelf: "center",
+                    resizeMode: "contain",
+                  }}
                 />
               </ImageBackground>
             </View>
           </View>
           <View style={[styles.cardView]}>
-            <LoginTabButtons
+            <LoginTabBar
               navigation={navigation}
               state={state}
               descriptors={descriptors}
@@ -107,35 +119,32 @@ const TabNavigator = ({ initialRouteName, children, screenOptions }) => {
       </KeyboardAwareScrollView>
     </NavigationHelpersContext.Provider>
   );
-};
+}
 
-const createLoginNavigator = createNavigatorFactory(TabNavigator);
+const createLoginNavigator = createNavigatorFactory(LoginSignupTabs);
 
 const LoginStack = createLoginNavigator();
-
-const LoginTabContainer = () => {
-  return (
-    <LoginStack.Navigator>
-      <LoginStack.Screen
-        name="SignIn"
-        component={SignIn}
-        options={{ title: "Sign Up" }}
-      />
-      <LoginStack.Screen
-        name="SignUp"
-        component={SignUp}
-        options={{ title: "Sign In" }}
-      />
-    </LoginStack.Navigator>
-  );
-};
-
 const Stack = createStackNavigator();
+
+const LoginScreen = () => (
+  <LoginStack.Navigator>
+    <LoginStack.Screen
+      name="SignIn"
+      component={SignIn}
+      options={{ title: "Sign In" }}
+    />
+    <LoginStack.Screen
+      name="SignUp"
+      component={SignUp}
+      options={{ title: "Sign Up" }}
+    />
+  </LoginStack.Navigator>
+);
 
 const SocialLogin = () => {
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="LoginScreen" component={LoginTabContainer} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="PasswordReset" component={PasswordReset} />
       <Stack.Screen name="UserDemo" component={UserDemo} />
     </Stack.Navigator>
