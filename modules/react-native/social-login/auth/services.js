@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { appConfig } from '../../../config/app';
 
 const socialLoginAPI = axios.create({
-  baseURL: appConfig.emailAuthAPIEndPoint, // your app back-end url
+  baseURL: "https://your-app-backend.botics.co", // your app back-end url
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
