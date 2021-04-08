@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { appConfig } from '../../../config/app';
 
-const SERVICE_URL = appConfig.emailAuthAPIEndPoint
+const SERVICE_URL = "https://your-app.botics.co"
 
 const usersAPI = axios.create({
   baseURL: SERVICE_URL, // your app back-end url
