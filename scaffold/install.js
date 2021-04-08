@@ -24,6 +24,7 @@ fs.copyFileSync(path.join(customFiles, "metro.config.js"), path.join(cwd, "metro
 fs.copyFileSync(path.join(customFiles, ".eslintrc.js"), path.join(cwd, ".eslintrc.js"));
 fs.copyFileSync(path.join(customFiles, ".prettierrc.js"), path.join(cwd, ".prettierrc.js"));
 fs.copyFileSync(path.join(customFiles, "config-overrides.js"), path.join(cwd, "config-overrides.js"));
+fs.copyFileSync(path.join(customFiles, ".crowdbotics.json"), path.join(cwd, ".crowdbotics.json"));
 fs.copyFileSync(path.join(customFiles, "package.json"), path.join(cwd, "package.json"));
 
 // dotenv
