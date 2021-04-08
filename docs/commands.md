@@ -58,10 +58,15 @@ To properly configure this module, follow the instructions given in README.md in
 ## Get module info
 
 ```sh
-npm run info <module_name>
+npm run info <module_type> <module_name>
 ```
 
 Prints the module name, description and the respective data JSON.
+
+Supported module types:
+
+- "django"
+- "react-native"
 
 ## Create a local demo app
 
