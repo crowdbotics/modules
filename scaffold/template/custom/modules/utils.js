@@ -50,7 +50,7 @@ const validate = (mod, prop) => {
 export const getModules = (manifest) => {
   let modules = [];
   for (const [name, definition] of Object.entries(manifest)) {
-    if (validate(definition, "title")) {
+    if (definition && validate(definition, "title")) {
       modules.push(definition)
     } else {
       let title = name.replace(/([A-Z])/g, " $1");
