@@ -298,7 +298,7 @@
         "newFile": true
       },
       "social-login/package.json": {
-        "code": "{\n  \"name\": \"@modules/sociallogin\",\n  \"version\": \"1.0.0\",\n  \"description\": \"A login and signup screen with options to connect to social accounts.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"@react-native-community/google-signin\": \"^5.0.0\",\n    \"react-native-fbsdk\": \"1.1.2\",\n    \"react-native-keyboard-aware-scroll-view\": \"^0.9.3\",\n    \"@invertase/react-native-apple-authentication\": \"^2.1.0\",\n    \"@react-navigation/native\": \"^5.9.2\",\n    \"@react-navigation/stack\": \"^5.14.2\",\n    \"redux-saga\": \"^1.1.3\",\n    \"uuid\": \"^8.3.2\",\n    \"react-native-get-random-values\": \"^1.6.0\"\n\n  }\n}\n",
+        "code": "{\n  \"name\": \"@modules/social-login\",\n  \"version\": \"1.0.0\",\n  \"description\": \"A login and signup screen with options to connect to social accounts.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"x-dependencies\": {},\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"@react-native-community/google-signin\": \"^5.0.0\",\n    \"react-native-fbsdk\": \"1.1.2\",\n    \"react-native-keyboard-aware-scroll-view\": \"^0.9.3\",\n    \"@invertase/react-native-apple-authentication\": \"^2.1.0\",\n    \"@react-navigation/native\": \"^5.9.2\",\n    \"@react-navigation/stack\": \"^5.14.2\",\n    \"redux-saga\": \"^1.1.3\",\n    \"uuid\": \"^8.3.2\",\n    \"react-native-get-random-values\": \"^1.6.0\"\n\n  }\n}\n",
         "parentDir": "/modules",
         "newFile": true
       },
@@ -394,7 +394,7 @@
         "newFile": true
       },
       "user-profile/package.json": {
-        "code": "{\n  \"name\": \"@modules/userprofile\",\n  \"version\": \"1.0.0\",\n  \"description\": \"A screen to display user information like a profile picture, profile stats, action buttons, and images.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"react-native-elements\": \"^2.3.2\",\n    \"react-native-datepicker\": \"^1.7.2\",\n    \"react-native-vector-icons\": \"^6.6.0\",\n    \"@react-navigation/native\": \"^5.9.2\",\n    \"redux-saga\": \"^1.1.3\"\n  }\n}\n",
+        "code": "{\n  \"name\": \"@modules/user-profile\",\n  \"version\": \"1.0.0\",\n  \"description\": \"A screen to display user information like a profile picture, profile stats, action buttons, and images.\",\n  \"private\": true,\n  \"main\": \"index.js\",\n  \"author\": \"Crowdbotics\",\n  \"license\": \"ISC\",\n  \"dependencies\": {\n    \"react-native-elements\": \"^2.3.2\",\n    \"react-native-datepicker\": \"^1.7.2\",\n    \"react-native-vector-icons\": \"^6.6.0\",\n    \"@react-navigation/native\": \"^5.9.2\",\n    \"redux-saga\": \"^1.1.3\"\n  }\n}\n",
         "parentDir": "/modules",
         "newFile": true
       },
