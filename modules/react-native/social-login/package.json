@@ -1,5 +1,5 @@
 {
-  "name": "@modules/sociallogin",
+  "name": "@modules/social-login",
   "version": "1.0.0",
   "description": "A login and signup screen with options to connect to social accounts.",
   "private": true,

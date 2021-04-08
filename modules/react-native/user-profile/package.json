@@ -1,5 +1,5 @@
 {
-  "name": "@modules/userprofile",
+  "name": "@modules/user-profile",
   "version": "1.0.0",
   "description": "A screen to display user information like a profile picture, profile stats, action buttons, and images.",
   "private": true,
