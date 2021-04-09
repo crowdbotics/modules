@@ -46,8 +46,7 @@ Check **Auto build** and **Is screen**.
 **Code:**
 Copy from:
 
-- [django.json](/dist/django.json)
-- [react-native.json](/dist/react-native.json)
+- [modules.json](/dist/modules.json)
 
 **Setup step:**
 
