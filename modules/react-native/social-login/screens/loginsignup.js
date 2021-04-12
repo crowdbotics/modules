@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from "react"
 import {
   View,
   Text,
@@ -7,41 +7,43 @@ import {
   TextInput,
   ActivityIndicator,
   Alert,
-  Platform,
-} from 'react-native';
-import {
-  apiLoginRequest,
-  apiSignupRequest,
-  apiFacebookLogin,
-  apiGoogleLogin,
-  apiAppleLogin,
-} from '../auth/actions';
+  Platform
+} from "react-native"
 import {
   AppleButton,
-  appleAuthAndroid,
-} from '@invertase/react-native-apple-authentication';
-import { HOME_SCREEN_NAME, validateEmail } from './constants.js';
-import { buttonStyles, textInputStyles, Color } from './styles';
-import { connect } from 'react-redux';
-import { GoogleSigninButton } from '@react-native-community/google-signin';
+  appleAuthAndroid
+} from "@invertase/react-native-apple-authentication"
+import { useSelector, useDispatch } from "react-redux";
+import { HOME_SCREEN_NAME, validateEmail } from "./constants"
+import { buttonStyles, textInputStyles, Color } from "./styles"
+import {
+  GoogleSigninButton,
+  GoogleSignin,
+  statusCodes
+} from "@react-native-google-signin/google-signin"
+import { LoginManager, AccessToken } from "react-native-fbsdk"
+import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from "../auth/utils"
+import { appleForAndroid, appleForiOS } from "../auth/apple"
+import { facebookLogin, googleLogin, appleLogin } from "../auth"
+import { unwrapResult } from "@reduxjs/toolkit"
 
 // Custom Text Input
-export const TextInputField = (props) => (
+export const TextInputField = props => (
   <View>
     <Text style={[textInputStyles.label, props.labelStyle]}>{props.label}</Text>
     <TextInput
       autoCapitalize="none"
       style={[textInputStyles.textInput, props.textInputStyle]}
       placeholderTextColor={Color.steel}
-      underlineColorAndroid={'transparent'}
+      underlineColorAndroid={"transparent"}
       {...props}
     />
     {!!props.error && <Text style={textInputStyles.error}>{props.error}</Text>}
   </View>
-);
+)
 
 // Custom Button
-export const Button = (props) => (
+export const Button = props => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={[buttonStyles.viewStyle, props.viewStyle]}>
       {props.loading ? (
@@ -56,12 +58,12 @@ export const Button = (props) => (
       )}
     </View>
   </TouchableOpacity>
-);
+)
 
 // Grouped Social Buttons View
-const SocialButtonsView = (props) => (
+const SocialButtonsView = props => (
   <View>
-    <Text style={{ textAlign: 'center', width: '100%', marginVertical: 5 }}>
+    <Text style={{ textAlign: "center", width: "100%", marginVertical: 5 }}>
       - or -
     </Text>
     <Button
@@ -70,7 +72,7 @@ const SocialButtonsView = (props) => (
         backgroundColor: Color.facebook,
         borderColor: Color.facebook,
         marginHorizontal: 5,
-        marginBottom: 2,
+        marginBottom: 2
       }}
       textStyle={{ color: Color.white }}
       loading={props.loading}
@@ -81,262 +83,256 @@ const SocialButtonsView = (props) => (
       size={GoogleSigninButton.Size.Wide}
       color={GoogleSigninButton.Color.Dark}
       disabled={props.loading}
-      style={{ width: '99%', height: 48, marginHorizontal: 2 }}
+      style={{ width: "99%", height: 48, marginHorizontal: 2 }}
     />
-    {(Platform.OS === 'ios' || appleAuthAndroid.isSupported) && (
+    {(Platform.OS === "ios" || appleAuthAndroid.isSupported) && (
       <AppleButton
         onPress={props.onAppleConnect}
         buttonStyle={AppleButton.Style.WHITE_OUTLINE}
         buttonType={AppleButton.Type.SIGN_IN}
         style={{
-          width: '97%', // You must specify a width
+          width: "97%", // You must specify a width
           height: 44, // You must specify a height
           marginHorizontal: 5,
-          marginTop: 2,
+          marginTop: 2
         }}
       />
     )}
   </View>
-);
+)
 
-// Main SignupComponent Class
-export class SignUpComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      confirmPassword: '',
-      emailError: '',
-      passwordError: '',
-      confirmPasswordError: '',
-      requestError: '',
-    };
-  }
-
-  componentDidUpdate(prevProps) {
-    const { api, user } = this.props;
-    if (prevProps.api.isLoading && !api.success && api.error.message) {
-      const error =
-        api.error.code === 400
-          ? 'This email is already registered.'
-          : api.error.message;
-      Alert.alert('Error', error);
-      this.setState({
-        requestError: api.error,
-      });
+const onFacebookConnect = async dispatch => {
+  try {
+    const fb_result = await LoginManager.logInWithPermissions([
+      "public_profile",
+      "email"
+    ])
+    if (!fb_result.isCancelled) {
+      const data = await AccessToken.getCurrentAccessToken()
+      dispatch(facebookLogin({ access_token: data.accessToken }))
+        .then(unwrapResult)
+        .then(res => {
+          if (res.key) navigation.navigate(HOME_SCREEN_NAME)
+        })
     }
-    if (prevProps.api.isLoading && api.success && user !== {}) {
-      Alert.alert(
-        'Signup Success',
-        'Registration Successful. A confirmation will be sent to your e-mail address.',
-      );
-    }
-  }
-
-  onSignupPress = async () => {
-    const { email, password, confirmPassword } = this.state;
-    this.setState({ emailError: '' });
-    this.setState({ passwordError: '' });
-    if (validateEmail.test(email)) {
-      if (password != '') {
-        if (password == confirmPassword) {
-          this.props.signup(email, password);
-        } else {
-          this.setState({
-            confirmPasswordError: 'Confirm password and password do not match',
-          });
-        }
-      } else {
-        this.setState({ passwordError: 'Please enter a valid password' });
-      }
-    } else {
-      this.setState({ emailError: 'Please enter a valid email address' });
-    }
-  };
-
-  render() {
-    const {
-      email,
-      password,
-      emailError,
-      passwordError,
-      confirmPassword,
-      confirmPasswordError,
-    } = this.state;
-    return (
-      <KeyboardAvoidingView>
-        <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
-          <TextInputField
-            keyboardType="email-address"
-            label="Email address"
-            placeholder="Email address"
-            onChangeText={(email) => this.setState({ email })}
-            value={email}
-            error={emailError}
-          />
-          <TextInputField
-            label="Password"
-            placeholder="Password"
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({ password })}
-            value={password}
-            error={passwordError}
-          />
-          <TextInputField
-            label="Confirm Password"
-            placeholder="Confirm Password"
-            secureTextEntry={true}
-            onChangeText={(confirmPassword) =>
-              this.setState({ confirmPassword })
-            }
-            value={confirmPassword}
-            error={confirmPasswordError}
-          />
-        </View>
-        <Button
-          title="Sign Up"
-          loading={this.props.api.isLoading}
-          onPress={this.onSignupPress}
-        />
-        <SocialButtonsView
-          loading={this.props.api.isLoading}
-          onFacebookConnect={this.props.connect_to_facebook}
-          onGoogleConnect={this.props.connect_to_google}
-          onAppleConnect={this.props.connect_to_apple}
-        />
-        {!!this.state.requestError && (
-          <Text style={textInputStyles.error}>
-            {this.state.requestError.message}
-          </Text>
-        )}
-      </KeyboardAvoidingView>
-    );
+  } catch (err) {
+    console.log("Facebook Login Failed: ", JSON.stringify(err))
   }
 }
 
-// Main SignInComponent Class
-export class SignInComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      emailError: '',
-      passwordError: '',
-      authLoading: false,
-      fbLoading: false,
-    };
-  }
-
-  componentDidUpdate(prevProps) {
-    const { api, token } = this.props;
-    if (prevProps.api.isLoading && !api.success) {
-      Alert.alert('Login Error', api.error.message);
+const onGoogleConnect = async dispatch => {
+  GoogleSignin.configure({
+    webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server
+    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    forceCodeForRefreshToken: false,
+    iosClientId: GOOGLE_IOS_CLIENT_ID
+  })
+  try {
+    await GoogleSignin.hasPlayServices()
+    await GoogleSignin.signIn()
+    const tokens = await GoogleSignin.getTokens()
+    dispatch(googleLogin({ access_token: tokens.accessToken }))
+      .then(unwrapResult)
+      .then(res => {
+        if (res.key) navigation.navigate(HOME_SCREEN_NAME)
+      })
+  } catch (err) {
+    if (err.code === statusCodes.SIGN_IN_CANCELLED) {
+      Alert.alert("Error", "The user canceled the signin request.")
     }
-    if (token) {
-      this.props.navigation.navigate(HOME_SCREEN_NAME);
-    }
-  }
-
-  onSigninPress = () => {
-    const { email, password } = this.state;
-    if (validateEmail.test(email)) {
-      if (password != '') {
-        this.props.login(email, password);
-        this.setState({ authLoading: false });
-      } else {
-        this.setState({ passwordError: 'Please enter a valid password' });
-      }
-    } else {
-      this.setState({ emailError: 'Please enter a valid email address' });
-    }
-  };
-
-  render() {
-    const { email, password, emailError, passwordError } = this.state;
-    const { api } = this.props;
-    return (
-      <KeyboardAvoidingView>
-        <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
-          <TextInputField
-            keyboardType="email-address"
-            label="Email address"
-            placeholder="Email address"
-            onChangeText={(email) => this.setState({ email })}
-            value={email}
-            error={emailError}
-          />
-          <TextInputField
-            label="Password"
-            placeholder="Password"
-            secureTextEntry={true}
-            onChangeText={(password) => this.setState({ password })}
-            value={password}
-            error={passwordError}
-          />
-        </View>
-
-        <Button
-          title="Login"
-          loading={this.props.api.isLoading}
-          onPress={this.onSigninPress}
-        />
-        <SocialButtonsView
-          loading={this.props.api.isLoading}
-          onFacebookConnect={this.props.connect_to_facebook}
-          onGoogleConnect={this.props.connect_to_google}
-          onAppleConnect={this.props.connect_to_apple}
-        />
-        {!!api.error && (
-          <Text style={textInputStyles.error}>{api.error.message}</Text>
-        )}
-
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: 10,
-          }}>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => {
-              this.props.navigation.navigate('PasswordReset');
-            }}>
-            <Text>Forgot your password?</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    );
   }
 }
 
-const mapStateToProps = (state) => {
-  console.log(JSON.stringify(state));
-  return {
-    token: state.login.token,
-    api: state.login.api,
-    user: state.login.user,
-  };
-};
+const onAppleConnect = async dispatch => {
+  try {
+    const signinFunction = Platform.select({
+      ios: appleForiOS,
+      android: appleForAndroid
+    })
+    const result = await signinFunction()
+    dispatch(
+      appleLogin({ id_token: result.id_token, access_token: result.code })
+    )
+      .then(unwrapResult)
+      .then(res => {
+        if (res.key) navigation.navigate(HOME_SCREEN_NAME)
+      })
+  } catch (err) {
+    console.log(JSON.stringify(err))
+  }
+}
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    login: (email, password) =>
-      dispatch(apiLoginRequest({ username: email, password })),
-    signup: (email, password) =>
-      dispatch(apiSignupRequest({ email, password })),
-    connect_to_facebook: () => dispatch(apiFacebookLogin()),
-    connect_to_google: () => dispatch(apiGoogleLogin()),
-    connect_to_apple: () => dispatch(apiAppleLogin()),
-  };
-};
+export const SignupTab = () => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [validationError, setValidationError] = useState({
+    email: "",
+    password: ""
+  })
 
-export const SignIn = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignInComponent);
-export const SignUp = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignUpComponent);
+  const { api } = useSelector(state => state.login)
+  const dispatch = useDispatch()
+
+  const onSignupPress = async () => {
+    setValidationError({ email: "", password: "" })
+    if (!validateEmail.test(email))
+      return setValidationError({
+        email: "Please enter a valid email address.",
+        password: ""
+      })
+
+    if (!password)
+      return setValidationError({
+        email: "",
+        password: "Please enter a valid password"
+      })
+
+    if (password !== confirmPassword)
+      return setValidationError({
+        email: "",
+        password: "Confirm password and password do not match."
+      })
+    dispatch(signupRequest({ email, password }))
+      .then(unwrapResult)
+      .then(() => {
+        Alert.alert(
+          "Signup Success",
+          "Registration Successful. A confirmation will be sent to your e-mail address."
+        )
+      })
+      .catch(err => console.log(err.message))
+  }
+
+  return (
+    <KeyboardAvoidingView>
+      <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
+        <TextInputField
+          keyboardType="email-address"
+          label="Email address"
+          placeholder="Email address"
+          onChangeText={value => setEmail(value)}
+          value={email}
+          error={validationError.email}
+        />
+        <TextInputField
+          label="Password"
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={value => setPassword(value)}
+          value={password}
+          error={validationError.password}
+        />
+        <TextInputField
+          label="Confirm Password"
+          placeholder="Confirm Password"
+          secureTextEntry={true}
+          onChangeText={value => setConfirmPassword(value)}
+          value={confirmPassword}
+        />
+      </View>
+      <Button
+        title="Sign Up"
+        loading={api.loading === "pending"}
+        onPress={onSignupPress}
+      />
+      <SocialButtonsView
+        loading={api.loading === "pending"}
+        onFacebookConnect={() => onFacebookConnect(dispatch)}
+        onGoogleConnect={() => onGoogleConnect(dispatch)}
+        onAppleConnect={() => onAppleConnect(dispatch)}
+      />
+      {!!api.error && (
+        <Text style={textInputStyles.error}>{api.error.message}</Text>
+      )}
+    </KeyboardAvoidingView>
+  )
+}
+
+export const SignInTab = ({ navigation }) => {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [validationError, setValidationError] = useState({
+    email: "",
+    password: ""
+  })
+
+  const { api } = useSelector(state => state.login)
+  const dispatch = useDispatch()
+
+  const onSigninPress = async () => {
+    if (!validateEmail.test(email))
+      return setValidationError({
+        email: "Please enter a valid email address.",
+        password: ""
+      })
+
+    if (!password)
+      return setValidationError({
+        email: "",
+        password: "Please enter a valid password"
+      })
+
+    dispatch(loginRequest({ username: email, password }))
+      .then(unwrapResult)
+      .then(res => {
+        if (res.token) navigation.navigate(HOME_SCREEN_NAME)
+      })
+      .catch(err => console.log(err.message))
+  }
+
+  return (
+    <KeyboardAvoidingView>
+      <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
+        <TextInputField
+          keyboardType="email-address"
+          label="Email address"
+          placeholder="Email address"
+          onChangeText={value => setEmail(value)}
+          value={email}
+          error={validationError.email}
+        />
+        <TextInputField
+          label="Password"
+          placeholder="Password"
+          secureTextEntry={true}
+          onChangeText={value => setPassword(value)}
+          value={password}
+          error={validationError.password}
+        />
+      </View>
+
+      <Button
+        title="Login"
+        loading={api.loading === "pending"}
+        onPress={onSigninPress}
+      />
+
+      {!!api.error && (
+        <Text style={textInputStyles.error}>{api.error.message}</Text>
+      )}
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: 10
+        }}
+      >
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate("PasswordReset")
+          }}
+        >
+          <Text>Forgot your password?</Text>
+        </TouchableOpacity>
+      </View>
+      <SocialButtonsView
+        loading={api.loading === "pending"}
+        onFacebookConnect={() => onFacebookConnect(dispatch)}
+        onGoogleConnect={() => onGoogleConnect(dispatch)}
+        onAppleConnect={() => onAppleConnect(dispatch)}
+      />
+    </KeyboardAvoidingView>
+  )
+}
