@@ -1,7 +1,7 @@
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
 import { appleAuthAndroid, appleAuth } from '@invertase/react-native-apple-authentication';
-import { APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK } from '../utils';
+import { APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK } from './utils';
 
 export async function appleForAndroid() {
   // Generate secure, random values for state and nonce
@@ -52,7 +52,6 @@ export async function appleForiOS() {
       requestedOperation: appleAuth.Operation.LOGIN,
       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
     });
-    console.log(appleAuthRequestResponse)
     // make response return an id_token to match the android version.
     const response = {
       user: newUser,
