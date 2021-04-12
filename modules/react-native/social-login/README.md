@@ -1,6 +1,6 @@
 # Social Login - Frontend Module
 
-This is React Native code for social login feature. FOr this feature to be fully functional, you will need to install and configure Social Login - Backend module.
+This is React Native code for social login feature. For this feature to be fully functional, you will need to install and configure Social Login - Backend module.
 
 ## Initial Setup
 
@@ -15,7 +15,7 @@ This is a summary of the native changes required, but you can explore more detai
 Install the dependencies (check the list in the package.json of this directory):
 
 ```sh
-yarn add @react-native-community/google-signin react-native-fbsdk@1.1.2 @invertase/react-native-apple-authentication
+yarn add @react-native-google-signin/google-signin react-native-fbsdk@1.1.2 @invertase/react-native-apple-authentication react-native-get-random-values
 ```
 
 Add the plugin on `android/app/build.gradle` (at the end of the file):
@@ -23,17 +23,6 @@ Add the plugin on `android/app/build.gradle` (at the end of the file):
 ```
 apply plugin: 'com.google.gms.google-services'
 
-```
-
-And add the google signin module at the dependencies section:
-
-```js
-dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    //noinspection GradleDynamicVersion
-    implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation(project(":react-native-community_google-signin")) // <- ADD THIS LINE HERE
-    ....
 ```
 
 Add the tag on `android/app/src/main/AndroidManifest.xml`:
