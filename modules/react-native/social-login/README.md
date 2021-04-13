@@ -376,7 +376,7 @@ However, there could be a variety of issues during iOS deployment. Below you wil
 
 Note that the majority of the configuration here is to help you get started with all social login apps. You will need to properly configure your app further by checking the official documentation for all providers (Google, Facebook and Apple) in order to get your app ready for release and accepted by the app store. Such configurations include:
 
-- Explicitly activating or decativating Facebook tracking and other Facebook features to be compliant with iOS App Store
+- Explicitly activating or deacativating Facebook tracking and other Facebook features to be compliant with iOS App Store
 - Changing Facebook app and Google Credentials for release, by updating the SHA-1 key from debug to release and including privacy policy according to their guidelines
 
 ## References and Troubleshooting
@@ -390,6 +390,8 @@ Note that the majority of the configuration here is to help you get started with
 7. [iOS Simulator stuck on password input](https://github.com/invertase/react-native-apple-authentication/issues/141)
 8. [DEVELOPER_ERROR when trying to login on appetize, but working locally](https://github.com/react-native-google-signin/google-signin/issues/949#issuecomment-778070056)
 
-## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.

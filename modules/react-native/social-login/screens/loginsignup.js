@@ -13,7 +13,7 @@ import {
   AppleButton,
   appleAuthAndroid
 } from "@invertase/react-native-apple-authentication"
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux"
 import { HOME_SCREEN_NAME, validateEmail } from "./constants"
 import { buttonStyles, textInputStyles, Color } from "./styles"
 import {
@@ -24,7 +24,13 @@ import {
 import { LoginManager, AccessToken } from "react-native-fbsdk"
 import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from "../auth/utils"
 import { appleForAndroid, appleForiOS } from "../auth/apple"
-import { facebookLogin, googleLogin, appleLogin } from "../auth"
+import {
+  loginRequest,
+  signupRequest,
+  facebookLogin,
+  googleLogin,
+  appleLogin
+} from "../auth"
 import { unwrapResult } from "@reduxjs/toolkit"
 
 // Custom Text Input
