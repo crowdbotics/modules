@@ -1,36 +1,29 @@
-import React from 'react';
-import { Text, View, ImageBackground } from 'react-native';
-import { connect } from "react-redux";
-import { styles } from "./styles";
+import React from "react"
+import { Text, View, ImageBackground } from "react-native"
+import { useSelector } from "react-redux"
+import { styles } from "./styles"
 
-function Article(props) {
+function Article({ route }) {
+  const id = route.params?.id
+  const article = useSelector(state =>
+    state.Articles.articles.find(record => record.id === id)
+  )
+
   return (
     <View>
-      <ImageBackground source={{ uri: props.article.image }} style={styles.image}>
-        <View style={styles.card}>
-          <Text style={styles.text}>
-            {props.article.title}
-          </Text>
-          <Text style={styles.author}>
-            {props.article.author}
-          </Text>
+      {article && (
+        <View>
+          <ImageBackground source={{ uri: article.image }} style={styles.image}>
+            <View style={styles.card}>
+              <Text style={styles.text}>{article.title}</Text>
+              <Text style={styles.author}>{article.author}</Text>
+            </View>
+          </ImageBackground>
+          <Text style={styles.body}>{article.body}</Text>
         </View>
-      </ImageBackground>
-      <Text style={styles.body}>
-        {props.article.body}
-      </Text>
+      )}
     </View>
-  );
+  )
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const id = ownProps.navigation.getParam("id", null);
-
-  return {
-    article: state.articlesReducer.articles.find(record => record.id == id)
-  }
-}
-
-const mapDispatchToProps = dispatch => ({})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Article)
+export default Article
