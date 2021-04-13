@@ -52,6 +52,7 @@ const parseModules = dir => {
   let moduleTypes = fs.readdirSync(dir);
   moduleTypes.map(moduleType => {
     let modules = fs.readdirSync(path.join(dir, moduleType));
+    console.log("")
     console.log("Parsing", moduleType, "modules...", "\n")
     modules.map(module => {
       let hasMeta = false;
@@ -59,12 +60,12 @@ const parseModules = dir => {
       let modulePath = path.join(dir, moduleType, module);
       data[slug] = {
         meta: {
-          title: module,
+          title: module.charAt(0).toUpperCase() + module.slice(1),
           description: "",
-          root: path.join(dir, module),
           type: moduleType,
           slug: slug,
-          root: generateRoot(moduleType, module)
+          root: generateRoot(moduleType, module),
+          setup: "To properly configure this module, follow the instructions given in README.md inside the module folder."
         },
         files: {}
       };
@@ -79,7 +80,7 @@ const parseModules = dir => {
 
       // Validations
       let isValid = true;
-      console.log(slug)
+      console.log("=>", slug)
       if (!hasMeta) {
         isValid = false;
         invalid("meta.json is missing");
@@ -91,11 +92,11 @@ const parseModules = dir => {
         }
       }
       if (isValid) {
-        valid("Module passes all checks")
+        valid("module passes all checks")
       }
-      console.log("")
     });
   })
+  console.log("")
   console.log("Total of modules:", Object.keys(data).length);
   return data;
 }
