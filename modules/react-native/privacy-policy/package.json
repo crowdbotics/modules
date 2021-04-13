@@ -1,7 +1,7 @@
 {
   "name": "@modules/privacy-policy",
   "version": "1.0.0",
-  "description": "Privacy Policy Screen",
+  "description": "Privacy Policy screen",
   "private": true,
   "main": "index.js",
   "dependencies": {
