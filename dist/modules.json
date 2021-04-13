@@ -5,6 +5,7 @@
       "description": "Backend for the Articles module.",
       "type": "django",
       "slug": "django-articles",
+      "key": "articles",
       "root": "/backend/modules",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -25,6 +26,7 @@
       "description": "Push Notifications backend",
       "type": "django",
       "slug": "django-push-notifications",
+      "key": "push-notifications",
       "root": "/backend/modules/push-notifications",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -39,6 +41,7 @@
       "description": "Social Login backend",
       "type": "django",
       "slug": "django-social-auth",
+      "key": "social-auth",
       "root": "/backend/modules/social-auth",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -56,6 +59,7 @@
       "description": "Module that shows available routes in a menu with links",
       "type": "react-native",
       "slug": "react-native-app-menu",
+      "key": "app-menu",
       "root": "/modules/app-menu",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -70,6 +74,7 @@
       "description": "Module for articles lists and details pages.",
       "type": "react-native",
       "slug": "react-native-articles",
+      "key": "articles",
       "root": "/modules/articles",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -93,6 +98,7 @@
       "description": "A set of screens to display chat conversations in a list and 1-to-1 messaging.",
       "type": "react-native",
       "slug": "react-native-chat",
+      "key": "chat",
       "root": "/modules/chat",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -109,6 +115,7 @@
       "description": "A simple login and signup screen with email and password.",
       "type": "react-native",
       "slug": "react-native-login",
+      "key": "login",
       "root": "/modules/login",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -134,6 +141,7 @@
       "description": "Add interactive maps to your mobile app to make it easier for users to find your locations.",
       "type": "react-native",
       "slug": "react-native-maps",
+      "key": "maps",
       "root": "/modules/maps",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -151,6 +159,7 @@
       "description": "Help your users get started with an onboarding tutorial welcome set of screens.",
       "type": "react-native",
       "slug": "react-native-onboarding",
+      "key": "onboarding",
       "root": "/modules/onboarding",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -167,6 +176,7 @@
       "description": "Privacy Policy Screen",
       "type": "react-native",
       "slug": "react-native-privacy-policy",
+      "key": "privacy-policy",
       "root": "/modules/privacy-policy",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -184,6 +194,7 @@
       "description": "Send important messages to users through your app. Customize notifications to be sent on a regular schedule or as needed.",
       "type": "react-native",
       "slug": "react-native-push-notifications",
+      "key": "push-notifications",
       "root": "/modules/push-notifications",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -199,6 +210,7 @@
       "description": "A login and signup screen with options to connect to social accounts.",
       "type": "react-native",
       "slug": "react-native-social-login",
+      "key": "social-login",
       "root": "/modules/social-login",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -226,6 +238,7 @@
       "description": "Greet your users with an image or logo.",
       "type": "react-native",
       "slug": "react-native-splash",
+      "key": "splash",
       "root": "/modules/splash",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -241,6 +254,7 @@
       "description": "Terms and Conditions screen",
       "type": "react-native",
       "slug": "react-native-terms-and-conditions",
+      "key": "terms-and-conditions",
       "root": "/modules/terms-and-conditions",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },
@@ -258,6 +272,7 @@
       "description": "A screen to display user information like a profile picture, profile stats, action buttons, and images.",
       "type": "react-native",
       "slug": "react-native-user-profile",
+      "key": "user-profile",
       "root": "/modules/user-profile",
       "setup": "To properly configure this module, follow the instructions given in README.md inside the module folder."
     },

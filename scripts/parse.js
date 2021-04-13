@@ -64,6 +64,7 @@ const parseModules = dir => {
           description: "",
           type: moduleType,
           slug: slug,
+          key: module,
           root: generateRoot(moduleType, module),
           setup: "To properly configure this module, follow the instructions given in README.md inside the module folder."
         },
