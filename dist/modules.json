@@ -1,7 +1,7 @@
 {
   "django-articles": {
     "meta": {
-      "title": "Articles",
+      "title": "Articles (Django)",
       "description": "Backend for the Articles module.",
       "type": "django",
       "slug": "django-articles",
@@ -21,7 +21,7 @@
   },
   "django-push-notifications": {
     "meta": {
-      "title": "Push-notifications",
+      "title": "Push Notifications (Django)",
       "description": "Push Notifications backend",
       "type": "django",
       "slug": "django-push-notifications",
@@ -35,7 +35,7 @@
   },
   "django-social-auth": {
     "meta": {
-      "title": "Social-auth",
+      "title": "Social Auth (Django)",
       "description": "Social Login backend",
       "type": "django",
       "slug": "django-social-auth",
