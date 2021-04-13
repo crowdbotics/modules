@@ -60,7 +60,7 @@ const parseModules = dir => {
       let modulePath = path.join(dir, moduleType, module);
       data[slug] = {
         meta: {
-          title: module.charAt(0).toUpperCase() + module.slice(1),
+          title: slug,
           description: "",
           type: moduleType,
           slug: slug,
