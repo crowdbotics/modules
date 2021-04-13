@@ -60,7 +60,7 @@ export const slice = createSlice({
   },
   [getUsers.fulfilled]: (state, action) => {
     if (state.api.loading === "pending") {
-      state.users = [...state.users, ...action.payload]
+      state.users = action.payload
       state.api.loading = "idle"
     }
   },

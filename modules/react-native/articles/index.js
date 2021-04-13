@@ -1,72 +1,64 @@
-import React, { Component } from 'react';
+import React, { useEffect } from "react"
 import {
   Text,
   FlatList,
   View,
   TouchableOpacity,
-  ImageBackground
-} from 'react-native';
-import { styles } from "./styles";
-import { connect } from "react-redux";
-import reducer from "./store/reducers"
-import { article_list } from "./store/actions";
+  ImageBackground,
+  SafeAreaView
+} from "react-native"
+import { styles } from "./styles"
+import { slice, article_list } from "./store"
+import { useSelector, useDispatch } from "react-redux"
+import { createStackNavigator } from "@react-navigation/stack"
+import Article from "./article"
 
-class ArticleList extends Component {
-  componentDidMount() {
-    this.props.load();
-  }
+const ArticlesList = ({ route, navigation }) => {
+  const detail = route.params?.detail || "Article"
+  const { articles } = useSelector(state => state.Articles)
+  const dispatch = useDispatch()
 
-  renderItem = ({ item }) => (
+  useEffect(async () => {
+    dispatch(article_list()).catch(e => console.log(e.message))
+  }, [detail])
+
+  const renderItem = ({ item }) => (
     <TouchableOpacity
       onPress={() => {
-        this.props.navigation.navigate(this.props.detail, { id: item.id })
-      }}>
+        navigation.navigate(detail, { id: item.id })
+      }}
+    >
       <ImageBackground source={{ uri: item.image }} style={styles.image}>
         <View style={styles.card}>
-          <Text style={styles.text}>
-            {item.title}
-          </Text>
-          <Text style={styles.author}>
-            {item.author}
-          </Text>
+          <Text style={styles.text}>{item.title}</Text>
+          <Text style={styles.author}>{item.author}</Text>
         </View>
       </ImageBackground>
     </TouchableOpacity>
-  );
+  )
 
-  render() {
-    const { articles } = this.props;
-    return (
+  return (
+    <SafeAreaView>
       <FlatList
         data={articles}
-        renderItem={this.renderItem}
+        renderItem={renderItem}
         keyExtractor={item => `${item.id}`}
       />
-    );
-
-  }
+    </SafeAreaView>
+  )
 }
 
-const mapStateToProps = (state, ownProps) => {
-  const detail = ownProps.navigation.getParam("detail", "Article");
+const Stack = createStackNavigator()
 
-  return {
-    detail: detail,
-    articles: state.articlesReducer.articles,
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    load: () => dispatch(article_list())
-  }
-}
+const ArticlesNavigator = () => (
+  <Stack.Navigator headerMode="none" initialRouteName="Articles">
+    <Stack.Screen name="Articles" component={ArticlesList} />
+    <Stack.Screen name="Article" component={Article} />
+  </Stack.Navigator>
+)
 
 export default {
   title: "Articles",
-  navigator: connect(mapStateToProps, mapDispatchToProps)(ArticleList),
-  slice: {
-    reducer: reducer,
-    actions: [article_list]
-  }
+  navigator: ArticlesNavigator,
+  slice
 }
