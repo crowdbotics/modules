@@ -15,7 +15,9 @@ import Article from "./article"
 
 const ArticlesList = ({ route, navigation }) => {
   const detail = route.params?.detail || "Article"
-  const { articles } = useSelector(state => state.Articles)
+  const articles = useSelector(state =>
+    Object.entries(state.Articles.articles).map(([, entry]) => entry)
+  )
   const dispatch = useDispatch()
 
   useEffect(async () => {
