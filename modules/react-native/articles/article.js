@@ -6,7 +6,7 @@ import { styles } from "./styles"
 function Article({ route }) {
   const id = route.params?.id
   const article = useSelector(state =>
-    state.Articles.articles.find(record => record.id === id)
+    state.Articles.articles[id]
   )
 
   return (
