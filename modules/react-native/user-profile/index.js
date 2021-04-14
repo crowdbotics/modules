@@ -14,9 +14,7 @@ export const UserProfile = ({ route }) => {
     return state?.login
   })
   const userId = route.params?.id || login?.user.id
-  const user = useSelector(state =>
-    state.userProfile.users.find(user => user.id === userId)
-  )
+  const user = useSelector(state => state.userProfile.users[userId])
   const api = useSelector(state => state.userProfile.api)
   const dispatch = useDispatch()
 
@@ -28,6 +26,7 @@ export const UserProfile = ({ route }) => {
           const edit = response.id === login?.user.id
           setIsEdit(edit)
         })
+        .catch(e => console.log(e))
     }
   }, [userId])
 

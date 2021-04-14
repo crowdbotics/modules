@@ -39,9 +39,7 @@ export const slice = createSlice({
     },
     [getUserById.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        action.payload.map(user => {
-          state.users[user.id] = user
-        })
+        state.users[action.payload.id] = action.payload
         state.api.loading = "idle"
       }
     },
@@ -59,7 +57,9 @@ export const slice = createSlice({
   },
   [getUsers.fulfilled]: (state, action) => {
     if (state.api.loading === "pending") {
-      state.users = action.payload
+      action.payload.map(user => {
+        state.users[user.id] = user
+      })
       state.api.loading = "idle"
     }
   },
