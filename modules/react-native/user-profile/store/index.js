@@ -25,7 +25,7 @@ export const updateUserById = createAsyncThunk(
   }
 )
 
-const initialState = { users: [], api: { loading: "idle", error: null } }
+const initialState = { users: {}, api: { loading: "idle", error: null } }
 
 export const slice = createSlice({
   name: "userProfile",
@@ -39,10 +39,9 @@ export const slice = createSlice({
     },
     [getUserById.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.users = [
-          ...state.users.filter(record => record.id !== action.payload.id),
-          action.payload
-        ]
+        action.payload.map(user => {
+          state.users[user.id] = user
+        })
         state.api.loading = "idle"
       }
     },
@@ -77,9 +76,7 @@ export const slice = createSlice({
   },
   [updateUserById.fulfilled]: (state, action) => {
     if (state.api.loading === "pending") {
-      state.users = state.users.map(record =>
-        record.id === action.payload.id ? action.payload : record
-      )
+      state.users[action.payload.id] = action.payload
       state.api.loading = "idle"
     }
   },

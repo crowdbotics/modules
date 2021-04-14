@@ -17,7 +17,7 @@ export const article_list = createAsyncThunk(
   }
 )
 
-const initialState = { articles: [], api: { loading: "idle", error: null } }
+const initialState = { articles: {}, api: { loading: "idle", error: null } }
 
 export const slice = createSlice({
   name: "articles",
@@ -32,7 +32,9 @@ export const slice = createSlice({
     },
     [article_list.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.articles = action.payload
+        action.payload.map(article => {
+          state.articles[article.id] = article
+        })
         state.api.loading = "idle"
       }
     },
@@ -49,10 +51,7 @@ export const slice = createSlice({
     },
     [article_read.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.articles = [
-          ...state.articles.filter(record => record.id !== action.payload.id),
-          action.payload
-        ]
+        state.articles[action.payload.id] = action.payload
         state.api.loading = "idle"
       }
     },
