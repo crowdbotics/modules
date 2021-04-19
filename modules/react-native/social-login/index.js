@@ -14,23 +14,13 @@ import {
   TabActions,
   createNavigatorFactory,
 } from "@react-navigation/native";
-import {
-  apiLoginRequest,
-  apiSignupRequest,
-  apiFacebookLogin,
-  apiGoogleLogin,
-  apiAppleLogin,
-} from "./auth/actions";
-import reducer from "./auth/reducers";
-import { styles } from "./screens/styles";
-import PasswordReset from "./screens/reset";
-import { SignIn, SignUp } from "./screens/loginsignup";
-import UserDemo from "./screens/redirect-demo";
-import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
-
-// Tabs
+import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
+import { slice } from "./auth";
+import { styles } from "./screens/styles";
+import { SignInTab, SignupTab } from "./screens/loginsignup";
+import PasswordReset from "./screens/reset";
 
 const LoginTabBar = ({ navigation, state, descriptors }) => {
   const currentTab = state.routes[state.index];
@@ -124,44 +114,37 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
 const createLoginNavigator = createNavigatorFactory(LoginSignupTabs);
 
 const LoginStack = createLoginNavigator();
+
+const LoginScreen = () => {
+  return (
+    <LoginStack.Navigator>
+      <LoginStack.Screen
+        name="SignIn"
+        component={SignInTab}
+        options={{ title: "Sign In" }}
+      />
+      <LoginStack.Screen
+        name="SignUp"
+        component={SignupTab}
+        options={{ title: "Sign Up" }}
+      />
+    </LoginStack.Navigator>
+  );
+};
+
 const Stack = createStackNavigator();
 
-const LoginScreen = () => (
-  <LoginStack.Navigator>
-    <LoginStack.Screen
-      name="SignIn"
-      component={SignIn}
-      options={{ title: "Sign In" }}
-    />
-    <LoginStack.Screen
-      name="SignUp"
-      component={SignUp}
-      options={{ title: "Sign Up" }}
-    />
-  </LoginStack.Navigator>
-);
-
-const SocialLogin = () => {
+const LoginSignup = () => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="PasswordReset" component={PasswordReset} />
-      <Stack.Screen name="UserDemo" component={UserDemo} />
     </Stack.Navigator>
   );
 };
 
 export default {
   title: "login",
-  navigator: SocialLogin,
-  slice: {
-    reducer: reducer,
-    actions: [
-      apiLoginRequest,
-      apiSignupRequest,
-      apiFacebookLogin,
-      apiGoogleLogin,
-      apiAppleLogin,
-    ],
-  },
+  navigator: LoginSignup,
+  slice: slice,
 };
