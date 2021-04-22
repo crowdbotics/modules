@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import config from "./config.js";
+import crypto from "crypto";
 
 const MODULES_DIR = path.join("modules");
 const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");
@@ -23,6 +24,8 @@ const parseModules = dir => {
   const meta = str => {
     return (path.basename(str) == META_FILE);
   }
+
+  const checksum = str => crypto.createHash('md5').update(str, 'utf8').digest('hex')
 
   const generateRoot = (type, module) => {
     switch (type) {
@@ -77,6 +80,7 @@ const parseModules = dir => {
         } else {
           data[slug].files[filePath] = content;
         }
+        data[slug].meta.checksum = checksum(JSON.stringify(data[slug]));
       });
 
       // Validations
