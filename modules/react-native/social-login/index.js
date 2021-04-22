@@ -14,24 +14,15 @@ import {
   TabActions,
   createNavigatorFactory,
 } from "@react-navigation/native";
-import {
-  apiLoginRequest,
-  apiSignupRequest,
-  apiFacebookLogin,
-  apiGoogleLogin,
-  apiAppleLogin,
-} from "./auth/actions";
-import reducer from "./auth/reducers";
-import { styles } from "./screens/styles";
-import PasswordReset from "./screens/reset";
-import { SignIn, SignUp } from "./screens/loginsignup";
-import UserDemo from "./screens/redirect-demo";
-import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
+import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
+import { slice } from "./auth";
+import { styles } from "./screens/styles";
+import { SignInTab, SignupTab } from "./screens/loginsignup";
+import PasswordReset from "./screens/reset";
 
-// Tabs
-const LoginTabButtons = ({ navigation, state, descriptors }) => {
+const LoginTabBar = ({ navigation, state, descriptors }) => {
   const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
@@ -65,7 +56,7 @@ const LoginTabButtons = ({ navigation, state, descriptors }) => {
   );
 };
 
-const TabNavigator = ({ initialRouteName, children, screenOptions }) => {
+function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
@@ -82,19 +73,30 @@ const TabNavigator = ({ initialRouteName, children, screenOptions }) => {
                 source={{
                   uri: BACKGROUND_URL,
                 }}
-                style={styles.imageBackground}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  resizeMode: "cover",
+                  height: "100%",
+                  width: "100%",
+                }}
               >
                 <Image
                   source={{
                     uri: LOGO_URL,
                   }}
-                  style={styles.logo}
+                  style={{
+                    width: 155,
+                    height: 155,
+                    alignSelf: "center",
+                    resizeMode: "contain",
+                  }}
                 />
               </ImageBackground>
             </View>
           </View>
           <View style={[styles.cardView]}>
-            <LoginTabButtons
+            <LoginTabBar
               navigation={navigation}
               state={state}
               descriptors={descriptors}
@@ -107,24 +109,24 @@ const TabNavigator = ({ initialRouteName, children, screenOptions }) => {
       </KeyboardAwareScrollView>
     </NavigationHelpersContext.Provider>
   );
-};
+}
 
-const createLoginNavigator = createNavigatorFactory(TabNavigator);
+const createLoginNavigator = createNavigatorFactory(LoginSignupTabs);
 
 const LoginStack = createLoginNavigator();
 
-const LoginTabContainer = () => {
+const LoginScreen = () => {
   return (
     <LoginStack.Navigator>
       <LoginStack.Screen
         name="SignIn"
-        component={SignIn}
-        options={{ title: "Sign Up" }}
+        component={SignInTab}
+        options={{ title: "Sign In" }}
       />
       <LoginStack.Screen
         name="SignUp"
-        component={SignUp}
-        options={{ title: "Sign In" }}
+        component={SignupTab}
+        options={{ title: "Sign Up" }}
       />
     </LoginStack.Navigator>
   );
@@ -132,27 +134,17 @@ const LoginTabContainer = () => {
 
 const Stack = createStackNavigator();
 
-const SocialLogin = () => {
+const LoginSignup = () => {
   return (
     <Stack.Navigator headerMode="none">
-      <Stack.Screen name="LoginScreen" component={LoginTabContainer} />
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="PasswordReset" component={PasswordReset} />
-      <Stack.Screen name="UserDemo" component={UserDemo} />
     </Stack.Navigator>
   );
 };
 
 export default {
   title: "login",
-  navigator: SocialLogin,
-  slice: {
-    reducer: reducer,
-    actions: [
-      apiLoginRequest,
-      apiSignupRequest,
-      apiFacebookLogin,
-      apiGoogleLogin,
-      apiAppleLogin,
-    ],
-  },
+  navigator: LoginSignup,
+  slice: slice,
 };

@@ -1,6 +1,6 @@
 # Social Login - Frontend Module
 
-This is React Native code for social login feature. FOr this feature to be fully functional, you will need to install and configure Social Login - Backend module.
+This is React Native code for social login feature. For this feature to be fully functional, you will need to install and configure Social Login - Backend module.
 
 ## Initial Setup
 
@@ -8,13 +8,17 @@ In this section, for every mention of `<module_directory>`, consider the directo
 
 When you are finished with the setup, do not forget to commit all changed and created files to the GitHub project, so the module can be successfully deployed on Crowdbotics platform.
 
-#### 1. Install dependencies and setup native files
+#### Install dependencies and setup native files
+
+This is a summary of the native changes required, but you can explore more details in the Facebook, Google and Apple sections at the end of this documentation.
+
+Install the dependencies (check the list in the package.json of this directory):
 
 ```sh
-yarn add @react-native-community/google-signin react-native-fbsdk@1.1.2 @invertase/react-native-apple-authentication
+yarn add @react-native-google-signin/google-signin react-native-fbsdk@1.1.2 @invertase/react-native-apple-authentication react-native-get-random-values
 ```
 
-Add the plugin on `android/app/build.gradle`:
+Add the plugin on `android/app/build.gradle` (at the end of the file):
 
 ```
 apply plugin: 'com.google.gms.google-services'
@@ -41,10 +45,55 @@ Add the following to the `dependencies` section:
         classpath ('com.google.gms:google-services:4.1.0')
 ```
 
-#### 2. Open the `/src/navigator/mainNavigator.js` file and import the login navigator in the import section as shown:
+Update the file `android/app/src/main/res/values/strings.xml` with the follow string (the value might need to be replaced later): 
+
+```
+<string name="facebook_app_id">Your_facebook_id_here</string>
+```
+
+#### Update api url
+
+Update the file `<module_directory>/auth/services.js`, replacing the value of `baseURL` with your own app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, update from
+`baseURL: "https://your-app-backend.botics.co"` to `baseURL: "https://my-app.botics.co"`
+
+Note for developers: you can access the user token through the reducer state (i.e. `state.login.token` and user auth information like email at `state.login.user`)
+
+
+#### Change the login screen destination to your desired screen/module (likely Home screen).
+
+To do that, open the `screens/constants.js` file and edit the `HOME_SCREEN_NAME` value with the desired destination module. For example, if my home screen is called `HomeScreen1234535`, then I should change as follows: `export const HOME_SCREEN_NAME = 'HomeScreen1234535'`. If you desire, you can also update your logo image URL (be mindful that the size of the image should match the original ones for ideal results).
+
+#### Make sure your backend support SENDGRID for emailing (optional)
+
+If your app's backend does not have SENDGRID environmental variables available, make changes to project backend settings (in `/backend/YOUR_PROJECT_NAME/settings.py` file) like below:
+
+```python
+EMAIL_HOST = env.str("EMAIL_HOST", "smtp.sendgrid.net")
+EMAIL_HOST_USER = env.str("SENDGRID_USERNAME", "")
+EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
+```
+
+If this code already exists, you can just skip this step.
+
+Next, you need to configure your own sendgrid credentials. Reference website: [Sendgrid](https://wwww.sendgrid.com)
+Once configured, add the sendgrid credential information to your project's environment variables.
+
+Using the Crowdbotics Dashboard, navigate to "Settings" and select the tab "Environment Variables", here you will add the following variables:
+
+```
+SENDGRID_USERNAME
+SENDGRID_PASSWORD
+```
+
+
+## Old Crowdbotics Scaffold (optional)
+If your project does not use the latest version of Crowdbotics scaffold 1.0, you might need to consider these manual steps.
+To verify if your project is on the latest version, look for a `.crowdbotics.json` file at the root of your project. If it does not exist, follow the steps below. If it already exists, you can skip to the `Configuring Facebook` section.
+#### Open the `/src/navigator/mainNavigator.js` file and import the login navigator in the import section as shown:
+If this module code is at the `modules/` and you are going to move this code to another place within the app, replace the filepath below `"../../modules/<module_directory>/"` with desired location:
 
 ```js
-import SocialLogin from "../features/<module_directory>/";
+import SocialLogin from "../../modules/<module_directory>/";
 ```
 
 Then, add it to the AppNavigator, as follows:
@@ -56,7 +105,7 @@ const AppNavigator = {
 ...
 ```
 
-#### 3. Add reducers to the store. Open `/src/store/index.js` file and add the following imports:
+#### Add reducers to the store. Open `/src/store/index.js` file and add the following imports:
 
 ```js
 import socialLoginSaga from "../features/<module_directory>/auth/sagas";
@@ -83,54 +132,6 @@ Near the end, before the `export { store }` line, register the new sagas `sagaMi
 ```js
 sagaMiddleware.run(socialLoginSaga);
 ```
-
-#### 4. Change the login screen destination to your desired screen/module (likely Home screen).
-
-To do that, open the `screens/constants.js` file and edit the `HOME_SCREEN_NAME` value with the desired destination module. For example, if my home screen is called `HomeScreen1234535`, then I should change as follows: `export const HOME_SCREEN_NAME = 'HomeScreen1234535'`. If you desire, you can also update your logo image URL (be mindful that the size of the image should match the original ones for ideal results).
-
-#### 5. Make sure your backend support SENDGRID for emailing (optional)
-
-If your app's backend does not have SENDGRID environmental variables available, make changes to project backend settings (in `/backend/YOUR_PROJECT_NAME/settings.py` file) like below:
-
-```python
-EMAIL_HOST = env.str("EMAIL_HOST", "smtp.sendgrid.net")
-EMAIL_HOST_USER = env.str("SENDGRID_USERNAME", "")
-EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
-```
-
-If this code already exists, you can just skip this step.
-
-Next, you need to configure your own sendgrid credentials. Reference website: [Sendgrid](https://wwww.sendgrid.com)
-Once configured, add the sendgrid credential information to your project's environment variables.
-
-Using the Crowdbotics Dashboard, navigate to "Settings" and select the tab "Environment Variables", here you will add the following variables:
-
-```
-SENDGRID_USERNAME
-SENDGRID_PASSWORD
-```
-
-#### STEP 6: Update api url (optional)
-
-If you have renamed your app through the Crowdbotics platform, you might need to change the reference url of your deployed app that is used to execute the api requests. To find out if you need to update, go to the file `src/config/app.js` and locate the `emailAuthAPIEndPoint`. If the value is your app's back-end url, then you do not need to change anything. If your current back-end url is different that what is shown there, update accordingly.
-
-For example, after renaming my app from `loginapp` to `personalapp`, the code needs to be changed from:
-
-```js
-export const appConfig = {
- emailAuthAPIEndPoint: "https://loginapp-123.botics.co",
- ...
-```
-
-to
-
-```js
-export const appConfig = {
- emailAuthAPIEndPoint: "https://personalapp-123.botics.co",
- ...
-```
-
-Note for developers: you can access the user token through the reducer state (i.e. `state.login.token` and user auth information like email at `state.login.user`)
 
 ## Configuring Facebook
 
@@ -178,7 +179,7 @@ Update your Android manifest file (`/android/app/src/main/AndroidManifest.xml`) 
 
 ```
 
-After everything, open the file `<your_project_name>/android/app/build.gradle` look for `defaultConfig` object and add `multiDexEnabled true`. It will look something like this:
+After everything, open the file `<your_project_name>/android/app/build.gradle` look for `defaultConfig` object and add `multiDexEnabled true` (if you are on a React Native version older than 0.64). It will look something like this:
 
 ```js
 ...
@@ -375,7 +376,7 @@ However, there could be a variety of issues during iOS deployment. Below you wil
 
 Note that the majority of the configuration here is to help you get started with all social login apps. You will need to properly configure your app further by checking the official documentation for all providers (Google, Facebook and Apple) in order to get your app ready for release and accepted by the app store. Such configurations include:
 
-- Explicitly activating or decativating Facebook tracking and other Facebook features to be compliant with iOS App Store
+- Explicitly activating or deacativating Facebook tracking and other Facebook features to be compliant with iOS App Store
 - Changing Facebook app and Google Credentials for release, by updating the SHA-1 key from debug to release and including privacy policy according to their guidelines
 
 ## References and Troubleshooting
@@ -389,6 +390,8 @@ Note that the majority of the configuration here is to help you get started with
 7. [iOS Simulator stuck on password input](https://github.com/invertase/react-native-apple-authentication/issues/141)
 8. [DEVELOPER_ERROR when trying to login on appetize, but working locally](https://github.com/react-native-google-signin/google-signin/issues/949#issuecomment-778070056)
 
-## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.

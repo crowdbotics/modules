@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, { useState } from "react"
 import {
   TextInput,
   View,
   Alert,
   Text,
   TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
-import DateTimePicker from 'react-native-datepicker';
-import { Avatar } from 'react-native-elements';
-import { inputStyles, Color, buttonStyles, styles } from './styles';
-import { getInitials, transformLabel } from './utils';
-import moment from 'moment';
+  ActivityIndicator
+} from "react-native"
+import { Avatar } from "react-native-elements"
+import { inputStyles, Color, buttonStyles, styles } from "./styles"
+import { getInitials, transformLabel } from "./utils"
+import { updateUserById } from "./store"
+import { useSelector, useDispatch } from "react-redux"
 
 export const Button = props => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
@@ -19,142 +19,117 @@ export const Button = props => (
       {props.loading ? (
         <ActivityIndicator color={Color.white} />
       ) : (
-          <Text style={buttonStyles.text}>{props.title}</Text>
-        )}
+        <Text style={buttonStyles.text}>{props.title}</Text>
+      )}
     </View>
   </TouchableOpacity>
-);
+)
 
 export const InputContainer = props => (
   <View>
     <Text style={inputStyles.label}>{transformLabel(props.label)}</Text>
     <View>
-      {props.isDate ? (
-        <DateTimePicker
-          style={[inputStyles.input, inputStyles.date]}
-          customStyles={{ dateInput: { borderWidth: 0 } }}
-          format="MM-DD-YYYY"
-          mode="date"
-          display="default"
-          {...props}
-        />
-      ) : (
-          <TextInput
-            autoCapitalize="none"
-            style={inputStyles.input}
-            placeholderTextColor={Color.steel}
-            underlineColorAndroid={'transparent'}
-            {...props}
-          />
-        )}
+      <TextInput
+        autoCapitalize="none"
+        style={inputStyles.input}
+        placeholderTextColor={Color.steel}
+        underlineColorAndroid={"transparent"}
+        {...props}
+      />
+
       {!!props.error && <Text style={inputStyles.error}>{props.error}</Text>}
     </View>
   </View>
-);
+)
 
-export default class Edit extends Component {
-  constructor(props) {
-    super(props);
-    const birthdate = this.props.user.birth_date
-      ? new Date(this.props.user.birth_date)
-      : null;
-    this.state = {
-      initials: getInitials(this.props.user),
-      first_name: this.props.user.first_name,
-      last_name: this.props.user.last_name,
-      email: this.props.user.email,
-      birth_date: birthdate,
-      bio: this.props.user.bio,
-      loading: false,
-    };
+export const EditUser = props => {
+  const { user } = props
+  const initials = getInitials(user)
+  const [form, setForm] = useState({
+    first_name: user.first_name,
+    last_name: user.last_name,
+    email: user.email,
+    bio: user.bio
+  })
+  // code below depends on the existence of any login module - update as needed.
+  const login = useSelector(state => {
+    return state?.login
+  })
+  const api = useSelector(state => state.userProfile.api)
+  const dispatch = useDispatch()
+
+  const onUpdateForm = (key, value) => {
+    setForm({
+      ...form,
+      [key]: value
+    })
   }
 
-  componentDidUpdate(prevProps) {
-    const { loading } = this.state;
-    const { api } = this.props;
-    if (prevProps.api.isLoading && !api.errors && loading) {
-      Alert.alert('User Updated', 'User information was successfully updated.');
-      this.setState({ loading: false });
-    }
+  const onSaveProfile = async () => {
+    const payload = { data: { ...form, id: user.id }, token: login?.token }
+    dispatch(updateUserById(payload))
+      .then(() =>
+        Alert.alert(
+          "User Updated",
+          "User information was successfully updated."
+        )
+      )
+      .catch(e => {
+        // handle your custom error message here
+        console.log(e.message)
+        Alert.alert(
+          "User Update Failed",
+          `An unexpected error happened: ${e.message}`
+        )
+      })
   }
-
-  onSaveProfile = () => {
-    this.setState({ loading: true });
-    const birthdate = this.state.birth_date
-      ? moment(this.state.birth_date, 'MM-DD-YYYY').format('YYYY-MM-DD')
-      : null;
-    this.props.updateUser(
-      {
-        id: this.props.user.id,
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
-        email: this.state.email,
-        bio: this.state.bio,
-        birth_date: birthdate,
-      },
-      this.props.token,
-    );
-  };
-
-  render() {
-    const { api } = this.props;
-    return (
-      <View>
-        <View style={styles.profileIcon}>
-          <Avatar
-            size="large"
-            rounded
-            icon={{ name: 'user', type: 'font-awesome' }}
-            title={this.state.initials}
-            containerStyle={{ backgroundColor: Color.pink }}
-          />
-        </View>
-
-        <InputContainer
-          keyboardType="default"
-          label="First Name"
-          placeholder="John"
-          onChangeText={value => this.setState({ first_name: value })}
-          value={this.state.first_name}
-        />
-        <InputContainer
-          keyboardType="default"
-          label="Last Name"
-          placeholder="Doe"
-          onChangeText={value => this.setState({ last_name: value })}
-          value={this.state.last_name}
-        />
-        <InputContainer
-          keyboardType="email-address"
-          label="Email Address"
-          placeholder="email@email.com"
-          onChangeText={value => this.setState({ email: value })}
-          value={this.state.email}
-          error={this.state.email ? '' : `E-mail address field is required.`}
-        />
-
-        <InputContainer
-          isDate={true}
-          label="Birth Date"
-          placeholder="01/01/1900"
-          maxDate={new Date()}
-          onDateChange={value => this.setState({ birth_date: value })}
-          date={this.state.birth_date}
-        />
-        <InputContainer
-          label="Bio"
-          multiline={true}
-          numberOfLines={2}
-          placeholder="Write something about yourself."
-          onChangeText={value => this.setState({ bio: value })}
-          value={this.state.bio}
-        />
-        <Button
-          title="Save"
-          loading={api.isLoading}
-          onPress={this.onSaveProfile}
+  return (
+    <View>
+      <View style={styles.profileIcon}>
+        <Avatar
+          size="large"
+          rounded
+          icon={{ name: "user", type: "font-awesome" }}
+          title={initials}
+          containerStyle={{ backgroundColor: Color.pink }}
         />
       </View>
-    );
-  }
+
+      <InputContainer
+        keyboardType="default"
+        label="First Name"
+        placeholder="John"
+        onChangeText={value => onUpdateForm("first_name", value)}
+        value={form.first_name}
+      />
+      <InputContainer
+        keyboardType="default"
+        label="Last Name"
+        placeholder="Doe"
+        onChangeText={value => onUpdateForm("last_name", value)}
+        value={form.last_name}
+      />
+      <InputContainer
+        keyboardType="email-address"
+        label="Email Address"
+        placeholder="email@email.com"
+        onChangeText={value => onUpdateForm("email", value)}
+        value={form.email}
+        error={form.email ? "" : `E-mail address field is required.`}
+      />
+      <InputContainer
+        label="Bio"
+        multiline={true}
+        numberOfLines={2}
+        placeholder="Write something about yourself."
+        onChangeText={value => onUpdateForm("bio", value)}
+        value={form.bio}
+      />
+      <Button
+        title="Save"
+        loading={api.loading === "pending"}
+        onPress={onSaveProfile}
+      />
+    </View>
+  )
 }
