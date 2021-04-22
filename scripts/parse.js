@@ -68,6 +68,7 @@ const parseModules = dir => {
           type: moduleType,
           slug: slug,
           key: module,
+          options: { "x": 0, "y": 0, "domTree": "" },
           root: generateRoot(moduleType, module),
           setup: "To properly configure this module, follow the instructions given in README.md inside the module folder."
         },
