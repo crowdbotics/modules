@@ -1,12 +1,15 @@
-import 'react-native-get-random-values';
-import { v4 as uuid } from 'uuid';
-import { appleAuthAndroid, appleAuth } from '@invertase/react-native-apple-authentication';
-import { APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK } from '../utils';
+import "react-native-get-random-values"
+import { v4 as uuid } from "uuid"
+import {
+  appleAuthAndroid,
+  appleAuth
+} from "@invertase/react-native-apple-authentication"
+import { APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK } from "./utils"
 
 export async function appleForAndroid() {
   // Generate secure, random values for state and nonce
-  const rawNonce = uuid();
-  const state = uuid();
+  const rawNonce = uuid()
+  const state = uuid()
 
   // Configure the request
   appleAuthAndroid.configure({
@@ -27,20 +30,20 @@ export async function appleForAndroid() {
     nonce: rawNonce,
 
     // Unique state value used to prevent CSRF attacks. A UUID will be generated if nothing is provided.
-    state,
-  });
+    state
+  })
 
   // Open the browser window for user sign in
   try {
-    return await appleAuthAndroid.signIn();
+    return await appleAuthAndroid.signIn()
   } catch (error) {
     if (error && error.message) {
       switch (error.message) {
         // Insert other error treatments here, if necessary
         case appleAuthAndroid.Error.SIGNIN_CANCELLED:
-          throw new Error('The user canceled the signin request.');
+          throw new Error("The user canceled the signin request.")
         default:
-          throw error;
+          throw error
       }
     }
   }
@@ -50,22 +53,21 @@ export async function appleForiOS() {
   try {
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-    });
-    console.log(appleAuthRequestResponse)
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME]
+    })
     // make response return an id_token to match the android version.
-    const response = {
+    const response = ({
       user: newUser,
       email,
       nonce,
       id_token: identityToken,
-      code: authorizationCode,
-    } = appleAuthRequestResponse;
+      code: authorizationCode
+    } = appleAuthRequestResponse)
     return response
   } catch (error) {
     if (error && error.code === appleAuth.Error.CANCELED) {
-      throw new Error('The user canceled the signin request.');
+      throw new Error("The user canceled the signin request.")
     }
-    throw error;
+    throw error
   }
 }

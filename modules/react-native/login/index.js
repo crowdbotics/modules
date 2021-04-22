@@ -17,10 +17,9 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
 import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
-import { apiLoginRequest, apiSignupRequest } from "./auth/actions";
-import reducer from "./auth/reducers";
+import { slice } from "./auth";
 import { styles } from "./screens/styles";
-import { SignIn, SignUp } from "./screens/loginsignup";
+import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
 const LoginTabBar = ({ navigation, state, descriptors }) => {
@@ -121,12 +120,12 @@ const LoginScreen = () => {
     <LoginStack.Navigator>
       <LoginStack.Screen
         name="SignIn"
-        component={SignIn}
+        component={SignInTab}
         options={{ title: "Sign In" }}
       />
       <LoginStack.Screen
         name="SignUp"
-        component={SignUp}
+        component={SignupTab}
         options={{ title: "Sign Up" }}
       />
     </LoginStack.Navigator>
@@ -147,8 +146,5 @@ const LoginSignup = () => {
 export default {
   title: "login",
   navigator: LoginSignup,
-  slice: {
-    reducer: reducer,
-    actions: [apiLoginRequest, apiSignupRequest],
-  },
+  slice: slice,
 };
