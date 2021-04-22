@@ -4,9 +4,9 @@ The user Profile Screen is a React Native-based screen that allows the user to v
 
 ## Requirements
 
-For this module to be fully functional, we recommend first installing and configuring the `Login and Signup` or `Social Login` module available in the storyboard's list of verified modules.
+For this module to be fully functional, we recommend first installing and configuring the `Login` or `Social Login` modules available in the storyboard's list of verified modules.
 
-### Update the file modules/user-profile/store/services.js
+### Update the file modules/user-profile/store/api.js
 
 Update this file by replacing the `SERVICE_URL` url value with your apps' own backend url. For example, for a Crowdbotics app deployed at `https://my-app.botics.co/`, the change would look like:
 
@@ -22,7 +22,6 @@ Go to your Crowdbotics' app dashboard and navigate to the `Data Models` page. Yo
 
 - `first_name`: type as `CharField`
 - `last_name`: type as `CharField`
-- `birth_date`: type as `DateField`
 - `bio`: type as `CharField`
 
 In the end, your data model should look like this:
@@ -31,18 +30,20 @@ In the end, your data model should look like this:
 
 After all the changes, click `save` for all the changes to be applied to your project.
 
+If you choose, you can add other fields to the user model, just make sure to update this module so the new fields are rendered correctly.
+
 [Visit our knowledge base](https://knowledge.crowdbotics.com/what-is-the-model-editor-and-what-is-it-for) if you need help understanding Data Models.
 
 ## Module Usage
 
-There are two ways of using this module. First, as a logged in user profile page, where the user can view, edit and update their profile information. This module will behave like this by default (you must be logged in using one of the login modules mentioned). If you use a custom login method and reducer store, you might need to edit the code in `mapStateToProps` to match where both the `auth_user` and user `token` is stored at.
+There are two ways of using this module. First, as a logged in user profile page, where the user can view, edit and update their profile information. This module will behave like this by default (you must be logged in using one of the login modules available). If you use a custom login method and reducer store, you might need to edit the code in `useSelector` for both `index.js` and `edit.js` files to match where both the `state.login.user` and user `state.login.token` is stored at.
 
 The second use case is for displaying **other** users' information. For example, if you have a screen that lists all the users available in the platform, and when you click in a user name, you would like to view that specific user details. For that, you need to add a navigation to the User Profile screen, and pass the user id as a parameter in the navigation call. In the code example below, whenever the button is clicked, it will navigate to the User Profile screen and load the information of the user which their id equals to `123`.
 
 ```js
 <Button
   title="Go to User Profile"
-  onPress={() => this.props.navigation.navigate("UserProfile", { id: 123 })}
+  onPress={() => navigation.navigate("userProfile", { id: 123 })}
 />
 ```
 
