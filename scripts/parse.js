@@ -27,15 +27,6 @@ const parseModules = dir => {
 
   const checksum = str => crypto.createHash('md5').update(str, 'utf8').digest('hex')
 
-  const generateRoot = (type, module) => {
-    switch (type) {
-      case "django":
-        return `/backend/modules/${module}`
-      case "react-native":
-        return `/modules/${module}`
-    }
-  }
-
   const parseModule = (moduleDir, callback) => {
     let entries = fs.readdirSync(moduleDir);
     entries.map(entry => {
@@ -44,7 +35,7 @@ const parseModules = dir => {
       if (stats.isDirectory()) {
         parseModule(entryPath, callback);
       } else if (accepted(entryPath)) {
-        let filePath = path.join(...entryPath.split("/").splice(3));
+        let filePath = path.join(...entryPath.split("/").splice(2));
         let content = fs.readFileSync(entryPath, "utf8");
         callback(filePath, content, meta(entryPath));
       }
@@ -52,56 +43,51 @@ const parseModules = dir => {
   }
 
   let data = {};
-  let moduleTypes = fs.readdirSync(dir);
-  moduleTypes.map(moduleType => {
-    let modules = fs.readdirSync(path.join(dir, moduleType));
-    console.log("")
-    console.log("Parsing", moduleType, "modules...", "\n")
-    modules.map(module => {
-      let hasMeta = false;
-      let slug = `${moduleType}-${module}`;
-      let modulePath = path.join(dir, moduleType, module);
-      data[slug] = {
-        meta: {
-          title: slug,
-          description: "",
-          type: moduleType,
-          slug: slug,
-          key: module,
-          options: { "x": 0, "y": 0, "domTree": "" },
-          root: generateRoot(moduleType, module),
-          setup: "To properly configure this module, follow the instructions given in README.md inside the module folder."
-        },
-        files: {}
-      };
-      parseModule(modulePath, (filePath, content, meta = false) => {
-        if (meta) {
-          hasMeta = true
-          data[slug].meta = Object.assign(data[slug].meta, JSON.parse(content));
-        } else {
-          data[slug].files[filePath] = content;
-        }
-        data[slug].meta.checksum = checksum(JSON.stringify(data[slug]));
-      });
-
-      // Validations
-      let isValid = true;
-      console.log("=>", slug)
-      if (!hasMeta) {
-        isValid = false;
-        invalid("meta.json is missing");
+  let modules = fs.readdirSync(dir);
+  console.log("")
+  console.log("Parsing modules...", "\n")
+  modules.map(module => {
+    let hasMeta = false;
+    let modulePath = path.join(dir, module);
+    data[module] = {
+      meta: {
+        title: module,
+        description: "",
+        slug: module,
+        options: { "x": 0, "y": 0, "domTree": "" },
+        setup: "To properly configure this module, follow the instructions given in README.md inside the module folder."
+      },
+      files: {}
+    };
+    parseModule(modulePath, (filePath, content, meta = false) => {
+      if (meta) {
+        hasMeta = true
+        data[module].meta = Object.assign(data[module].meta, JSON.parse(content));
+      } else {
+        data[module].files[filePath] = content;
       }
-      if (moduleType == "react-native") {
-        if (!data[slug].files["package.json"]) {
-          isValid = false;
-          invalid("package.json is missing")
-        }
-      }
-      if (isValid) {
-        valid("module passes all checks")
-      }
+      data[module].meta.checksum = checksum(JSON.stringify(data[module]));
     });
-  })
+
+    // Validations
+    let isValid = true;
+    console.log("=>", module);
+
+    let { meta } = data[module];
+
+    if (!hasMeta) {
+      isValid = false;
+      invalid("meta.json is missing");
+    } else {
+      if (!meta.root) {
+        isValid = false;
+        invalid("meta's root property is missing");
+      }
+    }
+    if (isValid) {
+      valid("module passes all checks")
+    }
+  });
   console.log("")
   console.log("Total of modules:", Object.keys(data).length);
   return data;
