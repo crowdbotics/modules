@@ -1,0 +1,5 @@
+{
+  "title": "Articles (Django)",
+  "description": "Backend for the Articles module.",
+  "root": "/backend/modules"
+}
