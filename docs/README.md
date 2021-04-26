@@ -5,3 +5,4 @@
 - [Autoloading modules](/docs/autoloading.md)
 - [Authoring new modules](/docs/authoring.md)
 - [Resources](/docs/resources.md)
+- [@store module](/docs/store.md)
