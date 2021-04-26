@@ -1,5 +1,6 @@
 import path from "path";
 import fs from "fs";
+import fse from "fs-extra";
 import config from "./config.js";
 import { generateCommand } from "./utils.js";
 import { execSync } from "child_process";
@@ -19,3 +20,19 @@ const command = generateCommand([
 ]);
 
 execSync(command);
+
+const cookiecutter_command = generateCommand([
+  `cookiecutter`,
+  `gh:crowdbotics/django-scaffold`,
+  `--checkout develop`,
+  `--config-file cookiecutter.yaml`,
+  `--output-dir demo`,
+  `--no-input`
+]);
+
+execSync(cookiecutter_command);
+
+fse.moveSync(
+  path.join("demo", "demo"),
+  path.join("demo", "backend")
+);

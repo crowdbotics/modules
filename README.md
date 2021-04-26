@@ -17,6 +17,16 @@ Our template is on the latest React Native and React versions.
   },
 ```
 
+### Cookiecutter
+
+[Github](https://github.com/cookiecutter/cookiecutter)
+
+Installation
+
+```sh
+pip install --user cookiecutter
+```
+
 ## Getting started
 
 ```sh
