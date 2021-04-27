@@ -6,18 +6,16 @@ import HTML from "react-native-render-html";
 
 
 const TermsAndConditions = ({ navigation }) => {
-  const contentWidth = useWindowDimensions().width;
 
+  const contentWidth = useWindowDimensions().width;
   const [htmlContent, setHtmlContent] = useState('<h1> No Terms and Conditions Loaded </h1>');
   
   useEffect(() => {
-    
-    //change the root url below to your projects url. 
+    //change the root url below to your project's url. 
     fetch('https://<APP_URL_HERE>.botics.co/modules/terms/termsandconditions/')
       .then(response => response.json())
-      // .then(data => console.log(data[0]['body']))
       .then(data => setHtmlContent(data[0]['body']))
-      .catch(err => alert(err));
+      .catch(err => alert("Terms and Conditions could not be loaded at this time."));
 
   });
 
@@ -40,9 +38,6 @@ const TermsAndConditions = ({ navigation }) => {
         <ScrollView style={{ flex: 1 }}>
           <HTML source={{ html: htmlContent }} contentWidth={contentWidth} />
         </ScrollView>
-
-
-
     </View>
   );
 };

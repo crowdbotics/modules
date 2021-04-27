@@ -5,7 +5,11 @@ Install:
 	docker-compose exec web python3 manage.py makemigrations
    	docker-compose exec web python3 manage.py migrate
 
-   	You should see something about the 0001 migration running and adding the TermAndCondition model
+   	You should see something about the 0001 migration running and adding the TermAndCondition model.
+-Set the url the frontend calls. In /terms-and-conditions/modules/index.js, change the URL in the fetch call, where it says <APP_URL_HERE>, to your app's url.
+-Make sure you add a terms object in the admin panel, and you should be up and running.
+
+
 
 
 
