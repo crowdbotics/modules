@@ -7,7 +7,6 @@ import HTML from "react-native-render-html";
 
 const TermsAndConditions = ({ navigation }) => {
 
-
   const contentWidth = useWindowDimensions().width;
   const [htmlContent, setHtmlContent] = useState('<h1> No Terms and Conditions Loaded </h1>');
   
