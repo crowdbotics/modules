@@ -11,8 +11,8 @@ class TermAndConditionViewSet(viewsets.ModelViewSet):
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
+
    	# This query will only return a single (if it exists) T&C string, and that will be 
    	# the most recently updated one that *also* has an active flag. You must set at least
    	# one T&C object to active for this to work.
     queryset = TermAndCondition.objects.filter(is_active=True).order_by('-updated_at').first()
-   

@@ -7,6 +7,7 @@ import HTML from "react-native-render-html";
 
 const TermsAndConditions = ({ navigation }) => {
 
+
   const contentWidth = useWindowDimensions().width;
   const [htmlContent, setHtmlContent] = useState('<h1> No Terms and Conditions Loaded </h1>');
   
@@ -16,7 +17,6 @@ const TermsAndConditions = ({ navigation }) => {
       .then(response => response.json())
       .then(data => setHtmlContent(data[0]['body']))
       .catch(err => alert("Terms and Conditions could not be loaded at this time."));
-
   });
 
 

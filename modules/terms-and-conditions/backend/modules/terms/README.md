@@ -1,3 +1,4 @@
+
 # Getting Started
 
 ## Install:
@@ -11,10 +12,6 @@
    You should see something about the 0001_terms migration running and adding the TermAndCondition model.
 3. Set the url the frontend calls. In /terms-and-conditions/modules/index.js, change the URL in the fetch call, where it says <APP_URL_HERE>, to your app's url.
 4. In the admin panel, make sure you add a `TermAndCondition` object and set it to  active in the admin panel. Then you should should be up and running.
-
-
-
-
 
 
 ## Usage:
@@ -34,5 +31,6 @@ Example Response:
 
 }
 ```
+
 
 
