@@ -27,17 +27,16 @@ const TermsAndConditions = ({ navigation }) => {
       }}>
       <View style={styles.heading}>
         <TouchableOpacity
-          style={{ padding: 5 }}
+          style={ styles.touchableopacity}
           onPress={() => {
             navigation.goBack();
           }}>
         </TouchableOpacity>
         <Text style={styles.header}>TERMS AND CONDITIONS</Text>
-          <View></View>
-        </View>
-        <ScrollView style={{ flex: 1 }}>
-          <HTML source={{ html: htmlContent }} contentWidth={contentWidth} />
-        </ScrollView>
+      </View>
+      <ScrollView style={{ flex: 1 }}>
+        <HTML source={{ html: htmlContent }} contentWidth={contentWidth} />
+      </ScrollView>
     </View>
   );
 };
