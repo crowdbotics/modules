@@ -1,4 +1,3 @@
-
 # Getting Started
 
 ## Install:
@@ -32,5 +31,5 @@ Example Response:
 
 }
 
-```
 
+```
