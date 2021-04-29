@@ -1,0 +1,5 @@
+{
+  "title": "Push Notifications (Django)",
+  "description": "Push Notifications backend",
+  "root": "/backend/modules/push-notifications"
+}
