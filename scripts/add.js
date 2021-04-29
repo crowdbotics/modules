@@ -17,7 +17,8 @@ modules.map(module => {
   const targetModuleDir = path.join(demoDir, meta.root);
 
   // Install module
-  execSync(`cp -r ${originModuleDir} ${targetModuleDir}`);
+  execSync(`mkdir -p ${targetModuleDir}`);
+  execSync(`cp -r ${originModuleDir}/* ${targetModuleDir}`);
 
   // NPM specific step
   find.file(originModuleDir, function(files) {
