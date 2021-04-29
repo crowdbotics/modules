@@ -1,3 +1,4 @@
+
 # Getting Started
 
 ## Install:
@@ -20,6 +21,7 @@
 GET: `<site-url>.botics.co/modules/terms/termsandconditions/`
 Example Response: 
 ```
+
 {
 	ID: 1,
 	body: "TERMS AND CONDITIONS SAMPLE AGREEMENT...",
@@ -29,7 +31,6 @@ Example Response:
 	"updated_at": "2021-04-27T18:02:42.491539Z"
 
 }
+
 ```
-
-
 
