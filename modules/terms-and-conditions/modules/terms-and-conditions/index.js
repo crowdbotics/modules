@@ -1,4 +1,3 @@
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import React, { useEffect, useState } from 'react';
 import { Text, View, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { styles } from './styles';
