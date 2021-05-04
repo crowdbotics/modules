@@ -1,0 +1,5 @@
+{
+  "title": "User Profile",
+  "description": "A screen to display user information like a profile picture, profile stats, action buttons, and images.",
+  "root": "/modules/user-profile"
+}

@@ -1,79 +1,97 @@
 import fs from "fs";
 import path from "path";
 import config from "./config.js";
+import crypto from "crypto";
 
-let data;
-const DJANGO_MODULES = path.join("modules", "django");
-const DJANGO_OUTPUT_FILE = path.join(config.dist.directory, "django.json");
-const REACT_NATIVE_MODULES = path.join("modules", "react-native");
-const REACT_NATIVE_OUTPUT_FILE = path.join(config.dist.directory, "react-native.json");
+const MODULES_DIR = path.join("modules");
+const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");
 const ACCEPTED_EXTENSIONS = [".json", ".js", ".ts", ".jsx", ".tsx", ".md", ".py"];
-
-const parseDir = dir => {
-  let entries = fs.readdirSync(dir);
-  entries.map(entry => {
-    let entryPath = path.join(dir, entry)
-    let stats = fs.statSync(entryPath);
-    if (stats.isDirectory()) {
-      parseDir(entryPath);
-    } else {
-      if (ACCEPTED_EXTENSIONS.includes(path.extname(entryPath))) {
-        data[entryPath] = fs.readFileSync(entryPath, "utf8");
-      }
-    }
-  });
-}
+const META_FILE = ["meta.json"]
 
 const parseModules = dir => {
+  const valid = message => {
+    console.log(`${message} \u2705`);
+  }
+
+  const invalid = message => {
+    console.log(`${message} \u274C`);
+  }
+
+  const accepted = str => {
+    return ACCEPTED_EXTENSIONS.includes(path.extname(str))
+  }
+
+  const meta = str => {
+    return (path.basename(str) == META_FILE);
+  }
+
+  const checksum = str => crypto.createHash('md5').update(str, 'utf8').digest('hex')
+
+  const parseModule = (moduleDir, callback) => {
+    let entries = fs.readdirSync(moduleDir);
+    entries.map(entry => {
+      let entryPath = path.join(moduleDir, entry)
+      let stats = fs.statSync(entryPath);
+      if (stats.isDirectory()) {
+        parseModule(entryPath, callback);
+      } else if (accepted(entryPath)) {
+        let filePath = path.join(...entryPath.split("/").splice(2));
+        let content = fs.readFileSync(entryPath, "utf8");
+        callback(filePath, content, meta(entryPath));
+      }
+    });
+  }
+
+  let data = {};
   let modules = fs.readdirSync(dir);
+  console.log("")
+  console.log("Parsing modules...", "\n")
   modules.map(module => {
-    parseDir(path.join(dir, module));
-  })
+    let hasMeta = false;
+    let modulePath = path.join(dir, module);
+    data[module] = {
+      meta: {
+        title: module,
+        description: "",
+        slug: module,
+        options: { "x": 0, "y": 0, "domTree": "" },
+        setup: "To properly configure this module, follow the instructions given in README.md inside the module folder."
+      },
+      files: {}
+    };
+    parseModule(modulePath, (filePath, content, meta = false) => {
+      if (meta) {
+        hasMeta = true
+        data[module].meta = Object.assign(data[module].meta, JSON.parse(content));
+      } else {
+        data[module].files[filePath] = content;
+      }
+      data[module].meta.checksum = checksum(JSON.stringify(data[module]));
+    });
+
+    // Validations
+    let isValid = true;
+    console.log("=>", module);
+
+    let { meta } = data[module];
+
+    if (!hasMeta) {
+      isValid = false;
+      invalid("meta.json is missing");
+    } else {
+      if (!meta.root) {
+        isValid = false;
+        invalid("meta's root property is missing");
+      }
+    }
+    if (isValid) {
+      valid("module passes all checks")
+    }
+  });
+  console.log("")
+  console.log("Total of modules:", Object.keys(data).length);
+  return data;
 }
 
-const parseData = ({
-  data,
-  file,
-  parentDir,
-  newFile = true,
-  multiDirectory = false
-}) => {
-  let map = {};
-  Object.keys(data).map(key => {
-    let paths = key.split("/");
-    let base = paths.splice(0, 2);
-    let module = paths[0];
-    if (multiDirectory) {
-      paths.splice(0, 1);
-    }
-    let file = paths.join("/");
-    if (!map.hasOwnProperty(base[1])) {
-      map[base[1]] = {};
-    }
-    if (!map[base[1]].hasOwnProperty(module)) {
-      map[base[1]][module] = {};
-    }
-    map[base[1]][module][file] = {
-      code: data[key],
-      parentDir: parentDir,
-      newFile: newFile
-    }
-  })
-  fs.writeFileSync(file, JSON.stringify(map, null, 2));
-}
-
-data = {};
-parseModules(REACT_NATIVE_MODULES);
-parseData({
-  data: data,
-  file: REACT_NATIVE_OUTPUT_FILE,
-  parentDir: "/modules"
-});
-data = {};
-parseModules(DJANGO_MODULES);
-parseData({
-  data: data,
-  file: DJANGO_OUTPUT_FILE,
-  parentDir: "/backend/modules",
-  multiDirectory: true
-});
+let data = parseModules(MODULES_DIR);
+fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
