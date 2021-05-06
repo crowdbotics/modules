@@ -7,14 +7,17 @@ import HTML from "react-native-render-html";
 const PrivacyPolicy = ({ navigation }) => {
 
   const contentWidth = useWindowDimensions().width;
-  const [htmlContent, setHtmlContent] = useState('<h1> No Privacy Policy Loaded </h1>');
+  const [htmlContent, setHtmlContent] = useState('<h3> Loading Privacy Policy... </h3>');
   
   useEffect(() => {
     //change the root url below to your project's url. 
-    fetch('https://<APP_URL_HERE>.botics.co/modules/privacy/privacypolicy/')
+    fetch('https://privacy-mod-test-1-26188.botics.co/privacy/')
       .then(response => response.json())
       .then(data => setHtmlContent(data[0]['body']))
-      .catch(err => alert("Privacy Policy could not be loaded at this time."));
+      .catch(err => {
+        setHtmlContent('<h3> Privacy Policy could not be loaded at this time.</h3>');
+        alert("Privacy Policy could not be loaded at this time.");
+       })
   });
 
 
@@ -33,7 +36,7 @@ const PrivacyPolicy = ({ navigation }) => {
         <Text style={styles.header}>Privacy Policy</Text>
       </View>
       <ScrollView style={{ flex: 1 }}>
-        <HTML source={{ html: htmlContent }} contentWidth={contentWidth} />
+        <HTML source={{ html: htmlContent }} contentWidth={contentWidth} style={styles.heading}/>
       </ScrollView>
     </View>
   );
