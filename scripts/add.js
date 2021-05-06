@@ -1,4 +1,5 @@
 import fs from "fs";
+import fse from "fs-extra";
 import path from "path";
 import config from "./config.js";
 import find from "find";
@@ -16,9 +17,11 @@ modules.map(module => {
   );
   const targetModuleDir = path.join(demoDir, meta.root);
 
+  const filterMeta = (src, _) => path.basename(src) != "meta.json";
+
   // Install module
-  execSync(`mkdir -p ${targetModuleDir}`);
-  execSync(`cp -r ${originModuleDir}/* ${targetModuleDir}`);
+  fs.mkdirSync(targetModuleDir, { recursive: true });
+  fse.copySync(originModuleDir, targetModuleDir, { filter: filterMeta });
 
   // NPM specific step
   find.file(originModuleDir, function(files) {
