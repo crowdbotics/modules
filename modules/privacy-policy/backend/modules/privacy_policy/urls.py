@@ -5,7 +5,7 @@ from .viewsets import PrivacyPolicyViewSet
 router = DefaultRouter()
 # because we are using a custom queryset for our viewset, the basename
 # must be specified explicitly here. See: https://www.django-rest-framework.org/api-guide/routers/#Usage
-# Your policy will be available at : /modules/privacy_policy/
+# Your policy will be available at : /modules/privacy-policy/
 router.register("", PrivacyPolicyViewSet, basename="privacy-policy")
 
 urlpatterns = [
