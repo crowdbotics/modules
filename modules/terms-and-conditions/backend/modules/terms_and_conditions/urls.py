@@ -6,7 +6,7 @@ from .viewsets import TermAndConditionViewSet
 router = DefaultRouter()
 # because we are using a custom queryset for our viewset, the basename
 # must be specified explicitly here. See: https://www.django-rest-framework.org/api-guide/routers/#Usage
-# Your terms will be available at : /modules/terms_and_conditions/
+# Your terms will be available at : /modules/terms-and-conditions/
 router.register("", TermAndConditionViewSet, basename="terms-and-conditions")
 
 urlpatterns = [
