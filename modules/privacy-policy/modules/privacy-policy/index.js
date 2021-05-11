@@ -11,7 +11,7 @@ const PrivacyPolicy = ({ navigation }) => {
   
   useEffect(() => {
     //change the root url below to your project's url. 
-    fetch('https://privacy-mod-test-1-26188.botics.co/privacy/')
+    fetch('https://privacy-mod-test-1-26188.botics.co/modules/privacy-policy/')
       .then(response => response.json())
       .then(data => setHtmlContent(data[0]['body']))
       .catch(err => {
