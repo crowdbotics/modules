@@ -17,7 +17,7 @@
 1. Go to your admin panel to add a new `PrivacyPolicy` object: `<site-url>.botics.co/admin/` and click on PrivacyPolicy. Make sure you save it.
 2. Make sure to set the active flag. Without at least 1 `PrivacyPolicy` object with an active flag, nothing will be returned by the backend. If there are multiple PP objects with active flags, the most recently updated one will be returned.
 3. Your privacy policy will be available at the following endpoint:
-GET: `<site-url>.botics.co/privacy/policy/`
+GET: `<site-url>.botics.co/modules/privacy-policy/`
 
 Example Response: 
 ```
