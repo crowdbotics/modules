@@ -5,8 +5,8 @@ import crypto from "crypto";
 
 const MODULES_DIR = path.join("modules");
 const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");
-const ACCEPTED_EXTENSIONS = [".json", ".js", ".ts", ".jsx", ".tsx", ".md", ".py"];
-const META_FILE = ["meta.json"]
+const ACCEPTED_EXTENSIONS = [".json", ".js", ".ts", ".jsx", ".tsx", ".md", ".py", ".png"];
+const META_FILE = ["meta.json"];
 
 const parseModules = dir => {
   const valid = message => {
@@ -37,7 +37,10 @@ const parseModules = dir => {
       } else if (accepted(entryPath)) {
         let filePath = path.join(...entryPath.split("/").splice(2));
         let content = fs.readFileSync(entryPath, "utf8");
-        callback(filePath, content, meta(entryPath));
+        if (filePath === "preview.png") {
+          content = "data:image/png;base64," + fs.readFileSync(entryPath, "base64");
+        }       
+        callback(filePath, content, meta(entryPath));      
       }
     });
   }
