@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { screens } from "@screens";
 
 const YourApp = () => {
   return (
@@ -77,4 +78,14 @@ export function getPropertyMap(source, prop) {
     }
   });
   return map;
+}
+
+export function getNavigationScreen(name) {
+  const screen = screens.find(x => x[0].includes(name))
+
+  if(screen){
+    return screen[0]
+  }
+
+  return name
 }
