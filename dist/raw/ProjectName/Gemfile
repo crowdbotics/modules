@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 gem "fastlane"
 gem "httparty"
+gem "cocoapods"
 
 android_plugins_path = File.join(
   File.dirname(__FILE__), 'android', 'fastlane', 'Pluginfile'
