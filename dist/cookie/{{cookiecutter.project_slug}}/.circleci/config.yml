@@ -193,8 +193,13 @@ jobs:
             - ios/Pods
 
       - run:
+          name: Install MacOS ffi
+          command: gem inst ffi -- --disable-system-libffi
+          working_directory: ios
+
+      - run:
           name: Update CocaPods dependencies
-          command: pod install --verbose
+          command: bundle exec pod install --verbose
           working_directory: ios
           timeout: 1200
 
@@ -226,13 +231,13 @@ jobs:
       #- store_artifacts:
       #    path: ios/test-results
 
-      - run:
-          name: Build and upload to appetize.io
-          command: bundle exec fastlane deploy_appetize
-          working_directory: ios
+      # - run:
+      #     name: Build and upload to appetize.io
+      #     command: bundle exec fastlane deploy_appetize
+      #     working_directory: ios
 
-      - store_artifacts:
-          path: /tmp/fastlane_build/app.zip
+      # - store_artifacts:
+      #     path: /tmp/fastlane_build/app.zip
 
       - run:
           name: Create a new beta build for TestFlight
