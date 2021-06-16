@@ -6,3 +6,13 @@ export const initialRoute = modules[0].title;
 export const slices = Object.entries(getPropertyMap(modules, "slice"));
 export const navigators = Object.entries(getPropertyMap(modules, "navigator"));
 export const hooks = Object.entries(getPropertyMap(modules, "hook"));
+
+export function getNavigationScreen(name) {
+    const screen = modules.find(x => x.title.includes(name))
+
+    if (screen) {
+        return screen.title
+    }
+
+    return name
+}
