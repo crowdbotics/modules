@@ -15,7 +15,7 @@ const getNavigation = (modules, screens, initialRoute) => {
   const Navigation = () => {
     const routes = modules.concat(screens).map(([name, navigator]) => {
       return (
-        <Stack.Screen key={name} name={name} component={navigator} screenOptions={{ headerShown: false }} />
+        <Stack.Screen key={name} name={name} component={navigator} screenOptions={ { headerShown: false } } />
       )
     });
     return (
