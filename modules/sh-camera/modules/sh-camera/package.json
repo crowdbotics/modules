@@ -1,0 +1,13 @@
+{
+    "name": "@modules/sh-camera",
+    "version": "1.0.1",
+    "description": "SH Camera",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+        
+    }
+  }
+  
