@@ -38,6 +38,6 @@
     "prettier": "^2.2.1"
   },
   "devDependencies": {
-    "@react-native-community/cli": "^4.13.1"
+    "@react-native-community/cli": "^5.0.1"
   }
 }
