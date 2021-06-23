@@ -1,8 +1,63 @@
 # {{cookiecutter.project_slug}}
 
-## Getting started
-
 Welcome to your new Crowdbotics app.
+
+## What is Crowdbotics?
+Crowdbotics is an easy way to build software applications of all kinds.  You can build production, high-caliber software applications in minutes, rather than weeks or months, even if you're not a software developer.
+
+The reason this works is that most software applications and features we want to build are similar to applications that have been built before. We've crawled hundreds of thousands of public code repositories to teach the Crowdbotics engine how to create software.
+
+As a result, Crowdbotics can generate new applications automatically in a standardized way.
+
+### Useful Links
+<p>
+  <a href="https://app.crowdbotics.com/">App Dashboard</a>
+  ·
+  <a href="https://knowledge.crowdbotics.com/">Knowledgebase</a>
+  ·
+  <a href="https://knowledge.crowdbotics.com/crowdbotics-developer-training">Developer Training</a>
+  ·
+  <a href="https://discuss.crowdbotics.com/">Forum</a>
+  ·
+  <a href="https://crowdbotics.slack.com/archives/CGSAV319V">Tech Support</a>
+</p> 
+
+## Table of Contents
+1. [Project Description](#project-description)
+2. [Project Structure](#project-structure)
+3. [Getting Started: Frontend](#getting-started-frontend)
+   - [Installation](#installation)
+   - [Running with Fastlane](#running-with-fastlane)
+     - [Android](#android-1)
+     - [iOS](#ios-1)
+     - [React Native Web](#react-native-web)
+4. [Getting Started: Backend](backend#readme)
+5. [License](#license)
+
+## Project Description
+
+{{cookiecutter.project_description}}
+
+## Project Structure
+
+    .
+    ├── ...
+    ├── android                 # Android native files
+    ├── backend                 # Django backend REST API
+    ├── ios                     # iOS native files
+    ├── modules                 # Modules
+    ├── public                  
+    ├── screens                 
+    ├── store                   # Application state storage
+    ├── ...
+    ├── README.md
+    └── ...
+
+# Getting started: Frontend
+
+This section outlines instructions on setting up a local development environment for the frontend of your application.
+
+## Installation
 
 ### Metro
 
@@ -81,3 +136,10 @@ Please follow the steps
 
 - please run `yarn web-build`
 - the web_build folder is generated and copied to backend/ automatically. please commit/push the web_build folder to git
+
+# License
+Disclaimer: The scaffold and everything in it is open and free to use as long as you comply with the [license](LICENSE). We promise to do our best to improve the code and fix bugs.
+
+Some apps do call for extra code; we can cover unique use cases and help you build a custom application on our platform.
+
+Created with ❤️ by [Crowdbotics](https://www.crowdbotics.com/)
