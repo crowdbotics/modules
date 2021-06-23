@@ -10,17 +10,15 @@ The reason this works is that most software applications and features we want to
 As a result, Crowdbotics can generate new applications automatically in a standardized way.
 
 ### Useful Links
-<p>
-  <a href="https://app.crowdbotics.com/">App Dashboard</a>
-  ·
-  <a href="https://knowledge.crowdbotics.com/">Knowledgebase</a>
-  ·
-  <a href="https://knowledge.crowdbotics.com/crowdbotics-developer-training">Developer Training</a>
-  ·
-  <a href="https://discuss.crowdbotics.com/">Forum</a>
-  ·
-  <a href="https://crowdbotics.slack.com/archives/CGSAV319V">Tech Support</a>
-</p> 
+[App Dashboard](https://app.crowdbotics.com/)
+·
+[Knowledgebase](https://knowledge.crowdbotics.com/)
+·
+[Developer Training](https://knowledge.crowdbotics.com/crowdbotics-developer-training)
+·
+[Forum](https://discuss.crowdbotics.com/)
+·
+[Tech Support](https://crowdbotics.slack.com/archives/CGSAV319V)
 
 ## Table of Contents
 1. [Project Description](#project-description)
@@ -138,8 +136,6 @@ Please follow the steps
 - the web_build folder is generated and copied to backend/ automatically. please commit/push the web_build folder to git
 
 # License
-Disclaimer: The scaffold and everything in it is open and free to use as long as you comply with the [license](LICENSE). We promise to do our best to improve the code and fix bugs.
-
-Some apps do call for extra code; we can cover unique use cases and help you build a custom application on our platform.
+The use of code in this repository is governed by Crowdbotics [Terms and Conditions](https://www.crowdbotics.com/terms-of-service).
 
 Created with ❤️ by [Crowdbotics](https://www.crowdbotics.com/)
