@@ -5,7 +5,7 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ## Requirements
 
-Node.js `v14.16.0` is required, we depend on relatively new `fs` calls.
+Node.js `v14.17.1` (LTS) is required, we depend on relatively new `fs` calls.
 
 Our template is on the latest React Native and React versions.
 [scaffold/template/package.json](/scaffold/template/package.json)
