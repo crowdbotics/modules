@@ -22,7 +22,7 @@ const command = generateCommand([
 execSync(command);
 
 const cookiecutter_command = generateCommand([
-  `cookiecutter`,
+  `python -m cookiecutter`,
   `gh:crowdbotics/django-scaffold`,
   `--checkout develop`,
   `--config-file cookiecutter.yaml`,
