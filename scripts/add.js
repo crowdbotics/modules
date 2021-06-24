@@ -46,7 +46,7 @@ modules.map((module) => {
           meta.root,
           path.dirname(file).replace(originModuleDir, "")
         );
-        let packages = [yarnPath, ...getDeps(packageJSON)];
+        let packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
 
         process.chdir(demoDir);
         try {
