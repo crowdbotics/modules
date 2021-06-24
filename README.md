@@ -17,7 +17,7 @@ Our template is on the latest React Native and React versions.
   },
 ```
 
-Yarn is required:
+[Yarn](https://yarnpkg.com/) is required:
 
 ``` sh
 npm install -g yarn
