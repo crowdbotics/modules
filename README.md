@@ -13,8 +13,14 @@ Our template is on the latest React Native and React versions.
 ```json
   "dependencies": {
     "react": "17.0.1",
-    "react-native": "0.64.0"
+    "react-native": "0.64.2"
   },
+```
+
+Yarn is required:
+
+``` sh
+npm install -g yarn
 ```
 
 ### Cookiecutter
@@ -30,7 +36,7 @@ pip install --user cookiecutter
 ## Getting started
 
 ```sh
-npm run demo
+yarn run demo
 ```
 
 For more information read the [Documentation](/docs).

@@ -12,7 +12,7 @@
 ## Generate modules data
 
 ```sh
-npm run parse
+yarn run parse
 ```
 
 Run the command to generate the JSON data, ready to be pasted in the Crowdbotic's Admin page for updates or new modules creation.
@@ -57,7 +57,7 @@ To properly configure this module, follow the instructions given in README.md in
 ## Get module info
 
 ```sh
-npm run info <module_type> <module_name>
+yarn run info <module_type> <module_name>
 ```
 
 Prints the module name, description and the respective data JSON.
@@ -70,7 +70,7 @@ Supported module types:
 ## Create a local demo app
 
 ```sh
-npm run demo
+yarn run demo
 ```
 
 This command runs `npx react-native init` with [`--template`](https://github.com/react-native-community/cli/tree/master/packages/global-cli#--template) pointing to our own [Custom React Native template](#custom-react-native-template).
@@ -78,7 +78,7 @@ This command runs `npx react-native init` with [`--template`](https://github.com
 ## Install a module
 
 ```sh
-npm run add <module_name> <supports_multiple_modules_syntax>
+yarn run add <module_name> <supports_multiple_modules_syntax>
 ```
 
 Installs a module into the demo app, performing the follow operations:
@@ -90,7 +90,7 @@ Installs a module into the demo app, performing the follow operations:
 ## Remove a module
 
 ```sh
-npm run remove <module_name> <supports_multiple_modules_syntax>
+yarn run remove <module_name> <supports_multiple_modules_syntax>
 ```
 
 Removes a module from the demo app, performing the follow operations:
@@ -104,14 +104,14 @@ Removes a module from the demo app, performing the follow operations:
 Start by generating a new app called ProjectName to serve as input for cookiecutter replacements:
 
 ```sh
-npm run raw
+yarn run raw
 
 ```
 
 Then run the cookie command to generate distribution cookiecutter.
 
 ```sh
-npm run cookie
+yarn run cookie
 ```
 
 Generates cookiecutter template by replacing according to table:
