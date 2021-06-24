@@ -40,10 +40,6 @@ fs.copyFileSync(path.join(customFiles, "Gemfile.lock"), path.join(cwd, "Gemfile.
 execSync(`cp -r ${path.join(customFiles, "android")} ${path.join(cwd)}`);
 execSync(`cp -r ${path.join(customFiles, "ios")} ${path.join(cwd)}`);
 
-// react-native cli bug?
-// https://github.com/react-native-community/cli/blob/641b21f583c97e3d48ce87d5fe804f42db92fa5c/packages/cli/src/tools/generator/copyProjectTemplateAndReplace.ts#L144
-fs.renameSync(path.join(cwd, "_editorconfig"), path.join(cwd, ".editorconfig"))
-
 // package.json manipulation
 const packageFile = path.join(cwd, "package.json");
 const packageJson = require(packageFile);
