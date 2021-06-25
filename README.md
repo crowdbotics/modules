@@ -5,6 +5,8 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ## Requirements
 
+### Node.js
+
 Node.js `v14.17.1` (LTS) is required, we depend on relatively new `fs` calls.
 
 Our template is on the latest React Native and React versions.
@@ -19,18 +21,16 @@ Our template is on the latest React Native and React versions.
 
 [Yarn](https://yarnpkg.com/) is required:
 
-``` sh
+```sh
 npm install -g yarn
 ```
 
-### Cookiecutter
+### Python dependencies
 
-[Github](https://github.com/cookiecutter/cookiecutter)
-
-Installation
+The `demo` command depends on the Python library [cookiecutter](https://github.com/cookiecutter/cookiecutter).
 
 ```sh
-pip install --user cookiecutter
+pipenv install
 ```
 
 ## Getting started
