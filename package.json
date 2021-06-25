@@ -4,6 +4,9 @@
   "description": "# React Native Scaffold",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": ">14.0 <15.0"
+  },
   "scripts": {
     "demo": "node scripts/demo.js",
     "add": "node scripts/add.js",
