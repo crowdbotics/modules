@@ -7,7 +7,7 @@
     "author": "Crowdbotics",
     "license": "ISC",
     "dependencies": {
-        
+        "react-native-actionsheet": "^2.4.2"
     }
   }
   
