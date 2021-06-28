@@ -39,7 +39,7 @@
     "@babel/types": "^7.12.12",
     "find": "^0.3.0",
     "fs-extra": "^10.0.0",
-    "prettier": "^2.2.1"
+    "prettier": "^2.3.2"
   },
   "devDependencies": {
     "react-native": "0.64.2",
