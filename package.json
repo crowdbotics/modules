@@ -15,6 +15,7 @@
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
+    "template": "node scripts/template.js",
     "bootstrap": "npm run demo; npm run raw; npm run cookie",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -41,6 +42,7 @@
     "prettier": "^2.2.1"
   },
   "devDependencies": {
-    "@react-native-community/cli": "^5.0.1"
+    "react-native": "0.64.2",
+    "@react-native-community/cli": "5.0.1"
   }
 }
