@@ -10,7 +10,7 @@ import {
   Platform
 } from "react-native";
 import { usePubNub } from "pubnub-react";
-import Metadata from 'url-metadata'
+// import Metadata from 'url-metadata'
 
 const Chat = ({ route }) => {
   // The `route` prop will be passed to us thanks to React Navigation.

@@ -42,7 +42,7 @@
     "prettier": "^2.3.2"
   },
   "devDependencies": {
-    "react-native": "0.64.2",
-    "@react-native-community/cli": "5.0.1"
+    "@react-native-community/cli": "5.0.1",
+    "react-native": "0.64.2"
   }
 }
