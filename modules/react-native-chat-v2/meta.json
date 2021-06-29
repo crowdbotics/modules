@@ -1,0 +1,5 @@
+{
+  "title": "Chat V2",
+  "description": "A set of screens to display chat conversations in a list and 1-to-many messaging.",
+  "root": "/modules/chat"
+}
