@@ -10,7 +10,6 @@
     "pubnub": "^4.29.11",
     "pubnub-react": "^2.1.0",
     "react-native-emoji-selector": "^0.2.0",
-    "react-native-keyboard-aware-scroll-view": "^0.9.3",
-    "url-metadata": "^2.5.0"
+    "react-native-keyboard-aware-scroll-view": "^0.9.3"
   }
 }
