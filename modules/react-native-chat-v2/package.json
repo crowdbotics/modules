@@ -1,25 +1,16 @@
 {
   "name": "@modules/chat-v2",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A set of screens to display chat conversations in a list and 1-to-many messaging",
   "private": true,
   "main": "index.js",
   "author": "Vlad Rimsha",
   "license": "ISC",
   "dependencies": {
-    "pubnub": "^4.33.0",
-    "zustand": "^3.5.13",
+    "pubnub": "^4.29.11",
     "pubnub-react": "^2.1.0",
-    "is-url": "^1.2.4",
-    "react-native-gifted-chat": "^0.16.3",
-    "uuid": "^8.3.2",
-    "react-native-image-crop-picker": "^0.36.2",
-    "react-native-actionsheet": "^2.4.2",
-    "react-native-permissions": "^3.0.5",
-    "react-native-linear-gradient": "^2.4.0"
-  },
-  "x-dependencies": {
-    "react-native-image-crop-picker": "0.36.2",
-    "react-native-permissions": "3.0.4"
+    "react-native-emoji-selector": "^0.2.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
+    "url-metadata": "^2.5.0"
   }
 }
