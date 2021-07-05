@@ -1,21 +1,15 @@
-import React from "react"
-import { Provider } from "react-redux"
 import "react-native-gesture-handler"
+import React from "react"
 import { NavigationContainer } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
-import {
-  configureStore,
-  createReducer,
-  combineReducers
-} from "@reduxjs/toolkit"
-
-import { screens } from "@screens"
-import { hooks, slices, navigators, initialRoute } from "@modules"
+import { OptionsContext, getOptions } from "@options"
+import { Provider } from "react-redux"
+import { configureStore, combineReducers } from "@reduxjs/toolkit"
 import { connectors } from "@store"
+import { createStackNavigator } from "@react-navigation/stack"
+import { hooks, slices, navigators, initialRoute } from "@modules"
+import { screens } from "@screens"
 
 const Stack = createStackNavigator()
-
-import { OptionsContext, getOptions } from "@options"
 
 const getNavigation = (modules, screens, initialRoute) => {
   const Navigation = () => {
@@ -48,18 +42,7 @@ const getStore = slices => {
     slices.map(([name, slice]) => [name, slice.reducer])
   )
 
-  const appState = {
-    name: "HelloWorldIdentifier",
-    url: "https://HelloWorldIdentifier.botics.co",
-    version: "1.0.0"
-  }
-
-  const appReducer = createReducer(appState, _ => {
-    return appState
-  })
-
   const reducer = combineReducers({
-    app: appReducer,
     ...reducers
   })
 
