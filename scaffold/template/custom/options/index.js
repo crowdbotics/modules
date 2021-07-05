@@ -1,13 +1,8 @@
 import React from "react"
 import * as modsOpts from "glob:../modules/**/options.js"
+import { modulesOptions, globalOptions } from "./options"
 
-const globalOptions = {
-  name: "HelloWorldIdentifier",
-  url: "https://HelloWorldIdentifier.botics.co",
-  api: "https://HelloWorldIdentifier.botics.co/api/v1"
-}
-
-const getopts = opts => {
+const parseOpts = opts => {
   let temp = {}
   for (const [name, definition] of Object.entries(opts)) {
     let key = `${name.charAt(0).toUpperCase()}${name.slice(1)}`
@@ -16,10 +11,12 @@ const getopts = opts => {
   return temp
 }
 
-const options = getopts(modsOpts)
+const options = parseOpts(modsOpts)
 
 export function getOptions(component) {
-  return options[component.name] || {}
+  let target = options[component.name] || {}
+  let source = modulesOptions[component.name] || {}
+  return Object.assign(target, source)
 }
 
 export const OptionsContext = React.createContext(options)
