@@ -1,15 +1,21 @@
-import "react-native-gesture-handler"
-import React from "react"
-import { NavigationContainer } from "@react-navigation/native"
-import { OptionsContext, getOptions } from "@options"
+import React, { useContext } from "react"
 import { Provider } from "react-redux"
-import { configureStore, combineReducers } from "@reduxjs/toolkit"
-import { connectors } from "@store"
+import "react-native-gesture-handler"
+import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import { hooks, slices, navigators, initialRoute } from "@modules"
+import {
+  configureStore,
+  createReducer,
+  combineReducers
+} from "@reduxjs/toolkit"
+
 import { screens } from "@screens"
+import { hooks, slices, navigators, initialRoute } from "@modules"
+import { connectors } from "@store"
 
 const Stack = createStackNavigator()
+
+import { GlobalOptionsContext, OptionsContext, getOptions } from "@options"
 
 const getNavigation = (modules, screens, initialRoute) => {
   const Navigation = () => {
@@ -37,12 +43,17 @@ const getNavigation = (modules, screens, initialRoute) => {
   return Navigation
 }
 
-const getStore = slices => {
+const getStore = (slices, globalState) => {
   const reducers = Object.fromEntries(
     slices.map(([name, slice]) => [name, slice.reducer])
   )
 
+  const appReducer = createReducer(globalState, _ => {
+    return globalState
+  })
+
   const reducer = combineReducers({
+    app: appReducer,
     ...reducers
   })
 
@@ -53,8 +64,9 @@ const getStore = slices => {
 }
 
 const App = () => {
+  const global = useContext(GlobalOptionsContext)
   const Navigation = getNavigation(navigators, screens, initialRoute)
-  const store = getStore([...slices, ...connectors])
+  const store = getStore([...slices, ...connectors], global)
 
   let effects = {}
   hooks.map(([_, hook]) => {
