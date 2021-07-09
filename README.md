@@ -35,8 +35,23 @@ pipenv install
 
 ## Getting started
 
+Generate a new app based on the scaffold:
+
 ```sh
 yarn run demo
 ```
 
-For more information read the [Documentation](/docs).
+Install the `App Menu` module:
+
+```sh
+yarn run add react-native-app-menu
+```
+
+## Documentation
+
+- [Commands](/docs/commands.md)
+- [Modules available](/docs/modules.md)
+- [Autoloading modules](/docs/autoloading.md)
+- [Authoring new modules](/docs/authoring.md)
+- [Resources](/docs/resources.md)
+- [@store module](/docs/store.md)
