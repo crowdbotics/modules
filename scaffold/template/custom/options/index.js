@@ -19,5 +19,9 @@ export function getOptions(component) {
   return Object.assign(target, source)
 }
 
+export function getGlobalOptions() {
+  return globalOptions
+}
+
 export const OptionsContext = React.createContext(options)
 export const GlobalOptionsContext = React.createContext(globalOptions)
