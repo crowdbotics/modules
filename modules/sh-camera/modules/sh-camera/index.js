@@ -39,12 +39,12 @@ const shCamera = ({ navigation }) => {
               let res = await pickFromCamera();
               console.log('pickFromCamera res', res);
               // TODO: Upload Image
-              uploadImage(res)
+              res && uploadImage(res)
             } else if (index == 1) {
               let res = await pickFromGallery();
               console.log('_pickFromGallery res', res);
               // TODO: Upload Image
-              uploadImage(res)
+              res && uploadImage(res)
             }
           }
         }}
