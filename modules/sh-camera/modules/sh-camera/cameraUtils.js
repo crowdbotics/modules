@@ -2,8 +2,10 @@ import { Alert, Platform } from 'react-native';
 import * as Permissions from 'react-native-permissions';
 import ImagePicker from 'react-native-image-crop-picker';
 import axios from "axios";
+import { BASE_URL } from "@env"
 
 async function askPermission(permission) {
+  console.log('askPermission askPermission', permission)
   try {
     const status = await Permissions.check(permission);
     if (status !== Permissions.RESULTS.GRANTED) {
@@ -12,9 +14,11 @@ async function askPermission(permission) {
       const status = await Permissions.request(permission);
       if (status !== Permissions.RESULTS.GRANTED) {
         //user denied on ask
+        console.log("DENIED")
         return false;
       }
     }
+    console.log("GRANTED")
     return true;
   } catch (err) {
     console.log('askPermission err', err, ' for permission', permission);
@@ -47,7 +51,7 @@ function permissionsAlert() {
   //console.log('alert');
   Alert.alert(
     'Permissions Required',
-    'Easywin requires Camera & Photos access to function properly. Please go to settings to enable manually.',
+    'App requires Camera & Photos access to function properly. Please go to settings to enable manually.',
     [
       {
         text: 'Cancel',
@@ -79,26 +83,6 @@ export const pickFromGallery = async () => {
       console.log('pickFromGallery err', err)
       return false;
     }
-
-    // return await new Promise(function (resolve, reject) {
-    //   ImagePicker.openPicker({ width: 300, height: 300, cropping: true, mediaType:'photo' }, (response) => {
-    //     console.log('openPicker res', response)
-    //     if (response.didCancel) {
-    //       console.log('User cancelled image picker');
-    //       resolve(false);
-    //     } else if (response.error) {
-    //       console.log('ImagePicker Error: ', response.error);
-    //       resolve(false);
-    //     } else {
-    //       const source = response.uri;
-
-    //       // You can also display the image using data:
-    //       // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-    //       // console.log('response image', response)
-    //       resolve(source);
-    //     }
-    //   });
-    // })
   }
 };
 
@@ -149,6 +133,6 @@ export const uploadImage = async (response) => {
     uri: response.path,
     data: response.data
   });
-  let res = await apiPost('http://192.168.100.9:8000/modules/sh-camera/upload_image/', data);
+  let res = await apiPost(BASE_URL+'/modules/sh-camera/upload_image/', data);
 }
 

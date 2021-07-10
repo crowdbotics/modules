@@ -20,4 +20,4 @@ class Image(models.Model):
         return [self.split(',')[0], self.split(',')[1]] if self.lat_long else []
 
     def __str__(self):
-        return self.id
+        return "%s"%self.id
