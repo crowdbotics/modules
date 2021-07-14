@@ -13,6 +13,7 @@ const ACCEPTED_EXTENSIONS = [
   ".tsx",
   ".md",
   ".py",
+  ".png",
 ];
 const META_FILE = ["meta.json"];
 
@@ -46,6 +47,10 @@ const parseModules = (dir) => {
       } else if (accepted(entryPath)) {
         let filePath = path.join(...entryPath.split("/").splice(2));
         let content = fs.readFileSync(entryPath, "utf8");
+        if (filePath === "preview.png") {
+          content =
+            "data:image/png;base64," + fs.readFileSync(entryPath, "base64");
+        }
         callback(filePath, content, meta(entryPath));
       }
     });
