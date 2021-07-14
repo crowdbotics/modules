@@ -48,7 +48,6 @@ export async function getCameraGalleryPermissions() {
 
 
 function permissionsAlert() {
-  //console.log('alert');
   Alert.alert(
     'Permissions Required',
     'App requires Camera & Photos access to function properly. Please go to settings to enable manually.',
@@ -135,4 +134,3 @@ export const uploadImage = async (response) => {
   });
   let res = await apiPost(BASE_URL+'/modules/sh-camera/upload_image/', data);
 }
-
