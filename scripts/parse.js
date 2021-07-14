@@ -13,9 +13,10 @@ const ACCEPTED_EXTENSIONS = [
   ".tsx",
   ".md",
   ".py",
-  ".png",
 ];
+const BASE_64_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 const META_FILE = ["meta.json"];
+const PREVIEW_FILE = ["preview.png"];
 
 const parseModules = (dir) => {
   const valid = (message) => {
@@ -26,16 +27,34 @@ const parseModules = (dir) => {
     console.log(`${message} \u274C`);
   };
 
-  const accepted = (str) => {
-    return ACCEPTED_EXTENSIONS.includes(path.extname(str));
+  const accepted = (entry) => {
+    return ACCEPTED_EXTENSIONS.includes(path.extname(entry));
   };
 
-  const meta = (str) => {
-    return path.basename(str) == META_FILE;
+  const base64 = (entry) => {
+    return BASE_64_EXTENSIONS.includes(path.extname(entry));
   };
 
   const checksum = (str) =>
     crypto.createHash("md5").update(str, "utf8").digest("hex");
+
+  const moduleDefaults = (module) => {
+    return {
+      meta: {
+        title: module,
+        description: "",
+        slug: module,
+        options: { x: 0, y: 0, domTree: "" },
+        setup:
+          "To properly configure this module, follow the instructions given in README.md inside the module folder.",
+      },
+      files: {},
+    };
+  };
+
+  const ignoreRootDirs = (entry, num) => {
+    return path.join(...entry.split("/").splice(num));
+  };
 
   const parseModule = (moduleDir, callback) => {
     let entries = fs.readdirSync(moduleDir);
@@ -45,13 +64,17 @@ const parseModules = (dir) => {
       if (stats.isDirectory()) {
         parseModule(entryPath, callback);
       } else if (accepted(entryPath)) {
-        let filePath = path.join(...entryPath.split("/").splice(2));
         let content = fs.readFileSync(entryPath, "utf8");
-        if (filePath === "preview.png") {
-          content =
-            "data:image/png;base64," + fs.readFileSync(entryPath, "base64");
-        }
-        callback(filePath, content, meta(entryPath));
+        let filePath = ignoreRootDirs(entryPath, 2);
+        callback(filePath, content);
+      } else if (base64(entryPath)) {
+        let ext = path.extname(entryPath).replace(".", "");
+        let content = `data:image/${ext};base64,${fs.readFileSync(
+          entryPath,
+          "base64"
+        )}`;
+        let filePath = ignoreRootDirs(entryPath, 2);
+        callback(filePath, content);
       }
     });
   };
@@ -92,24 +115,45 @@ const parseModules = (dir) => {
       data[module].meta.checksum = checksum(JSON.stringify(data[module]));
     });
 
-    // Validations
-    let isValid = true;
+  console.log("");
+  console.log("Parsing modules...", "\n");
+
+  modules.map((module) => {
     console.log("=>", module);
+    let modulePath = path.join(dir, module);
+    data[module] = moduleDefaults(module);
 
-    let { meta } = data[module];
+    parseModule(modulePath, (filePath, content) => {
+      data[module].files[filePath] = content;
+    });
 
-    if (!hasMeta) {
-      isValid = false;
+    // Parse module metadata
+    const meta = JSON.parse(data[module].files[META_FILE]);
+    delete data[module].files[META_FILE];
+
+    if (!meta) {
       invalid("meta.json is missing");
-    } else {
-      if (!meta.root) {
-        isValid = false;
-        invalid("meta's root property is missing");
-      }
+      return;
+    } else if (!meta.root) {
+      invalid("meta's root property is missing");
+      return;
     }
-    if (isValid) {
-      valid("module passes all checks");
+
+    data[module].meta = Object.assign(data[module].meta, meta);
+    data[module].meta.checksum = checksum(JSON.stringify(data[module]));
+
+    // Parse module preview image
+    const preview = data[module].files[PREVIEW_FILE];
+    delete data[module].files[PREVIEW_FILE];
+
+    if (!preview) {
+      invalid("module preview image missing");
+      return;
     }
+
+    data[module].meta.preview = preview;
+
+    valid("module passes all checks");
   });
   console.log("");
   console.log("Total of modules:", Object.keys(data).length);
