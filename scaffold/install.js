@@ -21,6 +21,8 @@ fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
 
 // CircleCI
 fs.renameSync(path.join(customFiles, ".circleci"), path.join(cwd, ".circleci"));
+// Github
+fs.renameSync(path.join(customFiles, ".github"), path.join(cwd, ".github"));
 
 // File overrides
 fs.copyFileSync(
