@@ -9,11 +9,13 @@ const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
-const filterMeta = (src, _) => path.basename(src) != "meta.json";
+const IGNORED_ENTRIES = ["meta.json", "node_modules"];
+
+const filterFiles = (src, _) => !IGNORED_ENTRIES.includes(path.basename(src));
 
 const copy = (origin, target) => {
   fs.mkdirSync(target, { recursive: true });
-  fse.copySync(origin, target, { filter: filterMeta });
+  fse.copySync(origin, target, { filter: filterFiles });
 };
 
 modules.map((module) => {
@@ -34,6 +36,10 @@ modules.map((module) => {
     }
     return packages;
   };
+
+  // cleanup node_modules
+  fs.rmdirSync(path.join(originModuleDir, "node_modules"), { recursive: true });
+  fs.rmdirSync(path.join(originModuleDir, "yarn.lock"), { recursive: true });
 
   copy(originModuleDir, targetModuleDir);
 
