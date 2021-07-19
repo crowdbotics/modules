@@ -7,6 +7,7 @@
 - [Adding dependencies to your module](#adding-dependencies-to-your-module)
 - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
 - [Running code on app load](#running-code-on-app-load)
+- [Modules Options](#modules-options)
 
 ## Guidelines
 
@@ -143,3 +144,98 @@ export default {
 ```
 
 The example above is for an headless module (no screens), but you can export hooks in regular modules too.
+
+## Modules Options
+
+Your module can include an options file that exports a JSON object that you can reuse on your module source code.
+
+Those options are then automatically provided from a React Native context:
+
+```javascript
+import React, { useContext } from "react";
+import { OptionsContext, GlobalOptionsContext } from "@options";
+
+function YourModuleComponent() {
+  // Consume module's own options in this component
+  const options = useContext(OptionsContext);
+
+  // Consume app's global options in this component
+  const global = useContext(GlobalContext);
+
+  return (
+  )
+}
+```
+
+One can also obtain options in a more direct manner, for use outside of components. The drawback with this method is that you miss reactivity if any option value were to change.
+
+```javascript
+import { getOptions, getGlobalOptions } from "@options";
+
+function YourModuleComponent() {
+  // ...
+  return (
+
+  )
+}
+
+const options = getOptions(YourModuleComponent);
+const global = getGlobalOptions();
+```
+
+### Writing your options file
+
+This is an example of an [options file](/modules/react-native-app-menu/options.js) for our App Menu module:
+
+```javascript
+import { StyleSheet } from "react-native";
+
+const styles = StyleSheet.create({
+  hr: {
+    marginTop: 20,
+    marginBottom: 20,
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+  },
+  container: {
+    flex: 1,
+    height: 100,
+    padding: 13,
+  },
+  text: {
+    color: "black",
+    fontSize: 20,
+  },
+  buttonPressed: {
+    backgroundColor: "aquamarine",
+  },
+  buttonNotPressed: {
+    backgroundColor: "blue",
+  },
+  button: {
+    borderRadius: 4,
+    padding: 15,
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 16,
+  },
+});
+
+export default {
+  title: "App Menu",
+  copy: "Routes available",
+  styles: styles,
+};
+```
+
+Its worth noting that the options file must `export default` a valid JSON object.
+
+For the Django modules, one writes an [options file](/modules/django-articles/articles/options.py) too:
+
+```python
+RECORDS_PER_PAGE = 50
+MEDIA_UPLOAD_PATH = "mediafiles/articles/"
+```
