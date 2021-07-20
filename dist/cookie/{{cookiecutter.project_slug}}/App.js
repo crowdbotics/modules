@@ -33,7 +33,7 @@ const getNavigation = (modules, screens, initialRoute) => {
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={initialRoute}
-          screenOptions={{ headerShown: true }}
+          screenOptions={ { headerShown: true } }
         >
           {routes}
         </Stack.Navigator>
