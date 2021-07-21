@@ -1,124 +1,149 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, SafeAreaView, Button, View, LogBox } from "react-native";
-import EmojiSelector from "react-native-emoji-selector";
-import Chat from "./chat";
+import React, { useState, useEffect } from 'react'
+import { GiftedChat, Actions } from 'react-native-gifted-chat'
+import * as Permissions from 'react-native-permissions'
+import metadata from './metadata'
+import PubNub from 'pubnub'
+import { usePubNub, PubNubProvider } from 'pubnub-react'
+import isUrl from 'is-url'
+import { Alert, Platform } from 'react-native'
+import ImagePicker from 'react-native-image-crop-picker'
 
-import { createStackNavigator } from '@react-navigation/stack';
-const Stack = createStackNavigator();
-
-const EmojiPicker = ({ navigation }) => {
-  // In here we are storing our currently picked emoji.
-  const [chosenEmoji, setEmoji] = useState(null);
-
-  // This method will be called when our user selects an emoji
-  const handleEmojiSelected = emoji => {
-    setEmoji(emoji);
-  };
-
-  // This method will be called when our user wants to continue with
-  // currently selected emoji - this method will do nothing if user
-  // didn't pick an emoji.
-  const handleContinueButton = () => {
-    if (chosenEmoji !== null) {
-      navigation.replace("Chat", { emoji: chosenEmoji });
+const checkPermission = async permission => {
+  const checkStatus = await Permissions.check(permission)
+  if (checkStatus !== Permissions.RESULTS.GRANTED) {
+    const requestStatus = await Permissions.request(permission)
+    if (requestStatus !== Permissions.RESULTS.GRANTED) {
+      return false
     }
-  };
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.topContainer}>
-        <Text style={styles.hint}>
-          Pick an emoji that will represent you in the chat
-        </Text>
-        <View
-          style={{
-            ...styles.emojiContainer,
-            ...(chosenEmoji === null ? styles.empty : {})
-          }}
-        >
-          <Text style={styles.emoji}>{chosenEmoji || ""}</Text>
-        </View>
-        <Button
-          // If user haven't chosen an emoji, we disable the continue button
-          disabled={chosenEmoji === null}
-          style={styles.continueButton}
-          title="Continue"
-          onPress={handleContinueButton}
-        />
-      </View>
-      <View style={{ height: "50%" }}>
-        <EmojiSelector onEmojiSelected={handleEmojiSelected} />
-      </View>
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    alignItems: "center",
-    width: "100%",
-    height: "100%"
-  },
-  topContainer: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    width: "100%",
-    height: "50%"
-  },
-  hint: {
-    fontSize: 16,
-    textAlign: "center",
-    marginTop: 32
-  },
-  continueButton: {
-    marginVertical: 64,
-    width: 300
-  },
-  emojiContainer: {
-    width: 64,
-    height: 64,
-    marginVertical: 32
-  },
-  emoji: {
-    width: "100%",
-    height: "100%",
-    fontSize: 60,
-    textAlign: "center",
-    textAlignVertical: "center",
-    fontSize: 60
-  },
-  empty: {
-    borderWidth: 5,
-    borderStyle: "dashed",
-    borderColor: "rgba(0, 0, 0, 0.2)"
   }
-});
+  return true
+}
 
-import PubNub from "pubnub";
-import { PubNubProvider } from "pubnub-react";
-
-const pubnub = new PubNub({
-  subscribeKey: "demo",
-  publishKey: "demo",
-  uuid: "0"
-});
-
-LogBox.ignoreAllLogs(true);
-
-const ChatNavigator = () => {
+const getPermissions = async () => {
+  const cameraPermission = Platform.select({
+    android: Permissions.PERMISSIONS.ANDROID.CAMERA,
+    ios: Permissions.PERMISSIONS.IOS.CAMERA,
+  })
+  const cameraStatus = await checkPermission(cameraPermission)
+  const storagePermission = Platform.select({
+    android: Permissions.PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
+    ios: Permissions.PERMISSIONS.IOS.PHOTO_LIBRARY,
+  })
+  const storageStatus = await checkPermission(storagePermission)
   return (
-    <PubNubProvider client={pubnub}>
-      <Stack.Navigator headerMode="none" initialRouteName="EmojiPicker">
-        <Stack.Screen name="EmojiPicker" component={EmojiPicker} />
-        <Stack.Screen name="Chat" component={Chat} />
-      </Stack.Navigator>
-    </PubNubProvider>
+    cameraStatus === Permissions.RESULTS.GRANTED &&
+    storageStatus === Permissions.RESULTS.GRANTED
   )
 }
 
-export default {
-  title: "Chat",
-  navigator: ChatNavigator,
+const client = new PubNub({
+  subscribeKey: 'demo',
+  publishKey: 'demo',
+  uuid: 0,
+})
+
+const user = {
+  _id: 0,
+  name: 'Vlad Rimsha',
+  avatar: 'https://ca.slack-edge.com/T2R0TP3DM-UDU3PDY81-25eda549c0b1-512',
+}
+
+export default () => (
+  <PubNubProvider client={client}>
+    <_App />
+  </PubNubProvider>
+)
+
+const _App = () => {
+  const pubnub = usePubNub()
+  const [messages, setMessages] = useState([])
+
+  useEffect(() => {
+    if (!pubnub) return
+
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const status = getPermissions()
+        if (!status) {
+          Alert.alert('Sorry we need camera roll permissions to make this work')
+        }
+      }
+    })()
+
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, {
+        _id: 1,
+        text: 'Ben never tests anything',
+        createdAt: new Date(),
+        user,
+      }),
+    )
+
+    const listener = {
+      message: envelop => {
+        setMessages(previousMessages =>
+          GiftedChat.append(previousMessages, envelop.message),
+        )
+      },
+      file: envelop => {
+        setMessages(previousMessages =>
+          GiftedChat.append(previousMessages, {
+            ...envelop.userMetadata.user,
+            image: envelop.file.url,
+          }),
+        )
+        console.log('got a new file', envelop)
+      },
+    }
+
+    pubnub.setUUID(0)
+    pubnub.addListener(listener)
+    pubnub.subscribe({ channels: ['chat'] })
+
+    return () => {
+      pubnub.removeListener(listener)
+      pubnub.unsubscribeAll()
+    }
+  }, [pubnub])
+
+  const onSend = (messages = []) => {
+    messages.forEach(async message => {
+      if (isUrl(message.text)) {
+        const meta = await metadata(message.text)
+        if (meta.hybridGraph) {
+          message.image =
+            meta.hybridGraph.image || meta.hybridGraph.imageSecureUrl
+        }
+      }
+      pubnub.publish({ channel: 'chat', message: { ...message, user } })
+    })
+  }
+
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.openPicker({
+        mediaType: 'photo',
+      })
+
+      pubnub.sendFile({
+        channel: 'chat',
+        file: { uri: result.path, name: result.filename, mimeType: result.mime },
+        meta: {
+          user,
+        },
+      })
+    } catch (e) {
+      console.log('user canselled')
+    }
+  }
+
+  return (
+    <GiftedChat
+      messages={messages}
+      renderUsernameOnMessage={true}
+      onSend={onSend}
+      renderActions={() => <Actions onPressActionButton={pickImage} />}
+      user={user}
+    />
+  )
 }
