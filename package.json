@@ -16,7 +16,7 @@
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
     "template": "node scripts/template.js",
-    "bootstrap": "npm run demo; npm run raw; npm run cookie",
+    "bootstrap": "npm run demo; npm run raw; npm run cookie; npm run parse",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -11,9 +11,10 @@ fs.copyFileSync(
   path.join(cwd, "README.md")
 );
 
-// Crowdbotics modules, store and screens files
+// Crowdbotics modules, store, options and screens files
 fs.renameSync(path.join(customFiles, "modules"), path.join(cwd, "modules"));
 fs.renameSync(path.join(customFiles, "screens"), path.join(cwd, "screens"));
+fs.renameSync(path.join(customFiles, "options"), path.join(cwd, "options"));
 fs.renameSync(path.join(customFiles, "store"), path.join(cwd, "store"));
 fs.renameSync(path.join(customFiles, "public"), path.join(cwd, "public"));
 fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
