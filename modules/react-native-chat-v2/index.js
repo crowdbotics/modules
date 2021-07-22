@@ -48,7 +48,7 @@ const user = {
   avatar: 'https://ca.slack-edge.com/T2R0TP3DM-UDU3PDY81-25eda549c0b1-512',
 }
 
-export default () => (
+const Container = () => (
   <PubNubProvider client={client}>
     <_App />
   </PubNubProvider>
@@ -92,7 +92,6 @@ const _App = () => {
             image: envelop.file.url,
           }),
         )
-        console.log('got a new file', envelop)
       },
     }
 
@@ -147,3 +146,8 @@ const _App = () => {
     />
   )
 }
+
+export default ({
+  title: 'Chat',
+  navigator: Container
+})
