@@ -2,9 +2,9 @@
 
 ## Summary
 
-- [template](template) is a copy of RN 0.64 template folder. Please don't change it.
-- [template.config.js](template.config.js) is a copy of RN 0.64 template config
-- [install.js](install.js) is a post installation / pre-deps script
+- [template](template) is a copy of `react-native` 0.64.2 template directory. Please don't change it.
+- [template.config.js](template.config.js) is a modified version of `react-native` 0.64.2 template config.
+- [install.js](install.js) is a post installation / pre-deps script.
 
 ## Notes
 
