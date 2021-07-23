@@ -5,7 +5,9 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ## Requirements
 
-Node.js `v14.16.0` is required, we depend on relatively new `fs` calls.
+### Node.js
+
+Node.js `v14.17.1` (LTS) is required, we depend on relatively new `fs` calls.
 
 Our template is on the latest React Native and React versions.
 [scaffold/template/package.json](/scaffold/template/package.json)
@@ -13,24 +15,43 @@ Our template is on the latest React Native and React versions.
 ```json
   "dependencies": {
     "react": "17.0.1",
-    "react-native": "0.64.0"
+    "react-native": "0.64.2"
   },
 ```
 
-### Cookiecutter
-
-[Github](https://github.com/cookiecutter/cookiecutter)
-
-Installation
+[Yarn](https://yarnpkg.com/) is required:
 
 ```sh
-pip install --user cookiecutter
+npm install -g yarn
+```
+
+### Python dependencies
+
+The `demo` command depends on the Python library [cookiecutter](https://github.com/cookiecutter/cookiecutter).
+
+```sh
+pipenv install
 ```
 
 ## Getting started
 
+Generate a new app based on the scaffold:
+
 ```sh
-npm run demo
+yarn run demo
 ```
 
-For more information read the [Documentation](/docs).
+Install the `App Menu` module:
+
+```sh
+yarn run add react-native-app-menu
+```
+
+## Documentation
+
+- [Commands](/docs/commands.md)
+- [Modules available](/docs/modules.md)
+- [Autoloading modules](/docs/autoloading.md)
+- [Authoring new modules](/docs/authoring.md)
+- [Resources](/docs/resources.md)
+- [@store module](/docs/store.md)

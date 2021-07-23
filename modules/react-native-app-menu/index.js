@@ -1,65 +1,70 @@
-import React from "react";
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useNavigationState } from "@react-navigation/native";
+import React, { useContext } from "react";
+import { OptionsContext, GlobalOptionsContext } from "@options";
+import { View, Text, Pressable } from "react-native";
+import { useNavigation, useNavigationState } from "@react-navigation/native";
 
-const title = "App Menu";
-
-function AppMenu({ navigation }) {
-  const routes = useNavigationState(
-    state => state.routeNames.filter(name => name !== title)
+function AppMenu() {
+  const options = useContext(OptionsContext);
+  return (
+    <View style={options.styles.container}>
+      <AppRoutes options={options} />
+      <View style={options.styles.hr} />
+      <GlobalOptions options={options} />
+    </View>
   );
-  const links = routes.map(route => {
+}
+
+function AppRoutes({ options }) {
+  const navigation = useNavigation();
+  const routes = useNavigationState((state) =>
+    state.routeNames.filter((name) => name !== options.title)
+  );
+
+  const pressed = ({ pressed }) => [
+    pressed ? options.styles.buttonPressed : options.styles.buttonNotPressed,
+    options.styles.button,
+  ];
+  const links = routes.map((route) => {
     return (
       <Pressable
         onPress={() => navigation.navigate(route)}
         style={pressed}
         key={route}
       >
-        <Text style={styles.buttonText}>{route}</Text>
-      </Pressable >
-    )
+        <Text style={options.styles.buttonText}>{route}</Text>
+      </Pressable>
+    );
   });
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Routes available ({routes.length})</Text>
+    <View>
+      <Text style={options.styles.text}>
+        {options.copy}({routes.length})
+      </Text>
       {links}
     </View>
-  )
+  );
 }
 
-const pressed = ({ pressed }) => [
-  pressed ? styles.buttonPressed : styles.buttonNotPressed,
-  styles.button
-];
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: 100,
-    padding: 13
-  },
-  text: {
-    fontSize: 20
-  },
-  buttonPressed: {
-    backgroundColor: 'rgba(72, 61, 139, 0.75)'
-  },
-  buttonNotPressed: {
-    backgroundColor: 'rgba(72, 61, 139, 1)'
-  },
-  button: {
-    borderRadius: 4,
-    padding: 15,
-    marginTop: 10
-  },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 16
-  }
-})
+function GlobalOptions({ options }) {
+  const global = useContext(GlobalOptionsContext);
+  const globalInfo = Object.entries(global).map(([key, val]) => {
+    return (
+      <Text style={options.styles.text} key={key}>
+        {key}: {val}
+      </Text>
+    );
+  });
+  return (
+    <View>
+      <Text style={options.styles.text}>
+        Global options({Object.entries(global).length})
+      </Text>
+      {globalInfo}
+    </View>
+  );
+}
 
 export default {
-  title: title,
-  navigator: AppMenu
-}
+  title: "App Menu",
+  navigator: AppMenu,
+};

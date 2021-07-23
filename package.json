@@ -1,9 +1,12 @@
 {
   "name": "crowdbotics-modules",
   "version": "1.0.0",
-  "description": "# React Native",
+  "description": "# React Native Scaffold",
   "main": "index.js",
   "type": "module",
+  "engines": {
+    "node": ">14.0 <15.0"
+  },
   "scripts": {
     "demo": "node scripts/demo.js",
     "add": "node scripts/add.js",
@@ -12,7 +15,8 @@
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
-    "bootstrap": "npm run demo; npm run raw; npm run cookie",
+    "template": "node scripts/template.js",
+    "bootstrap": "npm run demo; npm run raw; npm run cookie; npm run parse",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -34,10 +38,11 @@
     "@babel/template": "^7.12.7",
     "@babel/types": "^7.12.12",
     "find": "^0.3.0",
-    "fs-extra": "^9.1.0",
-    "prettier": "^2.2.1"
+    "fs-extra": "^10.0.0",
+    "prettier": "^2.3.2"
   },
   "devDependencies": {
-    "@react-native-community/cli": "^4.13.1"
+    "react-native": "0.64.2",
+    "@react-native-community/cli": "5.0.1"
   }
 }
