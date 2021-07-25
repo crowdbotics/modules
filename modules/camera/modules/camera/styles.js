@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import {
+  StyleSheet
+} from 'react-native';
 
 export const styles = StyleSheet.create({
   heading: {
@@ -8,7 +10,7 @@ export const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'flex-end',
     flexDirection: 'row',
-    justifyContent:'center',
+    justifyContent: 'center',
 
   },
   text: {
@@ -16,8 +18,19 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     width: '100%',
   },
-  icon: { width: 18, height: 16 },
-  touchableopacity: { padding: 5 },
-  scrollview: { flex: 1, padding: 20 },
-  header: { color: '#fff', fontSize: 16, },
+  icon: {
+    width: 18,
+    height: 16
+  },
+  touchableopacity: {
+    padding: 5
+  },
+  scrollview: {
+    flex: 1,
+    padding: 20
+  },
+  header: {
+    color: '#fff',
+    fontSize: 16,
+  },
 });

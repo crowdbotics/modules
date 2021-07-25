@@ -1,8 +1,13 @@
-import { Alert, Platform } from 'react-native';
+import {
+  Alert,
+  Platform
+} from 'react-native';
 import * as Permissions from 'react-native-permissions';
 import ImagePicker from 'react-native-image-crop-picker';
 import axios from "axios";
-import { BASE_URL } from "@env"
+import {
+  BASE_URL
+} from "@env"
 
 async function askPermission(permission) {
   console.log('askPermission askPermission', permission)
@@ -28,7 +33,9 @@ async function askPermission(permission) {
 
 export async function getCameraGalleryPermissions() {
   //need both permisisons for camera, so ask both on galery and camera
-  const { PERMISSIONS } = Permissions
+  const {
+    PERMISSIONS
+  } = Permissions
   let permission = Platform.select({
     android: PERMISSIONS.ANDROID.CAMERA,
     ios: PERMISSIONS.IOS.CAMERA,
@@ -51,12 +58,12 @@ function permissionsAlert() {
   Alert.alert(
     'Permissions Required',
     'App requires Camera & Photos access to function properly. Please go to settings to enable manually.',
-    [
-      {
+    [{
         text: 'Cancel',
         onPress: () => {
           console.log('Cancel Pressed')
-        }, style: 'cancel'
+        },
+        style: 'cancel'
       },
       {
         text: 'Settings',
@@ -75,7 +82,13 @@ export const pickFromGallery = async () => {
     return false;
   } else {
     try {
-      let res = await ImagePicker.openPicker({ width: 300, height: 300, cropping: true, mediaType: 'photo', includeBase64: true });
+      let res = await ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      });
       console.log('gallery res', res);
       return res
     } catch (err) {
@@ -92,7 +105,13 @@ export const pickFromCamera = async () => {
     return false;
   } else {
     try {
-      let res = await ImagePicker.openCamera({ width: 300, height: 300, cropping: true, mediaType: 'photo', includeBase64: true });
+      let res = await ImagePicker.openCamera({
+        width: 300,
+        height: 300,
+        cropping: true,
+        mediaType: 'photo',
+        includeBase64: true
+      });
       console.log('camera res', res);
       return res;
     } catch (err) {
@@ -132,5 +151,5 @@ export const uploadImage = async (response) => {
     uri: response.path,
     data: response.data
   });
-  let res = await apiPost(BASE_URL+'/modules/sh-camera/upload_image/', data);
+  let res = await apiPost(BASE_URL + '/modules/camera/upload_image/', data);
 }

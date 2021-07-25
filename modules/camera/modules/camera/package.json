@@ -1,7 +1,7 @@
 {
-    "name": "@modules/sh-camera",
+    "name": "@modules/camera",
     "version": "1.0.1",
-    "description": "SH Camera",
+    "description": "Camera Module",
     "private": true,
     "main": "index.js",
     "author": "Crowdbotics",
@@ -13,5 +13,4 @@
         "react-native-image-crop-picker": "0.36.2",
         "react-native-permissions": "3.0.4"
     }
-  }
-  
+}

@@ -57,6 +57,6 @@ const shCamera = ({ navigation }) => {
 };
 
 export default {
-  title: "SH Camera",
+  title: "Camera",
   navigator: shCamera
 }
