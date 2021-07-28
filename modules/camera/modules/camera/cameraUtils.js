@@ -5,9 +5,6 @@ import {
 import * as Permissions from 'react-native-permissions';
 import ImagePicker from 'react-native-image-crop-picker';
 import axios from "axios";
-import {
-  BASE_URL
-} from "@env"
 
 async function askPermission(permission) {
   console.log('askPermission askPermission', permission)
@@ -143,7 +140,8 @@ export async function apiPost(endpoint, data) {
   }
 }
 
-export const uploadImage = async (response) => {
+export const uploadImage = async (response, options) => {
+  const BASE_URL = options.url;
   let data = new FormData();
   data.append("image", {
     name: `rnd-${response.path}`,
