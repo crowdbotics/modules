@@ -5,7 +5,7 @@ import ActionSheet from 'react-native-actionsheet'
 import { pickFromCamera, pickFromGallery, uploadImage} from './cameraUtils'
 import { GlobalOptionsContext } from "@options";
 
-const shCamera = ({ navigation }) => {
+const Camera = ({ navigation }) => {
   // More info on all the options is below in the API Reference... just some common use cases shown here
   const actionSheet = useRef(null);
   const gOptions = useContext(GlobalOptionsContext);
@@ -59,5 +59,5 @@ const shCamera = ({ navigation }) => {
 
 export default {
   title: "Camera",
-  navigator: shCamera
+  navigator: Camera
 }
