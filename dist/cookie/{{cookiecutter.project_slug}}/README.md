@@ -23,14 +23,15 @@ As a result, Crowdbotics can generate new applications automatically in a standa
 ## Table of Contents
 1. [Project Description](#project-description)
 2. [Project Structure](#project-structure)
-3. [Getting Started: Frontend](#getting-started-frontend)
+3. [Modules](#modules)
+4. [Getting Started: Frontend](#getting-started-frontend)
    - [Installation](#installation)
    - [Running with Fastlane](#running-with-fastlane)
      - [Android](#android-1)
      - [iOS](#ios-1)
      - [React Native Web](#react-native-web)
-4. [Getting Started: Backend](backend#readme)
-5. [License](#license)
+5. [Getting Started: Backend](backend#readme)
+6. [License](#license)
 
 ## Project Description
 
@@ -50,6 +51,10 @@ As a result, Crowdbotics can generate new applications automatically in a standa
     ├── ...
     ├── README.md
     └── ...
+
+## Modules (THIS SECTION IS AUTO-GENERATED, PLEASE DO NOT EDIT)
+
+This section will show any installed modules you add from the Storyboard Modules section.
 
 # Getting started: Frontend
 
