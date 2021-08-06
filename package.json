@@ -34,7 +34,7 @@
     "@babel/core": "^7.15.0",
     "@babel/generator": "^7.14.9",
     "@babel/parser": "^7.12.11",
-    "@babel/preset-env": "^7.14.9",
+    "@babel/preset-env": "^7.15.0",
     "@babel/template": "^7.12.7",
     "@babel/types": "^7.15.0",
     "find": "^0.3.0",
