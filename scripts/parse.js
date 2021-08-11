@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import path from "path";
 import config from "./config.js";
 import crypto from "crypto";
@@ -90,10 +90,14 @@ const parseModules = (dir) => {
     data[module] = moduleDefaults(module);
 
     // cleanup node_modules
-    fs.rmdirSync(path.join(modulePath, "node_modules"), {
-      recursive: true,
-    });
-    fs.rmdirSync(path.join(modulePath, "yarn.lock"), { recursive: true });
+    if (existsSync(path.join(modulePath, "node_modules"))) {
+      fs.rmdirSync(path.join(modulePath, "node_modules"), {
+        recursive: true,
+      });
+    }
+    if (existsSync(path.join(modulePath, "yarn.lock"))) {
+      fs.rmdirSync(path.join(modulePath, "yarn.lock"), { recursive: true });
+    }
 
     parseModule(modulePath, (filePath, content) => {
       data[module].files[filePath] = content;
