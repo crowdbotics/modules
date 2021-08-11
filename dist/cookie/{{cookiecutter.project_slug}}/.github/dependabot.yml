@@ -14,3 +14,5 @@ updates:
       day: sunday
       time: "13:00"
     open-pull-requests-limit: 10
+    # Avoid major upgrades since they may not be compatible with the Crowdbotics ecosystem
+    versioning-strategy: lockfile-only
