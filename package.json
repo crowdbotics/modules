@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": ">14.0 <15.0"
+    "node": ">14.0"
   },
   "scripts": {
     "demo": "node scripts/demo.js",
