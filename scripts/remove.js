@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import path from "path";
 import config from "./config.js";
 import find from "find";
@@ -20,10 +20,16 @@ modules.map((module) => {
   const filterMeta = (src, _) => path.basename(src) != "meta.json";
 
   // cleanup node_modules
-  fs.rmdirSync(path.join(originModuleDir, "node_modules"), { recursive: true });
-  fs.rmdirSync(path.join(targetModuleDir, "node_modules"), { recursive: true });
+  if (existsSync(path.join(originModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
+      recursive: true,
+    });
+  }
+  if (existsSync(path.join(targetModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(targetModuleDir, "node_modules"), { recursive: true });
+  }
 
-  find.file(originModuleDir, function (files) {
+  find.file(originModuleDir, function(files) {
     let file = files.filter(filterPackageJSON)[0];
     if (file) {
       const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
