@@ -30,11 +30,3 @@ then run
     cd ios
     pod install
 
-## General Configs
-
-add following environment variables in `.env` file
-
-    BASE_URL='http://192.168.1.103:8000'
-    
-This url is for your backend server where images are to be uploaded
-
