@@ -1,8 +1,7 @@
 import { StyleSheet } from "react-native";
 
-//Add your Backend's URL here. 
-const url = "https://toc-1-29797.botics.co/modules/terms-and-conditions/";
-
+//to configure this module, edit the base url in options/options.js
+const path = "/modules/terms-and-conditions/";
 
 const title = "Terms And Conditions";
 
@@ -30,6 +29,6 @@ const styles = StyleSheet.create({
 
 export default {
   title: title,
-  url: url,
+  path: path,
   styles: styles,
 };
