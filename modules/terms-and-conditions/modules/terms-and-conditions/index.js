@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from "react";
 import { OptionsContext, GlobalOptionsContext } from "@options";
-import { Text, View, ScrollView, TouchableOpacity, useWindowDimensions } from 'react-native';
+import { Text, View, ScrollView, TouchableOpacity, useWindowDimensions } from "react-native";
 import HTML from "react-native-render-html";
 
 
@@ -8,14 +8,14 @@ const TermsAndConditions = ({ navigation }) => {
 
   const options = useContext(OptionsContext);
   const contentWidth = useWindowDimensions().width;
-  const [htmlContent, setHtmlContent] = useState('<h1>No Terms and Conditions Loaded</h1>');
+  const [htmlContent, setHtmlContent] = useState("<h1>Loading...</h1>");
   
   useEffect(() => {
     //Set your API's URL via Module Options - in options.js
     fetch(options.url)
       .then(response => response.json())
       .then(data => setHtmlContent(data[0]['body']))
-      .catch(err => alert("Terms and Conditions could not be loaded at this time."));
+      .catch(err => setHtmlContent("<h1>Error Loading Terms and Conditions</h1>"));
   });
 
 
