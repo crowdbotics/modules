@@ -13,7 +13,16 @@ const { title, navigator } = TermsAndConditions;
 ```
 
 ## Configuring the Terms & Conditions Frontend
-All that is required to configure the frontend is to edit the url variable in `options.js` to point to your app's url on the web. 
+All that is required to configure the frontend is to edit the url variable in `options/options.js` to point to your app's url on the web. That url should have a trailing slash. 
+
+```
+export const globalOptions = {
+  name: "demoIdentifier",
+  url: "https://<your-app-url-here>.botics.co/",
+  api: "https://<your-app-url-here>.co/api/v1"
+}
+
+```
 
 
 ## Contributing
