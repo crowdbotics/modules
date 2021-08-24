@@ -157,6 +157,14 @@ platform(:ios) do
 
     response.success?
   end
+
+  desc('Upload App Privacy Details to App Store')
+  upload_app_privacy_details_to_app_store(
+    app_identifier: identifier,
+    team_id: team_id,
+    team_name: team_name,
+    json_path: "app_privacy_details.json"
+  )
 end
 
 def get_appetize_public_key(platform, base_name)
@@ -176,3 +184,4 @@ def fetch_appetize_public_key(platform, base_name)
 
   item['publicKey']
 end
+
