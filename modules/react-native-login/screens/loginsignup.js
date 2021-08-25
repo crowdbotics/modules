@@ -131,9 +131,6 @@ export const SignupTab = ( navigation ) => {
 };
 
 export const SignInTab = ({ navigation }) => {
-      
-
-
   const options = useContext(OptionsContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
