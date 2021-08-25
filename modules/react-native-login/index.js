@@ -124,17 +124,18 @@ const createLoginNavigator = createNavigatorFactory(LoginSignupTabs);
 const LoginStack = createLoginNavigator();
 
 const LoginScreen = () => {
+  const options = useContext(OptionsContext)
   return (
     <LoginStack.Navigator>
       <LoginStack.Screen
         name="SignIn"
         component={SignInTab}
-        options={{ title: "Sign In" }}
+        options={{ title: options.SignInNavText }}
       />
       <LoginStack.Screen
         name="SignUp"
         component={SignupTab}
-        options={{ title: "Sign Up" }}
+        options={{ title: options.SignUpNavText }}
       />
     </LoginStack.Navigator>
   );
