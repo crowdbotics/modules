@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useContext } from "react";
+import { OptionsContext } from "@options";
+import AppMenu from "../app-menu";
 import {
   View,
   ImageBackground,
@@ -16,13 +18,16 @@ import {
 } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
-import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
 import { slice } from "./auth";
 import { styles } from "./screens/styles";
 import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
+
+
+
 const LoginTabBar = ({ navigation, state, descriptors }) => {
+
   const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
@@ -57,11 +62,14 @@ const LoginTabBar = ({ navigation, state, descriptors }) => {
 };
 
 function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
+
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
     initialRouteName,
   });
+
+  const options = useContext(OptionsContext);
 
   return (
     <NavigationHelpersContext.Provider value={navigation}>
@@ -71,7 +79,7 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
             <View style={styles.imageContainer}>
               <ImageBackground
                 source={{
-                  uri: BACKGROUND_URL,
+                  uri: options.BACKGROUND_URL,
                 }}
                 style={{
                   flex: 1,
@@ -83,7 +91,7 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
               >
                 <Image
                   source={{
-                    uri: LOGO_URL,
+                    uri: options.LOGO_URL,
                   }}
                   style={{
                     width: 155,
@@ -134,7 +142,8 @@ const LoginScreen = () => {
 
 const Stack = createStackNavigator();
 
-const LoginSignup = () => {
+const Login = () => {
+  
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
@@ -144,7 +153,7 @@ const LoginSignup = () => {
 };
 
 export default {
-  title: "login",
-  navigator: LoginSignup,
+  title: "Login",
+  navigator: Login,
   slice: slice,
 };
