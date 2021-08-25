@@ -3,10 +3,19 @@ The Login Module is a React Native-based module that allows the user to login or
 
 ## Installation
 
-#### Update api url
+#### Update api url in options/options.js
 
-Update the file `<module_directory>/auth/api.js`, replacing the value of `baseURL` with your own app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, update from
-`baseURL: "https://your-app-backend.botics.co"` to `baseURL: "https://my-app.botics.co"`
+The Login Module connects to an existing Crowdbotics Django backend, so you must have one already deployed. Once you have a backend deploy, to connect the module to your backend, modify the `url` in your global options folder, which is located in `my-app/options/options.js`. Note that this is not the same as the `options.js` file located within the login folder -- that is for your specific module options.
+
+Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+
+```
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+  {}
+```
 
 Note for developers: you can access the user token through the reducer state (i.e. `state.login.token` and user auth information like email at `state.login.user`)
 
