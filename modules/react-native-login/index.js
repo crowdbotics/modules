@@ -23,9 +23,6 @@ import { styles } from "./screens/styles";
 import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
-
-
-
 const LoginTabBar = ({ navigation, state, descriptors }) => {
 
   const currentTab = state.routes[state.index];
@@ -62,15 +59,12 @@ const LoginTabBar = ({ navigation, state, descriptors }) => {
 };
 
 function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
-
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
     initialRouteName,
   });
-
   const options = useContext(OptionsContext);
-
   return (
     <NavigationHelpersContext.Provider value={navigation}>
       <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
@@ -144,7 +138,6 @@ const LoginScreen = () => {
 const Stack = createStackNavigator();
 
 const Login = () => {
-  
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
