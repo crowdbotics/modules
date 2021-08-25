@@ -119,7 +119,7 @@ export const SignupTab = ( navigation ) => {
         />
       </View>
       <Button
-        title="Sign Up"
+        title={options.SignUpButtonText}
         loading={api.loading === "pending"}
         onPress={onSignupPress}
       />
@@ -188,7 +188,7 @@ export const SignInTab = ({ navigation }) => {
       </View>
 
       <Button
-        title="Login"
+        title={options.SignInButtonText}
         loading={api.loading === "pending"}
         onPress={onSigninPress}
       />
