@@ -20,7 +20,7 @@ export const globalOptions = {
 Note for developers: you can access the user token through the reducer state (i.e. `state.login.token` and user auth information like email at `state.login.user`)
 
 ### Change Login screen destination to your desired screen (likely Home screen).
-After a succesful login, you can route the user to whichever screen you like. To set the screen to redirect to, open the module options file for the Login Module -- `modules/login/options.js`. Note this is a different options folder than you used to set the url as it is nested within the Login Module. Inside this file, change the `HOME_SCREEN_NAME` value to the string of the screen you want to redirect to.
+After a successful login, you can route the user to whichever screen you like. To set the screen to redirect to, open the module options file for the Login Module -- `modules/login/options.js`. Note this is a different options folder than you used to set the url as it is nested within the Login Module. Inside this file, change the `HOME_SCREEN_NAME` value to the string of the screen you want to redirect to.
 
 For example, if my home screen has a navigation name of `HomeScreen1234`, then I should change as follows: `const HOME_SCREEN_NAME = 'HomeScreen1234'`. 
 
