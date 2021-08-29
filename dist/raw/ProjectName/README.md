@@ -110,7 +110,7 @@ This project is set up to run using [Docker Compose](https://docs.docker.com/com
 1. Install Docker:
    - Linux - [get.docker.com](https://get.docker.com/)
    - Windows or MacOS - [Docker Desktop](https://www.docker.com/products/docker-desktop)
-2. Clone this repo and `cd {{cookiecutter.project_slug}}`
+2. Clone this repo and `cd {{cookiecutter.project_slug}}/backend`
 3. Make sure `Pipfile.lock` exists. If it doesn't, generate it with:
 
    ```sh
@@ -153,7 +153,7 @@ This project is set up to run using [Docker Compose](https://docs.docker.com/com
 ### Installation
 
 1. Install [pipenv](https://pypi.org/project/pipenv/)
-2. Clone this repo and `cd {{cookiecutter.project_slug}}`
+2. Clone this repo and `cd {{cookiecutter.project_slug}}/backend`
 3. Run `pip install --user --upgrade pipenv` to get the latest pipenv version.
 4. Run `pipenv --python 3.6`
 5. Run `pipenv install`
@@ -187,6 +187,12 @@ This section outlines instructions on setting up a local development environment
 ### Metro
 
 After cloning the repo, install the dependencies locally with [Yarn](https://yarnpkg.com/):
+
+Goto `/frontend` and run `yarn install`
+
+```sh
+cd {{cookiecutter.project_slug}}/frontend
+```
 
 ```sh
 yarn install
