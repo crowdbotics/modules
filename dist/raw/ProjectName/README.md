@@ -29,14 +29,14 @@ As a result, Crowdbotics can generate new applications automatically in a standa
   - [Admin Panel](#admin-panel)
   - [API Documentation](#api-documentation)
 - [Getting started: Frontend](#getting-started-frontend)
-  - [Installation](#installation-1)
+  - [Frontend Installation](#frontend-installation)
     - [Metro](#metro)
     - [Android](#android)
     - [iOS](#ios)
     - [Setup react-native-vector-icons](#setup-react-native-vector-icons)
   - [Running with Fastlane](#running-with-fastlane)
-    - [Android](#android-1)
-    - [iOS](#ios-1)
+    - [For Android](#for-android)
+    - [For iOS](#for-ios)
   - [React Native Web](#react-native-web)
 - [License](#license)
 
@@ -186,7 +186,7 @@ API Documentation is generated automatically and can be access through http://lo
 
 This section outlines instructions on setting up a local development environment for the frontend of your application.
 
-## Installation
+## Frontend Installation
 
 ### Metro
 
@@ -237,7 +237,7 @@ The commands for Android and iOS are the same:
 - Build and upload a beta (requires signing): `bundle exec fastlane beta`
 - Build or promote a release: `bundle exec fastlane deploy`
 
-### Android
+### For Android
 
 Publish an Android app you must first create an app in the Play Console and
 manually upload an APK. After the first upload run `bundle exec fastlane supply init` from `android/` to sync with the Play store. All future releases will be
@@ -246,7 +246,7 @@ uploaded automatically.
 Android uses tracks. A beta release will build the app and upload to the beta
 track. Deploying will promote from beta to production.
 
-### iOS
+### For iOS
 
 CB developers must follow fastlane's [codesigning guide](https://codesigning.guide/) for using match.
 Match will automatically sign iOS builds.
@@ -267,6 +267,7 @@ Please follow the steps
 - the web_build folder is generated and copied to backend/ automatically. please commit/push the web_build folder to git
 
 # License
+
 The use of code in this repository is governed by Crowdbotics [Terms and Conditions](https://www.crowdbotics.com/terms-of-service).
 
 Created with ❤️ by [Crowdbotics](https://www.crowdbotics.com/)
