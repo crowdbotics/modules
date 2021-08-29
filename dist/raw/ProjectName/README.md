@@ -19,7 +19,6 @@ As a result, Crowdbotics can generate new applications automatically in a standa
   - [Project Description](#project-description)
   - [Project Structure](#project-structure)
   - [Features](#features)
-  - [Modules (THIS SECTION IS AUTO-GENERATED, PLEASE DO NOT EDIT)](#modules-this-section-is-auto-generated-please-do-not-edit)
 - [Getting Started: Backend](#getting-started-backend)
   - [Docker Setup (Recommended)](#docker-setup-recommended)
   - [Local Setup (Alternative to Docker)](#local-setup-alternative-to-docker)
@@ -33,6 +32,7 @@ As a result, Crowdbotics can generate new applications automatically in a standa
     - [Metro](#metro)
     - [Android](#android)
     - [iOS](#ios)
+  - [Modules (THIS SECTION IS AUTO-GENERATED, PLEASE DO NOT EDIT)](#modules-this-section-is-auto-generated-please-do-not-edit)
     - [Setup react-native-vector-icons](#setup-react-native-vector-icons)
   - [Running with Fastlane](#running-with-fastlane)
     - [For Android](#for-android)
@@ -94,10 +94,6 @@ As a result, Crowdbotics can generate new applications automatically in a standa
 4. [Bootstrap4](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
 5. Toast Notification
 6. Inline content editor in homepage
-
-## Modules (THIS SECTION IS AUTO-GENERATED, PLEASE DO NOT EDIT)
-
-This section will show any installed modules you add from the Storyboard Modules section.
 
 # Getting Started: Backend
 
@@ -214,6 +210,10 @@ npx react-native run-android
 pod install --repo-update --project-directory=ios
 npx react-native run-ios
 ```
+
+## Modules (THIS SECTION IS AUTO-GENERATED, PLEASE DO NOT EDIT)
+
+This section will show any installed modules you add from the Storyboard Modules section.
 
 ### Setup react-native-vector-icons
 
