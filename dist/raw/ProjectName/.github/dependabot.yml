@@ -1,7 +1,7 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: "/"
+    directory: "/mobile"
     schedule:
       interval: weekly
       day: sunday
