@@ -3,81 +3,105 @@ const fs = require("fs");
 const path = require("path");
 const cwd = process.cwd();
 const customFiles = path.join(cwd, "custom");
+const mobileDir = path.join(cwd, "mobile");
 const { execSync } = require("child_process");
 
-// docs
-fs.copyFileSync(
-  path.join(customFiles, "README.md"),
-  path.join(cwd, "README.md")
-);
+// Create mobile subdirectory in a app root directory
+fs.mkdirSync(mobileDir);
 
-// Crowdbotics modules, store, options and screens files
-fs.renameSync(path.join(customFiles, "modules"), path.join(cwd, "modules"));
-fs.renameSync(path.join(customFiles, "screens"), path.join(cwd, "screens"));
-fs.renameSync(path.join(customFiles, "options"), path.join(cwd, "options"));
-fs.renameSync(path.join(customFiles, "store"), path.join(cwd, "store"));
-fs.renameSync(path.join(customFiles, "public"), path.join(cwd, "public"));
-fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
+// Custom template folders to move in a app root directory
+const customFoldersToMoveRootDir = [
+  ".circleci",  // CircleCI
+  ".github",   // Github
+];
 
-// CircleCI
-fs.renameSync(path.join(customFiles, ".circleci"), path.join(cwd, ".circleci"));
-// Github
-fs.renameSync(path.join(customFiles, ".github"), path.join(cwd, ".github"));
+for (let folder of customFoldersToMoveRootDir) {
+  fs.renameSync(path.join(customFiles, folder), path.join(cwd, folder));
+}
 
-// File overrides
-fs.copyFileSync(
-  path.join(customFiles, "babel.config.js"),
-  path.join(cwd, "babel.config.js")
-);
-fs.copyFileSync(
-  path.join(customFiles, "heroku.yml"),
-  path.join(cwd, "heroku.yml")
-);
-fs.copyFileSync(
-  path.join(customFiles, "metro.config.js"),
-  path.join(cwd, "metro.config.js")
-);
-fs.copyFileSync(
-  path.join(customFiles, ".eslintrc.js"),
-  path.join(cwd, ".eslintrc.js")
-);
-fs.copyFileSync(
-  path.join(customFiles, ".prettierrc.js"),
-  path.join(cwd, ".prettierrc.js")
-);
-fs.copyFileSync(
-  path.join(customFiles, "config-overrides.js"),
-  path.join(cwd, "config-overrides.js")
-);
-fs.copyFileSync(
-  path.join(customFiles, ".crowdbotics.json"),
-  path.join(cwd, ".crowdbotics.json")
-);
-fs.copyFileSync(
-  path.join(customFiles, "package.json"),
-  path.join(cwd, "package.json")
-);
+// Custom template files to move in a app root directory
+const customFilesToMoveRootDir = [
+  "README.md",  // docs
+  "heroku.yml",
+];
 
-// dotenv
-fs.copyFileSync(path.join(customFiles, ".env"), path.join(cwd, ".env"));
-fs.copyFileSync(
-  path.join(customFiles, ".env.template"),
-  path.join(cwd, ".env.template")
-);
+for (let file of customFilesToMoveRootDir) {
+  fs.copyFileSync(path.join(customFiles, file), path.join(cwd, file));
+}
 
-// rubygems
-fs.copyFileSync(path.join(customFiles, "Gemfile"), path.join(cwd, "Gemfile"));
-fs.copyFileSync(
-  path.join(customFiles, "Gemfile.lock"),
-  path.join(cwd, "Gemfile.lock")
-);
+// Custom template folders to move in a app mobile subdirectory
+const customFoldersToMoveMobileDir = [
+  "store",
+  "public",
+  "modules",
+  "screens",
+  "options",
+]
 
-// native files
-execSync(`cp -r ${path.join(customFiles, "android")} ${path.join(cwd)}`);
-execSync(`cp -r ${path.join(customFiles, "ios")} ${path.join(cwd)}`);
+for (let folder of customFoldersToMoveMobileDir) {
+  fs.renameSync(path.join(customFiles, folder), path.join(mobileDir, folder));
+}
+
+//Custom template files to overrides in the mobile subdirectory
+const filesToOverride = [
+  ".env",
+  "App.js",
+  "Gemfile",
+  "package.json",
+  "Gemfile.lock",
+  ".eslintrc.js",
+  ".env.template",
+  ".prettierrc.js",
+  "babel.config.js",
+  "metro.config.js",
+  ".crowdbotics.json",
+  "config-overrides.js",
+];
+
+for (let file of filesToOverride) {
+  fs.copyFileSync(
+    path.join(customFiles, file),
+    path.join(mobileDir, file)
+  );
+}
+
+// Move required template files from app root directory to mobile subdirectory
+const requiredRootTemplateFiles = [
+  "app.json",
+  "index.js",
+  ".gitignore",
+  ".flowconfig",
+  ".buckconfig",
+  ".editorconfig",
+  ".gitattributes",
+  ".watchmanconfig",
+];
+
+for (let file of requiredRootTemplateFiles) {
+  fs.renameSync(path.join(cwd, file), path.join(mobileDir, file));
+}
+
+// Copy all native files from custom templates directory to mobile subdirectory recursively
+const nativeFiles = [
+  "android",
+  "ios",
+];
+
+for (let file of nativeFiles) {
+  execSync(`cp -r ${path.join(customFiles, file)} ${path.join(mobileDir)}`);
+}
+
+// Copy required template files from app root directory to mobile subdirectory recursively
+const requiredRootTemplateFolders = [
+  "__tests__",
+];
+
+for (let folder of requiredRootTemplateFolders) {
+  execSync(`cp -r ${path.join(cwd, folder)} ${path.join(mobileDir)}`);
+}
 
 // package.json manipulation
-const packageFile = path.join(cwd, "package.json");
+const packageFile = path.join(mobileDir, "package.json");
 const packageJson = require(packageFile);
 const dependencies = require(path.join(customFiles, "dependencies.json"));
 packageJson.dependencies = Object.assign(
@@ -92,3 +116,30 @@ fs.writeFileSync(packageFile, JSON.stringify(packageJson, null, 2));
 
 // Cleanup
 fs.rmdirSync(path.join(customFiles), { recursive: true });
+
+//Cleanup template files and folders in root directory
+const templateFilesToRemove = [
+  "App.js",
+  ".prettierrc.js",
+  ".eslintrc.js",
+  "metro.config.js",
+  "babel.config.js",
+  "package.json"
+];
+
+// Remove template files from app root directory
+for (let file of templateFilesToRemove) {
+  fs.unlinkSync(path.join(cwd, file));
+}
+
+// Remove template folders from app root directory
+const templateFoldersToRemove = [
+  "android",
+  "ios",
+  "__tests__",
+  "node_modules"
+];
+
+for (let folder of templateFoldersToRemove) {
+  fs.rmdirSync(path.join(cwd, folder), { recursive: true });
+}
