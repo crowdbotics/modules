@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export const globalOptions = {
   name: "{{cookiecutter.project_slug}}Identifier",
   url: "https://{{cookiecutter.project_slug}}Identifier.botics.co",

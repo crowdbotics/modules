@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 export const globalOptions = {
   name: "HelloWorldIdentifier",
   url: "https://HelloWorldIdentifier.botics.co",
