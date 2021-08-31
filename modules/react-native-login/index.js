@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { OptionsContext } from "@options";
-import AppMenu from "../app-menu";
 import {
   View,
   ImageBackground,
