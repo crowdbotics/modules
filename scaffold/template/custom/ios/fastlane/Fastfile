@@ -49,13 +49,17 @@ platform(:ios) do
     )
 
     if(File.file?(app_privacy_details))
+      puts("app_privacy_details.json exists. Uploading APP Privacy Details to App Store...")
+
       desc('Upload App Privacy Details to App Store')
       upload_app_privacy_details_to_app_store(
         app_identifier: identifier,
         team_id: team_id,
         team_name: team_name,
         json_path: app_privacy_details
-      )
+      )      
+    else
+      puts("app_privacy_details.json does not exist.")
     end
     
   end
