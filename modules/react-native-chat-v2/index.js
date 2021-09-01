@@ -132,7 +132,7 @@ const _App = () => {
         },
       })
     } catch (e) {
-      console.log('user canselled')
+      console.log('user canceled')
     }
   }
 
