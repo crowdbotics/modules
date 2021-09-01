@@ -23,6 +23,7 @@ team_id = '6YKR59QXKM'
 filename = "#{base_name}.xcodeproj"
 workspace_name = "#{base_name}.xcworkspace"
 identifier = "com.crowdbotics.#{app_name}"
+app_privacy_details = "app_privacy_details.json"
 
 platform(:ios) do
   before_all do
@@ -46,6 +47,17 @@ platform(:ios) do
       team_name: team_name,
       itc_team_name: team_name
     )
+
+    if(File.file?(app_privacy_details))
+      desc('Upload App Privacy Details to App Store')
+      upload_app_privacy_details_to_app_store(
+        app_identifier: identifier,
+        team_id: team_id,
+        team_name: team_name,
+        json_path: app_privacy_details
+      )
+    end
+    
   end
 
   desc('Pre-build setup')
@@ -157,14 +169,6 @@ platform(:ios) do
 
     response.success?
   end
-
-  desc('Upload App Privacy Details to App Store')
-  upload_app_privacy_details_to_app_store(
-    app_identifier: identifier,
-    team_id: team_id,
-    team_name: team_name,
-    json_path: "app_privacy_details.json"
-  )
 end
 
 def get_appetize_public_key(platform, base_name)
