@@ -17,7 +17,7 @@
 1. Go to your admin panel to add a new `TermAndCondition` object: `<site-url>.botics.co/admin/modules/termandcondition/`. Make sure you save it.
 2. Make sure to set the active flag; without at least 1 `TermAndCondition` object with an active flag, nothing will be returned by the backend. If there are multiple terms objects with active flags, the most recently updated one will be returned.
 3. Your terms will be available at the following endpoint:
-GET: `<site-url>.botics.co/modules/terms/termsandconditions/`
+GET: `<site-url>.botics.co/modules/terms-and-conditions/`
 Example Response: 
 ```
 
