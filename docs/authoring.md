@@ -170,6 +170,7 @@ function YourModuleComponent() {
 One can also obtain options in a more direct manner, for use outside of components. The drawback with this method is that you miss reactivity if any option value were to change.
 
 ```javascript
+import pkg from "./package.json"
 import { getOptions, getGlobalOptions } from "@options";
 
 function YourModuleComponent() {
@@ -179,7 +180,7 @@ function YourModuleComponent() {
   )
 }
 
-const options = getOptions(YourModuleComponent);
+const options = getOptions(pkg.name);
 const global = getGlobalOptions();
 ```
 
