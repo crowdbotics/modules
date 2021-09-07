@@ -1,23 +1,25 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, FlatList, ImageBackground, } from 'react-native';
-import { styles } from './styles';
 import ActionSheet from 'react-native-actionsheet'
-import { pickFromCamera, pickFromGallery, uploadImage} from './cameraUtils'
-import { GlobalOptionsContext } from "@options";
+import { pickFromCamera, pickFromGallery, uploadImage } from './utils'
+import { OptionsContext, GlobalOptionsContext } from "@options";
 
-const Camera = ({ navigation }) => {
+const Camera = () => {
   // More info on all the options is below in the API Reference... just some common use cases shown here
   const actionSheet = useRef(null);
+  const options = useContext(OptionsContext);
   const gOptions = useContext(GlobalOptionsContext);
   const [isLoading, setLoading] = useState(false);
   const ImagePickerOptions = ['Take Photo', 'Choose from Gallery', 'Cancel'];
   const [data, setData] = useState([]);
 
+  const { styles, buttonText } = options;
+
   const fetch_images = () => {
     fetch(`${gOptions.url}/modules/camera/photos/user/`)
       .then((response) => response.json())
       .then((json) => setData(json))
-      .catch((error) => console.error(error))
+      .catch((error) => console.log(error))
       .finally(() => setLoading(false));
   }
 
@@ -29,7 +31,7 @@ const Camera = ({ navigation }) => {
     <TouchableOpacity>
       <ImageBackground source={{ uri: `${gOptions.url}/${item.image}` }} style={styles.image}>
       </ImageBackground>
-    </TouchableOpacity>
+    </TouchableOpacity >
   )
 
   return (
@@ -37,41 +39,38 @@ const Camera = ({ navigation }) => {
       style={{
         flex: 1,
       }}>
-      
+
 
       <FlatList
-            data={data}
-            keyExtractor={({ id }, index) => id}
-            renderItem={renderItem}
-          />
+        data={data}
+        keyExtractor={item => item.id}
+        renderItem={renderItem}
+      />
       <ActionSheet
-        useNativeDriver={false}
         ref={actionSheet}
         title={'Select Image'}
         options={ImagePickerOptions}
         cancelButtonIndex={2}
         onPress={async (index) => {
-          if (index != 2) {
-            if (index == 0) {
-              let res = await pickFromCamera();
-              console.log('pickFromCamera res', res);
-              // TODO: Upload Image
-              res && uploadImage(res, gOptions).then(()=>{
+          let res;
+          switch (index) {
+            case 0:
+              res = await pickFromCamera();
+              res && uploadImage(res, gOptions).then(() => {
                 fetch_images()
               })
-            } else if (index == 1) {
-              let res = await pickFromGallery();
-              console.log('_pickFromGallery res', res);
-              // TODO: Upload Image
-              res && uploadImage(res, gOptions).then(()=>{
+              break;
+            case 1:
+              res = await pickFromGallery();
+              res && uploadImage(res, gOptions).then(() => {
                 fetch_images()
               })
-            }
+              break;
           }
         }}
       />
-      <TouchableOpacity onPress={() => { actionSheet.current.show() }} style={styles.photoBtn}>
-        <Text style={styles.photoBtnTxt}>+ Take Photo</Text>
+      <TouchableOpacity onPress={() => actionSheet.current.show()} style={styles.photoBtn}>
+        <Text style={styles.photoBtnTxt}>{buttonText}</Text>
       </TouchableOpacity>
     </View>
   );
