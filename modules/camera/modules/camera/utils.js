@@ -7,20 +7,16 @@ import ImagePicker from 'react-native-image-crop-picker';
 import axios from "axios";
 
 async function askPermission(permission) {
-  console.log('askPermission askPermission', permission)
   try {
     const status = await Permissions.check(permission);
     if (status !== Permissions.RESULTS.GRANTED) {
       //if not already granted then ask
-      console.log('askPermission status', status, ' for permission', permission);
       const status = await Permissions.request(permission);
       if (status !== Permissions.RESULTS.GRANTED) {
         //user denied on ask
-        console.log("DENIED")
         return false;
       }
     }
-    console.log("GRANTED")
     return true;
   } catch (err) {
     console.log('askPermission err', err, ' for permission', permission);
@@ -39,13 +35,11 @@ export async function getCameraGalleryPermissions() {
   })
 
   let cameraPermissions = await askPermission(permission);
-  console.log('cameraPermissions ', cameraPermissions)
   permission = Platform.select({
     android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
     ios: PERMISSIONS.IOS.PHOTO_LIBRARY,
   })
   let storagePermissions = await askPermission(permission);
-  console.log('storagePermissions ', storagePermissions)
   return cameraPermissions && storagePermissions
 }
 
@@ -56,18 +50,16 @@ function permissionsAlert() {
     'Permissions Required',
     'App requires Camera & Photos access to function properly. Please go to settings to enable manually.',
     [{
-        text: 'Cancel',
-        onPress: () => {
-          console.log('Cancel Pressed')
-        },
-        style: 'cancel'
-      },
-      {
-        text: 'Settings',
-        onPress: () => {
-          Permissions.openSettings().catch(() => console.log('cannot open settings'))
-        }
-      },
+      text: 'Cancel',
+      onPress: () => { console.log('Cancel Pressed') },
+      style: 'cancel'
+    },
+    {
+      text: 'Settings',
+      onPress: () => {
+        Permissions.openSettings().catch(() => console.log('cannot open settings'))
+      }
+    },
     ]
   )
 };
@@ -86,7 +78,6 @@ export const pickFromGallery = async () => {
         mediaType: 'photo',
         includeBase64: true
       });
-      console.log('gallery res', res);
       return res
     } catch (err) {
       console.log('pickFromGallery err', err)
@@ -109,7 +100,6 @@ export const pickFromCamera = async () => {
         mediaType: 'photo',
         includeBase64: true
       });
-      console.log('camera res', res);
       return res;
     } catch (err) {
       console.log('pickFromCamera err', err)
@@ -129,10 +119,8 @@ export const request = axios.create({
 
 export async function apiPost(endpoint, data) {
   try {
-    console.log('apiPost :: calling ::', `${endpoint}`, 'with data', data)
     let res = await request.post(endpoint, data)
     if (res) {
-      console.log(endpoint, '---res---:', res.text);
       return res
     }
   } catch (error) {
