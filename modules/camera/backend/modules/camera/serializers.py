@@ -1,6 +1,7 @@
 from .models import Image
 from rest_framework import serializers
 
+
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     image = serializers.SerializerMethodField()
 
@@ -9,10 +10,15 @@ class ImageSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Image
-        fields = ("image",)
+        fields = (
+            "id",
+            "image",
+        )
+
 
 class ImageUploadSerializer(serializers.ModelSerializer):
     image = serializers.ImageField()
+
     class Meta:
         model = Image
-        fields = ('image',)
+        fields = ("image",)
