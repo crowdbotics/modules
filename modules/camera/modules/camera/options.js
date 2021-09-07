@@ -2,7 +2,7 @@ import {
   StyleSheet
 } from 'react-native';
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   heading: {
     height: 60,
     backgroundColor: '#333333',
@@ -75,3 +75,8 @@ export const styles = StyleSheet.create({
     fontSize: 16
   }
 });
+
+export default {
+  buttonText: "+ Take Photo",
+  styles: styles
+}
