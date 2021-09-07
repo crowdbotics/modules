@@ -28,7 +28,7 @@ As a result, Crowdbotics can generate new applications automatically in a standa
   - [Admin Panel](#admin-panel)
   - [API Documentation](#api-documentation)
 - [Getting started: Frontend](#getting-started-frontend)
-  - [Frontend Installation](#frontend-installation)
+  - [Mobile App Related Installation](#mobile-app-related-installation)
     - [Metro](#metro)
     - [Android](#android)
     - [iOS](#ios)
@@ -182,16 +182,16 @@ API Documentation is generated automatically and can be access through http://lo
 
 This section outlines instructions on setting up a local development environment for the frontend of your application.
 
-## Frontend Installation
+## Mobile App Related Installation
 
 ### Metro
 
 After cloning the repo, install the dependencies locally with [Yarn](https://yarnpkg.com/):
 
-Goto `/frontend` and run `yarn install`
+Goto `/mobile` and run `yarn install`
 
 ```sh
-cd {{cookiecutter.project_slug}}/frontend
+cd {{cookiecutter.project_slug}}/mobile
 ```
 
 ```sh
