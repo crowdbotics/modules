@@ -1,3 +1,5 @@
+# Camera
+
 ## Android Configs
 
 Add these to `android/app/src/main/AndroidManifest.xml`:
