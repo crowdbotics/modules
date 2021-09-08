@@ -5,4 +5,8 @@ export const globalOptions = {
   url: "https://HelloWorldIdentifier.botics.co",
   api: "https://HelloWorldIdentifier.botics.co/api/v1"
 }
-export const modulesOptions = {}
+export const modulesOptions = {
+  "@modules/app-menu": {
+    "copy": "Routes available!"
+  }
+}
