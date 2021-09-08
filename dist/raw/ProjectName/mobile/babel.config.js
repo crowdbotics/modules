@@ -9,6 +9,6 @@ module.exports = {
       "safe": false,
       "allowUndefined": true
     }],
-    "import-glob"
+    "import-glob-meta"
   ]
 };

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext} from "react";
+import { OptionsContext} from "@options";
 import {
   View,
   Text,
@@ -9,7 +10,6 @@ import {
   Alert,
 } from "react-native";
 import { buttonStyles, textInputStyles, Color } from "./styles";
-import { HOME_SCREEN_NAME, validateEmail } from "./constants.js";
 import { useSelector, useDispatch } from "react-redux";
 import { loginRequest, signupRequest } from "../auth";
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -49,7 +49,8 @@ export const Button = (props) => (
 
 // Signup Component Tab
 
-export const SignupTab = () => {
+export const SignupTab = ( navigation ) => {
+  const options = useContext(OptionsContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -57,13 +58,12 @@ export const SignupTab = () => {
     email: "",
     password: "",
   });
-
-  const { api } = useSelector((state) => state.login);
+  const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const onSignupPress = async () => {
     setValidationError({ email: "", password: "" });
-    if (!validateEmail.test(email))
+    if (!options.validateEmail.test(email))
       return setValidationError({
         email: "Please enter a valid email address.",
         password: "",
@@ -119,7 +119,7 @@ export const SignupTab = () => {
         />
       </View>
       <Button
-        title="Sign Up"
+        title={options.SignUpButtonText}
         loading={api.loading === "pending"}
         onPress={onSignupPress}
       />
@@ -131,6 +131,7 @@ export const SignupTab = () => {
 };
 
 export const SignInTab = ({ navigation }) => {
+  const options = useContext(OptionsContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({
@@ -138,11 +139,11 @@ export const SignInTab = ({ navigation }) => {
     password: "",
   });
 
-  const { api } = useSelector((state) => state.login);
+  const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const onSigninPress = async () => {
-    if (!validateEmail.test(email))
+    if (!options.validateEmail.test(email))
       return setValidationError({
         email: "Please enter a valid email address.",
         password: "",
@@ -157,7 +158,7 @@ export const SignInTab = ({ navigation }) => {
     dispatch(loginRequest({ username: email, password }))
       .then(unwrapResult)
       .then((res) => {
-        if (res.token) navigation.navigate(HOME_SCREEN_NAME);
+        if (res.token) navigation.navigate(options.HOME_SCREEN_NAME);
       })
       .catch((err) => console.log(err.message));
   };
@@ -184,7 +185,7 @@ export const SignInTab = ({ navigation }) => {
       </View>
 
       <Button
-        title="Login"
+        title={options.SignInButtonText}
         loading={api.loading === "pending"}
         onPress={onSigninPress}
       />

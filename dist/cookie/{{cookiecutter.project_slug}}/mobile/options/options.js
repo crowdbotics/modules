@@ -5,4 +5,8 @@ export const globalOptions = {
   url: "https://{{cookiecutter.project_slug}}Identifier.botics.co",
   api: "https://{{cookiecutter.project_slug}}Identifier.botics.co/api/v1"
 }
-export const modulesOptions = {}
+export const modulesOptions = {
+  "@modules/app-menu": {
+    "copy": "Routes available!"
+  }
+}

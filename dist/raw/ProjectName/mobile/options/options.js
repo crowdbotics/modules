@@ -5,4 +5,8 @@ export const globalOptions = {
   url: "https://ProjectNameIdentifier.botics.co",
   api: "https://ProjectNameIdentifier.botics.co/api/v1"
 }
-export const modulesOptions = {}
+export const modulesOptions = {
+  "@modules/app-menu": {
+    "copy": "Routes available!"
+  }
+}
