@@ -117,8 +117,8 @@ const parseModules = (dir) => {
     }
 
     // Parse module options JSON Schema
-    if (existsSync(path.join(modulePath, "options.js")) && meta.options) {
-      let items = Object.entries(meta.options).map(([key, value]) => {
+    if (existsSync(path.join(modulePath, "options.js")) && meta.schema) {
+      let items = Object.entries(meta.schema).map(([key, value]) => {
         return {
           type: "object",
           properties: {
@@ -138,11 +138,7 @@ const parseModules = (dir) => {
         items: items
       }
 
-      //
-      const validate = ajv.compile(schema);
-      if (validate) {
-        meta.options
-      }
+      ajv.compile(schema);
     }
 
 

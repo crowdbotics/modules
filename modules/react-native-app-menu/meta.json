@@ -2,7 +2,7 @@
   "title": "App Menu",
   "description": "Module that shows available routes in a menu with links",
   "root": "/modules/app-menu",
-  "options": {
+  "schema": {
     "title": {
       "type": "string",
       "minLength": 3,
