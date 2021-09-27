@@ -2,7 +2,9 @@ import fs, { existsSync } from "fs";
 import path from "path";
 import config from "./config.js";
 import crypto from "crypto";
+import Ajv from "ajv";
 
+const ajv = new Ajv({ allErrors: true, strict: false });
 const MODULES_DIR = path.join("modules");
 const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");
 const ACCEPTED_EXTENSIONS = [
@@ -19,12 +21,12 @@ const META_FILE = ["meta.json"];
 const PREVIEW_FILE = ["preview.png"];
 
 const parseModules = (dir) => {
-  const valid = (message) => {
-    console.log(`${message} \u2705`);
+  const valid = (mod) => {
+    console.log("\u2705", mod);
   };
 
-  const invalid = (message) => {
-    console.log(`${message} \u274C`);
+  const invalid = (mod, message) => {
+    console.log("\u274C", mod, "=>", message);
   };
 
   const accepted = (entry) => {
@@ -85,7 +87,6 @@ const parseModules = (dir) => {
   console.log("Parsing modules...", "\n");
 
   modules.map((module) => {
-    console.log("=>", module);
     let modulePath = path.join(dir, module);
     data[module] = moduleDefaults(module);
 
@@ -108,12 +109,42 @@ const parseModules = (dir) => {
     delete data[module].files[META_FILE];
 
     if (!meta) {
-      invalid("meta.json is missing");
+      invalid(module, "meta.json is missing");
       return;
     } else if (!meta.root) {
-      invalid("meta's root property is missing");
+      invalid(module, "meta's root property is missing");
       return;
     }
+
+    // Parse module options JSON Schema
+    if (existsSync(path.join(modulePath, "options.js")) && meta.options) {
+      let items = Object.entries(meta.options).map(([key, value]) => {
+        return {
+          type: "object",
+          properties: {
+            key: {
+              type: "string",
+              pattern: key
+            },
+            value: value,
+          }
+        }
+      });
+
+      let schema = {
+        maxItems: 3,
+        additionalItems: true,
+        type: "array",
+        items: items
+      }
+
+      //
+      const validate = ajv.compile(schema);
+      if (validate) {
+        meta.options
+      }
+    }
+
 
     data[module].meta = Object.assign(data[module].meta, meta);
     data[module].meta.checksum = checksum(JSON.stringify(data[module]));
@@ -123,13 +154,13 @@ const parseModules = (dir) => {
     delete data[module].files[PREVIEW_FILE];
 
     if (!preview) {
-      invalid("module preview image missing");
+      invalid(module, "module preview image missing");
       return;
     }
 
     data[module].meta.preview = preview;
 
-    valid("module passes all checks");
+    valid(module, "module passes all checks");
   });
   console.log("");
   console.log("Total of modules:", Object.keys(data).length);
