@@ -118,29 +118,12 @@ const parseModules = (dir) => {
 
     // Parse module options JSON Schema
     if (existsSync(path.join(modulePath, "options.js")) && meta.schema) {
-      let items = Object.entries(meta.schema).map(([key, value]) => {
-        return {
-          type: "object",
-          properties: {
-            key: {
-              type: "string",
-              pattern: key
-            },
-            value: value,
-          }
-        }
-      });
-
       let schema = {
-        maxItems: 3,
-        additionalItems: true,
-        type: "array",
-        items: items
+        type: "object",
+        properties: meta.schema
       }
-
       ajv.compile(schema);
     }
-
 
     data[module].meta = Object.assign(data[module].meta, meta);
     data[module].meta.checksum = checksum(JSON.stringify(data[module]));
