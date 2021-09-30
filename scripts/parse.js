@@ -116,8 +116,8 @@ const parseModules = (dir) => {
       return;
     }
 
-    // Parse module options JSON Schema
-    if (existsSync(path.join(modulePath, "options.js")) && meta.schema) {
+    // Validate module options JSON Schema
+    if (meta.schema) {
       let schema = {
         type: "object",
         properties: meta.schema
