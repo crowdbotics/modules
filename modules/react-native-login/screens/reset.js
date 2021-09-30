@@ -11,7 +11,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { styles, textInputStyles } from "./styles";
-import { OptionsContext }  from "@options";
+import { OptionsContext } from "@options";
+import { validateEmail } from "../constants";
 import { resetPassword } from "../auth";
 
 const PasswordRecover = ({ navigation }) => {
@@ -21,7 +22,7 @@ const PasswordRecover = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const handlePasswordReset = () => {
-    if (!options.validateEmail.test(email))
+    if (!validateEmail.test(email))
       return Alert.alert("Error", "Please enter a valid email address.");
 
     dispatch(resetPassword({ email }))
