@@ -3,8 +3,10 @@ import path from "path";
 import config from "./config.js";
 import crypto from "crypto";
 import Ajv from "ajv";
+import addFormats from "ajv-formats"
 
 const ajv = new Ajv({ allErrors: true, strict: false });
+addFormats(ajv);
 const MODULES_DIR = path.join("modules");
 const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");
 const ACCEPTED_EXTENSIONS = [
