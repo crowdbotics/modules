@@ -1,5 +1,5 @@
-import React, { useState, useContext} from "react";
-import { OptionsContext} from "@options";
+import React, { useState, useContext } from "react";
+import { OptionsContext } from "@options";
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import { buttonStyles, textInputStyles, Color } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { loginRequest, signupRequest } from "../auth";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { validateEmail } from "../constants";
 
 // Custom Text Input
 export const TextInputField = (props) => (
@@ -39,17 +40,17 @@ export const Button = (props) => (
           style={props.loadingStyle}
         />
       ) : (
-        <Text style={[buttonStyles.textStyle, props.textStyle]}>
-          {props.title}
-        </Text>
-      )}
+          <Text style={[buttonStyles.textStyle, props.textStyle]}>
+            {props.title}
+          </Text>
+        )}
     </View>
   </TouchableOpacity>
 );
 
 // Signup Component Tab
 
-export const SignupTab = ( navigation ) => {
+export const SignupTab = (navigation) => {
   const options = useContext(OptionsContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,7 +64,7 @@ export const SignupTab = ( navigation ) => {
 
   const onSignupPress = async () => {
     setValidationError({ email: "", password: "" });
-    if (!options.validateEmail.test(email))
+    if (!validateEmail.test(email))
       return setValidationError({
         email: "Please enter a valid email address.",
         password: "",
@@ -143,7 +144,7 @@ export const SignInTab = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const onSigninPress = async () => {
-    if (!options.validateEmail.test(email))
+    if (!validateEmail.test(email))
       return setValidationError({
         email: "Please enter a valid email address.",
         password: "",
