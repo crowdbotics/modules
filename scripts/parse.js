@@ -125,6 +125,7 @@ const parseModules = (dir) => {
         properties: meta.schema
       }
       ajv.compile(schema);
+      meta.schema = schema;
     }
 
     data[module].meta = Object.assign(data[module].meta, meta);
