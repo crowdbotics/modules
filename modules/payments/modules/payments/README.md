@@ -1,0 +1,22 @@
+
+
+
+making sure the minimal iOS platform is set to 11
+npm install @stripe/stripe-react-native
+npm install --save-dev babel-plugin-import-glob
+npm install --save-dev babel-plugin-import-glob-meta
+
+
+
+Undefined symbols for architecture x86_64 on iOS
+While building your iOS project, you may see a Undefined symbols for architecture x86_64 error. This is caused by react-native init template configuration that is not fully compatible with Swift 5.1.
+
+Undefined symbols for architecture x86_64:
+  "(extension in Foundation):__C.NSScanner.scanUpToString(Swift.String) -> Swift.String?", referenced from:
+      static Stripe.STPPhoneNumberValidator.formattedRedactedPhoneNumber(for: Swift.String, forCountryCode: Swift.String?) -> Swift.String in libStripe.a(STPPhoneNumberValidator.o)
+  "__swift_FORCE_LOAD_$_swiftUniformTypeIdentifiers", referenced from:
+      __swift_FORCE_LOAD_$_swiftUniformTypeIdentifiers_$_Stripe in libStripe.a(PKPaymentAuthorizationViewController+Stripe_Blocks.o)
+Follow these steps to resolve this:
+
+Open your project via Xcode, go to project -> build settings, find library search paths and remove all swift related entries such as: $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) and $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME).
+Create a new Swift file to the project (File > New > File > Swift), give it any name (e.g. Fix.swift) and create a bridging header when prompted by Xcode.
