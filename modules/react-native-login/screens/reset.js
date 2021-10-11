@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Image,
   Alert,
@@ -11,12 +11,14 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { styles, textInputStyles } from "./styles";
-import { validateEmail, LOGO_URL } from "./constants.js";
+import { OptionsContext } from "@options";
+import { validateEmail } from "../constants";
 import { resetPassword } from "../auth";
 
 const PasswordRecover = ({ navigation }) => {
+  const options = useContext(OptionsContext);
   const [email, setEmail] = useState("");
-  const { api } = useSelector((state) => state.login);
+  const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const handlePasswordReset = () => {
@@ -44,7 +46,7 @@ const PasswordRecover = ({ navigation }) => {
       <Image
         style={[styles.image, imageSize]}
         source={{
-          uri: LOGO_URL,
+          uri: options.LOGO_URL,
         }}
       />
     );

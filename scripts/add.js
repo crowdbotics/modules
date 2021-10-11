@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import fse from "fs-extra";
 import path from "path";
 import config from "./config.js";
@@ -38,12 +38,18 @@ modules.map((module) => {
   };
 
   // cleanup node_modules
-  fs.rmdirSync(path.join(originModuleDir, "node_modules"), { recursive: true });
-  fs.rmdirSync(path.join(originModuleDir, "yarn.lock"), { recursive: true });
+  if (existsSync(path.join(originModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
+      recursive: true,
+    });
+  }
+  if (existsSync(path.join(originModuleDir, "yarn.lock"))) {
+    fs.rmdirSync(path.join(originModuleDir, "yarn.lock"), { recursive: true });
+  }
 
   copy(originModuleDir, targetModuleDir);
 
-  find.file(originModuleDir, function (files) {
+  find.file(originModuleDir, function(files) {
     files.map((file) => {
       if (path.basename(file) == "package.json") {
         const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));

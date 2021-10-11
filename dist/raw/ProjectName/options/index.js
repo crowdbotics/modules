@@ -1,21 +1,18 @@
 import React from "react"
-import * as modsOpts from "glob:../modules/**/options.js"
+import opts from "./../modules/*/options.js";
+
 import { modulesOptions, globalOptions } from "./options"
 
-const parseOpts = opts => {
-  let temp = {}
-  for (const [name, definition] of Object.entries(opts)) {
-    let key = `${name.charAt(0).toUpperCase()}${name.slice(1)}`
-    temp[key] = definition
-  }
-  return temp
-}
+let options = {}
 
-const options = parseOpts(modsOpts)
+opts.map(opt => {
+  options[opt.package] = opt.value
+})
 
-export function getOptions(component) {
-  let target = options[component.name] || {}
-  let source = modulesOptions[component.name] || {}
+
+export function getOptions(pakage) {
+  let target = options[pakage] || {}
+  let source = modulesOptions[pakage] || {}
   return Object.assign(target, source)
 }
 

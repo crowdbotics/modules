@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "engines": {
-    "node": ">14.0 <15.0"
+    "node": ">14.0"
   },
   "scripts": {
     "demo": "node scripts/demo.js",
@@ -30,13 +30,15 @@
   },
   "homepage": "https://github.com/crowdbotics/modules#readme",
   "dependencies": {
-    "@babel/cli": "^7.12.10",
-    "@babel/core": "^7.12.10",
-    "@babel/generator": "^7.12.11",
-    "@babel/parser": "^7.12.11",
-    "@babel/preset-env": "^7.12.11",
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/generator": "^7.14.9",
+    "@babel/parser": "^7.15.3",
+    "@babel/preset-env": "^7.15.0",
     "@babel/template": "^7.12.7",
-    "@babel/types": "^7.12.12",
+    "@babel/types": "^7.15.0",
+    "ajv": "^8.6.3",
+    "ajv-formats": "^2.1.1",
     "find": "^0.3.0",
     "fs-extra": "^10.0.0",
     "prettier": "^2.3.2"

@@ -10,7 +10,7 @@ import {
 } from "@reduxjs/toolkit"
 
 import { screens } from "@screens"
-import { hooks, slices, navigators, initialRoute } from "@modules"
+import { modules, reducers, hooks, initialRoute } from "@modules"
 import { connectors } from "@store"
 
 const Stack = createStackNavigator()
@@ -19,21 +19,27 @@ import { GlobalOptionsContext, OptionsContext, getOptions } from "@options"
 
 const getNavigation = (modules, screens, initialRoute) => {
   const Navigation = () => {
-    const routes = modules.concat(screens).map(([name, Navigator]) => {
+    const routes = modules.concat(screens).map(mod => {
+      const pakage = mod.package;
+      const name = mod.value.title;
+      const Navigator = mod.value.navigator;
       const Component = () => {
         return (
-          <OptionsContext.Provider value={getOptions(Navigator)}>
+          <OptionsContext.Provider value={getOptions(pakage)}>
             <Navigator />
           </OptionsContext.Provider>
         )
       }
       return <Stack.Screen key={name} name={name} component={Component} />
     })
+
+    const screenOptions = { headerShown: true };
+
     return (
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName={initialRoute}
-          screenOptions={ { headerShown: true } }
+          screenOptions={screenOptions}
         >
           {routes}
         </Stack.Navigator>
@@ -43,18 +49,15 @@ const getNavigation = (modules, screens, initialRoute) => {
   return Navigation
 }
 
-const getStore = (slices, globalState) => {
-  const reducers = Object.fromEntries(
-    slices.map(([name, slice]) => [name, slice.reducer])
-  )
-
+const getStore = (globalState) => {
   const appReducer = createReducer(globalState, _ => {
     return globalState
   })
 
   const reducer = combineReducers({
     app: appReducer,
-    ...reducers
+    ...reducers,
+    ...connectors
   })
 
   return configureStore({
@@ -65,12 +68,12 @@ const getStore = (slices, globalState) => {
 
 const App = () => {
   const global = useContext(GlobalOptionsContext)
-  const Navigation = getNavigation(navigators, screens, initialRoute)
-  const store = getStore([...slices, ...connectors], global)
+  const Navigation = getNavigation(modules, screens, initialRoute)
+  const store = getStore(global)
 
   let effects = {}
-  hooks.map(([_, hook]) => {
-    effects[hook.name] = hook()
+  hooks.map(hook => {
+    effects[hook.name] = hook.value()
   })
 
   return (
