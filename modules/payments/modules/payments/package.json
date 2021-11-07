@@ -7,10 +7,10 @@
     "author": "Crowdbotics",
     "license": "ISC",
     "dependencies": {
-        "@stripe/stripe-react-native": "^0.2.2",
     },
     "x-dependencies": {
+        "@stripe/stripe-react-native": "^0.2.2",
         "babel-plugin-import-glob": "^2.0.0",
-        "babel-plugin-import-glob-meta": "github:crowdbotics/babel-plugin-import-glob-meta",
+        "babel-plugin-import-glob-meta": "github:crowdbotics/babel-plugin-import-glob-meta"
     }
 }

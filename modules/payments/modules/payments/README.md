@@ -1,7 +1,8 @@
 
 
 
-making sure the minimal iOS platform is set to 11
+making sure the minimal iOS platform is set to 11 in POD file
+
 npm install @stripe/stripe-react-native
 npm install --save-dev babel-plugin-import-glob
 npm install --save-dev babel-plugin-import-glob-meta
@@ -20,3 +21,43 @@ Follow these steps to resolve this:
 
 Open your project via Xcode, go to project -> build settings, find library search paths and remove all swift related entries such as: $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) and $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME).
 Create a new Swift file to the project (File > New > File > Swift), give it any name (e.g. Fix.swift) and create a bridging header when prompted by Xcode.
+
+
+# Android
+AndroidManifest.xml
+<application>
+...
+<meta-data
+        android:name="com.google.android.gms.wallet.api.enabled"
+        android:value="true" />
+...
+</application>
+
+
+app/build.gradle
+
+dependencies {
+    ....
+    
+    implementation 'com.stripe:stripe-android:18.2.0'
+
+}
+
+
+# Global configs
+in options/options.js
+
+configue your server endpoints like this
+
+export const globalOptions = {
+  ....
+  url: "http://192.168.100.7:8000",
+  api: "http://192.168.100.7:8000/api/v1",
+  stripe_secret_key: "sk_test_xxxxxxxx"
+}
+
+# Server
+
+python manage.py runserver 192.168.100.7:8000
+
+here ip is local ip (can get it from ifconfig of your network settings)

@@ -1,132 +1,56 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
-import { Text, View, Pressable, Button, Alert } from 'react-native';
-import { OptionsContext, GlobalOptionsContext } from "@options";
-import { useNavigation, useNavigationState } from "@react-navigation/native";
+import React, { useEffect, useState } from 'react';
+import { Text, View, FlatList } from 'react-native';
 import { StripeProvider } from '@stripe/stripe-react-native';
-
+import {CheckoutScreen} from "./checkout";
+import {fetchPaymentHistory} from "./api";
 
 const Payments = (params) => {
+  const [payments, setPayments] = useState([])
+  const [refresh, setRefresh] = useState(true)
+  const get_payments = async () => {
+    setRefresh(true);
+    const res = await fetchPaymentHistory()
+    setPayments(res)
+    setRefresh(false);
+  }
+
+  useEffect(async ()=>{
+      await get_payments()
+  }, [])
   // More info on all the options is below in the API Reference... just some common use cases shown here
-  const actionSheet = useRef(null);
-  const options = useContext(OptionsContext);
-  const gOptions = useContext(GlobalOptionsContext);
-  const [data, setData] = useState([]);
-  const { styles, buttonText } = options;
-  const navigation = useNavigation()
-  console.log(navigation)
-  
+  const renderItem = ({item}) => {
+    return (
+      <View style={{padding: 10, margin: 10, backgroundColor: "#c9c9c9c9", borderRadius: 10}}>
+            <Text>{item.amount} cents {item.currency}</Text>
+            <Text><Text style={{fontWeight: "600"}}>Payment Method:</Text> {item.payment_method_types?.[0]} {item.charges?.data?.[0]?.payment_method_details?.card?.brand} - {item.charges?.data?.[0]?.payment_method_details?.card?.last4} </Text>
+            <Text><Text style={{fontWeight: "600"}}>Status:</Text> {item.status}</Text>
+      </View>
+    )
+  }
+
   return (
-    
-      <StripeProvider
-          publishableKey="pk_test_FrvlAsdLgTI9r0qdAO1KcXLI"
-          merchantIdentifier="merchant.com.crowdbotics.inaday"
-        >
-          <CheckoutScreen />
-      </StripeProvider>
+      <View>
+        <StripeProvider
+            publishableKey="pk_test_FrvlAsdLgTI9r0qdAO1KcXLI"
+            merchantIdentifier="merchant.com.crowdbotics.inaday"
+          >
+            <CheckoutScreen />
+        </StripeProvider>
+        <View >
+            <Text style={{marginHorizontal: 15, marginTop: 15, paddingBottom: 10}}>Payment History</Text>
+            <FlatList
+              data={payments}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+              onRefresh={get_payments}
+              refreshing={refresh}
+            />
+        </View>
+      </View>
   );
 };
 
 export default {
   title: "Payments",
   navigator: Payments
-}
-
-import { CardField, useStripe } from '@stripe/stripe-react-native';
-
-function PaymentScreen() {
-  const { confirmPayment } = useStripe();
-
-  return (
-    <CardField
-      postalCodeEnabled={true}
-      placeholder={{
-        number: '4242 4242 4242 4242',
-      }}
-      cardStyle={{
-        backgroundColor: '#FFFFFF',
-        textColor: '#000000',
-      }}
-      style={{
-        width: '100%',
-        height: 50,
-        marginVertical: 30,
-      }}
-      onCardChange={(cardDetails) => {
-        console.log('cardDetails', cardDetails);
-      }}
-      onFocus={(focusedField) => {
-        console.log('focusField', focusedField);
-      }}
-    />
-  );
-}
-
-
-function CheckoutScreen() {
-  // continued from above
-
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
-  const [loading, setLoading] = useState(false);
-  const API_URL = "http://localhost:3000";
-  const clientSecret = 'sk_test_51EA1HwDWvyLYvYlERNHHINu6Ngdh8MjRGxqRMNc69rOEAJAbv7ru8Ivi07JpUUMG2YbktCNLBO3SxV7NMwDyRjq4007822BMDs'
-  const fetchPaymentSheetParams = async () => {
-    const response = await fetch(`${API_URL}/payment-sheet`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    const { paymentIntent, ephemeralKey, customer } = await response.json();
-    console.log('response', { paymentIntent, ephemeralKey, customer })
-    return {
-      paymentIntent,
-      ephemeralKey,
-      customer,
-    };
-  };
-
-  const initializePaymentSheet = async () => {
-    const {
-      paymentIntent,
-      ephemeralKey,
-      customer,
-    } = await fetchPaymentSheetParams();
-
-    const { error } = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-      applePay: true
-    });
-    if (!error) {
-      setLoading(true);
-    }
-  };
-
-  const openPaymentSheet = async () => {
-    const { error } = await presentPaymentSheet({ clientSecret });
-
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
-    } else {
-      Alert.alert('Success', 'Your order is confirmed!');
-    }
-  };
-  
-  useEffect(() => {
-    initializePaymentSheet();
-  }, []);
-
-  return (
-    <View>
-      <Button
-        variant="primary"
-        disabled={!loading}
-        title="Checkout"
-        onPress={openPaymentSheet}
-      />
-    </View>
-  );
-  
 }

@@ -15,17 +15,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='PaymentLog',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(blank=True, max_length=120, null=True)),
-                ('path', models.TextField(blank=True, null=True)),
-                ('request', models.TextField(blank=True, null=True)),
-                ('response', models.TextField(blank=True, null=True)),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
-            ],
-        ),
-        migrations.CreateModel(
             name='StripeUserProfile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -34,29 +23,5 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='stripe_profile', to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.CreateModel(
-            name='StripeUserPaymentMethod',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('payment_source_id', models.CharField(blank=True, max_length=120, null=True)),
-                ('last4', models.CharField(blank=True, max_length=8, null=True)),
-                ('brand', models.CharField(blank=True, max_length=120, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='stripe_payment_methods', to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Payment',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('amount_cents', models.PositiveIntegerField(default=0, help_text='Amount in cents')),
-                ('amount_dollars', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
-                ('currency', models.CharField(blank=True, default='USD', max_length=50, null=True)),
-                ('payment_status', models.IntegerField(choices=[(1, 'Pending'), (2, 'Pre Authorized'), (3, 'Captured'), (4, 'Cancelled'), (5, 'Refunded'), (6, 'Partial Refunded'), (7, 'Failed')], default=1)),
-                ('timestamp', models.DateTimeField(auto_now_add=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='stripe_payments', to=settings.AUTH_USER_MODEL)),
-            ],
-        ),
+        )
     ]

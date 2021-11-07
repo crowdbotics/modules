@@ -16,21 +16,28 @@ const styles = StyleSheet.create({
     color: "black",
     fontSize: 20,
   },
-  buttonPressed: {
-    backgroundColor: "aquamarine",
-  },
-  buttonNotPressed: {
-    backgroundColor: "blue",
+  payButton: {
+    width: '40%',
+    height: 50,
+    alignSelf: 'center',
   },
   button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
     borderRadius: 4,
-    padding: 15,
-    marginTop: 10,
+    elevation: 3,
+    backgroundColor: 'black',
+    margin: 5,
+    height: 50,
   },
   buttonText: {
-    color: "white",
-    textAlign: "center",
     fontSize: 16,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
   },
 });
 
