@@ -14,7 +14,8 @@ const global = getGlobalOptions();
 export const CheckoutScreen = (params) =>  {
     // continued from above
     const options = useContext(OptionsContext);
-    const { styles, buttonText } = options;
+    const { styles, localOptions } = options;
+    const { merchantName, enableGooglePay, enableApplePay, merchantCountryCode, stripeTestEnv, merchantCurrency } = localOptions;
     const [value, setValue] = useState({
         amount: "1",
     });
@@ -22,7 +23,8 @@ export const CheckoutScreen = (params) =>  {
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
     const [loading, setLoading] = useState(false);
 
-    const clientSecret = global.stripe_secret_key;
+    const clientSecret = global.stripeSecretKey;
+    
     
     const initializePaymentSheet = async () => {
       const {
@@ -35,13 +37,13 @@ export const CheckoutScreen = (params) =>  {
         customerId: customer,
         customerEphemeralKeySecret: ephemeralKey,
         paymentIntentClientSecret: paymentIntent,
-        merchantDisplayName: 'Example Inc.',
+        merchantDisplayName: merchantName,
         applePay: false,
-        googlePay: true,
-        merchantCountryCode: 'US',
-        testEnv: true, // use test environment
+        googlePay: enableGooglePay,
+        merchantCountryCode: merchantCountryCode,
+        testEnv: stripeTestEnv, // use test environment
       });
-      console.log(error)
+      __DEV__ && console.log(error)
       if (!error) {
         setLoading(true);
       }
@@ -58,25 +60,26 @@ export const CheckoutScreen = (params) =>  {
         Alert.alert('Success', 'Your order is confirmed!');
       }
     };
-    
+      
     // Apple Pay related config
     const { presentApplePay, confirmApplePayPayment, isApplePaySupported } = useApplePay({
-        onShippingMethodSelected: (shippingMethod, handler) => {
-            console.log('shippingMethod', shippingMethod);
-            // Update cart summary based on selected shipping method.
-        },
-        onShippingContactSelected: (shippingContact, handler) => {
-            console.log('shippingContact', shippingContact);
-            // Make modifications to cart here e.g. adding tax.
-            // handler(cart);
-        },
+      onShippingMethodSelected: (shippingMethod, handler) => {
+        __DEV__ && console.log('shippingMethod', shippingMethod);
+          // Update cart summary based on selected shipping method.
+      },
+      onShippingContactSelected: (shippingContact, handler) => {
+        __DEV__ && console.log('shippingContact', shippingContact);
+          // Make modifications to cart here e.g. adding tax.
+          // handler(cart);
+      },
     });
-  
+
+
     const payApple = async () => {
       const { error, paymentMethod } = await presentApplePay({
-        cartItems: [{ label: 'Example item name', amount: value.amount }],
-        country: 'US',
-        currency: 'USD',
+        cartItems: [{ label: merchantName, amount: value.amount }],
+        country: merchantCountryCode,
+        currency: merchantCurrency,
         requiredShippingAddressFields: [
           'emailAddress',
           'phoneNumber',
@@ -85,21 +88,21 @@ export const CheckoutScreen = (params) =>  {
         requiredBillingContactFields: ['phoneNumber', 'name'],
         jcbEnabled: true,
       });
-  
+
       if (error) {
         Alert.alert(error.code, error.message);
       } else {
-        console.log(JSON.stringify(paymentMethod, null, 2));
+        __DEV__ && console.log(JSON.stringify(paymentMethod, null, 2));
         const {
             paymentIntent,
             ephemeralKey,
             customer,
           } = await fetchPaymentSheetParams(value.amount);
-  
+
         const { error: confirmApplePayError } = await confirmApplePayPayment(
             paymentIntent
         );
-  
+
         if (confirmApplePayError) {
           Alert.alert(confirmApplePayError.code, confirmApplePayError.message);
         } else {
@@ -107,46 +110,48 @@ export const CheckoutScreen = (params) =>  {
         }
       }
     };
-  
-    // Google Pay related config
-    const { initGooglePay } = useGooglePay();
+    if (enableGooglePay){
+      // Google Pay related config
+      const { initGooglePay } = useGooglePay();
 
-    useEffect(() => {
-      async function initialize() {
-        const { error } = await initGooglePay({
-          testEnv: true,
-          merchantName: 'Widget Store',
-          countryCode: 'US',
-          billingAddressConfig: {
-            format: 'FULL',
-            isPhoneNumberRequired: true,
-            isRequired: false,
-          },
-          existingPaymentMethodRequired: false,
-          isEmailRequired: true,
-        });
-  
-        if (error) {
-          Alert.alert(error.code, error.message);
-          return;
+      useEffect(() => {
+        async function initialize() {
+          const { error } = await initGooglePay({
+            testEnv: stripeTestEnv,
+            merchantName: merchantName,
+            countryCode: merchantCountryCode,
+            billingAddressConfig: {
+              format: 'FULL',
+              isPhoneNumberRequired: true,
+              isRequired: false,
+            },
+            existingPaymentMethodRequired: false,
+            isEmailRequired: true,
+          });
+    
+          if (error) {
+            Alert.alert(error.code, error.message);
+            return;
+          }
+          setGPayInitialized(true);
         }
-        setGPayInitialized(true);
-      }
-      if (Platform.OS === "android"){
-        initialize();
-      }
-    }, [initGooglePay]);
-  
+        if (Platform.OS === "android"){
+          initialize();
+        }
+      }, [initGooglePay]);
+    
+      
+    }
+
     const payGoogle = async () => {
       const {
         paymentIntent,
         ephemeralKey,
         customer,
       } = await fetchPaymentSheetParams(value.amount);
-      console.log('paymentIntent', paymentIntent)
       const { error } = await presentGooglePay({
-        clientSecret:paymentIntent,
-        currencyCode: 'USD',
+        clientSecret: paymentIntent,
+        currencyCode: merchantCurrency,
       });
     
       if (error) {
@@ -156,6 +161,7 @@ export const CheckoutScreen = (params) =>  {
       Alert.alert('Success', 'The SetupIntent was confirmed successfully.');
       setInitialized(false);
     };
+    
     return (
       <View>
         <View style={{paddingHorizontal: 15, margin: 20,}}>
@@ -163,17 +169,17 @@ export const CheckoutScreen = (params) =>  {
           <TextInput 
           placeholder={"Enter Amount"}
           value={value.amount} onChangeText={(text) => setValue({ ...value, amount: text })}
-          style={{padding: 15, borderWidth: 1, fontSize: 18, borderRadius: 8, backgroundColor: "#fff"}}
+          style={styles.inputField}
           ></TextInput>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <TouchableOpacity
-            style={[styles.button, {width: '40%', alignSelf: 'center', backgroundColor: '#016f70'}]}
+            style={[styles.button, styles.payNow]}
             onPress={openPaymentSheet}
             ><Text style={styles.buttonText}>Pay Now</Text>
             </TouchableOpacity>
 
-            {Platform.OS === "android" && (
+            {Platform.OS === "android" && enableGooglePay && (
                 <GooglePayButton
                     disabled={!gPayinitialized || loading}
                     style={[styles.payButton, {width: (deviceWidth/2.5) , height: 52, marginTop: 5 }]}
@@ -182,7 +188,7 @@ export const CheckoutScreen = (params) =>  {
                 />
             )}
             
-            {isApplePaySupported && (
+            {enableApplePay && isApplePaySupported  && (
             <ApplePayButton
                 onPress={payApple}
                 type="plain"
