@@ -39,10 +39,44 @@ const styles = StyleSheet.create({
     letterSpacing: 0.25,
     color: 'white',
   },
+  payNow: { 
+    width: '40%', 
+    alignSelf: 'center', 
+    backgroundColor: '#016f70'
+  },
+  inputField: {
+    padding: 15, 
+    borderWidth: 1, 
+    fontSize: 18, 
+    borderRadius: 8, 
+    backgroundColor: "#fff"
+  },
+  bold: {
+    fontWeight: "600"
+  },
+  listItemContainer: {
+    padding: 10, 
+    margin: 10, 
+    backgroundColor: "#c9c9c9c9", 
+    borderRadius: 10
+  }
 });
+
+export const localOptions = {
+  stripeSecretKey: "sk_test_xxxxxxxxxxx",
+  merchantName: "Example Inc.",
+  enableGooglePay: true,
+  enableApplePay: true,
+  merchantIdentifier:"merchant.com.crowdbotics.inaday",
+  merchantCountryCode: 'US',
+  merchantCurrency: 'USD',
+  stripeTestEnv: true,
+  stripePublishKey: "pk_test_xxxxxxxxxx"
+}
 
 export default {
   title: "App Menu",
   copy: "Routes available",
   styles: styles,
+  localOptions: localOptions
 };

@@ -20,7 +20,7 @@ export const fetchPaymentSheetParams = async (amount) => {
     });
 
     const { paymentIntent, ephemeralKey, customer } = await response.json();
-    console.log('response', { paymentIntent, ephemeralKey, customer })
+    __DEV__ && console.log('response', { paymentIntent, ephemeralKey, customer })
     return {
         paymentIntent,
         ephemeralKey,

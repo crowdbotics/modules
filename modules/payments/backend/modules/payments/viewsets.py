@@ -1,18 +1,16 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import authentication, permissions
+from rest_framework import authentication, permissions, status
 from django.contrib.auth.models import User
 import stripe
 from .services.StripeService import StripeService
 
 class PaymentSheetView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        if not request.user.id:
-            return Response({}, status=400)
         user = request.user
-        print(user)
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
             customer = stripe.Customer.create(email=user.email)
@@ -22,17 +20,15 @@ class PaymentSheetView(APIView):
         else:
             stripe_cus_id = stripe_profile.stripe_cus_id
         cents = request.data.get('cents', 100)
-        print("cents", cents)
         response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents)
-        return Response(response, status=200)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class GetStripePaymentsView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        if not request.user.id:
-            return Response({}, status=400)
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
@@ -44,15 +40,14 @@ class GetStripePaymentsView(APIView):
             "success": True,
             "data": history
         }
-        return Response(response, status=200)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 class GetPaymentMethodsView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        if not request.user.id:
-            return Response({}, status=400)
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
@@ -64,4 +59,4 @@ class GetPaymentMethodsView(APIView):
             "success": True,
             "data": history
         }
-        return Response(response, status=200)
+        return Response(response, status=status.HTTP_200_OK)

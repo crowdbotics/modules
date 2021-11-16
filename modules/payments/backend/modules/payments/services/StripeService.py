@@ -1,25 +1,27 @@
 import stripe
+import environ
 
+env = environ.Env()
 
 class StripeService:
-    stripe.api_key = 'STRIPE_SECRET_KEY'
+    stripe.api_key = env.str("STRIPE_SECRET_KEY")
 
     @classmethod
     def create_payment_intent_sheet(cls, cus_id, cents):
         ephemeralKey = stripe.EphemeralKey.create(
             customer=cus_id,
-            stripe_version='2020-08-27',
+            stripe_version=env.str("STRIPE_VERSION", '2020-08-27'),
         )
         paymentIntent = stripe.PaymentIntent.create(
             amount=cents,
-            currency='usd',
+            currency=env.str("STRIPE_CURRENCY", 'usd'),
             customer=cus_id
         )
 
         return {
             "paymentIntent": paymentIntent.client_secret,
-             "ephemeralKey": ephemeralKey.secret,
-             "customer": cus_id
+            "ephemeralKey": ephemeralKey.secret,
+            "customer": cus_id
         }
 
     @classmethod
