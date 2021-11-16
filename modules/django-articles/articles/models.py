@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
-from .options import MEDIA_UPLOAD_PATH
+from modules.utils import get_options
+
+MEDIA_UPLOAD_PATH = get_options("articles", "MEDIA_UPLOAD_PATH")
 
 
 class Article(models.Model):
