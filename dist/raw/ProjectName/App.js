@@ -1,73 +1,86 @@
-import React from "react";
-import { Provider } from "react-redux";
-import "react-native-gesture-handler";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from '@react-navigation/stack';
-import { configureStore, createReducer, combineReducers } from "@reduxjs/toolkit";
+import React, { useContext } from "react"
+import { Provider } from "react-redux"
+import "react-native-gesture-handler"
+import { NavigationContainer } from "@react-navigation/native"
+import { createStackNavigator } from "@react-navigation/stack"
+import {
+  configureStore,
+  createReducer,
+  combineReducers
+} from "@reduxjs/toolkit"
 
-import { screens } from "@screens";
-import { hooks, slices, navigators, initialRoute } from "@modules";
-import { connectors } from "@store";
+import { screens } from "@screens"
+import { modules, reducers, hooks, initialRoute } from "@modules"
+import { connectors } from "@store"
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator()
+
+import { GlobalOptionsContext, OptionsContext, getOptions } from "@options"
 
 const getNavigation = (modules, screens, initialRoute) => {
   const Navigation = () => {
-    const routes = modules.concat(screens).map(([name, navigator]) => {
-      return (
-        <Stack.Screen key={name} name={name} component={navigator} screenOptions={ { headerShown: false } } />
-      )
-    });
+    const routes = modules.concat(screens).map(mod => {
+      const pakage = mod.package;
+      const name = mod.value.title;
+      const Navigator = mod.value.navigator;
+      const Component = () => {
+        return (
+          <OptionsContext.Provider value={getOptions(pakage)}>
+            <Navigator />
+          </OptionsContext.Provider>
+        )
+      }
+      return <Stack.Screen key={name} name={name} component={Component} />
+    })
+
+    const screenOptions = { headerShown: true };
+
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={initialRoute}>
+        <Stack.Navigator
+          initialRouteName={initialRoute}
+          screenOptions={screenOptions}
+        >
           {routes}
         </Stack.Navigator>
       </NavigationContainer>
     )
   }
-  return Navigation;
+  return Navigation
 }
 
-const getStore = slices => {
-  const reducers = Object.fromEntries(slices.map(([name, slice]) => [name, slice.reducer]));
-
-  const appState = {
-    name: "ProjectNameIdentifier",
-    url: "https://ProjectNameIdentifier.botics.co",
-    version: "1.0.0"
-  }
-
-  const appReducer = createReducer(appState, _ => {
-    return appState;
+const getStore = (globalState) => {
+  const appReducer = createReducer(globalState, _ => {
+    return globalState
   })
 
   const reducer = combineReducers({
     app: appReducer,
-    ...reducers
-  });
+    ...reducers,
+    ...connectors
+  })
 
   return configureStore({
     reducer: reducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
-  });
+    middleware: getDefaultMiddleware => getDefaultMiddleware()
+  })
 }
 
-
 const App = () => {
-  const Navigation = getNavigation(navigators, screens, initialRoute);
-  const store = getStore([...slices, ...connectors]);
+  const global = useContext(GlobalOptionsContext)
+  const Navigation = getNavigation(modules, screens, initialRoute)
+  const store = getStore(global)
 
-  let effects = {};
-  hooks.map(([_, hook]) => {
-    effects[hook.name] = hook();
-  });
+  let effects = {}
+  hooks.map(hook => {
+    effects[hook.name] = hook.value()
+  })
 
   return (
     <Provider store={store}>
       <Navigation />
     </Provider>
-  );
-};
+  )
+}
 
-export default App;
+export default App
