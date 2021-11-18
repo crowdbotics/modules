@@ -8,6 +8,8 @@
 - [Install a module](#install-a-module)
 - [Remove a module](#remove-a-module)
 - [Generate cookiecutter](#generate-cookiecutter)
+- [Bootstrap](#bootstrap)
+- [Update React Native base template](#update-react-native-base-template)
 
 ## Generate modules data
 
@@ -15,44 +17,7 @@
 yarn run parse
 ```
 
-Run the command to generate the JSON data, ready to be pasted in the Crowdbotic's Admin page for updates or new modules creation.
-
-In our `crowdbotics-slack-app` backend we support two flags on each file:
-
-- `parentDir` - default to `src/features/<module_name>` if null, or use it otherwise
-- `newFile` - undocumented/unimplemented?
-
-### Create records in the admin panel
-
-- [Staging Admin](https://crowdbotics-slack-dev.herokuapp.com/admin)
-- [Production Admin](https://app.crowdbotics.com/admin)
-
-### Use the following Component field values
-
-**App Types:**
-
-```text
-3
-```
-
-Check **Auto build** and **Is screen**.
-
-**Options:**
-
-```json
-{ "x": 0, "y": 0, "domTree": "" }
-```
-
-**Code:**
-Copy from:
-
-- [modules.json](/dist/modules.json)
-
-**Setup step:**
-
-```text
-To properly configure this module, follow the instructions given in README.md inside the module folder.
-```
+Run the command to parse and export the modules source code into a [JSON file](/dist/modules.json).
 
 ## Get module info
 
@@ -78,10 +43,10 @@ This command runs `npx react-native init` with [`--template`](https://github.com
 ## Install a module
 
 ```sh
-yarn run add <module_name> <supports_multiple_modules_syntax>
+yarn run add [<module_name>]
 ```
 
-Installs a module into the demo app, performing the follow operations:
+Installs a list of modules into the demo app, performing the follow operations:
 
 1. Copies the module directory from [react-native](/modules/react-native) into `demo/modules`.
 2. Runs `yarn add <module_name>` in the `demo` directory.
@@ -90,10 +55,10 @@ Installs a module into the demo app, performing the follow operations:
 ## Remove a module
 
 ```sh
-yarn run remove <module_name> <supports_multiple_modules_syntax>
+yarn run remove [<module_name>]
 ```
 
-Removes a module from the demo app, performing the follow operations:
+Removes a list of modules from the demo app, performing the follow operations:
 
 1. Removes the module folder from `demo/modules`.
 2. Runs `yarn remove <module_name>` in the `demo` directory.
@@ -101,7 +66,7 @@ Removes a module from the demo app, performing the follow operations:
 
 ### Generate cookiecutter
 
-Start by generating a new app called ProjectName to serve as input for cookiecutter replacements:
+Start by generating a new app called `ProjectName` to serve as input for cookiecutter replacements:
 
 ```sh
 yarn run raw
@@ -114,7 +79,7 @@ Then run the cookie command to generate distribution cookiecutter.
 yarn run cookie
 ```
 
-Generates cookiecutter template by replacing according to table:
+Generates cookiecutter template by replacing according to the following translation table:
 
 | Before                     | After                                    | Example            |
 | -------------------------- | ---------------------------------------- | ------------------ |
@@ -125,3 +90,19 @@ Generates cookiecutter template by replacing according to table:
 | `ProjectSSHKeyFingerPrint` | `{{ cookiecutter.ssh_key_fingerprint }}` | `abc:123`          |
 
 Ouput will be made to [dist/cookie](/dist/cookie).
+
+## Bootstrap
+
+```sh
+yarn run bootstrap
+```
+
+Runs `demo`, `raw`, `cookie`, and `parse` commands.
+
+## Update React Native base template
+
+```sh
+yarn run template
+```
+
+Updates the react-native template from upstream, from the locally resolved version (currently pinned to 0.64.2).

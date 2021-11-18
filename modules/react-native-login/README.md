@@ -3,16 +3,36 @@ The Login Module is a React Native-based module that allows the user to login or
 
 ## Installation
 
-#### Update api url
+#### Update api url in options/options.js
 
-Update the file `<module_directory>/auth/api.js`, replacing the value of `baseURL` with your own app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, update from
-`baseURL: "https://your-app-backend.botics.co"` to `baseURL: "https://my-app.botics.co"`
+The Login Module connects to an existing Crowdbotics Django backend, so you must have one already deployed. Once you have a backend deployed, to connect the module to your backend, modify the `url` in your global options folder, which is located at `my-app/options/options.js`. Note that this is not the same as the `options.js` file located within the login folder -- that is for your specific Login Module options.
+
+Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+
+```
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+  {}
+```
 
 Note for developers: you can access the user token through the reducer state (i.e. `state.login.token` and user auth information like email at `state.login.user`)
 
 ### Change Login screen destination to your desired screen (likely Home screen).
+After a successful login, you can route the user to whichever screen you like. To set the screen to redirect to, open the module options file for the Login Module -- `modules/login/options.js`. Note this is a different options folder than you used to set the url as it is nested within the Login Module. Inside this file, change the `HOME_SCREEN_NAME` value to the string of the screen you want to redirect to.
 
-Open the `screens/constants.js` file and edit the `HOME_SCREEN_NAME` value with desired destination screen (likely Home Screen). For example, if my home screen has a navigation name of `HomeScreen1234`, then I should change as follows: `export const HOME_SCREEN_NAME = 'HomeScreen1234'`. If you desire, you can also update your logo image URL (be mindful that the size of the image should match the original ones for ideal results).
+For example, if my home screen has a navigation name of `HomeScreen1234`, then I should change as follows: `const HOME_SCREEN_NAME = 'HomeScreen1234'`. 
+
+### Additional Configuration via Module Options
+
+Module Options allow you to configure additional parts of your onboarding frontend.
+
+If you desire, you can also update your logo and background image URL (be mindful that the size of the image should match the original ones for ideal results) from `modules/login/options.js`. You can also set up custom text for the two sign in/up buttons and navigation tabs by editing the appropriate values - SignInNavText,SignUpNavText, SignInButtonText, SignUpButtonText.
+
+
+
+. Finally, if you would like to change the email validation logic, you can modify the regex in that same options.js file as well.
 
 
 ## Modify backend (optional)

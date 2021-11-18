@@ -194,7 +194,7 @@ jobs:
 
       - run:
           name: Install MacOS ffi
-          command: gem inst ffi -- --disable-system-libffi
+          command: gem inst ffi -v '1.15.1' -- --disable-system-libffi
           working_directory: ios
 
       - run:

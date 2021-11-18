@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import fse from "fs-extra";
 import path from "path";
 import config from "./config.js";
@@ -9,11 +9,13 @@ const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
-const filterMeta = (src, _) => path.basename(src) != "meta.json";
+const IGNORED_ENTRIES = ["meta.json", "node_modules"];
+
+const filterFiles = (src, _) => !IGNORED_ENTRIES.includes(path.basename(src));
 
 const copy = (origin, target) => {
   fs.mkdirSync(target, { recursive: true });
-  fse.copySync(origin, target, { filter: filterMeta });
+  fse.copySync(origin, target, { filter: filterFiles });
 };
 
 modules.map((module) => {
@@ -35,9 +37,19 @@ modules.map((module) => {
     return packages;
   };
 
+  // cleanup node_modules
+  if (existsSync(path.join(originModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
+      recursive: true,
+    });
+  }
+  if (existsSync(path.join(originModuleDir, "yarn.lock"))) {
+    fs.rmdirSync(path.join(originModuleDir, "yarn.lock"), { recursive: true });
+  }
+
   copy(originModuleDir, targetModuleDir);
 
-  find.file(originModuleDir, function (files) {
+  find.file(originModuleDir, function(files) {
     files.map((file) => {
       if (path.basename(file) == "package.json") {
         const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));

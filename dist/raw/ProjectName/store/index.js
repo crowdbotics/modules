@@ -1,4 +1,4 @@
-import * as mods from "glob:./**/*.slice.js"
+import storeSlices from "./*/*.slice.js"
 
 // Minimal check to see if imported slice has all properties of an actual slice
 const isValid = (slice) => {
@@ -6,9 +6,12 @@ const isValid = (slice) => {
   return Object.keys(slice).every(prop => sliceProps.includes(prop))
 }
 
-const getSlices = connectors =>
-  Object.entries(connectors)
-    .filter(([_, definition]) => definition.hasOwnProperty("slice") && isValid(definition.slice))
-    .map(([_, definition]) => [definition.slice.name, definition.slice])
+export const slices = storeSlices.filter(slice =>
+  slice.value.slice && isValid(slice.value.slice)
+).map(slice => slice.value.slice);
 
-export const connectors = getSlices(mods)
+export const connectors = slices.reduce((acc, slice) => {
+  let name = slice.name.charAt(0).toUpperCase() + slice.name.slice(1)
+  acc[name] = slice.reducer
+  return acc
+}, {})

@@ -29,6 +29,13 @@ fs.renameSync(
 );
 
 replace({
+  projectName: "{{cookiecutter.project_dash_slug}}",
+  projectTitle: "{{cookiecutter.project_dash_slug}}",
+  placeholderName: "ProjectNameIdentifier",
+  placeholderTitle: config.dist.builds.raw.titlePlaceholder
+});
+
+replace({
   projectName: "{{cookiecutter.project_slug}}",
   projectTitle: "{{cookiecutter.project_slug}}",
   placeholderName: config.dist.builds.raw.placeholderName,
@@ -40,13 +47,6 @@ replace({
   projectTitle: "{{cookiecutter.project_dash_slug}}",
   placeholderName: config.dist.builds.raw.placeholderName.toLowerCase(),
   placeholderTitle: config.dist.builds.raw.titlePlaceholder.toLowerCase()
-});
-
-replace({
-  projectName: "{{cookiecutter.project_dash_slug}}",
-  projectTitle: "{{cookiecutter.project_dash_slug}}",
-  placeholderName: "ProjectNameIdentifier",
-  placeholderTitle: config.dist.builds.raw.titlePlaceholder
 });
 
 replace({

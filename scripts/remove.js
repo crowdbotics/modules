@@ -1,5 +1,4 @@
-import fs from "fs";
-import fse from "fs-extra";
+import fs, { existsSync } from "fs";
 import path from "path";
 import config from "./config.js";
 import find from "find";
@@ -9,7 +8,7 @@ const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
-modules.map(module => {
+modules.map((module) => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "modules", module);
   const meta = JSON.parse(
@@ -20,6 +19,15 @@ modules.map(module => {
   const filterPackageJSON = (src, _) => path.basename(src) == "package.json";
   const filterMeta = (src, _) => path.basename(src) != "meta.json";
 
+  // cleanup node_modules
+  if (existsSync(path.join(originModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
+      recursive: true,
+    });
+  }
+  if (existsSync(path.join(targetModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(targetModuleDir, "node_modules"), { recursive: true });
+  }
 
   find.file(originModuleDir, function(files) {
     let file = files.filter(filterPackageJSON)[0];
@@ -31,12 +39,12 @@ modules.map(module => {
       try {
         execSync(`yarn remove ${name}`);
       } catch (err) {
-        console.warn("Failed removing module. Is this module installed?")
-        return
+        console.warn("Failed removing module. Is this module installed?");
+        return;
       }
     }
 
-    files.filter(filterMeta).map(file => {
+    files.filter(filterMeta).map((file) => {
       let targetFilePath = path.join(
         targetModuleDir,
         path.relative(originModuleDir, file)

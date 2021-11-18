@@ -1,19 +1,23 @@
-import { getPropertyMap, getModules } from "./utils.js";
-import * as mods from "glob:./**/index.js";
-import { screens } from "@screens";
+import mods from "./*/index.js";
+import { getModules } from "./modules.js"
 
 export const modules = getModules(mods);
-export const initialRoute = modules[0].title;
-export const slices = Object.entries(getPropertyMap(modules, "slice"));
-export const navigators = Object.entries(getPropertyMap(modules, "navigator"));
-export const hooks = Object.entries(getPropertyMap(modules, "hook"));
-
-export function getNavigationScreen(name) {
-    const screen = screens.find(x => x[0].includes(name))
-
-  if(screen){
-    return screen[0]
+export const initialRoute = modules[0].value.title;
+export const slices = modules.filter(mod => mod.value.slice).map(mod => mod.value.slice);
+export const reducers = slices.reduce((acc, slice) => {
+  let name = slice.name.charAt(0).toUpperCase() + slice.name.slice(1)
+  acc[name] = slice.reducer
+  return acc
+}, {})
+export const navigators = modules.filter(mod => mod.value.navigator).map(mod => {
+  return {
+    name: mod.name,
+    value: mod.value.navigator
   }
-
-  return name
-}
+})
+export const hooks = modules.filter(mod => mod.value.hook).map(mod => {
+  return {
+    name: mod.name,
+    value: mod.value.hook
+  }
+})

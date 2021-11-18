@@ -17,6 +17,6 @@
     "react-native-vector-icons": "^8.1.0"
   },
   "devDependencies": {
-    "babel-plugin-import-glob": "^2.0.0"
+    "babel-plugin-import-glob-meta": "github:crowdbotics/babel-plugin-import-glob-meta"
   }
 }
