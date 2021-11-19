@@ -13,7 +13,7 @@ jobs:
             if [ "$BUILD_TYPE" == "mobile" ]; then
               bash .circleci/generate_mobile_config.sh
             elif [ "$BUILD_TYPE" == "gcp" ]; then
-              bash backend/.circleci/generate_gcp_config.sh
+              bash backend/.circleci/generate_gcp_config.sh "backend/"
             fi
       - continuation/continue:
           parameters: '{}'
