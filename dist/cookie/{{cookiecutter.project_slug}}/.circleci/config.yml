@@ -10,7 +10,11 @@ jobs:
       - run: 
           name: Generate Pipeline generated_config.yml file
           command: |
-            bash .circleci/generate_circle_config.sh
+            if [ "$BUILD_TYPE" == "mobile" ]; then
+              bash .circleci/generate_mobile_config.sh
+            elif [ "$BUILD_TYPE" == "gcp" ]; then
+              bash backend/.circleci/generate_gcp_config.sh
+            fi
       - continuation/continue:
           parameters: '{}'
           configuration_path: configs/generated_config.yml
