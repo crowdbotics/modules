@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 set -o pipefail
 
 mkdir configs/
@@ -136,7 +136,7 @@ jobs:
 
   ios:
     macos:
-      xcode: "11.1.0"
+      xcode: "13.0.0"
     working_directory: ~/build
 
     # use a --login shell so our "set Ruby version" command gets picked up for later steps
