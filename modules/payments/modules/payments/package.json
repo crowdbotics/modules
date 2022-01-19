@@ -1,0 +1,16 @@
+{
+    "name": "@modules/payments",
+    "version": "1.0.1",
+    "description": "Payments Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+    },
+    "x-dependencies": {
+        "@stripe/stripe-react-native": "^0.2.2",
+        "babel-plugin-import-glob": "^2.0.0",
+        "babel-plugin-import-glob-meta": "github:crowdbotics/babel-plugin-import-glob-meta"
+    }
+}
