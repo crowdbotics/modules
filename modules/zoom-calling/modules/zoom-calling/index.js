@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Image, TouchableOpacity, Modal, Pressable } from "react-native";
-import ZoomUs from 'react-native-zoom-us';
+import { View, Text, Button, Image, TouchableOpacity, Modal, Pressable, NativeEventEmitter } from "react-native";
+import ZoomUs, { ZoomEmitter } from 'react-native-zoom-us';
 // @ts-ignore
 import { WebView } from 'react-native-webview';
-import { getCurrentUser, getOauthToken } from './utils';
+import { deleteMeeting, createMeeting, getCurrentUser, getOauthToken } from './utils';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DialogInput from 'react-native-dialog-input';
@@ -11,8 +11,11 @@ import DialogInput from 'react-native-dialog-input';
 const ZoomCalling = () => {
   const [isFirst, setIsFirst] = useState(true)
   const [oauthToken, setOauthToken] = useState(false)
+  const [meetingInfo, setMeetingInfo] = useState(false)
   const [isJoinMeeting, setIsJoinMeeting] = useState(false)
   const [modalVisible, setModalVisible] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [meetingEvent, setMeetingEvent] = useState('');
   const [currentUser, setCurrentUser] = useState({
     id: '',
     email: null,
@@ -28,25 +31,49 @@ const ZoomCalling = () => {
     ZoomUs.initialize({
       clientKey: 'uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio',
       clientSecret: 'xJOm6daNiIR0FCDJSTQSegxa0Loc0AeaYdIn',
-    }).then(response => {
-      console.log('response', response)
+    }).then((res) => {
+      setIsInitialized(true);
     })
+
   }, [])
 
+  useEffect(() => {
+    if (!isInitialized) {
+      return;
+    }
+    const zoomEmitter = new NativeEventEmitter(ZoomEmitter);
+    const eventListener = zoomEmitter.addListener('MeetingEvent', ({ event, status, ...params }) => {
+      setMeetingEvent(event)
+    },
+    );
+    return () => eventListener.remove();
+  }, [isInitialized])
+
+  useEffect(() => {
+    if (meetingEvent == "endedBySelf" || meetingEvent == "endedRemovedByHost") {
+      if (meetingInfo) {
+        deleteMeeting(meetingInfo['id'], oauthToken['access_token'])
+        setMeetingInfo(false);
+      }
+    }
+  }, [meetingEvent])
+  
   const startMeeting = () => {
-    // Start Meeting
-    console.log('startMeeting here...')
-    ZoomUs.startMeeting({
-      userName: currentUser.first_name + '' + currentUser.last_name,
-      meetingNumber: currentUser.pmi,
-      userId: currentUser.id,
-      zoomAccessToken: oauthToken['access_token'], // '5pUP5hFRRC2nC2H4FR2L1w',
-    })
+    createMeeting(currentUser.first_name + '' + currentUser.last_name, currentUser.id, oauthToken['access_token']).then(response => {
+      setMeetingInfo(response)
+      let params = parse_query_string(response.start_url)
+      if (params.zak) {
+        ZoomUs.startMeeting({
+          userName: currentUser.first_name + '' + currentUser.last_name,
+          meetingNumber: currentUser.pmi,
+          userId: currentUser.id,
+          zoomAccessToken: params.zak
+        })
+      }
+    }).catch(err => console.log(err))
   }
 
   const joinMeeting = (meetingId) => {
-    // Start Meeting
-    console.log('joinMeeting here...')
     setIsJoinMeeting(false)
     ZoomUs.joinMeeting({
       userName: currentUser.first_name + '' + currentUser.last_name,
@@ -71,7 +98,7 @@ const ZoomCalling = () => {
         setIsFirst(false)
         getOauthToken(params.code).then((response) => {
           setOauthToken(response)
-        }).catch(err => console.log('err', err))
+        })
         return
       }
     }
@@ -80,7 +107,6 @@ const ZoomCalling = () => {
   useEffect(() => {
     if (oauthToken) {
       getCurrentUser(oauthToken['access_token']).then(response => {
-        console.log('getCurrentUser', response)
         setCurrentUser(response)
       })
     }
@@ -143,11 +169,11 @@ const ZoomCalling = () => {
           </TouchableOpacity>
         </View>
         <DialogInput isDialogVisible={isJoinMeeting}
-            title={"Join Meeting"}
-            message={"Please enter Meeting ID"}
-            hintInput ={"Meeting ID"}
-            submitInput={ (meetingId) => joinMeeting(meetingId) }
-            closeDialog={ () => setIsJoinMeeting(false)}>
+          title={"Join Meeting"}
+          message={"Please enter Meeting ID"}
+          hintInput={"Meeting ID"}
+          submitInput={(meetingId) => joinMeeting(meetingId)}
+          closeDialog={() => setIsJoinMeeting(false)}>
         </DialogInput>
         <View style={styles.centeredView}>
           <Modal
@@ -171,9 +197,9 @@ const ZoomCalling = () => {
             </View>
           </Modal>
         </View>
-        
+
       </> : <WebView
-        useWebKit = {true}
+        useWebKit={true}
         userAgent="Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"
         onNavigationStateChange={onNavigationStateChange}
         source={{ uri: `https://zoom.us/oauth/authorize?response_type=code&client_id=O5o5klrbQWq3L6PBWbRjoA&redirect_uri=https://oauth.pstmn.io/v1/callback` }}
@@ -218,37 +244,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  UserImageArea:{
-    display: 'flex', 
-    flexDirection: 'row', 
-    alignItems: 'center' 
+  UserImageArea: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
-  MainCard:{
-    display: "flex", 
-    flexDirection: "row", 
-    justifyContent: "space-evenly", 
+  MainCard: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
     marginTop: 30
   },
-  Card:{
-    width: "50%", 
-    height: 100, 
+  Card: {
+    width: "50%",
+    height: 100,
     padding: 5
   },
-  HostMeetingText:{
-    color: 'white', 
+  HostMeetingText: {
+    color: 'white',
     textTransform: 'uppercase'
   },
-  JoinMeetingText:{
-    color: 'white', 
+  JoinMeetingText: {
+    color: 'white',
     textTransform: 'uppercase'
   },
-  ScheduleMeetingText:{
-    color: 'white', 
+  ScheduleMeetingText: {
+    color: 'white',
     textTransform: 'uppercase'
   },
-  MeetingCard:{
+  MeetingCard: {
     width: "100%",
-    height: 50, 
+    height: 50,
     padding: 5,
   },
   ///

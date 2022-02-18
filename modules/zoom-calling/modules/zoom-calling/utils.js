@@ -24,3 +24,29 @@ export const getCurrentUser = async (token) => {
   })
   return res.json()
 }
+
+export const createMeeting = async (topic, user_id, token) => {
+  let res = await fetch(`https://api.zoom.us/v2/users/${user_id}/meetings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({
+      topic: `${topic}'s Personal Meeting Room`,
+      "pre_schedule": false
+      })
+  })
+  return res.json()
+}
+
+export const deleteMeeting = async (meetingId, token) => {
+  await fetch(`https://api.zoom.us/v2/meetings/${meetingId}`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+}
