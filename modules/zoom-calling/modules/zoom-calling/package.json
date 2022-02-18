@@ -9,12 +9,14 @@
     "dependencies": {
         "react-native-webview": "^11.17.2",
         "react-native-base64": "0.2.1",
-        "react-native-dialog-input": "1.0.8"
+        "react-native-dialog-input": "1.0.8",
+        "react-native-paper": "4.11.2"
     },
     "x-dependencies": {
         "react-native-zoom-us": "6.6.1",
         "react-native-webview": "^11.17.2",
         "react-native-base64": "0.2.1",
-        "react-native-dialog-input": "1.0.8"
+        "react-native-dialog-input": "1.0.8",
+        "react-native-paper": "4.11.2"
     }
 }

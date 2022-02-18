@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, Image, TouchableOpacity, Modal, Pressable, NativeEventEmitter } from "react-native";
+import { View, Text, Image, NativeEventEmitter } from "react-native";
 import ZoomUs, { ZoomEmitter } from 'react-native-zoom-us';
 // @ts-ignore
 import { WebView } from 'react-native-webview';
@@ -7,13 +7,15 @@ import { deleteMeeting, createMeeting, getCurrentUser, getOauthToken } from './u
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DialogInput from 'react-native-dialog-input';
+import Button from './components/Button';
+import MeetingScheduleModal from './components/MeetingScheduleModal';
 
 const ZoomCalling = () => {
   const [isFirst, setIsFirst] = useState(true)
   const [oauthToken, setOauthToken] = useState(false)
   const [meetingInfo, setMeetingInfo] = useState(false)
   const [isJoinMeeting, setIsJoinMeeting] = useState(false)
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isMeetingScheduleModal, setIsMeetingScheduleModal] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [meetingEvent, setMeetingEvent] = useState('');
   const [currentUser, setCurrentUser] = useState({
@@ -26,6 +28,7 @@ const ZoomCalling = () => {
     last_name: "",
     personal_meeting_url: null
   })
+
 
   useEffect(() => {
     ZoomUs.initialize({
@@ -57,7 +60,7 @@ const ZoomCalling = () => {
       }
     }
   }, [meetingEvent])
-  
+
   const startMeeting = () => {
     createMeeting(currentUser.first_name + '' + currentUser.last_name, currentUser.id, oauthToken['access_token']).then(response => {
       setMeetingInfo(response)
@@ -112,6 +115,10 @@ const ZoomCalling = () => {
     }
   }, [oauthToken])
 
+  const onHandleMeetingSchedule = () => {
+    setIsMeetingScheduleModal(!isMeetingScheduleModal)
+  }
+
   return (
     <View style={{ flex: 1 }}>
       {oauthToken ? <>
@@ -135,38 +142,14 @@ const ZoomCalling = () => {
         </View>
         <View style={styles.MainCard}>
           <View style={styles.Card}>
-            <TouchableOpacity onPress={startMeeting}>
-              <View style={styles.cardbody}>
-                <View style={styles.innercard}>
-                  <View>
-                    <Text style={styles.HostMeetingText}>Host a meeting</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
+            <Button title="Host a meeting" onPress={startMeeting} />
           </View>
           <View style={styles.Card}>
-            <TouchableOpacity onPress={() => setIsJoinMeeting(true)}>
-              <View style={styles.cardbody}>
-                <View style={styles.innercard}>
-                  <View>
-                    <Text style={styles.JoinMeetingText}>Join a meeting</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
+            <Button title="Join a meeting" onPress={() => setIsJoinMeeting(true)} />
           </View>
         </View>
         <View style={styles.MeetingCard}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <View style={styles.cardbody}>
-              <View style={styles.innercard}>
-                <View>
-                  <Text style={styles.ScheduleMeetingText}>Schedule a meeting</Text>
-                </View>
-              </View>
-            </View>
-          </TouchableOpacity>
+          <Button title="Schedule a meeting" onPress={() => setIsMeetingScheduleModal(true)} />
         </View>
         <DialogInput isDialogVisible={isJoinMeeting}
           title={"Join Meeting"}
@@ -175,29 +158,13 @@ const ZoomCalling = () => {
           submitInput={(meetingId) => joinMeeting(meetingId)}
           closeDialog={() => setIsJoinMeeting(false)}>
         </DialogInput>
-        <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}></Text>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Text style={styles.textStyle}>Hide Modal</Text>
-                </Pressable>
-              </View>
-            </View>
-          </Modal>
-        </View>
-
+        {isMeetingScheduleModal && 
+          <MeetingScheduleModal
+            setModalVisible={setIsMeetingScheduleModal}
+            onHandleMeetingSchedule={onHandleMeetingSchedule}
+          />
+        }
+        
       </> : <WebView
         useWebKit={true}
         userAgent="Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"
@@ -222,27 +189,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     margin: 5
-  },
-  cardbody: {
-    minHeight: 50,
-    height: '100%',
-    backgroundColor: '#2D8CFF',
-    borderRadius: 5
-  },
-  innercard: {
-    padding: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 1.62,
-    elevation: 15,
-    display: 'flex',
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
   },
   UserImageArea: {
     display: 'flex',
@@ -282,14 +228,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 10,
   },
   modalView: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
+    padding: 15,
+    width: '90%',
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -297,18 +243,20 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
+    borderRadius: 5,
+    padding: 8,
+    elevation: 12,
+    marginLeft: 10,
+    width: 100
   },
   buttonOpen: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#FA060D",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#2D8CFF",
   },
   textStyle: {
     color: "white",
@@ -318,7 +266,45 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  heading: {
+    fontSize: 24,
+    color: 'black',
+    fontWeight: 'bold',
+    marginRight: 40,
+  },
+  ModalContent: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  InputLabels: {
+    width: "49%",
+  },
+  MeetingID: {
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  MeetingRow: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 5,
+  },
+  InputsArea: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "50%",
+    paddingRight: 5,
+  },
+  RadioButtons: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  VideoText: {
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
 });
 
 export default {
