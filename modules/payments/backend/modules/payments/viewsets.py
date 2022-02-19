@@ -1,9 +1,17 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
+from rest_framework.viewsets import ViewSet
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+
 import stripe
+
+from .services.ApplePaymentService import ApplePaymentService
 from .services.StripeService import StripeService
+from .serializers import appleIAPSerializer
+from .services.StripeService import StripeService
+
 
 class PaymentSheetView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
@@ -60,3 +68,29 @@ class GetPaymentMethodsView(APIView):
             "data": history
         }
         return Response(response, status=status.HTTP_200_OK)
+
+
+class AppleIAPayment(ViewSet):
+    serializer_class = appleIAPSerializer
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    @csrf_exempt
+    def create(self, request):
+        data_copy = request.data.copy()
+        data_copy['user'] = request.user
+        serializer = self.serializer_class(
+            data=data_copy, context={"request": request}
+        )
+        data = None
+        if serializer.is_valid(raise_exception=True):
+            verify_receipt, success = ApplePaymentService.verify_apple_receipt(request.data)
+            print('verify_receipt', verify_receipt)
+            if success:
+                data = "success"
+            else:
+                data = "fail"
+        return Response({
+            'success': True,
+            'result': data,
+        }, status=status.HTTP_200_OK)

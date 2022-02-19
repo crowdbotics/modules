@@ -26,7 +26,7 @@ class StripeService:
 
     @classmethod
     def get_payments_history(cls, cus_id, limit=100, offset=0):
-        return stripe.PaymentIntent.list(
+        return stripe.Charge.list(
             customer=cus_id, limit=limit, offset=offset, 
         ).get('data', [])
 
