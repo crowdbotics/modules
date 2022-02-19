@@ -2,18 +2,28 @@ import React, { useState } from 'react';
 import { View, Text, Modal, Pressable } from "react-native";
 import Input from '../Input';
 // @ts-ignore
-import { RadioButton } from 'react-native-paper';
+import { RadioButton, Checkbox } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+// @ts-ignore
+import DropDownPicker from 'react-native-dropdown-picker';
+// @ts-ignore
+import DatePicker from 'react-native-date-picker'
+// @ts-ignore
+import timezones from 'timezones-list';
 
 const MeetingScheduleModal = (props) => {
   const [meetingSchedule, setMeetingSchedule] = useState({
     topic: '',
-    startDate: '',
-    endDate: '',
+    startDate: new Date(),
+    timezone: '',
     meetingID: 'auto',
     hostVideo: true,
     participantsVideo: true
   });
+  const [openStartDate, setOpenStartDate] = useState(false)
+  
+  const [openTimezone, setOpenTimezone] = useState(false);
+    const [timezoneList, setTimezoneList] = useState(timezones.map(timezone => ({label: timezone.label, value: timezone.tzCode})));
 
   return (
     <View style={styles.centeredView}>
@@ -32,10 +42,10 @@ const MeetingScheduleModal = (props) => {
                 onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, topic: text })}
               />
             </View>
-            <View style={styles.ModalContent}>
+            {/* <View style={styles.ModalContent}>
               <View style={styles.InputLabels}>
                 <Input
-                  label="Start time"
+                  label="When"
                   onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, startDate: text })}
                 />
               </View>
@@ -45,8 +55,73 @@ const MeetingScheduleModal = (props) => {
                   onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, endDate: text })}
                 />
               </View>
-            </View>
+            </View> */}
 
+            <View style={styles.ModalContent}>
+              <View style={styles.InputLabels}>
+                <Pressable onPress={() => setOpenStartDate(true)}>
+                  <Input
+                    label="When"
+                    editable={false}
+                    value={meetingSchedule.startDate.toLocaleString('en-US', {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
+                  />
+                </Pressable>
+                <DatePicker
+                  modal
+                  open={openStartDate}
+                  date={meetingSchedule.startDate}
+                  onConfirm={(date) => {
+                    setOpenStartDate(false)
+                    setMeetingSchedule({ ...meetingSchedule, startDate: date })
+                  }}
+                  onCancel={() => {
+                    setOpenStartDate(false)
+                  }}
+                />
+              </View>
+              <View style={styles.InputLabels}>
+                <Text style={{fontWeight: "bold"}}>Timezone</Text>
+                <DropDownPicker
+                  placeholder='Timezone'
+                  placeholderStyle={{
+                    color: "lightgrey",
+                  }}
+                  style={{borderWidth: 1,
+                    borderColor: "lightgray",
+                    borderRadius: 5,
+                    padding: 4,
+                    marginTop: 5,
+                    height: 39,
+                  }}
+                  labelProps={{
+                    numberOfLines: 1,
+                  }}
+                  listMode="MODAL"
+                  modalTitle="Select timezone"
+                  open={openTimezone}
+                  value={meetingSchedule.timezone}
+                  items={timezoneList}
+                  setOpen={setOpenTimezone}
+                  setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
+                  setItems={setTimezoneList}
+                />
+              </View>
+            </View>
+            
+            <View style={{ marginTop: 10, display: "flex", flexDirection: "row"}}>
+              <Text style={{fontWeight: "bold"}}>Meeting Recurring</Text>
+              <Checkbox
+                status={'checked'}
+                onPress={() => {}}
+              />
+            </View>
+            
             <View style={{ marginTop: 10 }}>
               <Text style={styles.MeetingID}>Meeting ID</Text>
               <View style={styles.MeetingRow}>

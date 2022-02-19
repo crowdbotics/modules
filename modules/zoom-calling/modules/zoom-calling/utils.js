@@ -35,7 +35,7 @@ export const createMeeting = async (topic, user_id, token) => {
     },
     body: JSON.stringify({
       topic: `${topic}'s Personal Meeting Room`,
-      "pre_schedule": false
+      "type": 1
       })
   })
   return res.json()

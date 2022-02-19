@@ -55,7 +55,6 @@ const ZoomCalling = () => {
   useEffect(() => {
     if (meetingEvent == "endedBySelf" || meetingEvent == "endedRemovedByHost") {
       if (meetingInfo) {
-        deleteMeeting(meetingInfo['id'], oauthToken['access_token'])
         setMeetingInfo(false);
       }
     }

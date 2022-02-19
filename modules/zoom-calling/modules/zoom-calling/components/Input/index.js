@@ -6,8 +6,10 @@ const Input = (props) => {
     <View style={{marginBottom: 10}}>
       {props.label && <Text style={{fontWeight: "bold"}}>{props.label}</Text>}
       <TextInput
-        style={styles.input}
+        style={{...styles.input, color: '#000000'}}
         placeholder={props.label}
+        editable={props.editable}
+        value={props.value}
       />
     </View>
   )
@@ -19,7 +21,8 @@ const styles = StyleSheet.create({
     borderColor: "lightgray",
     borderRadius: 5,
     padding: 4,
-    marginTop: 5
+    marginTop: 5,
+    fontSize: 13
   }
 });
 
