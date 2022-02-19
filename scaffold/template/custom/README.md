@@ -1,8 +1,66 @@
-# HelloWorld
-
-## Getting started
+# ProjectName
 
 Welcome to your new Crowdbotics app.
+
+## What is Crowdbotics?
+Crowdbotics is an easy way to build software applications of all kinds.  You can build production, high-caliber software applications in minutes, rather than weeks or months, even if you're not a software developer.
+
+The reason this works is that most software applications and features we want to build are similar to applications that have been built before. We've crawled hundreds of thousands of public code repositories to teach the Crowdbotics engine how to create software.
+
+As a result, Crowdbotics can generate new applications automatically in a standardized way.
+
+### Useful Links
+[App Dashboard](https://app.crowdbotics.com/)
+·
+[Knowledgebase](https://knowledge.crowdbotics.com/)
+·
+[Developer Training](https://knowledge.crowdbotics.com/crowdbotics-developer-training)
+·
+[Forum](https://discuss.crowdbotics.com/)
+·
+[Tech Support](https://crowdbotics.slack.com/archives/CGSAV319V)
+
+## Table of Contents
+1. [Project Description](#project-description)
+2. [Project Structure](#project-structure)
+3. [Modules](#modules)
+4. [Getting Started: Frontend](#getting-started-frontend)
+   - [Installation](#installation)
+   - [Running with Fastlane](#running-with-fastlane)
+     - [Android](#android-1)
+     - [iOS](#ios-1)
+     - [React Native Web](#react-native-web)
+5. [Getting Started: Backend](backend#readme)
+6. [License](#license)
+
+## Project Description
+
+{{cookiecutter.project_description}}
+
+## Project Structure
+
+    .
+    ├── ...
+    ├── android                 # Android native files
+    ├── backend                 # Django backend REST API
+    ├── ios                     # iOS native files
+    ├── modules                 # Modules
+    ├── public                  
+    ├── screens                 
+    ├── store                   # Application state storage
+    ├── ...
+    ├── README.md
+    └── ...
+
+## Modules (THIS SECTION IS AUTO-GENERATED, PLEASE DO NOT EDIT)
+
+This section will show any installed modules you add from the Storyboard Modules section.
+
+# Getting started: Frontend
+
+This section outlines instructions on setting up a local development environment for the frontend of your application.
+
+## Installation
 
 ### Metro
 
@@ -81,3 +139,8 @@ Please follow the steps
 
 - please run `yarn web-build`
 - the web_build folder is generated and copied to backend/ automatically. please commit/push the web_build folder to git
+
+# License
+The use of code in this repository is governed by Crowdbotics [Terms and Conditions](https://www.crowdbotics.com/terms-of-service).
+
+Created with ❤️ by [Crowdbotics](https://www.crowdbotics.com/)

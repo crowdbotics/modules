@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import fse from "fs-extra";
 import path from "path";
 import config from "./config.js";
@@ -9,7 +9,16 @@ const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
-modules.map(module => {
+const IGNORED_ENTRIES = ["meta.json", "node_modules"];
+
+const filterFiles = (src, _) => !IGNORED_ENTRIES.includes(path.basename(src));
+
+const copy = (origin, target) => {
+  fs.mkdirSync(target, { recursive: true });
+  fse.copySync(origin, target, { filter: filterFiles });
+};
+
+modules.map((module) => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "modules", module);
   const meta = JSON.parse(
@@ -17,34 +26,46 @@ modules.map(module => {
   );
   const targetModuleDir = path.join(demoDir, meta.root);
 
-  const filterMeta = (src, _) => path.basename(src) != "meta.json";
+  const getDeps = (packageJSON) => {
+    let packages = [];
+    if (packageJSON.hasOwnProperty("x-dependencies")) {
+      const deps = packageJSON["x-dependencies"];
+      for (const [key, value] of Object.entries(deps)) {
+        packages.push(`${key}@${value}`);
+      }
+    }
+    return packages;
+  };
 
-  // Install module
-  fs.mkdirSync(targetModuleDir, { recursive: true });
-  fse.copySync(originModuleDir, targetModuleDir, { filter: filterMeta });
+  // cleanup node_modules
+  if (existsSync(path.join(originModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
+      recursive: true,
+    });
+  }
+  if (existsSync(path.join(originModuleDir, "yarn.lock"))) {
+    fs.rmdirSync(path.join(originModuleDir, "yarn.lock"), { recursive: true });
+  }
 
-  // NPM specific step
+  copy(originModuleDir, targetModuleDir);
+
   find.file(originModuleDir, function(files) {
-    files.map(file => {
+    files.map((file) => {
       if (path.basename(file) == "package.json") {
-        // Read package.json
         const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
+        const yarnPath = path.join(
+          "file:.",
+          meta.root,
+          path.dirname(file).replace(originModuleDir, "")
+        );
+        let packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
 
-        const yarnPath = path.join("file:.", meta.root, path.dirname(file).replace(originModuleDir, ""));
-        let packages = [yarnPath];
-
-        // Install x-dependencies
-        if (packageJSON.hasOwnProperty("x-dependencies")) {
-          const deps = packageJSON["x-dependencies"];
-          for (const [key, value] of Object.entries(deps)) {
-            packages.push(`${key}@${value}`);
-          }
-        }
-
-        // Install packages
-        packages = packages.join(" ");
         process.chdir(demoDir);
-        execSync(`yarn add ${packages}`);
+        try {
+          execSync(`yarn add ${packages}`);
+        } catch (err) {
+          console.warn("Failed adding module. Is this module available?");
+        }
       }
     });
   });

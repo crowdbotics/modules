@@ -1,35 +1,62 @@
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import path from "path";
 import config from "./config.js";
+import find from "find";
 import { execSync } from "child_process";
 
 const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
-modules.map(module => {
+modules.map((module) => {
   process.chdir(cwd);
-  // const originModuleDir = path.join(process.cwd(), "modules", "react-native", module);
-  const targetModuleDir = path.join(demoDir, "modules");
-  const moduleName = `@modules/${module}`;
+  const originModuleDir = path.join(process.cwd(), "modules", module);
+  const meta = JSON.parse(
+    fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
+  );
+  const targetModuleDir = path.join(demoDir, meta.root);
 
-  let packages = [moduleName];
+  const filterPackageJSON = (src, _) => path.basename(src) == "package.json";
+  const filterMeta = (src, _) => path.basename(src) != "meta.json";
 
-  // Remove x-dependencies
-  // TODO: Do we want to remove blindly? What if the user installed that dep too?
-  // const packageJSON = JSON.parse(
-  //   read(path.join(originModuleDir, "package.json"))
-  // );
-  // if (packageJSON.hasOwnProperty("x-dependencies")) {
-  //   const deps = packageJSON["x-dependencies"];
-  //   for (const [key, _] of Object.entries(deps)) {
-  //     packages.push(`${key}`);
-  //   }
-  // }
+  // cleanup node_modules
+  if (existsSync(path.join(originModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
+      recursive: true,
+    });
+  }
+  if (existsSync(path.join(targetModuleDir, "node_modules"))) {
+    fs.rmdirSync(path.join(targetModuleDir, "node_modules"), { recursive: true });
+  }
 
-  // Remove packages
-  packages = packages.join(" ");
-  process.chdir(demoDir);
-  execSync(`yarn remove ${packages}`);
-  fs.rmdirSync(path.join(targetModuleDir, module), { recursive: true });
+  find.file(originModuleDir, function(files) {
+    let file = files.filter(filterPackageJSON)[0];
+    if (file) {
+      const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
+      let name = packageJSON.name;
+      process.chdir(demoDir);
+
+      try {
+        execSync(`yarn remove ${name}`);
+      } catch (err) {
+        console.warn("Failed removing module. Is this module installed?");
+        return;
+      }
+    }
+
+    files.filter(filterMeta).map((file) => {
+      let targetFilePath = path.join(
+        targetModuleDir,
+        path.relative(originModuleDir, file)
+      );
+
+      fs.rmSync(targetFilePath);
+
+      let dir = path.dirname(targetFilePath);
+      let files = fs.readdirSync(dir);
+      if (files.length == 0) {
+        fs.rmdirSync(dir);
+      }
+    });
+  });
 });

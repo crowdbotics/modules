@@ -1,6 +1,6 @@
 # Terms & Conditions Screen
 
-The Terms and Conditions Screen is a React Native based screen that renders terms and conditions with a simple header.
+The Terms and Conditions Screen is a React Native based screen that renders a Terms and Conditions page with a simple header.
 
 ## Manual Setup
 
@@ -13,8 +13,17 @@ const { title, navigator } = TermsAndConditions;
 ```
 
 ## Configuring the Terms & Conditions Frontend
-All that is required to configure the frontend is to edit the url in `index.js` to point to your app's url on the web. On line 14 of `index.js`, replace <APP_URL_HERE> with your App's url (you can get this from the crowdbotics dashboard).
-`fetch('https://<APP_URL_HERE>.botics.co/modules/terms-and-conditions/')`
+All that is required to configure the frontend is to edit the url variable in `options/options.js` to point to your app's url on the web. That url should have a trailing slash. 
+
+```
+export const globalOptions = {
+  name: "demoIdentifier",
+  url: "https://<your-app-url-here>.botics.co/",
+  api: "https://<your-app-url-here>.co/api/v1"
+}
+
+```
+
 
 ## Contributing
 
