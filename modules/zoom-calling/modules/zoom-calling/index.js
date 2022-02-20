@@ -61,7 +61,11 @@ const ZoomCalling = () => {
   }, [meetingEvent])
 
   const startMeeting = () => {
-    createMeeting(currentUser.first_name + '' + currentUser.last_name, currentUser.id, oauthToken['access_token']).then(response => {
+    let meetingPayload = {
+      topic: `${currentUser.first_name + '' + currentUser.last_name}'s Personal Meeting Room`,
+      type: 1
+    }
+    createMeeting(currentUser.id, meetingPayload, oauthToken['access_token']).then(response => {
       setMeetingInfo(response)
       let params = parse_query_string(response.start_url)
       if (params.zak) {
@@ -114,8 +118,31 @@ const ZoomCalling = () => {
     }
   }, [oauthToken])
 
-  const onHandleMeetingSchedule = () => {
-    setIsMeetingScheduleModal(!isMeetingScheduleModal)
+  const onHandleMeetingSchedule = (data) => {
+    console.log('data', data)
+    let meetingPayload = {
+      recurrence: {
+        end_date_time: '',
+        end_times: 1,
+        monthly_day: 1,
+        monthly_week: -1,
+        monthly_week_day: 1,
+        repeat_interval: 0,
+        type: 1,
+        weekly_days: '1'
+      },
+      settings: {
+        host_video: data.hostVideo,
+        participant_video: data.participantsVideo,
+      },
+      start_time: data.startDate.toString(),
+      timezone: data.timezone,
+      topic: data.topic,
+      type: 2
+    }
+    createMeeting(currentUser.id, meetingPayload, oauthToken['access_token']).then(res => {
+      setIsMeetingScheduleModal(!isMeetingScheduleModal)
+    })
   }
 
   return (
@@ -157,13 +184,13 @@ const ZoomCalling = () => {
           submitInput={(meetingId) => joinMeeting(meetingId)}
           closeDialog={() => setIsJoinMeeting(false)}>
         </DialogInput>
-        {isMeetingScheduleModal && 
+        {isMeetingScheduleModal &&
           <MeetingScheduleModal
             setModalVisible={setIsMeetingScheduleModal}
             onHandleMeetingSchedule={onHandleMeetingSchedule}
           />
         }
-        
+
       </> : <WebView
         useWebKit={true}
         userAgent="Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"

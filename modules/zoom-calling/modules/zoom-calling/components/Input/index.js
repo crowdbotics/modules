@@ -10,6 +10,7 @@ const Input = (props) => {
         placeholder={props.label}
         editable={props.editable}
         value={props.value}
+        onChangeText={props.onChangeText}
       />
     </View>
   )

@@ -8,8 +8,7 @@ import { StyleSheet } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 // @ts-ignore
 import DatePicker from 'react-native-date-picker'
-// @ts-ignore
-import timezones from 'timezones-list';
+import { timezones } from '../../timezones';
 
 const MeetingScheduleModal = (props) => {
   const [meetingSchedule, setMeetingSchedule] = useState({
@@ -23,7 +22,7 @@ const MeetingScheduleModal = (props) => {
   const [openStartDate, setOpenStartDate] = useState(false)
   
   const [openTimezone, setOpenTimezone] = useState(false);
-    const [timezoneList, setTimezoneList] = useState(timezones.map(timezone => ({label: timezone.label, value: timezone.tzCode})));
+    const [timezoneList, setTimezoneList] = useState(timezones);
 
   return (
     <View style={styles.centeredView}>
@@ -42,21 +41,6 @@ const MeetingScheduleModal = (props) => {
                 onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, topic: text })}
               />
             </View>
-            {/* <View style={styles.ModalContent}>
-              <View style={styles.InputLabels}>
-                <Input
-                  label="When"
-                  onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, startDate: text })}
-                />
-              </View>
-              <View style={styles.InputLabels}>
-                <Input
-                  label="End time"
-                  onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, endDate: text })}
-                />
-              </View>
-            </View> */}
-
             <View style={styles.ModalContent}>
               <View style={styles.InputLabels}>
                 <Pressable onPress={() => setOpenStartDate(true)}>
@@ -104,6 +88,7 @@ const MeetingScheduleModal = (props) => {
                   }}
                   listMode="MODAL"
                   modalTitle="Select timezone"
+                  searchable={true}
                   open={openTimezone}
                   value={meetingSchedule.timezone}
                   items={timezoneList}

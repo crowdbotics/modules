@@ -25,7 +25,7 @@ export const getCurrentUser = async (token) => {
   return res.json()
 }
 
-export const createMeeting = async (topic, user_id, token) => {
+export const createMeeting = async (user_id, payload, token) => {
   let res = await fetch(`https://api.zoom.us/v2/users/${user_id}/meetings`, {
     method: 'POST',
     headers: {
@@ -33,10 +33,7 @@ export const createMeeting = async (topic, user_id, token) => {
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify({
-      topic: `${topic}'s Personal Meeting Room`,
-      "type": 1
-      })
+    body: JSON.stringify(payload)
   })
   return res.json()
 }
