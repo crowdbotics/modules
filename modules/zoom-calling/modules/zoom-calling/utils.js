@@ -1,12 +1,28 @@
 import base64 from 'react-native-base64'
 
+export const API_URL = "https://api.zoom.us";
+export const CLIENT_ID = "O8EhCwuQu20CXQxKr3b_g"
+export const SDK_KEY = "uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio"
+export const SDK_SECRET = "xJOm6daNiIR0FCDJSTQSegxa0Loc0AeaYdIn"
+export const CLIENT_SECRET = "GbH7b27RIJUvJj1ww3mLFKoUyVlufMWT"
+export const REDIRECT_URI = "https://oauth.pstmn.io/v1/callback"
+export const parse_query_string = (url) => {
+  let regex = /[?&]([^=#]+)=([^&#]*)/g,
+    params = {},
+    match;
+  while (match = regex.exec(url)) {
+    params[match[1]] = match[2];
+  }
+  return params;
+}
+
 export const getOauthToken = async (code) => {
-  let res = await fetch(`https://api.zoom.us/oauth/token?code=${code}&grant_type=authorization_code&redirect_uri=https://oauth.pstmn.io/v1/callback`, {
+  let res = await fetch(`${API_URL}/oauth/token?code=${code}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
-      'Authorization': `Basic ${base64.encode('O5o5klrbQWq3L6PBWbRjoA:ia00qOHowj0vEf1BXOXuZUxc54RFMZHC')}`
+      'Authorization': `Basic ${base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)}`
     },
     body: JSON.stringify({})
   })
@@ -14,7 +30,7 @@ export const getOauthToken = async (code) => {
 }
 
 export const getCurrentUser = async (token) => {
-  let res = await fetch(`https://api.zoom.us/v2/users/me`, {
+  let res = await fetch(`${API_URL}/v2/users/me`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -26,7 +42,7 @@ export const getCurrentUser = async (token) => {
 }
 
 export const createMeeting = async (user_id, payload, token) => {
-  let res = await fetch(`https://api.zoom.us/v2/users/${user_id}/meetings`, {
+  let res = await fetch(`${API_URL}/v2/users/${user_id}/meetings`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -39,7 +55,7 @@ export const createMeeting = async (user_id, payload, token) => {
 }
 
 export const deleteMeeting = async (meetingId, token) => {
-  await fetch(`https://api.zoom.us/v2/meetings/${meetingId}`, {
+  await fetch(`${API_URL}/v2/meetings/${meetingId}`, {
     method: 'DELETE',
     headers: {
       'Accept': 'application/json',

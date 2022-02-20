@@ -14,15 +14,25 @@ const MeetingScheduleModal = (props) => {
   const [meetingSchedule, setMeetingSchedule] = useState({
     topic: '',
     startDate: new Date(),
-    timezone: '',
+    timezone: 'America/Los_Angeles',
     meetingID: 'auto',
     hostVideo: true,
     participantsVideo: true
   });
+  const [errors, setErrors] = useState({
+    topic: '',
+  })
   const [openStartDate, setOpenStartDate] = useState(false)
-  
   const [openTimezone, setOpenTimezone] = useState(false);
-    const [timezoneList, setTimezoneList] = useState(timezones);
+  const [timezoneList, setTimezoneList] = useState(timezones);
+
+  const handleSave = () => {
+    if(meetingSchedule.topic == "") {
+      setErrors({...errors, topic: "This field is required."})
+      return
+    }
+    props.onHandleMeetingSchedule(meetingSchedule)
+  }
 
   return (
     <View style={styles.centeredView}>
@@ -38,6 +48,7 @@ const MeetingScheduleModal = (props) => {
             <View style={{ marginTop: 10 }}>
               <Input
                 label="Meeting topic"
+                errorMessage={(errors.topic != "") ? "This field is required." : ""}
                 onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, topic: text })}
               />
             </View>
@@ -70,13 +81,14 @@ const MeetingScheduleModal = (props) => {
                 />
               </View>
               <View style={styles.InputLabels}>
-                <Text style={{fontWeight: "bold"}}>Timezone</Text>
+                <Text style={{ fontWeight: "bold" }}>Timezone</Text>
                 <DropDownPicker
                   placeholder='Timezone'
                   placeholderStyle={{
                     color: "lightgrey",
                   }}
-                  style={{borderWidth: 1,
+                  style={{
+                    borderWidth: 1,
                     borderColor: "lightgray",
                     borderRadius: 5,
                     padding: 4,
@@ -98,15 +110,15 @@ const MeetingScheduleModal = (props) => {
                 />
               </View>
             </View>
-            
-            <View style={{ marginTop: 10, display: "flex", flexDirection: "row"}}>
-              <Text style={{fontWeight: "bold"}}>Meeting Recurring</Text>
+
+            {/* <View style={{ marginTop: 10, display: "flex", flexDirection: "row" }}>
+              <Text style={{ fontWeight: "bold" }}>Meeting Recurring</Text>
               <Checkbox
                 status={'checked'}
-                onPress={() => {}}
+                onPress={() => { }}
               />
-            </View>
-            
+            </View> */}
+
             <View style={{ marginTop: 10 }}>
               <Text style={styles.MeetingID}>Meeting ID</Text>
               <View style={styles.MeetingRow}>
@@ -177,7 +189,7 @@ const MeetingScheduleModal = (props) => {
 
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => props.onHandleMeetingSchedule(meetingSchedule)}
+                onPress={handleSave}
               >
                 <Text style={styles.textStyle}>Save</Text>
               </Pressable>

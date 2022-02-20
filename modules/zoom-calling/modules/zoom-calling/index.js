@@ -3,7 +3,7 @@ import { View, Text, Image, NativeEventEmitter } from "react-native";
 import ZoomUs, { ZoomEmitter } from 'react-native-zoom-us';
 // @ts-ignore
 import { WebView } from 'react-native-webview';
-import { deleteMeeting, createMeeting, getCurrentUser, getOauthToken } from './utils';
+import { API_URL, CLIENT_ID, CLIENT_SECRET, createMeeting, getCurrentUser, getOauthToken, parse_query_string, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DialogInput from 'react-native-dialog-input';
@@ -11,6 +11,7 @@ import Button from './components/Button';
 import MeetingScheduleModal from './components/MeetingScheduleModal';
 
 const ZoomCalling = () => {
+  const userAgent = "Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"
   const [isFirst, setIsFirst] = useState(true)
   const [oauthToken, setOauthToken] = useState(false)
   const [meetingInfo, setMeetingInfo] = useState(false)
@@ -32,11 +33,11 @@ const ZoomCalling = () => {
 
   useEffect(() => {
     ZoomUs.initialize({
-      clientKey: 'uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio',
-      clientSecret: 'xJOm6daNiIR0FCDJSTQSegxa0Loc0AeaYdIn',
+      clientKey: SDK_KEY,
+      clientSecret: SDK_SECRET
     }).then((res) => {
       setIsInitialized(true);
-    })
+    }).catch((error) => console.log(error))
 
   }, [])
 
@@ -47,8 +48,7 @@ const ZoomCalling = () => {
     const zoomEmitter = new NativeEventEmitter(ZoomEmitter);
     const eventListener = zoomEmitter.addListener('MeetingEvent', ({ event, status, ...params }) => {
       setMeetingEvent(event)
-    },
-    );
+    });
     return () => eventListener.remove();
   }, [isInitialized])
 
@@ -59,6 +59,14 @@ const ZoomCalling = () => {
       }
     }
   }, [meetingEvent])
+
+  useEffect(() => {
+    if (oauthToken) {
+      getCurrentUser(oauthToken['access_token']).then(response => {
+        setCurrentUser(response)
+      }).catch((error) => console.log(error))
+    }
+  }, [oauthToken])
 
   const startMeeting = () => {
     let meetingPayload = {
@@ -84,42 +92,23 @@ const ZoomCalling = () => {
     ZoomUs.joinMeeting({
       userName: currentUser.first_name + '' + currentUser.last_name,
       meetingNumber: meetingId
-    })
-  }
-
-  const parse_query_string = (url) => {
-    let regex = /[?&]([^=#]+)=([^&#]*)/g,
-      params = {},
-      match;
-    while (match = regex.exec(url)) {
-      params[match[1]] = match[2];
-    }
-    return params;
+    }).then(res => console.log(res)).catch((error) => console.log(error))
   }
 
   const onNavigationStateChange = (evt) => {
-    if (evt.url.includes('https://oauth.pstmn.io/v1/callback')) {
+    if (evt.url.includes(REDIRECT_URI)) {
       let params = parse_query_string(evt.url);
       if (params.code && isFirst) {
         setIsFirst(false)
         getOauthToken(params.code).then((response) => {
           setOauthToken(response)
-        })
+        }).catch((error) => console.log(error))
         return
       }
     }
   }
 
-  useEffect(() => {
-    if (oauthToken) {
-      getCurrentUser(oauthToken['access_token']).then(response => {
-        setCurrentUser(response)
-      })
-    }
-  }, [oauthToken])
-
   const onHandleMeetingSchedule = (data) => {
-    console.log('data', data)
     let meetingPayload = {
       recurrence: {
         end_date_time: '',
@@ -140,9 +129,9 @@ const ZoomCalling = () => {
       topic: data.topic,
       type: 2
     }
-    createMeeting(currentUser.id, meetingPayload, oauthToken['access_token']).then(res => {
+    createMeeting(currentUser.id, meetingPayload, oauthToken['access_token']).then(() => {
       setIsMeetingScheduleModal(!isMeetingScheduleModal)
-    })
+    }).catch((error) => console.log(error))
   }
 
   return (
@@ -193,9 +182,9 @@ const ZoomCalling = () => {
 
       </> : <WebView
         useWebKit={true}
-        userAgent="Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"
+        userAgent={userAgent}
         onNavigationStateChange={onNavigationStateChange}
-        source={{ uri: `https://zoom.us/oauth/authorize?response_type=code&client_id=O5o5klrbQWq3L6PBWbRjoA&redirect_uri=https://oauth.pstmn.io/v1/callback` }}
+        source={{ uri: `${API_URL}/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}` }}
       />
       }
 
