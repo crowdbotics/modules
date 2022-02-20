@@ -9,6 +9,9 @@ import { StyleSheet } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import Button from './components/Button';
 import MeetingScheduleModal from './components/MeetingScheduleModal';
+// @ts-ignore
+import CookieManager from '@react-native-cookies/cookies';
+
 
 const ZoomCalling = () => {
   const userAgent = "Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"
@@ -38,7 +41,7 @@ const ZoomCalling = () => {
     }).then((res) => {
       setIsInitialized(true);
     }).catch((error) => console.log(error))
-
+    
   }, [])
 
   useEffect(() => {
@@ -134,12 +137,19 @@ const ZoomCalling = () => {
     }).catch((error) => console.log(error))
   }
 
+  const handleLogout = () => {
+    CookieManager.clearAll().then(() => {
+      setOauthToken(false)
+      setIsFirst(true)
+    }).catch((error) => console.log(error))
+  }
+
   return (
     <View style={{ flex: 1 }}>
       {oauthToken ? <>
         <View style={styles.header}>
           <View>
-            <Text>&nbsp;</Text>
+            <Text onPress={handleLogout} style={{marginLeft: 5, color: "#FA060D"}}>Logout</Text>
           </View>
           <View style={styles.UserImageArea}>
             <View>
@@ -170,6 +180,7 @@ const ZoomCalling = () => {
           title={"Join Meeting"}
           message={"Please enter Meeting ID"}
           hintInput={"Meeting ID"}
+          textInputProps={{keyboardType: "number-pad"}}
           submitInput={(meetingId) => joinMeeting(meetingId)}
           closeDialog={() => setIsJoinMeeting(false)}>
         </DialogInput>
@@ -198,7 +209,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 5
+    marginTop: 5,
+    alignItems: "center"
   },
   userLogo: {
     width: 40,
