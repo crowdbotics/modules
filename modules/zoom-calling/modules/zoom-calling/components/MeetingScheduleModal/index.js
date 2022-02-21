@@ -17,7 +17,8 @@ const MeetingScheduleModal = (props) => {
     timezone: 'America/Los_Angeles',
     meetingID: false,
     hostVideo: true,
-    participantsVideo: true
+    participantsVideo: true,
+    recurring_meeting: false
   });
   const [errors, setErrors] = useState({
     topic: '',
@@ -27,8 +28,8 @@ const MeetingScheduleModal = (props) => {
   const [timezoneList, setTimezoneList] = useState(timezones);
 
   const handleSave = () => {
-    if(meetingSchedule.topic == "") {
-      setErrors({...errors, topic: "This field is required."})
+    if (meetingSchedule.topic == "") {
+      setErrors({ ...errors, topic: "This field is required." })
       return
     }
     props.onHandleMeetingSchedule(meetingSchedule)
@@ -110,16 +111,163 @@ const MeetingScheduleModal = (props) => {
                 />
               </View>
             </View>
-
-            {/* <View style={{ marginTop: 10, display: "flex", flexDirection: "row" }}>
-              <Text style={{ fontWeight: "bold" }}>Meeting Recurring</Text>
+            {/* <View style={{display: "flex", flexDirection: "row"}}>
               <Checkbox
-                status={'checked'}
-                onPress={() => { }}
+                status={meetingSchedule.recurring_meeting ? 'checked' : 'unchecked'}
+                onPress={() => setMeetingSchedule({ ...meetingSchedule, recurring_meeting: !meetingSchedule.recurring_meeting })}
               />
+              <Text style={{ marginTop: 8 }}>Recurring meeting</Text>
             </View> */}
+            {meetingSchedule.recurring_meeting && <>
+              <View style={styles.MeetingRecurrence}>
+                <View style={{ width: '25%' }}>
+                  <Text style={styles.RecurrenceText}>Recurrence</Text>
+                </View>
+                <View style={{ width: '70%' }}>
+                  <DropDownPicker
+                    placeholder='Daily'
+                    placeholderStyle={{
+                      color: "lightgrey",
+                    }}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "lightgray",
+                      borderRadius: 5,
+                      padding: 4,
+                      marginTop: 5,
+                      height: 39,
+                    }}
+                    labelProps={{
+                      numberOfLines: 1,
+                    }}
+                    listMode="MODAL"
+                    modalTitle="Select timezone"
+                    searchable={true}
+                    open={openTimezone}
+                    value={meetingSchedule.timezone}
+                    items={timezoneList}
+                    setOpen={setOpenTimezone}
+                    setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
+                    setItems={setTimezoneList}
+                  />
+                </View>
+              </View>
+              <View style={styles.RecurrenceArea}>
+                <View style={{ width: '30%' }}>
+                  <Text style={styles.RepeatText}>Repeat every</Text>
+                </View>
+                <View style={{ width: '30%' }}>
+                  <DropDownPicker
+                    placeholder='Daily'
+                    placeholderStyle={{
+                      color: "lightgrey",
+                    }}
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "lightgray",
+                      borderRadius: 5,
+                      padding: 4,
+                      marginTop: 5,
+                      height: 39,
+                    }}
+                    labelProps={{
+                      numberOfLines: 1,
+                    }}
+                    listMode="MODAL"
+                    modalTitle="Select timezone"
+                    searchable={true}
+                    open={openTimezone}
+                    value={meetingSchedule.timezone}
+                    items={timezoneList}
+                    setOpen={setOpenTimezone}
+                    setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
+                    setItems={setTimezoneList}
+                  />
+                </View>
+                <Text style={{ marginLeft: 5 }}>day</Text>
+              </View>
+              <View style={{marginTop:8}}>
+                <Text style={styles.EndText}>End date</Text>
+              </View>
+              <View style={styles.EndDate}>
+                <View style={styles.EndDateText}>
+                  <View>
+                    <RadioButton
+                      value="false"
+                      status={!meetingSchedule.meetingID ? 'checked' : 'unchecked'}
+                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: false })}
+                    />
+                  </View>
+                  <View>
+                    <Pressable onPress={() => setOpenStartDate(true)}>
+                      <Input
+                        editable={false}
+                        value={meetingSchedule.startDate.toLocaleString('en-US', {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                        })}
+                      />
+                    </Pressable>
+                    <DatePicker
+                      modal
+                      open={openStartDate}
+                      date={meetingSchedule.startDate}
+                      onConfirm={(date) => {
+                        setOpenStartDate(false)
+                        setMeetingSchedule({ ...meetingSchedule, startDate: date })
+                      }}
+                      onCancel={() => {
+                        setOpenStartDate(false)
+                      }}
+                    />
+                  </View>
+                </View>
 
-            <View style={{ marginTop: 10 }}>
+                <View style={styles.RadioButtonArea}>
+                  <View>
+                    <RadioButton
+                      value="false"
+                      status={!meetingSchedule.meetingID ? 'checked' : 'unchecked'}
+                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: false })}
+                    />
+                  </View>
+                  <View>
+                    <View style={{ width: '80%' }}>
+                      <DropDownPicker
+                        placeholder='Daily'
+                        placeholderStyle={{
+                          color: "lightgrey",
+                        }}
+                        style={{
+                          borderWidth: 1,
+                          borderColor: "lightgray",
+                          borderRadius: 5,
+                          padding: 4,
+                          height: 39,
+                        }}
+                        labelProps={{
+                          numberOfLines: 1,
+                        }}
+                        listMode="MODAL"
+                        modalTitle="Select timezone"
+                        searchable={true}
+                        open={openTimezone}
+                        value={meetingSchedule.timezone}
+                        items={timezoneList}
+                        setOpen={setOpenTimezone}
+                        setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
+                        setItems={setTimezoneList}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </>}
+            
+            <View style={{ marginTop: 5 }}>
               <Text style={styles.MeetingID}>Meeting ID</Text>
               <View style={styles.MeetingRow}>
                 <View style={styles.InputsArea}>
@@ -283,6 +431,51 @@ const styles = StyleSheet.create({
   VideoText: {
     fontWeight: 'bold',
     fontSize: 14,
+  },
+  RecurrenceArea:{
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center' , 
+    marginTop:10,
+  },
+  MeetingRecurrence:{
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'center'
+  },
+  RecurrenceText:{
+    fontSize: 14, 
+    marginTop: 5, 
+    paddingRight: 5, 
+    fontWeight:'bold',
+  },
+  RepeatText:{
+    fontSize: 14, 
+    marginTop: 8, 
+    paddingRight: 10, 
+    fontWeight:'bold',
+  },
+  EndText:{
+    fontSize: 14, 
+    fontWeight: 'bold', 
+  },
+  EndDate:{
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'center'
+  },
+  EndDateText:{
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    width: '40%'
+  },
+  RadioButtonArea:{
+    display: 'flex', 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    width: '40%', 
+    marginLeft: 35 
   },
 });
 

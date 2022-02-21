@@ -6,6 +6,7 @@ export const SDK_KEY = "uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio"
 export const SDK_SECRET = "xJOm6daNiIR0FCDJSTQSegxa0Loc0AeaYdIn"
 export const CLIENT_SECRET = "GbH7b27RIJUvJj1ww3mLFKoUyVlufMWT"
 export const REDIRECT_URI = "https://oauth.pstmn.io/v1/callback"
+
 export const parse_query_string = (url) => {
   let regex = /[?&]([^=#]+)=([^&#]*)/g,
     params = {},
@@ -14,6 +15,17 @@ export const parse_query_string = (url) => {
     params[match[1]] = match[2];
   }
   return params;
+}
+
+export const parse_meeting_id = (url) => {
+  return url.split("?").shift().split('/').pop()
+}
+
+export const parse_start_date = (dateString) => {
+  const date = new Date(dateString)
+  console.log("date", date)
+  return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "T" +
+          date.getHours() +  "-" + date.getMinutes() + "-" + date.getSeconds()
 }
 
 export const getOauthToken = async (code) => {

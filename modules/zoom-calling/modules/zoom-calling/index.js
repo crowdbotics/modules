@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, NativeEventEmitter, Pressable, SectionList } from "react-native";
+import { View, Text, Image, NativeEventEmitter } from "react-native";
 import ZoomUs, { ZoomEmitter } from 'react-native-zoom-us';
 // @ts-ignore
 import { WebView } from 'react-native-webview';
-import { API_URL, CLIENT_ID, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, parse_query_string, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
+import { API_URL, CLIENT_ID, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, parse_query_string, parse_start_date, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DialogInput from 'react-native-dialog-input';
@@ -11,8 +11,7 @@ import Button from './components/Button';
 import MeetingScheduleModal from './components/MeetingScheduleModal';
 // @ts-ignore
 import CookieManager from '@react-native-cookies/cookies';
-import { timezones } from './timezones';
-
+import ScheduleMeetingList from './components/ScheduleMeetingList';
 
 const ZoomCalling = () => {
   const userAgent = "Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"
@@ -142,7 +141,7 @@ const ZoomCalling = () => {
         participant_video: data.participantsVideo,
         use_pmi: data.meetingID
       },
-      start_time: data.startDate.toString(),
+      start_time: parse_start_date(data.startDate),
       timezone: data.timezone,
       topic: data.topic,
       type: 2
@@ -211,42 +210,8 @@ const ZoomCalling = () => {
         <View style={styles.MeetingCard}>
           <Button title="Schedule a meeting" onPress={() => setIsMeetingScheduleModal(true)} />
         </View>
-        <View style={styles.Area}>
-
-        </View>
-        <SectionList
-          sections={upcomingMeetingsList}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({ item }) => (
-            <View style={styles.TimeArea}>
-              <View style={styles.TimeAndLocation}>
-                <Text style={styles.TimeText}>{new Date(item.start_time).toLocaleString()}</Text>
-                <Text numberOfLines={2} style={styles.LocationText}>{timezones.find(obj => obj.value == item.timezone).label}</Text>
-              </View>
-              <View style={styles.MeetingDay}>
-                <Text numberOfLines={3} style={styles.TimeText}>{item.topic}</Text>
-                {/* <Text style={styles.MeetingIDText}>Meeting ID: -</Text> */}
-              </View>
-              <View style={styles.ButtonArea}>
-                <Pressable style={[styles.EditButton, styles.EditBtn]}>
-                  <Text style={styles.textStyle}>Join</Text>
-                </Pressable>
-                <Pressable onPress={() => handleRemoveMeeting(item)} style={[styles.EditButton, styles.DeleteBtn]}>
-                  <Text style={styles.textStyle}>Delete</Text>
-                </Pressable>
-              </View>
-            </View>
-          )}
-          renderSectionHeader={({ section: { title } }) => (
-            <Text style={styles.TitleText}>{title}</Text>
-          )}
-          ListEmptyComponent={() => (
-            <View style={{}}>
-              <Text style={styles.UpcomingText}>Upcoming Meetings</Text>
-              <Text style={styles.NewMeetingText}>The user does not have any upcoming meetings. To schedule a new meeting click Schedule a Meeting.</Text>
-            </View>
-          )}
-        />
+        <View style={styles.Area}></View>
+        <ScheduleMeetingList upcomingMeetingsList={upcomingMeetingsList} joinMeeting={joinMeeting} handleRemoveMeeting={handleRemoveMeeting} />
         <DialogInput isDialogVisible={isJoinMeeting}
           title={"Join Meeting"}
           message={"Please enter Meeting ID"}
@@ -360,134 +325,7 @@ const styles = StyleSheet.create({
     elevation: 12,
     marginLeft: 10,
     width: 100
-  },
-  ButtonArea: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: '40%',
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  buttonOpen: {
-    backgroundColor: "#FA060D",
-  },
-  EditBtn: {
-    backgroundColor: '#0e71eb',
-  },
-  DeleteBtn: {
-    backgroundColor: '#FA060D',
-  },
-  EditButton: {
-    borderRadius: 6,
-    marginLeft: 10,
-    marginTop: 8,
-    paddingTop: 8,
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-    fontSize: 12,
-    textAlign: 'center',
-    alignItems: 'center',
-    display: 'flex',
-  },
-  buttonClose: {
-    backgroundColor: "#2D8CFF",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-  heading: {
-    fontSize: 24,
-    color: 'black',
-    fontWeight: 'bold',
-    marginRight: 40,
-  },
-  ModalContent: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  InputLabels: {
-    width: "49%",
-  },
-  MeetingID: {
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  MeetingRow: {
-    display: "flex",
-    flexDirection: "row",
-    marginTop: 5,
-  },
-  InputsArea: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "50%",
-    paddingRight: 5,
-  },
-  RadioButtons: {
-    display: "flex",
-    flexDirection: "row",
-  },
-  VideoText: {
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-  TimeAndLocation: {
-    marginTop: 20,
-    marginLeft: 10,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '30%',
-  },
-  TimeText: {
-    fontSize: 12,
-  },
-  MeetingDay: {
-    marginTop: 20,
-    marginLeft: 10,
-    display: 'flex',
-    flexDirection: 'column',
-    width: '30%'
-  },
-  LocationText: {
-    color: '#747487',
-    fontSize: 12,
-    paddingTop: 6,
-  },
-  TimeArea: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  MeetingIDText: {
-    fontSize: 12,
-    color: '#747487',
-    paddingTop: 6,
-  },
-  TitleText: {
-    marginLeft: 10,
-    fontSize: 16,
-    fontWeight: 'bold'
-  },
-  UpcomingText: {
-    marginLeft: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  NewMeetingText: {
-    marginTop: 50,
-    color: '#747487',
-    padding: 40,
-    textAlign: 'center',
-    fontSize: 13,
-  },
+  }
 });
 
 export default {
