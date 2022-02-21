@@ -15,7 +15,7 @@ const MeetingScheduleModal = (props) => {
     topic: '',
     startDate: new Date(),
     timezone: 'America/Los_Angeles',
-    meetingID: 'auto',
+    meetingID: false,
     hostVideo: true,
     participantsVideo: true
   });
@@ -125,9 +125,9 @@ const MeetingScheduleModal = (props) => {
                 <View style={styles.InputsArea}>
                   <View style={styles.RadioButtons}>
                     <RadioButton
-                      value="auto"
-                      status={meetingSchedule.meetingID == 'auto' ? 'checked' : 'unchecked'}
-                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: 'auto' })}
+                      value="false"
+                      status={!meetingSchedule.meetingID ? 'checked' : 'unchecked'}
+                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: false })}
                     />
                     <Text numberOfLines={2} style={{ width: 100 }}>Generate Automatically</Text>
                   </View>
@@ -135,9 +135,9 @@ const MeetingScheduleModal = (props) => {
                 <View style={styles.InputsArea}>
                   <View style={styles.RadioButtons}>
                     <RadioButton
-                      value="personal"
-                      status={meetingSchedule.meetingID == 'personal' ? 'checked' : 'unchecked'}
-                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: 'personal' })}
+                      value="true"
+                      status={meetingSchedule.meetingID ? 'checked' : 'unchecked'}
+                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: true })}
                     />
                     <Text numberOfLines={2} style={{ width: 100 }}>Personal Meeting ID</Text>
                   </View>
@@ -190,8 +190,9 @@ const MeetingScheduleModal = (props) => {
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={handleSave}
+                disabled={props.isMeetingScheduleSave}
               >
-                <Text style={styles.textStyle}>Save</Text>
+                <Text style={styles.textStyle}>{props.isMeetingScheduleSave ? "Saving" : "Save"}</Text>
               </Pressable>
             </View>
           </View>

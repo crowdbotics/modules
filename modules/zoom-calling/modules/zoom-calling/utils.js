@@ -54,6 +54,18 @@ export const createMeeting = async (user_id, payload, token) => {
   return res.json()
 }
 
+export const getMeetingList = async (user_id, token) => {
+  let res = await fetch(`${API_URL}/v2/users/${user_id}/meetings?type=upcoming`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  return res.json()
+}
+
 export const deleteMeeting = async (meetingId, token) => {
   await fetch(`${API_URL}/v2/meetings/${meetingId}`, {
     method: 'DELETE',

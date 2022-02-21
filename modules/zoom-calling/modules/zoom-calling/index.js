@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, NativeEventEmitter } from "react-native";
+import { View, Text, Image, NativeEventEmitter, Pressable, SectionList } from "react-native";
 import ZoomUs, { ZoomEmitter } from 'react-native-zoom-us';
 // @ts-ignore
 import { WebView } from 'react-native-webview';
-import { API_URL, CLIENT_ID, CLIENT_SECRET, createMeeting, getCurrentUser, getOauthToken, parse_query_string, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
+import { API_URL, CLIENT_ID, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, parse_query_string, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DialogInput from 'react-native-dialog-input';
@@ -11,6 +11,7 @@ import Button from './components/Button';
 import MeetingScheduleModal from './components/MeetingScheduleModal';
 // @ts-ignore
 import CookieManager from '@react-native-cookies/cookies';
+import { timezones } from './timezones';
 
 
 const ZoomCalling = () => {
@@ -20,8 +21,10 @@ const ZoomCalling = () => {
   const [meetingInfo, setMeetingInfo] = useState(false)
   const [isJoinMeeting, setIsJoinMeeting] = useState(false)
   const [isMeetingScheduleModal, setIsMeetingScheduleModal] = useState(false);
+  const [isMeetingScheduleSave, setIsMeetingScheduleSave] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [meetingEvent, setMeetingEvent] = useState('');
+  const [upcomingMeetingsList, setUpcomingMeetingsList] = useState([]);
   const [currentUser, setCurrentUser] = useState({
     id: '',
     email: null,
@@ -41,7 +44,7 @@ const ZoomCalling = () => {
     }).then((res) => {
       setIsInitialized(true);
     }).catch((error) => console.log(error))
-    
+
   }, [])
 
   useEffect(() => {
@@ -67,6 +70,16 @@ const ZoomCalling = () => {
     if (oauthToken) {
       getCurrentUser(oauthToken['access_token']).then(response => {
         setCurrentUser(response)
+        getMeetingList(response['id'], oauthToken['access_token']).then(res => {
+          if (res.meetings.length == 0)
+            return
+
+          let DATA = [{
+            title: "Upcoming Meetings",
+            data: res.meetings
+          }]
+          setUpcomingMeetingsList(DATA)
+        }).catch((error) => console.log(error))
       }).catch((error) => console.log(error))
     }
   }, [oauthToken])
@@ -112,6 +125,7 @@ const ZoomCalling = () => {
   }
 
   const onHandleMeetingSchedule = (data) => {
+    setIsMeetingScheduleSave(true)
     let meetingPayload = {
       recurrence: {
         end_date_time: '',
@@ -126,6 +140,7 @@ const ZoomCalling = () => {
       settings: {
         host_video: data.hostVideo,
         participant_video: data.participantsVideo,
+        use_pmi: data.meetingID
       },
       start_time: data.startDate.toString(),
       timezone: data.timezone,
@@ -134,7 +149,18 @@ const ZoomCalling = () => {
     }
     createMeeting(currentUser.id, meetingPayload, oauthToken['access_token']).then(() => {
       setIsMeetingScheduleModal(!isMeetingScheduleModal)
-    }).catch((error) => console.log(error))
+      setIsMeetingScheduleSave(false)
+      getMeetingList(currentUser.id, oauthToken['access_token']).then(res => {
+        if (res.meetings.length == 0)
+          return
+
+        let DATA = [{
+          title: "Upcoming Meetings",
+          data: res.meetings
+        }]
+        setUpcomingMeetingsList(DATA)
+      }).catch((error) => console.log(error))
+    }).catch((error) => { setIsMeetingScheduleSave(false); console.log(error) })
   }
 
   const handleLogout = () => {
@@ -144,12 +170,21 @@ const ZoomCalling = () => {
     }).catch((error) => console.log(error))
   }
 
+  const handleRemoveMeeting = (item) => {
+    deleteMeeting(item.id, oauthToken['access_token']).then(res => {
+      let tmpUpcomingMeetingsList = JSON.parse(JSON.stringify(upcomingMeetingsList))
+      const index = upcomingMeetingsList[0].data.indexOf(item)
+      tmpUpcomingMeetingsList[0].data.splice(index, 1)
+      setUpcomingMeetingsList(tmpUpcomingMeetingsList)
+    }).catch((error) => console.log(error))
+  }
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.Container}>
       {oauthToken ? <>
         <View style={styles.header}>
           <View>
-            <Text onPress={handleLogout} style={{marginLeft: 5, color: "#FA060D"}}>Logout</Text>
+            <Text onPress={handleLogout} style={styles.LogoutText}>Logout</Text>
           </View>
           <View style={styles.UserImageArea}>
             <View>
@@ -176,11 +211,47 @@ const ZoomCalling = () => {
         <View style={styles.MeetingCard}>
           <Button title="Schedule a meeting" onPress={() => setIsMeetingScheduleModal(true)} />
         </View>
+        <View style={styles.Area}>
+
+        </View>
+        <SectionList
+          sections={upcomingMeetingsList}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => (
+            <View style={styles.TimeArea}>
+              <View style={styles.TimeAndLocation}>
+                <Text style={styles.TimeText}>{new Date(item.start_time).toLocaleString()}</Text>
+                <Text numberOfLines={2} style={styles.LocationText}>{timezones.find(obj => obj.value == item.timezone).label}</Text>
+              </View>
+              <View style={styles.MeetingDay}>
+                <Text numberOfLines={3} style={styles.TimeText}>{item.topic}</Text>
+                {/* <Text style={styles.MeetingIDText}>Meeting ID: -</Text> */}
+              </View>
+              <View style={styles.ButtonArea}>
+                <Pressable style={[styles.EditButton, styles.EditBtn]}>
+                  <Text style={styles.textStyle}>Join</Text>
+                </Pressable>
+                <Pressable onPress={() => handleRemoveMeeting(item)} style={[styles.EditButton, styles.DeleteBtn]}>
+                  <Text style={styles.textStyle}>Delete</Text>
+                </Pressable>
+              </View>
+            </View>
+          )}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.TitleText}>{title}</Text>
+          )}
+          ListEmptyComponent={() => (
+            <View style={{}}>
+              <Text style={styles.UpcomingText}>Upcoming Meetings</Text>
+              <Text style={styles.NewMeetingText}>The user does not have any upcoming meetings. To schedule a new meeting click Schedule a Meeting.</Text>
+            </View>
+          )}
+        />
         <DialogInput isDialogVisible={isJoinMeeting}
           title={"Join Meeting"}
           message={"Please enter Meeting ID"}
           hintInput={"Meeting ID"}
-          textInputProps={{keyboardType: "number-pad"}}
+          textInputProps={{ keyboardType: "number-pad" }}
           submitInput={(meetingId) => joinMeeting(meetingId)}
           closeDialog={() => setIsJoinMeeting(false)}>
         </DialogInput>
@@ -188,6 +259,7 @@ const ZoomCalling = () => {
           <MeetingScheduleModal
             setModalVisible={setIsMeetingScheduleModal}
             onHandleMeetingSchedule={onHandleMeetingSchedule}
+            isMeetingScheduleSave={isMeetingScheduleSave}
           />
         }
 
@@ -204,6 +276,9 @@ const ZoomCalling = () => {
 };
 
 const styles = StyleSheet.create({
+  Container: {
+    flex: 1,
+  },
   header: {
     width: '100%',
     display: 'flex',
@@ -216,6 +291,10 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     margin: 5
+  },
+  LogoutText: {
+    marginLeft: 5,
+    color: "#FA060D",
   },
   UserImageArea: {
     display: 'flex',
@@ -244,6 +323,9 @@ const styles = StyleSheet.create({
   ScheduleMeetingText: {
     color: 'white',
     textTransform: 'uppercase'
+  },
+  Area: {
+    marginTop: 20
   },
   MeetingCard: {
     width: "100%",
@@ -279,8 +361,34 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     width: 100
   },
+  ButtonArea: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '40%',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
   buttonOpen: {
     backgroundColor: "#FA060D",
+  },
+  EditBtn: {
+    backgroundColor: '#0e71eb',
+  },
+  DeleteBtn: {
+    backgroundColor: '#FA060D',
+  },
+  EditButton: {
+    borderRadius: 6,
+    marginLeft: 10,
+    marginTop: 8,
+    paddingTop: 8,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    fontSize: 12,
+    textAlign: 'center',
+    alignItems: 'center',
+    display: 'flex',
   },
   buttonClose: {
     backgroundColor: "#2D8CFF",
@@ -288,11 +396,11 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   heading: {
     fontSize: 24,
@@ -303,7 +411,7 @@ const styles = StyleSheet.create({
   ModalContent: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   InputLabels: {
     width: "49%",
@@ -331,6 +439,54 @@ const styles = StyleSheet.create({
   VideoText: {
     fontWeight: 'bold',
     fontSize: 14,
+  },
+  TimeAndLocation: {
+    marginTop: 20,
+    marginLeft: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '30%',
+  },
+  TimeText: {
+    fontSize: 12,
+  },
+  MeetingDay: {
+    marginTop: 20,
+    marginLeft: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    width: '30%'
+  },
+  LocationText: {
+    color: '#747487',
+    fontSize: 12,
+    paddingTop: 6,
+  },
+  TimeArea: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  MeetingIDText: {
+    fontSize: 12,
+    color: '#747487',
+    paddingTop: 6,
+  },
+  TitleText: {
+    marginLeft: 10,
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  UpcomingText: {
+    marginLeft: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  NewMeetingText: {
+    marginTop: 50,
+    color: '#747487',
+    padding: 40,
+    textAlign: 'center',
+    fontSize: 13,
   },
 });
 
