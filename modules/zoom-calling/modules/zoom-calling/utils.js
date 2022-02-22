@@ -1,11 +1,7 @@
 import base64 from 'react-native-base64'
+import options from './options';
 
 export const API_URL = "https://api.zoom.us";
-export const CLIENT_ID = "O8EhCwuQu20CXQxKr3b_g"
-export const SDK_KEY = "uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio"
-export const SDK_SECRET = "xJOm6daNiIR0FCDJSTQSegxa0Loc0AeaYdIn"
-export const CLIENT_SECRET = "GbH7b27RIJUvJj1ww3mLFKoUyVlufMWT"
-export const REDIRECT_URI = "https://www.crowdbotics.com"
 
 export const parse_query_string = (url) => {
   let regex = /[?&]([^=#]+)=([^&#]*)/g,
@@ -37,12 +33,12 @@ export const make_id = (length) => {
  return result;
 }
 export const getOauthToken = async (code, codeVerifier) => {
-  let res = await fetch(`${API_URL}/oauth/token?code=${code}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}&code_verifier=${codeVerifier}`, {
+  let res = await fetch(`${API_URL}/oauth/token?code=${code}&grant_type=authorization_code&redirect_uri=${options.REDIRECT_URI}&code_verifier=${codeVerifier}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Accept': 'application/json',
-      'Authorization': `Basic ${base64.encode(`${CLIENT_ID}:${CLIENT_SECRET}`)}`
+      'Authorization': `Basic ${base64.encode(`${options.CLIENT_ID}:${options.CLIENT_SECRET}`)}`
     },
     body: JSON.stringify({})
   })

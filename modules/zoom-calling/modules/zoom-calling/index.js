@@ -3,7 +3,7 @@ import { View, Text, Image, NativeEventEmitter } from "react-native";
 import ZoomUs, { ZoomEmitter } from 'react-native-zoom-us';
 // @ts-ignore
 import { WebView } from 'react-native-webview';
-import { API_URL, CLIENT_ID, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, make_id, parse_query_string, parse_start_date, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
+import { API_URL, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, make_id, parse_query_string, parse_start_date} from './utils';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DialogInput from 'react-native-dialog-input';
@@ -14,6 +14,7 @@ import CookieManager from '@react-native-cookies/cookies';
 import ScheduleMeetingList from './components/ScheduleMeetingList';
 // @ts-ignore
 import { sha256 } from 'react-native-sha256';
+import options from './options'
 
 const ZoomCalling = () => {
   const [sha256CodeChallenge, setSha256CodeChallenge] = useState('')
@@ -41,8 +42,8 @@ const ZoomCalling = () => {
 
   useEffect(() => {
     ZoomUs.initialize({
-      clientKey: SDK_KEY,
-      clientSecret: SDK_SECRET
+      clientKey: options.SDK_KEY,
+      clientSecret: options.SDK_SECRET
     }).then((res) => {
       setIsInitialized(true);
     }).catch((error) => console.log(error))
@@ -117,7 +118,7 @@ const ZoomCalling = () => {
   }
 
   const onNavigationStateChange = (evt) => {
-    if (evt.url.includes(REDIRECT_URI)) {
+    if (evt.url.includes(options.REDIRECT_URI)) {
       let params = parse_query_string(evt.url);
       if (params.code && isFirst) {
         setIsFirst(false)
@@ -240,7 +241,7 @@ const ZoomCalling = () => {
               useWebKit={true}
               userAgent={userAgent}
               onNavigationStateChange={onNavigationStateChange}
-              source={{ uri: `${API_URL}/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&code_challenge=${sha256CodeChallenge}&code_challenge_method=plain` }}
+              source={{ uri: `${API_URL}/oauth/authorize?response_type=code&client_id=${options.CLIENT_ID}&redirect_uri=${options.REDIRECT_URI}&code_challenge=${sha256CodeChallenge}&code_challenge_method=plain` }}
             />
           }
         </>
