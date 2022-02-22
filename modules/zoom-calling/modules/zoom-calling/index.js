@@ -3,7 +3,7 @@ import { View, Text, Image, NativeEventEmitter } from "react-native";
 import ZoomUs, { ZoomEmitter } from 'react-native-zoom-us';
 // @ts-ignore
 import { WebView } from 'react-native-webview';
-import { API_URL, CLIENT_ID, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, parse_query_string, parse_start_date, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
+import { API_URL, CLIENT_ID, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, make_id, parse_query_string, parse_start_date, REDIRECT_URI, SDK_KEY, SDK_SECRET } from './utils';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DialogInput from 'react-native-dialog-input';
@@ -12,8 +12,11 @@ import MeetingScheduleModal from './components/MeetingScheduleModal';
 // @ts-ignore
 import CookieManager from '@react-native-cookies/cookies';
 import ScheduleMeetingList from './components/ScheduleMeetingList';
+// @ts-ignore
+import { sha256 } from 'react-native-sha256';
 
 const ZoomCalling = () => {
+  const [sha256CodeChallenge, setSha256CodeChallenge] = useState('')
   const userAgent = "Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36"
   const [isFirst, setIsFirst] = useState(true)
   const [oauthToken, setOauthToken] = useState(false)
@@ -44,6 +47,9 @@ const ZoomCalling = () => {
       setIsInitialized(true);
     }).catch((error) => console.log(error))
 
+    sha256(make_id(100)).then(hash => {
+      setSha256CodeChallenge(hash)
+    }).catch((error) => console.log(error))
   }, [])
 
   useEffect(() => {
@@ -115,7 +121,7 @@ const ZoomCalling = () => {
       let params = parse_query_string(evt.url);
       if (params.code && isFirst) {
         setIsFirst(false)
-        getOauthToken(params.code).then((response) => {
+        getOauthToken(params.code, sha256CodeChallenge).then((response) => {
           setOauthToken(response)
         }).catch((error) => console.log(error))
         return
@@ -228,12 +234,16 @@ const ZoomCalling = () => {
           />
         }
 
-      </> : <WebView
-        useWebKit={true}
-        userAgent={userAgent}
-        onNavigationStateChange={onNavigationStateChange}
-        source={{ uri: `${API_URL}/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}` }}
-      />
+      </> : <>
+          {sha256CodeChallenge != "" && 
+              <WebView
+              useWebKit={true}
+              userAgent={userAgent}
+              onNavigationStateChange={onNavigationStateChange}
+              source={{ uri: `${API_URL}/oauth/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&code_challenge=${sha256CodeChallenge}&code_challenge_method=plain` }}
+            />
+          }
+        </>
       }
 
     </View>
