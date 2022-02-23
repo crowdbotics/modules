@@ -133,16 +133,6 @@ const ZoomCalling = () => {
   const onHandleMeetingSchedule = (data) => {
     setIsMeetingScheduleSave(true)
     let meetingPayload = {
-      recurrence: {
-        end_date_time: '',
-        end_times: 1,
-        monthly_day: 1,
-        monthly_week: -1,
-        monthly_week_day: 1,
-        repeat_interval: 0,
-        type: 1,
-        weekly_days: '1'
-      },
       settings: {
         host_video: data.hostVideo,
         participant_video: data.participantsVideo,
@@ -151,7 +141,30 @@ const ZoomCalling = () => {
       start_time: parse_start_date(data.startDate),
       timezone: data.timezone,
       topic: data.topic,
-      type: 2
+      type: 2,
+      recurrence: {
+        end_date_time: "",
+        end_times: 1,
+        monthly_day: 1,
+        monthly_week: -1,
+        monthly_week_day: 1,
+        repeat_interval: 0,
+        type: 1,
+        weekly_days: 1
+      }
+    }
+    if(data.recurring_meeting) {
+      meetingPayload.type = 8
+      meetingPayload.recurrence.type = data.recurrence.recurrence_type
+      meetingPayload.recurrence.repeat_interval = data.recurrence.repeatEvery
+      if(data.recurrence.isBy) {
+        meetingPayload.recurrence.end_date_time = parse_start_date(data.recurrence.endDate)
+      } else {
+        meetingPayload.recurrence.end_times = data.recurrence.occurrences
+      }
+      if (data.recurrence.recurrence_type == 2) {
+        meetingPayload.recurrence.weekly_days = data.recurrence.weekly_days
+      }
     }
     createMeeting(currentUser.id, meetingPayload, oauthToken['access_token']).then(() => {
       setIsMeetingScheduleModal(!isMeetingScheduleModal)

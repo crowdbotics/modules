@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, Pressable } from "react-native";
 import Input from '../Input';
 // @ts-ignore
-import { RadioButton, Checkbox } from 'react-native-paper';
+import { RadioButton } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
 import DropDownPicker from 'react-native-dropdown-picker';
 // @ts-ignore
 import DatePicker from 'react-native-date-picker'
 import { timezones } from '../../timezones';
+// @ts-ignore
+import CheckBox from '@react-native-community/checkbox';
 
 const MeetingScheduleModal = (props) => {
   const [meetingSchedule, setMeetingSchedule] = useState({
@@ -18,14 +20,105 @@ const MeetingScheduleModal = (props) => {
     meetingID: false,
     hostVideo: true,
     participantsVideo: true,
-    recurring_meeting: false
+    recurring_meeting: false,
+    recurrence: {
+      recurrence_type: "1",
+      repeatEvery: '1',
+      endDate: new Date(),
+      occurrences: '7',
+      isBy: true,
+      weekly_days: "1"
+    }
   });
   const [errors, setErrors] = useState({
     topic: '',
   })
   const [openStartDate, setOpenStartDate] = useState(false)
+  const [openEndDate, setOpenEndDate] = useState(false)
   const [openTimezone, setOpenTimezone] = useState(false);
+  const [openOccurrences, setOccurrences] = useState(false);
+  const [openRecurrenceType, setOpenRecurrenceType] = useState(false);
+  const [openRepeatEvery, setOpenRepeatEvery] = useState(false);
   const [timezoneList, setTimezoneList] = useState(timezones);
+  const [recurrenceList, setRecurrenceList] = useState([{
+    label: "Daily",
+    value: "1"
+  }, {
+    label: "Weekly",
+    value: "2"
+  }, {
+    label: "Monthly",
+    value: "3"
+  }, {
+    label: "No Fixed Time",
+    value: "0"
+  }])
+  const [repeatEveryList, setRepeatEveryList] = useState([])
+  const [occurrencesList, setOccurrencesList] = useState([
+    { label: "1", value: "1" },
+    { label: "2", value: "2" },
+    { label: "3", value: "3" },
+    { label: "4", value: "4" },
+    { label: "5", value: "5" },
+    { label: "6", value: "6" },
+    { label: "7", value: "7" },
+    { label: "8", value: "8" },
+    { label: "9", value: "9" },
+    { label: "10", value: "10" },
+    { label: "11", value: "11" },
+    { label: "12", value: "12" },
+    { label: "13", value: "13" },
+    { label: "14", value: "14" },
+    { label: "15", value: "15" },
+    { label: "16", value: "16" },
+    { label: "17", value: "17" },
+    { label: "18", value: "18" },
+    { label: "19", value: "19" },
+    { label: "20", value: "20" }
+  ])
+  const [weeklyList, setWeeklyList] = useState([{
+    label: "Sun",
+    value: "1",
+    isSelected: true
+  }, {
+    label: "Mon",
+    value: "2",
+    isSelected: false
+  }, {
+    label: "Tue",
+    value: "3",
+    isSelected: false
+  }, {
+    label: "Wed",
+    value: "4",
+    isSelected: false
+  }, {
+    label: "Thu",
+    value: "5",
+    isSelected: false
+  }, {
+    label: "Fri",
+    value: "6",
+    isSelected: false
+  }, {
+    label: "Sat",
+    value: "7",
+    isSelected: false
+  }])
+
+  useEffect(() => {
+    let tmpRepeatEveryList = []
+    if (meetingSchedule.recurrence.recurrence_type == "1")
+      for (let i = 0; i < 15; i++) {
+        tmpRepeatEveryList.push({ label: (i + 1).toString(), value: (i + 1).toString() })
+      }
+    else
+      for (let i = 0; i < 12; i++) {
+        tmpRepeatEveryList.push({ label: (i + 1).toString(), value: (i + 1).toString() })
+      }
+    setRepeatEveryList(tmpRepeatEveryList)
+  }, [meetingSchedule.recurrence.recurrence_type])
+  
 
   const handleSave = () => {
     if (meetingSchedule.topic == "") {
@@ -33,6 +126,14 @@ const MeetingScheduleModal = (props) => {
       return
     }
     props.onHandleMeetingSchedule(meetingSchedule)
+  }
+
+  const handleWeeklyCheckbox = (weekIndex) => {
+    let tmpWeeklyList = JSON.parse(JSON.stringify(weeklyList))
+    tmpWeeklyList[weekIndex].isSelected = !tmpWeeklyList[weekIndex].isSelected
+    setWeeklyList(tmpWeeklyList)
+    let weekly_days = tmpWeeklyList.filter(obj => obj.isSelected).map(obj => obj.value)
+    setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, weekly_days: weekly_days.toString()}})
   }
 
   return (
@@ -111,13 +212,14 @@ const MeetingScheduleModal = (props) => {
                 />
               </View>
             </View>
-            {/* <View style={{display: "flex", flexDirection: "row"}}>
-              <Checkbox
-                status={meetingSchedule.recurring_meeting ? 'checked' : 'unchecked'}
-                onPress={() => setMeetingSchedule({ ...meetingSchedule, recurring_meeting: !meetingSchedule.recurring_meeting })}
+            <View style={{ display: "flex", flexDirection: "row" }}>
+              <CheckBox
+                tintColors={{ true: '#24ebde', false: 'lightgray' }}
+                value={meetingSchedule.recurring_meeting}
+                onValueChange={(newValue) => setMeetingSchedule({ ...meetingSchedule, recurring_meeting: newValue })}
               />
-              <Text style={{ marginTop: 8 }}>Recurring meeting</Text>
-            </View> */}
+              <Text style={{ marginTop: 7 }}>Recurring meeting</Text>
+            </View>
             {meetingSchedule.recurring_meeting && <>
               <View style={styles.MeetingRecurrence}>
                 <View style={{ width: '25%' }}>
@@ -125,7 +227,7 @@ const MeetingScheduleModal = (props) => {
                 </View>
                 <View style={{ width: '70%' }}>
                   <DropDownPicker
-                    placeholder='Daily'
+                    placeholder='Recurrence'
                     placeholderStyle={{
                       color: "lightgrey",
                     }}
@@ -137,18 +239,13 @@ const MeetingScheduleModal = (props) => {
                       marginTop: 5,
                       height: 39,
                     }}
-                    labelProps={{
-                      numberOfLines: 1,
-                    }}
-                    listMode="MODAL"
-                    modalTitle="Select timezone"
-                    searchable={true}
-                    open={openTimezone}
-                    value={meetingSchedule.timezone}
-                    items={timezoneList}
-                    setOpen={setOpenTimezone}
-                    setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
-                    setItems={setTimezoneList}
+                    zIndex={9999}
+                    open={openRecurrenceType}
+                    value={meetingSchedule.recurrence.recurrence_type}
+                    items={recurrenceList}
+                    setOpen={setOpenRecurrenceType}
+                    setValue={(value) => setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, recurrence_type: value() } })}
+                    setItems={setRecurrenceList}
                   />
                 </View>
               </View>
@@ -158,7 +255,7 @@ const MeetingScheduleModal = (props) => {
                 </View>
                 <View style={{ width: '30%' }}>
                   <DropDownPicker
-                    placeholder='Daily'
+                    placeholder='Day'
                     placeholderStyle={{
                       color: "lightgrey",
                     }}
@@ -170,57 +267,70 @@ const MeetingScheduleModal = (props) => {
                       marginTop: 5,
                       height: 39,
                     }}
-                    labelProps={{
-                      numberOfLines: 1,
-                    }}
-                    listMode="MODAL"
-                    modalTitle="Select timezone"
-                    searchable={true}
-                    open={openTimezone}
-                    value={meetingSchedule.timezone}
-                    items={timezoneList}
-                    setOpen={setOpenTimezone}
-                    setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
-                    setItems={setTimezoneList}
+                    open={openRepeatEvery}
+                    value={meetingSchedule.recurrence.repeatEvery}
+                    items={repeatEveryList}
+                    setOpen={setOpenRepeatEvery}
+                    setValue={(value) => setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, repeatEvery: value() } })}
+                    setItems={setRepeatEveryList}
                   />
                 </View>
-                <Text style={{ marginLeft: 5 }}>day</Text>
+                <Text style={{ marginLeft: 5 }}>{meetingSchedule.recurrence.recurrence_type == '2' ? "Week": "day"}</Text>
               </View>
-              <View style={{marginTop:8}}>
+
+              {meetingSchedule.recurrence.recurrence_type == '2' &&
+                <View style={styles.RecurrenceArea}>
+                  <View>
+                    <Text style={styles.RepeatText}>Occurs on</Text>
+                  </View>
+                  <View style={{ justifyContent: "space-evenly", display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: 5, }}>
+                    {
+                      weeklyList.map((week, index) => (
+                        <View style={{ display: "flex", flexDirection: "column", alignItems: "center" }} key={index}>
+                          <CheckBox
+                            tintColors={{ true: '#24ebde', false: 'lightgray' }}
+                            value={week.isSelected}
+                            onValueChange={() => handleWeeklyCheckbox(index)}
+                          />
+                          <Text>{week.label}</Text>
+                        </View>
+                      ))
+                    }
+                  </View>
+                </View>
+              }
+
+              <View style={{ marginTop: 8 }}>
                 <Text style={styles.EndText}>End date</Text>
               </View>
               <View style={styles.EndDate}>
                 <View style={styles.EndDateText}>
                   <View>
                     <RadioButton
-                      value="false"
-                      status={!meetingSchedule.meetingID ? 'checked' : 'unchecked'}
-                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: false })}
+                      value="true"
+                      status={meetingSchedule.recurrence.isBy ? 'checked' : 'unchecked'}
+                      onPress={() => setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, isBy: true } })}
                     />
                   </View>
                   <View>
-                    <Pressable onPress={() => setOpenStartDate(true)}>
+                    <Pressable style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onPress={() => setOpenEndDate(true)}>
+                      <Text>By </Text>
                       <Input
                         editable={false}
-                        value={meetingSchedule.startDate.toLocaleString('en-US', {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                        })}
+                        value={meetingSchedule.recurrence.endDate.toDateString()}
                       />
                     </Pressable>
                     <DatePicker
                       modal
-                      open={openStartDate}
-                      date={meetingSchedule.startDate}
+                      mode={"date"}
+                      open={openEndDate}
+                      date={meetingSchedule.recurrence.endDate}
                       onConfirm={(date) => {
-                        setOpenStartDate(false)
-                        setMeetingSchedule({ ...meetingSchedule, startDate: date })
+                        setOpenEndDate(false)
+                        setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, endDate: date } })
                       }}
                       onCancel={() => {
-                        setOpenStartDate(false)
+                        setOpenEndDate(false)
                       }}
                     />
                   </View>
@@ -230,14 +340,16 @@ const MeetingScheduleModal = (props) => {
                   <View>
                     <RadioButton
                       value="false"
-                      status={!meetingSchedule.meetingID ? 'checked' : 'unchecked'}
-                      onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: false })}
+                      status={!meetingSchedule.recurrence.isBy ? 'checked' : 'unchecked'}
+                      onPress={() => setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, isBy: false } })}
                     />
                   </View>
                   <View>
-                    <View style={{ width: '80%' }}>
+                    <View style={{ width: '70%', display: "flex", flexDirection: "row", alignItems: "center" }}>
+                      <Text>After </Text>
                       <DropDownPicker
-                        placeholder='Daily'
+                        disabled={meetingSchedule.recurrence.isBy}
+                        placeholder='After'
                         placeholderStyle={{
                           color: "lightgrey",
                         }}
@@ -248,25 +360,19 @@ const MeetingScheduleModal = (props) => {
                           padding: 4,
                           height: 39,
                         }}
-                        labelProps={{
-                          numberOfLines: 1,
-                        }}
-                        listMode="MODAL"
-                        modalTitle="Select timezone"
-                        searchable={true}
-                        open={openTimezone}
-                        value={meetingSchedule.timezone}
-                        items={timezoneList}
-                        setOpen={setOpenTimezone}
-                        setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
-                        setItems={setTimezoneList}
+                        open={openOccurrences}
+                        value={meetingSchedule.recurrence.occurrences}
+                        items={occurrencesList}
+                        setOpen={setOccurrences}
+                        setValue={(value) => setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, occurrences: value() } })}
+                        setItems={setOccurrencesList}
                       />
                     </View>
                   </View>
                 </View>
               </View>
             </>}
-            
+
             <View style={{ marginTop: 5 }}>
               <Text style={styles.MeetingID}>Meeting ID</Text>
               <View style={styles.MeetingRow}>
@@ -327,7 +433,7 @@ const MeetingScheduleModal = (props) => {
                 </View>
               </View>
             </View>
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", marginTop: 40 }}>
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end", marginTop: 20 }}>
               <Pressable
                 style={[styles.button, styles.buttonOpen]}
                 onPress={() => props.setModalVisible(false)}
@@ -432,50 +538,50 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
-  RecurrenceArea:{
+  RecurrenceArea: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center' , 
-    marginTop:10,
+    alignItems: 'center',
+    marginTop: 10,
   },
-  MeetingRecurrence:{
-    display: 'flex', 
-    flexDirection: 'row', 
+  MeetingRecurrence: {
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center'
   },
-  RecurrenceText:{
-    fontSize: 14, 
-    marginTop: 5, 
-    paddingRight: 5, 
-    fontWeight:'bold',
+  RecurrenceText: {
+    fontSize: 14,
+    marginTop: 5,
+    paddingRight: 5,
+    fontWeight: 'bold',
   },
-  RepeatText:{
-    fontSize: 14, 
-    marginTop: 8, 
-    paddingRight: 10, 
-    fontWeight:'bold',
+  RepeatText: {
+    fontSize: 14,
+    marginTop: 8,
+    paddingRight: 10,
+    fontWeight: 'bold',
   },
-  EndText:{
-    fontSize: 14, 
-    fontWeight: 'bold', 
+  EndText: {
+    fontSize: 14,
+    fontWeight: 'bold',
   },
-  EndDate:{
-    display: 'flex', 
-    flexDirection: 'row', 
+  EndDate: {
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center'
   },
-  EndDateText:{
-    display: 'flex', 
-    flexDirection: 'row', 
-    alignItems: 'center', 
+  EndDateText: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
     width: '40%'
   },
-  RadioButtonArea:{
-    display: 'flex', 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    width: '40%', 
-    marginLeft: 35 
+  RadioButtonArea: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '40%',
+    marginLeft: 35
   },
 });
 
