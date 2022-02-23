@@ -7,6 +7,9 @@ export default (state, dispatch) => ({
         state.messages[payload.channel] = [...channelMessages, payload.message];
         dispatch({ messages: state.messages });
     },
+    file: envelop => {
+        console.log('new message arrived', payload, state);
+    },
     presence: event => {
         // action, channel, occupancy, state
         console.log('new presence event arrived', event);
