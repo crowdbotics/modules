@@ -8,7 +8,7 @@ export default (state, dispatch) => ({
         dispatch({ messages: state.messages });
     },
     file: envelop => {
-        console.log('new message arrived', payload, state);
+        console.log('new envelop arrived', envelop, state);
     },
     presence: event => {
         // action, channel, occupancy, state
