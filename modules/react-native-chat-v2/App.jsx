@@ -30,6 +30,7 @@ export default () => {
             channelGroups: [uuid],
             withPresence: true
         });
+        return () => client.unsubscribeAll()
     }, []);
     return <>
     <StatusBar translucent={true}/>
