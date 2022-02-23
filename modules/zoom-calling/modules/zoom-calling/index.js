@@ -153,7 +153,7 @@ const ZoomCalling = () => {
         weekly_days: 1
       }
     }
-    if(data.recurring_meeting) {
+    if(data.recurring_meeting && data.recurrence.recurrence_type != -1) {
       meetingPayload.type = 8
       meetingPayload.recurrence.type = data.recurrence.recurrence_type
       meetingPayload.recurrence.repeat_interval = data.recurrence.repeatEvery
@@ -165,6 +165,16 @@ const ZoomCalling = () => {
       if (data.recurrence.recurrence_type == 2) {
         meetingPayload.recurrence.weekly_days = data.recurrence.weekly_days
       }
+      if (data.recurrence.recurrence_type == 3) {
+        if(data.recurrence.isDayMonthly)
+          meetingPayload.recurrence.monthly_day = data.recurrence.dayOfMonth
+        else {
+          meetingPayload.recurrence.monthly_week_day = data.recurrence.day
+          meetingPayload.recurrence.monthly_week = data.recurrence.week
+        }
+      }
+    } else if(data.recurring_meeting && data.recurrence.recurrence_type == -1) {
+      meetingPayload.type = 3
     }
     createMeeting(currentUser.id, meetingPayload, oauthToken['access_token']).then(() => {
       setIsMeetingScheduleModal(!isMeetingScheduleModal)
