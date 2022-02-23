@@ -1,0 +1,37 @@
+import React from "react"
+import { StyleSheet, TextInput, View, Text } from 'react-native';
+
+const Input = (props) => {
+  return (
+    <View style={{ marginBottom: 10 }}>
+      {props.label && <Text style={{ fontWeight: "bold" }}>{props.label}</Text>}
+      <TextInput
+        style={{ ...styles.input, color: '#000000' }}
+        placeholder={props.label}
+        editable={props.editable}
+        value={props.value}
+        onChangeText={props.onChangeText}
+      />
+      { ('errorMessage' in props && props.errorMessage != "") && <Text style={styles.inputError}>{props.errorMessage}</Text>}
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  input: {
+    borderWidth: 1,
+    borderColor: "lightgray",
+    borderRadius: 5,
+    padding: 4,
+    marginTop: 5,
+    fontSize: 12
+  },
+  inputError: {
+    marginLeft: 4,
+    fontStyle: "italic",
+    color: '#FA060D'
+  }
+});
+
+
+export default Input
