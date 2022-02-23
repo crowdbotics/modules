@@ -12,7 +12,7 @@ const ScheduleMeetingList = (props) => {
       renderItem={({ item }) => (
         <View style={styles.TimeArea}>
           <View style={styles.TimeAndLocation}>
-            <Text style={styles.TimeText}>{new Date(item.start_time).toLocaleString()}</Text>
+            <Text style={styles.TimeText}>{("start_time" in item) ? new Date(item.start_time).toLocaleString(): "Recurring"}</Text>
             <Text numberOfLines={2} style={styles.LocationText}>{timezones.find(obj => obj.value == item.timezone).label}</Text>
           </View>
           <View style={styles.MeetingDay}>

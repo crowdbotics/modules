@@ -1,5 +1,5 @@
 {
   "title": "Zoom Calling",
   "description": "Zoom Calling Module",
-  "root": "/"
+  "root": "/modules/zoom-calling"
 }
