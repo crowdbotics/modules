@@ -1,6 +1,5 @@
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import LinearGradient from 'react-native-linear-gradient';
 const styles = StyleSheet.create({
     container: {
