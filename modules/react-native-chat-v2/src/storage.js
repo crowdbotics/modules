@@ -1,4 +1,4 @@
-import { FILESTACK_KEY } from "react-native-dotenv"
+import { FILESTACK_KEY } from "@env"
 const KEY = FILESTACK_KEY;
 const ENDPOINT = 'https://www.filestackapi.com/api';
 export const upload = async (file) => {

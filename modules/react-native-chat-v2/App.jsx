@@ -6,7 +6,7 @@ import Navigator from './src/Navigator';
 import { useStore, uuid } from './src/store';
 import { StatusBar, AppState } from 'react-native';
 import listener from './src/model';
-import { PUBNUB_SUB, PUBNUB_PUB } from "react-native-dotenv"
+import { PUBNUB_SUB, PUBNUB_PUB } from "@env"
 
 const subscribeKey = PUBNUB_SUB
 const publishKey = PUBNUB_PUB
