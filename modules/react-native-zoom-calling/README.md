@@ -49,6 +49,25 @@ public void onCreate() {
   android:networkSecurityConfig="@xml/network_security_config"
 >
 ```
+### iOS
+1. Make sure you have appropriate description in Info.plist:
+```
+<key>NSBluetoothPeripheralUsageDescription</key>
+<string>We will use your Bluetooth to access your Bluetooth headphones.</string>
+	
+<key>NSCameraUsageDescription</key>
+<string>For people to see you during meetings, we need access to your camera.</string>
+	
+<key>NSMicrophoneUsageDescription</key>
+<string>For people to hear you during meetings, we need access to your microphone.</string>
+	
+<key>NSPhotoLibraryUsageDescription</key>
+<string>For people to share, we need access to your photos.</string>
+```
+2. Update pods using cd ios/ && pod install && cd ..
+3. Make sure to set ENABLE_BITCODE = NO; for both Debug and Release because bitcode is not supported by Zoom iOS SDK
+4. Optional: Implement custom UI See [docs](https://marketplace.zoom.us/docs/sdk/native-sdks/iOS/mastering-zoom-sdk/in-meeting-function/customized-in-meeting-ui/overview/) for more details.
+
 ### Configurations Keys
 ```
 CLIENT_ID = "...”
