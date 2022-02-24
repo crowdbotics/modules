@@ -135,6 +135,6 @@ about instant meetings.
 [https://api.zoom.us/v2/users/{userId}/meetings]
 ## Delete a meeting
 [https://api.zoom.us/v2/meetings/{meetingId}]
-### Perform batch registration (Not implemented)
+## Perform batch registration (Not implemented)
 Prerequisites: The meeting host must be a Licensed user.
 Rate Limit Label: Heavy
