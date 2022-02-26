@@ -1,7 +1,7 @@
 import React, { PureComponent, useState, useEffect } from 'react';
-import { View, Text, Modal, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Modal, StyleSheet, Alert } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { verifyAppleIAPReceipt } from "./api";
+import { verifyAppleIAPReceipt, fetchAppleIAPProducts } from "./api";
 import RNIap, {
     InAppPurchase,
     PurchaseError,
@@ -17,25 +17,23 @@ import RNIap, {
 const InappPurchase = () => {
 
   const [value, setValue] = useState({
-    products: []
+    products: [],
+    apple_iap_product_ids: []
   });
+
+  const [apple_iap_product_ids, set_apple_iap_product_ids] = useState([])
+
   const productIds = Platform.select({
-    ios: [
-      'com.temporary.id',
-      'com.consumable.id',
-      'com.nonrenewing_sub.id',
-      'com.silver_sub.id',
-      'com.free_sub.id'
-    ],
+    ios: apple_iap_product_ids,
     android: [
       'com.example.coins100'
     ]
   });
 
   useEffect(async () => {
+    RNIap.initConnection();
+    await getAppleIAPProductIds();
     getAvailablePurchases();
-    await RNIap.initConnection();
-    getProducts();
   }, [])
 
   const getProducts = async () => {
@@ -44,8 +42,20 @@ const InappPurchase = () => {
     setValue({ ...value, products: products })
   }
 
+  const getAppleIAPProductIds = async () => {
+    var data = await fetchAppleIAPProducts();
+    if (data){
+      console.log("data", data)
+      data.forEach((obj)=>{
+        apple_iap_product_ids.push(obj.product_id)
+      });
+      console.log("value", apple_iap_product_ids)
+      getProducts();
+      
+    }
+  }
+
   const getAvailablePurchases = async () => {
-    console.log("CHALA")
     try {
       const purchases = await RNIap.getAvailablePurchases();
       console.log('Available purchases :: ', purchases);
@@ -53,7 +63,7 @@ const InappPurchase = () => {
         console.log('Available purchases :: ', purchases);
         verifyAppleIAPReceipt(purchases[0])
       } else {
-        Alert.alert('Restore Error', 'No previous purchase found')
+        // Alert.alert('Restore Error', 'No previous purchase found')
       }
     } catch (err) {
       console.log('getAvailablePurchases err', err);
@@ -61,7 +71,6 @@ const InappPurchase = () => {
       Alert.alert('Restore Error', err.message)
 
     }
-    console.log('Available purchases :: 123');
   };
 
 

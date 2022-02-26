@@ -7,6 +7,12 @@ class StripeService:
     stripe.api_key = env.str("STRIPE_SECRET_KEY")
 
     @classmethod
+    def create_user(cls, user):
+        return stripe.Customer.create(
+            email=user.email
+        )
+
+    @classmethod
     def create_payment_intent_sheet(cls, cus_id, cents):
         ephemeralKey = stripe.EphemeralKey.create(
             customer=cus_id,

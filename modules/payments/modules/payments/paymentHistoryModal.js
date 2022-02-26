@@ -20,7 +20,6 @@ const PaymentHistoryModal = (props) => {
         setRefresh(true);
         const res = await fetchPaymentHistory()
         fetchPaymentHistory().then(res => {
-            console.log("get_payments res", res)
             setRefresh(false);
             setPaymentHistory(res);
         })

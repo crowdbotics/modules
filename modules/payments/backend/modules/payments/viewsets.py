@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import stripe
 
+from .models import AppleIAPProduct
 from .services.ApplePaymentService import ApplePaymentService
 from .services.StripeService import StripeService
 from .serializers import appleIAPSerializer
@@ -66,6 +67,18 @@ class GetPaymentMethodsView(APIView):
         response = {
             "success": True,
             "data": history
+        }
+        return Response(response, status=status.HTTP_200_OK)
+
+class AppleIAProductsView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        products = AppleIAPProduct.objects.filter(is_active=True)
+        response = {
+            "success": True,
+            "data": [obj.as_dict() for obj in products]
         }
         return Response(response, status=status.HTTP_200_OK)
 
