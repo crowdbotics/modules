@@ -5,10 +5,10 @@ import {
 const styles = StyleSheet.create({
 });
 
-const CLIENT_ID = "O8EhCwuQu20CXQxKr3b_g"
-const SDK_KEY = "uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio"
-const SDK_SECRET = "xJOm6daNiIR0FCDJSTQSegxa0Loc0AeaYdIn"
-const CLIENT_SECRET = "GbH7b27RIJUvJj1ww3mLFKoUyVlufMWT"
+const CLIENT_ID = ""
+const CLIENT_SECRET = ""
+const SDK_KEY = ""
+const SDK_SECRET = ""
 const REDIRECT_URI = "https://www.crowdbotics.com"
 
 export default {
