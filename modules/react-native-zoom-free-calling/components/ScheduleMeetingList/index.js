@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, SectionList } from "react-native";
 import { parse_meeting_id,} from '../../utils';
 import { StyleSheet } from 'react-native';
-import { timezones } from '../..//timezones';
+import { timezones } from '../../timezones';
 
 const ScheduleMeetingList = (props) => {
   return (

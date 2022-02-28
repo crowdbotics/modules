@@ -1,7 +1,7 @@
 {
-    "name": "@modules/zoom-calling",
+    "name": "@modules/zoom-free-calling",
     "version": "1.0.1",
-    "description": "Zoom Calling",
+    "description": "Zoom Free Calling",
     "private": true,
     "main": "index.js",
     "author": "Crowdbotics",

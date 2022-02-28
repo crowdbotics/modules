@@ -1,4 +1,4 @@
-# Zoom Calling
+# Zoom Free Calling
 
 ### Installation command
 `yarn add react-native-zoom-us`
