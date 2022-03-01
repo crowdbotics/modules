@@ -41,7 +41,7 @@ export default (state, dispatch) => ({
 export const fetchChannels = async (pubnub, channelGroup) => {
     const res = await pubnub.channelGroups.listChannels({ channelGroup });
     console.log('fetched channel list', res);
-    const channels = res.channels.reduce((acc, channel) => ({ [channel]: { id: '', name: '', custom: { type: ChannelType.Group } }, ...acc }), {});
+    const channels = res.channels.reduce((acc, channel) => ({ [channel]: { id: '', name: '', updated: '', custom: { type: ChannelType.Group } }, ...acc }), {});
     if (!res.channels.length)
         return channels;
     try {
@@ -50,8 +50,8 @@ export const fetchChannels = async (pubnub, channelGroup) => {
             include: { customFields: true }
         });
         console.log('fetched metadata for channel list', metadata);
-        metadata.data.forEach(({ id, name, custom }) => {
-            channels[id] = { id, name, custom: { ...channels[id]?.custom, ...custom } };
+        metadata.data.forEach(({ id, name, updated, custom }) => {
+            channels[id] = { id, name, updated, custom: { ...channels[id]?.custom, ...custom } };
         });
     }
     catch (error) {
