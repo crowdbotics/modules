@@ -1,3 +1,4 @@
+// @ts-ignore
 import create from 'zustand';
 export const uuid = '0'; // uuidv4()
 export const user = {

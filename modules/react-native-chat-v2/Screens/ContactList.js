@@ -1,12 +1,13 @@
 import React from 'react';
 import { FlatList, View, Text, TouchableOpacity } from 'react-native';
-import { ListViewStyle } from './styles';
-import Circle from './components/Circle';
+import Circle from '../Components/Circle';
+import { ListViewStyle } from '../Navigator/styles';
+
 const ListViewItem = ({ item, index, length, onPress }) => {
     const letter = (item.name ? item.name[0] : '').toUpperCase();
     return <TouchableOpacity onPress={onPress} style={ListViewStyle.container}>
     <View style={{ flexDirection: 'row' }}>
-      <Circle letter={letter}/>
+      <Circle letter={letter} source=""/>
       <View style={[{ flexDirection: 'column' }, index !== length - 1 ? ListViewStyle.separator : {}]}>
         <Text style={ListViewStyle.title}>{item.name}</Text>
         <Text style={ListViewStyle.subtitle}>last seen</Text>

@@ -3,11 +3,14 @@ import 'react-native-gesture-handler';
 import Pubnub from 'pubnub';
 // @ts-ignore
 import { PubNubProvider } from "pubnub-react";
-import Navigator from './src/Navigator';
-import { useStore, uuid } from './src/store';
-import { StatusBar, AppState } from 'react-native';
-import listener from './src/model';
+import Navigator from './Navigator';
+import { useStore, uuid } from './Store/store';
+import { AppState } from 'react-native';
+import listener from './Store/model';
 import options from './options';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Setting a timer'])
 
 const client = new Pubnub({
   subscribeKey: options.PUBNUB_SUB,
@@ -32,7 +35,6 @@ const App = () => {
     return () => client.unsubscribeAll()
   }, []);
   return <>
-    <StatusBar translucent={true} />
     <PubNubProvider client={client}>
       <Navigator />
     </PubNubProvider>

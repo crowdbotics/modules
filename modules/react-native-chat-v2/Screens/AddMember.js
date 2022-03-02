@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import ContactList from './ContactList';
-import { useStore } from './store';
+import { useStore } from '../Store/store';
+// @ts-ignore
 import { usePubNub } from 'pubnub-react';
+
 export default ({ navigation, route }) => {
     const { state, dispatch } = useStore();
     const [loading, setLoading] = useState(false);

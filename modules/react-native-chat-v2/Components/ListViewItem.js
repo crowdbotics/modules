@@ -1,14 +1,14 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import { ListViewStyle } from "../styles";
+import { ListViewStyle } from "../Navigator/styles";
 import RadioToggle from "./RadioToggle";
-import Circle from "./Circle";
+import Circle from "../Components/Circle";
 import React from "react";
 export const ListViewItem = ({ item, selectedItems, onPress }) => {
     const letter = (item.name ? item.name[0] : '').toUpperCase();
     return <TouchableOpacity onPress={onPress} style={ListViewStyle.container}>
     <View style={{ flexDirection: 'row' }}>
       <RadioToggle checked={new Set(selectedItems).has(item._id)}/>
-      <Circle letter={letter}/>
+      <Circle letter={letter} source=""/>
       <View style={{ flexDirection: 'column' }}>
         <Text>{item.name}</Text>
         <Text>last seen</Text>

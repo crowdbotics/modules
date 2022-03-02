@@ -1,8 +1,9 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Button, FlatList, Text, View } from 'react-native';
-import { useStore } from './store';
-import styles, { NavigationStyle } from "./styles";
-import { ListViewItem } from "./components/ListViewItem";
+import { ListViewItem } from '../Components/ListViewItem';
+import styles, { NavigationStyle } from '../Navigator/styles';
+import { useStore } from '../Store/store';
+
 export default ({ navigation }) => {
     const { state, dispatch } = useStore();
     const [selectedContacts, setSelectedContacts] = useState([]);

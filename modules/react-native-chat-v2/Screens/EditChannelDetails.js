@@ -1,11 +1,13 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { ActivityIndicator, Button, TextInput, View } from 'react-native';
-import styles, { ListViewStyle, NavigationStyle } from './styles';
-import { usePubNub } from 'pubnub-react';
-import { useStore } from './store';
-import CirclePrompt from './components/CirclePrompt';
 import ImagePicker from 'react-native-image-crop-picker'
-import { upload } from './storage';
+import CirclePrompt from '../Components/CirclePrompt';
+import styles, { ListViewStyle, NavigationStyle } from '../Navigator/styles';
+import { upload } from '../Store/storage';
+import { useStore } from '../Store/store';
+// @ts-ignore
+import { usePubNub } from 'pubnub-react';
+
 export default ({ navigation, route }) => {
     const { state, dispatch } = useStore();
     const pubnub = usePubNub();

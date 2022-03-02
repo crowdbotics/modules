@@ -1,11 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
-import { InlineButton } from './components/Button';
+import { InlineButton } from '../Components/Button';
+// @ts-ignore
 import { usePubNub } from "pubnub-react";
-import { ChannelType, useStore } from "./store";
-import { ChatMember, ManagedChatMember } from "./components/ListViewItem";
-import styles, { ListViewStyle } from "./styles";
-import { fetchChannels } from "./model";
+import { ChannelType, useStore } from "../Store/store";
+import { ChatMember, ManagedChatMember } from "../Components/ListViewItem";
+import { fetchChannels } from '../utils';
+import styles, { ListViewStyle } from '../Navigator/styles';
+
 export default ({ route, navigation }) => {
     const item = route.params.item;
     if (item.custom.type === ChannelType.Group)

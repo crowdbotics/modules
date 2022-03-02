@@ -1,10 +1,12 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { Button, TextInput, View } from 'react-native';
-import { ChannelType, useStore } from './store';
+// @ts-ignore
 import { usePubNub } from 'pubnub-react';
-import styles, { ListViewStyle, NavigationStyle } from './styles';
-import Circle from './components/Circle';
-import { ChatMember } from './components/ListViewItem';
+import { ChannelType, useStore } from '../Store/store';
+import styles, { ListViewStyle, NavigationStyle } from '../Navigator/styles';
+import Circle from '../Components/Circle';
+import { ChatMember } from '../Components/ListViewItem';
+
 export default ({ navigation, route }) => {
     const pubnub = usePubNub();
     const { state, dispatch } = useStore();
@@ -54,7 +56,7 @@ export default ({ navigation, route }) => {
     }, [navigation, name]);
     return <View>
     <View style={[{ flexDirection: 'row' }, styles.section]}>
-      <Circle letter=""/>
+      <Circle letter="" source=""/>
       <TextInput style={{
         paddingLeft: 16
     }} value={name} onChangeText={setName} placeholder="Group Name" ref={nameInput}/>

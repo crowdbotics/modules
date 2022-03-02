@@ -1,7 +1,8 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { ListViewStyle } from './styles';
-import Circle from "./components/Circle";
+import Circle from '../Components/Circle';
+import { ListViewStyle } from '../Navigator/styles';
+
 export const ChannelListItem = ({ item, index, length, onPress }) => {
     const letter = (item.name ? item.name[0] : '').toUpperCase();
     const lastMessage = '';

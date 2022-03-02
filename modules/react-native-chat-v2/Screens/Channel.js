@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { user, useStore } from './store';
+import { user, useStore } from '../Store/store';
 // @ts-ignore
 import { Actions, GiftedChat } from 'react-native-gifted-chat';
 // @ts-ignore

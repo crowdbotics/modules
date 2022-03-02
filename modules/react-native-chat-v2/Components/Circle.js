@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 export default ({ letter, source }) => <View style={styles.container}>
   {source ?
     <Image source={{ uri: source }} style={styles.shape} /> :
-    <LinearGradient colors={['#4C4E52', '#4C4E52']} start={{ x: 0.1, y: 0.2 }} style={styles.shape}>
+    <LinearGradient colors={['#4CAF50', '#4CAF50']} start={{ x: 0.1, y: 0.2 }} style={styles.shape}>
       <Text style={styles.text}>{letter}</Text>
     </LinearGradient>}
 </View>;
