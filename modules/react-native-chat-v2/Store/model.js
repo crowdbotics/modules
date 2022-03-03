@@ -20,6 +20,10 @@ export default (state, dispatch) => ({
   },
   presence: event => {
     // action, channel, occupancy, state
+    if (event.channel in state.channels) {
+      state.channels[event.channel].last_seen = event?.state?.last_seen
+      dispatch({ channels: state.channels });
+    }
   },
   signal: signal => {
   },

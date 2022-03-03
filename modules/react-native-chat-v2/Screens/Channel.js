@@ -1,13 +1,12 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
-import { Text } from 'react-native';
 import { user, useStore } from '../Store/store';
 // @ts-ignore
 import { Actions, GiftedChat } from 'react-native-gifted-chat';
 // @ts-ignore
 import { usePubNub } from 'pubnub-react';
-import { cloneArray, sortArray, timeSince } from '../utils';
+import { cloneArray, sortArray } from '../utils';
 // @ts-ignore
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { launchImageLibrary } from 'react-native-image-picker';
 
 export default ({ route, navigation }) => {
   const pubnub = usePubNub();
@@ -21,23 +20,13 @@ export default ({ route, navigation }) => {
   }, [state.messages[item.id]])
 
   useEffect(() => {
-    pubnub.hereNow({
+    pubnub.setState({
+      state: {
+        last_seen: new Date().getTime()
+      },
       channels: [item.id],
-      includeUUIDs: true,
-      includeState: true,
-    }, (status, response) => {
-      if (response.channels[item.id].occupants.length > 0) {
-        navigation.setOptions({
-          title: channel.name,
-          headerRight: () => <Text style={{ color: "lightgray", paddingRight: 10 }}>{
-            response.channels[item.id].occupants[0].state ?
-              timeSince(new Date(response.channels[item.id]?.occupants[0]?.state?.last_seen * 1000))
-              : ""
-          }</Text>
-        });
-      }
-      // handle status, response
     });
+
   })
 
   useLayoutEffect(() => {

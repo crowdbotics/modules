@@ -59,3 +59,8 @@ export const sortArray = (arr) => {
     return 0;
   }).reverse();
 }
+
+export function getByValue(arr, value) {
+  var result = arr.find(function(o){return o.id == value;} );
+  return result
+}

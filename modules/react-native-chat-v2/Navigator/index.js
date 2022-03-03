@@ -19,7 +19,13 @@ const Navigator = () => {
   return <Stack.Navigator>
     <Stack.Screen options={{ headerShown: false }} name="Channels" component={Channels} />
 
-    <Stack.Screen name="Channel" component={Channel}/>
+    <Stack.Screen name="Channel" component={Channel}
+      options={({ navigation, route }) => ({
+        headerRight: () => <View style={NavigationStyle.headerRight}>
+          <Button onPress={() => navigation.navigate('ChannelDetails', { item: route.params.item })} title="Details" />
+        </View>
+      })}
+    />
     <Stack.Screen name="ChannelDetails" component={ChannelDetails} options={({ navigation, route }) => ({
       headerRight: () => <View style={NavigationStyle.headerRight}>
         <Button title="Edit" onPress={() => navigation.navigate('EditChannelDetails', { item: route.params.item })} />

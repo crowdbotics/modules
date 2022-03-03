@@ -10,7 +10,7 @@ import listener from './Store/model';
 import options from './options';
 import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs(['Setting a timer', 'Animated.event now'])
+LogBox.ignoreLogs(['Setting a timer'])
 
 const client = new Pubnub({
   subscribeKey: options.PUBNUB_SUB,

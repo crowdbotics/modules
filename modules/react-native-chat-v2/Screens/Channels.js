@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useStore } from '../Store/store';
 import { Text, TouchableOpacity, View, Image, Pressable, SectionList } from 'react-native';
 // @ts-ignore
 import { usePubNub } from 'pubnub-react';
-import { fetchChannels } from "../utils";
+import { fetchChannels, getByValue, timeSince } from "../utils";
 import { StyleSheet } from 'react-native';
 import Circle from '../Components/Circle';
 import SearchBar from '../Components/SearchBar';
+// @ts-ignore
+import { useFocusEffect } from '@react-navigation/native';
 
 const Channels = ({ navigation }) => {
   const pubnub = usePubNub();
@@ -55,19 +57,35 @@ const Channels = ({ navigation }) => {
     }
   }, [search])
 
-  useEffect(() => {
-    pubnub.addListener({
-      presence: (event) => {
-        pubnub.setState({
-          state: {
-            last_seen: event.timestamp
-          },
-          channels: [event.channel],
+  useFocusEffect(useCallback(() => {
+    getLastSeen()
+  },[state.channels]))
+
+  const getLastSeen = () => {
+    if(Object.keys(state.channels).length > 0) {
+      let channels = Object.entries(state.channels).map(([id, rest]) => ({ id, ...rest }));
+      Object.keys(state.channels).forEach(channel => {
+        pubnub.hereNow({
+          channels: [channel],
+          includeUUIDs: true,
+          includeState: true,
         }, (status, response) => {
+          let tmp = getByValue(channels, channel)
+          if(tmp) {
+            tmp.last_seen = response.channels[channel]?.occupants[0]?.state?.last_seen
+            const DATA = [{
+              title: "Channels",
+              data: channels.filter((item) => { return item.custom.type == "1" }).map((obj) => ({ ...obj }))
+            }, {
+              title: "Direct Chats",
+              data: channels.filter((item) => { return item.custom.type == "0" }).map((obj) => ({ ...obj }))
+            }];
+            setConversationList(DATA)
+          }
         });
-      }
-    })
-  }, [state.channels])
+      })
+    }
+  }
 
   const ListItem = (item) => {
     return (
@@ -78,7 +96,8 @@ const Channels = ({ navigation }) => {
               <Circle letter={(item.name ? item.name[0] : '').toUpperCase()} source={item.custom.caption} />
             </View>
             <View style={styles.Profile} >
-              <Text style={styles.ProfileText}>{item.name}</Text>
+              <Text style={{...styles.ProfileText, marginTop: ('last_seen' in item && item.last_seen) ? 1 : 8}}>{item.name}</Text>
+              { ('last_seen' in item && item.last_seen) && <Text style={{fontSize: 12, color: "gray"}}>Last seen: {timeSince(new Date(item?.last_seen).getTime())}</Text>}
             </View>
           </View>
         </View>
@@ -163,8 +182,7 @@ const styles = StyleSheet.create({
   ProfileText: {
     color: '#292B2F',
     fontWeight: 'bold',
-    fontSize: 16,
-    marginTop: 8,
+    fontSize: 16
   },
   GroupHeading: {
     color: '#292B2F',
