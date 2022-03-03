@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, View } from 'react-native';
+import { Button, View, Text } from 'react-native';
 // @ts-ignore
 import { createStackNavigator } from "@react-navigation/stack"
 import Channel from '../Screens/Channel';
@@ -19,11 +19,7 @@ const Navigator = () => {
   return <Stack.Navigator>
     <Stack.Screen options={{ headerShown: false }} name="Channels" component={Channels} />
 
-    <Stack.Screen name="Channel" component={Channel} options={({ navigation, route }) => ({
-      headerRight: () => <View style={NavigationStyle.headerRight}>
-        <Button onPress={() => navigation.navigate('ChannelDetails', { item: route.params.item })} title="Details" />
-      </View>
-    })} />
+    <Stack.Screen name="Channel" component={Channel}/>
     <Stack.Screen name="ChannelDetails" component={ChannelDetails} options={({ navigation, route }) => ({
       headerRight: () => <View style={NavigationStyle.headerRight}>
         <Button title="Edit" onPress={() => navigation.navigate('EditChannelDetails', { item: route.params.item })} />

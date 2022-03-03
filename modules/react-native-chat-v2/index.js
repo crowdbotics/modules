@@ -10,7 +10,7 @@ import listener from './Store/model';
 import options from './options';
 import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs(['Setting a timer'])
+LogBox.ignoreLogs(['Setting a timer', 'Animated.event now'])
 
 const client = new Pubnub({
   subscribeKey: options.PUBNUB_SUB,
@@ -22,18 +22,19 @@ const client = new Pubnub({
 const App = () => {
   const { state, dispatch } = useStore();
   useEffect(() => {
-    AppState.addEventListener('change', (nextState) => {
-      if (nextState.match(/inactive|background/)) {
-        client.unsubscribeAll();
-      }
-    });
+    // AppState.addEventListener('change', (nextState) => {
+    //   if (nextState.match(/inactive|background/)) {
+    //     client.unsubscribeAll();
+    //   }
+    // });
     client.addListener(listener(state, dispatch));
     client.subscribe({
       channelGroups: [uuid],
       withPresence: true
     });
-    return () => client.unsubscribeAll()
+    // return () => client.unsubscribeAll()
   }, []);
+  
   return <>
     <PubNubProvider client={client}>
       <Navigator />

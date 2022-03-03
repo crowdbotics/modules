@@ -55,13 +55,19 @@ const Channels = ({ navigation }) => {
     }
   }, [search])
 
-  // useEffect(() => {
-  //   pubnub.addListener({
-  //     presence: (event) => {
-  //       console.log('event', event)
-  //     }
-  //   })
-  // }, [])
+  useEffect(() => {
+    pubnub.addListener({
+      presence: (event) => {
+        pubnub.setState({
+          state: {
+            last_seen: event.timestamp
+          },
+          channels: [event.channel],
+        }, (status, response) => {
+        });
+      }
+    })
+  }, [state.channels])
 
   const ListItem = (item) => {
     return (
