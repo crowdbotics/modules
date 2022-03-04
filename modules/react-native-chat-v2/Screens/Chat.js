@@ -53,6 +53,10 @@ const Chat = ({ route, navigation }) => {
       if (res?.didCancel)
         return
 
+      if(res.assets[0].fileSize > 524000) {
+        alert("File size must be less then 5mb.")
+        return
+      }
       const tmpMessages = cloneArray(messages)
       tmpMessages.push({ image: res.assets[0].uri, pending: true, user: user })
       setMessages(tmpMessages)

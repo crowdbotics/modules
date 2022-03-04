@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
-import { ActivityIndicator, Button, TextInput, View } from 'react-native';
+import { ActivityIndicator, Button, TextInput, View, Text } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker'
 import CirclePrompt from '../Components/CirclePrompt';
 import { upload } from '../Store/storage';
@@ -7,6 +7,7 @@ import { useStore } from '../Store/store';
 // @ts-ignore
 import { usePubNub } from 'pubnub-react';
 import options from '../options';
+import { StyleSheet } from 'react-native';
 
 export default ({ navigation, route }) => {
   const { state, dispatch } = useStore();
@@ -15,6 +16,7 @@ export default ({ navigation, route }) => {
   const [image, setImage] = useState(null);
   const [localImage, setLocalImage] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const submit = async () => {
     setLoading(true);
     const res = await pubnub.objects.setChannelMetadata({
@@ -44,6 +46,7 @@ export default ({ navigation, route }) => {
     setLoading(false);
     navigation.goBack();
   };
+
   const pickImage = async () => {
     const result = await ImagePicker.openPicker({
       mediaType: 'photo'
@@ -51,20 +54,29 @@ export default ({ navigation, route }) => {
     if (!result) {
       return console.log('picking result cancelled')
     }
-    setImage(result.base64);
-    setLocalImage(result.uri);
+    setImage(result.path);
+    setLocalImage(result.path);
   };
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <View style={options.NavigationStyle.headerRight}>
-        {loading ? <ActivityIndicator /> : <Button title="Done" onPress={submit} />}
+
+  return (
+    <View style={styles.Container}>
+      <CirclePrompt onPress={pickImage} source={localImage || route.params.item.custom.caption} />
+      <View style={{...options.section, marginTop: 20}}>
+        <Text style={{fontWeight: "bold"}}>Channel name</Text>
+        <TextInput placeholder="Name" value={name} onChangeText={setName} style={{...options.ListViewStyle.subtitle, borderBottomWidth: 1}} />
       </View>
-    });
-  }, [navigation, name, image, loading]);
-  return <View>
-    <CirclePrompt onPress={pickImage} source={localImage || route.params.item.custom.caption} />
-    <View style={options.section}>
-      <TextInput placeholder="Name" value={name} onChangeText={setName} style={options.ListViewStyle.subtitle} />
+      <View style={{marginTop: 20}}>
+        <Button title="Update" onPress={submit} />
+      </View>
     </View>
-  </View>;
+  );
 };
+
+const styles = StyleSheet.create({
+  Container: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 10,
+    paddingTop: 20
+  },
+})

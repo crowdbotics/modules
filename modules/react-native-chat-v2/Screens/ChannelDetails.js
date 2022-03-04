@@ -35,13 +35,13 @@ const DirectChatDetails = ({ route, navigation }) => {
     const channels = await fetchChannels(pubnub, state.user._id);
     dispatch({ channels });
     setLoading(false);
-    navigation.pop(2);
+    navigation.popToTop()
   };
   if (loading)
     return <View><ActivityIndicator /></View>;
   return <View>
-    <View style={options.section}>
-      <InlineButton title="Block User" onPress={deleteChannel} />
+    <View style={styles.Container}>
+      <Button color={"#dc3545"} title="Block user" onPress={deleteChannel} />
     </View>
   </View>;
 };
@@ -96,7 +96,7 @@ const GroupChatDetails = ({ route, navigation }) => {
     ]);
     const channels = await fetchChannels(pubnub, state.user._id);
     dispatch({ channels });
-    navigation.pop(2);
+    navigation.popToTop();
   };
 
   const addMembers = () => {
