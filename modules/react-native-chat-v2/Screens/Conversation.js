@@ -10,7 +10,7 @@ import SearchBar from '../Components/SearchBar';
 // @ts-ignore
 import { useFocusEffect } from '@react-navigation/native';
 
-const Channels = ({ navigation }) => {
+const Conversions = ({ navigation }) => {
   const pubnub = usePubNub();
   const { state, dispatch } = useStore();
   const [loading, setLoading] = useState(true);
@@ -133,10 +133,10 @@ const Channels = ({ navigation }) => {
               <Pressable onPress={() => navigation.navigate('CreateChannel')}>
                 <Text style={styles.GroupHeading}>Create group</Text>
               </Pressable>
-              : <View></View>
-              // <Pressable onPress={() => navigation.navigate('Contacts')}>
-              //   <Text style={styles.GroupHeading}>Create contact</Text>
-              // </Pressable>
+              : 
+              <Pressable onPress={() => navigation.navigate('Contacts')}>
+                <Text style={styles.GroupHeading}>New chat</Text>
+              </Pressable>
             }
           </View>
         )}
@@ -191,4 +191,4 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
 });
-export default Channels
+export default Conversions

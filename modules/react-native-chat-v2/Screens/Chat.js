@@ -8,7 +8,7 @@ import { cloneArray, sortArray } from '../utils';
 // @ts-ignore
 import { launchImageLibrary } from 'react-native-image-picker';
 
-export default ({ route, navigation }) => {
+const Chat = ({ route, navigation }) => {
   const pubnub = usePubNub();
   const { state } = useStore();
   const { item } = route.params;
@@ -64,3 +64,4 @@ export default ({ route, navigation }) => {
   };
   return <GiftedChat isLoadingEarlier={true} messages={sortArray(messages)} renderUsernameOnMessage={true} onSend={onSend} renderActions={() => <Actions onPressActionButton={pickImage} />} user={user} />;
 };
+export default Chat

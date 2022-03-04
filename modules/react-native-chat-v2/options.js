@@ -23,11 +23,6 @@ export const NavigationStyle = StyleSheet.create({
     paddingRight: 16
   }
 });
-export const ChatStyle = StyleSheet.create({
-  container: {
-    paddingTop: 4
-  }
-});
 export const ListViewStyle = StyleSheet.create({
   container: {
     paddingVertical: 8,
@@ -71,7 +66,6 @@ export default {
   PUBNUB_PUB,
   ENDPOINT,
   FILESTACK_KEY,
-  ChatStyle,
   ListViewStyle,
   NavigationStyle,
   styles: styles
