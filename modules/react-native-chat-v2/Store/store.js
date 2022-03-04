@@ -1,6 +1,6 @@
 // @ts-ignore
 import create from 'zustand';
-export const uuid = '0'; // uuidv4()
+export const uuid = '1'; // uuidv4()
 export const user = {
     _id: uuid,
     name: 'Vlad Rimsha',

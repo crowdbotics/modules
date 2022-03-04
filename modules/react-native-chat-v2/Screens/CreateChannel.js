@@ -85,7 +85,7 @@ export default ({ navigation }) => {
     <View style={styles.Container}>
       <View>
         <TextInput autoFocus={true} value={name} onChangeText={setName} placeholder="Group Name" />
-        {isNameError && <Text style={{fontSize: 12, color: 'red'}}>Please enter group name.</Text> }
+        {isNameError && <Text style={{fontSize: 12, color: '#dc3545'}}>Please enter group name.</Text> }
       </View>
       <View>
         <Text style={styles.GroupHeading}>Select group members</Text>

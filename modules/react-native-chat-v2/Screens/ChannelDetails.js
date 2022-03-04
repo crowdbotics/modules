@@ -1,144 +1,201 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import React, { useLayoutEffect, useState, useCallback } from 'react';
+import { ActivityIndicator, SectionList, Button, View, Text, Pressable } from 'react-native';
 import { InlineButton } from '../Components/Button';
 // @ts-ignore
 import { usePubNub } from "pubnub-react";
 import { ChannelType, useStore } from "../Store/store";
-import { ChatMember, ManagedChatMember } from "../Components/ListViewItem";
 import { fetchChannels } from '../utils';
-import styles, { ListViewStyle } from '../Navigator/styles';
+import options from "../options"
+import Circle from '../Components/Circle';
+import { StyleSheet } from 'react-native';
+// @ts-ignore
+import { useFocusEffect } from '@react-navigation/native';
 
 export default ({ route, navigation }) => {
-    const item = route.params.item;
-    if (item.custom.type === ChannelType.Group)
-        return <GroupChatDetails route={route} navigation={navigation}/>;
-    if (item.custom.type === ChannelType.Direct)
-        return <DirectChatDetails route={route} navigation={navigation}/>;
+  const item = route.params.item;
+  if (item.custom.type === ChannelType.Group)
+    return <GroupChatDetails route={route} navigation={navigation} />;
+  if (item.custom.type === ChannelType.Direct)
+    return <DirectChatDetails route={route} navigation={navigation} />;
 };
+
 const DirectChatDetails = ({ route, navigation }) => {
-    const pubnub = usePubNub();
-    const { state, dispatch } = useStore();
-    const [loading, setLoading] = useState(false);
-    const deleteChannel = async () => {
-        setLoading(true);
-        const [metadataRes, channelGroupRes] = await Promise.all([
-            pubnub.objects.removeChannelMetadata({ channel: route.params.item.id }),
-            pubnub.channelGroups.removeChannels({
-                channelGroup: state.user._id,
-                channels: [route.params.item.id]
-            })
-        ]);
-        console.log('removing channel metadata', metadataRes);
-        console.log('removing channel from channel group', channelGroupRes);
-        const channels = await fetchChannels(pubnub, state.user._id);
-        dispatch({ channels });
-        setLoading(false);
-        navigation.pop(2);
-    };
-    if (loading)
-        return <View><ActivityIndicator /></View>;
-    return <View>
-    <View style={styles.section}>
-      <InlineButton title="Block User" onPress={deleteChannel}/>
+  const pubnub = usePubNub();
+  const { state, dispatch } = useStore();
+  const [loading, setLoading] = useState(false);
+  const deleteChannel = async () => {
+    setLoading(true);
+    const [metadataRes, channelGroupRes] = await Promise.all([
+      pubnub.objects.removeChannelMetadata({ channel: route.params.item.id }),
+      pubnub.channelGroups.removeChannels({
+        channelGroup: state.user._id,
+        channels: [route.params.item.id]
+      })
+    ]);
+    console.log('removing channel metadata', metadataRes);
+    console.log('removing channel from channel group', channelGroupRes);
+    const channels = await fetchChannels(pubnub, state.user._id);
+    dispatch({ channels });
+    setLoading(false);
+    navigation.pop(2);
+  };
+  if (loading)
+    return <View><ActivityIndicator /></View>;
+  return <View>
+    <View style={options.section}>
+      <InlineButton title="Block User" onPress={deleteChannel} />
     </View>
   </View>;
 };
-const MembersViewList = ({ channel }) => {
-    const { state, dispatch } = useStore();
-    const members = state.members[channel.id] ?? [];
-    const [loading, setLoading] = useState(true);
-    const pubnub = usePubNub();
-    useEffect(() => {
-        const bootstrap = async () => {
-            const res = await pubnub.objects.getChannelMembers({ channel: channel.id });
-            const _members = res.data.map(member => state.contacts.find(contact => contact._id === member.uuid.id));
-            dispatch({ members: { ...state.members, [channel.id]: _members } });
-            setLoading(false);
-        };
-        bootstrap();
-    }, []);
-    const removeMember = async (member) => {
-        setLoading(true);
-        const res = await pubnub.objects.removeChannelMembers({ channel: channel.id, uuids: [member._id] });
-        console.log('removing channel member', member, res);
-        const _members = state.members[channel.id].filter(m => m._id !== member._id);
-        dispatch({ members: { ...state.members, [channel.id]: _members } });
-        setLoading(false);
-    };
-    if (loading)
-        return <ActivityIndicator />;
-    if (`${state.user._id}-${channel.name}` === channel.id)
-        return <>{members.map((member, i, all) => <View key={member._id}>
-    <ManagedChatMember member={member} buttonText="Remove" onPress={() => removeMember(member)}/>
-    {i !== all.length - 1 && <View style={ListViewStyle.separator}/>}
-  </View>)}</>;
-    return <>{members.map((member, i, all) => <View key={member._id}>
-    <ChatMember member={member}/>
-    {i !== all.length - 1 && <View style={ListViewStyle.separator}/>}
-  </View>)}</>;
-};
+
 const GroupChatDetails = ({ route, navigation }) => {
-    const pubnub = usePubNub();
-    const { state, dispatch } = useStore();
-    const channel = state.channels[route.params.item.id];
-    const item = route.params.item;
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            title: channel.name
-        });
-    }, [navigation, channel]);
-    const leaveChannel = async () => {
-        console.log('leaving channel');
-        const [membersRes, unsubscribeRes, removeMetadataRes] = await Promise.all([
-            pubnub.objects.removeChannelMembers({
-                channel: item.id,
-                uuids: [state.user._id]
-            }),
-            pubnub.channelGroups.removeChannels({
-                channelGroup: state.user._id,
-                channels: [item.id]
-            }),
-            pubnub.objects.removeChannelMetadata({
-                channel: item.id
-            })
-        ]);
-        console.log('remove channel members res', membersRes);
-        console.log('remove from group channel res', unsubscribeRes);
-        console.log('remove channel metadata res', removeMetadataRes);
-        const channels = await fetchChannels(pubnub, state.user._id);
-        dispatch({ channels });
-        navigation.pop(2);
-    };
-    const deleteChannel = async () => {
-        if (item.id === state.user._id) {
-            return console.log('cannot delete notes channel');
-        }
-        const channel = item.id;
-        const members = await pubnub.objects.getChannelMembers({ channel });
-        console.log('getting members from channel', members.data);
-        const removeChannelMembersRes = await pubnub.objects.removeChannelMembers({ channel, uuids: members.data.map(member => member.uuid.id) });
-        console.log('removing members from channel', removeChannelMembersRes);
-        const removeChannelMetadataRes = await pubnub.objects.removeChannelMetadata({ channel });
-        console.log('removing channel metadata', removeChannelMetadataRes);
-        const deleteMessagesRes = await pubnub.deleteMessages({ channel });
-        console.log('removing channel messages', deleteMessagesRes);
-        const removeChannelRes = await pubnub.channelGroups.removeChannels({ channels: [channel], channelGroup: state.user._id });
-        console.log('remove channel from channel group', removeChannelRes);
-        const channels = { ...state.channels };
-        delete channels[channel];
-        dispatch({ channels });
-        navigation.replace('Channels');
-    };
-    const addMembers = () => {
-        navigation.navigate('AddMember', { item });
-    };
-    return <View>
-    <View style={styles.section}>
-      <InlineButton title="Add members" onPress={addMembers}/>
-      <InlineButton title="Leave group" onPress={leaveChannel}/>
-    </View>
-    <View style={styles.section}>
-      <MembersViewList channel={item}/>
+  const pubnub = usePubNub();
+  const { state, dispatch } = useStore();
+  const channel = state.channels[route.params.item.id];
+  const params = route.params.item;
+
+  const members = state.members[channel.id] ?? [];
+  const [loading, setLoading] = useState(true);
+
+  const bootstrap = async () => {
+    const res = await pubnub.objects.getChannelMembers({ channel: params.id });
+    const _members = res.data.map(member => state.contacts.find(contact => contact._id === member.uuid.id));
+    dispatch({ members: { ...state.members, [params.id]: _members } });
+    setLoading(false);
+  };
+
+  useFocusEffect(useCallback(() => {
+    bootstrap()
+  },[state.channels]))
+
+  const removeMember = async (member) => {
+    setLoading(true);
+    const res = await pubnub.objects.removeChannelMembers({ channel: params.id, uuids: [member._id] });
+    console.log('removing channel member', member, res);
+    const _members = state.members[params.id].filter(m => m._id !== member._id);
+    dispatch({ members: { ...state.members, [params.id]: _members } });
+    setLoading(false);
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: channel.name
+    });
+  }, [navigation, channel]);
+
+  const leaveChannel = async () => {
+    console.log('leaving channel');
+    const [membersRes, unsubscribeRes, removeMetadataRes] = await Promise.all([
+      pubnub.objects.removeChannelMembers({
+        channel: params.id,
+        uuids: [state.user._id]
+      }),
+      pubnub.channelGroups.removeChannels({
+        channelGroup: state.user._id,
+        channels: [params.id]
+      }),
+      pubnub.objects.removeChannelMetadata({
+        channel: params.id
+      })
+    ]);
+    const channels = await fetchChannels(pubnub, state.user._id);
+    dispatch({ channels });
+    navigation.pop(2);
+  };
+
+  const addMembers = () => {
+    navigation.navigate('AddMember', { item: params });
+  };
+
+  const ListItem = (item) => {
+    return (
+      <View key={item.id} style={styles.ListItem}>
+        <View style={styles.ProfileContainer}>
+          <View style={styles.ProfileBox}>
+            <Circle letter={(item.name ? item.name[0] : '').toUpperCase()} source={""} />
+          </View>
+          <View style={styles.Profile} >
+            <Text style={{...styles.ProfileText, marginTop: 8}}>{item.name}</Text>
+            {(`${state.user._id}-${channel.name}` === channel.id) &&
+            <Pressable onPress={() => removeMember(item)}>
+              <Text style={{color: "#dc3545", marginTop: 10}}>Remove</Text>  
+            </Pressable>}
+          </View>
+        </View>
+      </View>
+    )
+  }
+  
+  return <View style={styles.Container}>
+    <SectionList
+      refreshing={loading}
+      onRefresh={async () => {
+        await bootstrap()
+      }}
+      sections={[{ title: "Members", data: members}]}
+      keyExtractor={(item, index) => item + index}
+      renderItem={({ item }) => ListItem(item)}
+      renderSectionHeader={({ section: { title } }) => (
+        <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={styles.GroupHeading}>{title}</Text>
+          <Pressable onPress={addMembers}>
+            <Text style={styles.GroupHeading}>Add member</Text>
+          </Pressable>
+        </View>
+      )}
+    />
+    <View>
+      <Button color={"#dc3545"} title={"Leave group"} onPress={leaveChannel}></Button>
     </View>
   </View>;
 };
+
+const styles = StyleSheet.create({
+  Container: {
+    backgroundColor: 'white',
+    height: '100%',
+    padding: 10,
+    paddingTop: 20
+  },
+  TopProfileContainer: {
+    height: 80,
+    display: "flex",
+    flexDirection: "row",
+    alignContent: "center",
+    alignItems: "center",
+    padding: 8
+  },
+  ProfileBox: {
+    height: 42,
+    width: 42,
+    borderRadius: 50,
+    backgroundColor: '#292B2F'
+  },
+  ProfileContainer: {
+    display: 'flex',
+    flexDirection: 'row'
+  },
+  ListItem: {
+    backgroundColor: "#f0f3f7",
+    padding: 8,
+    marginBottom: 5
+  },
+  Profile: {
+    marginLeft: 15,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "82%"
+  },
+  ProfileText: {
+    color: '#292B2F',
+    fontWeight: 'bold',
+    fontSize: 16
+  },
+  GroupHeading: {
+    color: '#292B2F',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 10
+  }
+});

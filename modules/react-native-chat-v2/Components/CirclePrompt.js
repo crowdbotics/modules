@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 });
 export default ({ onPress, source }) => <TouchableOpacity style={styles.container} onPress={onPress}>
   {source ? <Image source={{ uri: source }} style={styles.shape}/> : <LinearGradient colors={['#a5bef5', '#91a2c7']} start={{ x: 0.1, y: 0.2 }} style={styles.shape}>
-    <Ionicons name="camera" size={45} color="#fff" style={styles.icon}/>
+    {/* <Ionicons name="camera" size={45} color="#fff" style={styles.icon}/> */}
   </LinearGradient>}
   <Text style={styles.text}>Set New Photo</Text>
 </TouchableOpacity>;

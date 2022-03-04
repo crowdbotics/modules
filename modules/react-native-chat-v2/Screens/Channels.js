@@ -113,7 +113,7 @@ const Channels = ({ navigation }) => {
             <Image style={styles.ProfileBox} source={{ uri: state.user.avatar }}></Image>
           </View>
           <View style={styles.Profile} >
-            <Text style={styles.ProfileText}>{state.user.name}</Text>
+            <Text style={{...styles.ProfileText, marginTop: 8}}>{state.user.name}</Text>
           </View>
         </View>
       </View>
@@ -133,10 +133,10 @@ const Channels = ({ navigation }) => {
               <Pressable onPress={() => navigation.navigate('CreateChannel')}>
                 <Text style={styles.GroupHeading}>Create group</Text>
               </Pressable>
-              :
-              <Pressable onPress={() => navigation.navigate('Contacts')}>
-                <Text style={styles.GroupHeading}>Create contact</Text>
-              </Pressable>
+              : <View></View>
+              // <Pressable onPress={() => navigation.navigate('Contacts')}>
+              //   <Text style={styles.GroupHeading}>Create contact</Text>
+              // </Pressable>
             }
           </View>
         )}

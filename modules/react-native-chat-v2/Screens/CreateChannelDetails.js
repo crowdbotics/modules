@@ -3,9 +3,9 @@ import { Button, TextInput, View } from 'react-native';
 // @ts-ignore
 import { usePubNub } from 'pubnub-react';
 import { ChannelType, useStore } from '../Store/store';
-import styles, { ListViewStyle, NavigationStyle } from '../Navigator/styles';
 import Circle from '../Components/Circle';
 import { ChatMember } from '../Components/ListViewItem';
+import options from '../options'
 
 export default ({ navigation, route }) => {
     const pubnub = usePubNub();
@@ -49,22 +49,22 @@ export default ({ navigation, route }) => {
     };
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerRight: () => <View style={NavigationStyle.headerRight}>
+            headerRight: () => <View style={options.NavigationStyle.headerRight}>
         <Button onPress={createGroup} title="Create"/>
       </View>
         });
     }, [navigation, name]);
     return <View>
-    <View style={[{ flexDirection: 'row' }, styles.section]}>
+    <View style={[{ flexDirection: 'row' }, options.section]}>
       <Circle letter="" source=""/>
       <TextInput style={{
         paddingLeft: 16
     }} value={name} onChangeText={setName} placeholder="Group Name" ref={nameInput}/>
     </View>
-    <View style={styles.section}>
+    <View style={options.section}>
       {route.params.members.map((member, i, all) => <View key={member._id}>
         <ChatMember member={member}/>
-        {i !== all.length - 1 && <View style={ListViewStyle.separator}/>}
+        {i !== all.length - 1 && <View style={options.separator}/>}
       </View>)}
     </View>
   </View>;
