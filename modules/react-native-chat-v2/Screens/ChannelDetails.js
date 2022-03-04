@@ -32,8 +32,6 @@ const DirectChatDetails = ({ route, navigation }) => {
         channels: [route.params.item.id]
       })
     ]);
-    console.log('removing channel metadata', metadataRes);
-    console.log('removing channel from channel group', channelGroupRes);
     const channels = await fetchChannels(pubnub, state.user._id);
     dispatch({ channels });
     setLoading(false);
@@ -71,7 +69,6 @@ const GroupChatDetails = ({ route, navigation }) => {
   const removeMember = async (member) => {
     setLoading(true);
     const res = await pubnub.objects.removeChannelMembers({ channel: params.id, uuids: [member._id] });
-    console.log('removing channel member', member, res);
     const _members = state.members[params.id].filter(m => m._id !== member._id);
     dispatch({ members: { ...state.members, [params.id]: _members } });
     setLoading(false);
@@ -84,7 +81,6 @@ const GroupChatDetails = ({ route, navigation }) => {
   }, [navigation, channel]);
 
   const leaveChannel = async () => {
-    console.log('leaving channel');
     const [membersRes, unsubscribeRes, removeMetadataRes] = await Promise.all([
       pubnub.objects.removeChannelMembers({
         channel: params.id,

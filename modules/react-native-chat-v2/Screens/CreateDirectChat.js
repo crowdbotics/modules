@@ -14,20 +14,10 @@ const CreateDirectChat = ({ navigation }) => {
   const data = search ? state.contacts.filter(item => item.name.includes(search)) : state.contacts;
   
   const createChat = async (item) => {
-    console.log('creating new chat with', item);
     const channel = `${state.user._id}-${item._id}`;
-    const res1 = await pubnub.objects.setChannelMetadata({
-      channel,
-      data: { name: item.name, custom: { type: ChannelType.Direct } }
-    });
-    console.log('setting new channel metadata', res1);
+    const res1 = await pubnub.objects.setChannelMetadata({ channel, data: { name: item.name, custom: { type: ChannelType.Direct } }});
     const res2 = await pubnub.objects.setChannelMembers({ channel, uuids: [{ id: state.user._id }, { id: `${item._id}` }] });
-    console.log('setting channel members', res2);
-    const res3 = await pubnub.channelGroups.addChannels({
-      channels: [channel],
-      channelGroup: state.user._id
-    });
-    console.log('adding channel to channel groups', res3);
+    const res3 = await pubnub.channelGroups.addChannels({ channels: [channel], channelGroup: state.user._id });
     dispatch({
       channels: {
         ...state.channels,

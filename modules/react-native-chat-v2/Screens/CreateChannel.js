@@ -60,11 +60,8 @@ export default ({ navigation }) => {
     setLoading(true);
     const channel = `${state.user._id}-${name.replace(/ /g,"-")}`;
     const res1 = await pubnub.objects.setChannelMetadata({ channel, data: { name, custom: { type: ChannelType.Group } }});
-    console.log('setting new channel metadata', res1);
     const res2 = await pubnub.objects.setChannelMembers({ channel, uuids: contacts.filter(obj => { return obj.isSelected }).map(user => user._id)});
-    console.log('setting channel members', res2);
     const res3 = await pubnub.channelGroups.addChannels({ channels: [channel], channelGroup: state.user._id});
-    console.log('adding channel to channel groups', res3);
     dispatch({
       channels: {
         ...state.channels,

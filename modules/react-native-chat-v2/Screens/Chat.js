@@ -10,10 +10,23 @@ import { launchImageLibrary } from 'react-native-image-picker';
 
 const Chat = ({ route, navigation }) => {
   const pubnub = usePubNub();
-  const { state } = useStore();
+  const { state, dispatch } = useStore();
   const { item } = route.params;
   const [messages, setMessages] = useState(state.messages[item.id] || [])
   const channel = state.channels[route.params.item.id];
+
+  useEffect(() => {
+    pubnub.fetchMessages({
+        channels: [item.id],
+      },
+      (status, response) => {
+        const messages = response.channels[item.id].map(obj =>  obj.message)
+        state.messages[item.id] = messages
+        dispatch({ messages: state.messages });
+      }
+    );
+  }, [item.id])
+  
 
   useEffect(() => {
     setMessages(state.messages[item.id] || [])

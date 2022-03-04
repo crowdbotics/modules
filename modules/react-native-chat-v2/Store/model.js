@@ -1,13 +1,11 @@
 export default (state, dispatch) => ({
   message: payload => {
     // channel, subscription, timetoken, message, publisher
-    console.log('payload', payload)
     const channelMessages = state.messages[payload.channel] || [];
     state.messages[payload.channel] = [...channelMessages, payload.message];
     dispatch({ messages: state.messages });
   },
   file: envelop => {
-    console.log('envelop', envelop)
     const channelMessages = state.messages[envelop.channel] || [];
     state.messages[envelop.channel] = [...channelMessages, {
       _id: envelop.file.id,

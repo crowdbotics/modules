@@ -21,17 +21,14 @@ export default ({ navigation, route }) => {
       channel: route.params.item.id,
       data: { name }
     });
-    console.log('updating channel name', name, res);
     const channel = state.channels[route.params.item.id];
     if (image) {
       try {
         const file = await upload(Buffer.from(image, 'base64'));
-        console.log('uploaded file', file.size);
         const res2 = await pubnub.objects.setChannelMetadata({
           channel: route.params.item.id,
           data: { custom: { ...channel.custom, caption: file.url } }
         });
-        console.log('setting caption to channel data', res2);
         dispatch({
           channels: {
             ...state.channels,
@@ -54,8 +51,6 @@ export default ({ navigation, route }) => {
     if (!result) {
       return console.log('picking result cancelled')
     }
-
-    console.log('picking result', result);
     setImage(result.base64);
     setLocalImage(result.uri);
   };
