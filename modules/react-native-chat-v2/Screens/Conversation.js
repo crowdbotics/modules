@@ -134,7 +134,7 @@ const Conversions = ({ navigation }) => {
                 <Text style={styles.GroupHeading}>Create group</Text>
               </Pressable>
               : 
-              <Pressable onPress={() => navigation.navigate('Contacts')}>
+              <Pressable onPress={() => navigation.navigate('CreateDirectChat')}>
                 <Text style={styles.GroupHeading}>New chat</Text>
               </Pressable>
             }

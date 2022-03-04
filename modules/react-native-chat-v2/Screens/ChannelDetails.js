@@ -157,14 +157,6 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 20
   },
-  TopProfileContainer: {
-    height: 80,
-    display: "flex",
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
-    padding: 8
-  },
   ProfileBox: {
     height: 42,
     width: 42,

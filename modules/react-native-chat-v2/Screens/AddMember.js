@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useStore } from '../Store/store';
 // @ts-ignore
 import { usePubNub } from 'pubnub-react';
-import { Pressable, View, Text, SectionList, TouchableOpacity } from 'react-native';
+import { View, Text, SectionList, TouchableOpacity } from 'react-native';
 import Circle from '../Components/Circle';
 import { StyleSheet } from 'react-native';
 
@@ -67,14 +67,6 @@ const styles = StyleSheet.create({
     height: '100%',
     padding: 10,
     paddingTop: 20
-  },
-  TopProfileContainer: {
-    height: 80,
-    display: "flex",
-    flexDirection: "row",
-    alignContent: "center",
-    alignItems: "center",
-    padding: 8
   },
   ProfileBox: {
     height: 42,
