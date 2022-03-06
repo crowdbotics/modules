@@ -43,7 +43,7 @@ const InappPurchase = () => {
   }
 
   const getAppleIAPProductIds = async () => {
-    var data = await fetchAppleIAPProducts();
+    var {status, data} = await fetchAppleIAPProducts();
     if (data){
       console.log("data", data)
       data.forEach((obj)=>{
@@ -58,9 +58,12 @@ const InappPurchase = () => {
   const getAvailablePurchases = async () => {
     try {
       const purchases = await RNIap.getAvailablePurchases();
+      // TODO: use this function to get the purchases from apple server and verify them through our server
       console.log('Available purchases :: ', purchases);
       if (purchases && purchases.length > 0) {
         console.log('Available purchases :: ', purchases);
+        // This zero index to be replaced or adjusted by requirements if the app only has one type of inapp payment plan then 0 is enough
+        // however if there are multiple then you might want to iterate of verify in bulk.
         verifyAppleIAPReceipt(purchases[0])
       } else {
         // Alert.alert('Restore Error', 'No previous purchase found')

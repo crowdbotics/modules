@@ -13,19 +13,18 @@ const PaymentHistoryModal = (props) => {
     const [refresh, setRefresh] = useState(false);
 
     useEffect(() => {
-        get_payments();
+        setRefresh(true);
+        fetchPaymentHistory()
+          .then(response => response.json())
+          .then(json => {
+            const { status, data } = json;
+            setRefresh(false);
+            setPaymentHistory({ status, data });
+          });
     }, [])
 
-    const get_payments = async () => {
-        setRefresh(true);
-        const res = await fetchPaymentHistory()
-        fetchPaymentHistory().then(res => {
-            setRefresh(false);
-            setPaymentHistory(res);
-        })
-    }
-
     const renderItem = ({ item }) => {
+        if (!item) return;
         return (
             <View style={styles.listItemContainer}>
                 <Text>{item.amount} cents {item.currency}</Text>

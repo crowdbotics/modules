@@ -37,8 +37,8 @@ export const fetchPaymentHistory = async () => {
             'Authorization': token
         }
     });
-    const {status, data} = await response.json();
-    return data;
+    const resp = await response.json();
+    return resp;
 };
 
 
@@ -51,8 +51,8 @@ export const verifyAppleIAPReceipt = async (json_data) => {
         },
         body: JSON.stringify(json_data)
     });
-    const {status, data} = await response.json();
-    return data;
+    const resp = await response.json();
+    return resp;
 };
 
 export const fetchAppleIAPProducts = async () => {
@@ -63,6 +63,6 @@ export const fetchAppleIAPProducts = async () => {
             'Authorization': token
         }
     });
-    const {status, data} = await response.json();
-    return data;
+    const resp = await response.json();
+    return resp;
 }
