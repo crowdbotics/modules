@@ -1,11 +1,9 @@
 // @ts-ignore
 import create from 'zustand';
-export const uuid = '1'; // uuidv4()
-export const user = {
-    _id: uuid,
-    name: 'Vlad Rimsha',
-    avatar: 'https://ca.slack-edge.com/T2R0TP3DM-UDU3PDY81-25eda549c0b1-512',
-};
+import { users } from './storage';
+const randIndex = 0 //Math.floor(Math.random() * users.length)
+export const uuid = users[randIndex]._id; // uuidv4()
+export const user = users[randIndex]
 export var ChannelType;
 (function (ChannelType) {
     ChannelType[ChannelType["Direct"] = 0] = "Direct";
@@ -16,10 +14,7 @@ export const useStore = create(setState => ({
         channels: {},
         messages: {},
         members: {},
-        contacts: [
-            { _id: '1', name: 'John', avatar: '' },
-            { _id: '2', name: 'Jane', avatar: '' }
-        ],
+        contacts: users,
         user,
     },
     dispatch: newState => setState((oldState) => ({ state: { ...oldState.state, ...newState } }))

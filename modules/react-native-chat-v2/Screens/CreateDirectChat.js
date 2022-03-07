@@ -15,7 +15,7 @@ const CreateDirectChat = ({ navigation }) => {
   
   const createChat = async (item) => {
     const channel = `${state.user._id}-${item._id}`;
-    const res1 = await pubnub.objects.setChannelMetadata({ channel, data: { name: item.name, custom: { type: ChannelType.Direct } }});
+    const res1 = await pubnub.objects.setChannelMetadata({ channel, data: { name: state.user.name +" - "+ item.name, custom: { type: ChannelType.Direct, owner: state.user._id } }});
     const res2 = await pubnub.objects.setChannelMembers({ channel, uuids: [{ id: state.user._id }, { id: `${item._id}` }] });
     const res3 = await pubnub.channelGroups.addChannels({ channels: [channel], channelGroup: state.user._id });
     dispatch({
@@ -23,12 +23,12 @@ const CreateDirectChat = ({ navigation }) => {
         ...state.channels,
         [channel]: {
           id: channel,
-          name: item.name,
-          custom: { type: ChannelType.Direct }
+          name: state.user.name +" - "+ item.name,
+          custom: { type: ChannelType.Direct, owner: state.user._id }
         }
       }
     });
-    navigation.replace('Channel', { item: { id: channel, name: item.name, custom: { type: ChannelType.Direct } } });
+    navigation.replace('Channel', { item: { id: channel, name: state.user.name +" - "+ item.name, custom: { type: ChannelType.Direct, owner: state.user._id } } });
   };
 
   const ListItem = (item) => {

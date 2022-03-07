@@ -5,10 +5,10 @@ import Pubnub from 'pubnub';
 import { PubNubProvider } from "pubnub-react";
 import Navigator from './Navigator';
 import { useStore, uuid } from './Store/store';
-import { AppState } from 'react-native';
 import listener from './Store/model';
 import options from './options';
 import { LogBox } from 'react-native';
+import { users } from './Store/storage';
 
 LogBox.ignoreLogs(['Setting a timer'])
 
@@ -29,7 +29,7 @@ const App = () => {
     // });
     client.addListener(listener(state, dispatch));
     client.subscribe({
-      channelGroups: [uuid],
+      channelGroups: users.map(user => {return user._id}),
       withPresence: true
     });
     // return () => client.unsubscribeAll()

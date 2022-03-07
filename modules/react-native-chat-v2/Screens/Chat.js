@@ -14,15 +14,17 @@ const Chat = ({ route, navigation }) => {
   const { item } = route.params;
   const [messages, setMessages] = useState(state.messages[item.id] || [])
   const channel = state.channels[route.params.item.id];
-
+  
   useEffect(() => {
     pubnub.fetchMessages({
         channels: [item.id],
       },
       (status, response) => {
-        const messages = response.channels[item.id].map(obj =>  obj.message)
-        state.messages[item.id] = messages
-        dispatch({ messages: state.messages });
+        if(response) {
+          const messages = response.channels[item.id].map(obj =>  obj.message)
+          state.messages[item.id] = messages
+          dispatch({ messages: state.messages });
+        }
       }
     );
   }, [item.id])
