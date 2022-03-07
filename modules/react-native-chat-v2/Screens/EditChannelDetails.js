@@ -26,7 +26,7 @@ export default ({ navigation, route }) => {
     const channel = state.channels[route.params.item.id];
     if (image) {
       try {
-        const file = await upload(Buffer.from(image, 'base64'));
+        const file = await upload(image);
         const res2 = await pubnub.objects.setChannelMetadata({
           channel: route.params.item.id,
           data: { custom: { ...channel.custom, caption: file.url } }
@@ -49,12 +49,13 @@ export default ({ navigation, route }) => {
 
   const pickImage = async () => {
     const result = await ImagePicker.openPicker({
-      mediaType: 'photo'
+      mediaType: 'photo',
+      includeBase64: true,
     });
     if (!result) {
       return console.log('picking result cancelled')
     }
-    setImage(result.path);
+    setImage(result.data);
     setLocalImage(result.path);
   };
 
