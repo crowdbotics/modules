@@ -10,7 +10,7 @@ export default (state, dispatch) => ({
     state.messages[envelop.channel] = [...channelMessages, {
       _id: envelop.file.id,
       name: envelop.file.name,
-      image: envelop.file.url,
+      [envelop.message.type]: envelop.file.url,
       createdAt: new Date((envelop.timetoken / 10000000) * 1000),
       user: state.user
     }];

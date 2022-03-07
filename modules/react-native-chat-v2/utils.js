@@ -1,4 +1,5 @@
-import { ChannelType } from "./Store/store";
+// @ts-ignore
+import RNFS from 'react-native-fs';
 
 export const cloneArray = (data) => {
   return JSON.parse(JSON.stringify(data))
@@ -59,4 +60,27 @@ export const sortArray = (arr) => {
 export function getByValue(arr, value) {
   var result = arr.find(function(o){return o.id == value;} );
   return result
+}
+
+export const getUrl = async (uri, fileName) => {
+  const destPath = `${RNFS.TemporaryDirectoryPath}/${fileName}`;
+  await RNFS.copyFile(uri, destPath);
+  await RNFS.stat(destPath);
+  return destPath;
+}
+
+export const loadHistory = (data) => {
+  return data.map(obj => {
+    if("file" in obj) {
+      let message = {
+        _id: obj.file.id,
+        [obj.message.type]: obj.file.name,
+        createdAt: obj.message.createdAt,
+        user: obj.message.user
+      }
+      return message
+    } else {
+      return obj
+    }
+  })
 }

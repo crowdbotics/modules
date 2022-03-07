@@ -18,7 +18,10 @@
     "react-native-permissions": "^3.0.5",
     "react-native-linear-gradient": "^2.4.0",
     "react-native-image-picker": "4.7.3",
-    "@react-native-community/checkbox": "0.5.10"
+    "@react-native-community/checkbox": "0.5.10",
+    "react-native-popup-menu": "0.15.12",
+    "react-native-video": "5.2.0",
+    "react-native-fs": "2.19.0"
   },
   "x-dependencies": {
     "react-native-image-crop-picker": "0.36.2",

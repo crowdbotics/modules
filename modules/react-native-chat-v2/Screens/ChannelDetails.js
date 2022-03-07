@@ -1,11 +1,9 @@
 import React, { useLayoutEffect, useState, useCallback } from 'react';
 import { ActivityIndicator, SectionList, Button, View, Text, Pressable } from 'react-native';
-import { InlineButton } from '../Components/Button';
 // @ts-ignore
 import { usePubNub } from "pubnub-react";
 import { ChannelType, useStore } from "../Store/store";
 import { fetchChannels } from '../utils';
-import options from "../options"
 import Circle from '../Components/Circle';
 import { StyleSheet } from 'react-native';
 // @ts-ignore
@@ -23,6 +21,7 @@ const DirectChatDetails = ({ route, navigation }) => {
   const pubnub = usePubNub();
   const { state, dispatch } = useStore();
   const [loading, setLoading] = useState(false);
+  
   const deleteChannel = async () => {
     setLoading(true);
     const [metadataRes, channelGroupRes] = await Promise.all([
@@ -32,10 +31,12 @@ const DirectChatDetails = ({ route, navigation }) => {
         channels: [route.params.item.id]
       })
     ]);
-    const channels = await fetchChannels(pubnub, state.user._id);
-    dispatch({ channels });
-    setLoading(false);
-    navigation.popToTop()
+    fetchChannels(pubnub, state.user._id).then((channels) => {
+      dispatch({ channels });
+      setLoading(false);
+      navigation.popToTop()
+    })
+    
   };
   if (loading)
     return <View><ActivityIndicator /></View>;
@@ -76,7 +77,7 @@ const GroupChatDetails = ({ route, navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: channel.name
+      title: channel?.name
     });
   }, [navigation, channel]);
 
@@ -94,9 +95,11 @@ const GroupChatDetails = ({ route, navigation }) => {
         channel: params.id
       })
     ]);
-    const channels = await fetchChannels(pubnub, state.user._id);
-    dispatch({ channels });
-    navigation.popToTop();
+    fetchChannels(pubnub, state.user._id).then((channels) => {
+      dispatch({ channels });
+      navigation.popToTop();
+    })
+    
   };
 
   const addMembers = () => {

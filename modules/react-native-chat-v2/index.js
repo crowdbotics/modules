@@ -9,6 +9,7 @@ import listener from './Store/model';
 import options from './options';
 import { LogBox } from 'react-native';
 import { users } from './Store/storage';
+import { MenuProvider } from 'react-native-popup-menu';
 
 LogBox.ignoreLogs(['Setting a timer'])
 
@@ -37,7 +38,9 @@ const App = () => {
   
   return <>
     <PubNubProvider client={client}>
-      <Navigator />
+      <MenuProvider>
+        <Navigator />
+      </MenuProvider>
     </PubNubProvider>
   </>;
 };
