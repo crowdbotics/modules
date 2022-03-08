@@ -9,7 +9,7 @@ import EditChannelDetails from '../Screens/EditChannelDetails';
 import AddMember from '../Screens/AddMember';
 import options from '../options'
 import Chat from '../Screens/Chat';
-import CreateDirectChat from '../Screens/CreateDirectChat';
+import CreateDirectChannel from '../Screens/CreateDirectChannel';
 
 const Stack = createStackNavigator();
 
@@ -32,7 +32,7 @@ const Navigator = () => {
         </Pressable>
       </View>
     })} />
-    <Stack.Screen name="CreateDirectChat" component={CreateDirectChat} options={{ title: "New chat"}} />
+    <Stack.Screen name="CreateDirectChannel" component={CreateDirectChannel} options={{ title: "New chat"}} />
     <Stack.Screen name="EditChannelDetails" options={{ title: 'Edit' }} component={EditChannelDetails} />
     <Stack.Screen name="CreateChannel" component={CreateChannel} options={{ title: 'New Group' }} />
     <Stack.Screen name="AddMember" component={AddMember} options={{ title: 'Contacts' }} />

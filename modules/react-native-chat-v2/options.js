@@ -19,7 +19,7 @@ export const NavigationStyle = StyleSheet.create({
     fontSize: 16
   },
   headerRight: {
-    marginTop: 8,
+    marginTop: 5,
     paddingRight: 16
   }
 });

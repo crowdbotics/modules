@@ -7,7 +7,7 @@ import { usePubNub } from 'pubnub-react';
 import { StyleSheet, Text } from 'react-native';
 import Circle from '../Components/Circle';
 
-const CreateDirectChat = ({ navigation }) => {
+const CreateDirectChannel = ({ navigation }) => {
   const pubnub = usePubNub();
   const { state, dispatch } = useStore();
   const [search, setSearch] = useState('');
@@ -107,8 +107,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateDirectChat
-
-function useEffect(arg0, arg1) {
-  throw new Error('Function not implemented.');
-}
+export default CreateDirectChannel

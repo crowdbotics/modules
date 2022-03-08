@@ -1,7 +1,7 @@
 // @ts-ignore
 import create from 'zustand';
 import { users } from './storage';
-const randIndex = Math.floor(Math.random() * users.length)
+const randIndex = 0 //Math.floor(Math.random() * users.length)
 export const uuid = users[randIndex]._id; // uuidv4()
 export const user = users[randIndex]
 export var ChannelType;

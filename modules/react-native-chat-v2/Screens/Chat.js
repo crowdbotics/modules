@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useEffect, useState } from 'react';
 import { user, useStore } from '../Store/store';
 // @ts-ignore
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
 // @ts-ignore
 import { usePubNub } from 'pubnub-react';
 import { cloneArray, getUrl, loadHistory, sortArray } from '../utils';
@@ -184,9 +184,13 @@ const Chat = ({ route, navigation }) => {
       </View>
     );
   }
-  return <GiftedChat isLoadingEarlier={true} renderMessageImage={renderMessageImage} renderMessageVideo={renderMessageVideo} messages={sortArray(messages)} renderUsernameOnMessage={true} onSend={onSend} renderActions={() => actions()} user={user} />;
+  return <GiftedChat listViewProps={styles.Container} isLoadingEarlier={true} renderMessageImage={renderMessageImage} renderMessageVideo={renderMessageVideo} messages={sortArray(messages)} renderUsernameOnMessage={true} onSend={onSend} renderInputToolbar={(props) => {return <InputToolbar {...props} containerStyle={styles.inputToolbar} />}} renderActions={() => actions()} user={user} />;
+    
 };
 const styles = StyleSheet.create({
+  Container: {
+    backgroundColor: 'white'
+  },
   triggerWrapper: {
     display: "flex",
     flex: 1,
@@ -198,7 +202,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 15
-
+  },
+  inputToolbar: {
+    color: "black"
   }
 })
 export default Chat
