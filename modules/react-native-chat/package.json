@@ -1,6 +1,6 @@
 {
   "name": "@modules/chat",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "A set of screens to display chat conversations in a list and 1-to-1 messaging",
   "private": true,
   "main": "index.js",
