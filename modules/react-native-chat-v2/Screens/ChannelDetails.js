@@ -82,6 +82,7 @@ const GroupChatDetails = ({ route, navigation }) => {
   }, [navigation, channel]);
 
   const leaveChannel = async () => {
+    setLoading(true);
     const [membersRes, unsubscribeRes, removeMetadataRes] = await Promise.all([
       pubnub.objects.removeChannelMembers({
         channel: params.id,
@@ -96,6 +97,7 @@ const GroupChatDetails = ({ route, navigation }) => {
       })
     ]);
     fetchChannels(pubnub, state.user._id).then((channels) => {
+      setLoading(false);
       dispatch({ channels });
       navigation.popToTop();
     })
@@ -115,7 +117,7 @@ const GroupChatDetails = ({ route, navigation }) => {
           </View>
           <View style={styles.Profile} >
             <Text style={{...styles.ProfileText, marginTop: 8}}>{item.name}</Text>
-            {(`${state.user._id}-${channel.name}` === channel.id) &&
+            {(state.user._id == params.custom.owner) &&
             <Pressable onPress={() => removeMember(item)}>
               <Text style={{color: "#dc3545", marginTop: 10}}>Remove</Text>  
             </Pressable>}

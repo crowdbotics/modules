@@ -60,13 +60,13 @@ export default ({ navigation }) => {
     }
     setLoading(true);
     const channel = contacts.filter(obj => { return obj.isSelected }).map(user => user._id).join("-")
-    const res1 = await pubnub.objects.setChannelMetadata({ channel, data: { name, custom: { type: ChannelType.Group } }});
+    const res1 = await pubnub.objects.setChannelMetadata({ channel, data: { name, custom: { type: ChannelType.Group, owner: state.user._id } }});
     const res2 = await pubnub.objects.setChannelMembers({ channel, uuids: contacts.filter(obj => { return obj.isSelected }).map(user => user._id)});
     const res3 = await pubnub.channelGroups.addChannels({ channels: [channel], channelGroup: state.user._id});
     dispatch({
       channels: {
         ...state.channels,
-        [channel]: { id: channel, name, custom: { type: ChannelType.Group } }
+        [channel]: { id: channel, name, custom: { type: ChannelType.Group, owner: state.user._id } }
       }
     });
     setLoading(false);
@@ -74,7 +74,7 @@ export default ({ navigation }) => {
       index: 0,
       routes: [{ name: 'Channels' }, {
         name: 'Channel',
-        params: { item: { id: channel, name, custom: { type: ChannelType.Group } } }
+        params: { item: { id: channel, name, custom: { type: ChannelType.Group, owner: state.user._id } } }
       }]
     });
   };
