@@ -22,27 +22,25 @@ const DirectChatDetails = ({ route, navigation }) => {
   const { state, dispatch } = useStore();
   const [loading, setLoading] = useState(false);
   
-  const deleteChannel = async () => {
+  const deleteChannel = () => {
     setLoading(true);
-    const [metadataRes, channelGroupRes] = await Promise.all([
+    Promise.all([
       pubnub.objects.removeChannelMetadata({ channel: route.params.item.id }),
       pubnub.channelGroups.removeChannels({
         channelGroup: state.user._id,
         channels: [route.params.item.id]
       })
-    ]);
-    fetchChannels(pubnub, state.user._id).then((channels) => {
-      dispatch({ channels });
-      setLoading(false);
-      navigation.popToTop()
+    ]).then(() => {
+      fetchChannels(pubnub, state.user._id).then((channels) => {
+        dispatch({ channels });
+        setLoading(false);
+        navigation.navigate('Channels')
+      })
     })
-    
   };
-  if (loading)
-    return <View><ActivityIndicator /></View>;
   return <View>
     <View style={styles.Container}>
-      <Button color={"#dc3545"} title="Block user" onPress={deleteChannel} />
+      <Button disabled={loading} color={"#dc3545"} title="Block user" onPress={deleteChannel} />
     </View>
   </View>;
 };
@@ -53,7 +51,7 @@ const GroupChatDetails = ({ route, navigation }) => {
   const channel = state.channels[route.params.item.id];
   const params = route.params.item;
 
-  const members = state.members[channel.id] ?? [];
+  const members = state.members[channel?.id] ?? [];
   const [loading, setLoading] = useState(true);
 
   const bootstrap = async () => {
@@ -81,9 +79,9 @@ const GroupChatDetails = ({ route, navigation }) => {
     });
   }, [navigation, channel]);
 
-  const leaveChannel = async () => {
+  const leaveChannel = () => {
     setLoading(true);
-    const [membersRes, unsubscribeRes, removeMetadataRes] = await Promise.all([
+    Promise.all([
       pubnub.objects.removeChannelMembers({
         channel: params.id,
         uuids: [state.user._id]
@@ -95,13 +93,13 @@ const GroupChatDetails = ({ route, navigation }) => {
       pubnub.objects.removeChannelMetadata({
         channel: params.id
       })
-    ]);
-    fetchChannels(pubnub, state.user._id).then((channels) => {
-      setLoading(false);
-      dispatch({ channels });
-      navigation.popToTop();
+    ]).then(() => {
+      fetchChannels(pubnub, state.user._id).then((channels) => {
+        dispatch({ channels });
+        setLoading(false);
+        navigation.navigate('Channels')
+      })
     })
-    
   };
 
   const addMembers = () => {
@@ -146,7 +144,7 @@ const GroupChatDetails = ({ route, navigation }) => {
       )}
     />
     <View>
-      <Button color={"#dc3545"} title={"Leave group"} onPress={leaveChannel}></Button>
+      <Button disabled={loading} color={"#dc3545"} title={"Leave group"} onPress={leaveChannel}></Button>
     </View>
   </View>;
 };

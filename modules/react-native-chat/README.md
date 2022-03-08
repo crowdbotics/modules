@@ -28,17 +28,17 @@ const client = new Pubnub({
 ## Features
 
 ### Create group
-Create new group by clicking on "Create group" button
+By clicking the "Create group" button new groups can be created using group name.
 ### Add members
-Select group members from the list of contacts
+New members can be added from contact list in the existing group.
 ### Remove members
-In chat details you can remove group members
+Members from the group can be removed from chat details.
 ### Leave group
-In chat details you can leave channel
+In chat details you can leave channel.
 ### Create direct chat
-Create one to one chat by clicking on "New chat" button
+One-to-one chat can be created by clicking the "New chat" button. In this way, a personal conversation can be started with any member of the contact list.
 ### Chat
-Start chat by clicking on conversation list
+Clicking on conversation list chat can be started with any of selected member. This allows real-time communication.  
 ### Send image
 Send image in chat by clicking on "+" icon. Max image size must be less than 5mb.
 ### Send video
@@ -48,8 +48,12 @@ In chat details you can change chat icon by clicking on "edit" button.
 ### Block user
 In chat details you can block user
 ### History
+All previous text, images and videos history is available in one to one and group chat.
 ### Search channels
+Search functionality is available to find the desired channel from the list of available channels by using the channel name in the search bar.
 ### Last seen
+Last time active status of every contact member in conversation list is available below his/her name.
+
 
 If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
