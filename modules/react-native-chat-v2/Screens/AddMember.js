@@ -5,6 +5,7 @@ import { usePubNub } from 'pubnub-react';
 import { View, Text, SectionList, TouchableOpacity } from 'react-native';
 import Circle from '../Components/Circle';
 import { StyleSheet } from 'react-native';
+import Loader from '../Components/loader';
 
 export default ({ navigation, route }) => {
   const { state, dispatch } = useStore();
@@ -45,19 +46,22 @@ export default ({ navigation, route }) => {
   }
   
   return (
-    <View style={styles.Container}>
-      <SectionList
-        refreshing={loading}
-        sections={[{ title: "Contacts", data: data}]}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => ListItem(item)}
-        renderSectionHeader={({ section: { title } }) => (
-          <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={styles.GroupHeading}>{title}</Text>
-          </View>
-        )}
-      />
-    </View>
+    <>
+    {loading && <Loader />}
+      <View style={styles.Container}>
+        <SectionList
+          refreshing={loading}
+          sections={[{ title: "Contacts", data: data}]}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => ListItem(item)}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+              <Text style={styles.GroupHeading}>{title}</Text>
+            </View>
+          )}
+        />
+      </View>
+    </>
   )
 };
 

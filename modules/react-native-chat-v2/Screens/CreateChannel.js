@@ -8,6 +8,7 @@ import CheckBox from '@react-native-community/checkbox';
 import { cloneArray } from '../utils';
 // @ts-ignore
 import { usePubNub } from 'pubnub-react';
+import Loader from '../Components/loader';
 
 export default ({ navigation }) => {
   const pubnub = usePubNub();
@@ -79,21 +80,24 @@ export default ({ navigation }) => {
   };
 
   return (
-    <View style={styles.Container}>
-      <View>
-        <TextInput autoFocus={true} value={name} onChangeText={setName} placeholder="Group Name" />
-        {isNameError && <Text style={{fontSize: 12, color: '#dc3545'}}>Please enter group name.</Text> }
+    <>
+      {loading && <Loader />}
+      <View style={styles.Container}>
+        <View>
+          <TextInput autoFocus={true} value={name} onChangeText={setName} placeholder="Group Name" />
+          {isNameError && <Text style={{fontSize: 12, color: '#dc3545'}}>Please enter group name.</Text> }
+        </View>
+        <View>
+          <Text style={styles.GroupHeading}>Select group members</Text>
+        </View>
+        <FlatList
+          data={contacts}
+          renderItem={({ item }) => ListItem(item)}
+          keyExtractor={item => item._id}
+        />
+        <Button disabled={(contacts.filter(obj => { return obj.isSelected }).length == 0 || loading) ? true : false} onPress={createGroup} title="Create Group" />
       </View>
-      <View>
-        <Text style={styles.GroupHeading}>Select group members</Text>
-      </View>
-      <FlatList
-        data={contacts}
-        renderItem={({ item }) => ListItem(item)}
-        keyExtractor={item => item._id}
-      />
-      <Button disabled={(contacts.filter(obj => { return obj.isSelected }).length == 0 || loading) ? true : false} onPress={createGroup} title="Create Group" />
-    </View>
+    </>
   );
 };
 

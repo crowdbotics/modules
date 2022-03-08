@@ -6,11 +6,13 @@ import { ChannelType, useStore } from '../Store/store';
 import { usePubNub } from 'pubnub-react';
 import { StyleSheet, Text } from 'react-native';
 import Circle from '../Components/Circle';
+import Loader from '../Components/loader';
 
 const CreateDirectChannel = ({ navigation }) => {
   const pubnub = usePubNub();
   const { state, dispatch } = useStore();
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false)
   const data = search ? state.contacts.filter(item => item.name.includes(search)) : state.contacts;
   
   const createChat = async (item) => {
@@ -28,12 +30,16 @@ const CreateDirectChannel = ({ navigation }) => {
         }
       }
     });
+    setLoading(false)
     navigation.replace('Channel', { item: { id: channel, name: state.user.name +" - "+ item.name, custom: { type: ChannelType.Direct, owner: state.user._id } } });
   };
 
   const ListItem = (item) => {
     return (
-      <TouchableOpacity onPress={() => createChat(item)}>
+      <TouchableOpacity onPress={() => {
+        setLoading(true);
+        createChat(item)
+      }}>
         <View key={item.id} style={styles.ListItem}>
           <View style={styles.ProfileContainer}>
             <View style={styles.ProfileBox}>
@@ -49,19 +55,22 @@ const CreateDirectChannel = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.Container}>
-      <SearchBar value={search} onChange={setSearch} />
-      <SectionList
-        sections={[{ title: "Contacts", data: data }]}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => ListItem(item)}
-        renderSectionHeader={({ section: { title } }) => (
-          <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={styles.GroupHeading}>{title}</Text>
-          </View>
-        )}
-      />
-    </View>
+    <>
+      {loading && <Loader />}
+      <View style={styles.Container}>
+        <SearchBar value={search} onChange={setSearch} />
+        <SectionList
+          sections={[{ title: "Contacts", data: data }]}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => ListItem(item)}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+              <Text style={styles.GroupHeading}>{title}</Text>
+            </View>
+          )}
+        />
+      </View>
+    </>
   )
 }
 

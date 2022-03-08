@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState } from 'react';
-import { ActivityIndicator, Button, TextInput, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { Button, TextInput, View, Text } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker'
 import CirclePrompt from '../Components/CirclePrompt';
 import { upload } from '../Store/storage';
@@ -8,6 +8,7 @@ import { useStore } from '../Store/store';
 import { usePubNub } from 'pubnub-react';
 import options from '../options';
 import { StyleSheet } from 'react-native';
+import Loader from '../Components/loader';
 
 export default ({ navigation, route }) => {
   const { state, dispatch } = useStore();
@@ -37,14 +38,14 @@ export default ({ navigation, route }) => {
             [route.params.item.id]: { ...channel, name, custom: { ...channel.custom, caption: file.url } }
           }
         });
+        setLoading(false);
+        navigation.goBack();
       }
       catch (e) {
         console.log('failed to upload a file', e);
+        setLoading(false);
       }
     }
-    dispatch({ channels: { ...state.channels, [route.params.item.id]: { ...channel, name } } });
-    setLoading(false);
-    navigation.goBack();
   };
 
   const pickImage = async () => {
@@ -60,16 +61,19 @@ export default ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.Container}>
-      <CirclePrompt onPress={pickImage} source={localImage || route.params.item.custom.caption} />
-      <View style={{...options.section, marginTop: 20}}>
-        <Text style={{fontWeight: "bold"}}>Channel name</Text>
-        <TextInput placeholder="Name" value={name} onChangeText={setName} style={{...options.ListViewStyle.subtitle, borderBottomWidth: 1}} />
+    <>
+      {loading && <Loader />}
+      <View style={styles.Container}>
+        <CirclePrompt onPress={pickImage} source={localImage || route.params.item.custom.caption} />
+        <View style={{ ...options.section, marginTop: 20 }}>
+          <Text style={{ fontWeight: "bold" }}>Channel name</Text>
+          <TextInput placeholder="Name" value={name} onChangeText={setName} style={{ ...options.ListViewStyle.subtitle, borderBottomWidth: 1 }} />
+        </View>
+        <View style={{ marginTop: 20 }}>
+          <Button title="Update" onPress={submit} />
+        </View>
       </View>
-      <View style={{marginTop: 20}}>
-        <Button title="Update" onPress={submit} />
-      </View>
-    </View>
+    </>
   );
 };
 
