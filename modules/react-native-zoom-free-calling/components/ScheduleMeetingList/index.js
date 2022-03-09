@@ -5,30 +5,34 @@ import { StyleSheet } from 'react-native';
 import { timezones } from '../../timezones';
 
 const ScheduleMeetingList = (props) => {
+
+  const listItem = (item) => {
+    return (
+      <View style={styles.TimeArea}>
+        <View style={styles.TimeAndLocation}>
+          <Text style={styles.TimeText}>{("start_time" in item) ? new Date(item.start_time).toLocaleString(): "Recurring"}</Text>
+          <Text numberOfLines={2} style={styles.LocationText}>{timezones.find(obj => obj.value == item.timezone).label}</Text>
+        </View>
+        <View style={styles.MeetingDay}>
+          <Text numberOfLines={3} style={styles.TimeText}>{item.topic}</Text>
+          <Text style={styles.MeetingIDText}>Meeting ID: {parse_meeting_id(item.join_url).replace(/(\d{3})/g, '$1 ')}</Text>
+        </View>
+        <View style={styles.ButtonArea}>
+          <Pressable onPress={() => props.joinMeeting(parse_meeting_id(item.join_url))} style={[styles.EditButton, styles.EditBtn]}>
+            <Text style={styles.textStyle}>Join</Text>
+          </Pressable>
+          <Pressable onPress={() => props.handleRemoveMeeting(item)} style={[styles.EditButton, styles.DeleteBtn]}>
+            <Text style={styles.textStyle}>Delete</Text>
+          </Pressable>
+        </View>
+      </View>
+    )
+  }
   return (
     <SectionList
       sections={props.upcomingMeetingsList}
       keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => (
-        <View style={styles.TimeArea}>
-          <View style={styles.TimeAndLocation}>
-            <Text style={styles.TimeText}>{("start_time" in item) ? new Date(item.start_time).toLocaleString(): "Recurring"}</Text>
-            <Text numberOfLines={2} style={styles.LocationText}>{timezones.find(obj => obj.value == item.timezone).label}</Text>
-          </View>
-          <View style={styles.MeetingDay}>
-            <Text numberOfLines={3} style={styles.TimeText}>{item.topic}</Text>
-            <Text style={styles.MeetingIDText}>Meeting ID: {parse_meeting_id(item.join_url).replace(/(\d{3})/g, '$1 ')}</Text>
-          </View>
-          <View style={styles.ButtonArea}>
-            <Pressable onPress={() => props.joinMeeting(parse_meeting_id(item.join_url))} style={[styles.EditButton, styles.EditBtn]}>
-              <Text style={styles.textStyle}>Join</Text>
-            </Pressable>
-            <Pressable onPress={() => props.handleRemoveMeeting(item)} style={[styles.EditButton, styles.DeleteBtn]}>
-              <Text style={styles.textStyle}>Delete</Text>
-            </Pressable>
-          </View>
-        </View>
-      )}
+      renderItem={({ item }) => listItem(item)}
       renderSectionHeader={({ section: { title } }) => (
         <Text style={styles.TitleText}>{title}</Text>
       )}

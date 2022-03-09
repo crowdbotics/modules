@@ -3,10 +3,10 @@ import { StyleSheet, TextInput, View, Text } from 'react-native';
 
 const Input = (props) => {
   return (
-    <View style={{ marginBottom: 10 }}>
-      {props.label && <Text style={{ fontWeight: "bold" }}>{props.label}</Text>}
+    <View style={styles.Mt10}>
+      {props.label && <Text style={styles.FwBold}>{props.label}</Text>}
       <TextInput
-        style={{ ...styles.input, color: '#000000' }}
+        style={[styles.input, styles.color]}
         placeholder={props.label}
         editable={props.editable}
         value={props.value}
@@ -30,6 +30,15 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     fontStyle: "italic",
     color: '#FA060D'
+  },
+  Mt10: {
+    marginTop: 10
+  },
+  FwBold: {
+    fontWeight: 'bold'
+  },
+  color: {
+    color: '#000000'
   }
 });
 
