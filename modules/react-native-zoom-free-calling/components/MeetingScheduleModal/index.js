@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { View, Text, Modal, Pressable, SectionList } from "react-native";
 import Input from '../Input';
 // @ts-ignore
@@ -11,6 +11,7 @@ import DatePicker from 'react-native-date-picker'
 import { timezones } from '../../timezones';
 // @ts-ignore
 import CheckBox from '@react-native-community/checkbox';
+import options from '../../options'
 
 const MeetingScheduleModal = (props) => {
   const [meetingSchedule, setMeetingSchedule] = useState({
@@ -181,11 +182,11 @@ const MeetingScheduleModal = (props) => {
   }, [meetingSchedule.recurrence.recurrence_type])
 
   useEffect(() => {
-    let tmp = []
+    let tmpOccursOnList = []
     for (let i = 0; i < 31; i++) {
-      tmp.push({ label: (i + 1).toString(), value: (i + 1).toString() })
+      tmpOccursOnList.push({ label: (i + 1).toString(), value: (i + 1).toString() })
     }
-    setOccursOnList(tmp)
+    setOccursOnList(tmpOccursOnList)
   }, [])
 
   const handleSave = () => {
@@ -206,7 +207,7 @@ const MeetingScheduleModal = (props) => {
 
   const meetingTopic = () => {
     return (
-      <View style={{ marginTop: 10 }}>
+      <View style={styles.Mt10}>
         <Input
           label="Meeting topic"
           errorMessage={(errors.topic != "") ? "This field is required." : ""}
@@ -247,7 +248,7 @@ const MeetingScheduleModal = (props) => {
           />
         </View>
         <View style={styles.InputLabels}>
-          <Text style={{ fontWeight: "bold" }}>Timezone</Text>
+          <Text style={[styles.FwBold, styles.Mt10]}>Timezone</Text>
           <DropDownPicker
             placeholder='Timezone'
             placeholderStyle={styles.DropDownPlaceholder}
@@ -272,21 +273,21 @@ const MeetingScheduleModal = (props) => {
 
   const recurringMeeting = () => {
     return (
-      <>
-        <View style={{ display: "flex", flexDirection: "row" }}>
+      <Fragment>
+        <View style={styles.Dflex}>
           <CheckBox
             tintColors={{ true: '#24ebde', false: 'lightgray' }}
             value={meetingSchedule.recurring_meeting}
             onValueChange={(newValue) => setMeetingSchedule({ ...meetingSchedule, recurring_meeting: newValue })}
           />
-          <Text style={{ marginTop: 7 }}>Recurring meeting</Text>
+          <Text style={styles.Mt7}>Recurring meeting</Text>
         </View>
         {meetingSchedule.recurring_meeting && <>
-          <View style={styles.MeetingRecurrence}>
-            <View style={{ width: '25%' }}>
+          <View style={styles.FlexCenter}>
+            <View style={styles.Wp25}>
               <Text style={styles.RecurrenceText}>Recurrence</Text>
             </View>
-            <View style={{ width: '70%' }}>
+            <View style={styles.Wp70}>
               <DropDownPicker
                 zIndex={20}
                 placeholderStyle={styles.DropDownPlaceholder}
@@ -300,12 +301,12 @@ const MeetingScheduleModal = (props) => {
               />
             </View>
           </View>
-          {meetingSchedule.recurrence.recurrence_type != '-1' && 
+          {meetingSchedule.recurrence.recurrence_type != '-1' &&
             <View style={styles.RecurrenceArea}>
-              <View style={{ width: '30%' }}>
+              <View style={styles.Wp30}>
                 <Text style={styles.RepeatText}>Repeat every</Text>
               </View>
-              <View style={{ width: '30%' }}>
+              <View style={styles.Wp30}>
                 <DropDownPicker
                   zIndex={19}
                   placeholderStyle={styles.DropDownPlaceholder}
@@ -318,10 +319,10 @@ const MeetingScheduleModal = (props) => {
                   setItems={setRepeatEveryList}
                 />
               </View>
-              <Text style={{ marginLeft: 5 }}>{meetingSchedule.recurrence.recurrence_type == '2' ? "Week" : "day"}</Text>
+              <Text style={styles.Ml5}>{meetingSchedule.recurrence.recurrence_type == '2' ? "Week" : "day"}</Text>
             </View>
           }
-          
+
 
           {meetingSchedule.recurrence.recurrence_type == '2' &&
             <View style={styles.RecurrenceArea}>
@@ -331,9 +332,9 @@ const MeetingScheduleModal = (props) => {
               <View style={styles.MeetingTypeTwoOccurs}>
                 {
                   weeklyList.map((week, index) => (
-                    <View style={{ display: "flex", flexDirection: "column", alignItems: "center" }} key={index}>
+                    <View style={styles.DalignItem} key={index}>
                       <CheckBox
-                        tintColors={{ true: '#24ebde', false: 'lightgray' }}
+                        tintColors={options.checkboxColor}
                         value={week.isSelected}
                         onValueChange={() => handleWeeklyCheckbox(index)}
                       />
@@ -358,7 +359,7 @@ const MeetingScheduleModal = (props) => {
                     onPress={() => setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, isDayMonthly: true } })}
                   />
                   <Text>Day </Text>
-                  <View style={{ width: '30%' }}>
+                  <View style={styles.Wp30}>
                     <DropDownPicker
                       zIndex={18}
                       placeholderStyle={styles.DropDownPlaceholder}
@@ -379,7 +380,7 @@ const MeetingScheduleModal = (props) => {
                     status={!meetingSchedule.recurrence.isDayMonthly ? 'checked' : 'unchecked'}
                     onPress={() => setMeetingSchedule({ ...meetingSchedule, recurrence: { ...meetingSchedule.recurrence, isDayMonthly: false } })}
                   />
-                  <View style={{ width: '32%', marginRight: 5 }}>
+                  <View style={styles.DropDownContainer}>
                     <DropDownPicker
                       zIndex={17}
                       disabled={meetingSchedule.recurrence.isDayMonthly}
@@ -393,7 +394,7 @@ const MeetingScheduleModal = (props) => {
                       setItems={setWeeksList}
                     />
                   </View>
-                  <View style={{ width: '40%' }}>
+                  <View style={styles.Wp40}>
                     <DropDownPicker
                       zIndex={16}
                       disabled={meetingSchedule.recurrence.isDayMonthly}
@@ -412,10 +413,10 @@ const MeetingScheduleModal = (props) => {
             </View>
           }
           {meetingSchedule.recurrence.recurrence_type != '-1' && <>
-            <View style={{ marginTop: 8 }}>
+            <View style={styles.Mt8}>
               <Text style={styles.EndText}>End date</Text>
             </View>
-            <View style={styles.EndDate}>
+            <View style={styles.FlexCenter}>
               <View style={styles.EndDateText}>
                 <View>
                   <RadioButton
@@ -425,7 +426,7 @@ const MeetingScheduleModal = (props) => {
                   />
                 </View>
                 <View>
-                  <Pressable style={{ display: "flex", flexDirection: "row", alignItems: "center" }} onPress={() => setOpenEndDate(true)}>
+                  <Pressable style={styles.FlexCenter} onPress={() => setOpenEndDate(true)}>
                     <Text>By </Text>
                     <Input
                       editable={false}
@@ -448,7 +449,7 @@ const MeetingScheduleModal = (props) => {
                 </View>
               </View>
 
-              <View style={styles.RadioButtonArea}>
+              <View style={[styles.RadioButtonArea, styles.Mt10]}>
                 <View>
                   <RadioButton
                     value="false"
@@ -457,7 +458,7 @@ const MeetingScheduleModal = (props) => {
                   />
                 </View>
                 <View>
-                  <View style={{ width: '70%', display: "flex", flexDirection: "row", alignItems: "center" }}>
+                  <View style={styles.DisplayWidth}>
                     <Text>After </Text>
                     <DropDownPicker
                       zIndex={15}
@@ -477,15 +478,15 @@ const MeetingScheduleModal = (props) => {
               </View>
             </View>
           </>}
-          
+
         </>}
-      </>
+      </Fragment>
     )
   }
 
   const meetingID = () => {
     return (
-      <View style={{ marginTop: 5 }}>
+      <View style={styles.Mt5}>
         <Text style={styles.MeetingID}>Meeting ID</Text>
         <View style={styles.MeetingRow}>
           <View style={styles.InputsArea}>
@@ -495,7 +496,7 @@ const MeetingScheduleModal = (props) => {
                 status={!meetingSchedule.meetingID ? 'checked' : 'unchecked'}
                 onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: false })}
               />
-              <Text numberOfLines={2} style={{ width: 100 }}>Generate Automatically</Text>
+              <Text numberOfLines={2} style={styles.W100}>Generate Automatically</Text>
             </View>
           </View>
           <View style={styles.InputsArea}>
@@ -505,7 +506,7 @@ const MeetingScheduleModal = (props) => {
                 status={meetingSchedule.meetingID ? 'checked' : 'unchecked'}
                 onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: true })}
               />
-              <Text numberOfLines={2} style={{ width: 100 }}>Personal Meeting ID</Text>
+              <Text numberOfLines={2} style={styles.W100}>Personal Meeting ID</Text>
             </View>
           </View>
         </View>
@@ -515,12 +516,12 @@ const MeetingScheduleModal = (props) => {
 
   const video = () => {
     return (
-      <View style={{ marginTop: 10 }}>
+      <View style={styles.Mt10}>
         <Text style={styles.VideoText}>Video</Text>
         <View style={styles.VideoMain}>
           <View style={styles.VideoContainer}>
-            <Text style={{ marginTop: 8 }}>Host</Text>
-            <View style={{ display: "flex", flexDirection: "row", }}>
+            <Text style={styles.Mt8}>Host</Text>
+            <View style={styles.Dflex}>
               <RadioButton
                 value="true"
                 status={meetingSchedule.hostVideo ? 'checked' : 'unchecked'}
@@ -534,8 +535,8 @@ const MeetingScheduleModal = (props) => {
             </View>
           </View>
           <View style={styles.VideoContainer}>
-            <Text style={{ marginTop: 8 }}>Participants</Text>
-            <View style={{ display: "flex", flexDirection: "row", }}>
+            <Text style={styles.Mt8}>Participants</Text>
+            <View style={styles.Dflex}>
               <RadioButton
                 value="true"
                 status={meetingSchedule.participantsVideo ? 'checked' : 'unchecked'}
@@ -681,7 +682,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  MeetingRecurrence: {
+  FlexCenter: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center'
@@ -701,11 +702,6 @@ const styles = StyleSheet.create({
   EndText: {
     fontSize: 14,
     fontWeight: 'bold',
-  },
-  EndDate: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center'
   },
   EndDateText: {
     display: 'flex',
@@ -763,7 +759,60 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 5
+  },
+  DropDownContainer: {
+    width: '32%',
+    marginRight: 5
+  },
+  DisplayWidth: {
+    width: '70%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  Mt8: {
+    marginTop: 8
+  },
+  Mt10: {
+    marginTop: 10
+  },
+  FwBold: {
+    fontWeight: 'bold'
+  },
+  Dflex: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  DalignItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  Mt7: {
+    marginTop: 7
+  },
+  Mt5: {
+    marginTop: 5
+  },
+  W100: {
+    width: 100
+  },
+  Wp25: {
+    width: '25%'
+  },
+  Wp70: {
+    width: '70%'
+  },
+  Wp40: {
+    width: '40%'
+  },
+  Wp30: {
+    width: '30%'
+  },
+  Ml5: {
+    marginLeft: 5
   }
+
 });
 
 export default MeetingScheduleModal
