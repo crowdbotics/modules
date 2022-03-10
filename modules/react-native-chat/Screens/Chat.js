@@ -127,11 +127,11 @@ const Chat = ({ route, navigation }) => {
     return (
       <Menu>
         <MenuTrigger customStyles={{ triggerWrapper: styles.triggerWrapper }}>
-          <Text style={{ fontSize: 25, marginTop: -4, color: "gray" }}>+</Text>
+          <Text style={styles.PlusContainer}>+</Text>
         </MenuTrigger>
-        <MenuOptions optionsContainerStyle={{ marginTop: -40, marginLeft: 5 }}>
+        <MenuOptions optionsContainerStyle={styles.OptionContainer}>
           <MenuOption onSelect={() => pickImage()} text='Image' />
-          <View style={{ borderBottomColor: "lightgray", borderBottomWidth: 1 }} />
+          <View style={styles.border} />
           <MenuOption onSelect={() => pickVideo()} text='Video' />
         </MenuOptions>
       </Menu>
@@ -158,8 +158,8 @@ const Chat = ({ route, navigation }) => {
     }
 
     return (
-      <View style={{ padding: 5 }}>
-        <Video resizeMode="contain" source={{ uri: result }} style={{ width: 200, height: 120 }} />
+      <View style={styles.P5}>
+        <Video resizeMode="contain" source={{ uri: result }} style={styles.VideoContainer} />
       </View>
     );
   }
@@ -173,9 +173,9 @@ const Chat = ({ route, navigation }) => {
       result = currentMessage.image
     }
     return (
-      <View style={{ padding: 5 }}>
+      <View style={styles.P5}>
         <Image
-          style={{ width: 200, height: 120 }}
+          style={styles.ImageContainer}
           resizeMode="cover"
           source={{
             uri: result
@@ -184,7 +184,7 @@ const Chat = ({ route, navigation }) => {
       </View>
     );
   }
-  return <GiftedChat listViewProps={styles.Container} isLoadingEarlier={true} renderMessageImage={renderMessageImage} renderMessageVideo={renderMessageVideo} messages={sortArray(messages)} renderUsernameOnMessage={true} onSend={onSend} renderInputToolbar={(props) => {return <InputToolbar {...props} containerStyle={styles.inputToolbar} />}} renderActions={() => actions()} user={user} />;
+  return <GiftedChat listViewProps={styles.Container} isLoadingEarlier={true} renderMessageImage={renderMessageImage} renderMessageVideo={renderMessageVideo} messages={sortArray(messages)} renderUsernameOnMessage={true} onSend={onSend} renderInputToolbar={(props) => {return <InputToolbar {...props} textInputStyle={styles.inputToolbar} />}} renderActions={() => actions()} user={user} />;
     
 };
 const styles = StyleSheet.create({
@@ -204,7 +204,31 @@ const styles = StyleSheet.create({
     borderRadius: 15
   },
   inputToolbar: {
-    color: "black"
+    color: "#000",
+  },
+  PlusContainer: {
+    fontSize: 25,
+    marginTop: -4,
+    color: "gray" 
+  }, 
+  OptionContainer: {
+    marginTop: -40,
+    marginLeft: 5
+  },
+  border: {
+    borderBottomColor: "lightgray",
+    borderBottomWidth: 1 
+  },
+  P5: {
+    padding: 5
+  },
+  VideoContainer: {
+    width: 200,
+    height: 120
+  },
+  ImageContainer: {
+    width: 200,
+    height: 120
   }
 })
 export default Chat

@@ -46,7 +46,7 @@ const CreateDirectChannel = ({ navigation }) => {
               <Circle letter={(item.name ? item.name[0] : '').toUpperCase()} source={""} />
             </View>
             <View style={styles.Profile} >
-              <Text style={{ ...styles.ProfileText, marginTop: 8 }}>{item.name}</Text>
+              <Text style={[styles.ProfileText, styles.Mt8]}>{item.name}</Text>
             </View>
           </View>
         </View>
@@ -64,7 +64,7 @@ const CreateDirectChannel = ({ navigation }) => {
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => ListItem(item)}
           renderSectionHeader={({ section: { title } }) => (
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <View style={styles.TitleContainer}>
               <Text style={styles.GroupHeading}>{title}</Text>
             </View>
           )}
@@ -113,6 +113,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 10
+  },
+  Mt8: {
+    marginTop: 8
+  },
+  TitleContainer: {
+    display: "flex", 
+    flexDirection: "row", 
+    justifyContent: "space-between"
   }
 });
 

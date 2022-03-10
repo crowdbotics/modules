@@ -37,7 +37,7 @@ export default ({ navigation, route }) => {
               <Circle letter={(item.name ? item.name[0] : '').toUpperCase()} source={""} />
             </View>
             <View style={styles.Profile} >
-              <Text style={{...styles.ProfileText, marginTop: 8}}>{item.name}</Text>
+              <Text style={[styles.ProfileText, styles.Mt8]}>{item.name}</Text>
             </View>
           </View>
         </View>
@@ -55,7 +55,7 @@ export default ({ navigation, route }) => {
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => ListItem(item)}
           renderSectionHeader={({ section: { title } }) => (
-            <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <View style={styles.Displayflex}>
               <Text style={styles.GroupHeading}>{title}</Text>
             </View>
           )}
@@ -104,5 +104,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
     marginBottom: 10
-  }
+  },
+  Mt8 : {
+    marginTop: 8
+  },
+ Displayflex: {
+    display: "flex", 
+    flexDirection: "row", 
+    justifyContent: "space-between"
+ }
 });

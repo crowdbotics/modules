@@ -33,7 +33,7 @@ export default ({ navigation }) => {
     return (
       <View key={item.id} style={styles.ListItem}>
         <View style={styles.ProfileContainer}>
-          <View style={{ marginBottom: 5, marginTop: 5, marginRight: 8 }}>
+          <View style={styles.CheckBoxContainer}>
             <CheckBox
               tintColors={{ true: '#4CAF50', false: 'lightgray' }}
               value={item.isSelected}
@@ -84,8 +84,8 @@ export default ({ navigation }) => {
       {loading && <Loader />}
       <View style={styles.Container}>
         <View>
-          <TextInput autoFocus={true} value={name} onChangeText={setName} placeholder="Group Name" />
-          {isNameError && <Text style={{fontSize: 12, color: '#dc3545'}}>Please enter group name.</Text> }
+          <TextInput style={styles.TextInput} autoFocus={true} value={name} onChangeText={setName} placeholder="Group Name" />
+          {isNameError && <Text style={styles.GroupName}>Please enter group name.</Text> }
         </View>
         <View>
           <Text style={styles.GroupHeading}>Select group members</Text>
@@ -139,5 +139,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10
   },
+  CheckBoxContainer: {
+    marginBottom: 5,
+    marginTop: 5,
+    marginRight: 8
+  },
+  TextInput: {
+    color: "#000" 
+  }, 
+  GroupName: {
+    fontSize: 12,
+    color: '#dc3545'
+  }
 })
 

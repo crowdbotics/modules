@@ -97,7 +97,7 @@ const Conversions = ({ navigation }) => {
             </View>
             <View style={styles.Profile} >
               <Text style={{...styles.ProfileText, marginTop: ('last_seen' in item && item.last_seen) ? 1 : 8}}>{item.name}</Text>
-              { ('last_seen' in item && item.last_seen) && <Text style={{fontSize: 12, color: "gray"}}>Last seen: {timeSince(new Date(item?.last_seen).getTime())}</Text>}
+              { ('last_seen' in item && item.last_seen) && <Text style={styles.LastSeenText}>Last seen: {timeSince(new Date(item?.last_seen).getTime())}</Text>}
             </View>
           </View>
         </View>
@@ -113,7 +113,7 @@ const Conversions = ({ navigation }) => {
             <Image style={styles.ProfileBox} source={{ uri: state.user.avatar }}></Image>
           </View>
           <View style={styles.Profile} >
-            <Text style={{...styles.ProfileText, marginTop: 8}}>{state.user.name}</Text>
+            <Text style={[styles.ProfileText, styles.MT8]}>{state.user.name}</Text>
           </View>
         </View>
       </View>
@@ -127,7 +127,7 @@ const Conversions = ({ navigation }) => {
         keyExtractor={(item, index) => item + index}
         renderItem={({ item }) => ListItem(item)}
         renderSectionHeader={({ section: { title } }) => (
-          <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+          <View style={styles.ListContainer}>
             <Text style={styles.GroupHeading}>{title}</Text>
             {title == "Channels" ?
               <Pressable onPress={() => navigation.navigate('CreateChannel')}>
@@ -190,5 +190,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10
   },
+  LastSeenText: {
+    fontSize: 12,
+    color: "gray"
+  },
+  MT8: {
+    marginTop: 8
+  },
+  ListContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between" 
+  }
 });
 export default Conversions

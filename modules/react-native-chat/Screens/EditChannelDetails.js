@@ -65,11 +65,11 @@ export default ({ navigation, route }) => {
       {loading && <Loader />}
       <View style={styles.Container}>
         <CirclePrompt onPress={pickImage} source={localImage || route.params.item.custom.caption} />
-        <View style={{ ...options.section, marginTop: 20 }}>
-          <Text style={{ fontWeight: "bold" }}>Channel name</Text>
-          <TextInput placeholder="Name" value={name} onChangeText={setName} style={{ ...options.ListViewStyle.subtitle, borderBottomWidth: 1 }} />
+        <View style={[options.section, styles.Mt20]}>
+          <Text style={styles.ChannelName}>Channel name</Text>
+          <TextInput placeholder="Name" value={name} onChangeText={setName} style={[options.ListViewStyle.subtitle, styles.TextInput ]} />
         </View>
-        <View style={{ marginTop: 20 }}>
+        <View style={styles.Mt20}>
           <Button title="Update" onPress={submit} />
         </View>
       </View>
@@ -84,4 +84,13 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingTop: 20
   },
+  Mt20: {
+    marginTop: 20
+  },
+  ChannelName: {
+    fontWeight: 'bold'
+  },
+  TextInput: {
+    borderBottomWidth: 1
+  }
 })
