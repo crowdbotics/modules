@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect, useState } from 'react';
+import React, { createRef, useLayoutEffect, useEffect, useState } from 'react';
 import { user, useStore } from '../Store/store';
 // @ts-ignore
 import { GiftedChat, InputToolbar } from 'react-native-gifted-chat';
@@ -17,12 +17,17 @@ import {
 
 import { View, Text } from 'react-native';
 import Video from 'react-native-video';
+// @ts-ignore
+import EmojiSelector from "react-native-emoji-selector";
+
 const Chat = ({ route, navigation }) => {
   const pubnub = usePubNub();
   const { state, dispatch } = useStore();
   const { item } = route.params;
   const [messages, setMessages] = useState(state.messages[item.id] || [])
   const channel = state.channels[route.params.item.id];
+  const [actionSheet, setActionSheet] = useState(false);
+  const [emoji, setEmoji] = useState(null);
 
   useEffect(() => {
     pubnub.fetchMessages({
@@ -123,6 +128,10 @@ const Chat = ({ route, navigation }) => {
     })
   };
 
+  const pickEmoji = () => {
+    setActionSheet(true)
+  }
+  
   const actions = () => {
     return (
       <Menu>
@@ -130,6 +139,8 @@ const Chat = ({ route, navigation }) => {
           <Text style={styles.PlusContainer}>+</Text>
         </MenuTrigger>
         <MenuOptions optionsContainerStyle={styles.OptionContainer}>
+          <MenuOption onSelect={pickEmoji} text='Emoji' />
+          <View style={styles.border} />
           <MenuOption onSelect={() => pickImage()} text='Image' />
           <View style={styles.border} />
           <MenuOption onSelect={() => pickVideo()} text='Video' />
@@ -139,9 +150,11 @@ const Chat = ({ route, navigation }) => {
   }
 
   const onSend = (message) => {
+    setActionSheet(false)
     const tmpMessages = cloneArray(messages)
     tmpMessages.push({ text: message[0].text, pending: true, user: user })
     setMessages(tmpMessages)
+    setEmoji(null)
     pubnub.publish({ channel: item.id, message: message[0] }, (status, response) => {
       console.log(status);
       console.log(response);
@@ -184,7 +197,27 @@ const Chat = ({ route, navigation }) => {
       </View>
     );
   }
-  return <GiftedChat listViewProps={styles.Container} isLoadingEarlier={true} renderMessageImage={renderMessageImage} renderMessageVideo={renderMessageVideo} messages={sortArray(messages)} renderUsernameOnMessage={true} onSend={onSend} renderInputToolbar={(props) => {return <InputToolbar {...props} textInputStyle={styles.inputToolbar} />}} renderActions={() => actions()} user={user} />;
+
+  const onEmojiSelected = (emoji) => {
+    setEmoji(emoji)
+  }
+
+  return <>
+    <GiftedChat
+      text={emoji}
+      listViewProps={styles.Container}
+      isLoadingEarlier={true}
+      renderMessageImage={renderMessageImage}
+      renderMessageVideo={renderMessageVideo}
+      messages={sortArray(messages)}
+      renderUsernameOnMessage={true}
+      onSend={onSend}
+      renderInputToolbar={(props) => {return <InputToolbar {...props} textInputStyle={styles.inputToolbar} />}}
+      renderActions={() => actions()}
+      user={user}
+    />
+    { actionSheet && <EmojiSelector onEmojiSelected={emoji => onEmojiSelected(emoji)} /> }
+  </>
     
 };
 const styles = StyleSheet.create({
