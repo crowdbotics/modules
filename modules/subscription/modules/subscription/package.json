@@ -1,0 +1,16 @@
+{
+    "name": "@modules/subscription",
+    "version": "1.0.1",
+    "description": "Subscription Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+    },
+    "x-dependencies": {
+    },
+    "scripts": {
+        "postinstall": "cd ../../../../ && yarn run add payments && yarn run add react-native-login"
+    }
+}
