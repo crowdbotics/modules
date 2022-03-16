@@ -22,7 +22,7 @@ class PhoneNumberViewset(ModelViewSet):
     def send_otp(self, request):
         phone = request.data.get('phone_number')
         account_sid = 'ACd6bee6c0b7e4e24f2489fd82aa110e85'
-        auth_token = 'ba2ed7fc608d9b9c6b17903119b19b5f'
+        auth_token = '1a2d29e72e882fc81ad3db734d7c82b2'
         client = Client(account_sid, auth_token)
         otp_code = generate_opt()
         registered_phone_num = PhoneNumber.objects.get(phone_number=phone)
@@ -37,10 +37,14 @@ class PhoneNumberViewset(ModelViewSet):
                 from_='+17575304751',
                 to=phone,
             )
-
-            Verify.objects.create(phone_number=registered_phone_num, code=otp_code)
-            return Response("OTP has been sent to your phone number", status=status.HTTP_200_OK)
-        return Response("Your phone number is not registered ", status=status.HTTP_404_NOT_FOUND)
+            if Verify.objects.filter(phone_number=registered_phone_num).exists():
+                t = Verify.objects.get(phone_number=registered_phone_num)
+                t.code = otp_code
+                t.save()
+            else:
+                Verify.objects.create(phone_number=registered_phone_num, code=otp_code)
+            return Response({'message': "Verification code has been sent to your phone number", 'Status': status.HTTP_200_OK})
+        return Response({'message': "Your phone number is not registered", 'Status': status.HTTP_404_NOT_FOUND})
 
 
 class VerifyViewSet(ModelViewSet):
@@ -51,10 +55,14 @@ class VerifyViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         phone_num = request.data.get('phone_number')
         code = request.data.get('code')
-        result = Verify.objects.get(phone_number__phone_number=phone_num, code=code)
-        if result:
-            result.delete()
-            return Response('OK', status=status.HTTP_200_OK)
-        return Response('Invalid Phone Number or OTP', status=status.HTTP_404_NOT_FOUND)
+        try:
+            result = Verify.objects.get(phone_number__phone_number=phone_num, code=code)
+            if result:
+                result.delete()
+                return Response({'message': 'Verified', 'Status': status.HTTP_200_OK})
+            else:
+                return Response({'message': 'Invalid verification code', 'Status': status.HTTP_404_NOT_FOUND})
+        except:
+            return Response({'message': 'Something went wrong.', 'Status': status.HTTP_404_NOT_FOUND})
 
 

@@ -1,14 +1,10 @@
 import React from "react";
-import { View, Text } from "react-native";
+import Navigator from './navigator';
 
 const TwoFactorAuthentication = () => {
   
   return (
-    <View>
-      <Text>
-        Two Factor Authentication
-      </Text>
-    </View>
+    <Navigator />
   );
 };
 
