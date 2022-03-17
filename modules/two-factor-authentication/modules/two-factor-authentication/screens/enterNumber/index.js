@@ -9,22 +9,28 @@ import CountryCode from '../../components/CountryCode'
 import options from '../../options'
 import { smsVerification } from '../../api'
 import Loader from '../../components/Loader'
+import { phoneValidator } from '../../components/validators'
 
 const EnterNumber = (props) => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [code, setCode] = useState('US')
   const [callingCode, setCallingCode] = useState('1')
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(false)
 
   const clickHandler = async () => {
-    const PhoneNumber = `+${callingCode}${phoneNumber}`
-    const data = { phone_number: PhoneNumber }
-    setIsLoading(true)
-    await smsVerification(data)
-    setIsLoading(false)
-    props.navigation.navigate('Verification', {
-      data
-    })
+    if(phoneValidator(phoneNumber)){
+      const PhoneNumber = `+${callingCode}${phoneNumber}`
+      const data = { phone_number: PhoneNumber, email:'' }
+      setIsLoading(true)
+      const res=await smsVerification(data)   
+      setIsLoading(false)
+      props.navigation.navigate('Verification', {
+        data
+      })
+    }else{
+      setError(true)
+    }
   }
 
   const onCountrySelect = (country) => {
@@ -49,10 +55,11 @@ const EnterNumber = (props) => {
               setValue={setPhoneNumber}
               autoCapitalize="none"
               placeholder="Enter your Phone Number"
+              errorText={error && 'Please enter a valid phone number'}
 
             />
           </View>
-        </View>
+        </View>        
 
         <Button mode="contained" onPress={clickHandler} style={styles.button}>
           Continue
@@ -78,7 +85,8 @@ const styles = StyleSheet.create({
 
   button: {
     margin: 12
-  }
+  },
+
 })
 
 export default EnterNumber;

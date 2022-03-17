@@ -10,14 +10,15 @@ const AuthTypes = (props) => {
   }
 
   const onEmail = () => {
+    props.navigation.navigate('Email')
   }
 
-  const onAuthy = () => {
+  const on2FA = () => {
   }
 
   return (
     <View style={{ padding: 10 }}>
-      <Text style={styles.text}>Verify through</Text>
+      <Text style={styles.text}>Verification method</Text>
       <View style={options.styles.FlexRowSpaceBetween}>
         <View style={[options.styles.wp50, options.styles.p5]}>
           <Button onPress={onSMS}>
@@ -31,8 +32,8 @@ const AuthTypes = (props) => {
         </View>
       </View>
       <View style={[options.styles.wp100, options.styles.p5]}>
-        <Button onPress={onAuthy}>
-          Authy
+        <Button onPress={on2FA}>
+          2FA
         </Button>
       </View>
     </View>

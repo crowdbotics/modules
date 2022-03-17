@@ -2,7 +2,7 @@ import { getGlobalOptions } from "@options";
 
 
 const global = getGlobalOptions();
-const BASE_URL = "https://b7e6-39-53-96-150.ngrok.io" // global.url; // change your BASE_URL in `options/options.js` to edit this value
+const BASE_URL = "https://9a8a-39-53-182-70.ngrok.io" // global.url; // change your BASE_URL in `options/options.js` to edit this value
 
 export const smsVerification = async (data) => {
   const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/phonenumber/send_otp/`, {
@@ -12,7 +12,8 @@ export const smsVerification = async (data) => {
     },
     body: JSON.stringify(data)
   })
-  return response
+  
+  return response.json()
 };
 
 export const verifyCode= async (data) => {

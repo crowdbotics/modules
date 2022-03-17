@@ -5,6 +5,7 @@ import AuthTypes from '../screens/authTypes';
 import Verification from '../screens/verification';
 import EnterNumber from '../screens/enterNumber';
 import Home from '../screens/home';
+import Email from '../screens/email';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +15,8 @@ const Navigator = () => {
       <Stack.Screen options={{ headerShown: false }} name="AuthTypes" component={AuthTypes} />
       <Stack.Screen name="Verification" component={Verification} />
       <Stack.Screen name="EnterNumber" component={EnterNumber} />
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+      <Stack.Screen name="Email" component={Email} />
     </Stack.Navigator>
   )
 };
