@@ -13,7 +13,7 @@ const Navigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen options={{ headerShown: false }} name="AuthTypes" component={AuthTypes} />
-      <Stack.Screen name="Verification" component={Verification} />
+      <Stack.Screen options={{ headerShown: false }} name="Verification" component={Verification} />
       <Stack.Screen name="EnterNumber" component={EnterNumber} />
       <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
       <Stack.Screen name="Email" component={Email} />

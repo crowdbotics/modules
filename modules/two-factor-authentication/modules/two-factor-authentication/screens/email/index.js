@@ -25,9 +25,6 @@ const Email = (props) => {
         setError(true)
     }
   }
-
-
-
   return (
     <>
       {isLoading && <Loader />}
@@ -35,7 +32,7 @@ const Email = (props) => {
         <Text style={styles.text}>Enter your Email</Text>
         <View style={options.styles.FlexRow}>
 
-          <View style={{ width: "100%" }}>
+          <View style={styles.w100}>
             <Input
               label="Enter Email"
               returnKeyType="next"
@@ -44,12 +41,9 @@ const Email = (props) => {
               autoCapitalize="none"
               placeholder="Enter your Email"
               errorText={error && 'Please enter a valid email address'}
-
             />
           </View>
         </View>
-       
-
         <Button mode="contained" onPress={clickHandler} style={styles.button}>
           Continue
         </Button>
@@ -75,6 +69,9 @@ const styles = StyleSheet.create({
   button: {
     margin: 12
   },
+  w100:{
+    width: '100%'
+  }
 
 })
 

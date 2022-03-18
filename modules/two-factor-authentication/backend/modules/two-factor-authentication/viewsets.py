@@ -45,10 +45,10 @@ class PhoneNumberViewset(ModelViewSet):
                         t.save()
                     else:
                         Verify.objects.create(phone_number=registered_phone_num, code=otp_code)
-                    return Response({'message': "Verification code has been sent to your phone number", 'Status': status.HTTP_200_OK})
+                    return Response({'message': "Verification code has been sent to your phone number", 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
 
             except:
-                return Response({'message': "Your phone number is not registered", 'Status': status.HTTP_404_NOT_FOUND})
+                return Response({'message': "Your phone number is not registered", 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 
         elif email and email != '':
             try:
@@ -73,9 +73,9 @@ class PhoneNumberViewset(ModelViewSet):
                         print(response.headers)
                     except Exception as e:
                         print(e.body)
-                    return Response({'message': "Verification code has been sent to your Email Address", 'Status': status.HTTP_200_OK})
+                    return Response({'message': "Verification code has been sent to your Email Address", 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
             except:
-                return Response({'message': "Your Email is not registered", 'Status': status.HTTP_404_NOT_FOUND})
+                return Response({'message': "Your Email is not registered", 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 
 
 class VerifyViewSet(ModelViewSet):
@@ -92,22 +92,22 @@ class VerifyViewSet(ModelViewSet):
                 result = Verify.objects.get(phone_number__phone_number=phone_num, code=code)
                 if result:
                     result.delete()
-                    return Response({'message': 'Verified', 'Status': status.HTTP_200_OK})
+                    return Response({'message': 'Verified', 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
                 else:
-                    return Response({'message': 'Invalid verification code', 'Status': status.HTTP_404_NOT_FOUND})
+                    return Response({'message': 'Invalid verification code', 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
             except:
-                return Response({'message': 'Something went wrong.', 'Status': status.HTTP_404_NOT_FOUND})
+                return Response({'message': 'Something went wrong.', 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 
         elif email:
             try:
                 result = Verify.objects.get(email=email, code=code)
                 if result:
                     result.delete()
-                    return Response({'message': 'Verified', 'Status': status.HTTP_200_OK})
+                    return Response({'message': 'Verified', 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
                 else:
-                    return Response({'message': 'Invalid verification code', 'Status': status.HTTP_404_NOT_FOUND})
+                    return Response({'message': 'Invalid verification code', 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
             except:
-                return Response({'message': 'Something went wrong.', 'Status': status.HTTP_404_NOT_FOUND})
+                return Response({'message': 'Something went wrong.', 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 
 
 

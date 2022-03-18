@@ -1,6 +1,3 @@
-
-
-
 import React, { useState } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
 import Input from '../../components/Input'
@@ -17,19 +14,31 @@ const EnterNumber = (props) => {
   const [callingCode, setCallingCode] = useState('1')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(false)
+  const [regError, setRegError] = useState(false)
+  const [networkError, setNetworkError]= useState(false)
 
   const clickHandler = async () => {
-    if(phoneValidator(phoneNumber)){
-      const PhoneNumber = `+${callingCode}${phoneNumber}`
-      const data = { phone_number: PhoneNumber, email:'' }
-      setIsLoading(true)
-      const res=await smsVerification(data)   
+    setError(false)
+    setNetworkError(false)
+    setRegError(false)
+    try {
+      if(phoneValidator(phoneNumber)){
+        const PhoneNumber = `+${callingCode}${phoneNumber}`
+        const data = { phone_number: PhoneNumber, email:'' }
+        setIsLoading(true)
+        const res = await smsVerification(data)
+        if(res.ok) {
+          props.navigation.navigate('Verification', { data })
+        } else {
+          setRegError(true)
+        }
+        setIsLoading(false)
+      } else {
+        setError(true)
+      }
+    } catch (error) {
       setIsLoading(false)
-      props.navigation.navigate('Verification', {
-        data
-      })
-    }else{
-      setError(true)
+      setNetworkError(true)
     }
   }
 
@@ -44,10 +53,10 @@ const EnterNumber = (props) => {
       <View style={styles.main}>
         <Text style={styles.text}>Enter your Phone Number</Text>
         <View style={options.styles.FlexRow}>
-          <View style={{ width: "25%", display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <View style={styles.countryCode}>
             <CountryCode code={code} onCountrySelect={onCountrySelect} />
           </View>
-          <View style={{ width: "75%" }}>
+          <View style={styles.input}>
             <Input
               label="Enter Code"
               returnKeyType="next"
@@ -55,7 +64,7 @@ const EnterNumber = (props) => {
               setValue={setPhoneNumber}
               autoCapitalize="none"
               placeholder="Enter your Phone Number"
-              errorText={error && 'Please enter a valid phone number'}
+              errorText={error && 'Please enter a valid phone number' || regError && 'Your Phone number is not registered' || networkError && 'Network Error'}
 
             />
           </View>
@@ -78,6 +87,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignContent: 'space-around'
   },
+  input:{ 
+    width: "75%" 
+  },
   text: {
     margin: 12,
     fontWeight: 'bold'
@@ -86,6 +98,12 @@ const styles = StyleSheet.create({
   button: {
     margin: 12
   },
+  countryCode: { 
+    width: "25%", 
+    display: 'flex', 
+    flexDirection: 'row',
+    alignItems: 'center' 
+  }
 
 })
 

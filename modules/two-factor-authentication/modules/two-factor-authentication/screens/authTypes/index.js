@@ -17,7 +17,7 @@ const AuthTypes = (props) => {
   }
 
   return (
-    <View style={{ padding: 10 }}>
+    <View style={styles.main}>
       <Text style={styles.text}>Verification method</Text>
       <View style={options.styles.FlexRowSpaceBetween}>
         <View style={[options.styles.wp50, options.styles.p5]}>
@@ -41,6 +41,9 @@ const AuthTypes = (props) => {
 }
 
 const styles = StyleSheet.create({
+  main:{
+    padding: 10 
+  },
   text: {
     margin: 12,
     fontWeight: 'bold',
