@@ -16,6 +16,17 @@ const Subscription = (params) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [preSelectedPlan, setPreSelectedPlan] = useState("qqq");
+  const [subscribeBtn, setSubscribeBtn] = useState({
+      isActive: false,
+      text: ""
+  })
+
+  useEffect(()=>{
+    
+  }, [plans])
+  
+
   // More info on all the options is below in the API Reference... just some common use cases shown here
   const subscribe = async () =>{
     const {paymentIntent,
@@ -37,19 +48,44 @@ const Subscription = (params) => {
 
   useEffect(async () => {
     fetchPlans().then(response => response.json())
-    .then(json => {
+    .then((json) => {
       const { status, result } = json;
       setPlans(result);
-      console.log(plans)
+      result.forEach((obj)=>{
+        if (obj.is_subscribed){
+          setSelectedPlan(obj.price_id)
+          setPreSelectedPlan(obj.price_id)
+          planSelected(obj)
+        }
+      })
     });
-  }, [])
+  }, [preSelectedPlan])
 
+  const planSelected = (item) => {
+      setSelectedPlan(item.price_id)
+      let text = subscribeBtn.text
+      let isActive = subscribeBtn.isActive
+      if (item.price_id === preSelectedPlan){
+        text = "Already Subscribed"
+        isActive =  false
+      }else{
+        if (preSelectedPlan){
+          text = "Change Plan"
+        }else{
+          text = "Subscribe"
+        }
+        
+        isActive =  true
+      }
+      setSubscribeBtn({isActive,text})
+
+  }
 
   const renderItem = ({ item }) => {
     if (!item) return;
     return (
         <TouchableOpacity style={[styles.listItemContainer, selectedPlan == item.price_id && styles.selected, {justifyContent: "space-between"}]} 
-            onPress={()=>{setSelectedPlan(item.price_id)}}>
+            onPress={()=>{planSelected(item)}}>
             <Text style={{fontSize: 24, fontWeight: "600"}}>{item.name}</Text>
             <Text><Text style={styles.bold}>Description:</Text> {item.description}</Text>
             <Text><Text style={styles.bold}>Price ID:</Text> {item.price_id}</Text>
@@ -73,8 +109,9 @@ const Subscription = (params) => {
             style={{ }}
             extraData={plans}
         />
-        <TouchableOpacity onPress={()=> {selectedPlan && subscribe()}} style={[styles.button, !selectedPlan && styles.disabled]}>
-            {selectedPlan ? <Text style={styles.buttonText}>Subscribe</Text>: <Text style={styles.buttonText}>Select A Plan</Text> }</TouchableOpacity>
+        <TouchableOpacity onPress={()=> {subscribeBtn.isActive && subscribe()}} style={[styles.button, !subscribeBtn.isActive && styles.disabled]}>
+              <Text style={styles.buttonText}>{subscribeBtn.text}</Text>
+        </TouchableOpacity>
         </StripeProvider>
       </View>
   );

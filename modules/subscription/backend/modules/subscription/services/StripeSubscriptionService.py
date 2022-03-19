@@ -1,7 +1,32 @@
+import json
 import stripe
+import environ
+
+from modules.payments.models import StripeUserProfile
+env = environ.Env()
+
+
+class StripeSubStatus:
+    ACTIVE = 'active'
+    PAST_DUE = 'past_due'
+    UNPAID = 'unpaid'
+    CANCELED = 'canceled'
+    INCOMPLETE = 'incomplete'
+    INCOMPLETE_EXPIRED = 'incomplete_expired'
+    TRAILING = 'trialing'
+    ALL = 'all'
+    ENDED = 'ended'
 
 
 class StripeSubscriptionService:
+    stripe.api_key = env.str("STRIPE_SECRET_KEY")
+    WEBHOOK_SECRET = env.str("STRIPE_WEBHOOK_SECRET")
+    LOG_EVENT_TYPES = [
+        "payment_intent.created", "customer.subscription.created",
+        "invoice.paid", "invoice.payment_succeeded",
+        "customer.subscription.updated"
+    ]
+
 
     @classmethod
     def get_products(self):
@@ -40,20 +65,95 @@ class StripeSubscriptionService:
 
     @classmethod
     def create_invoice_intent_sheet(cls, cust_id, price_id, behavior='default_incomplete'):
-        subscription = stripe.Subscription.create(
-            customer=cust_id,
-            items=[{
-                'price': price_id,
-            }],
-            payment_behavior=behavior,
-            expand=['latest_invoice.payment_intent'],
-        )
+        subscriptions = stripe.Subscription.list(customer=cust_id, status=StripeSubStatus.INCOMPLETE, price=price_id)
+        subscriptions = subscriptions.get('data')
+        if not subscriptions:
+            # Create new incomplete status subscription and respective intent to capture payment.
+            subscription = stripe.Subscription.create(
+                customer=cust_id,
+                items=[{
+                    'price': price_id,
+                }],
+                payment_behavior=behavior,
+                expand=['latest_invoice.payment_intent'],
+            )
+            client_secret = subscription.latest_invoice.payment_intent.client_secret
+        else:
+            # If there already exist an incomplete intent against this user and price fetch the payment intent of that.
+            subscription = subscriptions[0]
+            invoice = stripe.Invoice.retrieve(subscription.latest_invoice)
+            payment_intent = stripe.PaymentIntent.retrieve(invoice.payment_intent)
+            client_secret = payment_intent.client_secret
+
         ephemeralKey = stripe.EphemeralKey.create(
             customer=cust_id,
             stripe_version='2020-08-27',
         )
         return {
-            "paymentIntent": subscription.latest_invoice.payment_intent.client_secret,
+            "paymentIntent": client_secret,
             "ephemeralKey": ephemeralKey.secret,
             "customer": cust_id
         }
+
+    @classmethod
+    def validate_webhook_payload(cls, payload):
+        try:
+            payload = json.loads(payload)
+            if "id" not in payload:
+                raise ValueError("id not in payload, payload incorrect")
+        except Exception as e:
+            raise e
+        return payload
+
+    @classmethod
+    def get_event_from_webhook(cls, payload, sig_header):
+        payload = cls.validate_webhook_payload(payload)
+        try:
+            event = stripe.Event.construct_from(
+                payload, sig_header, cls.WEBHOOK_SECRET
+            )
+            cls.log_stripe_event(event)
+        except stripe.error.SignatureVerificationError as e:
+            # Invalid signature
+            return False
+        return event
+
+    @classmethod
+    def handle_webhook_events(cls, event):
+        # Handle the event
+        if event.type == 'invoice.payment_succeeded':
+            payment_intent = event.data.object  # contains a stripe.PaymentIntent
+            print('PaymentIntent was successful!', event.data, payment_intent)
+            cls.customer_subscribed(payment_intent)
+        elif event.type == 'payment_method.attached':
+            payment_method = event.data.object  # contains a stripe.PaymentMethod
+            print('PaymentMethod was attached to a Customer!')
+        # ... handle other event types
+        else:
+            print('Unhandled event type {}'.format(event.type))
+
+    @classmethod
+    def customer_subscribed(cls, obj):
+        from modules.subscription.models import UserSubscription, SubscriptionPlan, UserSubscriptionHistory
+        customer = obj.customer
+        price_id = obj.lines.data[0].price.id
+        sub_id = obj.subscription
+
+        sub, created = UserSubscription.objects.get_or_create(user=StripeUserProfile.objects.get(stripe_cus_id=customer).user)
+        sub.tier = SubscriptionPlan.objects.get(price_id=price_id)
+        sub.subscription_id = sub_id
+        sub.save()
+        UserSubscriptionHistory.objects.create(sub=sub, action="invoice.payment_succeeded", result=json.dumps(obj))
+
+    @classmethod
+    def log_stripe_event(cls, event):
+        from modules.subscription.models import StripeWebhookLog
+        try:
+            data = json.dumps(event.data.object)
+        except:
+            data = str(event.data.object)
+        StripeWebhookLog.objects.create(type=event.type, data=data)
+
+    @classmethod
+    def update_subscription(cls, sub_id, new_price):
+        pass
