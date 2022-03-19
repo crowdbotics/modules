@@ -1,6 +1,13 @@
 import { StyleSheet } from "react-native";
+import { Dimensions } from 'react-native'
+let deviceWidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    height: 150,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   hr: {
     marginTop: 20,
     marginBottom: 20,
@@ -57,19 +64,45 @@ const styles = StyleSheet.create({
   listItemContainer: {
     padding: 10, 
     margin: 10, 
-    backgroundColor: "#c9c9c9c9", 
+    backgroundColor: "white", 
     borderRadius: 10,
     height: 350,
-    width: 200,
-    borderWidth: 1
+    width: deviceWidth/1.8,
+    borderWidth: 1,
+    borderColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   selected: {
-    borderColor: '#EA9FAA',
-    backgroundColor: "#EA9F16",
+    borderColor: '#CEEBD6',
+    backgroundColor: "#CEEBD6",
     borderWidth: 1
   },
   disabled: {
       backgroundColor: 'gray'
+  },
+  selectedPlanTag: {
+    position: 'absolute', 
+    right: 0, 
+    top: -10, 
+    borderRadius: 26,
+    backgroundColor:'black', 
+    paddingVertical: 5, 
+    paddingHorizontal: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   }
 });
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { Text, View, FlatList, TouchableOpacity, Alert, Modal, Pressable } from 'react-native';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { Text, View, FlatList, TouchableOpacity, Alert, Modal, Pressable, ActivityIndicator } from 'react-native';
 import { OptionsContext, GlobalOptionsContext } from "@options";
 import { ScrollView } from 'react-native-gesture-handler';
 import { Dimensions } from 'react-native'
@@ -16,34 +16,31 @@ const Subscription = (params) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState("");
-  const [preSelectedPlan, setPreSelectedPlan] = useState("qqq");
+  const [preSelectedPlan, setPreSelectedPlan] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
+  let flatListRef = useRef();
   const [subscribeBtn, setSubscribeBtn] = useState({
       isActive: false,
       text: ""
   })
-
-  useEffect(()=>{
-    
-  }, [plans])
   
 
   // More info on all the options is below in the API Reference... just some common use cases shown here
   const subscribe = async () =>{
-    const {paymentIntent,
-      ephemeralKey,
-      customer} = await fetchPaymentSheetParams(selectedPlan)
-    const { error } = await initPaymentSheet({
+    setLoading(true)
+    const {paymentIntent, ephemeralKey, customer} = await fetchPaymentSheetParams(selectedPlan)
+    let { error } = await initPaymentSheet({
       customerId: customer,
       customerEphemeralKeySecret: ephemeralKey,
       paymentIntentClientSecret: paymentIntent,
       merchantDisplayName: "SHahraiz",
-      applePay: false,
-      googlePay: true,
       merchantCountryCode:  "US",
-      testEnv: true, // use test environment
+      testEnv: __DEV__, // use test environment
     });
 
-    const { error2 } = await presentPaymentSheet({ clientSecret });
+    let result = await presentPaymentSheet({ clientSecret });
+    setLoading(false)
   }
 
   useEffect(async () => {
@@ -51,14 +48,18 @@ const Subscription = (params) => {
     .then((json) => {
       const { status, result } = json;
       setPlans(result);
-      result.forEach((obj)=>{
+      result.forEach((obj, i)=>{
         if (obj.is_subscribed){
           setSelectedPlan(obj.price_id)
           setPreSelectedPlan(obj.price_id)
           planSelected(obj)
+          setTimeout(()=>{
+            flatListRef.current.scrollToIndex({animated:true, index:i, viewPosition:0.5})
+          }, 200)
         }
       })
     });
+
   }, [preSelectedPlan])
 
   const planSelected = (item) => {
@@ -86,6 +87,7 @@ const Subscription = (params) => {
     return (
         <TouchableOpacity style={[styles.listItemContainer, selectedPlan == item.price_id && styles.selected, {justifyContent: "space-between"}]} 
             onPress={()=>{planSelected(item)}}>
+            {preSelectedPlan == item.price_id && <View style={styles.selectedPlanTag}><Text style={{color: 'white'}}>Current Plan</Text></View>}
             <Text style={{fontSize: 24, fontWeight: "600"}}>{item.name}</Text>
             <Text><Text style={styles.bold}>Description:</Text> {item.description}</Text>
             <Text><Text style={styles.bold}>Price ID:</Text> {item.price_id}</Text>
@@ -100,7 +102,11 @@ const Subscription = (params) => {
           publishableKey={stripePublishKey}
           merchantIdentifier={merchantIdentifier}
         >
-          <Text>Subscription</Text>
+          <View style={styles.headerContainer}>
+              <Text style={{fontSize: 20}}>Choose a</Text>
+              <Text style={{fontSize: 54}}>Subscription</Text>
+              <Text style={{fontSize: 20}}>Plan</Text>
+          </View>
           <FlatList
             horizontal={true}
             data={plans}
@@ -108,10 +114,16 @@ const Subscription = (params) => {
             keyExtractor={item => item.id}
             style={{ }}
             extraData={plans}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            ref={flatListRef}
         />
-        <TouchableOpacity onPress={()=> {subscribeBtn.isActive && subscribe()}} style={[styles.button, !subscribeBtn.isActive && styles.disabled]}>
-              <Text style={styles.buttonText}>{subscribeBtn.text}</Text>
-        </TouchableOpacity>
+        {subscribeBtn.isActive &&<TouchableOpacity onPress={()=> {subscribeBtn.isActive && subscribe()}} style={[styles.button]}>
+            {loading? <ActivityIndicator></ActivityIndicator>: <Text style={styles.buttonText}>{subscribeBtn.text}</Text>}
+        </TouchableOpacity>}
+        {preSelectedPlan !== "" && <TouchableOpacity onPress={()=> {}} style={[styles.button, {backgroundColor: '#DF202C'}]}>
+          {cancelLoading? <ActivityIndicator></ActivityIndicator>: <Text style={styles.buttonText}>Cancel Subscription</Text>}
+        </TouchableOpacity>}
         </StripeProvider>
       </View>
   );
