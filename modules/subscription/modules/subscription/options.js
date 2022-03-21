@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     fontWeight: "600"
   },
   listItemContainer: {
+    paddingTop: 15,
     padding: 10, 
     margin: 10, 
     backgroundColor: "white", 

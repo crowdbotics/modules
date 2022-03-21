@@ -3,7 +3,7 @@ import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions(); 
 const BASE_URL = global.url; // change your BASE_URL in `options/options.js` to edit this value
-const token = "Token da27ae41bacbe05d36c73b0aa13ad404e8115660"
+const token = "Token 20013de1140d54d543aed9c7390606d77ae8d845"
 // FIXME: Make this call with Authorization
 // Right now there is no login in this module but when this feture will be added
 // there will be a user profile added make changes accordingly
@@ -31,6 +31,18 @@ export const fetchPaymentSheetParams = async (price_tier) => {
 export const fetchPlans = async () => {
     const response = await fetch(`${BASE_URL}/modules/subscription/get_subscription_plans/`, {
         method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': token
+        }
+    });
+    return response
+};
+
+
+export const cancelPlan = async () => {
+    const response = await fetch(`${BASE_URL}/modules/subscription/cancel_subscription_plan/`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': token

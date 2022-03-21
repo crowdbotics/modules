@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Dimensions } from 'react-native'
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { useApplePay, useGooglePay, useStripe, presentGooglePay, ApplePayButton, GooglePayButton } from '@stripe/stripe-react-native';
-import { fetchPlans , fetchPaymentSheetParams} from "./api";
+import { fetchPlans , fetchPaymentSheetParams, cancelPlan} from "./api";
 
 const Subscription = (params) => {
   const options = useContext(OptionsContext);
@@ -41,9 +41,14 @@ const Subscription = (params) => {
 
     let result = await presentPaymentSheet({ clientSecret });
     setLoading(false)
+    setTimeout(()=>{
+      setPreSelectedPlan(null)
+      refreshPlans()
+    }, 2000)
+
   }
 
-  useEffect(async () => {
+  const refreshPlans = async() =>{
     fetchPlans().then(response => response.json())
     .then((json) => {
       const { status, result } = json;
@@ -59,6 +64,10 @@ const Subscription = (params) => {
         }
       })
     });
+  }
+  useEffect(async () => {
+    console.log("chala")
+    await refreshPlans()
 
   }, [preSelectedPlan])
 
@@ -79,9 +88,18 @@ const Subscription = (params) => {
         isActive =  true
       }
       setSubscribeBtn({isActive,text})
-
+      
   }
 
+  const cancelSub = async () =>{
+    setCancelLoading(true)
+    await cancelPlan()
+    setTimeout(()=>{
+      setPreSelectedPlan("")
+      refreshPlans()
+    }, 2000)
+    setCancelLoading(false)
+  }
   const renderItem = ({ item }) => {
     if (!item) return;
     return (
@@ -89,7 +107,7 @@ const Subscription = (params) => {
             onPress={()=>{planSelected(item)}}>
             {preSelectedPlan == item.price_id && <View style={styles.selectedPlanTag}><Text style={{color: 'white'}}>Current Plan</Text></View>}
             <Text style={{fontSize: 24, fontWeight: "600"}}>{item.name}</Text>
-            <Text><Text style={styles.bold}>Description:</Text> {item.description}</Text>
+            <Text>{item.description}</Text>
             <Text><Text style={styles.bold}>Price ID:</Text> {item.price_id}</Text>
             <Text style={{fontSize: 24, fontWeight: "600", alignSelf: 'flex-end', alignContent: "flex-end"}}>${item.price}/{item.interval}</Text>
         </TouchableOpacity>
@@ -121,7 +139,7 @@ const Subscription = (params) => {
         {subscribeBtn.isActive &&<TouchableOpacity onPress={()=> {subscribeBtn.isActive && subscribe()}} style={[styles.button]}>
             {loading? <ActivityIndicator></ActivityIndicator>: <Text style={styles.buttonText}>{subscribeBtn.text}</Text>}
         </TouchableOpacity>}
-        {preSelectedPlan !== "" && <TouchableOpacity onPress={()=> {}} style={[styles.button, {backgroundColor: '#DF202C'}]}>
+        {preSelectedPlan !== "" && <TouchableOpacity onPress={()=> {cancelSub()}} style={[styles.button, {backgroundColor: '#DF202C'}]}>
           {cancelLoading? <ActivityIndicator></ActivityIndicator>: <Text style={styles.buttonText}>Cancel Subscription</Text>}
         </TouchableOpacity>}
         </StripeProvider>

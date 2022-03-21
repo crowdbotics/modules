@@ -1,4 +1,5 @@
 import json
+from tkinter import N
 import stripe
 import environ
 
@@ -62,6 +63,42 @@ class StripeSubscriptionService:
         )
         return session
 
+    @classmethod
+    def already_has_a_plan(cls, user):
+        has_user_sub = hasattr(user, 'user_subscription')
+        return user.user_subscription if has_user_sub else None
+
+    @classmethod
+    def create_subscription(cls, cust_id, price_id):
+        return cls.create_invoice_intent_sheet(cust_id, price_id, behavior='default_incomplete')
+
+    @classmethod
+    def update_subscription(cls, sub_id, price_id):
+        try:
+            print("update_subscription")
+            subscription = stripe.Subscription.retrieve(sub_id)
+
+            updatedSubscription = stripe.Subscription.modify(
+                sub_id,
+                cancel_at_period_end=False,
+                items=[{
+                    'id': subscription['items']['data'][0].id,
+                    'price': price_id,
+                }]
+            )
+            return updatedSubscription
+        except Exception as e:
+            return False
+
+    @classmethod
+    def cancel_subscription(cls, sub_id):
+        try:
+            # Cancel the subscription by deleting it
+            deletedSubscription = stripe.Subscription.delete(sub_id)
+            return deletedSubscription
+        except Exception as e:
+            pass
+        return None
 
     @classmethod
     def create_invoice_intent_sheet(cls, cust_id, price_id, behavior='default_incomplete'):
@@ -125,12 +162,51 @@ class StripeSubscriptionService:
             payment_intent = event.data.object  # contains a stripe.PaymentIntent
             print('PaymentIntent was successful!', event.data, payment_intent)
             cls.customer_subscribed(payment_intent)
-        elif event.type == 'payment_method.attached':
-            payment_method = event.data.object  # contains a stripe.PaymentMethod
-            print('PaymentMethod was attached to a Customer!')
+            if payment_intent.billing_reason == 'subscription_create':
+                subscription_id = payment_intent.subscription
+                payment_intent_id = payment_intent.payment_intent
+
+                # Retrieve the payment intent used to pay the subscription
+                pi = stripe.PaymentIntent.retrieve(payment_intent_id)
+
+                # Set the default payment method
+                stripe.Subscription.modify(
+                subscription_id,
+                default_payment_method=pi.payment_method
+                )
+        elif event.type == 'customer.subscription.updated':
+            sub = event.data.object  # contains a stripe.Subscription
+            print('sub', sub)
+            if sub.status == 'past_due':
+                cls.end_subscription(sub)
+            elif sub.status == 'active':
+                cls.modify_subscription(sub)
         # ... handle other event types
+        elif event.type == 'invoice.payment.failed':
+            pass
+        elif event.type == 'invoice.payment_succeeded':
+            pass
         else:
             print('Unhandled event type {}'.format(event.type))
+
+    @classmethod
+    def end_subscription(cls, sub):
+        # You can use an email or a mobile push notification to customer to let him know to pay
+        from modules.subscription.models import UserSubscription
+        customer = sub.customer
+        sub, created = UserSubscription.objects.get_or_create(user=StripeUserProfile.objects.get(stripe_cus_id=customer).user)
+        sub.is_active = False
+        sub.save()
+
+    @classmethod
+    def modify_subscription(cls, sub):
+        # You can use an email or a mobile push notification to customer to let him know to pay
+        from modules.subscription.models import UserSubscription, SubscriptionPlan
+        customer = sub.customer
+        s, created = UserSubscription.objects.get_or_create(user=StripeUserProfile.objects.get(stripe_cus_id=customer).user)
+        s.is_active = True
+        s.tier = SubscriptionPlan.objects.get(price_id=sub.plan.id)
+        s.save()
 
     @classmethod
     def customer_subscribed(cls, obj):
@@ -142,6 +218,7 @@ class StripeSubscriptionService:
         sub, created = UserSubscription.objects.get_or_create(user=StripeUserProfile.objects.get(stripe_cus_id=customer).user)
         sub.tier = SubscriptionPlan.objects.get(price_id=price_id)
         sub.subscription_id = sub_id
+        sub.is_active=True
         sub.save()
         UserSubscriptionHistory.objects.create(sub=sub, action="invoice.payment_succeeded", result=json.dumps(obj))
 
@@ -153,7 +230,3 @@ class StripeSubscriptionService:
         except:
             data = str(event.data.object)
         StripeWebhookLog.objects.create(type=event.type, data=data)
-
-    @classmethod
-    def update_subscription(cls, sub_id, new_price):
-        pass

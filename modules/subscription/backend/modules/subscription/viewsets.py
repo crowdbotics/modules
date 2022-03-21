@@ -55,9 +55,32 @@ class BuySubscriptionPlanView(APIView):
             stripe_cus_id = stripe_profile.stripe_cus_id
         price_tier = request.data.get('price_tier')
         plan = SubscriptionPlan.objects.get(price_id=price_tier)
-        response = StripeSubscriptionService.create_invoice_intent_sheet(stripe_cus_id, plan.price_id)
+        already_has_a_plan = StripeSubscriptionService.already_has_a_plan(user)
+        print("StripeSubscriptionService")
+        if already_has_a_plan.subscription_id:
+            # update subscription
+            print("StripeSubscriptionService3")
+            result = StripeSubscriptionService.update_subscription(already_has_a_plan.subscription_id, plan.price_id)
+        else:
+            print("StripeSubscriptionService2")
+            result = StripeSubscriptionService.create_subscription(stripe_cus_id, plan.price_id)
+        response = result
         return Response(response, status=status.HTTP_200_OK)
 
+
+class CancelSubscriptionPlanView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        already_has_a_plan = StripeSubscriptionService.already_has_a_plan(user)
+        deletedSubscription = StripeSubscriptionService.cancel_subscription(already_has_a_plan.subscription_id)
+        already_has_a_plan.tier = None
+        already_has_a_plan.subscription_id = ""
+        already_has_a_plan.is_active = False
+        already_has_a_plan.save()
+        return Response("", status=status.HTTP_200_OK)
 
 class StripeWebhookView(APIView):
 
