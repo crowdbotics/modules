@@ -14,6 +14,7 @@ const AuthTypes = (props) => {
   }
 
   const on2FA = () => {
+    props.navigation.navigate('GoogleAuth')
   }
 
   return (

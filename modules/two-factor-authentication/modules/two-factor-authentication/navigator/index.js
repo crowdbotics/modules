@@ -6,6 +6,7 @@ import Verification from '../screens/verification';
 import EnterNumber from '../screens/enterNumber';
 import Home from '../screens/home';
 import Email from '../screens/email';
+import GoogleAuth from '../screens/googleAuthScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,8 @@ const Navigator = () => {
       <Stack.Screen name="EnterNumber" component={EnterNumber} />
       <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
       <Stack.Screen name="Email" component={Email} />
+      <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
+
     </Stack.Navigator>
   )
 };

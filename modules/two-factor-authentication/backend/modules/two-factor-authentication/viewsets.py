@@ -1,6 +1,8 @@
+import pyotp
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from demo.settings import SENDGRID_API_KEY, ACCOUNT_SID, AUTH_TOKEN
@@ -111,3 +113,28 @@ class VerifyViewSet(ModelViewSet):
 
 
 
+class Google_AUTH(APIView):
+    def get(self, request, id=None):
+        secret = '3232323232323232'
+        name = 'twofactorauth@crowbotics.com'
+        link = pyotp.TOTP(secret).provisioning_uri(name=name, issuer_name='2FA')
+        return Response({
+            'secret': secret,
+            'name': name,
+            'link': link,
+            'status': status.HTTP_200_OK
+        }, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        otp = request.data['otp']
+        verification_code = pyotp.TOTP('3232323232323232').now()
+        if verification_code == otp:
+            return Response({
+                'message': 'Verified',
+                'status': status.HTTP_200_OK
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'message': 'Not Verified',
+                'status': status.HTTP_400_BAD_REQUEST
+            }, status=status.HTTP_400_BAD_REQUEST)

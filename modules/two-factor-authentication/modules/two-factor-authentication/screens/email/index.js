@@ -11,18 +11,30 @@ const Email = (props) => {
   const [email, setEmail] = useState('')
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [networkError, setNetworkError]= useState(false)
+  const [regError, setRegError] = useState(false)
 
   const clickHandler = async () => {
-    if (emailValidator(email)){
-    const data = {phone_number: '', email }
-    setIsLoading(true)
-    await smsVerification(data)
-    setIsLoading(false)
-    props.navigation.navigate('Verification', {
-      data
-    })
-    }else {
-        setError(true)
+    setError(false)
+    setNetworkError(false)
+    setRegError(false)
+    try {
+      if (emailValidator(email)){
+        const data = {phone_number: '', email }
+        setIsLoading(true)
+        const res = await smsVerification(data)
+        if(res.ok){     
+        props.navigation.navigate('Verification', { data})
+        }else {
+          setRegError(true)
+        }
+        setIsLoading(false)
+        }else {
+            setError(true)
+        }
+    } catch (error) {
+      setIsLoading(false)
+      setNetworkError(true)
     }
   }
   return (
@@ -40,7 +52,7 @@ const Email = (props) => {
               setValue={setEmail}
               autoCapitalize="none"
               placeholder="Enter your Email"
-              errorText={error && 'Please enter a valid email address'}
+              errorText={error && 'Please enter a valid email address' || regError && 'Your Email is not registered' || networkError && 'Network Error'}
             />
           </View>
         </View>
