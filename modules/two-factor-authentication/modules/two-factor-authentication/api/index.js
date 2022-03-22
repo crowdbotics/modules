@@ -1,12 +1,12 @@
+// @ts-ignore
 import { getGlobalOptions } from "@options";
 
-
 const global = getGlobalOptions();
-const BASE_URL = "https://b224-111-88-86-43.ngrok.io" // global.url; // change your BASE_URL in `options/options.js` to edit this value
+const BASE_URL = "https://508b-111-88-84-164.ngrok.io" // global.url; // change your BASE_URL in `options/options.js` to edit this value
 
-export const smsVerification = async (data) => {
+export const sendVerification = async (data) => {
   try {
-    const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/phonenumber/send_otp/`, {
+    const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/twofactorauth/send_otp/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ export const smsVerification = async (data) => {
   }
 };
 
-export const verifyCode= async (data) => {
+export const verifyCode = async (data) => {
   try {
     const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/verify/verify_otp/`, {
       method: 'DELETE',
@@ -29,8 +29,50 @@ export const verifyCode= async (data) => {
       body: JSON.stringify(data)
     })
     return response
-    
+
   } catch (error) {
     throw new Error('NETWORK_ERROR').message
   }
 };
+
+export const getCode = async (id) => {
+  const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/2fa?id=${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return await response.json()
+}
+
+export const verify2FA = async (data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/2fa`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    })
+    return response
+
+  } catch (error) {
+    throw new Error('NETWORK_ERROR').message
+  }
+}
+
+export const set2faMethod = async (data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/twofactorauth/${data.id}/`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    })
+    return response
+
+  } catch (error) {
+    throw new Error('NETWORK_ERROR').message
+  }
+}

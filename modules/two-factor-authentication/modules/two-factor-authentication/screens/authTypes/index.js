@@ -1,16 +1,23 @@
 import React from 'react'
 import { Text, StyleSheet, View } from 'react-native'
+import { set2faMethod } from '../../api'
 import Button from '../../components/Button'
 import options from '../../options'
 
 const AuthTypes = (props) => {
 
-  const onSMS = () => {
-    props.navigation.navigate('EnterNumber')
+  const onSMS = async () => {
+    await set2faMethod({
+      id: options.user.id,
+      method: "SMS"
+    })
   }
 
-  const onEmail = () => {
-    props.navigation.navigate('Email')
+  const onEmail = async () => {
+    await set2faMethod({
+      id: options.user.id,
+      method: "EMAIL"
+    })
   }
 
   const on2FA = () => {
@@ -19,7 +26,7 @@ const AuthTypes = (props) => {
 
   return (
     <View style={styles.main}>
-      <Text style={styles.text}>Verification method</Text>
+      <Text style={styles.text}>Verification methods</Text>
       <View style={options.styles.FlexRowSpaceBetween}>
         <View style={[options.styles.wp50, options.styles.p5]}>
           <Button onPress={onSMS}>
@@ -46,7 +53,8 @@ const styles = StyleSheet.create({
     padding: 10 
   },
   text: {
-    margin: 12,
+    marginBottom: 5,
+    marginTop: 12,
     fontWeight: 'bold',
     fontSize: 18
   }

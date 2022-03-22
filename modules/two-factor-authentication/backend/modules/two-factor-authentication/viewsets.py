@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from demo.settings import SENDGRID_API_KEY, ACCOUNT_SID, AUTH_TOKEN
-from .models import PhoneNumber, Verify
+from .models import TwoFactorAuth, Verify
 from .serializers import PhoneNumberSerializer, VerifySerializer
 import os
 from twilio.rest import Client
@@ -21,7 +21,7 @@ def generate_opt():
 
 
 class PhoneNumberViewset(ModelViewSet):
-    queryset = PhoneNumber.objects.all()
+    queryset = TwoFactorAuth.objects.all()
     serializer_class = PhoneNumberSerializer
 
     @action(methods=['post'], detail=False)
@@ -34,7 +34,7 @@ class PhoneNumberViewset(ModelViewSet):
                 account_sid = ACCOUNT_SID
                 auth_token = AUTH_TOKEN
                 client = Client(account_sid, auth_token)
-                registered_phone_num = PhoneNumber.objects.get(phone_number=phone)
+                registered_phone_num = TwoFactorAuth.objects.get(phone_number=phone)
                 if registered_phone_num:
                     message = client.messages.create(
                         body="Your private code is {} don't share with anyone".format(otp_code),
@@ -54,12 +54,12 @@ class PhoneNumberViewset(ModelViewSet):
 
         elif email and email != '':
             try:
-                registered_email = PhoneNumber.objects.get(email=email)
+                registered_email = TwoFactorAuth.objects.get(email=email)
                 if registered_email:
                     message = Mail(
                         from_email='saad.abid@crowdbotics.com',
                         to_emails=email,
-                        subject='Sending with Twilio SendGrid is Fun',
+                        subject='Crowdbotics 2FA code',
                         html_content='<strong>"Your OTP code is {}. Do not share with anyone"</strong>'.format(otp_code))
                     if Verify.objects.filter(email=registered_email).exists():
                         t = Verify.objects.get(email=registered_email)
@@ -112,22 +112,34 @@ class VerifyViewSet(ModelViewSet):
                 return Response({'message': 'Something went wrong.', 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 class Google_AUTH(APIView):
-    def get(self, request, id=None):
-        secret = '3232323232323232'
-        name = 'twofactorauth@crowbotics.com'
-        link = pyotp.TOTP(secret).provisioning_uri(name=name, issuer_name='2FA')
-        return Response({
-            'secret': secret,
-            'name': name,
-            'link': link,
-            'status': status.HTTP_200_OK
-        }, status=status.HTTP_200_OK)
+    def get(self, request):
+        userId = request.GET.get('id', None)
+        if userId:
+            try:
+                user = TwoFactorAuth.objects.get(pk=userId)
+                secret = user.secret
+                name = user.email
+                link = pyotp.TOTP(secret).provisioning_uri(name=name, issuer_name='2FA')
+                return Response({
+                    'secret': secret,
+                    'name': name,
+                    'link': link,
+                    'status': status.HTTP_200_OK
+                }, status=status.HTTP_200_OK)
+            except:
+                return Response({'message': 'Enter a Valid user id.', 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
+
+        else:
+            return Response({'message': 'User Does not exist.', 'status': status.HTTP_404_NOT_FOUND},
+                            status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         otp = request.data['otp']
-        verification_code = pyotp.TOTP('3232323232323232').now()
+        userId = request.data['id']
+        user = TwoFactorAuth.objects.get(pk=userId)
+        secret = user.secret
+        verification_code = pyotp.TOTP(secret).now()
         if verification_code == otp:
             return Response({
                 'message': 'Verified',

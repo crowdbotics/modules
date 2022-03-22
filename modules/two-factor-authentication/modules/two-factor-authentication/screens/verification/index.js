@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
-import { smsVerification, verifyCode } from '../../api'
+import { sendVerification, verify2FA, verifyCode } from '../../api'
 import Loader from '../../components/Loader'
 import options from '../../options'
 
@@ -12,38 +12,64 @@ const Verification = (props) => {
   const [code, setCode] = useState('')
   const [error, setError] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [networkError, setNetworkError]= useState(false)
-  const { phone_number, email } = props.route.params.data
+  const [networkError, setNetworkError] = useState(false)
+
+  useEffect(() => {
+    async () => {
+      if (options.user.method == '') {
+        methodHandler()
+      } else {
+        await handleVerification()
+      }
+    }
+  }, [])
 
   const clickHandler = async () => {
     try {
       setIsLoading(true)
-      const detail = phone_number || email
-      const credential= phone_number ? 'phone_number' : 'email'
-      const data = await verifyCode({ code: +code, [credential]: detail })
-      console.log(data)
+      let response = null
+      if (options.user.method == 'SMS') {
+        response = await verifyCode({ code: +code, phone_number: options.user.phone_number })
+      } else if (options.user.method == 'EMAIL') {
+        response = await verifyCode({ code: +code, email: options.user.email })
+      } else if (options.user.method == '2FA') {
+        response = await verify2FA({ otp: code })
+      }
       setIsLoading(false)
-      if(data.ok) {
+      if (response.ok) {
         props.navigation.navigate('Home')
       } else {
         setError(true)
-      }      
+      }
     } catch (error) {
       setIsLoading(false)
       setNetworkError(true)
     }
   }
-  const clickHandlerResend= async ()=>{
+  const handleVerification = async () => {
     setIsLoading(true)
-    await smsVerification(props.route.params.data)
+    if (options.user.method == 'SMS') {
+      await sendVerification({ phone_number: options.user.phone_number })
+    } else if (options.user.method == 'EMAIL') {
+      await sendVerification({ email: options.user.email })
+    }
     setIsLoading(false)
   }
 
+  const methodHandler = () => {
+    props.navigation.navigate('AuthTypes')
+  }
+
   return (
-      <>
-        {isLoading && <Loader/>}
-        <View style={styles.main}>
-          <Text style={styles.text}>Verification code has been set to your {phone_number ? `phone_number, ${phone_number}` : `email, ${email}` }</Text>
+    <>
+      {isLoading && <Loader />}
+      <View style={styles.main}>
+        <View>
+          {options.user.method != "2FA" ?
+            <Text style={styles.text}>Verification code has been sent to your {options.user.method == "SMS" ? `phone number, ${options.user.phone_number}` : `email, ${options.user.email}`}</Text>
+            :
+            <Text style={styles.text}>Enter your 6-digits code from Google Authenticator App</Text>
+          }
           <Input
             label="Enter Code"
             returnKeyType="next"
@@ -51,21 +77,30 @@ const Verification = (props) => {
             setValue={setCode}
             autoCapitalize="none"
             placeholder="Verification code"
-            errorText= {error && 'The code does not match' || networkError && 'Network Error'}
+            errorText={error && 'The code does not match' || networkError && 'Network Error'}
           />
-          
+
           <View>
             <Button mode="contained" onPress={clickHandler}>
               Verify
             </Button>
           </View>
-          <View style={styles.resend}>            
+          {options.user.method != "2FA" &&
+            <View style={styles.resend}>
               <Text>Didn't receive a code? </Text>
-              <TouchableOpacity onPress={clickHandlerResend}><Text style={styles.textPurple}>Resend</Text></TouchableOpacity>
-            
-          </View>
+              <TouchableOpacity onPress={handleVerification}><Text style={styles.textPurple}>Resend</Text></TouchableOpacity>
+            </View>
+          }
+
+
         </View>
-      </>
+        <View style={{ paddingTop: 15 }}>
+          <Button mode="contained" onPress={methodHandler}>
+            Change 2FA method
+          </Button>
+        </View>
+      </View>
+    </>
   )
 }
 export default Verification;
@@ -78,23 +113,23 @@ const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    alignContent: 'space-around'
+    alignContent: 'space-between',
+    justifyContent: "space-between"
   },
   text: {
-    margin: 12,
+    marginBottom: 5,
+    marginTop: 12,
     fontWeight: 'bold'
   },
   textPurple: {
-    color:'purple',
+    color: 'purple',
     fontWeight: 'bold'
   },
-  resend:{
-    paddingTop:7,
+  resend: {
+    paddingTop: 7,
     display: 'flex',
-    flexDirection: 'row', 
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end'
   }
-    
-
 })

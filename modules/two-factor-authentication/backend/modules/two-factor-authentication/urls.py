@@ -6,9 +6,10 @@ from .viewsets import *
 
 
 router = routers.DefaultRouter()
-router.register('phonenumber', PhoneNumberViewset)
+router.register('twofactorauth', PhoneNumberViewset)
 router.register('verify', VerifyViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('2fa', Google_AUTH.as_view()),
 ]
+

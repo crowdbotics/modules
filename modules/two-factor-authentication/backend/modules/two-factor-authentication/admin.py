@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import PhoneNumber, Verify
+from .models import TwoFactorAuth, Verify
 
 
-@admin.register(PhoneNumber)
+@admin.register(TwoFactorAuth)
 class AdminPhoneNumber(admin.ModelAdmin):
     list_display = ['id', 'phone_number', 'email']
 
@@ -10,5 +10,4 @@ class AdminPhoneNumber(admin.ModelAdmin):
 @admin.register(Verify)
 class AdminPhoneNumber(admin.ModelAdmin):
     list_display = ['id', 'phone_number', 'email', 'code']
-
 
