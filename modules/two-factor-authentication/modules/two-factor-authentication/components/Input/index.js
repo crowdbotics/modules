@@ -9,6 +9,7 @@ const Input = (props) => {
         style={styles.input}
         placeholder={props.placeholder}
         onChangeText={(num)=>props.setValue(num)}
+        placeholderTextColor='#ddd'
       />
       {props.errorText ? <Text style={styles.error}>{props.errorText}</Text> : null}
     </View>
@@ -24,7 +25,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     height: 40,
     padding: 10,
-    borderColor: 'lightgray'
+    borderColor: 'lightgray',
+    color: "#000",
+
   },
   error: {
     fontSize: 13,

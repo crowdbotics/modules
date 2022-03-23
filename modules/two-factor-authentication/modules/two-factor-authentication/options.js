@@ -19,11 +19,11 @@ const styles = StyleSheet.create({
 });
 
 let user = {
-  id: 43,
-  email: 'ropaxob383@f1xm.com',
-  phone_number: '+923346014141',
-  secret: '3232323232323232',
-  method: '2FA'
+  id: 45,
+  email: '',
+  phone_number: '',
+  secret: '',
+  method: ''
 }
 
 export default {

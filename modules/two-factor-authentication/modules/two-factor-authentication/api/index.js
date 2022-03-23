@@ -2,7 +2,7 @@
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL = "https://508b-111-88-84-164.ngrok.io" // global.url; // change your BASE_URL in `options/options.js` to edit this value
+const BASE_URL = "https://d5bb-39-53-80-200.ngrok.io" // global.url; // change your BASE_URL in `options/options.js` to edit this value
 
 export const sendVerification = async (data) => {
   try {
@@ -71,6 +71,21 @@ export const set2faMethod = async (data) => {
       body: JSON.stringify(data)
     })
     return response
+
+  } catch (error) {
+    throw new Error('NETWORK_ERROR').message
+  }
+}
+
+export const getUser = async (data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/modules/two-factor-authentication/twofactorauth/${data.id}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    return await response.json()
 
   } catch (error) {
     throw new Error('NETWORK_ERROR').message

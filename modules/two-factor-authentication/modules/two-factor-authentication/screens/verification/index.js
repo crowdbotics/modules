@@ -1,12 +1,13 @@
 
-import React, { useState, useEffect } from 'react'
-import { Text, StyleSheet, View, TouchableOpacity } from 'react-native'
+import React, { useState, useCallback} from 'react'
+import { Text, StyleSheet, View, TouchableOpacity} from 'react-native'
 import Input from '../../components/Input'
 import Button from '../../components/Button'
-import { sendVerification, verify2FA, verifyCode } from '../../api'
+import { sendVerification, getUser, verify2FA, verifyCode} from '../../api'
 import Loader from '../../components/Loader'
 import options from '../../options'
-
+// @ts-ignore
+import { useFocusEffect } from '@react-navigation/native';
 
 const Verification = (props) => {
   const [code, setCode] = useState('')
@@ -14,15 +15,22 @@ const Verification = (props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [networkError, setNetworkError] = useState(false)
 
-  useEffect(() => {
-    async () => {
-      if (options.user.method == '') {
+
+  useFocusEffect(useCallback(() => {
+    setError(false)
+    setIsLoading(true)
+    getUser({ id: options.user.id }).then(async res => {
+      options.user = res
+      setIsLoading(false)
+      if (!res.method) {
         methodHandler()
       } else {
         await handleVerification()
       }
-    }
-  }, [])
+      
+    })
+    
+  },[]))
 
   const clickHandler = async () => {
     try {
@@ -33,7 +41,7 @@ const Verification = (props) => {
       } else if (options.user.method == 'EMAIL') {
         response = await verifyCode({ code: +code, email: options.user.email })
       } else if (options.user.method == '2FA') {
-        response = await verify2FA({ otp: code })
+        response = await verify2FA({ id: options.user.id, otp: code })
       }
       setIsLoading(false)
       if (response.ok) {
@@ -81,7 +89,7 @@ const Verification = (props) => {
           />
 
           <View>
-            <Button mode="contained" onPress={clickHandler}>
+            <Button mode="contained" onPress={clickHandler} disabled={code=='' ? true : false}>
               Verify
             </Button>
           </View>
@@ -91,10 +99,8 @@ const Verification = (props) => {
               <TouchableOpacity onPress={handleVerification}><Text style={styles.textPurple}>Resend</Text></TouchableOpacity>
             </View>
           }
-
-
         </View>
-        <View style={{ paddingTop: 15 }}>
+        <View style={styles.pt15}>
           <Button mode="contained" onPress={methodHandler}>
             Change 2FA method
           </Button>
@@ -122,7 +128,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   textPurple: {
-    color: 'purple',
+    color: '#2E5984',
     fontWeight: 'bold'
   },
   resend: {
@@ -131,5 +137,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end'
+  },
+  pt15:{
+    paddingTop:15
   }
 })
