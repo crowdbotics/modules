@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from demo.settings import SENDGRID_API_KEY, ACCOUNT_SID, AUTH_TOKEN
+from demo.settings import *
 from .models import TwoFactorAuth, Verify
 from .serializers import PhoneNumberSerializer, VerifySerializer
 import os
@@ -38,7 +38,7 @@ class PhoneNumberViewset(ModelViewSet):
                 if registered_phone_num:
                     message = client.messages.create(
                         body="Your private code is {} don't share with anyone".format(otp_code),
-                        from_='+17575304751',
+                        from_=settings.PHONE,
                         to=phone,
                     )
                     if Verify.objects.filter(phone_number=registered_phone_num).exists():
@@ -57,7 +57,7 @@ class PhoneNumberViewset(ModelViewSet):
                 registered_email = TwoFactorAuth.objects.get(email=email)
                 if registered_email:
                     message = Mail(
-                        from_email='saad.abid@crowdbotics.com',
+                        from_email=settings.EMAIL,
                         to_emails=email,
                         subject='Crowdbotics 2FA code',
                         html_content='<strong>"Your OTP code is {}. Do not share with anyone"</strong>'.format(otp_code))
