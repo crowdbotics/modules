@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from demo.settings import *
+from demo import settings
+from demo.settings import ACCOUNT_SID, AUTH_TOKEN, SENDGRID_API_KEY
 from .models import TwoFactorAuth, Verify
 from .serializers import PhoneNumberSerializer, VerifySerializer
 import os
