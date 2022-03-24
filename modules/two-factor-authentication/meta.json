@@ -1,0 +1,11 @@
+{
+  "title": "Two Factor Authentication",
+  "description": "Two Factor Authentication Module",
+  "root": "/",
+  "schema": {
+    "buttonText": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
