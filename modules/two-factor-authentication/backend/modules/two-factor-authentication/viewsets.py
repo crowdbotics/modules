@@ -70,11 +70,7 @@ class PhoneNumberViewset(ModelViewSet):
                     try:
                         sg = SendGridAPIClient(SENDGRID_API_KEY)
                         response = sg.send(message)
-                        print(response.status_code)
-                        print(response.body)
-                        print(response.headers)
                     except Exception as e:
-                        print(e.body)
                     return Response({'message': "Verification code has been sent to your Email Address", 'status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
             except:
                 return Response({'message': "Your Email is not registered", 'status': status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
