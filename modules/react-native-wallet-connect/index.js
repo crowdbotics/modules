@@ -1,21 +1,12 @@
-import React from 'react';
+
 // @ts-ignore
-import { useWalletConnect, withWalletConnect } from '@walletconnect/react-native-dapp';
+import {  withWalletConnect } from '@walletconnect/react-native-dapp';
 // @ts-ignore
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
-import {Text, Button} from "react-native"
+import { LogBox, Platform} from "react-native"
+import App from './app';
 
-
-
-function App(){
-  const connector = useWalletConnect();
-  if (!connector.connected) {
-  
-    return <Button title="Connect" onPress={() => connector.connect()} />;
-  }
-  return <Button title="Kill Session" onPress={() => connector.killSession()} />;
-}
+LogBox.ignoreLogs(['react-native-gesture'])
 
 const WalletConnect = withWalletConnect(App, {
   redirectUrl: Platform.OS === 'web' ? window.location.origin : 'yourappscheme://',
