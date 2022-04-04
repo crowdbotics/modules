@@ -12,9 +12,6 @@ import Button from '../components/Button';
 import Web3 from 'web3'
 // @ts-ignore
 import WalletConnectProvider from '@walletconnect/web3-provider';
-// @ts-ignore
-import {ethers,providers} from 'ethers';
-
 
 const Home = (props) => {
   const connector = useWalletConnect();
@@ -71,16 +68,11 @@ const Home = (props) => {
     })
 
     await provider.enable();
-    const ethers_provider = await new providers.Web3Provider(provider);
-    const signer = ethers_provider.getSigner();
-
     const web = new Web3(provider);
 
     web.eth.getAccounts((err, res) => {
-      console.log(err, '=============',res)
-      web.eth.getBalance(res[0], (error,result)=>{
-        console.log(error,'aaaaaaaaaaa',result);
-        setBalance(result)
+      web.eth.getBalance(res[0], async (error, amount)=>{
+        setBalance(await web.utils.fromWei(amount, "ether"))
       })
     })
   }
@@ -104,14 +96,14 @@ const Home = (props) => {
               </TouchableOpacity>
             </View>
             <View>
-              <Text>Balance:{balance}</Text>
+              <Text>Balance: {balance}</Text>
             </View>
-            <View style={{display:'flex', flexDirection:'row', width:'100%' }}>
-              <View style={{width:'50%' }}>
-                <Button onPress={()=>{props.navigation.navigate('ReceiveTransaction', {data:connector._accounts[0]})}} style={{width:'50%'}}>Receieve Funds</Button >
+            <View style={{display:'flex', flexDirection:'row', width:'100%', marginTop: 20 }}>
+              <View style={{width:'50%', padding: 10 }}>
+                <Button onPress={()=>{props.navigation.navigate('ReceiveTransaction')}} style={{width:'50%'}}>Receive Funds</Button >
               </View>  
-              <View style={{ width:'50%' }}>
-                <Button  onPress={()=>{props.navigation.navigate('SendTransaction', {data:connector._accounts[0]})}} style={{width:'50%'}}>Send Funds</Button>
+              <View style={{ width:'50%', padding: 10 }}>
+                <Button  onPress={()=>{props.navigation.navigate('SendTransaction')}} style={{width:'50%'}}>Send Funds</Button>
               </View>
             </View>
 
