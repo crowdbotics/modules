@@ -14,6 +14,10 @@ const PaymentHistoryModal = (props) => {
 
     useEffect(() => {
         setRefresh(true);
+        get_payments()
+    }, [])
+
+    const get_payments = () => {
         fetchPaymentHistory()
           .then(response => response.json())
           .then(json => {
@@ -21,8 +25,7 @@ const PaymentHistoryModal = (props) => {
             setRefresh(false);
             setPaymentHistory({ status, data });
           });
-    }, [])
-
+    }
     const renderItem = ({ item }) => {
         if (!item) return;
         return (

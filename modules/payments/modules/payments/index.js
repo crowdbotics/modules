@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Text, View, FlatList, TouchableOpacity, Alert, Modal, Pressable } from 'react-native';
+import { Platform } from 'react-native';
 import { OptionsContext, GlobalOptionsContext } from "@options";
 import { StripeProvider } from '@stripe/stripe-react-native';
 import { CheckoutScreen } from "./checkout";
@@ -17,8 +17,6 @@ const Payments = (params) => {
   const { stripePublishKey, merchantIdentifier } = localOptions;
   // More info on all the options is below in the API Reference... just some common use cases shown here
 
-
-
   return (
     <ScrollView>
       <StripeProvider
@@ -29,7 +27,9 @@ const Payments = (params) => {
       </StripeProvider>
 
       <PaymentHistoryModal></PaymentHistoryModal>
-      <InappPurchase></InappPurchase>
+      {Platform.OS == 'ios' && 
+        <InappPurchase></InappPurchase>
+      }
       
     </ScrollView>
   );
