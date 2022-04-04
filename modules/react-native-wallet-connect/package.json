@@ -18,7 +18,8 @@
     "react-native-camera": "4.2.1",
     "react-native-permissions": "^2.0.10",
     "web3":"^1.7.1",
-    "ethers":"^5.4.7"
+    "ethers":"^5.4.7",
+    "react-native-qrcode-svg":"6.1.2"
   },
   "x-dependencies": {
     "@walletconnect/react-native-dapp":"1.4.1",
@@ -27,6 +28,7 @@
     "react-native-qrcode-scanner": "1.5.5",
     "react-native-camera": "4.2.1",
     "react-native-permissions": "^2.0.10",
-    "web3":"^1.7.1"
+    "web3":"^1.7.1",
+    "react-native-qrcode-svg":"6.1.2"
   }
 }

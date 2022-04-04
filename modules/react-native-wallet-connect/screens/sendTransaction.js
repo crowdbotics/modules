@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import {View, Text,TouchableOpacity, TextInput,Button,StyleSheet} from 'react-native' ;
+import {View, Text,TouchableOpacity, TextInput,StyleSheet} from 'react-native' ;
 // @ts-ignore
 import Web3 from 'web3';
 // @ts-ignore
@@ -10,31 +10,33 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import { RNCamera } from 'react-native-camera';
 // @ts-ignore
 import QRCodeScanner from 'react-native-qrcode-scanner'
-import { globalConnector } from './home';
-
+import { globalConnector,parseAddress } from '../utils';
+import Input from '../components/TextInput';
+import Button from '../components/Button';
+import Loader from '../components/Loader';
 
 const SendTransaction= (props)=>{
     const {data}=props.route.params
     const [sender,setSender]=useState('')
     const [qr,setQr]=useState(false)
-    const [reciever, setReciever]= useState('')
-    const [amount,setAmount] = useState('')
+    const [receiver, setReceiver]= useState('')
+    const [amount,setAmount] = useState('0.01')
+    const [isLoading, setIsLoading]=useState(false)
 
     useEffect(()=>{
       setSender(data)
-      console.log('globalConnector', globalConnector)
     }, [])
 
     const onSuccess = e => {
-      console.log(e)
-      setReciever(e.data)
+      const address=parseAddress(e.data).address
+      setReceiver(address)
       setQr(false)  
     }
 
 
     const StartTransaction = async () =>{
 
-
+      setIsLoading(true)
       const provider = new WalletConnectProvider({
         rpc:{
           97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
@@ -46,41 +48,57 @@ const SendTransaction= (props)=>{
 
       await provider.enable();
       const ethers_provider = await new providers.Web3Provider(provider);
-      console.log('ethers_provider', ethers_provider)
       const signer = ethers_provider.getSigner();
 
       const web = new Web3(provider);
 
-
       const tx = {
         from: sender,
-        to: "0x2784BdD74FC4E0FA6eDDfE2d6e77B60B1936c7DC",
+        to: receiver,
         gas:250000,
-        value:web.utils.toWei(String(0.01)),
+        value:web.utils.toWei(amount),
       }
-
-      const txHash = await web.eth.sendTransaction(tx)
-
-
+      web.eth.sendTransaction(tx, (err,transactionHash) => {
+          setIsLoading(false)
+      })
     }
 
-    console.log(props.route.params.data)
     return(
+      <View>
+        {isLoading && <Loader/>}
         <View style={{padding:10}}>
           {!qr ? <>
-            <View style={{display:'flex', flexDirection:'row',alignItems:'center',padding:10}}>
-              <Text>From:</Text>
-              <TextInput style={{width:'90%', backgroundColor:'white', color:'black'}}>{sender}</TextInput>
+            <View style={{display:'flex', flexDirection:'row',alignItems:'center'}}>
+              <View style={{width: '15%'}}>
+                <Text style={{paddingRight: 10}}>From:</Text>
+              </View>
+              <View style={{width: '95%'}}>
+                <Input style={{ color:'black'}} editable={false} value={sender}/>
+              </View>
             </View>
-            <View style={{display:'flex', flexDirection:'row',alignItems:'center', justifyContent:'space-between',padding:10}}>
-              <Text>To:</Text>
-              <View style={{display:'flex',flexDirection:'row',alignItems:'center', width:'90%', }}>
-                <TextInput style={{width:'90%', backgroundColor:'white', color:'black'}}>{reciever}</TextInput>
-                <TouchableOpacity onPress={()=>setQr(true)}>
-                  <Text style={{color:'red'}}>QR</Text>
-                </TouchableOpacity>
+            <View style={{display:'flex', flexDirection:'row',alignItems:'center'}}>
+              <View style={{width: '15%'}}>
+                <Text style={{paddingRight: 10}}>To:</Text>
+              </View>
+              <View style={{display:'flex',flexDirection:'row', alignItems:'center',}}>
+                <View style={{width: '80%'}}>
+                  <Input style={{ color:'black'}} value={receiver} setValue={setReceiver} placeholder='Receiver Address'/>
+                </View>
+                <View style={{width: '15%'}}>
+                  <Button onPress={()=>setQr(true)}>
+                    QR
+                  </Button>
+                </View>
               </View>
             </View> 
+              <View style={{display:'flex', flexDirection:'row',alignItems:'center'}}>
+                <View style={{width: '15%'}}>
+                  <Text style={{paddingRight: 10}}>Amount:</Text>
+                </View>
+                <View style={{width: '95%'}}>
+                  <Input style={{ color:'black'}} setValue={setAmount} value={amount}/>
+                </View>
+              </View>
             </> : <QRCodeScanner
             onRead={onSuccess}
             flashMode={RNCamera.Constants.FlashMode.torch}
@@ -97,13 +115,11 @@ const SendTransaction= (props)=>{
             />
           }
         
-          <TouchableOpacity >
-            <Text style={{color:'red'}} onPress={()=>StartTransaction()}>Send</Text>
-          </TouchableOpacity>
+          {!qr && <Button onPress={()=>StartTransaction()}>Send</Button>}
           
         </View>
+      </View>  
     )
-
 }
 
 const styles = StyleSheet.create({
