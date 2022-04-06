@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-// @ts-ignore
-import Web3 from 'web3';
-// @ts-ignore
-import { providers } from 'ethers';
-// @ts-ignore
-import WalletConnectProvider from '@walletconnect/web3-provider';
+import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid } from 'react-native';
 // @ts-ignore
 import { RNCamera } from 'react-native-camera';
 // @ts-ignore
 import QRCodeScanner from 'react-native-qrcode-scanner'
-import { globalConnector, parseAddress } from '../utils';
+import { globalConnector, parseAddress, walletProvider,fundTransfer } from '../utils';
 import Input from '../components/TextInput';
 import Button from '../components/Button';
 import Loader from '../components/Loader';
@@ -21,9 +15,20 @@ const SendTransaction = (props) => {
   const [receiver, setReceiver] = useState('')
   const [amount, setAmount] = useState('0.01')
   const [isLoading, setIsLoading] = useState(false)
+  const [toast, setToast]= useState(false)
+  const [transactionError, setTransactionError]= useState(false)
+
+  useEffect(()=>{
+    if(toast && !isLoading){
+      props.navigation.goBack()
+    }
+  },[toast])
 
   useEffect(() => {
     setSender(globalConnector._accounts[0])
+    setToast(false)
+    setTransactionError(false)
+
   }, [])
 
   const onSuccess = e => {
@@ -32,35 +37,29 @@ const SendTransaction = (props) => {
     setQr(false)
   }
 
-
   const StartTransaction = async () => {
 
     setIsLoading(true)
-    const provider = new WalletConnectProvider({
-      rpc: {
-        97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-      },
-      chainId: 97,
-      connector: globalConnector,
-      qrcode: false,
-    })
-
-    await provider.enable();
-    const ethers_provider = await new providers.Web3Provider(provider);
-    const signer = ethers_provider.getSigner();
-
-    const web = new Web3(provider);
-
-    const tx = {
-      from: sender,
-      to: receiver,
-      gas: 250000,
-      value: web.utils.toWei(amount),
-    }
-    web.eth.sendTransaction(tx, (err, transactionHash) => {
+    const provider = walletProvider()
+    fundTransfer(provider,sender,receiver,amount).then((res)=>{
       setIsLoading(false)
+      setToast(true)
+    }).catch((e)=>{
+      setIsLoading(false)
+      setTransactionError(true)
     })
+    
   }
+
+  const showToastWithGravity = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      50
+    );
+  };
 
   return (
     <View>
@@ -114,10 +113,14 @@ const SendTransaction = (props) => {
         />
         }
 
-        {!qr && <Button onPress={() => StartTransaction()}>Send</Button>}
+        {!qr && <Button onPress={() => StartTransaction()} disabled={!receiver || !sender || !amount ? true : false}>Send</Button>}
+        {toast && showToastWithGravity('Transaction successful')}
+        {transactionError && !toast && showToastWithGravity('request rejected')}
 
       </View>
+
     </View>
+
   )
 }
 

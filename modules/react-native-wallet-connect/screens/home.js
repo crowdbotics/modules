@@ -6,7 +6,7 @@ import { Text, View, TouchableOpacity,} from "react-native"
 import {  useFocusEffect } from '@react-navigation/native'
 // @ts-ignore
 import {SvgUri} from 'react-native-svg';
-import { globalConnector, setGlobalConnector } from '../utils';
+import { globalConnector, setGlobalConnector, walletProvider } from '../utils';
 import Button from '../components/Button';
 // @ts-ignore
 import Web3 from 'web3'
@@ -50,27 +50,32 @@ const Home = (props) => {
       setIsSwitch(true)
       setChangeWallet(false)
     } 
+    // if(connector.connected){
+    //   getAccount()
+    // }
    
   }, [connector])
 
-  useEffect(()=>{
-    getAccount()
-  }, [connector])
+  useFocusEffect(
+    React.useCallback(()=>{
+      if(globalConnector){
+        
+        getAccount()
+      }
+    },[globalConnector])
+  )
+
+
 
   const getAccount = async () => {
-    const provider = new WalletConnectProvider({
-      rpc:{
-        97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-      },
-      chainId:97,
-      connector: globalConnector,
-      qrcode: false,
-    })
-
+    
+    const provider=walletProvider()
     await provider.enable();
     const web = new Web3(provider);
 
+  
     web.eth.getAccounts((err, res) => {
+      
       web.eth.getBalance(res[0], async (error, amount)=>{
         setBalance(await web.utils.fromWei(amount, "ether"))
       })
@@ -89,14 +94,14 @@ const Home = (props) => {
                   height = "50"
                   width = "50"
                 /> 
-                <Text style={{alignSelf:'center'}}>{connectedWallet.name}</Text>
+                <Text style={{alignSelf:'center', width: 80}} numberOfLines={1} ellipsizeMode='middle'>{globalConnector && globalConnector._accounts}</Text>
               </View>
               <TouchableOpacity  onPress={() => connector.killSession()} >
                 <Text style={{color:'red', fontWeight:'bold'}}>Kill Session</Text>
               </TouchableOpacity>
             </View>
-            <View>
-              <Text>Balance: {balance}</Text>
+            <View style={{padding:10}}>
+              <Text>Balance: {balance ? `${balance} ETH` : '--'}</Text>
             </View>
             <View style={{display:'flex', flexDirection:'row', width:'100%', marginTop: 20 }}>
               <View style={{width:'50%', padding: 10 }}>
@@ -105,6 +110,9 @@ const Home = (props) => {
               <View style={{ width:'50%', padding: 10 }}>
                 <Button  onPress={()=>{props.navigation.navigate('SendTransaction')}} style={{width:'50%'}}>Send Funds</Button>
               </View>
+            </View>
+            <View style={{padding: 10 }}>
+                <Button  onPress={()=>{props.navigation.navigate('TransactionHistory')}}>Transaction History</Button>
             </View>
 
           </> }
