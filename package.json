@@ -41,7 +41,7 @@
     "ajv-formats": "^2.1.1",
     "find": "^0.3.0",
     "fs-extra": "^10.0.0",
-    "prettier": "^2.3.2"
+    "prettier": "^2.6.2"
   },
   "devDependencies": {
     "@react-native-community/cli": "5.0.1",
