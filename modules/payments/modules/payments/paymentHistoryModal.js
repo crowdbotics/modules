@@ -19,8 +19,7 @@ const PaymentHistoryModal = (props) => {
 
     const get_payments = () => {
         fetchPaymentHistory()
-          .then(response => response.json())
-          .then(json => {
+          .then(json => {   
             const { status, data } = json;
             setRefresh(false);
             setPaymentHistory({ status, data });

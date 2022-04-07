@@ -7,7 +7,7 @@ Payment module supports following functionalities
 - Stripe Payment
 - Apple Pay (through stripe)
 - Google Pay (through stripe)
-- [Apple inApp Purchase (through apple)](#headin)
+- [Apple In-App Purchase (through apple)](#headin)
 
 # Setup iOS
 Follow following steps to setup the project in iOS.
@@ -20,7 +20,7 @@ Follow following steps to setup the project in iOS.
 - select the project and click on `build settings` search for `Library Search Paths` double click values and remove all swift related entries such as: \$(TOOLCHAIN_DIR)/usr/lib/swift/\$(PLATFORM_NAME) and \$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/\$(PLATFORM_NAME)
 
 
-### **Setup Apple inAPP purchase Local testing environment**
+### **Setup Apple In-App Purchase Local testing environment**
 
 - Create a new file to the project `File > New > File > StoreKit Configuration File`, give it a name (e.g. Configuration).
 - you will see a UI to add products click + icon and choose from options
@@ -32,7 +32,7 @@ Follow following steps to setup the project in iOS.
 
 *(not required step)* You can see sample product configurations in the provided file `ios/Configuration.storekit.sample` copy all the data from this file to your created configuration file if you dont want to create your own products.
    
-### **Setup apple inAPP purchases backend<a name="headin"></a>**
+### **Setup apple In-App Purchases backend<a name="headin"></a>**
 - visit **http://127.0.0.1:8000/admin/payments/appleiapproduct/**
 - Add new Record with 
   - **`name`** (any name)
@@ -46,42 +46,72 @@ Follow following steps to setup the project in iOS.
 # Setup Android
 
 
-in `AndroidManifest.xml` file add following
+in `android/app/src/main/AndroidManifest.xml` file add following
+```
+<application> 
+    ...
+    <meta-data android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
+    ...
+</application>
+```
 
-    <application> 
-        ...
-        <meta-data android:name="com.google.android.gms.wallet.api.enabled"
-                android:value="true" />
-        ...
-    </application>
+in `android/app/build.gradle` file add following
+```
+dependencies {
+  ....
+
+  implementation 'com.stripe:stripe-android:18.2.0'
+
+}
+
+defaultConfig {
+  ....
+
+  missingDimensionStrategy 'store', 'play'
+
+}
+
+dexOptions {
+    javaMaxHeapSize "4G"
+}
+```
+in `android/build.gradle` change following
+```
+ext {
+    buildToolsVersion = "30.0.3"
+    minSdkVersion = 21
+    compileSdkVersion = 30
+    targetSdkVersion = 30
+    ndkVersion = "20.1.5948944"
+}
+```
+in `android/gradle.properties` add
+```
+org.gradle.jvmargs=-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8
+
+```
 
 
-in `app/build.gradle` file add following
-
-    dependencies {
-        ....
-    
-        implementation 'com.stripe:stripe-android:18.2.0'
-
-    }
 
 
 # Global configs
 in options/options.js
 
 configue your server endpoints like this
-
-    export const globalOptions = {
-      ....
-        url: "http://192.168.100.7:8000",
-        api: "http://192.168.100.7:8000/api/v1",
-        stripe_secret_key: "sk_test_xxxxxxxx"
-    }
+```
+export const globalOptions = {
+  ....
+  url: "http://192.168.100.7:8000",
+  api: "http://192.168.100.7:8000/api/v1",
+  stripe_secret_key: "sk_test_xxxxxxxx"
+}
+```
 
 ### Server connection with you simulator or device
 
 ```console
 foo@bar:~$ python manage.py runserver 192.168.100.7:8000
 ```
-here `ip` is local ip (can get it from `ifconfig` in terminal of your network settings)
+here `ip (192.168.100.7)` is local ip (can get it by running `ifconfig` in terminal or from your network settings)
 and make sure your device and computer are on same network.
