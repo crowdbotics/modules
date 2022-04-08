@@ -20,10 +20,10 @@ Modern React Native components guidelines:
 - Prefer redux-thunk over redux-saga
 - Prefer pure components
 
-Run pre-configured ESLint with:
+Run pre-configured ESLint on your module with:
 
 ```
-yarn lint
+yarn run eslint modules/<your-module>
 ```
 
 ## package.json
