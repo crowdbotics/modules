@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 // @ts-ignore
 import QRCode from 'react-native-qrcode-svg'
-import { View } from 'react-native'
+import { View,StyleSheet } from 'react-native'
 import {  walletProvider, } from '../utils';
+
 
 
 const ReceiveTransaction = () => {
@@ -20,7 +21,7 @@ const ReceiveTransaction = () => {
   }
 
   return (
-    <View style={{display: "flex", flex: 1, alignSelf: "center", alignContent: "center", alignItems: "center", height: "100%", justifyContent: "center"}}>
+    <View style={styles.receive}>
       {account &&
         <QRCode
           value={account}
@@ -29,5 +30,7 @@ const ReceiveTransaction = () => {
     </View>
   )
 }
-
+const styles=StyleSheet.create({
+  receive:{display: "flex", flex: 1, alignSelf: "center", alignContent: "center", alignItems: "center", height: "100%", justifyContent: "center"}
+})
 export default ReceiveTransaction

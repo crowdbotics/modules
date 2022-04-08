@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import { useWalletConnect} from '@walletconnect/react-native-dapp';
-import { Text, View, TouchableOpacity,} from "react-native"
+import { Text, View, TouchableOpacity,StyleSheet} from "react-native"
 // @ts-ignore
 import {  useFocusEffect } from '@react-navigation/native'
-// @ts-ignore
-import {SvgUri} from 'react-native-svg';
 import { globalConnector, setGlobalConnector, walletProvider } from '../utils';
 import Button from '../components/Button';
 // @ts-ignore
 import Web3 from 'web3'
-// @ts-ignore
-import WalletConnectProvider from '@walletconnect/web3-provider';
+
 
 const Home = (props) => {
   const connector = useWalletConnect();
   const [connectedWallet, setConnectedWallet] = useState(null)
   const [isSwitch, setIsSwitch] = useState(false)
   const [changeWallet, setChangeWallet] = useState(false)
-  const [balance, setBalance] = useState('')
+  const [balance, setBalance] = useState(null)
 
   useFocusEffect(
     React.useCallback(() => {
@@ -42,6 +39,8 @@ const Home = (props) => {
 
   const switchSession=async ()=>{
     await connector.killSession()
+    setBalance('0')
+    setGlobalConnector(null)
     setChangeWallet(true)
   }
 
@@ -53,18 +52,20 @@ const Home = (props) => {
     // if(connector.connected){
     //   getAccount()
     // }
-   
   }, [connector])
 
   useFocusEffect(
     React.useCallback(()=>{
       if(globalConnector){
-        
         getAccount()
       }
-    },[globalConnector])
+    },[])
   )
-
+    useEffect(()=>{
+      if(globalConnector){
+        getAccount()
+      }
+    }, [globalConnector])
 
 
   const getAccount = async () => {
@@ -84,40 +85,35 @@ const Home = (props) => {
 
   return (
     
-      <View style={{height: '100%', display: "flex", flexDirection:'column', justifyContent: "space-between", padding: 10}}>
+      <View style={styles.container}>
         <View>
           { connector.connected && connectedWallet && <>
-            <View style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent: "space-between"}}> 
-              <View style={{display:'flex', flexDirection:'row', alignItems:'center'}}>  
-                <SvgUri
-                  uri = {connectedWallet.icons[0]}
-                  height = "50"
-                  width = "50"
-                /> 
-                <Text style={{alignSelf:'center', width: 80}} numberOfLines={1} ellipsizeMode='middle'>{globalConnector && globalConnector._accounts}</Text>
+            <View style={styles.top}> 
+              <View style={styles.account}>  
+                <Text style={styles.accountText} numberOfLines={1} ellipsizeMode='middle'>{globalConnector && globalConnector._accounts}</Text>
               </View>
               <TouchableOpacity  onPress={() => connector.killSession()} >
-                <Text style={{color:'red', fontWeight:'bold'}}>Kill Session</Text>
+                <Text style={styles.kill}>Kill Session</Text>
               </TouchableOpacity>
             </View>
-            <View style={{padding:10}}>
-              <Text>Balance: {balance ? `${balance} ETH` : '--'}</Text>
+            <View style={styles.pt10}>
+              <Text>Balance: {balance ? `${balance}ETH` : '...'}</Text>
             </View>
-            <View style={{display:'flex', flexDirection:'row', width:'100%', marginTop: 20 }}>
-              <View style={{width:'50%', padding: 10 }}>
+            <View style={styles.funds}>
+              <View style={styles.fundButton}>
                 <Button onPress={()=>{props.navigation.navigate('ReceiveTransaction')}} style={{width:'50%'}}>Receive Funds</Button >
               </View>  
-              <View style={{ width:'50%', padding: 10 }}>
+              <View style={styles.fundButton}>
                 <Button  onPress={()=>{props.navigation.navigate('SendTransaction')}} style={{width:'50%'}}>Send Funds</Button>
               </View>
             </View>
-            <View style={{padding: 10 }}>
+            <View style={styles.pt10}>
                 <Button  onPress={()=>{props.navigation.navigate('TransactionHistory')}}>Transaction History</Button>
             </View>
 
           </> }
         </View>
-        <View style={{display: 'flex', justifyContent:'center', alignItems:'center'}}>
+        <View style={styles.connectText}>
             {!connector.connected && <Text style={{fontWeight:'bold'}}>Connect your Wallet</Text>}
         </View>
         <View>
@@ -127,4 +123,32 @@ const Home = (props) => {
     
   )
 }
+
+const styles=StyleSheet.create({
+  container:{
+    height: '100%', 
+    display: "flex", 
+    flexDirection:'column', 
+    justifyContent: "space-between", 
+    padding: 10
+  },
+  top:{
+    display:'flex', 
+    flexDirection:'row', 
+    alignItems:'center', 
+    justifyContent: "space-between"
+  },
+  account:{
+    display:'flex', 
+    flexDirection:'row', 
+    alignItems:'center'
+  },
+  accountText:{display:'flex', flexDirection:'row', width:80, marginTop: 20 },
+  kill:{color:'red', fontWeight:'bold'},
+  pt10:{paddingVertical:10},
+  funds:{display:'flex', flexDirection:'row', width:'100%', marginTop: 20 },
+  fundButton:{width:'50%', padding: 10 },
+  connectText: {display: 'flex', justifyContent:'center', alignItems:'center'},
+
+})
 export default Home

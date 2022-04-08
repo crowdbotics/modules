@@ -7,6 +7,21 @@ import Web3 from 'web3';
 
 export let globalConnector;
 
+export const currencyData=[
+  {
+    chainId:97,
+    title:'Binance'
+  },
+  {
+    chainId:3,
+    title:'Ropsten'
+  },
+  {
+    chainId:43113,
+    title:'Avalanche'
+  }  
+]
+
 export const setGlobalConnector = (connector) => {
   globalConnector = connector
 }
@@ -59,3 +74,12 @@ export const fundTransfer = (provider, sender, receiver, amount) => {
     })
   })
 }
+
+
+export const switchMetamask = async (chainId) => {
+  return globalConnector.sendCustomRequest({
+    method: "wallet_switchEthereumChain",
+    params: [{ "chainId": chainId }],
+  })
+    
+};

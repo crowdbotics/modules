@@ -66,35 +66,35 @@ const SendTransaction = (props) => {
       {isLoading && <Loader />}
       <View style={{ padding: 10 }}>
         {!qr ? <>
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ width: '20%' }}>
+          <View style={styles.center}>
+            <View style={styles.wp20}>
               <Text style={{ paddingRight: 10 }}>From:</Text>
             </View>
-            <View style={{ width: '80%' }}>
-              <Input style={{ color: 'black' }} editable={false} value={sender} />
+            <View style={styles.wp80}>
+              <Input style={styles.blackColor} editable={false} value={sender} />
             </View>
           </View>
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ width: '20%' }}>
+          <View style={styles.center}>
+            <View style={styles.wp20}>
               <Text style={{ paddingRight: 10 }}>To:</Text>
             </View>
-            <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-              <View style={{ width: '74%' }}>
-                <Input style={{ color: 'black' }} value={receiver} setValue={setReceiver} placeholder='Receiver Address' />
+            <View style={styles.center}>
+              <View style={styles.wp74}>
+                <Input style={styles.blackColor} value={receiver} setValue={setReceiver} placeholder='Receiver Address' />
               </View>
-              <View style={{ width: '15%' }}>
+              <View style={styles.wp15}>
                 <Button onPress={() => setQr(true)}>
                   QR
                 </Button>
               </View>
             </View>
           </View>
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{ width: '20%' }}>
+          <View style={styles.center}>
+            <View style={styles.wp20}>
               <Text style={{ paddingRight: 10 }}>Amount:</Text>
             </View>
-            <View style={{ width: '80%' }}>
-              <Input style={{ color: 'black' }} setValue={setAmount} value={amount} />
+            <View style={styles.wp80}>
+              <Input style={styles.blackColor} setValue={setAmount} value={amount} />
             </View>
           </View>
         </> : <QRCodeScanner
@@ -141,7 +141,13 @@ const styles = StyleSheet.create({
   },
   buttonTouchable: {
     padding: 16
-  }
+  },
+  center:{ display: 'flex', flexDirection: 'row', alignItems: 'center' },
+  wp20:{ width: '20%' },
+  wp80:{ width: '80%' },
+  blackColor: {color:'black'},
+  wp15:{width:'15%'},
+  wp74:{width:'74%'}
 });
 
 export default SendTransaction

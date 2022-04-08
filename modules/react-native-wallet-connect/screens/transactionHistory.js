@@ -2,18 +2,21 @@ import React, { useState, useEffect } from 'react'
 import { globalConnector, walletProvider } from '../utils'
 // @ts-ignore
 import Web3 from 'web3';
-import { Text, SectionList, View } from 'react-native'
+import { Text, SectionList, View,StyleSheet } from 'react-native'
+import Loader from '../components/Loader';
 
 const TransactionHistory = () => {
 
   const [transactionList, setTransactionList] = useState([])
-  // const [received, setReceived] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    a()
+    setIsLoading(true)
+    getTransactionHistory()
   }, [])
+  
 
-  const a = async () => {
+  const getTransactionHistory = async () => {
     const provider = walletProvider()
     provider.enable()
     const web = new Web3(provider)
@@ -34,6 +37,7 @@ const TransactionHistory = () => {
         }
       }
       setTransactionList(transaction)
+      setIsLoading(false)
     }
   }
   
@@ -42,42 +46,54 @@ const TransactionHistory = () => {
   // }
   const Item = ({title}) =>{
     return(
-        <View style={{backgroundColor:'white', borderRadius:6, padding:10, marginVertical:9}}>
-            <View style={{display:'flex', flexDirection:'row', }}> 
-                <Text style={{width:'20%'}}>From</Text>
+    
+        
+        <View style={styles.container}>
+            <View style={styles.center}> 
+                <Text style={styles.wp20}>From</Text>
                 <Text style={{width:100}} numberOfLines={1} ellipsizeMode='middle'>{title.from}</Text>
             </View>
-            <View style={{ display:'flex', flexDirection:'row', }}> 
-                <Text style={{width:'20%'}}>To:</Text>
+            <View style={styles.center}> 
+                <Text style={styles.wp20}>To:</Text>
                 <Text style={{width:100}} numberOfLines={1} ellipsizeMode='middle'>{title.to}</Text>
             </View>
-            <View style={{display:'flex', flexDirection:'row', }}> 
-                <Text style={{width:'20%'}}>Amount</Text>
+            <View style={styles.center}> 
+                <Text style={styles.wp20}>Amount</Text>
                 <Text>{parseInt(title.value).toFixed(4)}</Text>
             </View>        
         
         </View>
+       
     )
     }
 
 
   return (
-    <View style={{padding:10}}>
-
-      {transactionList.length ? <SectionList
-        sections={[{
-          title: 'Transactions',
-          data: transactionList
-        }]}
-        keyExtractor={(item, index) => item + index}
-        renderItem={({ item }) => <Item title={item} />}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text>{title}</Text>
-        )} /> : null}
-    </View>
+    <>
+      {isLoading && <Loader/>}
+      <View style={{padding:10}}>
+        
+        {transactionList.length ? <SectionList
+          sections={[{
+            title: 'Transactions',
+            data: transactionList
+          }]}
+          keyExtractor={(item, index) => item + index}
+          renderItem={({ item }) => <Item title={item} />}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text>{title}</Text>
+          )} /> : null}
+      </View>
+    </>  
   )
 
 
 }
+const styles = StyleSheet.create({
+  container:{backgroundColor:'white', borderRadius:6, padding:10, marginVertical:9},
+  center:{display:'flex', flexDirection:'row', },
+  wp20:{ width: '20%' }
+
+});
 
 export default TransactionHistory

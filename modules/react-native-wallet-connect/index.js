@@ -3,7 +3,7 @@ import React from 'react';
 import WalletConnectProvider from '@walletconnect/react-native-dapp';
 // @ts-ignore
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LogBox, Platform} from "react-native"
+import { LogBox,Platform} from "react-native"
 import App from './app';
 
 LogBox.ignoreLogs(['react-native-gesture'])
@@ -18,6 +18,7 @@ const WalletConnect=()=>{
         icons: ['https://walletconnect.org/walletconnect-logo.png'],
         name: 'WalletConnect',
       }}
+      
       redirectUrl={Platform.OS === 'web' ? window.location.origin : 'yourappscheme://'}
       storageOptions= {{
         asyncStorage: AsyncStorage,
@@ -26,13 +27,6 @@ const WalletConnect=()=>{
     </WalletConnectProvider>
   )
 }
-
-// const WalletConnect = withWalletConnect(App, {
-//   redirectUrl: Platform.OS === 'web' ? window.location.origin : 'yourappscheme://',
-//   storageOptions: {
-//     asyncStorage: AsyncStorage,
-//   },
-// });
 
 export default {
   title: "WalletConnect",
