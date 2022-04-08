@@ -17,7 +17,8 @@
     "raw": "node scripts/raw.js",
     "template": "node scripts/template.js",
     "bootstrap": "npm run demo; npm run raw; npm run cookie; npm run parse",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "yarn run eslint modules"
   },
   "repository": {
     "type": "git",
@@ -45,6 +46,12 @@
   },
   "devDependencies": {
     "@react-native-community/cli": "5.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-react": "^7.29.4",
     "react-native": "0.64.2"
   }
 }

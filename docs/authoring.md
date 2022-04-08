@@ -20,6 +20,12 @@ Modern React Native components guidelines:
 - Prefer redux-thunk over redux-saga
 - Prefer pure components
 
+Run pre-configured ESLint with:
+
+```
+yarn lint
+```
+
 ## package.json
 
 Your module's `main` key should always point to `index.js`. We also suggest that you name your module with a namespace prefix `@modules` like in the example below.
