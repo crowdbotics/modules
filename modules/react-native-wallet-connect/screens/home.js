@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import { useWalletConnect} from '@walletconnect/react-native-dapp';
-import { Text, View, TouchableOpacity,StyleSheet} from "react-native"
+import { Text, View, TouchableOpacity,StyleSheet, TouchableHighlight, Image} from "react-native"
 // @ts-ignore
 import {  useFocusEffect } from '@react-navigation/native'
 import { globalConnector, setGlobalConnector, walletProvider } from '../utils';
 import Button from '../components/Button';
 // @ts-ignore
 import Web3 from 'web3'
-
+// @ts-ignore
+import refreshIcon from "../refresh-icon.png"
 
 const Home = (props) => {
   const connector = useWalletConnect();
@@ -39,7 +40,7 @@ const Home = (props) => {
 
   const switchSession=async ()=>{
     await connector.killSession()
-    setBalance('0')
+    setBalance(null)
     setGlobalConnector(null)
     setChangeWallet(true)
   }
@@ -69,7 +70,7 @@ const Home = (props) => {
 
 
   const getAccount = async () => {
-    
+    setBalance(null)
     const provider=walletProvider()
     await provider.enable();
     const web = new Web3(provider);
@@ -96,15 +97,18 @@ const Home = (props) => {
                 <Text style={styles.kill}>Kill Session</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.pt10}>
-              <Text>Balance: {balance ? `${balance}ETH` : '...'}</Text>
+            <View style={[styles.pt10, {display: "flex", flexDirection: "row"}]}>
+              <Text>Balance: {balance ? `${balance}ETH` : '--'}</Text>
+              <TouchableOpacity style={{marginLeft: 10}} onPress={async () => await getAccount()}>
+                <Image style={styles.refreshIcon} source={refreshIcon}/>
+              </TouchableOpacity>
             </View>
             <View style={styles.funds}>
               <View style={styles.fundButton}>
-                <Button onPress={()=>{props.navigation.navigate('ReceiveTransaction')}} style={{width:'50%'}}>Receive Funds</Button >
+                <Button onPress={()=>{props.navigation.navigate('ReceiveTransaction')}}>Receive Funds</Button >
               </View>  
               <View style={styles.fundButton}>
-                <Button  onPress={()=>{props.navigation.navigate('SendTransaction')}} style={{width:'50%'}}>Send Funds</Button>
+                <Button  onPress={()=>{props.navigation.navigate('SendTransaction')}}>Send Funds</Button>
               </View>
             </View>
             <View style={styles.pt10}>
@@ -136,19 +140,23 @@ const styles=StyleSheet.create({
     display:'flex', 
     flexDirection:'row', 
     alignItems:'center', 
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    marginTop: 10
   },
   account:{
     display:'flex', 
     flexDirection:'row', 
     alignItems:'center'
   },
-  accountText:{display:'flex', flexDirection:'row', width:80, marginTop: 20 },
+  accountText:{display:'flex', flexDirection:'row', width: 80 },
   kill:{color:'red', fontWeight:'bold'},
   pt10:{paddingVertical:10},
-  funds:{display:'flex', flexDirection:'row', width:'100%', marginTop: 20 },
-  fundButton:{width:'50%', padding: 10 },
+  funds:{display:'flex', flexDirection:'row', width:'100%', justifyContent: "space-between", marginTop: 20 },
+  fundButton:{width: '48%' },
   connectText: {display: 'flex', justifyContent:'center', alignItems:'center'},
-
+  refreshIcon: {
+    width: 20,
+    height: 20,
+  }
 })
 export default Home

@@ -54,7 +54,7 @@ const SendTransaction = (props) => {
   const showToastWithGravity = (message) => {
     ToastAndroid.showWithGravityAndOffset(
       message,
-      ToastAndroid.LONG,
+      ToastAndroid.SHORT,
       ToastAndroid.BOTTOM,
       25,
       50
