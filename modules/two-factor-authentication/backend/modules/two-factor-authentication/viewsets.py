@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from demo import settings
-from demo.settings import ACCOUNT_SID, AUTH_TOKEN, SENDGRID_API_KEY
+from django.conf import settings
 from .models import TwoFactorAuth, Verify
 from .serializers import PhoneNumberSerializer, VerifySerializer
 import os
@@ -32,8 +31,8 @@ class PhoneNumberViewset(ModelViewSet):
         otp_code = generate_opt()
         if phone and phone != '':
             try:
-                account_sid = ACCOUNT_SID
-                auth_token = AUTH_TOKEN
+                account_sid = settings.ACCOUNT_SID
+                auth_token = settings.AUTH_TOKEN
                 client = Client(account_sid, auth_token)
                 registered_phone_num = TwoFactorAuth.objects.get(phone_number=phone)
                 if registered_phone_num:
@@ -69,7 +68,7 @@ class PhoneNumberViewset(ModelViewSet):
                     else:
                         Verify.objects.create(email=registered_email.email, code=otp_code)
                     try:
-                        sg = SendGridAPIClient(SENDGRID_API_KEY)
+                        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
                         response = sg.send(message)
                     except Exception as e:
                         print(e)
