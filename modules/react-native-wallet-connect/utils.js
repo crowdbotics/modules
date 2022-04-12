@@ -19,7 +19,19 @@ export const currencyData=[
   {
     chainId:43113,
     title:'Avalanche'
-  }  
+  },
+  {
+    chainId:4,
+    title:'Rinkeby' 
+  },
+  {
+  chainId:42,
+  title:'Kovan' 
+  },
+  {
+    chainId:5,
+    title:'Goerli' 
+    },
 ]
 
 export const setGlobalConnector = (connector) => {
@@ -45,6 +57,10 @@ export const walletProvider = () => {
       97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
       43113: 'https://api.avax-test.network/ext/bc/C/rpc',
       3: 'https://ropsten.infura.io/v3/9ba7553f08b34a0f850ba9ce848ab465',
+      4: 'https://rinkeby.infura.io/v3/9ba7553f08b34a0f850ba9ce848ab465',
+      42: 'https://kovan.infura.io/v3/9ba7553f08b34a0f850ba9ce848ab465',
+      5: 'https://goerli.infura.io/v3/9ba7553f08b34a0f850ba9ce848ab465'
+
     },
     chainId: globalConnector._chainId,
     connector: globalConnector,
@@ -77,9 +93,17 @@ export const fundTransfer = (provider, sender, receiver, amount) => {
 
 
 export const switchMetamask = async (chainId) => {
-  return globalConnector.sendCustomRequest({
-    method: "wallet_switchEthereumChain",
-    params: [{ "chainId": chainId }],
+  return new  Promise(async (resolve, reject) => {
+    try {
+      await globalConnector.sendCustomRequest({
+        method: "wallet_switchEthereumChain",
+        params: [{ "chainId": chainId }],
+      })
+      resolve({message: "switch currency"})
+    } catch (e) {
+      resolve(e)
+    }
   })
+  
     
 };

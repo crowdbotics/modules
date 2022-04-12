@@ -1,13 +1,18 @@
 import React from 'react'
 import {Pressable,View,Text} from 'react-native'
-const CurrencyList=({data,setModalVisible, modalVisible,setTestCurrency})=>{
+import { switchMetamask } from '../../utils'
+// @ts-ignore
+import {utils} from 'ethers'
+const CurrencyList=({data,setModalVisible,modalVisible})=>{
 
-    const pressHandler=()=>{
+    const pressHandler=async()=>{
+
        setModalVisible(!modalVisible)
-       setTestCurrency(data)
+      
+       await switchMetamask(utils.hexValue(data.chainId))
     }
     return(
-      <View>
+      <View style={{padding:12}}>
                     
         {modalVisible && <Pressable
           style={{}}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 // @ts-ignore
 import { useWalletConnect} from '@walletconnect/react-native-dapp';
-import { Text, View, TouchableOpacity,StyleSheet, TouchableHighlight, Image} from "react-native"
+import { Text, View, TouchableOpacity,StyleSheet, Image} from "react-native"
 // @ts-ignore
 import {  useFocusEffect } from '@react-navigation/native'
-import { globalConnector, setGlobalConnector, switchMetamask, walletProvider } from '../utils';
+import { globalConnector, setGlobalConnector, walletProvider } from '../utils';
 import Button from '../components/Button';
 // @ts-ignore
 import Web3 from 'web3'
@@ -15,6 +15,7 @@ import refreshIcon from "../refresh-icon.png"
 import LinearGradient from 'react-native-linear-gradient';
 // @ts-ignore
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder'
+import CurrencyModal from '../components/CurrencyModal';
 
 const Home = (props) => {
   const connector = useWalletConnect();
@@ -22,7 +23,8 @@ const Home = (props) => {
   const [isSwitch, setIsSwitch] = useState(false)
   const [changeWallet, setChangeWallet] = useState(false)
   const [balance, setBalance] = useState(null)
-
+  const [modalVisible, setModalVisible]=useState(false)
+  
   useFocusEffect(
     React.useCallback(() => {
       if(connector._peerMeta) {
@@ -55,9 +57,6 @@ const Home = (props) => {
       setIsSwitch(true)
       setChangeWallet(false)
     } 
-    // if(connector.connected){
-    //   getAccount()
-    // }
   }, [connector])
 
   useFocusEffect(
@@ -82,21 +81,27 @@ const Home = (props) => {
 
   
     web.eth.getAccounts((err, res) => {
-      
       web.eth.getBalance(res[0], async (error, amount)=>{
         setBalance(await web.utils.fromWei(amount, "ether"))
       })
     })
   }
 
+  const switchCurrencyHandler= () => {
+      setModalVisible(!modalVisible)
+  }
+
   return (
-    
+    <>
       <View style={styles.container}>
         <View>
           { connector.connected && connectedWallet && <>
+
             <View style={styles.top}> 
               <View style={styles.account}>  
-                <Text style={styles.accountText} numberOfLines={1} ellipsizeMode='middle'>{globalConnector && globalConnector._accounts}</Text>
+                <TouchableOpacity onPress={switchCurrencyHandler}>
+                  <Text style={styles.accountText} numberOfLines={1} ellipsizeMode='middle'>{globalConnector && globalConnector._accounts}</Text>
+                </TouchableOpacity>  
               </View>
               <TouchableOpacity  onPress={() => connector.killSession()} >
                 <Text style={styles.kill}>Kill Session</Text>
@@ -119,9 +124,6 @@ const Home = (props) => {
             <View style={styles.pt10}>
                 <Button  onPress={()=>{props.navigation.navigate('TransactionHistory')}}>Transaction History</Button>
             </View>
-            {/* <View style={styles.pt10}>
-                <Button  onPress={()=>{switchMetamask('0x3').then(res => console.log(res)).catch(err => console.log(err))}}>Switch Currency</Button>
-            </View> */}
 
           </> }
         </View>
@@ -132,6 +134,10 @@ const Home = (props) => {
           {!connector.connected ? <Button onPress={() => connector.connect()}>Connect to wallet</Button> : <Button onPress={switchSession}>Switch Session</Button>}
         </View>
       </View>
+      <View>
+          <CurrencyModal  modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+      </View>
+    </>  
     
   )
 }
