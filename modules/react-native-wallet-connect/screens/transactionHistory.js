@@ -32,7 +32,6 @@ const TransactionHistory = () => {
             if (globalConnector._accounts[0] == e.from) {
               if (e.from != e.to)
                 bal = bal + (e.value);
-              console.log(i, e.from, e.to, e.value.toString(10));
               tmpTransactionList.push({
                 to: e.to,
                 from: e.from,
@@ -44,7 +43,6 @@ const TransactionHistory = () => {
             if (globalConnector._accounts[0] == e.to) {
               if (e.from != e.to)
                 bal = bal - (e.value);
-              console.log(i, e.from, e.to, e.value.toString(10));
               tmpTransactionList.push({
                 to: e.to,
                 from: e.from,
