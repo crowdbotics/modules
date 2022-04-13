@@ -1,8 +1,5 @@
 # Zoom Free Calling
 
-### Installation command
-`yarn add react-native-zoom-us`
-
 1. Set pickFirst rules in android/app/build.gradle
 ```
 android {

@@ -43,8 +43,8 @@ const ZoomCalling = () => {
 
   useEffect(() => {
     ZoomUs.initialize({
-      clientKey: options.SDK_KEY,
-      clientSecret: options.SDK_SECRET
+      clientKey: options.CLIENT_ID,
+      clientSecret: options.CLIENT_SECRET
     }).then((res) => {
       setIsInitialized(true);
     }).catch((error) => console.log(error))

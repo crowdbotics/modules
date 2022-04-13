@@ -12,29 +12,14 @@ import { timezones } from '../../timezones';
 // @ts-ignore
 import CheckBox from '@react-native-community/checkbox';
 import options from '../../options'
+import Video from '../Video';
+import MeetingID from '../MeetingId';
+import RecurringMeeting from '../RecurringMeeting';
+import MeetingTime from '../MeetingTime';
+import Actions from '../Actions';
 
 const MeetingScheduleModal = (props) => {
-  const [meetingSchedule, setMeetingSchedule] = useState({
-    topic: '',
-    startDate: new Date(),
-    timezone: 'America/Los_Angeles',
-    meetingID: false,
-    hostVideo: true,
-    participantsVideo: true,
-    recurring_meeting: false,
-    recurrence: {
-      recurrence_type: "1",
-      repeatEvery: '1',
-      endDate: new Date(),
-      occurrences: '7',
-      isBy: true,
-      weekly_days: "1",
-      isDayMonthly: true,
-      dayOfMonth: "23",
-      week: "1",
-      day: "1"
-    }
-  });
+  const [meetingSchedule, setMeetingSchedule] = useState(options.initialMeetingSchedule);
   const [errors, setErrors] = useState({
     topic: '',
   })
@@ -48,134 +33,25 @@ const MeetingScheduleModal = (props) => {
   const [openWeeks, setOpenWeeks] = useState(false);
   const [openDays, setOpenDays] = useState(false);
   const [timezoneList, setTimezoneList] = useState(timezones);
-  const [recurrenceList, setRecurrenceList] = useState([{
-    label: "Daily",
-    value: "1"
-  }, {
-    label: "Weekly",
-    value: "2"
-  }, {
-    label: "Monthly",
-    value: "3"
-  }, {
-    label: "No Fixed Time",
-    value: "-1"
-  }])
+  const [recurrenceList, setRecurrenceList] = useState(options.initialRecurrenceList)
   const [repeatEveryList, setRepeatEveryList] = useState([])
   const [occursOnList, setOccursOnList] = useState([])
-  const [occurrencesList, setOccurrencesList] = useState([
-    { label: "1", value: "1" },
-    { label: "2", value: "2" },
-    { label: "3", value: "3" },
-    { label: "4", value: "4" },
-    { label: "5", value: "5" },
-    { label: "6", value: "6" },
-    { label: "7", value: "7" },
-    { label: "8", value: "8" },
-    { label: "9", value: "9" },
-    { label: "10", value: "10" },
-    { label: "11", value: "11" },
-    { label: "12", value: "12" },
-    { label: "13", value: "13" },
-    { label: "14", value: "14" },
-    { label: "15", value: "15" },
-    { label: "16", value: "16" },
-    { label: "17", value: "17" },
-    { label: "18", value: "18" },
-    { label: "19", value: "19" },
-    { label: "20", value: "20" }
-  ])
-  const [weeklyList, setWeeklyList] = useState([{
-    label: "Sun",
-    value: "1",
-    isSelected: true
-  }, {
-    label: "Mon",
-    value: "2",
-    isSelected: false
-  }, {
-    label: "Tue",
-    value: "3",
-    isSelected: false
-  }, {
-    label: "Wed",
-    value: "4",
-    isSelected: false
-  }, {
-    label: "Thu",
-    value: "5",
-    isSelected: false
-  }, {
-    label: "Fri",
-    value: "6",
-    isSelected: false
-  }, {
-    label: "Sat",
-    value: "7",
-    isSelected: false
-  }])
-  const [weeksList, setWeeksList] = useState([{
-    label: "First",
-    value: "1",
-    isSelected: true
-  }, {
-    label: "Second",
-    value: "2",
-    isSelected: false
-  }, {
-    label: "Third",
-    value: "3",
-    isSelected: false
-  }, {
-    label: "Fourth",
-    value: "4",
-    isSelected: false
-  }, {
-    label: "Last",
-    value: "-1",
-    isSelected: false
-  }])
-  const [daysList, setDaysList] = useState([{
-    label: "Sunday",
-    value: "1",
-    isSelected: true
-  }, {
-    label: "Monday",
-    value: "2",
-    isSelected: false
-  }, {
-    label: "Tuesday",
-    value: "3",
-    isSelected: false
-  }, {
-    label: "Wednesday",
-    value: "4",
-    isSelected: false
-  }, {
-    label: "Thursday",
-    value: "5",
-    isSelected: false
-  }, {
-    label: "Friday",
-    value: "6",
-    isSelected: false
-  }, {
-    label: "Saturday",
-    value: "7",
-    isSelected: false
-  }])
+  const [occurrencesList, setOccurrencesList] = useState(options.initialOccurrencesList)
+  const [weeklyList, setWeeklyList] = useState(options.initialWeeklyList)
+  const [weeksList, setWeeksList] = useState(options.initialWeeksList)
+  const [daysList, setDaysList] = useState(options.initialDaysList)
   useEffect(() => {
     let tmpRepeatEveryList = []
     if (meetingSchedule.recurrence.recurrence_type == "1")
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < options.recurrentMeeting.daily; i++) {
         tmpRepeatEveryList.push({ label: (i + 1).toString(), value: (i + 1).toString() })
       }
     else if (meetingSchedule.recurrence.recurrence_type == "2")
-      for (let i = 0; i < 12; i++) {
+      for (let i = 0; i < options.recurrentMeeting.weekly; i++) {
         tmpRepeatEveryList.push({ label: (i + 1).toString(), value: (i + 1).toString() })
       }
     else if (meetingSchedule.recurrence.recurrence_type == "3")
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < options.recurrentMeeting.monthly; i++) {
         tmpRepeatEveryList.push({ label: (i + 1).toString(), value: (i + 1).toString() })
       }
     setRepeatEveryList(tmpRepeatEveryList)
@@ -215,60 +91,6 @@ const MeetingScheduleModal = (props) => {
         />
       </View>
     );
-  }
-
-  const meetingTime = () => {
-    return (
-      <View style={styles.ModalContent}>
-        <View style={styles.InputLabels}>
-          <Pressable onPress={() => setOpenStartDate(true)}>
-            <Input
-              label="When"
-              editable={false}
-              value={meetingSchedule.startDate.toLocaleString('en-US', {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-                hour: "numeric",
-                minute: "2-digit",
-              })}
-            />
-          </Pressable>
-          <DatePicker
-            modal
-            open={openStartDate}
-            date={meetingSchedule.startDate}
-            onConfirm={(date) => {
-              setOpenStartDate(false)
-              setMeetingSchedule({ ...meetingSchedule, startDate: date })
-            }}
-            onCancel={() => {
-              setOpenStartDate(false)
-            }}
-          />
-        </View>
-        <View style={styles.InputLabels}>
-          <Text style={[styles.FwBold, styles.Mt10]}>Timezone</Text>
-          <DropDownPicker
-            placeholder='Timezone'
-            placeholderStyle={styles.DropDownPlaceholder}
-            style={styles.DropDownPicker}
-            labelProps={{
-              numberOfLines: 1,
-            }}
-            listMode="MODAL"
-            modalTitle="Select timezone"
-            searchable={true}
-            open={openTimezone}
-            value={meetingSchedule.timezone}
-            items={timezoneList}
-            setOpen={setOpenTimezone}
-            setValue={(value) => setMeetingSchedule({ ...meetingSchedule, timezone: value() })}
-            setItems={setTimezoneList}
-          />
-        </View>
-      </View>
-    )
   }
 
   const recurringMeeting = () => {
@@ -484,99 +306,14 @@ const MeetingScheduleModal = (props) => {
     )
   }
 
-  const meetingID = () => {
-    return (
-      <View style={styles.Mt5}>
-        <Text style={styles.MeetingID}>Meeting ID</Text>
-        <View style={styles.MeetingRow}>
-          <View style={styles.InputsArea}>
-            <View style={styles.RadioButtons}>
-              <RadioButton
-                value="false"
-                status={!meetingSchedule.meetingID ? 'checked' : 'unchecked'}
-                onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: false })}
-              />
-              <Text numberOfLines={2} style={styles.W100}>Generate Automatically</Text>
-            </View>
-          </View>
-          <View style={styles.InputsArea}>
-            <View style={styles.RadioButtons}>
-              <RadioButton
-                value="true"
-                status={meetingSchedule.meetingID ? 'checked' : 'unchecked'}
-                onPress={() => setMeetingSchedule({ ...meetingSchedule, meetingID: true })}
-              />
-              <Text numberOfLines={2} style={styles.W100}>Personal Meeting ID</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
-  const video = () => {
-    return (
-      <View style={styles.Mt10}>
-        <Text style={styles.VideoText}>Video</Text>
-        <View style={styles.VideoMain}>
-          <View style={styles.VideoContainer}>
-            <Text style={styles.Mt8}>Host</Text>
-            <View style={styles.Dflex}>
-              <RadioButton
-                value="true"
-                status={meetingSchedule.hostVideo ? 'checked' : 'unchecked'}
-                onPress={() => setMeetingSchedule({ ...meetingSchedule, hostVideo: true })}
-              />
-              <RadioButton
-                value="false"
-                status={!meetingSchedule.hostVideo ? 'checked' : 'unchecked'}
-                onPress={() => setMeetingSchedule({ ...meetingSchedule, hostVideo: false })}
-              />
-            </View>
-          </View>
-          <View style={styles.VideoContainer}>
-            <Text style={styles.Mt8}>Participants</Text>
-            <View style={styles.Dflex}>
-              <RadioButton
-                value="true"
-                status={meetingSchedule.participantsVideo ? 'checked' : 'unchecked'}
-                onPress={() => setMeetingSchedule({ ...meetingSchedule, participantsVideo: true })}
-              />
-              <RadioButton
-                value="false"
-                status={!meetingSchedule.participantsVideo ? 'checked' : 'unchecked'}
-                onPress={() => setMeetingSchedule({ ...meetingSchedule, participantsVideo: false })}
-              />
-            </View>
-          </View>
-        </View>
-      </View>
-    )
-  }
-
-  const actions = () => {
-    return (
-      <View style={styles.ActionsMain}>
-        <Pressable
-          style={[styles.button, styles.buttonOpen]}
-          onPress={() => props.setModalVisible(false)}
-        >
-          <Text style={styles.textStyle}>Cancel</Text>
-        </Pressable>
-
-        <Pressable
-          style={[styles.button, styles.buttonClose]}
-          onPress={handleSave}
-          disabled={props.isMeetingScheduleSave}
-        >
-          <Text style={styles.textStyle}>{props.isMeetingScheduleSave ? "Saving" : "Save"}</Text>
-        </Pressable>
-      </View>
-    )
-  }
   const DATA = [
     {
-      data: [meetingTopic(), meetingTime(), recurringMeeting(), meetingID(), video(), actions()]
+      data: [meetingTopic(),
+      <MeetingTime meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} setOpenStartDate={setOpenStartDate} openStartDate={openStartDate} openTimezone={openTimezone} setOpenTimezone={setOpenTimezone} timezoneList={timezoneList} setTimezoneList={setTimezoneList} />,
+      recurringMeeting(),
+      <MeetingID meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
+      <Video meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
+      <Actions handleSave={handleSave} setModalVisible={props.setModalVisible} />]
     }
   ];
 
