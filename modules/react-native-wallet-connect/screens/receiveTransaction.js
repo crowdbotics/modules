@@ -17,7 +17,7 @@ const ReceiveTransaction = () => {
     const provider=await walletProvider()
     const accountAddress = provider.connector._accounts[0]
     const chainId = provider._chainID
-    setAccount(`ethereum:${accountAddress}@${chainId}`)
+    setAccount(`${accountAddress}`)
   }
 
   return (

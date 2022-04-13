@@ -46,7 +46,7 @@ const TransactionHistory = () => {
               tmpTransactionList.push({
                 to: e.to,
                 from: e.from,
-                value: e.value.toString(10)
+                value: e.value.toString(5)
               })
               setTransactionList(tmpTransactionList)
             }

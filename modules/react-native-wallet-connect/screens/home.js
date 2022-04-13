@@ -4,7 +4,7 @@ import { useWalletConnect} from '@walletconnect/react-native-dapp';
 import { Text, View, TouchableOpacity,StyleSheet, Image} from "react-native"
 // @ts-ignore
 import {  useFocusEffect } from '@react-navigation/native'
-import { globalConnector, setGlobalConnector, walletProvider } from '../utils';
+import { globalConnector, setGlobalConnector, switchMetamask, walletProvider } from '../utils';
 import Button from '../components/Button';
 // @ts-ignore
 import Web3 from 'web3'
@@ -24,7 +24,7 @@ const Home = (props) => {
   const [changeWallet, setChangeWallet] = useState(false)
   const [balance, setBalance] = useState(null)
   const [modalVisible, setModalVisible]=useState(false)
-  
+
   useFocusEffect(
     React.useCallback(() => {
       if(connector._peerMeta) {
@@ -71,7 +71,16 @@ const Home = (props) => {
         getAccount()
       }
     }, [globalConnector])
-
+    useEffect(()=>{
+      if(connector.connected){
+        connector.on("session_update", (error, payload) => {
+          getAccount()
+          if (error) {
+            throw error;
+          }
+        })
+      }
+    },[connector])
 
   const getAccount = async () => {
     setBalance(null)
@@ -91,6 +100,9 @@ const Home = (props) => {
       setModalVisible(!modalVisible)
   }
 
+  const handleCurrencyModalItemPress = async (chainId) => {
+    await switchMetamask(chainId)
+  }
   return (
     <>
       <View style={styles.container}>
@@ -107,8 +119,8 @@ const Home = (props) => {
                 <Text style={styles.kill}>Kill Session</Text>
               </TouchableOpacity>
             </View>
-            <View style={[styles.pt10, {display: "flex", flexDirection: "row"}]}>
-              <Text>Balance: {balance ? `${balance}ETH` : <ShimmerPlaceHolder style={{borderRadius: 4}} width={50} height={10} LinearGradient={LinearGradient} />}</Text>
+            <View style={[styles.pt10, styles.balance]}>
+              <Text>Balance: {balance ? `${balance}` : <ShimmerPlaceHolder style={{borderRadius: 4}} width={50} height={10} LinearGradient={LinearGradient} />}</Text>
               <TouchableOpacity style={{marginLeft: 10}} onPress={async () => await getAccount()}>
                 <Image style={styles.refreshIcon} source={refreshIcon}/>
               </TouchableOpacity>
@@ -128,14 +140,14 @@ const Home = (props) => {
           </> }
         </View>
         <View style={styles.connectText}>
-            {!connector.connected && <Text style={{fontWeight:'bold'}}>Connect your Wallet</Text>}
+            {!connector.connected && <Text style={styles.fwb}>Connect your Wallet</Text>}
         </View>
         <View>
           {!connector.connected ? <Button onPress={() => connector.connect()}>Connect to wallet</Button> : <Button onPress={switchSession}>Switch Session</Button>}
         </View>
       </View>
       <View>
-          <CurrencyModal  modalVisible={modalVisible} setModalVisible={setModalVisible}/>
+          <CurrencyModal modalVisible={modalVisible} setModalVisible={setModalVisible} onItemPress={handleCurrencyModalItemPress}/>
       </View>
     </>  
     
@@ -171,6 +183,9 @@ const styles=StyleSheet.create({
   refreshIcon: {
     width: 20,
     height: 20,
-  }
+  },
+  balance: {display: "flex", flexDirection: "row"},
+  fwb:{fontWeight:'bold'}
+
 })
 export default Home

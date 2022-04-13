@@ -7,31 +7,31 @@ import Web3 from 'web3';
 
 export let globalConnector;
 
-export const currencyData=[
+export const currencyData = [
   {
-    chainId:97,
-    title:'Binance'
+    chainId: 97,
+    title: 'Binance'
   },
   {
-    chainId:3,
-    title:'Ropsten'
+    chainId: 3,
+    title: 'Ropsten'
   },
   {
-    chainId:43113,
-    title:'Avalanche'
+    chainId: 43113,
+    title: 'Avalanche'
   },
   {
-    chainId:4,
-    title:'Rinkeby' 
+    chainId: 4,
+    title: 'Rinkeby'
   },
   {
-  chainId:42,
-  title:'Kovan' 
+    chainId: 42,
+    title: 'Kovan'
   },
   {
-    chainId:5,
-    title:'Goerli' 
-    },
+    chainId: 5,
+    title: 'Goerli'
+  },
 ]
 
 export const setGlobalConnector = (connector) => {
@@ -51,7 +51,7 @@ export const parseAddress = (input) => {
 }
 
 export const walletProvider = () => {
-  
+
   return new WalletConnectProvider({
     rpc: {
       97: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
@@ -83,9 +83,9 @@ export const fundTransfer = (provider, sender, receiver, amount) => {
     }
     web.eth.sendTransaction(tx, (err, transactionHash) => {
       if (err) {
-        reject({error: err})
+        reject({ error: err })
       } else {
-        resolve({hash: transactionHash})
+        resolve({ hash: transactionHash })
       }
     })
   })
@@ -93,17 +93,17 @@ export const fundTransfer = (provider, sender, receiver, amount) => {
 
 
 export const switchMetamask = async (chainId) => {
-  return new  Promise(async (resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     try {
       await globalConnector.sendCustomRequest({
         method: "wallet_switchEthereumChain",
         params: [{ "chainId": chainId }],
       })
-      resolve({message: "switch currency"})
+      resolve({ message: "switch currency" })
     } catch (e) {
       resolve(e)
     }
   })
-  
-    
+
+
 };

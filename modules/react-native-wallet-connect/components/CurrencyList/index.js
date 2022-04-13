@@ -1,27 +1,29 @@
 import React from 'react'
-import {Pressable,View,Text} from 'react-native'
-import { switchMetamask } from '../../utils'
+import { Pressable, View, Text,StyleSheet } from 'react-native'
+
 // @ts-ignore
-import {utils} from 'ethers'
-const CurrencyList=({data,setModalVisible,modalVisible})=>{
+import { utils } from 'ethers'
+const CurrencyList = ({ data, setModalVisible, modalVisible, onItemPress }) => {
 
-    const pressHandler=async()=>{
+  const pressHandler = async () => {
+    setModalVisible(!modalVisible)
+    onItemPress(utils.hexValue(data.chainId))
+  }
+  return (
+    <View style={styles.p12}>
 
-       setModalVisible(!modalVisible)
-      
-       await switchMetamask(utils.hexValue(data.chainId))
-    }
-    return(
-      <View style={{padding:12}}>
-                    
-        {modalVisible && <Pressable
-          style={{}}
-          onPress={pressHandler}
-        >
-          <Text>{data.title}</Text>
-        </Pressable>}
-      </View>
-    )
+      {modalVisible && <Pressable
+        style={{}}
+        onPress={pressHandler}
+      >
+        <Text>{data.title}</Text>
+      </Pressable>}
+    </View>
+  )
 
 }
+
+const styles=StyleSheet.create({
+  p12 : {padding:12}
+})
 export default CurrencyList

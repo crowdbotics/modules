@@ -2,12 +2,13 @@ import React from "react";
 import { View, Text, Modal } from "react-native";
 import { StyleSheet,FlatList } from 'react-native';
 import { currencyData } from "../../utils";
+import Button from "../Button";
 import CurrencyList from "../CurrencyList";
 
-const CurrencyModal = ({setModalVisible, modalVisible}) => {
+const CurrencyModal = ({setModalVisible, modalVisible, onItemPress}) => {
 
   const renderItem = ({ item }) => (
-    <CurrencyList data={item}  setModalVisible={setModalVisible} modalVisible={modalVisible} />
+    <CurrencyList data={item}  setModalVisible={setModalVisible} modalVisible={modalVisible} onItemPress={onItemPress}/>
   );
 
   return (
@@ -25,6 +26,9 @@ const CurrencyModal = ({setModalVisible, modalVisible}) => {
         keyExtractor={item=>item.chainId}
 
         />
+        <View style={{width: 100}}>
+          <Button onPress={() => setModalVisible(false)}>Close</Button>
+        </View>
       </View>
     </Modal>
   )
