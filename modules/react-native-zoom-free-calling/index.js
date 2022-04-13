@@ -78,7 +78,6 @@ const ZoomCalling = () => {
       getCurrentUser(oauthToken['access_token']).then(response => {
         setCurrentUser(response)
         getMeetingList(response['id'], oauthToken['access_token']).then(res => {
-          console.log('res.meetings', res.meetings)
           if (res.meetings.length == 0)
             return
 
