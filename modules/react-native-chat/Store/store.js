@@ -4,11 +4,11 @@ import { users } from './storage';
 const randIndex = Math.floor(Math.random() * users.length)
 export const uuid = users[randIndex]._id; // uuidv4()
 export const user = users[randIndex]
-export var ChannelType;
-(function (ChannelType) {
-  ChannelType[ChannelType["Direct"] = 0] = "Direct";
-  ChannelType[ChannelType["Group"] = 1] = "Group";
-})(ChannelType || (ChannelType = {}));
+export var ChannelType={
+  Direct:0,
+  Group:1
+};
+
 export const useStore = create(setState => ({
   state: {
     channels: {},

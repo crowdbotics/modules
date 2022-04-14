@@ -24,11 +24,11 @@
     "react-native-emoji-selector": "0.2.0"
   },
   "x-dependencies": {
-    "react-native-image-crop-picker": "0.36.2",
-    "react-native-permissions": "3.0.4",
-    "react-native-linear-gradient": "^2.4.0",
     "react-native-image-picker": "4.7.3",
+    "react-native-image-crop-picker": "^0.36.2",
     "@react-native-community/checkbox": "0.5.10",
+    "react-native-linear-gradient": "^2.4.0",
+    "react-native-permissions": "3.0.4",
     "react-native-fs": "2.19.0"
   }
 }

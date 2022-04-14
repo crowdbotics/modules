@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,Fragment } from 'react';
 import { Button, TextInput, View, Text } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker'
 import CirclePrompt from '../Components/CirclePrompt';
@@ -10,7 +10,7 @@ import options from '../options';
 import { StyleSheet } from 'react-native';
 import Loader from '../Components/loader';
 
-export default ({ navigation, route }) => {
+ const EditChannelDetails=({ navigation, route }) => {
   const { state, dispatch } = useStore();
   const pubnub = usePubNub();
   const [name, setName] = useState(route.params.item.name);
@@ -28,6 +28,7 @@ export default ({ navigation, route }) => {
     if (image) {
       try {
         const file = await upload(image);
+       
         const res2 = await pubnub.objects.setChannelMetadata({
           channel: route.params.item.id,
           data: { custom: { ...channel.custom, caption: file.url } }
@@ -61,7 +62,7 @@ export default ({ navigation, route }) => {
   };
 
   return (
-    <>
+    <Fragment>
       {loading && <Loader />}
       <View style={styles.Container}>
         <CirclePrompt onPress={pickImage} source={localImage || route.params.item.custom.caption} />
@@ -73,7 +74,7 @@ export default ({ navigation, route }) => {
           <Button title="Update" onPress={submit} />
         </View>
       </View>
-    </>
+    </Fragment>
   );
 };
 
@@ -94,3 +95,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1
   }
 })
+export default EditChannelDetails

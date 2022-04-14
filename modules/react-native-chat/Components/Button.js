@@ -1,15 +1,19 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default ({ title, onPress }) => {
-    return <TouchableOpacity onPress={onPress}>
-    <Text>{title}</Text>
-  </TouchableOpacity>;
+ const Button=({ title, onPress }) => {
+    return (
+      <TouchableOpacity onPress={onPress}>
+        <Text>{title}</Text>
+      </TouchableOpacity>
+    );
 };
 export const InlineButton = ({ title, onPress }) => {
-    return <TouchableOpacity onPress={onPress} style={styles.btnStyle}>
-    <Text style={styles.txtStyle}>{title}</Text>
-  </TouchableOpacity>;
+    return (
+      <TouchableOpacity onPress={onPress} style={styles.btnStyle}>
+        <Text style={styles.txtStyle}>{title}</Text>
+      </TouchableOpacity>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -21,3 +25,4 @@ const styles = StyleSheet.create({
     fontSize: 16
   }
 });
+export default Button

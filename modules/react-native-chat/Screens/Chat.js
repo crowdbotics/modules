@@ -27,7 +27,7 @@ const Chat = ({ route, navigation }) => {
   const [messages, setMessages] = useState(state.messages[item.id] || [])
   const channel = state.channels[route.params.item.id];
   const [actionSheet, setActionSheet] = useState(false);
-  const [emoji, setEmoji] = useState(null);
+  const [textInput, setTextInput] = useState(null);
 
   useEffect(() => {
     pubnub.fetchMessages({
@@ -154,7 +154,7 @@ const Chat = ({ route, navigation }) => {
     const tmpMessages = cloneArray(messages)
     tmpMessages.push({ text: message[0].text, pending: true, user: user })
     setMessages(tmpMessages)
-    setEmoji(null)
+    setTextInput(null)
     pubnub.publish({ channel: item.id, message: message[0] }, (status, response) => {
       console.log(status);
       console.log(response);
@@ -199,12 +199,13 @@ const Chat = ({ route, navigation }) => {
   }
 
   const onEmojiSelected = (emoji) => {
-    setEmoji(emoji)
+    setTextInput(emoji)
   }
 
   return <>
     <GiftedChat
-      text={emoji}
+      text={textInput}
+      onInputTextChanged={text => setTextInput(text)}
       listViewProps={styles.Container}
       isLoadingEarlier={true}
       renderMessageImage={renderMessageImage}
