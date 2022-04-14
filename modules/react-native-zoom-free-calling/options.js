@@ -10,10 +10,10 @@ const recurrentMeeting={
   weekly:12,
   monthly:3
 }
-const CLIENT_ID = "O8EhCwuQu20CXQxKr3b_g"
-const CLIENT_SECRET = "GbH7b27RIJUvJj1ww3mLFKoUyVlufMWT"
-const SDK_KEY = "uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio"
-const SDK_SECRET = "xJOm6daNiIR0FCDJSTQSegxa0Loc0AeaYdIn"
+const CLIENT_ID = ""
+const CLIENT_SECRET = ""
+const SDK_KEY = ""
+const SDK_SECRET = ""
 const REDIRECT_URI = "https://www.crowdbotics.com"
 
 const checkboxColor = { true: '#24ebde', false: 'lightgray' }
