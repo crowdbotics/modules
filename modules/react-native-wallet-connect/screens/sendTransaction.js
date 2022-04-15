@@ -112,10 +112,21 @@ const SendTransaction = (props) => {
       </View> */}
      
       {isLoading && <Loader />}
-      <View style={{ padding: 10,}}>
+      <View style={{ padding: 10}}>
         <>
           {!qr ? <>
             <View style={styles.center}>
+              <View style={styles.walletCard}>
+                <View style={{alignSelf:'center', display: 'flex', flexDirection:'column'}}>
+                  <Text style={{fontSize: 24, fontWeight: 'bold' }}>Total</Text>
+                  <Text style={{color: '#7C7C7C', fontSize:12}}>Available to send</Text>
+                </View>
+                <View>
+                  <Text style={{fontSize: 23, fontWeight: '800' }}>
+                    123123
+                  </Text>
+                </View>
+              </View>
               <View>
                 <Text style={{ paddingLeft: 10, paddingBottom:6 }}>From</Text>
               </View>
@@ -220,9 +231,27 @@ const styles = StyleSheet.create({
     height: 20,
   },
   pt10:{paddingVertical:10},
-
   balance: {display: "flex", flexDirection: "row", marginTop:15},
-
+  walletCard: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    height: 76,
+    width: "100%",
+    padding: 10,
+    marginBottom: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    shadowColor: 'lightgray',
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 1.62,
+    elevation: 15,
+  }
 });
 
 export default SendTransaction
