@@ -22,11 +22,13 @@ const ReceiveTransaction = () => {
 
   return (
     <View style={styles.receive}>
-      {account &&
-        <QRCode
-          value={account}
-          size={300} />
-      }
+      <View style={{borderColor:'#C4C4C4', borderWidth:2, padding:25, borderRadius:10}}>
+        {account &&
+          <QRCode
+            value={account}
+            size={200} />
+        }
+      </View>
     </View>
   )
 }

@@ -14,12 +14,12 @@ const Button = (props) => {
 
 const styles = StyleSheet.create({
   button: {
-    padding: 10,
-    backgroundColor: '#73A5C6',
+    height:49,
+    backgroundColor: '#000000',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 3
+    borderRadius: 10,
   },
   clicked: {
     padding: 10,

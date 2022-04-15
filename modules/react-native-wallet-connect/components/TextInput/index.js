@@ -21,12 +21,15 @@ const Input = (props) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginVertical: 12,
+    // marginVertical: 3,
+    borderRadius:10,
+    paddingLeft:10,
+    paddingRight:10,
   },
   input: {
     backgroundColor: "#fff",
     height: 40,
-    padding: 10,
+    // padding: 10,
     borderColor: 'lightgray',
     color: "#000",
 
