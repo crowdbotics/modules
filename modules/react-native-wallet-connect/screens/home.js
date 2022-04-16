@@ -4,7 +4,7 @@ import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native"
 // @ts-ignore
 import { useFocusEffect } from '@react-navigation/native'
-import { globalConnector, setGlobalConnector, switchMetamask, walletProvider } from '../utils';
+import { getBalance, globalConnector, setGlobalConnector, switchMetamask, walletProvider } from '../utils';
 import Button from '../components/Button';
 // @ts-ignore
 import Web3 from 'web3'
@@ -87,18 +87,9 @@ const Home = (props) => {
     }
   }, [connector])
 
-  const getAccount = async () => {
+  const getAccount = () => {
     setBalance(null)
-    const provider = walletProvider()
-    await provider.enable();
-    const web = new Web3(provider);
-
-
-    web.eth.getAccounts((err, res) => {
-      web.eth.getBalance(res[0], async (error, amount) => {
-        setBalance(await web.utils.fromWei(amount, "ether"))
-      })
-    })
+    getBalance().then(res => setBalance(res))
   }
 
   const switchCurrencyHandler = () => {

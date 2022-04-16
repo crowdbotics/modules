@@ -104,6 +104,17 @@ export const switchMetamask = async (chainId) => {
       resolve(e)
     }
   })
-
-
 };
+
+export const getBalance = () => {
+  return new Promise(async (resolve, reject) => {
+    const provider = walletProvider()
+    await provider.enable();
+    const web = new Web3(provider);
+    web.eth.getAccounts((err, res) => {
+      web.eth.getBalance(res[0], async (error, amount) => {
+        resolve(await web.utils.fromWei(amount, "ether"))
+      })
+    })
+  })
+}
