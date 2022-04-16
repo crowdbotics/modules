@@ -5,8 +5,11 @@ import { View, Text, TouchableHighlight } from "react-native";
 const Button = (props) => {
   return (
     <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
-      <View style={!props.clicked ? styles.button : styles.clicked}>
-        <Text style={styles.text}>{props.children}</Text>
+      <View style={[styles.button, {
+        backgroundColor: props.backgroundColor ? props.backgroundColor : '#000000',
+        height: props.height ? props.height : 49
+      }]}>
+        <Text style={[styles.text, {color: props.color ? props.color : '#ffffff'}]}>{props.children}</Text>
       </View>
     </TouchableHighlight>
   )
@@ -14,25 +17,14 @@ const Button = (props) => {
 
 const styles = StyleSheet.create({
   button: {
-    height:49,
-    backgroundColor: '#000000',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
-  },
-  clicked: {
-    padding: 10,
-    backgroundColor: '#2E5984',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 3
+    borderRadius: 10
   },
   text: {
     fontWeight: 'bold',
-    fontSize: 15,
-    color: 'white'
+    fontSize: 15
   },
 })
 export default Button

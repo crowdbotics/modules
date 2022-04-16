@@ -4,12 +4,10 @@ import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native"
 // @ts-ignore
 import { useFocusEffect } from '@react-navigation/native'
-import { getBalance, globalConnector, setGlobalConnector, switchMetamask, walletProvider } from '../utils';
+import { getBalance, globalConnector, setGlobalConnector, switchMetamask } from '../utils';
 import Button from '../components/Button';
 // @ts-ignore
-import Web3 from 'web3'
-// @ts-ignore
-import refreshIcon from "../refresh-icon.png"
+import refreshIcon from "../assets/refresh-icon.png"
 
 // @ts-ignore
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,9 +16,7 @@ import ShimmerPlaceHolder from 'react-native-shimmer-placeholder'
 import CurrencyModal from '../components/CurrencyModal';
 
 // @ts-ignore
-import walletIcon from '../wallet.png';
-// @ts-ignore
-import icon from '../icon.png';
+import walletIcon from '../assets/wallet.png';
 
 const Home = (props) => {
   const connector = useWalletConnect();
@@ -104,10 +100,13 @@ const Home = (props) => {
 
       {connector.connected && connectedWallet &&
         <View style={styles.top}>
-          <View style={styles.account}>
+          <View style={[styles.account, {display: 'flex', flexDirection: 'column'}]}>
             <TouchableOpacity onPress={switchCurrencyHandler}>
               <Text style={styles.accountText} numberOfLines={1} ellipsizeMode='middle'>{globalConnector && globalConnector._accounts}</Text>
             </TouchableOpacity>
+            <View style={{marginTop: 25, width: 120}}>
+              <Button height={40} backgroundColor="#F1F1F1" color="#000000" onPress={switchSession}>Switch wallet</Button>
+            </View>
           </View>
           <View style={[styles.pt10, styles.balance]}>
             <TouchableOpacity style={{ marginRight: 5, marginTop: 4 }} onPress={async () => await getAccount()}>
@@ -117,8 +116,6 @@ const Home = (props) => {
               <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{balance ? `${balance}` : <ShimmerPlaceHolder style={{ borderRadius: 4, }} width={50} height={15} LinearGradient={LinearGradient} />}</Text>
               <Text style={{ color: '#7C7C7C', fontSize: 14, alignSelf: 'flex-end', textAlign: 'right' }}>Balance</Text>
             </View>
-
-
           </View>
         </View>
       }
@@ -127,14 +124,14 @@ const Home = (props) => {
         <View>
           {connector.connected && connectedWallet && <>
             <View>
-              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, marginTop: 10 }}>
-                <Text>Wallet</Text>
-                <Text>Balance</Text>
+              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28, marginTop: 14, paddingHorizontal: 23 }}>
+                <Text style={{ fontSize: 16 }}>Wallet</Text>
+                <Text style={{ fontSize: 16 }}>Balance</Text>
               </View>
               <TouchableOpacity style={styles.walletCard} onPress={() => props.navigation.navigate('MyWallet')}>
                 <View style={{ display: 'flex', flexDirection: 'row', }}>
-                  <Image source={icon} />
-                    <Text style={{ color: '#26292A', fontSize: 14, marginLeft: 10, alignSelf: 'center' }}>Metamask</Text>
+                  <Image source={walletIcon} />
+                  <Text style={{ color: '#26292A', fontSize: 14, marginLeft: 10, alignSelf: 'center' }}>Metamask</Text>
                 </View>
                 <View>
                   <Text>
@@ -143,18 +140,6 @@ const Home = (props) => {
                 </View>
               </TouchableOpacity>
             </View>
-            <View style={styles.funds}>
-              <View style={styles.fundButton}>
-                <Button onPress={() => { props.navigation.navigate('ReceiveTransaction') }}>Receive Funds</Button >
-              </View>
-              <View style={styles.fundButton}>
-                <Button onPress={() => { props.navigation.navigate('SendTransaction') }}>Send Funds</Button>
-              </View>
-            </View>
-            <View style={styles.pt10}>
-              <Button onPress={() => { props.navigation.navigate('TransactionHistory') }}>Transaction History</Button>
-            </View>
-
           </>}
         </View>
         {
@@ -169,7 +154,6 @@ const Home = (props) => {
             <Button onPress={() => connector.killSession()} style={styles.kill}>Kill Session</Button>}
         </View>
       </View>
-      {/* <Button onPress={switchSession}>Switch Session</Button> */}
       <View>
         <CurrencyModal modalVisible={modalVisible} setModalVisible={setModalVisible} onItemPress={handleCurrencyModalItemPress} />
       </View>
@@ -180,7 +164,7 @@ const Home = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: '85%',
+    height: '75%',
     display: "flex",
     flexDirection: 'column',
     justifyContent: "space-between",
@@ -203,7 +187,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: "space-between",
-    height: 110,
+    height: '25%',
     padding: 10
   },
   account: {
