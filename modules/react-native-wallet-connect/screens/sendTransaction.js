@@ -13,7 +13,7 @@ import LinearGradient from 'react-native-linear-gradient';
 // @ts-ignore
 import ShimmerPlaceHolder from 'react-native-shimmer-placeholder'
 // @ts-ignore
-import qrIcon from '../qr.png'
+import qrIcon from '../assets/qr.png'
 
 const SendTransaction = (props) => {
   const [sender, setSender] = useState('')

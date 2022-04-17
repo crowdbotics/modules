@@ -21,6 +21,11 @@ npx rn-nodeify --install "stream" --hack
 ```
 ./node_modules/.bin/rn-nodeify --hack --install
 ```
+Import following in index.js
+```
+import './shim.js'
+import crypto from 'crypto'
+```
 # The following dependencies are used for the module
 
 ```
