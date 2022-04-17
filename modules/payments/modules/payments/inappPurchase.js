@@ -1,18 +1,8 @@
-import React, { PureComponent, useState, useEffect } from 'react';
-import { View, Text, Modal, StyleSheet, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { verifyAppleIAPReceipt, fetchAppleIAPProducts } from "./api";
-import RNIap, {
-    InAppPurchase,
-    PurchaseError,
-    SubscriptionPurchase,
-    acknowledgePurchaseAndroid,
-    consumePurchaseAndroid,
-    finishTransaction,
-    finishTransactionIOS,
-    purchaseErrorListener,
-    purchaseUpdatedListener,
-  } from 'react-native-iap';
+import RNIap from 'react-native-iap';
 
 const InappPurchase = () => {
 
@@ -90,7 +80,7 @@ const InappPurchase = () => {
 
     return (
         <View>
-            <Text style={[styles.text, {paddingHorizontal: 15, paddingVertical: 10}]}>Apple Products</Text>
+            <Text style={[styles.text, styles.firstTitle]}>Apple Products</Text>
             <FlatList
                 data={value.products}
                 renderItem={({ item }) => (
@@ -173,6 +163,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#c9c9c9c9", 
         borderRadius: 10
       },
+      firstTitle: {
+        paddingHorizontal: 15, 
+        paddingVertical: 10
+      }
 })
 
 export default InappPurchase;

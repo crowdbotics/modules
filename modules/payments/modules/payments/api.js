@@ -3,7 +3,7 @@ import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions(); 
 const BASE_URL = global.url; // change your BASE_URL in `options/options.js` to edit this value
-const token = "Token 913fdab66a6d73f3ed45a57a4fe6e8fa092fd153"
+const token = "Your token here"
 // FIXME: Make this call with Authorization
 // Right now there is no login in this module but when this feture will be added
 // there will be a user profile added make changes accordingly

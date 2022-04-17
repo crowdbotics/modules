@@ -1,4 +1,4 @@
-import React, { PureComponent, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Modal, StyleSheet, Pressable, Alert, RefreshControl } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { fetchPaymentHistory } from "./api";
@@ -43,7 +43,7 @@ const PaymentHistoryModal = (props) => {
     return (
         <View>
             <TouchableOpacity onPress={() => { setModalVisible(true) }}>
-                <Text style={{ marginHorizontal: 15, marginTop: 15, paddingBottom: 10 }}>View Payment History</Text>
+                <Text style={styles.btnText}>View Payment History</Text>
             </TouchableOpacity>
             <Modal
                 animationType="slide"
@@ -126,6 +126,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#c9c9c9c9",
         borderRadius: 10
     },
+    btnText: { 
+        marginHorizontal: 15, 
+        marginTop: 15, 
+        paddingBottom: 10 
+    }
 })
 
 export default PaymentHistoryModal;

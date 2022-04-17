@@ -37,7 +37,7 @@ class AppleIAPProduct(models.Model):
     is_active = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return "{}-{}".format(self.pk, self.name)
+        return f"{self.pk}-{self.name}"
 
     def as_dict(self):
         return {
