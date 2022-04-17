@@ -131,7 +131,7 @@ const Home = (props) => {
               <TouchableOpacity style={styles.walletCard} onPress={() => props.navigation.navigate('MyWallet')}>
                 <View style={{ display: 'flex', flexDirection: 'row', }}>
                   <Image source={walletIcon} />
-                  <Text style={{ color: '#26292A', fontSize: 14, marginLeft: 10, alignSelf: 'center' }}>Metamask</Text>
+                  <Text style={{ color: '#26292A', fontSize: 14, marginLeft: 10, alignSelf: 'center' }}>{connectedWallet.name}</Text>
                 </View>
                 <View>
                   <Text>

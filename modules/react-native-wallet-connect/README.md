@@ -30,6 +30,22 @@ npm install @walletconnect/react-native-dapp
 npm install react-native-svg @react-native-async-storage/async-storage
 ```
 
+# Configuration for react-native-camera
+Add permissions to your app android/app/src/main/AndroidManifest.xml file:
+```
+<uses-permission android:name="android.permission.CAMERA" />
+```
+Insert the following lines in android/app/build.gradle:
+```
+android {
+  ...
+  defaultConfig {
+    ...
+    missingDimensionStrategy 'react-native-camera', 'general' // <--- insert this line
+  }
+}
+```
+
 ## Getting started
 # Run the following command as per the enlisted sequence:
 
