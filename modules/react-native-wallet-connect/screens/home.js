@@ -139,6 +139,48 @@ const Home = (props) => {
                   </Text>
                 </View>
               </TouchableOpacity>
+              <View style={styles.walletCardDetailContainer}>
+                <View style={styles.walletCardDetail}>
+                  <View>
+                    <Text>Wallet</Text>
+                  </View>
+                  <View>
+                    <Text>
+                      {connectedWallet.url}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.walletCardDetail}>
+                  <View>
+                    <Text>Status</Text>
+                  </View>
+                  <View>
+                    <Text style={{color: '#12D790'}}>
+                      Online
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.walletCardDetail}>
+                  <View>
+                    <Text>Connect to</Text>
+                  </View>
+                  <View>
+                    <Text>
+                      {connectedWallet.description}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.walletCardDetail}>
+                  <View>
+                    <Text>Address</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.accountText} numberOfLines={1} ellipsizeMode='middle'>
+                      {globalConnector && globalConnector._accounts}
+                    </Text>
+                  </View>
+                </View>
+              </View>
             </View>
           </>}
         </View>
@@ -195,7 +237,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 30,
   },
-  accountText: { display: 'flex', flexDirection: 'row', width: 80 },
+  accountText: { width: 115 },
   kill: { backgroundColor: 'red', color: 'white', fontWeight: 'bold', marginRight: '15' },
   pt10: { paddingVertical: 10 },
   funds: { display: 'flex', flexDirection: 'row', width: '100%', justifyContent: "space-between", marginTop: 20 },
@@ -208,6 +250,22 @@ const styles = StyleSheet.create({
   balance: { display: "flex", flexDirection: "row", marginTop: 15 },
   fwb: { fontWeight: 'bold' },
   btn: { textAlign: 'center', marginBottom: 20, paddingHorizontal: 30 },
-  walletCard: { backgroundColor: 'white', borderRadius: 10, height: 76, width: "100%", padding: 10, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }
+  walletCard: { backgroundColor: 'white', borderRadius: 10, height: 76, width: "100%", padding: 10, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  walletCardDetailContainer: {
+    marginTop: 17,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 10,
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  walletCardDetail: {
+    height: 45,
+    width: "100%",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  }
 })
 export default Home
