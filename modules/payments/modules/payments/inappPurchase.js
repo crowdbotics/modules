@@ -89,7 +89,7 @@ const InappPurchase = () => {
                         <TouchableOpacity onPress={async () => {
                           requestPurchase(item.productId)
                         }} style={[styles.button]}>
-                            <Text style={styles.buttonText}>{item.type == 'iap' ? 'Buy' : 'Subscribe'}</Text>
+                            <Text style={styles.buttonText}>{item.type === 'iap' ? 'Buy' : 'Subscribe'}</Text>
                         </TouchableOpacity>
                     </View>
                 )}
