@@ -66,11 +66,11 @@ const TransactionHistory = () => {
   const Item = ({ title }) => {
     return (
       <View style={styles.walletCard}>
-        <View style={{ display: 'flex', flexDirection: 'row', }}>
+        <View style={styles.walletInner}>
           <Image source={walletIcon} />
-          <View style={{ alignSelf: 'center', display: 'flex', flexDirection: 'column' }}>
-            <Text style={{ color: '#26292A', fontSize: 14, marginLeft: 10 }}>From: {title.from}</Text>
-            <Text style={{ color: '#26292A', fontSize: 14, marginLeft: 10 }}>To: {title.to}</Text>
+          <View style={styles.walletCarder}>
+            <Text style={styles.from} numberOfLines={1} ellipsizeMode='middle'>From: {title.from}</Text>
+            <Text style={styles.to} numberOfLines={1} ellipsizeMode='middle'>To: {title.to}</Text>
           </View>
 
         </View>
@@ -88,7 +88,7 @@ const TransactionHistory = () => {
   return (
     <>
       {isLoading && <Loader />}
-      <View style={{ padding: 10 }}>
+      <View style={styles.mainPad}>
 
         {transactionList.length ? <SectionList
           sections={[{
@@ -98,7 +98,7 @@ const TransactionHistory = () => {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => <Item title={item} />}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{marginHorizontal: 10, marginVertical: 20, fontSize: 14}}>{title}</Text>
+            <Text style={styles.title}>{title}</Text>
           )} /> : null}
       </View>
     </>
@@ -110,7 +110,25 @@ const styles = StyleSheet.create({
   container: { backgroundColor: 'white', borderRadius: 6, padding: 10, marginVertical: 9 },
   center: { display: 'flex', flexDirection: 'row', },
   wp20: { width: '20%' },
-  walletCard:{backgroundColor:'white', borderBottomWidth: 1, borderBottomColor: 'lightgray', height:76, width:"100%", padding:10, display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between' }
+  walletCard:{backgroundColor:'white', borderBottomWidth: 1, borderBottomColor: 'lightgray', height:76, width:"100%", padding:10, display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between' },
+  walletInner: {
+    display: 'flex', flexDirection: 'row',
+  },
+  walletCarder: {
+    alignSelf: 'center', display: 'flex', flexDirection: 'column',
+  },
+  from: {
+    color: '#26292A', fontSize: 14, marginLeft: 10,width:115
+  },
+  to: {
+    color: '#26292A', fontSize: 14, marginLeft: 10, width: 115
+  },
+  mainPad: {
+    padding: 10,
+  },
+  title: {
+    marginHorizontal: 10, marginVertical: 20, fontSize: 14,
+  },
 });
 
 export default TransactionHistory

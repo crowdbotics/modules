@@ -100,21 +100,21 @@ const Home = (props) => {
 
       {connector.connected && connectedWallet &&
         <View style={styles.top}>
-          <View style={[styles.account, {display: 'flex', flexDirection: 'column'}]}>
+          <View style={[styles.account, styles.accounted]}>
             <TouchableOpacity onPress={switchCurrencyHandler}>
               <Text style={styles.accountText} numberOfLines={1} ellipsizeMode='middle'>{globalConnector && globalConnector._accounts}</Text>
             </TouchableOpacity>
-            <View style={{marginTop: 25, width: 120}}>
+            <View style={styles.switched}>
               <Button height={40} backgroundColor="#F1F1F1" color="#000000" onPress={switchSession}>Switch wallet</Button>
             </View>
           </View>
           <View style={[styles.pt10, styles.balance]}>
-            <TouchableOpacity style={{ marginRight: 5, marginTop: 4 }} onPress={async () => await getAccount()}>
+            <TouchableOpacity style={styles.getAccount} onPress={async () => await getAccount()}>
               <Image style={styles.refreshIcon} source={refreshIcon} />
             </TouchableOpacity>
             <View>
-              <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{balance ? `${balance}` : <ShimmerPlaceHolder style={{ borderRadius: 4, }} width={50} height={15} LinearGradient={LinearGradient} />}</Text>
-              <Text style={{ color: '#7C7C7C', fontSize: 14, alignSelf: 'flex-end', textAlign: 'right' }}>Balance</Text>
+              <Text style={styles.balanceText}>{balance ? `${balance}` : <ShimmerPlaceHolder style={{ borderRadius: 4, }} width={50} height={15} LinearGradient={LinearGradient} />}</Text>
+              <Text style={styles.balanceTxt}>Balance</Text>
             </View>
           </View>
         </View>
@@ -124,14 +124,14 @@ const Home = (props) => {
         <View>
           {connector.connected && connectedWallet && <>
             <View>
-              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28, marginTop: 14, paddingHorizontal: 23 }}>
-                <Text style={{ fontSize: 16 }}>Wallet</Text>
-                <Text style={{ fontSize: 16 }}>Balance</Text>
+              <View style={styles.walletBalance}>
+                <Text style={styles.walletText}>Wallet</Text>
+                <Text style={styles.walletText}>Balance</Text>
               </View>
               <TouchableOpacity style={styles.walletCard} onPress={() => props.navigation.navigate('MyWallet')}>
-                <View style={{ display: 'flex', flexDirection: 'row', }}>
+                <View style={styles.myWallet}>
                   <Image source={walletIcon} />
-                  <Text style={{ color: '#26292A', fontSize: 14, marginLeft: 10, alignSelf: 'center' }}>{connectedWallet.name}</Text>
+                  <Text style={styles.walletName}>{connectedWallet.name}</Text>
                 </View>
                 <View>
                   <Text>
@@ -155,7 +155,7 @@ const Home = (props) => {
                     <Text>Status</Text>
                   </View>
                   <View>
-                    <Text style={{color: '#12D790'}}>
+                    <Text style={styles.onlineText}>
                       Online
                     </Text>
                   </View>
@@ -187,7 +187,7 @@ const Home = (props) => {
         {
           !connector.connected && <View style={styles.connectText}>
 
-            {!connector.connected && <Image style={{ marginBottom: 10 }} source={walletIcon} />}
+            {!connector.connected && <Image style={styles.walletIcon} source={walletIcon} />}
             {!connector.connected && <Text style={styles.fwb}>Connect your Wallet</Text>}
           </View>
         }
@@ -237,6 +237,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 30,
   },
+  accounted: {
+    display: 'flex', 
+    flexDirection: 'column',
+  },
   accountText: { width: 115 },
   kill: { backgroundColor: 'red', color: 'white', fontWeight: 'bold', marginRight: '15' },
   pt10: { paddingVertical: 10 },
@@ -266,6 +270,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
-  }
+  },
+  switched: {
+    marginTop: 25, width: 120,
+  },
+  getAccount: {
+    marginRight: 5, marginTop: 4,
+  },
+  balanceText: {
+    fontSize: 20, fontWeight: 'bold',
+  },
+  balanceTxt: {
+    color: '#7C7C7C', fontSize: 14, alignSelf: 'flex-end', textAlign: 'right',
+  },
+  walletBalance: {
+    display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28, marginTop: 14, paddingHorizontal: 23, 
+  },
+  walletText: {
+    fontSize: 16,
+  },
+  myWallet: {
+    display: 'flex', flexDirection: 'row', 
+  },
+  walletName: {
+    color: '#26292A', fontSize: 14, marginLeft: 10, alignSelf: 'center',
+  },
+  onlineText: {
+    color: '#12D790',
+  },
+  walletIcon: {
+    marginBottom: 10,
+  },
 })
 export default Home

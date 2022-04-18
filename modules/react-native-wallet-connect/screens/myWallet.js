@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, useWindowDimensions } from 'react-native';
+import { useWindowDimensions,StyleSheet } from 'react-native';
 // @ts-ignore
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import ReceiveTransaction from './receiveTransaction';
@@ -23,16 +23,10 @@ const MyWallet = (props) => {
   const renderTabBar = props => (
     <TabBar
       {...props}
-      indicatorStyle={{backgroundColor: '#FFFFFF', borderRadius: 10, height: 37, shadowColor: '#000', elevation: 5}}
-      indicatorContainerStyle={{ height: 37, marginTop: 6}}
-      labelStyle={{color: '#000000', fontSize: 14, textTransform: 'capitalize', width: '100%'}}
-      style={{
-        backgroundColor: '#F1F1F1',
-        height: 48,
-        borderRadius: 10,
-        marginLeft: 10,
-        marginRight: 10
-      }}
+      indicatorStyle={styles.indicator}
+      indicatorContainerStyle={styles.indicatorContainer}
+      labelStyle={styles.label}
+      style={styles.tab}
     />
   );
 
@@ -46,4 +40,18 @@ const MyWallet = (props) => {
     />
   )
 }
+
+const styles = StyleSheet.create({
+  tab:{
+    backgroundColor: '#F1F1F1',
+    height: 48,
+    borderRadius: 10,
+    marginLeft: 10,
+    marginRight: 10
+  },
+  indicator:{backgroundColor: '#FFFFFF', borderRadius: 10, height: 37, shadowColor: '#000', elevation: 5},
+  indicatorContainer: { height: 37, marginTop: 6},
+  label:{color: '#000000', fontSize: 14, textTransform: 'capitalize', width: '100%'}
+
+})
 export default MyWallet

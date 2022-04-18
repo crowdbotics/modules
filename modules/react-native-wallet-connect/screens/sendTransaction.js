@@ -26,12 +26,6 @@ const SendTransaction = (props) => {
   const [balance, setBalance] = useState(null)
 
   useEffect(() => {
-    if (toast && !isLoading) {
-      props.navigation.goBack()
-    }
-  }, [toast])
-
-  useEffect(() => {
     setSender(globalConnector._accounts[0])
     setToast(false)
     setTransactionError(false)
@@ -70,22 +64,22 @@ const SendTransaction = (props) => {
   };
 
   return (
-    <View style={{ backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'space-between' }}>
+    <View style={styles.main}>
       {isLoading && <Loader />}
-      <View style={{ padding: 10 }}>
+      <View style={styles.mainPad}>
         <>
           {!qr ? <>
             <View style={styles.walletCard}>
-              <View style={{ alignSelf: 'center', display: 'flex', flexDirection: 'column' }}>
-                <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Total</Text>
-                <Text style={{ color: '#7C7C7C', fontSize: 12 }}>Available to send</Text>
+              <View style={styles.wallet}>
+                <Text style={styles.totalText}>Total</Text>
+                <Text style={styles.availableText}>Available to send</Text>
               </View>
               <View>
-                <Text style={{ fontSize: 23, fontWeight: '800' }}>{balance ? `${balance}` : <ShimmerPlaceHolder style={{ borderRadius: 4, }} width={50} height={15} LinearGradient={LinearGradient} />}</Text>
+                <Text style={styles.balanceText}>{balance ? `${balance}` : <ShimmerPlaceHolder style={{ borderRadius: 4, }} width={50} height={15} LinearGradient={LinearGradient} />}</Text>
               </View>
             </View>
             <View style={styles.center}>
-              <View style={{ paddingLeft: 10, paddingBottom: 6 }}>
+              <View style={styles.from}>
                 <Text>From</Text>
               </View>
               <View style={styles.blackColor} >
@@ -93,15 +87,15 @@ const SendTransaction = (props) => {
               </View>
             </View>
             <View style={styles.center}>
-              <View style={{ paddingLeft: 10, paddingBottom: 6 }}>
+              <View style={styles.to}>
                 <Text>To</Text>
               </View>
               <View style={styles.center}>
-                <View style={[styles.blackColor, { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
-                  <View style={{width: "90%"}}>
+                <View style={[styles.blackColor, styles.inputField]}>
+                  <View style={styles.receiver}>
                     <Input value={receiver} setValue={setReceiver} placeholder='Receiver Address' />
                   </View>
-                  <View style={{ paddingRight: 10, width: "10%" }}>
+                  <View style={styles.qrCode}>
                     <TouchableOpacity onPress={() => setQr(true)}>
                       <Image
                         source={qrIcon}
@@ -113,7 +107,7 @@ const SendTransaction = (props) => {
               </View>
             </View>
             <View style={styles.center}>
-              <View style={{ paddingLeft: 10, paddingBottom: 6 }}>
+              <View style={styles.amountText}>
                 <Text >Amount</Text>
               </View>
               <View style={styles.blackColor}>
@@ -141,7 +135,7 @@ const SendTransaction = (props) => {
         </>
 
       </View>
-      <View style={{ paddingHorizontal: 30, marginBottom: 30 }}>
+      <View style={styles.bottomBtn}>
         {!qr && <Button onPress={() => StartTransaction()} disabled={!receiver || !sender || !amount ? true : false}>Send</Button>}
       </View>
     </View>
@@ -211,7 +205,46 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 1.62,
     elevation: 15,
-  }
+  },
+  main: {
+    backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'space-between',
+  },
+  wallet: {
+    alignSelf: 'center', display: 'flex', flexDirection: 'column', 
+  },
+  totalText: {
+    fontSize: 24, fontWeight: 'bold',
+  },
+  availableText: {
+    color: '#7C7C7C', fontSize: 12,
+  },
+  balanceText: {
+    fontSize: 23, fontWeight: '800',
+  },
+  from: {
+    paddingLeft: 10, paddingBottom: 6,
+  },
+  to: {
+    paddingLeft: 10, paddingBottom: 6, 
+  },
+  inputField: {
+    display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+  },
+  mainPad: {
+    padding: 10 
+  },
+  receiver: {
+    width: "90%",
+  },
+  qrCode: {
+    paddingRight: 10, width: "10%",
+  },
+  amountText: {
+    paddingLeft: 10, paddingBottom: 6,
+  },
+  bottomBtn: {
+    paddingHorizontal: 30, marginBottom: 30,
+  },
 });
 
 export default SendTransaction

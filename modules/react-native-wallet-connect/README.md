@@ -21,11 +21,11 @@ npx rn-nodeify --install "stream" --hack
 ```
 ./node_modules/.bin/rn-nodeify --hack --install
 ```
-Import following in index.js
-```
+# Import the  following in the index.js in root directory
+
 import './shim.js'
 import crypto from 'crypto'
-```
+
 # The following dependencies are used for the module
 
 ```
@@ -39,6 +39,8 @@ npm install react-native-svg @react-native-async-storage/async-storage
 Add permissions to your app android/app/src/main/AndroidManifest.xml file:
 ```
 <uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.VIBRATE"/>
+
 ```
 Insert the following lines in android/app/build.gradle:
 ```
@@ -66,12 +68,6 @@ npm run android
 ```
 npm run start
 ```
-
-# Import the  following in the index.js in root directory
-
-import './shim.js'
-import crypto from 'crypto'
-
 ## Features
 
 # Connect to Crypto Wallets
