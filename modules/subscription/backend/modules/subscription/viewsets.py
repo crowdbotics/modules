@@ -1,7 +1,3 @@
-import json
-
-from django.core.exceptions import ValidationError
-from django.views.generic import TemplateView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
 from rest_framework.views import APIView
@@ -10,19 +6,6 @@ import stripe
 from modules.subscription.models import SubscriptionPlan
 from modules.subscription.serializers import SubscriptionPlanSerializer
 from modules.subscription.services.StripeSubscriptionService import StripeSubscriptionService
-
-
-class ManageSubscriptionsView(TemplateView):
-    template_name = "subscription/index.html"
-
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
-        # Add in a QuerySet of all the books
-        # context['products'] = StripeSubscriptionService.get_products_with_detail()
-        context['get_portal_session'] = StripeSubscriptionService.get_portal_session("cus_KY067C6rxtCxb7")
-        # context['create_subscription'] = StripeSubscriptionService.create_subscription("cus_KY067C6rxtCxb7", "price_1Kceg0DWvyLYvYlE2I8SRkPe")
-        return context
 
 
 class SubscriptionPlanView(APIView):

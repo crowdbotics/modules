@@ -3,7 +3,7 @@ import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions(); 
 const BASE_URL = global.url; // change your BASE_URL in `options/options.js` to edit this value
-const token = "Token 20013de1140d54d543aed9c7390606d77ae8d845"
+const token = "your token here"
 // FIXME: Make this call with Authorization
 // Right now there is no login in this module but when this feture will be added
 // there will be a user profile added make changes accordingly
@@ -15,7 +15,7 @@ export const fetchPaymentSheetParams = async (price_tier) => {
             'Authorization': token
         },
         body: JSON.stringify({
-        "price_tier": price_tier
+            "price_tier": price_tier
         })
     });
 

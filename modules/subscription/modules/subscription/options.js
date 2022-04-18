@@ -108,15 +108,15 @@ const styles = StyleSheet.create({
 });
 
 export const localOptions = {
-  stripeSecretKey: "sk_test_51EA1HwDWvyLYvYlERNHHINu6Ngdh8MjRGxqRMNc69rOEAJAbv7ru8Ivi07JpUUMG2YbktCNLBO3SxV7NMwDyRjq4007822BMDs",
+  stripeSecretKey: "your stripe secret key here  e.g. sk_test_xxxx",
   merchantName: "Example Inc.",
   enableGooglePay: true,
   enableApplePay: true,
-  merchantIdentifier:"merchant.com.crowdbotics.inaday",
+  merchantIdentifier: "merchant.com.crowdbotics.inaday",
   merchantCountryCode: 'US',
   merchantCurrency: 'USD',
   stripeTestEnv: true,
-  stripePublishKey: "pk_test_FrvlAsdLgTI9r0qdAO1KcXLI"
+  stripePublishKey: "your stripe publish key here e.g. pk_test_xxxx"
 }
 
 export default {

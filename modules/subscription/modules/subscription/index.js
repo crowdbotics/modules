@@ -1,15 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Text, View, FlatList, TouchableOpacity, Alert, Modal, Pressable, ActivityIndicator } from 'react-native';
 import { OptionsContext, GlobalOptionsContext } from "@options";
-import { ScrollView } from 'react-native-gesture-handler';
-import { Dimensions } from 'react-native'
-import { StripeProvider } from '@stripe/stripe-react-native';
-import { useApplePay, useGooglePay, useStripe, presentGooglePay, ApplePayButton, GooglePayButton } from '@stripe/stripe-react-native';
+import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
 import { fetchPlans , fetchPaymentSheetParams, cancelPlan} from "./api";
 
 const Subscription = (params) => {
   const options = useContext(OptionsContext);
-  // console.log(options)
   const { styles, localOptions } = options;
   const clientSecret = global.stripeSecretKey;
   const { stripePublishKey, merchantIdentifier } = localOptions;
@@ -66,9 +62,7 @@ const Subscription = (params) => {
     });
   }
   useEffect(async () => {
-    console.log("chala")
     await refreshPlans()
-
   }, [preSelectedPlan])
 
   const planSelected = (item) => {
