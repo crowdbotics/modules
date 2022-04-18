@@ -75,7 +75,6 @@ class StripeSubscriptionService:
     @classmethod
     def update_subscription(cls, sub_id, price_id):
         try:
-            print("update_subscription")
             subscription = stripe.Subscription.retrieve(sub_id)
 
             updatedSubscription = stripe.Subscription.modify(
@@ -160,7 +159,6 @@ class StripeSubscriptionService:
         # Handle the event
         if event.type == 'invoice.payment_succeeded':
             payment_intent = event.data.object  # contains a stripe.PaymentIntent
-            print('PaymentIntent was successful!', event.data, payment_intent)
             cls.customer_subscribed(payment_intent)
             if payment_intent.billing_reason == 'subscription_create':
                 subscription_id = payment_intent.subscription
@@ -176,7 +174,6 @@ class StripeSubscriptionService:
                 )
         elif event.type == 'customer.subscription.updated':
             sub = event.data.object  # contains a stripe.Subscription
-            print('sub', sub)
             if sub.status == 'past_due':
                 cls.end_subscription(sub)
             elif sub.status == 'active':

@@ -15,7 +15,6 @@ class SubscriptionPlanView(APIView):
     def get(self, request, *args, **kwargs):
         plans = SubscriptionPlan.objects.filter(is_active=True)
         response = SubscriptionPlanSerializer(plans, many=True, context={'user': request.user})
-        print(response.data)
         return Response({
             'success': True,
             'result': response.data,
@@ -39,13 +38,10 @@ class BuySubscriptionPlanView(APIView):
         price_tier = request.data.get('price_tier')
         plan = SubscriptionPlan.objects.get(price_id=price_tier)
         already_has_a_plan = StripeSubscriptionService.already_has_a_plan(user)
-        print("StripeSubscriptionService")
         if already_has_a_plan.subscription_id:
             # update subscription
-            print("StripeSubscriptionService3")
             result = StripeSubscriptionService.update_subscription(already_has_a_plan.subscription_id, plan.price_id)
         else:
-            print("StripeSubscriptionService2")
             result = StripeSubscriptionService.create_subscription(stripe_cus_id, plan.price_id)
         response = result
         return Response(response, status=status.HTTP_200_OK)
