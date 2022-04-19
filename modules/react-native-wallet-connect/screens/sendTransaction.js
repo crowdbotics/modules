@@ -130,7 +130,7 @@ const SendTransaction = (props) => {
           />
           }
 
-          {toast && showToastWithGravity('Transaction successful')}
+          {toast && showToastWithGravity('Transaction has been submitted')}
           {transactionError && !toast && showToastWithGravity('request rejected')}
         </>
 
