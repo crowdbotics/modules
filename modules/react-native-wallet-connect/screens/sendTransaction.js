@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid, Image } from 'react-native';
 // @ts-ignore
 import { RNCamera } from 'react-native-camera';
@@ -21,14 +21,10 @@ const SendTransaction = (props) => {
   const [receiver, setReceiver] = useState('')
   const [amount, setAmount] = useState('0.01')
   const [isLoading, setIsLoading] = useState(false)
-  const [toast, setToast] = useState(false)
-  const [transactionError, setTransactionError] = useState(false)
   const [balance, setBalance] = useState(null)
 
   useEffect(() => {
     setSender(globalConnector._accounts[0])
-    setToast(false)
-    setTransactionError(false)
     getBalance().then(res => setBalance(res))
   }, [])
 
@@ -43,12 +39,12 @@ const SendTransaction = (props) => {
     const provider = walletProvider()
     fundTransfer(provider, sender, receiver, amount).then((res) => {
       setIsLoading(false)
-      setToast(true)
+      showToastWithGravity('Transaction has been submitted')
       setBalance(null)
       getBalance().then(res => setBalance(res))
     }).catch((e) => {
       setIsLoading(false)
-      setTransactionError(true)
+      showToastWithGravity('request rejected')
     })
 
   }
@@ -67,8 +63,8 @@ const SendTransaction = (props) => {
     <View style={styles.main}>
       {isLoading && <Loader />}
       <View style={styles.mainPad}>
-        <>
-          {!qr ? <>
+        <Fragment>
+          {!qr ? <Fragment>
             <View style={styles.walletCard}>
               <View style={styles.wallet}>
                 <Text style={styles.totalText}>Total</Text>
@@ -114,7 +110,7 @@ const SendTransaction = (props) => {
                 <Input setValue={setAmount} value={amount} />
               </View>
             </View>
-          </> : <QRCodeScanner
+          </Fragment> : <QRCodeScanner
             onRead={onSuccess}
             flashMode={RNCamera.Constants.FlashMode.torch}
             topContent={
@@ -129,10 +125,7 @@ const SendTransaction = (props) => {
             }
           />
           }
-
-          {toast && showToastWithGravity('Transaction has been submitted')}
-          {transactionError && !toast && showToastWithGravity('request rejected')}
-        </>
+        </Fragment>
 
       </View>
       <View style={styles.bottomBtn}>
@@ -210,7 +203,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white', height: '100%', display: 'flex', justifyContent: 'space-between',
   },
   wallet: {
-    alignSelf: 'center', display: 'flex', flexDirection: 'column', 
+    alignSelf: 'center', display: 'flex', flexDirection: 'column',
   },
   totalText: {
     fontSize: 24, fontWeight: 'bold',
@@ -225,13 +218,13 @@ const styles = StyleSheet.create({
     paddingLeft: 10, paddingBottom: 6,
   },
   to: {
-    paddingLeft: 10, paddingBottom: 6, 
+    paddingLeft: 10, paddingBottom: 6,
   },
   inputField: {
     display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
   },
   mainPad: {
-    padding: 10 
+    padding: 10
   },
   receiver: {
     width: "90%",

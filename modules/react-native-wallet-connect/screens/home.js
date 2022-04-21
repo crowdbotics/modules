@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 // @ts-ignore
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native"
@@ -122,7 +122,7 @@ const Home = (props) => {
 
       <View style={connector.connected ? styles.container : styles.homeContainer}>
         <View>
-          {connector.connected && connectedWallet && <>
+          {connector.connected && connectedWallet && <Fragment>
             <View>
               <View style={styles.walletBalance}>
                 <Text style={styles.walletText}>Wallet</Text>
@@ -182,7 +182,7 @@ const Home = (props) => {
                 </View>
               </View>
             </View>
-          </>}
+          </Fragment>}
         </View>
         {
           !connector.connected && <View style={styles.connectText}>
