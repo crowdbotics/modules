@@ -2,7 +2,7 @@
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL = 'https://421d-39-53-89-13.ngrok.io' //global.url;
+const BASE_URL = global.url;
 
 export const sendQuery = async (data) => {
   try {

@@ -1,5 +1,3 @@
-
-
 export const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
