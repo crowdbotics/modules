@@ -1,0 +1,11 @@
+{
+  "title": "Appointment",
+  "description": "Appointment Module",
+  "root": "/",
+  "schema": {
+    "buttonText": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
