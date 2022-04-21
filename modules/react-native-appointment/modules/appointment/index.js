@@ -1,11 +1,9 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
-import { View,StyleSheet } from 'react-native';
-import Home from './screens/home';
-
+import React from 'react';
+import Navigator from './Navigator';
 
 const Appointment = () => {
   return(
-    <Home/>
+    <Navigator />
   )
 
 };

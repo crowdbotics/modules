@@ -3,18 +3,18 @@ import { Text, View, TouchableOpacity, FlatList, ImageBackground, StyleSheet, us
 // @ts-ignore
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import CreateAppointment from './createAppointment';
-import Appointment from './appointment';
+import AppointmentList from './appointmentList';
 
 const Home = () => {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'Appointment', title: 'Create an appointment' },
+    { key: 'AppointmentList', title: 'Create an Appointment' },
     { key: 'Calendar', title: 'Calendar' },
 
   ]);
   const renderScene = SceneMap({
-    Appointment: Appointment,
+    AppointmentList: AppointmentList,
     Calendar: CreateAppointment,
 
   });

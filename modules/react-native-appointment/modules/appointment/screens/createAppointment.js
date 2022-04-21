@@ -11,7 +11,7 @@ const CreateAppointment = () => {
   const [location, setLocation] = useState('')
   const [description, setDescription] = useState('')
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(['weekly', 'biweekly', 'daily', 'monthly']);
+  const [value, setValue] = useState('daily');
   const [items, setItems] = useState([
     {label: 'Weekly', value: 'weekly'},
     {label: 'Biweekly', value: 'biweekly'},
@@ -25,16 +25,16 @@ const CreateAppointment = () => {
         <View style={styles.container}>
           <View style={styles.head}>
             <View style={styles.headItems}>
-              <Text>21/4/22</Text>
-              <Text>Date</Text>
+              <Text style={{fontSize: 22, color: '#313633'}}>16/01/2022</Text>
+              <Text style={{fontSize: 14, color: '#7C7C7C', marginTop: 8}}>Appointment date</Text>
             </View>
             <View style={styles.headItems}>
-              <Text>12 am</Text>
-              <Text>Time</Text>
+              <Text style={{fontSize: 22, color: '#313633'}}>12:00</Text>
+              <Text style={{fontSize: 14, color: '#7C7C7C', marginTop: 8}}>Time</Text>
             </View >
             <View style={styles.headItems}>
-              <Text>1 Hr</Text>
-              <Text>Duration</Text>
+              <Text style={{fontSize: 22, color: '#313633'}}>1 Hour</Text>
+              <Text style={{fontSize: 14, color: '#7C7C7C', marginTop: 8}}>Duration</Text>
             </View> 
           </View>
           <View style={styles.mt15}>
@@ -70,10 +70,13 @@ const CreateAppointment = () => {
               setOpen={setOpen}
               setValue={setValue}
               setItems={setItems}
-              multiple={true}
+              style={{
+                borderColor: '#C4C4C4',
+                height: 53
+              }}
             />
           </View>
-          <Text>Time Slots</Text>
+          <Text style={{marginVertical: 20, fontSize: 14}}>Time Slot</Text>
           <View style={styles.list}>
            {dummyTimeSlots.map((item,index)=>(
               <View style={styles.items} key={index}>
@@ -92,12 +95,12 @@ const CreateAppointment = () => {
 
 };
 const styles = StyleSheet.create({
-  container:{height:'100%', padding:20, backgroundColor:'white'},  
-  head: {display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center',borderTopWidth:0.5, borderBottomWidth:1, borderColor:'#F0F2F7',paddingVertical:20},
+  container:{height:'100%', padding: 10},  
+  head: {display:'flex', flexDirection:'row', justifyContent:'space-between', paddingVertical: 20, paddingHorizontal: 17, borderColor: '#F0F2F7', borderBottomWidth: 1, borderTopWidth: 1 },
   headItems: {display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center'},
   mt15:{marginTop:15},
-  mb10: {marginBottom:10},
-  items:{borderWidth:1,borderRadius:10, borderBottomColor:'#D8D8D8',width:90, height:30,marginVertical:15,marginRight:15, justifyContent:'center', alignItems:'center'},
+  mb10: {marginBottom:10, fontSize: 14, marginLeft: 10},
+  items:{borderWidth:1, borderRadius:10, borderColor:'#D8D8D8', width:90, height:30, margin: 7, justifyContent:'center', alignItems:'center'},
   list:{display:'flex', flexDirection:'row', flexWrap:'wrap'},
   button:{padding:15}
 
