@@ -5,7 +5,7 @@ import CalendarStrip  from 'react-native-calendar-strip'
 import { dummyAppointments } from '../utils';
 
 
-const Appointment = () => {
+const Appointment = ({navigation}) => {
 
   const renderItem = ({ item }) => (
     <View style={styles.appointmentItem}>
@@ -37,7 +37,7 @@ const Appointment = () => {
       <View>
         <View style={styles.viewAll}>
           <Text style={{fontSize: 14, color: '#1E2022'}}>List of Appointments</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>navigation.navigate('Appointments')}>
             <Text style={{fontSize: 14, color: '#1E2022'}}>View all</Text>
           </TouchableOpacity>
         </View>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   viewAll: {display:'flex', flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginTop: 20, marginHorizontal: 14},
   appointmentItem:{display:'flex', flexDirection:'row', justifyContent:'space-around',alignItems:'center', marginVertical:20},
   card:{backgroundColor: '#DADADA', borderRadius: 10, width: '80%', height:50, textAlign:'center', display:'flex', justifyContent:'center',alignItems:'center', padding:10},
- 
+  
 
 })
 export default Appointment;

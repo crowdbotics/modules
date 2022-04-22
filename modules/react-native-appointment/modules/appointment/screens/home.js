@@ -1,11 +1,11 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, FlatList, ImageBackground, StyleSheet, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 // @ts-ignore
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
-import CreateAppointment from './createAppointment';
 import AppointmentList from './appointmentList';
+import Calendar from './calendar';
 
-const Home = () => {
+const Home = (props) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
@@ -14,8 +14,8 @@ const Home = () => {
 
   ]);
   const renderScene = SceneMap({
-    AppointmentList: AppointmentList,
-    Calendar: CreateAppointment,
+    AppointmentList: ()=><AppointmentList navigation={props.navigation}/>,
+    Calendar: () => <Calendar navigation={props.navigation}/>,
 
   });
 
