@@ -33,7 +33,7 @@
   "dependencies": {
     "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.8",
-    "@babel/generator": "^7.14.9",
+    "@babel/generator": "^7.17.9",
     "@babel/parser": "^7.15.3",
     "@babel/preset-env": "^7.16.11",
     "@babel/template": "^7.16.7",
