@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
-import { useStore } from '../Store/store';
+import React, { useState } from "react";
+import { useStore } from "../Store/store";
 // @ts-ignore
-import { usePubNub } from 'pubnub-react';
-import { View, Text, SectionList, TouchableOpacity } from 'react-native';
-import Circle from '../Components/Circle';
-import { StyleSheet } from 'react-native';
-import Loader from '../Components/loader';
+import { usePubNub } from "pubnub-react";
+import {
+  View,
+  Text,
+  SectionList,
+  TouchableOpacity,
+  StyleSheet
+} from "react-native";
+import Circle from "../Components/Circle";
+import Loader from "../Components/loader";
 
-export default ({ navigation, route }) => {
+export default function AddMember({ navigation, route }) {
   const { state, dispatch } = useStore();
   const [loading, setLoading] = useState(false);
   const pubnub = usePubNub();
   const data = state.contacts;
 
   const addUser = async (user) => {
-    if (loading)
+    if (loading) {
       return;
+    }
     setLoading(true);
-    const res = await pubnub.objects.setChannelMembers({
+    await pubnub.objects.setChannelMembers({
       channel: route.params.item.id,
       uuids: [user._id]
     });
@@ -34,24 +40,27 @@ export default ({ navigation, route }) => {
         <View key={item.id} style={styles.ListItem}>
           <View style={styles.ProfileContainer}>
             <View style={styles.ProfileBox}>
-              <Circle letter={(item.name ? item.name[0] : '').toUpperCase()} source={""} />
+              <Circle
+                letter={(item.name ? item.name[0] : "").toUpperCase()}
+                source={""}
+              />
             </View>
-            <View style={styles.Profile} >
+            <View style={styles.Profile}>
               <Text style={[styles.ProfileText, styles.Mt8]}>{item.name}</Text>
             </View>
           </View>
         </View>
       </TouchableOpacity>
-    )
-  }
-  
+    );
+  };
+
   return (
     <>
-    {loading && <Loader />}
+      {loading && <Loader />}
       <View style={styles.Container}>
         <SectionList
           refreshing={loading}
-          sections={[{ title: "Contacts", data: data}]}
+          sections={[{ title: "Contacts", data: data }]}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => ListItem(item)}
           renderSectionHeader={({ section: { title } }) => (
@@ -62,13 +71,13 @@ export default ({ navigation, route }) => {
         />
       </View>
     </>
-  )
-};
+  );
+}
 
 const styles = StyleSheet.create({
   Container: {
-    backgroundColor: 'white',
-    height: '100%',
+    backgroundColor: "white",
+    height: "100%",
     padding: 10,
     paddingTop: 20
   },
@@ -76,11 +85,11 @@ const styles = StyleSheet.create({
     height: 42,
     width: 42,
     borderRadius: 50,
-    backgroundColor: '#292B2F'
+    backgroundColor: "#292B2F"
   },
   ProfileContainer: {
-    display: 'flex',
-    flexDirection: 'row'
+    display: "flex",
+    flexDirection: "row"
   },
   ListItem: {
     backgroundColor: "#f0f3f7",
@@ -95,22 +104,22 @@ const styles = StyleSheet.create({
     width: "82%"
   },
   ProfileText: {
-    color: '#292B2F',
-    fontWeight: 'bold',
+    color: "#292B2F",
+    fontWeight: "bold",
     fontSize: 16
   },
   GroupHeading: {
-    color: '#292B2F',
-    fontWeight: 'bold',
+    color: "#292B2F",
+    fontWeight: "bold",
     fontSize: 18,
     marginBottom: 10
   },
-  Mt8 : {
+  Mt8: {
     marginTop: 8
   },
- Displayflex: {
-    display: "flex", 
-    flexDirection: "row", 
+  Displayflex: {
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between"
- }
+  }
 });
