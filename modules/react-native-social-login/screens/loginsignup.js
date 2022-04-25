@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,33 +8,33 @@ import {
   ActivityIndicator,
   Alert,
   Platform
-} from "react-native"
+} from "react-native";
 import {
   AppleButton,
   appleAuthAndroid
-} from "@invertase/react-native-apple-authentication"
-import { useSelector, useDispatch } from "react-redux"
-import { HOME_SCREEN_NAME, validateEmail } from "./constants"
-import { buttonStyles, textInputStyles, Color } from "./styles"
+} from "@invertase/react-native-apple-authentication";
+import { useSelector, useDispatch } from "react-redux";
+import { HOME_SCREEN_NAME, validateEmail } from "./constants";
+import { buttonStyles, textInputStyles, Color } from "./styles";
 import {
   GoogleSigninButton,
   GoogleSignin,
   statusCodes
-} from "@react-native-google-signin/google-signin"
-import { LoginManager, AccessToken } from "react-native-fbsdk"
-import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from "../auth/utils"
-import { appleForAndroid, appleForiOS } from "../auth/apple"
+} from "@react-native-google-signin/google-signin";
+import { LoginManager, AccessToken } from "react-native-fbsdk";
+import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from "../auth/utils";
+import { appleForAndroid, appleForiOS } from "../auth/apple";
 import {
   loginRequest,
   signupRequest,
   facebookLogin,
   googleLogin,
   appleLogin
-} from "../auth"
-import { unwrapResult } from "@reduxjs/toolkit"
+} from "../auth";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 // Custom Text Input
-export const TextInputField = props => (
+export const TextInputField = (props) => (
   <View>
     <Text style={[textInputStyles.label, props.labelStyle]}>{props.label}</Text>
     <TextInput
@@ -46,28 +46,30 @@ export const TextInputField = props => (
     />
     {!!props.error && <Text style={textInputStyles.error}>{props.error}</Text>}
   </View>
-)
+);
 
 // Custom Button
-export const Button = props => (
+export const Button = (props) => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={[buttonStyles.viewStyle, props.viewStyle]}>
-      {props.loading ? (
+      {props.loading
+        ? (
         <ActivityIndicator
           color={props.loadingColor ? props.loadingColor : Color.white}
           style={props.loadingStyle}
         />
-      ) : (
+          )
+        : (
         <Text style={[buttonStyles.textStyle, props.textStyle]}>
           {props.title}
         </Text>
-      )}
+          )}
     </View>
   </TouchableOpacity>
-)
+);
 
 // Grouped Social Buttons View
-const SocialButtonsView = props => (
+const SocialButtonsView = (props) => (
   <View>
     <Text style={{ textAlign: "center", width: "100%", marginVertical: 5 }}>
       - or -
@@ -105,110 +107,113 @@ const SocialButtonsView = props => (
       />
     )}
   </View>
-)
+);
 
-const onFacebookConnect = async dispatch => {
+const onFacebookConnect = async (dispatch, navigation) => {
   try {
-    const fb_result = await LoginManager.logInWithPermissions([
+    const fbResult = await LoginManager.logInWithPermissions([
       "public_profile",
       "email"
-    ])
-    if (!fb_result.isCancelled) {
-      const data = await AccessToken.getCurrentAccessToken()
+    ]);
+    if (!fbResult.isCancelled) {
+      const data = await AccessToken.getCurrentAccessToken();
       dispatch(facebookLogin({ access_token: data.accessToken }))
         .then(unwrapResult)
-        .then(res => {
-          if (res.key) navigation.navigate(HOME_SCREEN_NAME)
-        })
+        .then((res) => {
+          if (res.key) navigation.navigate(HOME_SCREEN_NAME);
+        });
     }
   } catch (err) {
-    console.log("Facebook Login Failed: ", JSON.stringify(err))
+    console.log("Facebook Login Failed: ", JSON.stringify(err));
   }
-}
+};
 
-const onGoogleConnect = async dispatch => {
+const onGoogleConnect = async (dispatch, navigation) => {
   GoogleSignin.configure({
     webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     forceCodeForRefreshToken: false,
     iosClientId: GOOGLE_IOS_CLIENT_ID
-  })
+  });
   try {
-    await GoogleSignin.hasPlayServices()
-    await GoogleSignin.signIn()
-    const tokens = await GoogleSignin.getTokens()
+    await GoogleSignin.hasPlayServices();
+    await GoogleSignin.signIn();
+    const tokens = await GoogleSignin.getTokens();
     dispatch(googleLogin({ access_token: tokens.accessToken }))
       .then(unwrapResult)
-      .then(res => {
-        if (res.key) navigation.navigate(HOME_SCREEN_NAME)
-      })
+      .then((res) => {
+        if (res.key) navigation.navigate(HOME_SCREEN_NAME);
+      });
   } catch (err) {
     if (err.code === statusCodes.SIGN_IN_CANCELLED) {
-      Alert.alert("Error", "The user canceled the signin request.")
+      Alert.alert("Error", "The user canceled the signin request.");
     }
   }
-}
+};
 
-const onAppleConnect = async dispatch => {
+const onAppleConnect = async (dispatch, navigation) => {
   try {
     const signinFunction = Platform.select({
       ios: appleForiOS,
       android: appleForAndroid
-    })
-    const result = await signinFunction()
+    });
+    const result = await signinFunction();
     dispatch(
       appleLogin({ id_token: result.id_token, access_token: result.code })
     )
       .then(unwrapResult)
-      .then(res => {
-        if (res.key) navigation.navigate(HOME_SCREEN_NAME)
-      })
+      .then((res) => {
+        if (res.key) navigation.navigate(HOME_SCREEN_NAME);
+      });
   } catch (err) {
-    console.log(JSON.stringify(err))
+    console.log(JSON.stringify(err));
   }
-}
+};
 
-export const SignupTab = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
+export const SignupTab = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
     password: ""
-  })
+  });
 
-  const { api } = useSelector(state => state.login)
-  const dispatch = useDispatch()
+  const { api } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
 
   const onSignupPress = async () => {
-    setValidationError({ email: "", password: "" })
-    if (!validateEmail.test(email))
+    setValidationError({ email: "", password: "" });
+    if (!validateEmail.test(email)) {
       return setValidationError({
         email: "Please enter a valid email address.",
         password: ""
-      })
+      });
+    }
 
-    if (!password)
+    if (!password) {
       return setValidationError({
         email: "",
         password: "Please enter a valid password"
-      })
+      });
+    }
 
-    if (password !== confirmPassword)
+    if (password !== confirmPassword) {
       return setValidationError({
         email: "",
         password: "Confirm password and password do not match."
-      })
+      });
+    }
     dispatch(signupRequest({ email, password }))
       .then(unwrapResult)
       .then(() => {
         Alert.alert(
           "Signup Success",
           "Registration Successful. A confirmation will be sent to your e-mail address."
-        )
+        );
       })
-      .catch(err => console.log(err.message))
-  }
+      .catch((err) => console.log(err.message));
+  };
 
   return (
     <KeyboardAvoidingView>
@@ -217,7 +222,7 @@ export const SignupTab = () => {
           keyboardType="email-address"
           label="Email address"
           placeholder="Email address"
-          onChangeText={value => setEmail(value)}
+          onChangeText={(value) => setEmail(value)}
           value={email}
           error={validationError.email}
         />
@@ -225,7 +230,7 @@ export const SignupTab = () => {
           label="Password"
           placeholder="Password"
           secureTextEntry={true}
-          onChangeText={value => setPassword(value)}
+          onChangeText={(value) => setPassword(value)}
           value={password}
           error={validationError.password}
         />
@@ -233,7 +238,7 @@ export const SignupTab = () => {
           label="Confirm Password"
           placeholder="Confirm Password"
           secureTextEntry={true}
-          onChangeText={value => setConfirmPassword(value)}
+          onChangeText={(value) => setConfirmPassword(value)}
           value={confirmPassword}
         />
       </View>
@@ -244,48 +249,50 @@ export const SignupTab = () => {
       />
       <SocialButtonsView
         loading={api.loading === "pending"}
-        onFacebookConnect={() => onFacebookConnect(dispatch)}
-        onGoogleConnect={() => onGoogleConnect(dispatch)}
-        onAppleConnect={() => onAppleConnect(dispatch)}
+        onFacebookConnect={() => onFacebookConnect(dispatch, navigation)}
+        onGoogleConnect={() => onGoogleConnect(dispatch, navigation)}
+        onAppleConnect={() => onAppleConnect(dispatch, navigation)}
       />
       {!!api.error && (
         <Text style={textInputStyles.error}>{api.error.message}</Text>
       )}
     </KeyboardAvoidingView>
-  )
-}
+  );
+};
 
 export const SignInTab = ({ navigation }) => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
     password: ""
-  })
+  });
 
-  const { api } = useSelector(state => state.login)
-  const dispatch = useDispatch()
+  const { api } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
 
   const onSigninPress = async () => {
-    if (!validateEmail.test(email))
+    if (!validateEmail.test(email)) {
       return setValidationError({
         email: "Please enter a valid email address.",
         password: ""
-      })
+      });
+    }
 
-    if (!password)
+    if (!password) {
       return setValidationError({
         email: "",
         password: "Please enter a valid password"
-      })
+      });
+    }
 
     dispatch(loginRequest({ username: email, password }))
       .then(unwrapResult)
-      .then(res => {
-        if (res.token) navigation.navigate(HOME_SCREEN_NAME)
+      .then((res) => {
+        if (res.token) navigation.navigate(HOME_SCREEN_NAME);
       })
-      .catch(err => console.log(err.message))
-  }
+      .catch((err) => console.log(err.message));
+  };
 
   return (
     <KeyboardAvoidingView>
@@ -294,7 +301,7 @@ export const SignInTab = ({ navigation }) => {
           keyboardType="email-address"
           label="Email address"
           placeholder="Email address"
-          onChangeText={value => setEmail(value)}
+          onChangeText={(value) => setEmail(value)}
           value={email}
           error={validationError.email}
         />
@@ -302,7 +309,7 @@ export const SignInTab = ({ navigation }) => {
           label="Password"
           placeholder="Password"
           secureTextEntry={true}
-          onChangeText={value => setPassword(value)}
+          onChangeText={(value) => setPassword(value)}
           value={password}
           error={validationError.password}
         />
@@ -327,7 +334,7 @@ export const SignInTab = ({ navigation }) => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            navigation.navigate("PasswordReset")
+            navigation.navigate("PasswordReset");
           }}
         >
           <Text>Forgot your password?</Text>
@@ -340,5 +347,5 @@ export const SignInTab = ({ navigation }) => {
         onAppleConnect={() => onAppleConnect(dispatch)}
       />
     </KeyboardAvoidingView>
-  )
-}
+  );
+};

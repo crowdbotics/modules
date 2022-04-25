@@ -13,5 +13,30 @@
   },
   "plugins": ["react"],
   "ignorePatterns": ["demo", "dist", "docs", "preview"],
-  "rules": {}
+  "rules": {
+    "func-call-spacing": ["error", "never"],
+    "quotes": [
+      "error",
+      "double",
+      { "avoidEscape": true, "allowTemplateLiterals": false }
+    ],
+    "space-before-function-paren": [
+      "error",
+      { "anonymous": "always", "named": "never", "asyncArrow": "always" }
+    ],
+    "semi": ["error", "always"],
+    "react/prop-types": [0, {}]
+  },
+  "globals": {
+    "__DEV__": "readonly",
+    "FormData": "readonly",
+    "fetch": "readonly",
+    "alert": "readonly"
+  },
+  "settings": {
+    "react": {
+      "fragment": "Fragment",
+      "version": "17.0.1"
+    }
+  }
 }
