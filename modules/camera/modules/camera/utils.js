@@ -136,5 +136,5 @@ export const uploadImage = async (response, options) => {
     uri: response.path,
     data: response.data
   });
-  const res = await apiPost(BASE_URL + "/modules/camera/upload_image/", data);
+  await apiPost(BASE_URL + "/modules/camera/upload_image/", data);
 };

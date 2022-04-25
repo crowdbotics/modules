@@ -29,7 +29,7 @@ const LoginTabBar = ({ navigation, state, descriptors }) => {
       {state.routes.map((route) => (
         <View
           key={route.key}
-          style={route.key == currentTab.key ? styles.activeTabStyle : null}
+          style={route.key === currentTab.key ? styles.activeTabStyle : null}
         >
           <TouchableOpacity
             onPress={() => {

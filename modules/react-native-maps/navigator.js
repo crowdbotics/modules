@@ -4,7 +4,7 @@ import { createStackNavigator } from "react-navigation-stack";
 
 import Maps from "./index";
 
-export default MapsNavigator = createStackNavigator({
+const MapsNavigator = createStackNavigator({
   Maps: {
     screen: Maps.screen,
     navigationOptions: ({ navigation }) => ({
@@ -13,3 +13,5 @@ export default MapsNavigator = createStackNavigator({
     })
   }
 });
+
+export default MapsNavigator;

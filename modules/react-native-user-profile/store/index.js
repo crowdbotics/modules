@@ -3,7 +3,7 @@ import { api } from "./api";
 
 export const getUserById = createAsyncThunk(
   "userProfile/getUserById",
-  async id => {
+  async (id) => {
     const response = await api.getUserById(id);
     return response.data;
   }
@@ -11,7 +11,7 @@ export const getUserById = createAsyncThunk(
 
 export const getUsers = createAsyncThunk(
   "userProfile/getUsers",
-  async payload => {
+  async (payload) => {
     const response = await api.getUsers(payload);
     return response.data;
   }
@@ -32,7 +32,7 @@ export const slice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    [getUserById.pending]: state => {
+    [getUserById.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
       }
@@ -50,15 +50,16 @@ export const slice = createSlice({
       }
     }
   },
-  [getUsers.pending]: state => {
+  [getUsers.pending]: (state) => {
     if (state.api.loading === "idle") {
       state.api.loading = "pending";
     }
   },
   [getUsers.fulfilled]: (state, action) => {
     if (state.api.loading === "pending") {
-      action.payload.map(user => {
+      action.payload.map((user) => {
         state.users[user.id] = user;
+        return user;
       });
       state.api.loading = "idle";
     }

@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+// FIXME - fix undefined variables
+
 import "react-native-get-random-values";
 import { v4 as uuid } from "uuid";
 import {
@@ -49,6 +52,7 @@ export async function appleForAndroid() {
   }
 }
 
+// FIXME - undefined variables
 export async function appleForiOS() {
   try {
     const appleAuthRequestResponse = await appleAuth.performRequest({

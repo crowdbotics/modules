@@ -9,12 +9,10 @@ const styles = StyleSheet.create({
   heading: {
     height: 60,
     backgroundColor: "#333333",
-    justifyContent: "space-between",
     padding: 20,
     alignItems: "flex-end",
     flexDirection: "row",
     justifyContent: "center"
-
   },
   text: {
     color: "#000000",

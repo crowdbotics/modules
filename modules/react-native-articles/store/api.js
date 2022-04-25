@@ -8,15 +8,15 @@ const articlesAPI = axios.create({
   }
 });
 
-export function article_list() {
+export function articleList() {
   return articlesAPI.get("/article/");
 }
 
-export function article_read(id) {
+export function articleRead(id) {
   return articlesAPI.get(`/article/${id}/`);
 }
 
 export const api = {
-  article_list,
-  article_read
+  articleList,
+  articleRead
 };

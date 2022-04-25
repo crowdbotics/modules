@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, SafeAreaView, Button, View, LogBox } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Button,
+  View,
+  LogBox
+} from "react-native";
 import EmojiSelector from "react-native-emoji-selector";
 import Chat from "./chat";
 
@@ -14,7 +21,7 @@ const EmojiPicker = ({ navigation }) => {
   const [chosenEmoji, setEmoji] = useState(null);
 
   // This method will be called when our user selects an emoji
-  const handleEmojiSelected = emoji => {
+  const handleEmojiSelected = (emoji) => {
     setEmoji(emoji);
   };
 
@@ -87,7 +94,6 @@ const styles = StyleSheet.create({
   emoji: {
     width: "100%",
     height: "100%",
-    fontSize: 60,
     textAlign: "center",
     textAlignVertical: "center",
     fontSize: 60

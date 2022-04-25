@@ -28,13 +28,16 @@ export const fetchPaymentSheetParams = async (amount) => {
 };
 
 export const fetchPaymentHistory = async () => {
-  const response = await fetch(`${BASE_URL}/modules/payments/get_payments_history/`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token
+  const response = await fetch(
+    `${BASE_URL}/modules/payments/get_payments_history/`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token
+      }
     }
-  });
-  const { status, data } = await response.json();
+  );
+  const { data } = await response.json();
   return data;
 };

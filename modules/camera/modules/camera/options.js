@@ -1,21 +1,17 @@
-import {
-  StyleSheet
-} from "react-native";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   heading: {
     height: 60,
     backgroundColor: "#333333",
-    justifyContent: "space-between",
     padding: 20,
     alignItems: "flex-end",
     flexDirection: "row",
     justifyContent: "center"
-
   },
   text: {
-    color: "#000000",
-    fontSize: 16,
+    fontSize: 28,
+    color: "#ffffff",
     width: "100%"
   },
   icon: {
@@ -55,10 +51,6 @@ const styles = StyleSheet.create({
   },
   card: {
     padding: 10
-  },
-  text: {
-    fontSize: 28,
-    color: "#ffffff"
   },
   author: {
     fontSize: 18,
