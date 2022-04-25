@@ -34,7 +34,7 @@ import {
 import { unwrapResult } from "@reduxjs/toolkit";
 
 // Custom Text Input
-export const TextInputField = props => (
+export const TextInputField = (props) => (
   <View>
     <Text style={[textInputStyles.label, props.labelStyle]}>{props.label}</Text>
     <TextInput
@@ -49,7 +49,7 @@ export const TextInputField = props => (
 );
 
 // Custom Button
-export const Button = props => (
+export const Button = (props) => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={[buttonStyles.viewStyle, props.viewStyle]}>
       {props.loading
@@ -69,7 +69,7 @@ export const Button = props => (
 );
 
 // Grouped Social Buttons View
-const SocialButtonsView = props => (
+const SocialButtonsView = (props) => (
   <View>
     <Text style={{ textAlign: "center", width: "100%", marginVertical: 5 }}>
       - or -
@@ -109,17 +109,17 @@ const SocialButtonsView = props => (
   </View>
 );
 
-const onFacebookConnect = async dispatch => {
+const onFacebookConnect = async (dispatch, navigation) => {
   try {
-    const fb_result = await LoginManager.logInWithPermissions([
+    const fbResult = await LoginManager.logInWithPermissions([
       "public_profile",
       "email"
     ]);
-    if (!fb_result.isCancelled) {
+    if (!fbResult.isCancelled) {
       const data = await AccessToken.getCurrentAccessToken();
       dispatch(facebookLogin({ access_token: data.accessToken }))
         .then(unwrapResult)
-        .then(res => {
+        .then((res) => {
           if (res.key) navigation.navigate(HOME_SCREEN_NAME);
         });
     }
@@ -128,7 +128,7 @@ const onFacebookConnect = async dispatch => {
   }
 };
 
-const onGoogleConnect = async dispatch => {
+const onGoogleConnect = async (dispatch, navigation) => {
   GoogleSignin.configure({
     webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
@@ -141,7 +141,7 @@ const onGoogleConnect = async dispatch => {
     const tokens = await GoogleSignin.getTokens();
     dispatch(googleLogin({ access_token: tokens.accessToken }))
       .then(unwrapResult)
-      .then(res => {
+      .then((res) => {
         if (res.key) navigation.navigate(HOME_SCREEN_NAME);
       });
   } catch (err) {
@@ -151,7 +151,7 @@ const onGoogleConnect = async dispatch => {
   }
 };
 
-const onAppleConnect = async dispatch => {
+const onAppleConnect = async (dispatch, navigation) => {
   try {
     const signinFunction = Platform.select({
       ios: appleForiOS,
@@ -162,7 +162,7 @@ const onAppleConnect = async dispatch => {
       appleLogin({ id_token: result.id_token, access_token: result.code })
     )
       .then(unwrapResult)
-      .then(res => {
+      .then((res) => {
         if (res.key) navigation.navigate(HOME_SCREEN_NAME);
       });
   } catch (err) {
@@ -170,7 +170,7 @@ const onAppleConnect = async dispatch => {
   }
 };
 
-export const SignupTab = () => {
+export const SignupTab = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -179,7 +179,7 @@ export const SignupTab = () => {
     password: ""
   });
 
-  const { api } = useSelector(state => state.login);
+  const { api } = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
   const onSignupPress = async () => {
@@ -212,7 +212,7 @@ export const SignupTab = () => {
           "Registration Successful. A confirmation will be sent to your e-mail address."
         );
       })
-      .catch(err => console.log(err.message));
+      .catch((err) => console.log(err.message));
   };
 
   return (
@@ -222,7 +222,7 @@ export const SignupTab = () => {
           keyboardType="email-address"
           label="Email address"
           placeholder="Email address"
-          onChangeText={value => setEmail(value)}
+          onChangeText={(value) => setEmail(value)}
           value={email}
           error={validationError.email}
         />
@@ -230,7 +230,7 @@ export const SignupTab = () => {
           label="Password"
           placeholder="Password"
           secureTextEntry={true}
-          onChangeText={value => setPassword(value)}
+          onChangeText={(value) => setPassword(value)}
           value={password}
           error={validationError.password}
         />
@@ -238,7 +238,7 @@ export const SignupTab = () => {
           label="Confirm Password"
           placeholder="Confirm Password"
           secureTextEntry={true}
-          onChangeText={value => setConfirmPassword(value)}
+          onChangeText={(value) => setConfirmPassword(value)}
           value={confirmPassword}
         />
       </View>
@@ -249,9 +249,9 @@ export const SignupTab = () => {
       />
       <SocialButtonsView
         loading={api.loading === "pending"}
-        onFacebookConnect={() => onFacebookConnect(dispatch)}
-        onGoogleConnect={() => onGoogleConnect(dispatch)}
-        onAppleConnect={() => onAppleConnect(dispatch)}
+        onFacebookConnect={() => onFacebookConnect(dispatch, navigation)}
+        onGoogleConnect={() => onGoogleConnect(dispatch, navigation)}
+        onAppleConnect={() => onAppleConnect(dispatch, navigation)}
       />
       {!!api.error && (
         <Text style={textInputStyles.error}>{api.error.message}</Text>
@@ -268,7 +268,7 @@ export const SignInTab = ({ navigation }) => {
     password: ""
   });
 
-  const { api } = useSelector(state => state.login);
+  const { api } = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
   const onSigninPress = async () => {
@@ -288,10 +288,10 @@ export const SignInTab = ({ navigation }) => {
 
     dispatch(loginRequest({ username: email, password }))
       .then(unwrapResult)
-      .then(res => {
+      .then((res) => {
         if (res.token) navigation.navigate(HOME_SCREEN_NAME);
       })
-      .catch(err => console.log(err.message));
+      .catch((err) => console.log(err.message));
   };
 
   return (
@@ -301,7 +301,7 @@ export const SignInTab = ({ navigation }) => {
           keyboardType="email-address"
           label="Email address"
           placeholder="Email address"
-          onChangeText={value => setEmail(value)}
+          onChangeText={(value) => setEmail(value)}
           value={email}
           error={validationError.email}
         />
@@ -309,7 +309,7 @@ export const SignInTab = ({ navigation }) => {
           label="Password"
           placeholder="Password"
           secureTextEntry={true}
-          onChangeText={value => setPassword(value)}
+          onChangeText={(value) => setPassword(value)}
           value={password}
           error={validationError.password}
         />

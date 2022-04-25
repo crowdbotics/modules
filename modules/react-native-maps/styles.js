@@ -6,9 +6,8 @@ const { width, height } = Dimensions.get("window");
 const guidelineBaseWidth = 350;
 const guidelineBaseHeight = 680;
 
-const scale = size => (width / guidelineBaseWidth) * size;
-const scaleVertical = size => (height / guidelineBaseHeight) * size;
-const scaleModerate = (size, factor = 0.5) => size + ((scale(size) - size) * factor);
+const scale = (size) => (width / guidelineBaseWidth) * size;
+const scaleVertical = (size) => (height / guidelineBaseHeight) * size;
 
 export const styles = StyleSheet.create({
   view: {

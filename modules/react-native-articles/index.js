@@ -8,20 +8,20 @@ import {
   SafeAreaView
 } from "react-native";
 import { styles } from "./styles";
-import { slice, article_list } from "./store";
+import { slice, articleList } from "./store";
 import { useSelector, useDispatch } from "react-redux";
 import { createStackNavigator } from "@react-navigation/stack";
 import Article from "./article";
 
 const ArticlesList = ({ route, navigation }) => {
   const detail = route.params?.detail || "Article";
-  const articles = useSelector(state =>
+  const articles = useSelector((state) =>
     Object.entries(state.Articles.articles).map(([, entry]) => entry)
   );
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    dispatch(article_list()).catch(e => console.log(e.message));
+    dispatch(articleList()).catch((e) => console.log(e.message));
   }, [detail]);
 
   const renderItem = ({ item }) => (
@@ -44,7 +44,7 @@ const ArticlesList = ({ route, navigation }) => {
       <FlatList
         data={articles}
         renderItem={renderItem}
-        keyExtractor={item => `${item.id}`}
+        keyExtractor={(item) => `${item.id}`}
       />
     </SafeAreaView>
   );

@@ -1,6 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { OptionsContext, GlobalOptionsContext } from "@options";
-import { Text, View, ScrollView, TouchableOpacity, useWindowDimensions } from "react-native";
+import {
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  useWindowDimensions
+} from "react-native";
 import HTML from "react-native-render-html";
 
 const TermsAndConditions = ({ navigation }) => {
@@ -12,9 +18,12 @@ const TermsAndConditions = ({ navigation }) => {
   useEffect(() => {
     // Set your API's URL via Module Options - in options.js
     fetch(globalOptions.url + options.path)
-      .then(response => response.json())
-      .then(data => setHtmlContent(data[0].body))
-      .catch(err => setHtmlContent("<h1>Error Loading Terms and Conditions</h1>"));
+      .then((response) => response.json())
+      .then((data) => setHtmlContent(data[0].body))
+      .catch((err) => {
+        console.log(err);
+        return setHtmlContent("<h1>Error Loading Terms and Conditions</h1>");
+      });
   });
 
   return (
@@ -24,8 +33,8 @@ const TermsAndConditions = ({ navigation }) => {
           style={options.styles.touchableopacity}
           onPress={() => {
             navigation.goBack();
-          }}>
-        </TouchableOpacity>
+          }}
+        ></TouchableOpacity>
         <Text style={options.styles.header}>{options.title}</Text>
       </View>
       <ScrollView style={{ flex: 1 }}>
