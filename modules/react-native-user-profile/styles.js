@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native";
 
 export const Color = {
   malibu: "#46E1FD",
@@ -10,7 +10,7 @@ export const Color = {
   facebook: "#3b5998",
   red: "red",
   gray: "#6A6A6A"
-}
+};
 
 export const styles = StyleSheet.create({
   container: {
@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
   },
   label: { color: Color.gray, fontSize: 12, fontWeight: "bold" },
   text: { color: Color.black, fontSize: 16, marginTop: 3, marginBottom: 12 }
-})
+});
 
 export const inputStyles = {
   input: {
@@ -54,7 +54,7 @@ export const inputStyles = {
   date: { width: "100%", paddingVertical: 0 },
   label: { color: Color.gray, fontSize: 12, fontWeight: "bold" },
   error: { color: Color.red, fontSize: 9 }
-}
+};
 
 export const buttonStyles = {
   view: {
@@ -72,4 +72,4 @@ export const buttonStyles = {
     marginHorizontal: 40,
     marginVertical: 10
   }
-}
+};

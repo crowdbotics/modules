@@ -5,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  Text,
+  Text
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector, useDispatch } from "react-redux";
@@ -22,8 +22,7 @@ const PasswordRecover = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const handlePasswordReset = () => {
-    if (!validateEmail.test(email))
-      return Alert.alert("Error", "Please enter a valid email address.");
+    if (!validateEmail.test(email)) { return Alert.alert("Error", "Please enter a valid email address."); }
 
     dispatch(resetPassword({ email }))
       .then(unwrapResult)
@@ -40,13 +39,13 @@ const PasswordRecover = ({ navigation }) => {
   const renderImage = () => {
     const imageSize = {
       width: 365,
-      height: 161,
+      height: 161
     };
     return (
       <Image
         style={[styles.image, imageSize]}
         source={{
-          uri: options.LOGO_URL,
+          uri: options.LOGO_URL
         }}
       />
     );
@@ -86,7 +85,7 @@ const PasswordRecover = ({ navigation }) => {
           <Text
             style={{
               color: "#fff",
-              fontSize: 15,
+              fontSize: 15
             }}
           >
             Reset Password

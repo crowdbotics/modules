@@ -44,7 +44,7 @@ export const resetPassword = createAsyncThunk(
 const initialState = {
   token: null,
   user: {},
-  api: { loading: "idle", error: null },
+  api: { loading: "idle", error: null }
 };
 export const slice = createSlice({
   name: "login",
@@ -146,6 +146,6 @@ export const slice = createSlice({
         state.api.error = mapErrorMessage(action.error);
         state.api.loading = "idle";
       }
-    },
-  },
+    }
+  }
 });

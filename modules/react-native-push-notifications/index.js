@@ -1,4 +1,4 @@
-import OneSignal from 'react-native-onesignal';
+import OneSignal from "react-native-onesignal";
 import { Platform, Alert } from "react-native";
 import { useState, useEffect } from "react";
 import { ONE_SIGNAL_APP_ID } from "@env";
@@ -26,7 +26,7 @@ const useOneSignal = () => {
         "OneSignal: notification will show in foreground:",
         notifReceivedEvent
       );
-      let notif = notifReceivedEvent.getNotification();
+      const notif = notifReceivedEvent.getNotification();
       const button1 = {
         text: "Cancel",
         onPress: () => { notifReceivedEvent.complete(); },
@@ -65,7 +65,7 @@ const useOneSignal = () => {
   });
 
   return isSubscribed;
-}
+};
 
 export default {
   title: "Push Notifications",

@@ -3,7 +3,10 @@ import { StyleSheet, Text, SafeAreaView, Button, View, LogBox } from "react-nati
 import EmojiSelector from "react-native-emoji-selector";
 import Chat from "./chat";
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
+
+import PubNub from "pubnub";
+import { PubNubProvider } from "pubnub-react";
 const Stack = createStackNavigator();
 
 const EmojiPicker = ({ navigation }) => {
@@ -96,9 +99,6 @@ const styles = StyleSheet.create({
   }
 });
 
-import PubNub from "pubnub";
-import { PubNubProvider } from "pubnub-react";
-
 const pubnub = new PubNub({
   subscribeKey: "demo",
   publishKey: "demo",
@@ -115,10 +115,10 @@ const ChatNavigator = () => {
         <Stack.Screen name="Chat" component={Chat} />
       </Stack.Navigator>
     </PubNubProvider>
-  )
-}
+  );
+};
 
 export default {
   title: "Chat",
-  navigator: ChatNavigator,
-}
+  navigator: ChatNavigator
+};
