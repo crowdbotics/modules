@@ -1,13 +1,13 @@
-import React from "react"
-import { Text, View, ImageBackground } from "react-native"
-import { useSelector } from "react-redux"
-import { styles } from "./styles"
+import React from "react";
+import { Text, View, ImageBackground } from "react-native";
+import { useSelector } from "react-redux";
+import { styles } from "./styles";
 
 function Article({ route }) {
-  const id = route.params?.id
+  const id = route.params?.id;
   const article = useSelector(state =>
     state.Articles.articles[id]
-  )
+  );
 
   return (
     <View>
@@ -23,7 +23,7 @@ function Article({ route }) {
         </View>
       )}
     </View>
-  )
+  );
 }
 
-export default Article
+export default Article;

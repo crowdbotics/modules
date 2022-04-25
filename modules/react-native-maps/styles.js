@@ -1,8 +1,6 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from "react-native";
 
-import { Dimensions } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 // Guideline sizes are based on standard ~5" screen mobile device
 const guidelineBaseWidth = 350;
@@ -27,12 +25,12 @@ export const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject
   },
   searchbar: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     marginLeft: scale(10),
     marginRight: scale(10),
     marginTop: scaleVertical(5),
     marginBottom: scaleVertical(5),
     borderRadius: 12,
-    borderColor: '#E5E5E5',
-  },
+    borderColor: "#E5E5E5"
+  }
 });

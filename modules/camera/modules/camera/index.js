@@ -1,7 +1,7 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity, FlatList, ImageBackground, } from 'react-native';
-import ActionSheet from 'react-native-actionsheet'
-import { pickFromCamera, pickFromGallery, uploadImage } from './utils'
+import React, { useRef, useContext, useEffect, useState } from "react";
+import { Text, View, TouchableOpacity, FlatList, ImageBackground } from "react-native";
+import ActionSheet from "react-native-actionsheet";
+import { pickFromCamera, pickFromGallery, uploadImage } from "./utils";
 import { OptionsContext, GlobalOptionsContext } from "@options";
 
 const Camera = () => {
@@ -10,7 +10,7 @@ const Camera = () => {
   const options = useContext(OptionsContext);
   const gOptions = useContext(GlobalOptionsContext);
   const [isLoading, setLoading] = useState(false);
-  const ImagePickerOptions = ['Take Photo', 'Choose from Gallery', 'Cancel'];
+  const ImagePickerOptions = ["Take Photo", "Choose from Gallery", "Cancel"];
   const [data, setData] = useState([]);
 
   const { styles, buttonText } = options;
@@ -21,10 +21,10 @@ const Camera = () => {
       .then((json) => setData(json))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  }
+  };
 
   useEffect(() => {
-    fetch_images()
+    fetch_images();
   }, []);
 
   const renderItem = ({ item }) => (
@@ -32,14 +32,13 @@ const Camera = () => {
       <ImageBackground source={{ uri: `${gOptions.url}/${item.image}` }} style={styles.image}>
       </ImageBackground>
     </TouchableOpacity >
-  )
+  );
 
   return (
     <View
       style={{
-        flex: 1,
+        flex: 1
       }}>
-
 
       <FlatList
         data={data}
@@ -48,7 +47,7 @@ const Camera = () => {
       />
       <ActionSheet
         ref={actionSheet}
-        title={'Select Image'}
+        title={"Select Image"}
         options={ImagePickerOptions}
         cancelButtonIndex={2}
         onPress={async (index) => {
@@ -57,14 +56,14 @@ const Camera = () => {
             case 0:
               res = await pickFromCamera();
               res && uploadImage(res, gOptions).then(() => {
-                fetch_images()
-              })
+                fetch_images();
+              });
               break;
             case 1:
               res = await pickFromGallery();
               res && uploadImage(res, gOptions).then(() => {
-                fetch_images()
-              })
+                fetch_images();
+              });
               break;
           }
         }}
@@ -79,4 +78,4 @@ const Camera = () => {
 export default {
   title: "Camera",
   navigator: Camera
-}
+};
