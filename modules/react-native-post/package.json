@@ -1,0 +1,11 @@
+{
+    "name": "@modules/post",
+    "version": "1.0.1",
+    "description": "Post Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {},
+    "x-dependencies": {}
+}
