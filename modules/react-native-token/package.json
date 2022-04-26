@@ -1,0 +1,11 @@
+{
+    "name": "@modules/token",
+    "version": "1.0.1",
+    "description": "Token Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {},
+    "x-dependencies": {}
+}
