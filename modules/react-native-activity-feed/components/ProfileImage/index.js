@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { View, Text, TouchableHighlight, Image } from "react-native";
+import { View, TouchableHighlight, Image } from "react-native";
 import edit from "../../edit.png";
 
 const ProfileImage = (props) => {
