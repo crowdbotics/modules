@@ -1,0 +1,11 @@
+{
+    "name": "@modules/activity-feed",
+    "version": "1.0.1",
+    "description": "Activity feed Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {},
+    "x-dependencies": {}
+}

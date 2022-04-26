@@ -1,0 +1,5 @@
+{
+  "title": "Activity feed",
+  "description": "Activity feed screen",
+  "root": "/modules/activity-feed"
+}
