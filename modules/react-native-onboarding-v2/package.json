@@ -1,0 +1,11 @@
+{
+    "name": "@modules/onboarding",
+    "version": "1.0.1",
+    "description": "Onboarding Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {},
+    "x-dependencies": {}
+}
