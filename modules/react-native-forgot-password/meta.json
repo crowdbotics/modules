@@ -1,0 +1,5 @@
+{
+  "title": "Forgot password",
+  "description": "Forgot password screen",
+  "root": "/modules/forgot-password"
+}
