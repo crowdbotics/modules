@@ -1,0 +1,11 @@
+{
+    "name": "@modules/create-post",
+    "version": "1.0.1",
+    "description": "Create Post",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {},
+    "x-dependencies": {}
+}
