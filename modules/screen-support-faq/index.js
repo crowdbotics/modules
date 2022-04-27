@@ -1,11 +1,5 @@
 import React, {Fragment} from 'react';
 import { Text, View, TextInput, Image, ScrollView, StyleSheet } from 'react-native';
-// @ts-ignore
-import searchIcon from "./searchIcon.png";
-// @ts-ignore
-import chevronDown from "./chevrondown.png";
-// @ts-ignore
-import arrow from "./arrow.png";
 
 const FAQList = [{
   title: "FAQ Information",
@@ -37,7 +31,7 @@ const SupportFaq = () => {
         </View>
         <View style={styles.searchArea}>
           <View style={styles.searchInput}>
-            <Image style={styles.searchIcon} source={searchIcon} />
+            <Image style={styles.searchIcon} source={require("./searchIcon.png")} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search here"
@@ -102,13 +96,13 @@ const Accordion = () => {
         <View key={index} style={accordionStyles.faqCard}>
           <View style={accordionStyles.faqsection}>
             <Text style={accordionStyles.subHeading}>{FAQ.title}</Text>
-            <Image style={accordionStyles.downIcon} resizeMode="contain" source={chevronDown} />
+            <Image style={accordionStyles.downIcon} resizeMode="contain" source={ require("./chevrondown.png")} />
           </View>
           {
             FAQ.data.map((item, i) => (
               <View key={i} style={accordionStyles.accordian}>
                 <View style={accordionStyles.accordianlist}>
-                  <Image style={accordionStyles.arrowIcon} resizeMode="contain" source={arrow} />
+                  <Image style={accordionStyles.arrowIcon} resizeMode="contain" source={require("./arrow.png")} />
                   <Text style={accordionStyles.smallHeading}>{item}</Text>
                 </View>
               </View>
