@@ -1,7 +1,27 @@
-import React, { useState } from 'react'
-import { StyleSheet } from 'react-native'
-import { View, Text, TouchableOpacity } from "react-native";
-import Button from "../Button/index";
+import React, {useState} from 'react';
+import { View, Text, TouchableOpacity,TouchableHighlight, StyleSheet } from "react-native";
+
+
+const sliderData = [{
+  heading: 'Lorem ipsum',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.tortor lectus tempus lacus.'
+}, {
+  heading: 'Lorem ipsum 1',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.tortor lectus tempus lacus 1.'
+},{
+  heading: 'Lorem ipsum 2',
+  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.tortor lectus tempus lacus 2.'
+}]
+
+const Onboarding = ()=> {
+  return (
+    <Slider data={sliderData} onFinish={() => {}}/>
+  );
+}
+export default {
+  title: "Onboarding",
+  navigator: Onboarding
+}
 
 const Slider = (props) => {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -94,4 +114,31 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   }
 })
-export default Slider 
+
+const Button = (props) => {
+  return (
+    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
+      <View style={[btnStyles.button, {
+        backgroundColor: props.backgroundColor ? props.backgroundColor : '#000000',
+        height: props.height ? props.height : 49,
+        borderWidth: props.borderWidth ? props.borderWidth : 0,
+        borderColor: props.borderColor ? props.borderColor : '#000000'
+      }]}>
+        <Text style={[btnStyles.text, {color: props.color ? props.color : '#ffffff'}]}>{props.children}</Text>
+      </View>
+    </TouchableHighlight>
+  )
+}
+
+const btnStyles = StyleSheet.create({
+  button: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10
+  },
+  text: {
+    fontWeight: 'bold',
+    fontSize: 15
+  },
+})
