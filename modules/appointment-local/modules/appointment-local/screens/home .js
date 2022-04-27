@@ -4,8 +4,6 @@ import { StyleSheet, useWindowDimensions } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import AppointmentList from './appointmentList';
 import Calendar from './calendar';
-// @ts-ignore
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 
 const Home = (props) => {
