@@ -1,4 +1,50 @@
-import { StyleSheet } from 'react-native';
+import * as React from 'react';
+import { Text, View, Image, StyleSheet } from 'react-native';
+
+
+ const Settings = () => {
+  return (
+    <View style={styles.container}>
+
+      <View style={styles.mainSection}>
+        <View style={styles.faqSupport}>
+          <Image style={styles.faqIcon} source={require("./assets/faq.png")}/>
+          <Text style={styles.faqText}>FAQ's</Text>
+        </View>
+        <View style={styles.emailSupport}>
+          <Image style={styles.emailsupportIcon} source={require("./assets/emailsupport.png")}/>
+          <Text style={styles.emailsupportText}>Email Support</Text>
+        </View>
+        <View style={styles.invitefriendsSupport}>
+          <Image style={styles.inviteFriendsIcon} source={require("./assets/invitefriends.png")}/>
+          <Text style={styles.inviteFriendsText}>Invite Friends</Text>
+        </View>
+        <View style={styles.pushNotifications}>
+          <View style={styles.pushnoti}>
+            <Image style={styles.pushnotificationsIcon} source={require("./assets/bell.png")}/>
+            <Text style={styles.pushnotificationsText}>Push Notifications</Text>
+          </View>
+          <View style={styles.switchbutton}>
+              <View style={styles.ballicon}></View>
+          </View>
+        </View>
+        <View style={styles.pushNotifications}>
+          <View style={styles.pushnoti}>
+            <Image style={styles.pushnotificationsIcon} source={require("./assets/updates.png")}/>
+            <Text style={styles.pushnotificationsText}>Auto Updates</Text>
+          </View>
+          <View style={styles.switchbutton}>
+              <View style={styles.ballicon}></View>
+          </View>
+        </View>
+          <View style={styles.invitefriendsSupport}>
+          <Image style={styles.inviteFriendsIcon} source={require("./assets/abouticon.png")}/>
+          <Text style={styles.inviteFriendsText}>About Us</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   topHead: {
@@ -120,7 +166,7 @@ const styles = StyleSheet.create({
     borderRadius:10,
   },
 });
-
 export default {
-  styles: styles
+  title: "Settings",
+  navigator: Settings
 }
