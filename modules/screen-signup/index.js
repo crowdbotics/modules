@@ -1,11 +1,5 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image, StyleSheet, TextInput, TouchableHighlight } from 'react-native';
-// @ts-ignore
-import fbIcon from './fbIcon.png'
-// @ts-ignore
-import googleIcon from './googleIcon.png'
-// @ts-ignore
-import appleIcon from './appleIcon.png'
 
 
 const Signup = () => {
@@ -45,19 +39,19 @@ const Signup = () => {
         <View style={styles.imageContainer}>
           <View style={styles.iconContainer}>
             <Image
-              source={appleIcon}
+              source={require('./assets/appleIcon.png')}
               style={styles.icon}
             />
           </View>
           <View style={styles.iconContainer}>
             <Image
-              source={googleIcon}
+              source={require('./assets/googleIcon.png')}
               style={styles.icon}
             />
           </View>
           <View style={styles.iconContainer}>
             <Image
-              source={fbIcon}
+              source={require('./assets/fbIcon.png')}
               style={styles.icon}
             />
           </View>
