@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, View, StyleSheet, TouchableHighlight, Image, TextInput } from 'react-native';
-// @ts-ignore
-import edit from './edit.png'
+
 
 const Profile = () => {
   return (
@@ -143,7 +142,7 @@ const ProfileImage = (props) => {
   return (
     <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
       <View style={profileStyles.container}>
-        <Image style={profileStyles.image} resizeMode="contain" source={edit} />
+        <Image style={profileStyles.image} resizeMode="contain" source={require('./assets/edit.png')} />
       </View>
     </TouchableHighlight>
   )
