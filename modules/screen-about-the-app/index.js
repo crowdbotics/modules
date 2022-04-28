@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const RateTheAppScreen = (params) => {
+export const AboutTheAppScreen = (params) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.headingTxt}>Rate The app Screen</Text>
+      <Text style={styles.headingTxt}>About the App Screen</Text>
     </View>
   );
 };
