@@ -22,7 +22,7 @@ function AppRoutes({ options }) {
 
   const pressed = ({ pressed }) => [
     pressed ? options.styles.buttonPressed : options.styles.buttonNotPressed,
-    options.styles.button,
+    options.styles.button
   ];
   const links = routes.map((route) => {
     return (
@@ -66,5 +66,5 @@ function GlobalOptions({ options }) {
 
 export default {
   title: "App Menu",
-  navigator: AppMenu,
+  navigator: AppMenu
 };
