@@ -1,28 +1,28 @@
-import React, {Fragment} from 'react';
-import { Text, View, TextInput, Image, ScrollView, StyleSheet } from 'react-native';
+import React, { Fragment } from "react";
+import { Text, View, TextInput, Image, ScrollView, StyleSheet } from "react-native";
 
 const FAQList = [{
   title: "FAQ Information",
   data: [
-    'Varius tincidunt.',
-    'Volutpat euismod ut tempus.',
-    'Et nulla quis nullam dui.',
-    'Eget gravida tellus molestie.']
-},{
+    "Varius tincidunt.",
+    "Volutpat euismod ut tempus.",
+    "Et nulla quis nullam dui.",
+    "Eget gravida tellus molestie."]
+}, {
   title: "Diam proin at.",
   data: []
-},{
+}, {
   title: "Aliquam ut habitant.",
   data: []
-},{
+}, {
   title: "Eget nibh massa.",
   data: []
-},{
+}, {
   title: "Interdum ut cursus.",
   data: []
-}]
+}];
 
-const SupportFaq = () => {
+export const SupportFaq = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -44,50 +44,46 @@ const SupportFaq = () => {
       </View>
     </ScrollView>
   );
-}
+};
 const styles = StyleSheet.create({
   topHead: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
   },
   mainHeading: {
-    fontSize: 22,
+    fontSize: 22
   },
   container: {
     padding: 20,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff"
   },
   searchArea: {
     marginTop: 10,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
   searchInput: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F6F6F6',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F6F6F6",
     height: 40,
     borderRadius: 10,
     margin: 10,
-    width: '70%',
+    width: "70%"
   },
   searchIcon: {
     margin: 5,
     marginLeft: 7,
     height: 13,
     width: 13,
-    resizeMode: 'stretch',
-    alignItems: 'center',
-  },
+    resizeMode: "stretch",
+    alignItems: "center"
+  }
 });
-export default {
-  title: "Support & Faq",
-  navigator: SupportFaq
-}
 
 const Accordion = () => {
   return <Fragment>
@@ -112,53 +108,53 @@ const Accordion = () => {
         </View>
       ))
     }
-  </Fragment>
-}
+  </Fragment>;
+};
 
 const accordionStyles = StyleSheet.create({
   faqCard: {
-    display: 'flex',
-    height: 'auto',
+    display: "flex",
+    height: "auto",
     marginHorizontal: 10,
     marginTop: 30,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     shadowColor: "lightgray",
-    elevation: 5,
+    elevation: 5
   },
   faqsection: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingHorizontal: 12
   },
   subHeading: {
     fontSize: 16,
-    color: '#231F20',
-    fontWeight: 'bold',
+    color: "#231F20",
+    fontWeight: "bold"
   },
   accordian: {
-    marginTop: 10,
+    marginTop: 10
   },
   accordianlist: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 5,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 5
   },
   arrowIcon: {
     height: 13,
     width: 8,
-    margin: 5,
+    margin: 5
   },
   smallHeading: {
     fontSize: 12,
-    color: '#231F20'
+    color: "#231F20"
   },
   downIcon: {
     height: 12,
-    width: 12,
-  },
-}) 
+    width: 12
+  }
+});

@@ -1,3 +1,0 @@
-# Support & Faq
-
-# Support & Faq

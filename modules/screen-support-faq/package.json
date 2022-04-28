@@ -1,11 +1,10 @@
 {
     "name": "@modules/support-faq",
-    "version": "1.0.1",
-    "description": "Support & Faq Module",
+    "version": "1.0.0",
+    "description": "",
     "private": true,
     "main": "index.js",
+    "files": ["*"],
     "author": "Crowdbotics",
-    "license": "ISC",
-    "dependencies": {},
-    "x-dependencies": {}
+    "license": "ISC"
 }
