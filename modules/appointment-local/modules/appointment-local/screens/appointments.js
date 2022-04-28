@@ -1,53 +1,134 @@
-import React, {useState} from 'react';
-import {View,Text,SafeAreaView,ScrollView, TouchableOpacity,Image,StyleSheet} from 'react-native'
-import { dummyAppointmentLists } from '../utils';
+import React, { useState, useEffect, Fragment } from 'react';
+import { View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity, Modal } from 'react-native'
 // @ts-ignore
 import deleteIcon from '../deleteIcon.png'
-
-
+import { deleteAppointment, getAppointment } from '../api';
+import Input from '../components/InputText';
+import Loader from '../components/Loader';
 
 const Appointments = () => {
+  const [appointmentList, setAppointmentList] = useState([])
+  const [filterAppointmentList, setFilterAppointmentList] = useState([])
+  const [search, setSearch] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalItem, setModalItem] = useState('')
 
+  useEffect(() => {
+    if (search != "") {
+      const filteredAppointments = appointmentList.filter(item => item.title.toLowerCase().includes(search.toLowerCase()))
+      setFilterAppointmentList(filteredAppointments)
+    } else {
+      setFilterAppointmentList(appointmentList)
+    }
+
+  }, [search])
+
+
+  useEffect(() => {
+    setIsLoading(true)
+    getAppointment().then(res => res.json()).then(res => {
+      setAppointmentList(res)
+      setFilterAppointmentList(res)
+      setIsLoading(false)
+    }).catch(error => {
+      console.log(error)
+      setIsLoading(false)
+    })
+  }, [])
+
+  const deleteHandler = async (id) => {
+    setIsLoading(true)
+    await deleteAppointment(id).then((res) => getAppointment())
+      .then(res => res.json()
+        .then(res => setFilterAppointmentList(res)))
+      .catch(error => console.log(error))
+
+    setIsLoading(false)
+  }
+  const modalHandler = (item) => {
+    setModalItem(item)
+    setModalVisible(true)
+  }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.main}>
       <ScrollView>
         <View style={styles.container}>
-          {dummyAppointmentLists.map((item, index) => {
+          {isLoading && <Loader />}
+          <View style={styles.mv10}>
+            <Text style={styles.mb10}>Search</Text>
+            <Input
+              placeholder='Search'
+              setValue={setSearch}
+              value={search}
+            />
+          </View>
+          {!isLoading && filterAppointmentList.map((item, index) => {
             return (
-              
-                <View  style={styles.item}>
-                  <View style={[styles.box,{backgroundColor:item.color}]}></View>
+              <TouchableOpacity onPress={() => modalHandler(item)} style={styles.item} key={item.id}>
+                <Fragment>
+                  <View style={styles.box}></View>
                   <View>
                     <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.date}>{`${item.date}, ${item.time}`}</Text>
+                    <Text style={styles.date}>{`${item.selected_date}, ${item.time_slot}`}</Text>
                   </View>
                   <View style={styles.delete}>
-                    <View style={styles.deleteButton}>
-                      <Image
-                      source={deleteIcon}
-                      style={{height:17, width:17}}
-                      />
-                    </View>
+                    <TouchableOpacity onPress={() => deleteHandler(item.id)}>
+                      <View style={styles.deleteButton}>
+                        <Image
+                          source={deleteIcon}
+                          style={styles.deleteIcon}
+                        />
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </View>
-             
+                </Fragment>
+              </TouchableOpacity>
             )
           })}
-        </View>  
+          <View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={styles.modalContainer}>
+                <Text styles={styles.modalText}>Title:{modalItem.title}</Text>
+                <Text styles={styles.modalText}>Location:{modalItem.location}</Text>
+                <Text styles={styles.modalText}>Duration{modalItem.duration}</Text>
+                <Text styles={styles.modalText}>Description:{modalItem.description}</Text>
+                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.hide}>
+                  <Text>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>
+
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
-} 
+}
 const styles = StyleSheet.create({
- 
-  container:{backgroundColor:"#F1F1F1", height:'100%', paddingHorizontal:10},
-  item: {display:'flex', flexDirection:'row',justifyContent:'space-between', alignItems:'center', paddingLeft:10, backgroundColor:'white',borderRadius:10,height:106, marginBottom:15},
-  card:{backgroundColor: '#DADADA', borderRadius: 10, width: '80%', height:50, textAlign:'center', display:'flex', justifyContent:'center',alignItems:'center', padding:10},
-  box:{height:80, width:80, borderRadius:10,},
-  title: {fontSize:14, fontWeight:'400', color:'#1E2022'},
-  date:{fontSize:14, fontWeight:'400', color:'#77838F'},
-  delete:{height:106, width:80,borderRadius:10},
-  deleteButton: {height:'100%', display:'flex', justifyContent:'center',alignItems:'center', backgroundColor:'#EA4335',borderRadius:10}
+  main: { backgroundColor: "#F1F1F1", height: '100%' },
+  container: { backgroundColor: "#F1F1F1", height: '100%', paddingHorizontal: 10 },
+  item: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, backgroundColor: 'white', borderRadius: 10, height: 106, marginBottom: 15 },
+  card: { backgroundColor: '#DADADA', borderRadius: 10, width: '80%', height: 50, textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 10 },
+  box: { height: 80, width: 80, borderRadius: 10, backgroundColor: '#FCF1D6' },
+  title: { fontSize: 14, fontWeight: '400', color: '#1E2022' },
+  date: { fontSize: 14, fontWeight: '400', color: '#77838F' },
+  delete: { height: 106, width: 60, borderRadius: 10 },
+  deleteButton: { height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#EA4335', borderRadius: 10 },
+  mv10: { marginVertical: 10, },
+  mb10: { marginBottom: 10, fontSize: 14, marginLeft: 10 },
+  modalContainer: { height: '40%', width: "70%", alignSelf: 'center', backgroundColor: '#DADADA', display: 'flex', justifyContent: 'center', marginTop: '40%', borderRadius: 10, padding: 10 },
+  hide: { marginTop: '30%', alignSelf: 'center' },
+  modalText: { fontWeight: 'bold', fontSize: 16 },
+  deleteIcon: { height: 17, width: 17 }
 })
 export default Appointments

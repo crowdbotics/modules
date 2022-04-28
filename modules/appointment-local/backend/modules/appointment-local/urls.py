@@ -6,5 +6,5 @@ from .viewsets import AppointmentViewSet
 router = routers.DefaultRouter()
 router.register(r'appointment', AppointmentViewSet)
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
 ]

@@ -2,47 +2,55 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import Input from '../components/InputText';
 // @ts-ignore
-import DropDownPicker from 'react-native-dropdown-picker';
-import { dummyTimeSlots } from '../utils';
+import { TimeSlots } from '../options';
 import Button from '../components/Button';
+import { createAppointment } from '../api';
+import Loader from '../components/Loader';
 
 const CreateAppointment = ({ route, navigation }) => {
   const { duration, selectedDate } = route.params;
   const [title, setTitle] = useState('')
   const [location, setLocation] = useState('')
   const [description, setDescription] = useState('')
-  const [open, setOpen] = useState(false);
   const [timeSlot, setTimeSlot] = useState(route.params.timeSlot)
-  const [value, setValue] = useState('daily');
-  const [items, setItems] = useState([
-    { label: 'Weekly', value: 'weekly' },
-    { label: 'Biweekly', value: 'biweekly' },
-    { label: 'Daily', value: 'daily' },
-    { label: 'Monthly', value: 'monthly' },
-  ])
-
-  console.log(duration, timeSlot, selectedDate)
+  const [isLoading, setIsLoading] = useState(false)
 
   const selectTimeSlot = (item) => {
     setTimeSlot(item)
+  }
+  const pressHandler = async ()=> {
+    setIsLoading(true)
+    await createAppointment({
+      title: title,
+      description: description,
+      selected_date: selectedDate,
+      time_slot: timeSlot,
+      duration: duration,
+      location: location,
+    })
+    .then(res=>setIsLoading(false)).then(res=> navigation.replace('Home'))
+    .catch(e=>console.log(e))
+    
+    
   }
 
   return (
     <SafeAreaView>
       <ScrollView>
+        {isLoading && <Loader/>}
         <View style={styles.container}>
           <View style={styles.head}>
             <View style={styles.headItems}>
-              <Text style={{ fontSize: 22, color: '#313633' }}>{selectedDate}</Text>
-              <Text style={{ fontSize: 14, color: '#7C7C7C', marginTop: 8 }}>Appointment date</Text>
+              <Text style={styles.headerComponents}>{selectedDate}</Text>
+              <Text style={styles.headerText}>Appointment date</Text>
             </View>
             <View style={styles.headItems}>
-              <Text style={{ fontSize: 22, color: '#313633' }}>{timeSlot}</Text>
-              <Text style={{ fontSize: 14, color: '#7C7C7C', marginTop: 8 }}>Time</Text>
+              <Text style={styles.headerComponents}>{timeSlot}</Text>
+              <Text style={styles.headerText}>Time</Text>
             </View >
             <View style={styles.headItems}>
-              <Text style={{ fontSize: 22, color: '#313633' }}>{duration} Hour</Text>
-              <Text style={{ fontSize: 14, color: '#7C7C7C', marginTop: 8 }}>Duration</Text>
+              <Text style={styles.headerComponents}>{duration}</Text>
+              <Text style={styles.headerText}>Duration</Text>
             </View>
           </View>
           <View style={styles.mt15}>
@@ -69,26 +77,11 @@ const CreateAppointment = ({ route, navigation }) => {
               value={description}
               multiline={true} />
           </View>
-          <View style={styles.mt15}>
-            <Text style={styles.mb10}>Select Reminder</Text>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              style={{
-                borderColor: '#C4C4C4',
-                height: 53
-              }}
-            />
-          </View>
           <Text style={{ marginVertical: 20, fontSize: 14 }}>Time Slot</Text>
           <View style={styles.list}>
-            {dummyTimeSlots.map((item, index) => (
+            {TimeSlots.map((item, index) => (
               <TouchableOpacity style={[styles.items, {
-                backgroundColor: (timeSlot == item ? "#00B0BF" : "#FFF")
+                backgroundColor: (timeSlot == item ? "#000" : "#FFF")
               }]} onPress={() => selectTimeSlot(item)} key={index}>
                 <Text style={{
                   color: (timeSlot == item ? "#FFF" : "#000")
@@ -97,7 +90,7 @@ const CreateAppointment = ({ route, navigation }) => {
             ))}
           </View>
           <View style={styles.button}>
-            <Button>Create Appointment</Button>
+            <Button onPress={pressHandler}>Create Appointment</Button>
           </View>
 
         </View>
@@ -110,6 +103,8 @@ const styles = StyleSheet.create({
   container: { height: '100%', padding: 10 },
   head: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 20, paddingHorizontal: 17, borderColor: '#F0F2F7', borderBottomWidth: 1, borderTopWidth: 1 },
   headItems: { display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' },
+  headerComponents:{ fontSize: 22, color: '#313633' },
+  headerText:{ fontSize: 14, color: '#7C7C7C', marginTop: 8 },
   mt15: { marginTop: 15 },
   mb10: { marginBottom: 10, fontSize: 14, marginLeft: 10 },
   items: { borderWidth: 1, borderRadius: 10, borderColor: '#D8D8D8', width: 90, height: 30, margin: 7, justifyContent: 'center', alignItems: 'center' },
