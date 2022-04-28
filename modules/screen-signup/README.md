@@ -1,3 +1,0 @@
-# Signup
-
-## Signup screen
