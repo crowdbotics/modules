@@ -1,6 +1,7 @@
-import React, { } from "react";
+import React from "react";
 import { Text, StyleSheet, Dimensions, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+
 const deviceWidth = Dimensions.get("window").width;
 
 const pressed = () => {
@@ -9,28 +10,25 @@ const pressed = () => {
 
 export const LoginScreen = (params) => {
   return (
-        <View style={styles.container}>
-            <View style={styles.topSection}>
-                <Text style={styles.headingTxt}>Sign In</Text>
-            </View>
-            <View style={styles.bottomSection}>
-                <Text
-                    style={styles.bottomSectionText}
-                    >Welcome Back!</Text>
-                <Text
-                    style={styles.bottomSectionDescription}
-                    >Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit, sed do eiusmod tempor</Text>
-                <Button title={"SignUp"}></Button>
-                <Button
-                    title={"Login"}
-                    btnStyle={styles.loginBtnStyle}
-                    textStyle={styles.loginBtnText}
-                    onPress={pressed}
-                ></Button>
-            </View>
-        </View>
-
+    <View style={styles.container}>
+      <View style={styles.topSection}>
+        <Text style={styles.headingTxt}>Sign In</Text>
+      </View>
+      <View style={styles.bottomSection}>
+        <Text style={styles.bottomSectionText}>Welcome Back!</Text>
+        <Text style={styles.bottomSectionDescription}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor
+        </Text>
+        <Button title={"SignUp"}></Button>
+        <Button
+          title={"Login"}
+          btnStyle={styles.loginBtnStyle}
+          textStyle={styles.loginBtnText}
+          onPress={pressed}
+        ></Button>
+      </View>
+    </View>
   );
 };
 
