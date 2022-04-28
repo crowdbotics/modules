@@ -1,9 +1,7 @@
-import * as React from 'react';
-import { Text, View, Image, ScrollView, StyleSheet,TouchableHighlight } from 'react-native';
+import * as React from "react";
+import { Text, View, Image, ScrollView, StyleSheet, TouchableHighlight } from "react-native";
 
-
-
- const ActivityFeed = ()=> {
+const ActivityFeed = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -14,11 +12,11 @@ import { Text, View, Image, ScrollView, StyleSheet,TouchableHighlight } from 're
         </View>
         <View style={styles.followingSection}>
           <View style={styles.textarea}>
-            <Image style={styles.postIcon} source={require('./assets/posts.png')} />
+            <Image style={styles.postIcon} source={require("./assets/posts.png")} />
             <Text style={styles.postText}>My post</Text>
           </View>
           <View style={styles.textarea}>
-            <Image style={styles.followingIcon} source={require('./assets/following.png')} />
+            <Image style={styles.followingIcon} source={require("./assets/following.png")} />
             <Text style={styles.followingText}>Following</Text>
           </View>
         </View>
@@ -55,40 +53,40 @@ import { Text, View, Image, ScrollView, StyleSheet,TouchableHighlight } from 're
       </View>
     </ScrollView>
   );
-}
+};
 const styles = StyleSheet.create({
 
   container: {
     padding: 10,
-    height: '100%',
-    backgroundColor: 'white'
+    height: "100%",
+    backgroundColor: "white"
   },
 
   followingSection: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     paddingLeft: 30,
     paddingRight: 30,
-    paddingTop: 20,
+    paddingTop: 20
 
   },
   headerContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignSelf: 'center',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "column",
+    alignSelf: "center",
+    alignItems: "center"
   },
   headerText: {
     marginTop: 15,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold"
   },
   headerSubText: {
     marginTop: 5,
     fontSize: 12,
-    color: '#C4C4C4',
+    color: "#C4C4C4"
   },
   postIcon: {
     width: 15,
@@ -98,84 +96,82 @@ const styles = StyleSheet.create({
     shadowColor: "#0000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 1.3,
-    shadowRadius: 3.84,
+    shadowRadius: 3.84
 
   },
   followingIcon: {
     width: 15,
     height: 15,
-    marginBottom: 5,
+    marginBottom: 5
   },
   textarea: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center"
   },
   followingText: {
     fontSize: 14,
-    color: '#C4C4C4',
+    color: "#C4C4C4"
   },
   pt30: {
-    paddingTop: 30,
+    paddingTop: 30
   },
   pt10: {
     paddingTop: 5
   },
   galleryRow: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row"
   },
   smallPost: {
     height: 120,
-    width: '33%',
-    paddingHorizontal: 3,
+    width: "33%",
+    paddingHorizontal: 3
   },
   columnRow: {
-    width: '33%',
+    width: "33%"
   },
   smallPostcolumn: {
     height: 120,
-    width: '100%',
-    padding: 3,
+    width: "100%",
+    padding: 3
   },
   largePost: {
     height: 240,
-    width: '67%',
-    padding: 3,
+    width: "67%",
+    padding: 3
   }
 });
 
 export default {
   title: "Activity Feed",
   navigator: ActivityFeed
-}
-
+};
 
 const Post = (props) => {
   return (
     <TouchableHighlight onPress={props.onPress} style={postStyles.galleryPost} underlayColor='#DDDDDD'>
-        <Image style={postStyles.editIcon} source={require('./assets/edit.png')} />
+        <Image style={postStyles.editIcon} source={require("./assets/edit.png")} />
     </TouchableHighlight>
-  )
-}
+  );
+};
 const postStyles = StyleSheet.create({
   galleryPost: {
-  borderRadius:10,
-  width:'100%',
-  height:'100%',
-  backgroundColor:'#FCF1D6',
-  display:'flex',
-  alignItems:'center',
-  justifyContent:'center',
-  marginRight:5,
-},
+    borderRadius: 10,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#FCF1D6",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 5
+  },
   editIcon: {
-  height:35,
-  width:35,
-},
-
+    height: 35,
+    width: 35
+  }
 
 });
 
@@ -183,22 +179,22 @@ const ProfileImage = (props) => {
   return (
     <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
       <View style={imageStyles.container}>
-        <Image style={imageStyles.image} resizeMode="contain" source={require('./assets/edit.png')} />
+        <Image style={imageStyles.image} resizeMode="contain" source={require("./assets/edit.png")} />
       </View>
     </TouchableHighlight>
-  )
-}
+  );
+};
 const imageStyles = StyleSheet.create({
   container: {
-    backgroundColor: 'lightgray',
+    backgroundColor: "lightgray",
     height: 70,
     width: 70,
     borderRadius: 35,
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center"
   },
   image: {
     width: 20,
     marginTop: 4
   }
-})
+});
