@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, StyleSheet, Text, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native'
 import { CalendarList } from 'react-native-calendars';
-import { TimeSlots } from '../options';
+import { OptionsContext} from "@options";
 import DropDownPicker from 'react-native-dropdown-picker';
 import Button from '../components/Button';
 
 const Calendar = ({ navigation }) => {
+  const options = useContext(OptionsContext)
+  console.log(options.timeSlots)
   const today = new Date()
   const [open, setOpen] = useState(false);
   const [duration, setDuration] = useState('00:30:00');
@@ -54,7 +56,7 @@ const Calendar = ({ navigation }) => {
           />
           <Text style={styles.timeSlot}>Time Slot</Text>
           <View style={styles.list}>
-            {TimeSlots.map((item, index) => (
+            { options.timeSlots.map((item, index) => (
               <TouchableOpacity style={[styles.items, {
                 backgroundColor: (timeSlot == item ? "#000" : "#FFF")
               }]} onPress={() => selectTimeSlot(item)} key={index}>

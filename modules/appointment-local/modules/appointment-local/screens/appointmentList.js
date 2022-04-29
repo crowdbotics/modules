@@ -1,15 +1,16 @@
-import React, {  useState,useCallback,useEffect } from 'react';
+import React, {  useState,useCallback,useEffect,useContext } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 // @ts-ignore
 import CalendarStrip from 'react-native-calendar-strip'
 import { getAppointment } from '../api';
 import Loader from '../components/Loader';
 import { useFocusEffect } from '@react-navigation/native';
-import {appointmentColors} from "../options"
+import { OptionsContext} from "@options";
 import {dateFunc} from "../utils"
 import AppointmentModal from '../components/AppointmentDetailModal';
 
 const Appointment = ({ navigation }) => {
+  const options = useContext(OptionsContext)
   const [appointmentList, setAppointmentList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [modalItem, setModalItem] = useState('')
@@ -52,7 +53,7 @@ const Appointment = ({ navigation }) => {
     <TouchableOpacity onPress={()=>modalHandler(item)}>
       <View style={styles.appointmentItem}>
         <Text style={styles.listText}>{item.time_slot}</Text>
-        <View style={[styles.card, { backgroundColor: appointmentColors[Math.floor(Math.random() * appointmentColors.length)]}]}>
+        <View style={[styles.card, { backgroundColor: options.appointmentColors[Math.floor(Math.random() * options.appointmentColors.length)]}]}>
           <Text style={{ fontSize: 16 }}>{item.title}</Text>
         </View>
       </View>
@@ -69,8 +70,6 @@ const Appointment = ({ navigation }) => {
       <CalendarStrip
         daySelectionAnimation={{ type: 'background', duration: 10, highlightColor: '#E6E6E6' }}
         style={{ height: 100, paddingBottom: 10 }}
-        calendarHeaderStyle={{ color: 'white' }}
-        calendarColor={'white'}
         onDateSelected={(date)=> setFilterDate(dateFunc(new Date(date)))}
       />
       <View>

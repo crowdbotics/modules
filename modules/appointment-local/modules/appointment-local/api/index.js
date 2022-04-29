@@ -1,7 +1,7 @@
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL ="https://c7ab-39-53-109-99.ngrok.io"
+const BASE_URL = global
 
 export const createAppointment = async (data) => {
   try {

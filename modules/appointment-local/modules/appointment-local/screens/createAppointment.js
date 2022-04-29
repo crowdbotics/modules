@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { Text, View, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import Input from '../components/InputText';
 // @ts-ignore
-import { TimeSlots } from '../options';
+import { OptionsContext} from "@options";
 import Button from '../components/Button';
 import { createAppointment } from '../api';
 import Loader from '../components/Loader';
 
 const CreateAppointment = ({ route, navigation }) => {
+  const options = useContext(OptionsContext)
   const { duration, selectedDate } = route.params;
   const [title, setTitle] = useState('')
   const [location, setLocation] = useState('')
@@ -79,7 +80,7 @@ const CreateAppointment = ({ route, navigation }) => {
           </View>
           <Text style={{ marginVertical: 20, fontSize: 14 }}>Time Slot</Text>
           <View style={styles.list}>
-            {TimeSlots.map((item, index) => (
+            {options.timeSlots.map((item, index) => (
               <TouchableOpacity style={[styles.items, {
                 backgroundColor: (timeSlot == item ? "#000" : "#FFF")
               }]} onPress={() => selectTimeSlot(item)} key={index}>
