@@ -1,4 +1,0 @@
-# Onboarding
-
-## Onboarding Screen
-
