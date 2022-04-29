@@ -1,8 +1,11 @@
-import * as React from 'react';
-import { Text, View, TextInput, TouchableHighlight,StyleSheet  } from 'react-native';
+import * as React from "react";
+import { Text, View, TextInput, TouchableHighlight, StyleSheet } from "react-native";
 
+const pressed = () => {
+  console.log("pressed");
+};
 
-const Token= () => {
+export const Token = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topHead}>
@@ -31,134 +34,95 @@ const Token= () => {
     </View>
 
     <View style={styles.submitBtn}>
-        <Button style={styles.submitButton}>Submit</Button>
+        <Button onPress={pressed} style={styles.submitButton}>Submit</Button>
     </View>
     </View>
   );
-}
+};
 const styles = StyleSheet.create({
   topHead: {
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    justifyContent:'center',
-    textAlign:'center',
-    height:'20%',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    height: "20%"
   },
   mainHeading: {
     fontSize: 30,
-    fontWeight:'bold',
+    fontWeight: "bold"
   },
   container: {
-    padding:20,
-    height:'100%',
-    flex:1,
-    justifyContent:'space-between',
-    backgroundColor:'#FFF'
+    padding: 20,
+    height: "100%",
+    flex: 1,
+    justifyContent: "space-between",
+    backgroundColor: "#FFF"
   },
   verification: {
-    display:'flex',
-    alignItems:'center',
-    justifyContent:'center',
-    height:'50%',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "50%"
   },
   verificationText: {
-    fontSize:22,
+    fontSize: 22
   },
   resendcodedetails: {
-    paddingTop:10
+    paddingTop: 10
   },
   resendcodeText: {
-    color: 'rgba(0,0,0,0.5)'
+    color: "rgba(0,0,0,0.5)"
   },
   boldText: {
-    fontWeight:'bold',
-    color: '#231F20'
+    fontWeight: "bold",
+    color: "#231F20"
   },
-  pincodeArea:{
-    display:'flex',
-    flexDirection:'row',
-    justifyContent:'center',
-    alignItems:'center',
-    paddingTop:25,
+  pincodeArea: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 25
   },
   tokenFields: {
-    width:'16%',
-    margin:5,
-    borderColor:'#000000',
-    borderWidth:1,
-    borderRadius:10
+    width: "16%",
+    margin: 5,
+    borderColor: "#000000",
+    borderWidth: 1,
+    borderRadius: 10
   },
-  submitBtn:{
-    height:'30%',
-    paddingLeft:20,
-    paddingRight:20,
-  },
+  submitBtn: {
+    height: "30%",
+    paddingLeft: 20,
+    paddingRight: 20
+  }
 });
-export default {
-  title: "Token",
-  navigator: Token
-}
 
 const Button = (props) => {
   return (
     <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
       <View style={[btnStyles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : '#000000',
+        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
         height: props.height ? props.height : 49,
         borderWidth: props.borderWidth ? props.borderWidth : 0,
-        borderColor: props.borderColor ? props.borderColor : '#000000'
+        borderColor: props.borderColor ? props.borderColor : "#000000"
       }]}>
-        <Text style={[btnStyles.text, {color: props.color ? props.color : '#ffffff'}]}>{props.children}</Text>
+        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
       </View>
     </TouchableHighlight>
-  )
-}
+  );
+};
 
 const btnStyles = StyleSheet.create({
   button: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 10
   },
   text: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 15
-  },
-})
-
-const Input = (props) => {
-
-  return (
-    <View>
-      <TextInput
-        style={inputStyles.input}
-        placeholder={props.placeholder}
-        value={props.value}
-        onChangeText={(num)=>props.setValue(num)}
-        placeholderTextColor='#ddd'
-        editable={props.editable === false? false : true}
-      />
-      {props.errorText ? <Text style={inputStyles.error}>{props.errorText}</Text> : null}
-    </View>
-  )
-}
-
-const inputStyles = StyleSheet.create({
-  input: {
-    backgroundColor: "#fff",
-    height: 53,
-    borderColor: '#C4C4C4',
-    color: "#000",
-    borderRadius: 10,
-    fontSize: 14,
-    borderWidth:1,
-    paddingHorizontal: 15
-  },
-  error: {
-    fontSize: 13,
-    color: "#FA060D",
-    paddingTop: 8,
-  },
-})
+  }
+});

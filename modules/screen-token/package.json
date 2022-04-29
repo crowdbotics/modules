@@ -1,11 +1,10 @@
 {
     "name": "@modules/token",
-    "version": "1.0.1",
-    "description": "Token Module",
+    "version": "1.0.0",
+    "description": "",
     "private": true,
     "main": "index.js",
+    "files": ["*"],
     "author": "Crowdbotics",
-    "license": "ISC",
-    "dependencies": {},
-    "x-dependencies": {}
+    "license": "ISC"
 }

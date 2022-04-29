@@ -1,4 +1,0 @@
-# Token
-
-## Token screen
-
