@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert,
+  Alert
 } from "react-native";
 import { buttonStyles, textInputStyles, Color } from "./styles";
 import { useSelector, useDispatch } from "react-redux";
@@ -34,16 +34,18 @@ export const TextInputField = (props) => (
 export const Button = (props) => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={[buttonStyles.viewStyle, props.viewStyle]}>
-      {props.loading ? (
+      {props.loading
+        ? (
         <ActivityIndicator
           color={props.loadingColor ? props.loadingColor : Color.white}
           style={props.loadingStyle}
         />
-      ) : (
+          )
+        : (
           <Text style={[buttonStyles.textStyle, props.textStyle]}>
             {props.title}
           </Text>
-        )}
+          )}
     </View>
   </TouchableOpacity>
 );
@@ -57,30 +59,33 @@ export const SignupTab = (navigation) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
-    password: "",
+    password: ""
   });
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const onSignupPress = async () => {
     setValidationError({ email: "", password: "" });
-    if (!validateEmail.test(email))
+    if (!validateEmail.test(email)) {
       return setValidationError({
         email: "Please enter a valid email address.",
-        password: "",
+        password: ""
       });
+    }
 
-    if (!password)
+    if (!password) {
       return setValidationError({
         email: "",
-        password: "Please enter a valid password",
+        password: "Please enter a valid password"
       });
+    }
 
-    if (password !== confirmPassword)
+    if (password !== confirmPassword) {
       return setValidationError({
         email: "",
-        password: "Confirm password and password do not match.",
+        password: "Confirm password and password do not match."
       });
+    }
     dispatch(signupRequest({ email, password }))
       .then(unwrapResult)
       .then(() => {
@@ -137,24 +142,26 @@ export const SignInTab = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
-    password: "",
+    password: ""
   });
 
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const onSigninPress = async () => {
-    if (!validateEmail.test(email))
+    if (!validateEmail.test(email)) {
       return setValidationError({
         email: "Please enter a valid email address.",
-        password: "",
+        password: ""
       });
+    }
 
-    if (!password)
+    if (!password) {
       return setValidationError({
         email: "",
-        password: "Please enter a valid password",
+        password: "Please enter a valid password"
       });
+    }
 
     dispatch(loginRequest({ username: email, password }))
       .then(unwrapResult)
@@ -197,7 +204,7 @@ export const SignInTab = ({ navigation }) => {
         style={{
           justifyContent: "center",
           alignItems: "center",
-          marginTop: 10,
+          marginTop: 10
         }}
       >
         <TouchableOpacity
