@@ -1,5 +1,5 @@
 {
   "title": "Token screen",
   "description": "Token screen.",
-  "root": "/modules/token"
+  "root": "/screens/token"
 }
