@@ -1,5 +1,5 @@
 {
-    "name": "@modules/create-post",
+    "name": "@screens/create-post",
     "version": "1.0.0",
     "description": "",
     "private": true,

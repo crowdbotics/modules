@@ -1,5 +1,5 @@
 {
   "title": "create Post",
   "description": "Create post",
-  "root": "/modules/create-post"
+  "root": "/screens/create-post"
 }
