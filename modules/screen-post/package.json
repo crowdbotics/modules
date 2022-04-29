@@ -1,5 +1,5 @@
 {
-    "name": "@modules/post",
+    "name": "@screens/post",
     "version": "1.0.1",
     "description": "Post Module",
     "private": true,

@@ -1,5 +1,5 @@
 {
   "title": "Post screen",
   "description": "Post screen",
-  "root": "/modules/post"
+  "root": "/screens/post"
 }
