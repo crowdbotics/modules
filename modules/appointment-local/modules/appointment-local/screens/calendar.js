@@ -90,13 +90,43 @@ const Calendar = ({ navigation }) => {
 
 }
 const styles = StyleSheet.create({
-  items: { borderWidth: 1, borderRadius: 10, borderColor: '#D8D8D8', width: 90, height: 30, margin: 7, justifyContent: 'center', alignItems: 'center' },
-  list: { display: 'flex', flexDirection: 'row', flexWrap: 'wrap' },
-  mt15: { marginTop: 15 },
-  mb10: { marginBottom: 10, fontSize: 14, marginLeft: 10 },
-  button: { padding: 30 },
-  ph10: { paddingHorizontal: 15 },
-  timeSlot: { marginVertical: 10, fontSize: 14, marginLeft: 10 },
-  dropdown:{borderColor: '#C4C4C4',height: 53}
+  items: { 
+    borderWidth: 1, 
+    borderRadius: 10, 
+    borderColor: '#D8D8D8', 
+    width: 90, 
+    height: 30, 
+    margin: 7, 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+  },
+  list: { 
+    display: 'flex', 
+    flexDirection: 'row', 
+    flexWrap: 'wrap' 
+  },
+  mt15: { 
+    marginTop: 15 
+  },
+  mb10: { 
+    marginBottom: 10, 
+    fontSize: 14,
+    marginLeft: 10 
+  },
+  button: { 
+    padding: 30 
+  },
+  ph10: { 
+    paddingHorizontal: 15 
+  },
+  timeSlot: { 
+    marginVertical: 10, 
+    fontSize: 14, 
+    marginLeft: 10 
+  },
+  dropdown:{
+    borderColor: '#C4C4C4',
+    height: 53
+  }
 })
 export default Calendar

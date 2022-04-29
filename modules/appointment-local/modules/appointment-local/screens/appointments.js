@@ -1,10 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity} from 'react-native'
 // @ts-ignore
 import deleteIcon from '../deleteIcon.png'
 import { deleteAppointment, getAppointment } from '../api';
 import Input from '../components/InputText';
 import Loader from '../components/Loader';
+import AppointmentModal from '../components/AppointmentDetailModal';
 
 const Appointments = () => {
   const [appointmentList, setAppointmentList] = useState([])
@@ -88,25 +89,7 @@ const Appointments = () => {
             )
           })}
           <View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <View style={styles.modalContainer}>
-                <Text styles={styles.modalText}>Title:{modalItem.title}</Text>
-                <Text styles={styles.modalText}>Location:{modalItem.location}</Text>
-                <Text styles={styles.modalText}>Duration{modalItem.duration}</Text>
-                <Text styles={styles.modalText}>Description:{modalItem.description}</Text>
-                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.hide}>
-                  <Text>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </Modal>
+            <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible}/>
           </View>
 
         </View>
@@ -115,20 +98,77 @@ const Appointments = () => {
   )
 }
 const styles = StyleSheet.create({
-  main: { backgroundColor: "#F1F1F1", height: '100%' },
-  container: { backgroundColor: "#F1F1F1", height: '100%', paddingHorizontal: 10 },
-  item: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: 10, backgroundColor: 'white', borderRadius: 10, height: 106, marginBottom: 15 },
-  card: { backgroundColor: '#DADADA', borderRadius: 10, width: '80%', height: 50, textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 10 },
-  box: { height: 80, width: 80, borderRadius: 10, backgroundColor: '#FCF1D6' },
-  title: { fontSize: 14, fontWeight: '400', color: '#1E2022' },
-  date: { fontSize: 14, fontWeight: '400', color: '#77838F' },
-  delete: { height: 106, width: 60, borderRadius: 10 },
-  deleteButton: { height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#EA4335', borderRadius: 10 },
-  mv10: { marginVertical: 10, },
-  mb10: { marginBottom: 10, fontSize: 14, marginLeft: 10 },
-  modalContainer: { height: '40%', width: "70%", alignSelf: 'center', backgroundColor: '#DADADA', display: 'flex', justifyContent: 'center', marginTop: '40%', borderRadius: 10, padding: 10 },
-  hide: { marginTop: '30%', alignSelf: 'center' },
-  modalText: { fontWeight: 'bold', fontSize: 16 },
-  deleteIcon: { height: 17, width: 17 }
+  main: { 
+    backgroundColor: "#F1F1F1", 
+    height: '100%' 
+  },
+  container: { 
+    backgroundColor: "#F1F1F1", 
+    height: '100%', 
+    paddingHorizontal: 10 
+  },
+  item: { 
+    display: 'flex', 
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center', 
+    paddingLeft: 10, 
+    backgroundColor: 'white', 
+    borderRadius: 10, 
+    height: 106, 
+    marginBottom: 15 
+  },
+  card: { 
+    backgroundColor: '#DADADA', 
+    borderRadius: 10, 
+    width: '80%', 
+    height: 50, 
+    textAlign: 'center', 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    padding: 10 
+  },
+  box: { 
+    height: 80, 
+    width: 80, 
+    borderRadius: 10, 
+    backgroundColor: '#FCF1D6' 
+  },
+  title: { 
+    fontSize: 14, 
+    fontWeight: '400', 
+    color: '#1E2022' 
+  },
+  date: { 
+    fontSize: 14, 
+    fontWeight: '400', 
+    color: '#77838F' 
+  },
+  delete: { 
+    height: 106, 
+    width: 60, 
+    borderRadius: 10 
+  },
+  deleteButton: { 
+    height: '100%', 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: '#EA4335', 
+    borderRadius: 10 
+  },
+  mv10: { 
+    marginVertical: 10
+  },
+  mb10: { 
+    marginBottom: 10, 
+    fontSize: 14, 
+    marginLeft: 10 
+  },
+  deleteIcon: { 
+     height: 17,
+     width: 17 
+    }
 })
 export default Appointments
