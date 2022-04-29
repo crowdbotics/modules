@@ -31,7 +31,7 @@ export const SupportFaq = () => {
         </View>
         <View style={styles.searchArea}>
           <View style={styles.searchInput}>
-            <Image style={styles.searchIcon} source={require("./searchIcon.png")} />
+            <Image style={styles.searchIcon} source={require("./assets/searchIcon.png")} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search here"
@@ -92,13 +92,13 @@ const Accordion = () => {
         <View key={index} style={accordionStyles.faqCard}>
           <View style={accordionStyles.faqsection}>
             <Text style={accordionStyles.subHeading}>{FAQ.title}</Text>
-            <Image style={accordionStyles.downIcon} resizeMode="contain" source={ require("./chevrondown.png")} />
+            <Image style={accordionStyles.downIcon} resizeMode="contain" source={ require("./assets/chevrondown.png")} />
           </View>
           {
             FAQ.data.map((item, i) => (
               <View key={i} style={accordionStyles.accordian}>
                 <View style={accordionStyles.accordianlist}>
-                  <Image style={accordionStyles.arrowIcon} resizeMode="contain" source={require("./arrow.png")} />
+                  <Image style={accordionStyles.arrowIcon} resizeMode="contain" source={require("./assets/arrow.png")} />
                   <Text style={accordionStyles.smallHeading}>{item}</Text>
                 </View>
               </View>
