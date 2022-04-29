@@ -1,5 +1,5 @@
 {
-    "name": "@modules/activity-feed",
+    "name": "@screens/activity-feed",
     "version": "1.0.0",
     "description": "",
     "private": true,
