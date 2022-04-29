@@ -1,8 +1,8 @@
-import React from "react"
-import { View, Text } from "react-native"
-import { Avatar } from "react-native-elements"
-import { Color, styles } from "./styles"
-import { getInitials, transformLabel } from "./utils"
+import React from "react";
+import { View, Text } from "react-native";
+import { Avatar } from "react-native-elements";
+import { Color, styles } from "./styles";
+import { getInitials, transformLabel } from "./utils";
 
 const UserInfo = props => (
   <View>
@@ -11,14 +11,15 @@ const UserInfo = props => (
       {props.value ? props.value : "Not available"}
     </Text>
   </View>
-)
+);
 
 const ViewUser = props => {
-  const { user } = props
-  const initials = getInitials(user)
+  const { user } = props;
+  const initials = getInitials(user);
   return (
     <View>
-      {user.id ? (
+      {user.id
+        ? (
         <View>
           <View style={styles.profileIcon}>
             <Avatar
@@ -36,11 +37,12 @@ const ViewUser = props => {
           <UserInfo label="Email" value={user.email} />
           <UserInfo label="Biography" value={user.bio} />
         </View>
-      ) : (
+          )
+        : (
         <Text style={styles.label}>No user information available.</Text>
-      )}
+          )}
     </View>
-  )
-}
+  );
+};
 
-export default ViewUser
+export default ViewUser;
