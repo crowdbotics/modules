@@ -1,11 +1,9 @@
 {
     "name": "@modules/settings",
-    "version": "1.0.1",
-    "description": "Settings Module",
+    "version": "1.0.0",
+    "description": "",
     "private": true,
     "main": "index.js",
     "author": "Crowdbotics",
-    "license": "ISC",
-    "dependencies": {},
-    "x-dependencies": {}
+    "license": "ISC"
 }
