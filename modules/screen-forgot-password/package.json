@@ -1,5 +1,5 @@
 {
-    "name": "@modules/forgot-password",
+    "name": "@screens/forgot-password",
     "version": "1.0.0",
     "description": "",
     "private": true,

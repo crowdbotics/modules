@@ -1,5 +1,5 @@
 {
   "title": "Forgot password screen",
   "description": "Forgot password screen",
-  "root": "/modules/forgot-password"
+  "root": "/screens/forgot-password"
 }
