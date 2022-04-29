@@ -1,7 +1,11 @@
 import * as React from "react";
 import { Text, View, Image, ScrollView, StyleSheet, TouchableHighlight } from "react-native";
 
-const ActivityFeed = () => {
+const pressed = () => {
+  console.log("pressed");
+};
+
+export const ActivityFeed = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -24,13 +28,13 @@ const ActivityFeed = () => {
         <View style={styles.pt30}>
           <View style={styles.galleryRow}>
             <View style={styles.smallPost}>
-              <Post />
+              <Post onPress={pressed}/>
             </View>
             <View style={styles.smallPost}>
-              <Post />
+              <Post onPress={pressed}/>
             </View>
             <View style={styles.smallPost}>
-              <Post />
+              <Post onPress={pressed}/>
             </View>
           </View>
         </View>
@@ -145,11 +149,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "Activity Feed",
-  navigator: ActivityFeed
-};
-
 const Post = (props) => {
   return (
     <TouchableHighlight onPress={props.onPress} style={postStyles.galleryPost} underlayColor='#DDDDDD'>
@@ -157,6 +156,7 @@ const Post = (props) => {
     </TouchableHighlight>
   );
 };
+
 const postStyles = StyleSheet.create({
   galleryPost: {
     borderRadius: 10,
@@ -184,6 +184,7 @@ const ProfileImage = (props) => {
     </TouchableHighlight>
   );
 };
+
 const imageStyles = StyleSheet.create({
   container: {
     backgroundColor: "lightgray",
