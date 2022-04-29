@@ -1,5 +1,5 @@
 {
   "title": "Onboarding screen",
   "description": "Onboarding screen",
-  "root": "/modules/onboarding"
+  "root": "/screens/onboarding"
 }

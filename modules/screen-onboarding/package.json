@@ -1,5 +1,5 @@
 {
-    "name": "@modules/onboarding",
+    "name": "@screens/onboarding",
     "version": "1.0.0",
     "description": "",
     "private": true,
