@@ -1,5 +1,5 @@
 {
-    "name": "@modules/profile",
+    "name": "@screens/profile",
     "version": "1.0.0",
     "description": "",
     "private": true,

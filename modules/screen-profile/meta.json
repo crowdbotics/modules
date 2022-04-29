@@ -1,5 +1,5 @@
 {
   "title": "Profile screen",
   "description": "Profile screen",
-  "root": "/modules/profile"
+  "root": "/screens/profile"
 }
