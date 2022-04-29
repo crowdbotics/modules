@@ -10,6 +10,7 @@
 - [Generate cookiecutter](#generate-cookiecutter)
 - [Bootstrap](#bootstrap)
 - [Update React Native base template](#update-react-native-base-template)
+- [Lint modules](#lint-modules)
 
 ## Generate modules data
 
@@ -106,3 +107,11 @@ yarn run template
 ```
 
 Updates the react-native template from upstream, from the locally resolved version (currently pinned to 0.64.2).
+
+## Lint modules
+
+Lint modules source code with a pre-configured ESLint setup:
+
+```
+yarn lint
+```
