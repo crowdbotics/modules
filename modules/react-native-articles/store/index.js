@@ -1,65 +1,66 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { api } from "./api"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { api } from "./api";
 
-export const article_read = createAsyncThunk(
-  "articles/article_read",
+export const articleRead = createAsyncThunk(
+  "articles/articleRead",
   async ({ id }) => {
-    const response = await api.article_read(id)
-    return response.data
+    const response = await api.articleRead(id);
+    return response.data;
   }
-)
+);
 
-export const article_list = createAsyncThunk(
-  "articles/article_list",
+export const articleList = createAsyncThunk(
+  "articles/articleList",
   async () => {
-    const response = await api.article_list()
-    return response.data
+    const response = await api.articleList();
+    return response.data;
   }
-)
+);
 
-const initialState = { articles: {}, api: { loading: "idle", error: null } }
+const initialState = { articles: {}, api: { loading: "idle", error: null } };
 
 export const slice = createSlice({
   name: "articles",
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    [article_list.pending]: state => {
+    [articleList.pending]: (state) => {
       if (state.api.loading === "idle") {
-        state.api.loading = "pending"
-        state.api.error = null
+        state.api.loading = "pending";
+        state.api.error = null;
       }
     },
-    [article_list.fulfilled]: (state, action) => {
+    [articleList.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        action.payload.map(article => {
-          state.articles[article.id] = article
-        })
-        state.api.loading = "idle"
+        action.payload.map((article) => {
+          state.articles[article.id] = article;
+          return article;
+        });
+        state.api.loading = "idle";
       }
     },
-    [article_list.rejected]: (state, action) => {
+    [articleList.rejected]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.api.error = action.error
-        state.api.loading = "idle"
+        state.api.error = action.error;
+        state.api.loading = "idle";
       }
     },
-    [article_read.pending]: state => {
+    [articleRead.pending]: (state) => {
       if (state.api.loading === "idle") {
-        state.api.loading = "pending"
+        state.api.loading = "pending";
       }
     },
-    [article_read.fulfilled]: (state, action) => {
+    [articleRead.fulfilled]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.articles[action.payload.id] = action.payload
-        state.api.loading = "idle"
+        state.articles[action.payload.id] = action.payload;
+        state.api.loading = "idle";
       }
     },
-    [article_read.rejected]: (state, action) => {
+    [articleRead.rejected]: (state, action) => {
       if (state.api.loading === "pending") {
-        state.api.error = action.error
-        state.api.loading = "idle"
+        state.api.error = action.error;
+        state.api.loading = "idle";
       }
     }
   }
-})
+});
