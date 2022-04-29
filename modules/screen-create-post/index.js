@@ -1,13 +1,17 @@
 import React from "react";
 import { Text, View, Image, ScrollView, StyleSheet, TouchableHighlight } from "react-native";
 
-const CreatePost = () => {
+const pressed = () => {
+  console.log("pressed");
+};
+
+export const CreatePost = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={[styles.headerPost, styles.pa]}>
           <Image style={styles.crossIcon} resizeMode="contain" source={require("./assets/cross.png")} />
-          <Post />
+          <Post onPress={pressed} />
         </View>
         <View style={[styles.actionContainer, styles.pa]}>
           <Text style={styles.actionLeftText}>Choose picture/video</Text>
@@ -56,13 +60,39 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     paddingVertical: 10
   },
-  pa: { padding: 10 },
-  crossIcon: { position: "absolute", zIndex: 9, height: 10, width: 10, margin: 20 },
-  headerPost: { marginVertical: 20, height: 300 },
-  actionContainer: { marginVertical: 20, display: "flex", flexDirection: "row", justifyContent: "space-between" },
-  actionLeftText: { fontSize: 14, color: "#3B566E" },
-  actionRight: { display: "flex", flexDirection: "row" },
-  actionRightImage: { marginLeft: 10, height: 20, width: 20 },
+  pa: {
+    padding: 10
+  },
+  crossIcon: {
+    position: "absolute",
+    zIndex: 9,
+    height: 10,
+    width: 10,
+    margin: 20
+  },
+  headerPost: {
+    marginVertical: 20,
+    height: 300
+  },
+  actionContainer: {
+    marginVertical: 20,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  actionLeftText: {
+    fontSize: 14,
+    color: "#3B566E"
+  },
+  actionRight: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  actionRightImage: {
+    marginLeft: 10,
+    height: 20,
+    width: 20
+  },
   pt10: {
     paddingTop: 3
   },
@@ -90,11 +120,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "CreatePost",
-  navigator: CreatePost
-};
-
 const Post = (props) => {
   return (
     <TouchableHighlight style={postStyles.galleryPost} onPress={props.onPress} underlayColor='#DDDDDD'>
@@ -102,6 +127,7 @@ const Post = (props) => {
     </TouchableHighlight>
   );
 };
+
 const postStyles = StyleSheet.create({
   galleryPost: {
     borderRadius: 10,
