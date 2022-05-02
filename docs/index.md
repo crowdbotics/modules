@@ -4,9 +4,9 @@ This is a monorepo which holds the source code for the various modules we built,
 
 ## Documentation
 
-- [Commands](/docs/commands.md)
-- [Modules available](/docs/modules.md)
-- [Autoloading modules](/docs/autoloading.md)
-- [Authoring new modules](/docs/authoring.md)
-- [Resources](/docs/resources.md)
-- [@store module](/docs/store.md)
+- [Commands](commands.md)
+- [Modules available](modules.md)
+- [Autoloading modules](autoloading.md)
+- [Authoring new modules](authoring.md)
+- [Resources](resources.md)
+- [@store module](store.md)
