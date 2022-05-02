@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react'
 import { Modal, StyleSheet, View, Text } from 'react-native'
 import Button from '../Button';
@@ -11,10 +12,11 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
     >
       <View style={styles.modalContainer}>
         <Text style={styles.modalHeaderText}>Appointment details</Text>
-        <Text style={styles.modalText}>Title: {modalItem.title}</Text>
+        <Text style={styles.modalText}>Title: {modalItem.summary}</Text>
+        <Text style={styles.modalText}>Status: {modalItem.status}</Text>
         <Text style={styles.modalText}>Location: {modalItem.location}</Text>
-        <Text style={styles.modalText}>Duration: {modalItem.duration}</Text>
-        <Text style={styles.modalText}>Description: {modalItem.description}</Text>
+        <Text style={styles.modalText}>Start time: {('start' in modalItem) ? moment(new Date(modalItem.start.dateTime)).format('YYYY-MM-DD HH:mm A'): ''}</Text>
+        <Text style={styles.modalText}>End time: {('end' in modalItem) ? moment(new Date(modalItem.end.dateTime)).format('YYYY-MM-DD HH:mm A'): ''}</Text>
         <View style={styles.modalActionButton}>
           <Button height={40} onPress={() => setModalVisible(false)} style={styles.hide}>
             Cancel

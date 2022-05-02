@@ -1,48 +1,40 @@
-import React, {  useState,useCallback,useEffect,useContext } from 'react';
+import React, {  useState, useCallback } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 // @ts-ignore
 import CalendarStrip from 'react-native-calendar-strip'
-import { getAppointment } from '../api';
+import { getAppointmentByDate } from '../api';
 import Loader from '../components/Loader';
+// @ts-ignore
 import { useFocusEffect } from '@react-navigation/native';
-import { OptionsContext} from "@options";
-import {dateFunc} from "../utils"
 import AppointmentModal from '../components/AppointmentDetailModal';
+// @ts-ignore
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import moment from "moment";
 
 const Appointment = ({ navigation }) => {
-  const options = useContext(OptionsContext)
-  const [appointmentList, setAppointmentList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [modalItem, setModalItem] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
-  const [filterDate, setFilterDate] =useState('')
+  const [filterDate, setFilterDate] =useState((new Date()).toISOString())
   const [filteredAppointments,setFilteredAppointments] = useState([])
 
   useFocusEffect(
-    useCallback(()=>{
-      setIsLoading(true)
-      getAppointment().then(res => res.json()).then(res => {
-        setAppointmentList(res)
-        setFilteredAppointments(res)
-        setIsLoading(false)
-      }).catch(error => {
-        console.log(error)
-        setIsLoading(false)
-      })
-    },[])
+    useCallback(() =>{
+      getAllAppointment()
+    },[filterDate])
   )
 
-  useEffect(() => {
-    if(filterDate){
-      const appointmentFilter=appointmentList.filter(item=>{
-        return item.selected_date == filterDate
-      })
-      setFilteredAppointments(appointmentFilter)
-    }else {
-      setFilteredAppointments(appointmentList)
-    }
-
-  }, [filterDate])
+  const getAllAppointment = async () => {
+    setIsLoading(true)
+    const tokens = await GoogleSignin.getTokens()
+    getAppointmentByDate(tokens.accessToken, 100, filterDate).then(res => res.json()).then(res => {
+      setFilteredAppointments(res.items)
+      setIsLoading(false)
+    }).catch(error => {
+      console.log(error)
+      setIsLoading(false)
+    })
+  }
 
   const modalHandler = (item) => {
     setModalItem(item)
@@ -52,9 +44,9 @@ const Appointment = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={()=>modalHandler(item)}>
       <View style={styles.appointmentItem}>
-        <Text style={styles.listText}>{item.time_slot}</Text>
-        <View style={[styles.card, { backgroundColor: options.appointmentColors[Math.floor(Math.random() * options.appointmentColors.length)]}]}>
-          <Text style={{ fontSize: 16 }}>{item.title}</Text>
+        <Text style={styles.listText}>{('start' in item) ? moment(new Date(item.start.dateTime)).format('h:mm A'): ''}</Text>
+        <View style={[styles.card]}>
+          <Text numberOfLines={1} style={{ fontSize: 16 }}>{item.summary}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -68,9 +60,10 @@ const Appointment = ({ navigation }) => {
         <Text style={styles.calendarText}>Calendar</Text>
       </View>
       <CalendarStrip
+        selectedDate={filterDate}
         daySelectionAnimation={{ type: 'background', duration: 10, highlightColor: '#E6E6E6' }}
         style={{ height: 100, paddingBottom: 10 }}
-        onDateSelected={(date)=> setFilterDate(dateFunc(new Date(date)))}
+        onDateSelected={(date)=> setFilterDate((new Date(date)).toISOString())}
       />
       <View>
         <View style={styles.viewAll}>
@@ -85,7 +78,7 @@ const Appointment = ({ navigation }) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-      <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible}/>
+      { modalVisible && <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible}/> }
 
     </View>
   )
@@ -127,7 +120,7 @@ const styles = StyleSheet.create({
     marginVertical: 10 
   },
   card: { 
-    backgroundColor: '#DADADA', 
+    backgroundColor: "#FCF1D6", 
     borderRadius: 10, 
     width: '80%', 
     height: 50, 

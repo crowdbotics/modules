@@ -1,14 +1,13 @@
-import { getGlobalOptions } from "@options";
 
-const global = getGlobalOptions();
-const BASE_URL = global
+const BASE_URL = "https://www.googleapis.com/calendar/v3/calendars"
 
-export const createAppointment = async (data) => {
+export const createAppointment = async (accessToken, data) => {
   try {
-    const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/`, {
+    const response = await fetch(`${BASE_URL}/primary/events`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
       },
       body: JSON.stringify(data)
     })
@@ -18,12 +17,13 @@ export const createAppointment = async (data) => {
   }
 };
 
-export const getAppointment = async () => {
+export const getAppointmentByDate = async (accessToken, maxResults = 100, datetime) => {
   try {
-    const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/`, {
+    const response = await fetch(`${BASE_URL}/primary/events?showDeleted=false&orderBy=startTime&singleEvents=true&maxResults=${maxResults}&timeMin=${datetime}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
       },
     })
     return response
@@ -32,12 +32,28 @@ export const getAppointment = async () => {
   }
 };
 
-export const deleteAppointment = async (data) => {
+export const getAllAppointments = async (accessToken) => {
   try {
-    const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/${data}/`, {
+    const response = await fetch(`${BASE_URL}/primary/events?showDeleted=false&orderBy=startTime&singleEvents=true`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+    })
+    return response
+  } catch (error) {
+    throw new Error('NETWORK_ERROR').message
+  }
+};
+
+export const deleteAppointment = async (accessToken, id) => {
+  try {
+    const response = await fetch(`${BASE_URL}/primary/events/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
       },
     })
     return response
