@@ -1,8 +1,11 @@
 import React from 'react';
 import Navigator from './Navigator';
+import { LogBox } from 'react-native';
 
 const Appointment = () => {
-  return(
+  LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+
+  return (
     <Navigator />
   )
 

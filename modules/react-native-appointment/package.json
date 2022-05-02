@@ -1,6 +1,6 @@
 {
   "name": "@modules/appointment",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Appointment Module",
   "private": true,
   "main": "index.js",
