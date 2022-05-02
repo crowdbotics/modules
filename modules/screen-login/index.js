@@ -103,3 +103,5 @@ const btnStyles = StyleSheet.create({
     color: "white"
   }
 });
+
+export default LoginScreen;

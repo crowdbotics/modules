@@ -22,3 +22,5 @@ const styles = StyleSheet.create({
     marginVertical: 12
   }
 });
+
+export default DirectMessagesScreen;
