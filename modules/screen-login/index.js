@@ -36,22 +36,22 @@ const styles = StyleSheet.create({
   container: {
     margin: 20,
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: "space-around"
   },
   topSection: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "center"
   },
   bottomSection: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   bottomSectionText: {
     alignSelf: "center",
     fontSize: 24,
     fontWeight: "bold",
     padding: 2,
-    marginVertical: 12,
+    marginVertical: 12
   },
   bottomSectionDescription: {
     alignSelf: "center",
@@ -60,21 +60,21 @@ const styles = StyleSheet.create({
     maxWidth: deviceWidth / 1.4,
     textAlign: "center",
     padding: 5,
-    marginVertical: 12,
+    marginVertical: 12
   },
   headingTxt: {
     fontWeight: "bold",
     color: "black",
-    fontSize: 28,
+    fontSize: 28
   },
   loginBtnStyle: {
     backgroundColor: "white",
     borderColor: "black",
-    borderWidth: 1,
+    borderWidth: 1
   },
   loginBtnText: {
-    color: "black",
-  },
+    color: "black"
+  }
 });
 
 const Button = ({ title, btnStyle, textStyle, onPress }) => {
@@ -97,11 +97,11 @@ const btnStyles = StyleSheet.create({
     margin: 5,
     width: deviceWidth - 80,
     minHeight: 45,
-    marginVertical: 12,
+    marginVertical: 12
   },
   btnText: {
-    color: "white",
-  },
+    color: "white"
+  }
 });
 
 export default LoginScreen;
