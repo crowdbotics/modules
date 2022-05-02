@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const AccountSettingsScreen = (params) => {
+const AccountSettingsScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Account Settings Screen</Text>

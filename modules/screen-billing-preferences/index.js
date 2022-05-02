@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const BillingPreferencesScreen = (params) => {
+const BillingPreferencesScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Billing Preferences Screen</Text>

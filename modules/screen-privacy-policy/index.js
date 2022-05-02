@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const PrivacyPolicyScreen = (params) => {
+const PrivacyPolicyScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Privacy Policy Screen</Text>

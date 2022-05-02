@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const InviteFriendsScreen = (params) => {
+const InviteFriendsScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Invite Friends Screen</Text>

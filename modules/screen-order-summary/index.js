@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const OrderSummaryScreen = (params) => {
+const OrderSummaryScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Order Summary Screen</Text>

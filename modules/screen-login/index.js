@@ -8,7 +8,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const LoginScreen = (params) => {
+const LoginScreen = (params) => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
