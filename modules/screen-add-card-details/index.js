@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const AddCardDetailsScreen = (params) => {
+const AddCardDetailsScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Add Card Details Screen</Text>

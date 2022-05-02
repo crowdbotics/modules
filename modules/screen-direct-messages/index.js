@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const DirectMessagesScreen = (params) => {
+const DirectMessagesScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Direct Messages Screen</Text>

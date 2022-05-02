@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const ActivityFeedScreen = (params) => {
+const ActivityFeedScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Activity Feed Screen</Text>

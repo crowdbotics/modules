@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const CreatePostScreen2 = (params) => {
+const CreatePostScreen2 = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Create Post Screen</Text>

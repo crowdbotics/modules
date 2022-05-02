@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const SearchListingScreen = (params) => {
+const SearchListingScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Search Listing Screen</Text>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const AppointmentListingScreen = (params) => {
+const AppointmentListingScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Appointment Listing Screen</Text>

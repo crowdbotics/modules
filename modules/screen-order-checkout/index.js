@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const OrderCheckoutScreen = (params) => {
+const OrderCheckoutScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Order Checkout Screen</Text>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const SignatureScreen = (params) => {
+const SignatureScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Signature Screen</Text>

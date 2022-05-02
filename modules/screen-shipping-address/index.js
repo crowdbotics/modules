@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-export const ShippingAddressScreen = (params) => {
+const ShippingAddressScreen = (params) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingTxt}>Shipping Address Screen</Text>
