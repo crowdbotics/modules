@@ -5,7 +5,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const Signup = () => {
+const Signup = () => {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
@@ -154,6 +154,8 @@ const styles = StyleSheet.create({
     color: "#6B6B6B"
   }
 });
+
+export default Signup;
 
 const Button = (props) => {
   return (
