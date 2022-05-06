@@ -12,11 +12,13 @@ const sliderData = [{
   description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.tortor lectus tempus lacus 2."
 }];
 
-export const Onboarding = () => {
+const Onboarding = () => {
   return (
     <Slider data={sliderData} onFinish={() => {}}/>
   );
 };
+
+export default Onboarding;
 
 const Slider = (props) => {
   const [currentSlide, setCurrentSlide] = useState(0);
