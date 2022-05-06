@@ -8,7 +8,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const LoginScreen = (params) => {
+const LoginScreen = (params) => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
@@ -103,3 +103,5 @@ const btnStyles = StyleSheet.create({
     color: "white"
   }
 });
+
+export default LoginScreen;

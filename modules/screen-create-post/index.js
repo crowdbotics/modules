@@ -5,7 +5,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const CreatePost = () => {
+const CreatePost = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -120,10 +120,12 @@ const styles = StyleSheet.create({
   }
 });
 
+export default CreatePost;
+
 const Post = (props) => {
   return (
     <TouchableHighlight style={postStyles.galleryPost} onPress={props.onPress} underlayColor='#DDDDDD'>
-        <Image postStyle={postStyles.editIcon} source={require("./assets/edit.png")} />
+        <Image style={postStyles.editIcon} source={require("./assets/edit.png")} />
     </TouchableHighlight>
   );
 };
