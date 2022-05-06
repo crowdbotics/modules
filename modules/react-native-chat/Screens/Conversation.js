@@ -17,7 +17,7 @@ import SearchBar from "../Components/SearchBar";
 // @ts-ignore
 import { useFocusEffect } from "@react-navigation/native";
 
-const Conversions = ({ navigation }) => {
+const Conversations = ({ navigation }) => {
   const pubnub = usePubNub();
   const { state, dispatch } = useStore();
   const [loading, setLoading] = useState(true);
@@ -49,7 +49,7 @@ const Conversions = ({ navigation }) => {
         title: "Channels",
         data: channels
           .filter((item) => {
-            return item.custom.type === "1";
+            return item.custom.type === 1;
           })
           .map((obj) => ({ ...obj }))
       },
@@ -57,7 +57,7 @@ const Conversions = ({ navigation }) => {
         title: "Direct Chats",
         data: channels
           .filter((item) => {
-            return item.custom.type === "0";
+            return item.custom.type === 0;
           })
           .map((obj) => ({ ...obj }))
       }
@@ -113,7 +113,7 @@ const Conversions = ({ navigation }) => {
                   title: "Channels",
                   data: channels
                     .filter((item) => {
-                      return item.custom.type === "1";
+                      return item.custom.type === 1;
                     })
                     .map((obj) => ({ ...obj }))
                 },
@@ -121,7 +121,7 @@ const Conversions = ({ navigation }) => {
                   title: "Direct Chats",
                   data: channels
                     .filter((item) => {
-                      return item.custom.type === "0";
+                      return item.custom.type === 0;
                     })
                     .map((obj) => ({ ...obj }))
                 }
@@ -275,4 +275,4 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   }
 });
-export default Conversions;
+export default Conversations;

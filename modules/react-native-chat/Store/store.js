@@ -1,9 +1,9 @@
 // @ts-ignore
 import create from "zustand";
+import options from "../options";
 import { users } from "./storage";
-const randIndex = Math.floor(Math.random() * users.length);
-export const uuid = users[randIndex]._id; // uuidv4()
-export const user = users[randIndex];
+export const uuid = options.user._id;
+export const user = options.user;
 export const ChannelType = {
   Direct: 0,
   Group: 1
@@ -14,7 +14,7 @@ export const useStore = create((setState) => ({
     channels: {},
     messages: {},
     members: {},
-    contacts: users,
+    contacts: [options.user, ...users],
     user
   },
   dispatch: (newState) =>

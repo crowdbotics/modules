@@ -14,11 +14,6 @@ export const upload = async (file) => {
 
 export const users = [
   {
-    name: "Mark Kelley",
-    _id: "user_a00001",
-    avatar: "https://randomuser.me/api/portraits/men/1.jpg"
-  },
-  {
     name: "Anna Gordon",
     _id: "user_a00002",
     avatar: "https://randomuser.me/api/portraits/women/1.jpg"

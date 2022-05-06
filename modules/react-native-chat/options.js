@@ -55,9 +55,15 @@ export const ListViewStyle = StyleSheet.create({
   }
 });
 
-const PUBNUB_PUB = "PUBNUB Publish key";
-const PUBNUB_SUB = "PUBNUB Subscription key";
+const PUBNUB_PUB = "PUBNUB_PUB Key";
+const PUBNUB_SUB = "PUBNUB_SUB Key";
 const FILESTACK_KEY = "AAPKloXQDQy61KlIW09M6z";
+
+const user = {
+  name: "Mark Kelley",
+  _id: "user_a00001",
+  avatar: "https://randomuser.me/api/portraits/men/1.jpg"
+};
 
 export default {
   PUBNUB_SUB: PUBNUB_SUB,
@@ -66,5 +72,6 @@ export default {
   FILESTACK_KEY: FILESTACK_KEY,
   ListViewStyle: ListViewStyle,
   NavigationStyle: NavigationStyle,
+  user: user,
   styles: styles
 };
