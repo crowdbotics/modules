@@ -13,7 +13,7 @@ const data = [
     text: "Mauris ultrices ut mauris ut elementum nunc. Quisque eu vulputate nunc. Sed odio lectus."
   }
 ];
-export const Post = () => {
+const Post = () => {
   return (
 
     <ScrollView>
@@ -30,6 +30,9 @@ export const Post = () => {
 
   );
 };
+
+export default Post;
+
 const styles = StyleSheet.create({
   container: { padding: 10, height: "100%", backgroundColor: "#FFF" },
   headerContainer: { display: "flex", flexDirection: "row", justifyContent: "flex-end" },
