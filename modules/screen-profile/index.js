@@ -5,7 +5,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const Profile = () => {
+const Profile = () => {
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
@@ -108,6 +108,8 @@ const styles = StyleSheet.create({
     width: "80%"
   }
 });
+
+export default Profile;
 
 const Button = (props) => {
   return (
