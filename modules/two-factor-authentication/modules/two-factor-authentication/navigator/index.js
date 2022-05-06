@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 // @ts-ignore
-import { createStackNavigator } from "@react-navigation/stack"
-import AuthTypes from '../screens/authTypes';
-import Verification from '../screens/verification';
-import Home from '../screens/home';
-import GoogleAuth from '../screens/googleAuth';
+import { createStackNavigator } from "@react-navigation/stack";
+import AuthTypes from "../screens/authTypes";
+import Verification from "../screens/verification";
+import Home from "../screens/home";
+import GoogleAuth from "../screens/googleAuth";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +16,6 @@ const Navigator = () => {
       <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
       <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
     </Stack.Navigator>
-  )
+  );
 };
-export default Navigator
+export default Navigator;

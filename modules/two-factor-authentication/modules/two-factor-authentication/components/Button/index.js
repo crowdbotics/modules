@@ -1,6 +1,5 @@
-import React from 'react'
-import { StyleSheet } from 'react-native'
-import { View, Text, TouchableHighlight } from "react-native";
+import React from "react";
+import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 
 const Button = (props) => {
   return (
@@ -9,30 +8,30 @@ const Button = (props) => {
         <Text style={styles.text}>{props.children}</Text>
       </View>
     </TouchableHighlight>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   button: {
     padding: 10,
-    backgroundColor: '#73A5C6',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#73A5C6",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 3
   },
   clicked: {
     padding: 10,
-    backgroundColor: '#2E5984',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#2E5984",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 3
   },
   text: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 15,
-    color: 'white'
-  },
-})
-export default Button
+    color: "white"
+  }
+});
+export default Button;

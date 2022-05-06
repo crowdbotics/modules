@@ -29,7 +29,7 @@ EMAIL_HOST_USER = '...'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+EMAIL='...'
+PHONE='...'
 
-from_email='...'
-from_='...'
-```
+
