@@ -5,7 +5,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const ActivityFeed = () => {
+const ActivityFeedScreen = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -17,7 +17,7 @@ export const ActivityFeed = () => {
         <View style={styles.followingSection}>
           <View style={styles.textarea}>
             <Image style={styles.postIcon} source={require("./assets/posts.png")} />
-            <Text style={styles.postText}>My post</Text>
+            <Text>My post</Text>
           </View>
           <View style={styles.textarea}>
             <Image style={styles.followingIcon} source={require("./assets/following.png")} />
@@ -148,6 +148,8 @@ const styles = StyleSheet.create({
     padding: 3
   }
 });
+
+export default ActivityFeedScreen;
 
 const Post = (props) => {
   return (
