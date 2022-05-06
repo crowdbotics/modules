@@ -8,6 +8,7 @@
 - [Adding dependencies with Native code](#adding-dependencies-with-native-code)
 - [Running code on app load](#running-code-on-app-load)
 - [Modules Options](#modules-options)
+- [Screen modules](#screen-modules)
 
 ## Guidelines
 
@@ -245,4 +246,39 @@ For the Django modules, one writes an [options file](/modules/django-articles/ar
 ```python
 RECORDS_PER_PAGE = 50
 MEDIA_UPLOAD_PATH = "mediafiles/articles/"
+```
+
+## Screen Modules
+
+Screen modules are client only modules that depend on `react` and `react-native` libraries exclusively, and are compatible with the initial release of Studio.
+
+Those require a `meta.json` root property that points to the screens directory, i.e:
+
+```json
+{
+  "title": "Login Screen",
+  "description": "Login screen",
+  "root": "/screens/login"
+}
+```
+
+Similar to modules, those screens point to a main file `index.js`. Notice how the name of the modules starts with `@screens` instead.
+
+```json
+{
+  "name": "@screens/login",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "files": ["*"],
+  "author": "Crowdbotics",
+  "license": "ISC"
+}
+```
+
+Finally, this type of modules should include a default export in the main file (`index.js`) - this will be automatically picked up by the [Autoloading](autoloading.md) mechanism:
+
+```
+export default LoginScreen;
 ```
