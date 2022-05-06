@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
 
-export const Settings = () => {
+const Settings = () => {
   return (
     <View style={styles.container}>
 
@@ -165,3 +165,5 @@ const styles = StyleSheet.create({
     borderRadius: 10
   }
 });
+
+export default Settings;
