@@ -5,7 +5,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const Token = () => {
+const Token = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topHead}>
@@ -98,6 +98,8 @@ const styles = StyleSheet.create({
     paddingRight: 20
   }
 });
+
+export default Token;
 
 const Button = (props) => {
   return (
