@@ -55,8 +55,8 @@ export const ListViewStyle = StyleSheet.create({
   }
 });
 
-const PUBNUB_PUB = "PUBNUB_PUB Key";
-const PUBNUB_SUB = "PUBNUB_SUB Key";
+const PUBNUB_PUB = "PUBNUB Publish key";
+const PUBNUB_SUB = "PUBNUB Subscription key";
 const FILESTACK_KEY = "AAPKloXQDQy61KlIW09M6z";
 
 const user = {
