@@ -18,7 +18,39 @@
 yarn run parse
 ```
 
-Run the command to parse and export the modules source code into a [JSON file](/dist/modules.json).
+Run the command to validate, parse and export the modules source code into a [JSON file](/dist/modules.json).
+
+Example output:
+
+```shell
+~/code/github.com/crowdbotics@modules (hotfix/login-screen-export) $ yarn parse
+yarn run v1.22.10
+$ node scripts/parse.js
+
+Parsing modules...
+
+✅ camera
+✅ django-articles
+❌ django-push-notifications => module preview image missing
+❌ django-social-auth => module preview image missing
+✅ payments
+✅ privacy-policy
+✅ react-native-app-menu
+✅ react-native-articles
+✅ react-native-chat
+✅ react-native-login
+✅ react-native-maps
+✅ react-native-onboarding
+❌ react-native-push-notifications => module preview image missing
+❌ react-native-social-login => module preview image missing
+✅ react-native-splash
+✅ react-native-user-profile
+✅ screen-login
+✅ terms-and-conditions
+
+Total of modules: 18
+Done in 0.27s.
+```
 
 ## Get module info
 
