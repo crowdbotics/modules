@@ -1,0 +1,5 @@
+{
+    "title": "Rating Screen",
+    "description": "Rating screen, give star rating to the app and submit a comment",
+    "root": "/screens/rate-the-app"
+}
