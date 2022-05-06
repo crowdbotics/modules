@@ -5,7 +5,7 @@ const pressed = () => {
   console.log("pressed");
 };
 
-export const ForgotPassword = () => {
+const ForgotPassword = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topHead}>
@@ -88,6 +88,8 @@ const styles = StyleSheet.create({
     fontSize: 20
   }
 });
+
+export default ForgotPassword;
 
 const Button = (props) => {
   return (
