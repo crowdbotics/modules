@@ -22,7 +22,7 @@ const FAQList = [{
   data: []
 }];
 
-export const SupportFaq = () => {
+const SupportFaq = () => {
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
     alignItems: "center"
   }
 });
+
+export default SupportFaq;
 
 const Accordion = () => {
   return <Fragment>
