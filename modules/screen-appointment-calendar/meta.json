@@ -1,0 +1,5 @@
+{
+    "title": "Appointment Calendar Screen",
+    "description": "Appointment Calendar screen.",
+    "root": "/screens/appointment-calendar"
+}

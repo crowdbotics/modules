@@ -9,7 +9,7 @@ jobs:
   node:
     working_directory: ~/build
     docker:
-      - image: circleci/node:14.16.0
+      - image: cimg/node:14.19
     steps:
       - checkout
 
