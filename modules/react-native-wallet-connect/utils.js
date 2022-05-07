@@ -38,14 +38,8 @@ export const setGlobalConnector = (connector) => {
 
 export const parseAddress = (input) => {
   const network = input.split(":")[0];
-  const addressAndChainId = input.split(":")[1];
-  const chainId = addressAndChainId.split("@")[1];
-  const address = addressAndChainId.split("@")[0];
-  return {
-    network,
-    address,
-    chainId
-  };
+  const address = input.split(":")[1];
+  return { network, address };
 };
 
 export const walletProvider = () => {
