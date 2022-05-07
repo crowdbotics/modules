@@ -1,6 +1,5 @@
-import React from "react"
-import { StyleSheet } from 'react-native';
-import { View, Text, TouchableOpacity } from "react-native"
+import React from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 const Button = (props) => {
   return (
@@ -13,14 +12,14 @@ const Button = (props) => {
         </View>
       </View>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   CardBody: {
     minHeight: 50,
-    height: '100%',
-    backgroundColor: '#2D8CFF',
+    height: "100%",
+    backgroundColor: "#2D8CFF",
     borderRadius: 5
   },
   InnerCard: {
@@ -28,21 +27,20 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 0
     },
     shadowOpacity: 0.23,
     shadowRadius: 1.62,
     elevation: 15,
-    display: 'flex',
+    display: "flex",
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: "center",
+    justifyContent: "center"
   },
   HostMeetingText: {
-    color: 'white',
-    textTransform: 'uppercase'
+    color: "white",
+    textTransform: "uppercase"
   }
 });
 
-
-export default Button
+export default Button;

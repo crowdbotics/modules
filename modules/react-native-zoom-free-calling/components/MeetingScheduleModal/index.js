@@ -1,46 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Modal, SectionList } from "react-native";
-import Input from '../Input';
-import { StyleSheet } from 'react-native';
-import options from '../../options'
-import Video from '../Video';
-import MeetingID from '../MeetingId';
-import RecurringMeeting from '../RecurringMeeting';
-import MeetingTime from '../MeetingTime';
-import Actions from '../Actions';
+import React, { useState, Fragment } from "react";
+import { View, Text, Modal, SectionList, StyleSheet } from "react-native";
+import Input from "../Input";
+import options from "../../options";
+import Video from "../Video";
+import MeetingID from "../MeetingId";
+import RecurringMeeting from "../RecurringMeeting";
+import MeetingTime from "../MeetingTime";
+import Actions from "../Actions";
 
 const MeetingScheduleModal = (props) => {
   const [meetingSchedule, setMeetingSchedule] = useState(options.initialMeetingSchedule);
-  const [errors, setErrors] = useState({ topic: '' })
- 
+  const [errors, setErrors] = useState({ topic: "" });
+
   const handleSave = () => {
-    if (meetingSchedule.topic == "") {
-      setErrors({ ...errors, topic: "This field is required." })
-      return
+    if (meetingSchedule.topic === "") {
+      setErrors({ ...errors, topic: "This field is required." });
+      return;
     }
-    props.onHandleMeetingSchedule(meetingSchedule)
-  }
-  
+    props.onHandleMeetingSchedule(meetingSchedule);
+  };
+
   const meetingTopic = () => {
     return (
       <View style={styles.Mt10}>
         <Input
           label="Meeting topic"
-          errorMessage={(errors.topic != "") ? "This field is required." : ""}
+          errorMessage={(errors.topic !== "") ? "This field is required." : ""}
           onChangeText={(text) => setMeetingSchedule({ ...meetingSchedule, topic: text })}
         />
       </View>
     );
-  }
-  
+  };
+
   const DATA = [
     {
       data: [meetingTopic(),
-        <MeetingTime meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
-        <RecurringMeeting meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
-        <MeetingID meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
-        <Video meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
-        <Actions handleSave={handleSave} setModalVisible={props.setModalVisible} />]
+        <MeetingTime key="MeetingTime" meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
+        <RecurringMeeting key={"RecurringMeeting"} meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
+        <MeetingID key={"MeetingID"} meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
+        <Video key={"Video"} meetingSchedule={meetingSchedule} setMeetingSchedule={setMeetingSchedule} />,
+        <Actions key={"Actions"} handleSave={handleSave} setModalVisible={props.setModalVisible} />]
     }
   ];
 
@@ -56,12 +55,12 @@ const MeetingScheduleModal = (props) => {
         <SectionList
           sections={DATA}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <>{item}</>}
+          renderItem={({ item, index }) => <Fragment key={index}>{item}</Fragment>}
         />
       </View>
     </Modal>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   modalView: {
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     padding: 15,
-    width: '90%',
+    width: "90%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -78,17 +77,17 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
+    elevation: 5
   },
   heading: {
     fontSize: 24,
-    color: 'black',
-    fontWeight: 'bold',
-    marginRight: 40,
+    color: "black",
+    fontWeight: "bold",
+    marginRight: 40
   },
   Mt10: {
     marginTop: 10
   }
 });
 
-export default MeetingScheduleModal
+export default MeetingScheduleModal;

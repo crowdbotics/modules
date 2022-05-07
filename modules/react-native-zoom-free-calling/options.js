@@ -1,23 +1,23 @@
 import {
   StyleSheet
-} from 'react-native';
+} from "react-native";
 
 const styles = StyleSheet.create({
-  
-});
-const recurrentMeeting={
-  daily: 15,
-  weekly:12,
-  monthly:3
-}
-const CLIENT_ID = ""
-const CLIENT_SECRET = ""
-const SDK_KEY = ""
-const SDK_SECRET = ""
-const REDIRECT_URI = "https://www.crowdbotics.com"
 
-const checkboxColor = { true: '#24ebde', false: 'lightgray' }
-const initialWeeklyList=[{
+});
+const recurrentMeeting = {
+  daily: 15,
+  weekly: 12,
+  monthly: 3
+};
+const CLIENT_ID = "jxMz2MegRdSgM5TF9QlYg";
+const CLIENT_SECRET = "SKt39I6s5kOwBBn2Eqvlo37tbuQ8RZEz";
+const SDK_KEY = "uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio";
+const SDK_SECRET = "vqaYHwHdS0XyPCwqKDKd6NxeOa8npTvRQeea";
+const REDIRECT_URI = "https://www.crowdbotics.com";
+
+const checkboxColor = { true: "#24ebde", false: "lightgray" };
+const initialWeeklyList = [{
   label: "Sun",
   value: "1",
   isSelected: true
@@ -45,7 +45,7 @@ const initialWeeklyList=[{
   label: "Sat",
   value: "7",
   isSelected: false
-}]
+}];
 
 const initialWeeksList = [{
   label: "First",
@@ -67,9 +67,9 @@ const initialWeeksList = [{
   label: "Last",
   value: "-1",
   isSelected: false
-}]
+}];
 
-const initialDaysList =[{
+const initialDaysList = [{
   label: "Sunday",
   value: "1",
   isSelected: true
@@ -97,9 +97,9 @@ const initialDaysList =[{
   label: "Saturday",
   value: "7",
   isSelected: false
-}]
+}];
 
-const initialOccurrencesList=[
+const initialOccurrencesList = [
   { label: "1", value: "1" },
   { label: "2", value: "2" },
   { label: "3", value: "3" },
@@ -120,8 +120,8 @@ const initialOccurrencesList=[
   { label: "18", value: "18" },
   { label: "19", value: "19" },
   { label: "20", value: "20" }
-]
-const initialRecurrenceList=[{
+];
+const initialRecurrenceList = [{
   label: "Daily",
   value: "1"
 }, {
@@ -133,21 +133,21 @@ const initialRecurrenceList=[{
 }, {
   label: "No Fixed Time",
   value: "-1"
-}]
+}];
 
-const initialMeetingSchedule= {
-  topic: '',
+const initialMeetingSchedule = {
+  topic: "",
   startDate: new Date(),
-  timezone: 'America/Los_Angeles',
+  timezone: "America/Los_Angeles",
   meetingID: false,
   hostVideo: true,
   participantsVideo: true,
   recurring_meeting: false,
   recurrence: {
     recurrence_type: "1",
-    repeatEvery: '1',
+    repeatEvery: "1",
     endDate: new Date(),
-    occurrences: '7',
+    occurrences: "7",
     isBy: true,
     weekly_days: "1",
     isDayMonthly: true,
@@ -155,24 +155,23 @@ const initialMeetingSchedule= {
     week: "1",
     day: "1"
   }
-}
+};
 
 export default {
-  CLIENT_ID: CLIENT_ID ,
+  CLIENT_ID: CLIENT_ID,
   CLIENT_SECRET: CLIENT_SECRET,
-  SDK_KEY: SDK_KEY ,
+  SDK_KEY: SDK_KEY,
   SDK_SECRET: SDK_SECRET,
-  REDIRECT_URI:  REDIRECT_URI,
-  initialWeeklyList:initialWeeklyList,
+  REDIRECT_URI: REDIRECT_URI,
+  initialWeeklyList: initialWeeklyList,
   initialWeeksList: initialWeeksList,
   initialDaysList: initialDaysList,
-  initialOccurrencesList:initialOccurrencesList,
-  initialRecurrenceList:initialRecurrenceList,
-  initialMeetingSchedule:initialMeetingSchedule,
+  initialOccurrencesList: initialOccurrencesList,
+  initialRecurrenceList: initialRecurrenceList,
+  initialMeetingSchedule: initialMeetingSchedule,
   CHECKBOX_COLOR_FALSE: "lightgray",
   CHECKBOX_COLOR_TRUE: "#24ebde",
   recurrentMeeting: recurrentMeeting,
-  checkboxColor:checkboxColor,
+  checkboxColor: checkboxColor,
   styles: styles
-}
-
+};

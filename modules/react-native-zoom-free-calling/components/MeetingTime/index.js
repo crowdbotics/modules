@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, Text, Pressable, } from 'react-native'
-import DropDownPicker from 'react-native-dropdown-picker';
-import Input from '../Input';
-import { timezones } from '../../timezones';
+import React, { useState } from "react";
+import { View, StyleSheet, Text, Pressable } from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
+import Input from "../Input";
+import { timezones } from "../../timezones";
 // @ts-ignore
-import DatePicker from 'react-native-date-picker'
+import DatePicker from "react-native-date-picker";
 
 const MeetingTime = ({
   meetingSchedule,
   setMeetingSchedule
 }) => {
-  const [openStartDate, setOpenStartDate] = useState(false)
+  const [openStartDate, setOpenStartDate] = useState(false);
   const [openTimezone, setOpenTimezone] = useState(false);
   const [timezoneList, setTimezoneList] = useState(timezones);
 
@@ -21,12 +21,12 @@ const MeetingTime = ({
           <Input
             label="When"
             editable={false}
-            value={meetingSchedule.startDate.toLocaleString('en-US', {
+            value={meetingSchedule.startDate.toLocaleString("en-US", {
               day: "numeric",
               month: "short",
               year: "numeric",
               hour: "numeric",
-              minute: "2-digit",
+              minute: "2-digit"
             })}
           />
         </Pressable>
@@ -35,11 +35,11 @@ const MeetingTime = ({
           open={openStartDate}
           date={meetingSchedule.startDate}
           onConfirm={(date) => {
-            setOpenStartDate(false)
-            setMeetingSchedule({ ...meetingSchedule, startDate: date })
+            setOpenStartDate(false);
+            setMeetingSchedule({ ...meetingSchedule, startDate: date });
           }}
           onCancel={() => {
-            setOpenStartDate(false)
+            setOpenStartDate(false);
           }}
         />
       </View>
@@ -50,7 +50,7 @@ const MeetingTime = ({
           placeholderStyle={styles.DropDownPlaceholder}
           style={styles.DropDownPicker}
           labelProps={{
-            numberOfLines: 1,
+            numberOfLines: 1
           }}
           listMode="MODAL"
           modalTitle="Select timezone"
@@ -64,8 +64,8 @@ const MeetingTime = ({
         />
       </View>
     </View>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   ModalContent: {
     display: "flex",
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   InputLabels: {
-    width: "49%",
+    width: "49%"
   },
   DropDownPicker: {
     borderWidth: 1,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 4,
     marginTop: 5,
-    height: 39,
+    height: 39
   },
   DropDownPlaceholder: {
     color: "lightgrey"
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   FwBold: {
-    fontWeight: 'bold'
-  },
-})
-export default MeetingTime
+    fontWeight: "bold"
+  }
+});
+export default MeetingTime;

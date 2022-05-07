@@ -1,9 +1,7 @@
-import React from 'react'
-import { View, StyleSheet, Text, Pressable, } from 'react-native'
+import React from "react";
+import { View, StyleSheet, Text } from "react-native";
 // @ts-ignore
-import { RadioButton } from 'react-native-paper';
-
-
+import { RadioButton } from "react-native-paper";
 
 const Video = ({ meetingSchedule, setMeetingSchedule }) => {
   return (
@@ -15,12 +13,12 @@ const Video = ({ meetingSchedule, setMeetingSchedule }) => {
           <View style={styles.Dflex}>
             <RadioButton
               value="true"
-              status={meetingSchedule.hostVideo ? 'checked' : 'unchecked'}
+              status={meetingSchedule.hostVideo ? "checked" : "unchecked"}
               onPress={() => setMeetingSchedule({ ...meetingSchedule, hostVideo: true })}
             />
             <RadioButton
               value="false"
-              status={!meetingSchedule.hostVideo ? 'checked' : 'unchecked'}
+              status={!meetingSchedule.hostVideo ? "checked" : "unchecked"}
               onPress={() => setMeetingSchedule({ ...meetingSchedule, hostVideo: false })}
             />
           </View>
@@ -30,26 +28,26 @@ const Video = ({ meetingSchedule, setMeetingSchedule }) => {
           <View style={styles.Dflex}>
             <RadioButton
               value="true"
-              status={meetingSchedule.participantsVideo ? 'checked' : 'unchecked'}
+              status={meetingSchedule.participantsVideo ? "checked" : "unchecked"}
               onPress={() => setMeetingSchedule({ ...meetingSchedule, participantsVideo: true })}
             />
             <RadioButton
               value="false"
-              status={!meetingSchedule.participantsVideo ? 'checked' : 'unchecked'}
+              status={!meetingSchedule.participantsVideo ? "checked" : "unchecked"}
               onPress={() => setMeetingSchedule({ ...meetingSchedule, participantsVideo: false })}
             />
           </View>
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
 
   VideoText: {
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontWeight: "bold",
+    fontSize: 14
   },
   VideoMain: {
     display: "flex",
@@ -74,7 +72,7 @@ const styles = StyleSheet.create({
   Dflex: {
     display: "flex",
     flexDirection: "row"
-  },
-})
+  }
+});
 
-export default Video
+export default Video;
