@@ -1,6 +1,6 @@
 
-const textMessage=''
+const textMessage = "sample text";
 export default {
-  email: '',
-  textMessage : textMessage
-}
+  email: "admin@admin.com",
+  textMessage: textMessage
+};

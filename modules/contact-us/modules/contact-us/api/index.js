@@ -7,14 +7,14 @@ const BASE_URL = global.url;
 export const sendQuery = async (data) => {
   try {
     const response = await fetch(`${BASE_URL}/modules/contact-us/contact_us/`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
-    })
-    return response
+    });
+    return response;
   } catch (error) {
-    throw new Error('NETWORK_ERROR').message
+    throw new Error("NETWORK_ERROR").message;
   }
 };
