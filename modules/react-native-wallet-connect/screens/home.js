@@ -1,100 +1,100 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState, Fragment } from "react";
 // @ts-ignore
-import { useWalletConnect } from '@walletconnect/react-native-dapp';
-import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native"
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native";
 // @ts-ignore
-import { useFocusEffect } from '@react-navigation/native'
-import { getBalance, globalConnector, setGlobalConnector, switchMetamask } from '../utils';
-import Button from '../components/Button';
+import { useFocusEffect } from "@react-navigation/native";
+import { getBalance, globalConnector, setGlobalConnector, switchMetamask } from "../utils";
+import Button from "../components/Button";
 // @ts-ignore
-import refreshIcon from "../assets/refresh-icon.png"
+import refreshIcon from "../assets/refresh-icon.png";
 
 // @ts-ignore
-import LinearGradient from 'react-native-linear-gradient';
+import LinearGradient from "react-native-linear-gradient";
 // @ts-ignore
-import ShimmerPlaceHolder from 'react-native-shimmer-placeholder'
-import CurrencyModal from '../components/CurrencyModal';
+import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
+import CurrencyModal from "../components/CurrencyModal";
 
 // @ts-ignore
-import walletIcon from '../assets/wallet.png';
+import walletIcon from "../assets/wallet.png";
 
 const Home = (props) => {
   const connector = useWalletConnect();
-  const [connectedWallet, setConnectedWallet] = useState(null)
-  const [isSwitch, setIsSwitch] = useState(false)
-  const [changeWallet, setChangeWallet] = useState(false)
-  const [balance, setBalance] = useState(null)
-  const [modalVisible, setModalVisible] = useState(false)
+  const [connectedWallet, setConnectedWallet] = useState(null);
+  const [isSwitch, setIsSwitch] = useState(false);
+  const [changeWallet, setChangeWallet] = useState(false);
+  const [balance, setBalance] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       if (connector._peerMeta) {
-        setConnectedWallet(connector._peerMeta)
+        setConnectedWallet(connector._peerMeta);
       }
       if (connector.connected) {
-        setIsSwitch(false)
+        setIsSwitch(false);
         setGlobalConnector(connector);
       }
     }, [connector])
-  )
+  );
 
   useEffect(() => {
     if (isSwitch) {
       if (!connector.connected) {
-        connector.connect()
+        connector.connect();
       }
     }
-  }, [isSwitch])
+  }, [isSwitch]);
 
   const switchSession = async () => {
-    await connector.killSession()
-    setBalance(null)
-    setGlobalConnector(null)
-    setChangeWallet(true)
-  }
+    await connector.killSession();
+    setBalance(null);
+    setGlobalConnector(null);
+    setChangeWallet(true);
+  };
 
   useEffect(() => {
     if (!connector.connected && changeWallet) {
-      setIsSwitch(true)
-      setChangeWallet(false)
+      setIsSwitch(true);
+      setChangeWallet(false);
     }
-  }, [connector])
+  }, [connector]);
 
   useFocusEffect(
     React.useCallback(() => {
       if (globalConnector) {
-        getAccount()
+        getAccount();
       }
     }, [])
-  )
+  );
   useEffect(() => {
     if (globalConnector) {
-      getAccount()
+      getAccount();
     }
-  }, [globalConnector])
+  }, [globalConnector]);
   useEffect(() => {
     if (connector.connected) {
       connector.on("session_update", (error, payload) => {
-        getAccount()
+        getAccount();
         if (error) {
           throw error;
         }
-      })
+      });
     }
-  }, [connector])
+  }, [connector]);
 
   const getAccount = () => {
-    setBalance(null)
-    getBalance().then(res => setBalance(res))
-  }
+    setBalance(null);
+    getBalance().then(res => setBalance(res));
+  };
 
   const switchCurrencyHandler = () => {
-    setModalVisible(!modalVisible)
-  }
+    setModalVisible(!modalVisible);
+  };
 
   const handleCurrencyModalItemPress = async (chainId) => {
-    await switchMetamask(chainId)
-  }
+    await switchMetamask(chainId);
+  };
   return (
     <>
 
@@ -113,7 +113,7 @@ const Home = (props) => {
               <Image style={styles.refreshIcon} source={refreshIcon} />
             </TouchableOpacity>
             <View>
-              <Text style={styles.balanceText}>{balance ? `${balance}` : <ShimmerPlaceHolder style={{ borderRadius: 4, }} width={50} height={15} LinearGradient={LinearGradient} />}</Text>
+              <Text style={styles.balanceText}>{balance ? `${balance}` : <ShimmerPlaceHolder style={{ borderRadius: 4 }} width={50} height={15} LinearGradient={LinearGradient} />}</Text>
               <Text style={styles.balanceTxt}>Balance</Text>
             </View>
           </View>
@@ -128,7 +128,7 @@ const Home = (props) => {
                 <Text style={styles.walletText}>Wallet</Text>
                 <Text style={styles.walletText}>Balance</Text>
               </View>
-              <TouchableOpacity style={styles.walletCard} onPress={() => props.navigation.navigate('MyWallet')}>
+              <TouchableOpacity style={styles.walletCard} onPress={() => props.navigation.navigate("MyWallet")}>
                 <View style={styles.myWallet}>
                   <Image source={walletIcon} />
                   <Text style={styles.walletName}>{connectedWallet.name}</Text>
@@ -192,8 +192,9 @@ const Home = (props) => {
           </View>
         }
         <View style={styles.btn}>
-          {!connector.connected ? <Button onPress={() => connector.connect()}>Connect to wallet</Button> :
-            <Button onPress={() => connector.killSession()} style={styles.kill}>Kill Session</Button>}
+          {!connector.connected
+            ? <Button onPress={() => connector.connect()}>Connect to wallet</Button>
+            : <Button onPress={() => connector.killSession()} style={styles.kill}>Kill Session</Button>}
         </View>
       </View>
       <View>
@@ -201,105 +202,105 @@ const Home = (props) => {
       </View>
     </>
 
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    height: '75%',
+    height: "75%",
     display: "flex",
-    flexDirection: 'column',
+    flexDirection: "column",
     justifyContent: "space-between",
     padding: 10,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
-    backgroundColor: '#F1F1F1'
+    backgroundColor: "#F1F1F1"
   },
   homeContainer: {
-    height: '100%',
+    height: "100%",
     display: "flex",
-    flexDirection: 'column',
+    flexDirection: "column",
     justifyContent: "space-between",
     padding: 10,
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
-    backgroundColor: '#F1F1F1'
+    backgroundColor: "#F1F1F1"
   },
   top: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
-    height: '25%',
+    height: "25%",
     padding: 10
   },
   account: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingTop: 30,
+    display: "flex",
+    flexDirection: "row",
+    paddingTop: 30
   },
   accounted: {
-    display: 'flex', 
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column"
   },
   accountText: { width: 115 },
-  kill: { backgroundColor: 'red', color: 'white', fontWeight: 'bold', marginRight: '15' },
+  kill: { backgroundColor: "red", color: "white", fontWeight: "bold", marginRight: "15" },
   pt10: { paddingVertical: 10 },
-  funds: { display: 'flex', flexDirection: 'row', width: '100%', justifyContent: "space-between", marginTop: 20 },
-  fundButton: { width: '48%' },
-  connectText: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+  funds: { display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", marginTop: 20 },
+  fundButton: { width: "48%" },
+  connectText: { display: "flex", justifyContent: "center", alignItems: "center" },
   refreshIcon: {
     width: 20,
-    height: 20,
+    height: 20
   },
   balance: { display: "flex", flexDirection: "row", marginTop: 15 },
-  fwb: { fontWeight: 'bold' },
-  btn: { textAlign: 'center', marginBottom: 20, paddingHorizontal: 30 },
-  walletCard: { backgroundColor: 'white', borderRadius: 10, height: 76, width: "100%", padding: 10, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  fwb: { fontWeight: "bold" },
+  btn: { textAlign: "center", marginBottom: 20, paddingHorizontal: 30 },
+  walletCard: { backgroundColor: "white", borderRadius: 10, height: 76, width: "100%", padding: 10, display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   walletCardDetailContainer: {
     marginTop: 17,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 10,
-    display: 'flex',
-    flexDirection: 'column'
+    display: "flex",
+    flexDirection: "column"
   },
   walletCardDetail: {
     height: 45,
     width: "100%",
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between'
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   switched: {
-    marginTop: 25, width: 120,
+    marginTop: 25, width: 120
   },
   getAccount: {
-    marginRight: 5, marginTop: 4,
+    marginRight: 5, marginTop: 4
   },
   balanceText: {
-    fontSize: 20, fontWeight: 'bold',
+    fontSize: 20, fontWeight: "bold"
   },
   balanceTxt: {
-    color: '#7C7C7C', fontSize: 14, alignSelf: 'flex-end', textAlign: 'right',
+    color: "#7C7C7C", fontSize: 14, alignSelf: "flex-end", textAlign: "right"
   },
   walletBalance: {
-    display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 28, marginTop: 14, paddingHorizontal: 23, 
+    display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: 28, marginTop: 14, paddingHorizontal: 23
   },
   walletText: {
-    fontSize: 16,
+    fontSize: 16
   },
   myWallet: {
-    display: 'flex', flexDirection: 'row', 
+    display: "flex", flexDirection: "row"
   },
   walletName: {
-    color: '#26292A', fontSize: 14, marginLeft: 10, alignSelf: 'center',
+    color: "#26292A", fontSize: 14, marginLeft: 10, alignSelf: "center"
   },
   onlineText: {
-    color: '#12D790',
+    color: "#12D790"
   },
   walletIcon: {
-    marginBottom: 10,
-  },
-})
-export default Home
+    marginBottom: 10
+  }
+});
+export default Home;
