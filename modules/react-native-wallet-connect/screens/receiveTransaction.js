@@ -14,7 +14,7 @@ const ReceiveTransaction = () => {
   const getAccount = async () => {
     const provider = await walletProvider();
     const accountAddress = provider.connector._accounts[0];
-    setAccount(`${accountAddress}`);
+    setAccount(`address:${accountAddress}`);
   };
 
   return (
