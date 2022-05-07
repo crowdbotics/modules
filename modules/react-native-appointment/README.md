@@ -2,6 +2,8 @@
 
 ## Features
 
+# Sync with google calendar
+Appointments are synced with Google Calendar.
 # Create appointment
 User can create an appointment
 
