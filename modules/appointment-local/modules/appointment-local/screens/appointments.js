@@ -1,56 +1,54 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import { View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity} from 'react-native'
+import React, { useState, useEffect, Fragment } from "react";
+import { View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity } from "react-native";
 // @ts-ignore
-import deleteIcon from '../deleteIcon.png'
-import { deleteAppointment, getAppointment } from '../api';
-import Input from '../components/InputText';
-import Loader from '../components/Loader';
-import AppointmentModal from '../components/AppointmentDetailModal';
+import deleteIcon from "../deleteIcon.png";
+import { deleteAppointment, getAppointment } from "../api";
+import Input from "../components/InputText";
+import Loader from "../components/Loader";
+import AppointmentModal from "../components/AppointmentDetailModal";
 
 const Appointments = () => {
-  const [appointmentList, setAppointmentList] = useState([])
-  const [filterAppointmentList, setFilterAppointmentList] = useState([])
-  const [search, setSearch] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [appointmentList, setAppointmentList] = useState([]);
+  const [filterAppointmentList, setFilterAppointmentList] = useState([]);
+  const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalItem, setModalItem] = useState('')
+  const [modalItem, setModalItem] = useState("");
 
   useEffect(() => {
-    if (search != "") {
-      const filteredAppointments = appointmentList.filter(item => item.title.toLowerCase().includes(search.toLowerCase()))
-      setFilterAppointmentList(filteredAppointments)
+    if (search !== "") {
+      const filteredAppointments = appointmentList.filter(item => item.title.toLowerCase().includes(search.toLowerCase()));
+      setFilterAppointmentList(filteredAppointments);
     } else {
-      setFilterAppointmentList(appointmentList)
+      setFilterAppointmentList(appointmentList);
     }
-
-  }, [search])
-
+  }, [search]);
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     getAppointment().then(res => res.json()).then(res => {
-      setAppointmentList(res)
-      setFilterAppointmentList(res)
-      setIsLoading(false)
+      setAppointmentList(res);
+      setFilterAppointmentList(res);
+      setIsLoading(false);
     }).catch(error => {
-      console.log(error)
-      setIsLoading(false)
-    })
-  }, [])
+      console.log(error);
+      setIsLoading(false);
+    });
+  }, []);
 
   const deleteHandler = async (id) => {
-    setIsLoading(true)
+    setIsLoading(true);
     await deleteAppointment(id).then((res) => getAppointment())
       .then(res => res.json()
         .then(res => setFilterAppointmentList(res)))
-      .catch(error => console.log(error))
+      .catch(error => console.log(error));
 
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
   const modalHandler = (item) => {
-    setModalItem(item)
-    setModalVisible(true)
-  }
+    setModalItem(item);
+    setModalVisible(true);
+  };
 
   return (
     <SafeAreaView style={styles.main}>
@@ -86,7 +84,7 @@ const Appointments = () => {
                   </View>
                 </Fragment>
               </TouchableOpacity>
-            )
+            );
           })}
           <View>
             <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible}/>
@@ -95,80 +93,80 @@ const Appointments = () => {
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
-  main: { 
-    backgroundColor: "#F1F1F1", 
-    height: '100%' 
+  main: {
+    backgroundColor: "#F1F1F1",
+    height: "100%"
   },
-  container: { 
-    backgroundColor: "#F1F1F1", 
-    height: '100%', 
-    paddingHorizontal: 10 
+  container: {
+    backgroundColor: "#F1F1F1",
+    height: "100%",
+    paddingHorizontal: 10
   },
-  item: { 
-    display: 'flex', 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    alignItems: 'center', 
-    paddingLeft: 10, 
-    backgroundColor: 'white', 
-    borderRadius: 10, 
-    height: 106, 
-    marginBottom: 15 
+  item: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingLeft: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    height: 106,
+    marginBottom: 15
   },
-  card: { 
-    backgroundColor: '#DADADA', 
-    borderRadius: 10, 
-    width: '80%', 
-    height: 50, 
-    textAlign: 'center', 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    padding: 10 
+  card: {
+    backgroundColor: "#DADADA",
+    borderRadius: 10,
+    width: "80%",
+    height: 50,
+    textAlign: "center",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10
   },
-  box: { 
-    height: 80, 
-    width: 80, 
-    borderRadius: 10, 
-    backgroundColor: '#FCF1D6' 
+  box: {
+    height: 80,
+    width: 80,
+    borderRadius: 10,
+    backgroundColor: "#FCF1D6"
   },
-  title: { 
-    fontSize: 14, 
-    fontWeight: '400', 
-    color: '#1E2022' 
+  title: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: "#1E2022"
   },
-  date: { 
-    fontSize: 14, 
-    fontWeight: '400', 
-    color: '#77838F' 
+  date: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: "#77838F"
   },
-  delete: { 
-    height: 106, 
-    width: 60, 
-    borderRadius: 10 
+  delete: {
+    height: 106,
+    width: 60,
+    borderRadius: 10
   },
-  deleteButton: { 
-    height: '100%', 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    backgroundColor: '#EA4335', 
-    borderRadius: 10 
+  deleteButton: {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#EA4335",
+    borderRadius: 10
   },
-  mv10: { 
+  mv10: {
     marginVertical: 10
   },
-  mb10: { 
-    marginBottom: 10, 
-    fontSize: 14, 
-    marginLeft: 10 
+  mb10: {
+    marginBottom: 10,
+    fontSize: 14,
+    marginLeft: 10
   },
-  deleteIcon: { 
-     height: 17,
-     width: 17 
-    }
-})
-export default Appointments
+  deleteIcon: {
+    height: 17,
+    width: 17
+  }
+});
+export default Appointments;

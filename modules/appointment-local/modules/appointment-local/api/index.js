@@ -1,47 +1,47 @@
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL = global
+const BASE_URL = global;
 
 export const createAppointment = async (data) => {
   try {
     const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
-    })
-    return response
+    });
+    return response;
   } catch (error) {
-    throw new Error('NETWORK_ERROR').message
+    throw new Error("NETWORK_ERROR").message;
   }
 };
 
 export const getAppointment = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      return response
-    } catch (error) {
-      throw new Error('NETWORK_ERROR').message
-    }
-  };
+  try {
+    const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    return response;
+  } catch (error) {
+    throw new Error("NETWORK_ERROR").message;
+  }
+};
 
-  export const deleteAppointment = async (data) => {
-    try {
-      const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/${data}/`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      return response
-    } catch (error) {
-      throw new Error('NETWORK_ERROR').message
-    }
-  };
+export const deleteAppointment = async (data) => {
+  try {
+    const response = await fetch(`${BASE_URL}/modules/appointment-local/appointment/${data}/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    return response;
+  } catch (error) {
+    throw new Error("NETWORK_ERROR").message;
+  }
+};
