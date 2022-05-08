@@ -1,0 +1,12 @@
+{
+    "title": "Social Feed Module",
+    "description": "Social Feed Module",
+    "root": "/",
+    "schema": {
+      "buttonText": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+  
