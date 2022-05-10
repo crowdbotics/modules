@@ -1,0 +1,3 @@
+# QR code
+
+## Android Configs
