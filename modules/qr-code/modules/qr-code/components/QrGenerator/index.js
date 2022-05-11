@@ -24,7 +24,7 @@ const QrGenerator = (props) => {
         {qr && <Image source={{ uri: `data:image/png;base64,${qr}` }} style={styles.qr} />}
       </View>
       <View style={styles.btn}>
-        <Button onPress={pressHandler}>Enter</Button>
+        <Button onPress={pressHandler}>Generate</Button>
       </View>
     </View>
   );

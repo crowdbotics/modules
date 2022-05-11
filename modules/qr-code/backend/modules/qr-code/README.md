@@ -1,7 +1,11 @@
 # QRCode
 
-Run the following commands  to get started:
+Following dependency is used to generate Qr at the backend 
 ```
 pip install qrcode
-pip install pillow
+```
+Start the server by running the following command :
+
+```
+python manage.py runserver
 ```
