@@ -6,7 +6,7 @@ import QRCodeScanner from "react-native-qrcode-scanner";
 import { RNCamera } from "react-native-camera";
 import QrModal from "../Modal";
 
-const QrScanner = () => {
+const QrScanner = (props) => {
   const [data, setData] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -18,7 +18,6 @@ const QrScanner = () => {
 
   const onSuccess = e => {
     setData(e.data);
-    console.log(e);
   };
 
   return (

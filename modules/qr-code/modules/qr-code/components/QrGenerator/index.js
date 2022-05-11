@@ -13,7 +13,6 @@ const QrGenerator = (props) => {
       .then(res => setQr(res.qrcode))
       .catch(e => console.log(e));
   };
-  console.log(qr);
 
   return (
     <View style={styles.container}>
