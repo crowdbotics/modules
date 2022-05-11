@@ -1,7 +1,7 @@
 # QRCode
 
-Before starting the server run:
-
-```sh
-python manage.py migrate
+Run the following commands  to get started:
+```
+pip install qrcode
+pip install pillow
 ```
