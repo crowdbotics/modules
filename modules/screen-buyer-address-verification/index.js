@@ -1,13 +1,6 @@
 
 import * as React from "react";
-import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
-
-import Input from "./components/Input/index";
-import Button from "./components/Button/index";
-import check from "./assets/check.png";
-import rating from "./assets/rating.png";
-import arrived from "./assets/arrived.png";
-import departure from "./assets/departure.png";
+import { Text, View, StyleSheet, Image, ScrollView, TouchableHighlight, TextInput } from "react-native";
 
 const BuyerAddressVerification = () => {
   return (
@@ -27,7 +20,7 @@ const BuyerAddressVerification = () => {
       </Text>
       <View style={styles.inputIcon}>
         <Input style={styles.inputStyle} placeholder='Enter'/>
-        <Image style={styles.icon} source={check}/>
+        <Image style={styles.icon} source={require("./assets/check.png")}/>
       </View>
     </View>
 
@@ -41,11 +34,11 @@ const BuyerAddressVerification = () => {
       <View style={styles.ratingView}>
           <Text style={styles.shippingText}> Free Shipping </Text>
           <View style={styles.rateRow}>
-            <Image style={styles.rateIcon} source={rating}/>
-            <Image style={styles.rateIcon} source={rating}/>
-            <Image style={styles.rateIcon} source={rating}/>
-            <Image style={styles.rateIcon} source={rating}/>
-            <Image style={styles.rateIcon} source={rating}/>
+            <Image style={styles.rateIcon} source={require("./assets/rating.png")}/>
+            <Image style={styles.rateIcon} source={require("./assets/rating.png")}/>
+            <Image style={styles.rateIcon} source={require("./assets/rating.png")}/>
+            <Image style={styles.rateIcon} source={require("./assets/rating.png")}/>
+            <Image style={styles.rateIcon} source={require("./assets/rating.png")}/>
           </View>
       </View>
 
@@ -82,10 +75,10 @@ const BuyerAddressVerification = () => {
       <View style={styles.borderLine}></View>
 
       <View style={styles.main}>
-        <View style={styles.iconArea}>
-          <Image style={styles.departureicon} source={departure}/>
+        <View>
+          <Image style={styles.departureicon} source={require("./assets/departure.png")}/>
           <View style={styles.verticalLine}></View>
-          <Image style={styles.arrivedicon} source={arrived}/>
+          <Image style={styles.arrivedicon} source={require("./assets/arrived.png")}/>
         </View>
 
         <View style={styles.mainArea}>
@@ -311,3 +304,60 @@ const styles = StyleSheet.create({
 });
 
 export default BuyerAddressVerification;
+
+const Button = (props) => {
+  return (
+    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
+      <View style={[buttonStyles.button, {
+        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
+        height: props.height ? props.height : 49,
+        borderWidth: props.borderWidth ? props.borderWidth : 0,
+        borderColor: props.borderColor ? props.borderColor : "#000000"
+      }]}>
+        <Text style={[buttonStyles.text, { color: props.color ? props.color : "#FFFFFF" }]}>{props.children}</Text>
+      </View>
+    </TouchableHighlight>
+  );
+};
+const buttonStyles = StyleSheet.create({
+  button: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10
+  },
+  text: {
+    fontWeight: "bold",
+    fontSize: 15
+  }
+});
+
+const Input = (props) => {
+  return (
+    <View>
+      <TextInput
+        style={inputStyles.input}
+        placeholder={props.placeholder}
+        value={props.value}
+        onChangeText={props.setValue}
+        placeholderTextColor='#ddd'
+      />
+      {props.errorText ? <Text style={inputStyles.error}>{props.errorText}</Text> : null}
+    </View>
+  );
+};
+const inputStyles = StyleSheet.create({
+  input: {
+    backgroundColor: "#fff",
+    height: 49,
+    color: "#000",
+    borderRadius: 10,
+    fontSize: 14,
+    paddingHorizontal: 15
+  },
+  error: {
+    fontSize: 13,
+    color: "#FA060D",
+    paddingTop: 8
+  }
+});
