@@ -4,7 +4,7 @@ import { Image, Text, StyleSheet, View } from "react-native";
 const KanbanScreen = () => {
   return (
     <View style={styles.container}>
-      <Image resizeMode="contain" style={{ width: "100%", height: 200 }} source={require("./assets/header.png")} />
+      <Image resizeMode="contain" style={styles.headerImage} source={require("./assets/header.png")} />
       <Text style={styles.text}>Projects</Text>
       <View style={styles.tabView}>
         <View style={styles.selectedTab}>
