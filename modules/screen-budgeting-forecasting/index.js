@@ -3,7 +3,7 @@ import { Image, Text, StyleSheet, View, ScrollView } from "react-native";
 
 const BudgetingForecastingScreen = () => {
   return (
-    <ScrollView style={{ borderWidth: 1 }}>
+    <ScrollView>
     <View>
       <View style={styles.container}>
         <View>
@@ -12,17 +12,17 @@ const BudgetingForecastingScreen = () => {
           <Text>Bank Account: 0954 4543 2112 3116</Text>
         </View>
         <View>
-          <Image resizeMode="contain" style={{ width: 52, height: 73 }} source={require("./assets/withdraw.png")} />
+          <Image resizeMode="contain" style={styles.withdrawImage} source={require("./assets/withdraw.png")} />
         </View>
       </View>
-      <View style={{ backgroundColor: "#FFF", height: 610 }}>
-        <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={require("./assets/balance.png")} />
+      <View style={styles.balanceImage}>
+        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/balance.png")} />
       </View>
-      <View style={{ backgroundColor: "#FFF", height: 200 }}>
-        <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={require("./assets/monthly-spending.png")} />
+      <View style={styles.monthlySpendingImage}>
+        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/monthly-spending.png")} />
       </View>
-      <View style={{ backgroundColor: "#FFF", height: 600 }}>
-        <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={require("./assets/total-spending.png")} />
+      <View style={styles.totalSpendingImage}>
+        <Image resizeMode="contain" style={styles.imageHW} source={require("./assets/total-spending.png")} />
       </View>
     </View>
     </ScrollView>
@@ -41,6 +41,26 @@ const styles = StyleSheet.create({
   currentBalance: {
     fontSize: 36,
     marginVertical: 5
+  },
+  withdrawImage: {
+    width: 52,
+    height: 73 
+  },
+  balanceImage: {
+    backgroundColor: "#FFF",
+    height: 610
+  },
+  monthlySpendingImage: {
+    backgroundColor: "#FFF",
+    height: 200
+  },
+  totalSpendingImage: {
+    backgroundColor: "#FFF",
+    height: 600
+  },
+  imageHW: {
+    width: "100%",
+    height: "100%"
   }
 });
 
