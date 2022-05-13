@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   withdrawImage: {
     width: 52,
-    height: 73 
+    height: 73
   },
   balanceImage: {
     backgroundColor: "#FFF",
