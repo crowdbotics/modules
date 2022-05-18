@@ -38,3 +38,4 @@ export default {
   title: 'Payments',
   navigator: Payments
 }
+;

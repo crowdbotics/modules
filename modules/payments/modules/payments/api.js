@@ -8,9 +8,9 @@ const token = 'Your token here'
 // there will be a user profile added make changes accordingly
 export const fetchPaymentSheetParams = async (amount) => {
   const response = await fetch(`${BASE_URL}/modules/payments/payment_sheet/`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: token
     },
     body: JSON.stringify({
@@ -19,7 +19,7 @@ export const fetchPaymentSheetParams = async (amount) => {
   })
 
   const { paymentIntent, ephemeralKey, customer } = await response.json()
-  __DEV__ && console.log('response', { paymentIntent, ephemeralKey, customer })
+  __DEV__ && console.log("response", { paymentIntent, ephemeralKey, customer });
   return {
     paymentIntent,
     ephemeralKey,

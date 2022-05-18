@@ -53,18 +53,18 @@ export const CheckoutScreen = (params) => {
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message)
     } else {
-      Alert.alert('Success', 'Your order is confirmed!')
+      Alert.alert("Success", "Your order is confirmed!")
     }
   }
 
   // Apple Pay related config
   const { presentApplePay, confirmApplePayPayment, isApplePaySupported } = useApplePay({
-    onShippingMethodSelected: (shippingMethod, handler) => {
-      __DEV__ && console.log('shippingMethod', shippingMethod)
+    onShippingMethodSelected: (shippingMethod) => {
+      __DEV__ && console.log("shippingMethod", shippingMethod)
       // Update cart summary based on selected shipping method.
     },
-    onShippingContactSelected: (shippingContact, handler) => {
-      __DEV__ && console.log('shippingContact', shippingContact)
+    onShippingContactSelected: (shippingContact) => {
+      __DEV__ && console.log("shippingContact", shippingContact)
       // Make modifications to cart here e.g. adding tax.
       // handler(cart);
     }
@@ -101,7 +101,7 @@ export const CheckoutScreen = (params) => {
       if (confirmApplePayError) {
         Alert.alert(confirmApplePayError.code, confirmApplePayError.message)
       } else {
-        Alert.alert('Success', 'The payment was confirmed successfully!')
+        Alert.alert("Success", "The payment was confirmed successfully!")
       }
     }
   }
@@ -116,7 +116,7 @@ export const CheckoutScreen = (params) => {
           merchantName: merchantName,
           countryCode: merchantCountryCode,
           billingAddressConfig: {
-            format: 'FULL',
+            format: "FULL",
             isPhoneNumberRequired: true,
             isRequired: false
           },
@@ -164,7 +164,7 @@ export const CheckoutScreen = (params) => {
           style={styles.inputField}
           ></TextInput>
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <TouchableOpacity
             style={[styles.button, styles.payNow]}
             onPress={openPaymentSheet}
