@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import Image
+from .models import FormDefinition, FormAnswers
 
-class ImageAdmin(admin.ModelAdmin):
-    pass
-
-admin.site.register(Image, ImageAdmin)
+# Register your models here.
+admin.site.register(FormDefinition)
+admin.site.register(FormAnswers)

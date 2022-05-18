@@ -18,7 +18,6 @@ export const getOauthToken = async (code) => {
     const encodedValue = encodeURIComponent(code[property]);
     formBody.push(encodedKey + "=" + encodedValue);
   }
-  console.log("==========", formBody.join("&"));
   const res = await fetch("https://api.typeform.com/oauth/token", {
     method: "POST",
     headers: {

@@ -1,30 +1,49 @@
-from .models import Image
-from .serializers import ImageSerializer, ImageUploadSerializer
-from rest_framework import viewsets
-from rest_framework.parsers import FileUploadParser
+from .models import FormDefinition
+from .serializers import FormDefinitionSerializer, FormAnswersSerializer
 from rest_framework.views import APIView
-from rest_framework import permissions, status
+from rest_framework import status
 from rest_framework.response import Response
 
-class ImageViewSet(viewsets.ModelViewSet):
-    """
-    A simple ViewSet for viewing and editing accounts.
-    """
-    queryset = Image.objects.all()
-    serializer_class = ImageSerializer
-    http_method_names = ["get"]
 
+from .serializers import FormAnswersSerializer, FormDefinitionSerializer
 
-class ImageUploadView(APIView):
-	parser_class = (FileUploadParser,)
-	
-	def post(self, request, *args, **kwargs):
-		image_serializer = ImageUploadSerializer(data=request.data, partial=True)
-		try:
-			if image_serializer.is_valid(raise_exception=True):
-				image_serializer.save()
-				return Response(image_serializer.data, status=status.HTTP_201_CREATED)
-			else:
-				return Response(image_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-		except Exception as e:
-			return Response(e.args[0], status=status.HTTP_400_BAD_REQUEST)
+class FormDefinitionView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        formResponse = request.data["form_response"]
+        isForm = FormDefinition.objects.filter(form_id=formResponse["form_id"]).exists()
+
+        if not isForm:
+            for fields in formResponse["definition"]["fields"]:
+                payloadFormDefinition = {}
+                payloadFormDefinition["form_id"] = formResponse["form_id"]
+                payloadFormDefinition["definition_id"] = fields["id"]
+                payloadFormDefinition["type"] = fields["type"]
+                payloadFormDefinition["title"] = fields["title"]
+
+                if fields["type"] == "multiple_choice":
+                    payloadFormDefinition["choices"] = fields["choices"]
+                    
+                formDefinitionSerializer = FormDefinitionSerializer(data=payloadFormDefinition)
+
+                if formDefinitionSerializer.is_valid():
+                    formDefinitionSerializer.save()
+                else:
+                    return Response(formDefinitionSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        for fields in formResponse["answers"]:
+            payloadFormAnswers = {}
+            payloadFormAnswers["form_definition_id"] = fields["field"]["id"]
+            payloadFormAnswers["type"] = fields["type"]
+            if fields["type"] == "choice":
+                payloadFormAnswers["answer"] = fields["choice"]["label"]
+            else:
+                payloadFormAnswers["answer"] = fields["text"]
+
+            formAnswersSerializer = FormAnswersSerializer(data=payloadFormAnswers)
+            if formAnswersSerializer.is_valid():
+                formAnswersSerializer.save()
+            else:
+                return Response(formDefinitionSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": "data inserted successfully"}, status=status.HTTP_200_OK)

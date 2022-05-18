@@ -1,13 +1,11 @@
-
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework import routers
-
-from .viewsets import ImageViewSet, ImageUploadView
-
+from . import viewsets
 
 router = routers.DefaultRouter()
-router.register(r'photos/user', ImageViewSet)
+# Wire up our API using automatic URL routing.
+# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
-    path('upload_image/', ImageUploadView.as_view()),
+    path('webhook/', viewsets.FormDefinitionView.as_view())
 ]

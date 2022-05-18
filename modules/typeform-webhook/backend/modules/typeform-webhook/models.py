@@ -1,9 +1,23 @@
 from django.db import models
-from django.conf import settings
+import jsonfield
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='static/img/')
-    created_at = models.DateTimeField(auto_now_add=True)
+class FormDefinition(models.Model):
+
+    form_id = models.CharField(max_length=20)
+    definition_id = models.CharField(max_length=20, unique=True)
+    type = models.CharField(max_length=50)
+    title = models.CharField(max_length=200)
+    choices = jsonfield.JSONField()
 
     def __str__(self):
-        return "%s"%self.id
+        return self.title
+
+
+class FormAnswers(models.Model):
+
+    form_definition_id = models.ForeignKey(FormDefinition, to_field="definition_id", db_column="definition_id", on_delete=models.CASCADE)
+    type = models.CharField(max_length=50)
+    answer = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.answer

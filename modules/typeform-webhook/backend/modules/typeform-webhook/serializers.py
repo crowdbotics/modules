@@ -1,24 +1,14 @@
-from .models import Image
 from rest_framework import serializers
+from .models import FormDefinition, FormAnswers
 
 
-class ImageSerializer(serializers.HyperlinkedModelSerializer):
-    image = serializers.SerializerMethodField()
-
-    def get_image(self, obj):
-        return obj.image.url
-
+class FormDefinitionSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Image
-        fields = (
-            "id",
-            "image",
-        )
+        model = FormDefinition
+        fields = '__all__'
 
 
-class ImageUploadSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField()
-
+class FormAnswersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Image
-        fields = ("image",)
+        model = FormAnswers
+        fields = '__all__'

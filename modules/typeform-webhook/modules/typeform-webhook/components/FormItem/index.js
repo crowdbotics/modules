@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, Switch } from "react-native";
+import { StyleSheet, Switch, Text, View, TouchableOpacity } from "react-native";
 import { getWebHook } from "../../api";
 
-const FormItem = ({ form, toggleSwitch, oauthToken }) => {
-  const [webhookList, setWebhookList] = useState(null);
-  useEffect(() => {
-    if (oauthToken) {
-      getWebHook(oauthToken, form.id)
-        .then(res => res.json())
-        .then(res => {
-          console.log("here..", res);
-          setWebhookList(res);
-        });
-    }
-  }, []);
+const FormItem = (props) => {
+  const [webhook, setWebhook] = useState({
+    enabled: props.isEnabled
+  });
 
   useEffect(() => {
-    console.log("webhookList", webhookList);
-  }, [webhookList]);
+    getWebHook(props.oauthToken, props.form.id)
+    .then(res => res.json())
+    .then(res => {
+      if (res.items.length) {
+        setWebhook(res.items[0]);
+      }
+      });
+  }, [props.isEnabled]);
+ 
   return (
-    <View style={styles.card}>
-      <Text>{form.title}</Text>
-      <View>
-        <Switch
-          trackColor={{ false: "#767577", true: "#81b0ff" }}
-          thumbColor={"#000"}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={() => toggleSwitch()}
-          value={form.id}
-        />
+    <TouchableOpacity onPress={()=>props.navigation.navigate('Typeform',{url : props.form._links})}>
+      <View style={styles.card}>
+        <Text>{props.form.title}</Text>
+        <View>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            thumbColor={true ? "#000" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={(event) => props.toggleSwitch(props.form.id, event)}
+            value={webhook.enabled}
+          />
+        </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

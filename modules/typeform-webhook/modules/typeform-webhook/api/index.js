@@ -15,7 +15,7 @@ export const getForms = (oauthToken) => {
   }
 };
 
-export const createWebHook = (oauthToken, formId) => {
+export const createWebHook = (oauthToken, formId, enabled) => {
   try {
     const res = fetch(`https://api.typeform.com/forms/${formId}/webhooks/asdfghijk`, {
       method: "PUT",
@@ -25,7 +25,7 @@ export const createWebHook = (oauthToken, formId) => {
         "Content-Type": "application/json; charset=UTF-8"
       },
       body: JSON.stringify({
-        enabled: true,
+        enabled: enabled,
         url: "https://test.com"
       })
     }
