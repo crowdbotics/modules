@@ -1,25 +1,24 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 
-const GoogleCalendarScreen = (params) => {
+const GoogleCalendarScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.headingTxt}>Google Calendar Screen</Text>
+      <Image style={styles.image} resizeMode="contain" source={require("./assets/calendar.png")} />
     </View>
+
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
-    flex: 1,
-    justifyContent: "space-around"
+    backgroundColor: "#FFF",
+    paddingVertical: 10,
+    flex: 1
   },
-  headingTxt: {
-    fontSize: 24,
-    fontWeight: "bold",
-    padding: 2,
-    marginVertical: 12
+  image: {
+    width: "100%",
+    height: "50%"
   }
 });
 

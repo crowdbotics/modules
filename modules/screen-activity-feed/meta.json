@@ -1,5 +1,5 @@
 {
-    "title": "Activity Feed Screen",
-    "description": "Activity Feed screen.",
-    "root": "/screens/activity-feed"
+  "title": "Activity feed screen",
+  "description": "Activity feed screen",
+  "root": "/screens/activity-feed"
 }
