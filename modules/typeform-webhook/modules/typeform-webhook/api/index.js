@@ -1,3 +1,4 @@
+import options from "../options";
 
 export const getForms = (oauthToken) => {
   try {
@@ -17,7 +18,7 @@ export const getForms = (oauthToken) => {
 
 export const createWebHook = (oauthToken, formId, enabled) => {
   try {
-    const res = fetch(`https://api.typeform.com/forms/${formId}/webhooks/asdfghijk`, {
+    const res = fetch(`https://api.typeform.com/forms/${formId}/webhooks/cb-module`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -26,7 +27,7 @@ export const createWebHook = (oauthToken, formId, enabled) => {
       },
       body: JSON.stringify({
         enabled: enabled,
-        url: "https://test.com"
+        url: options.WEBHOOK_URL
       })
     }
     );

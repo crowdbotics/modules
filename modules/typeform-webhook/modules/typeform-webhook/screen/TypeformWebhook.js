@@ -11,14 +11,17 @@ import options from "../options";
 import { createWebHook, getForms } from "../api";
 import { getOauthToken, parseQueryString } from "../utils";
 import FormItem from "../components/FormItem";
+import Loader from "../components/Loader";
 
 const TypeformWebhook = (props) => {
   const userAgent = "Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36";
   const [oauthToken, setOauthToken] = useState(null);
   const [formList, setFormList] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
 
   const toggleSwitch = (id, enable) => {
+    setIsLoading(true)
     createWebHook(oauthToken, id, enable)
       .then(res => res.json())
       .then(res => {
@@ -26,16 +29,27 @@ const TypeformWebhook = (props) => {
         let obj = tmpResult.find(obj => obj.id == id)
         obj.isEnabled = res.enabled
         setFormList(tmpResult)
+        setIsLoading(false)
       })
-      .catch(e => console.log(e));
+      .catch(e => {
+        console.log(e)
+        setIsLoading(false)
+      });
   };
 
   useEffect(() => {
     if (oauthToken) {
+        setIsLoading(true)
         getForms(oauthToken)
         .then(res => res.json())
-        .then(res => setFormList(res.items))
-        .catch(e => console.log(e));
+        .then(res => {
+          setFormList(res.items)
+          setIsLoading(true)
+        })
+        .catch(e => {
+          console.log(e)
+          setIsLoading(false)
+        });
       
     }
   }, [oauthToken]);
@@ -73,6 +87,7 @@ const TypeformWebhook = (props) => {
 
   return (
     <Fragment>
+      {isLoading && <Loader/>}
       {oauthToken
         ? <View style={styles.container}>
         <Text style={styles.heading}>TypeForm</Text>
