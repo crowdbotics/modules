@@ -2,7 +2,7 @@
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL = global
+const BASE_URL = global;
 
 const REDIRECT_URI = "https://www.crowdbotics.com/";
 const CLIENT_ID = "";

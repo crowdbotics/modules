@@ -3,7 +3,7 @@ import options from "../options";
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL = global
+const BASE_URL = global;
 
 export const getForms = (oauthToken) => {
   try {
