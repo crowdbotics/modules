@@ -28,3 +28,27 @@ export const getOauthToken = async (code) => {
   });
   return res.json();
 };
+
+export function groupByToken(data) {
+  const groupData = [];
+  const tokens = data[0].form_answers.map(obj => obj.token);
+  tokens.forEach(token => {
+    const tmpData = [];
+    data.forEach(obj => {
+      const formAnswer = obj.form_answers.find(formAnswer => formAnswer.token === token);
+      tmpData.push({ ...obj, form_answers: formAnswer });
+    });
+    groupData.push({
+      title: {
+        token: token,
+        submitted_at: tmpData[0].form_answers.submitted_at
+      },
+      data: tmpData
+    });
+  });
+  return groupData;
+}
+
+export const formatDate = (date) => {
+  return new Date(date).toLocaleString();
+};

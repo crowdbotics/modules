@@ -7,5 +7,6 @@ router = routers.DefaultRouter()
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
-    path('webhook/', viewsets.FormDefinitionView.as_view())
+    path('webhook/', viewsets.FormDefinitionView.as_view()),
+    path('form-answer/<form_id>', viewsets.FormDefinitionDetailView.as_view())
 ]

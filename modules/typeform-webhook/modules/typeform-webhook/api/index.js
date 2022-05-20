@@ -1,4 +1,9 @@
 import options from "../options";
+// @ts-ignore
+import { getGlobalOptions } from "@options";
+
+const global = getGlobalOptions();
+const BASE_URL = global
 
 export const getForms = (oauthToken) => {
   try {
@@ -44,6 +49,22 @@ export const getWebHook = (oauthToken, id) => {
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${oauthToken}`,
+        "Content-Type": "application/json; charset=UTF-8"
+      }
+    }
+    );
+    return res;
+  } catch (error) {
+    throw new Error("NETWORK_ERROR").message;
+  }
+};
+
+export const getResponses = (id) => {
+  try {
+    const res = fetch(`${BASE_URL}/form-answer/${id}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
         "Content-Type": "application/json; charset=UTF-8"
       }
     }

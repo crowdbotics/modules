@@ -18,39 +18,38 @@ const TypeformWebhook = (props) => {
   const [oauthToken, setOauthToken] = useState(null);
   const [formList, setFormList] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleSwitch = (id, enable) => {
-    setIsLoading(true)
+    setIsLoading(true);
     createWebHook(oauthToken, id, enable)
       .then(res => res.json())
       .then(res => {
-        let tmpResult = JSON.parse(JSON.stringify(formList))
-        let obj = tmpResult.find(obj => obj.id == id)
-        obj.isEnabled = res.enabled
-        setFormList(tmpResult)
-        setIsLoading(false)
+        const tmpResult = JSON.parse(JSON.stringify(formList));
+        const obj = tmpResult.find(obj => obj.id === id);
+        obj.isEnabled = res.enabled;
+        setFormList(tmpResult);
+        setIsLoading(false);
       })
       .catch(e => {
-        console.log(e)
-        setIsLoading(false)
+        console.log(e);
+        setIsLoading(false);
       });
   };
 
   useEffect(() => {
     if (oauthToken) {
-        setIsLoading(true)
-        getForms(oauthToken)
+      setIsLoading(true);
+      getForms(oauthToken)
         .then(res => res.json())
         .then(res => {
-          setFormList(res.items)
-          setIsLoading(true)
+          setFormList(res.items);
+          setIsLoading(false);
         })
         .catch(e => {
-          console.log(e)
-          setIsLoading(false)
+          console.log(e);
+          setIsLoading(false);
         });
-      
     }
   }, [oauthToken]);
 
@@ -79,7 +78,7 @@ const TypeformWebhook = (props) => {
           useWebKit={true}
           userAgent={userAgent}
           onNavigationStateChange={onNavigationStateChange}
-          source={{ uri: `https://admin.typeform.com/oauth/authorize?response_type=code&client_id=${options.CLIENT_ID}&scope=accounts:read+forms:read+webhooks:write+webhooks:read&redirect_uri=${options.REDIRECT_URI}` }}
+          source={{ uri: `https://admin.typeform.com/oauth/authorize?response_type=code&client_id=${options.CLIENT_ID}&scope=accounts:read+forms:read+responses:read+webhooks:write+webhooks:read&redirect_uri=${options.REDIRECT_URI}` }}
         />
     </Fragment>
     );
@@ -124,5 +123,4 @@ const styles = StyleSheet.create({
     elevation: 10
   }
 });
-export default TypeformWebhook
-
+export default TypeformWebhook;

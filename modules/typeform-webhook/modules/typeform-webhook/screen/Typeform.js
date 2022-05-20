@@ -2,8 +2,8 @@ import React from "react";
 // @ts-ignore
 import TypeformEmbed from "react-native-typeform-embed";
 
-const TypeForm = ({route}) => {
-  const  URL= route.params.url.display
+const TypeForm = ({ route }) => {
+  const URL = route.params.url.display;
 
   return (
     <TypeformEmbed
@@ -11,7 +11,6 @@ const TypeForm = ({route}) => {
       onSubmit={() => alert("Submitted!")}
     />
   );
+};
 
-}
-
-export default TypeForm
+export default TypeForm;
