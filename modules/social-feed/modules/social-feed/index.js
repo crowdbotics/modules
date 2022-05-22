@@ -2,6 +2,10 @@ import React, { useEffect, useState, useContext } from "react";
 import { Text, View, FlatList } from "react-native";
 import { OptionsContext } from "@options";
 import {  } from "./api";
+import  SocialProfileScreen from "./screens/social-profile";
+import SocialFeedScreen from "./screens/social-feed";
+import PostDetailsScreen from "./screens/post-details";
+import FollowersList from "./screens/followers";
 
 const SocialFeed = () => {
   const options = useContext(OptionsContext);
@@ -13,7 +17,10 @@ const SocialFeed = () => {
 
   return (
     <View>
-      <Text>Social Feed</Text>
+      {/* <SocialProfileScreen /> */}
+      <SocialFeedScreen />
+      {/* <PostDetailsScreen /> */}
+      {/* <FollowersList /> */}
     </View>
   );
 };
