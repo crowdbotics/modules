@@ -12,6 +12,10 @@ jobs:
           command: |
             if [ "$BUILD_TYPE" == "mobile" ]; then
               bash .circleci/generate_mobile_config.sh
+            elif [ "$BUILD_TYPE" == "mobile_ios" ]; then
+              bash .circleci/generate_mobile_ios_config.sh
+            elif [ "$BUILD_TYPE" == "mobile_android" ]; then
+              bash .circleci/generate_mobile_android_config.sh
             elif [ "$BUILD_TYPE" == "gcp" ]; then
               bash backend/.circleci/generate_gcp_config.sh "backend/"
             fi
