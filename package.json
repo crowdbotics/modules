@@ -45,7 +45,7 @@
     "prettier": "^2.6.2"
   },
   "devDependencies": {
-    "@react-native-community/cli": "7.0.3",
+    "@react-native-community/cli": "5.0.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.26.0",
