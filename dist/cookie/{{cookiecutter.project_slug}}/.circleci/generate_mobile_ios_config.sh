@@ -185,7 +185,7 @@ jobs:
 
 workflows:
   version: 2.1
-  node-android-ios:
+  node-ios:
     jobs:
       - node
       - ios:
