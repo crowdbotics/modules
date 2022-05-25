@@ -23,7 +23,7 @@ export const getForms = (oauthToken) => {
 
 export const createWebHook = (oauthToken, formId, enabled) => {
   try {
-    const res = fetch(`https://api.typeform.com/forms/${formId}/webhooks/cb-module`, {
+    const res = fetch(`https://api.typeform.com/forms/${formId}/webhooks/${options.WEBHOOK_TAG}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -61,7 +61,7 @@ export const getWebHook = (oauthToken, id) => {
 
 export const getResponses = (id) => {
   try {
-    const res = fetch(`${BASE_URL}/form-answer/${id}`, {
+    const res = fetch(`${BASE_URL}/modules/typeform-webhook/form-answer/${id}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -69,6 +69,7 @@ export const getResponses = (id) => {
       }
     }
     );
+
     return res;
   } catch (error) {
     throw new Error("NETWORK_ERROR").message;
