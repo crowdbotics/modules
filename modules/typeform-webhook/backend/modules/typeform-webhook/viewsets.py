@@ -23,6 +23,8 @@ class FormDefinitionView(APIView):
 
                 if fields["type"] == "multiple_choice":
                     payloadFormDefinition["choices"] = fields["choices"]
+                elif fields["type"] == "picture_choice":
+                    payloadFormDefinition["choices"] = fields["choices"]
 
                 formDefinitionSerializer = FormDefinitionSerializer(data=payloadFormDefinition)
 
@@ -48,6 +50,10 @@ class FormDefinitionView(APIView):
                 payloadFormAnswers["answer"] = fields["email"]
             elif fields["type"] == "url":
                 payloadFormAnswers["answer"] = fields["url"]
+            elif fields["type"] == "number":
+                payloadFormAnswers["answer"] = str(fields["number"])
+            elif fields["type"] == "date":
+                payloadFormAnswers["answer"] = fields["date"]
             else:
                 payloadFormAnswers["answer"] = str(fields["boolean"])
 
