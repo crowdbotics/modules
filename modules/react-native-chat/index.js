@@ -28,9 +28,9 @@ const App = () => {
     //     client.unsubscribeAll();
     //   }
     // });
-    let userIds = users.map((user) => {
+    const userIds = users.map((user) => {
       return user._id;
-    })
+    });
     client.addListener(listener(state, dispatch));
     client.subscribe({
       channelGroups: [options.user._id, ...userIds],

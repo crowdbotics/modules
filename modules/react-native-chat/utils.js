@@ -52,11 +52,11 @@ export const timeSince = (date) => {
 };
 
 export const removeDuplication = (arr) => {
-  return arr.filter((v,i,a)=>a.findIndex(v2=>(v2._id===v._id))===i)
-}
+  return arr.filter((v, i, a) => a.findIndex(v2 => (v2._id === v._id)) === i);
+};
 
 export const sortArray = (arr) => {
-  const newData = removeDuplication(arr)
+  const newData = removeDuplication(arr);
   return newData
     .sort((a, b) => {
       const keyA = new Date(a.createdAt);
