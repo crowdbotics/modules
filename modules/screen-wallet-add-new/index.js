@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, View, Text, StyleSheet, ScrollView, TouchableHighlight } from "react-native";
+import { Image, View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 
 const WalletAddNewScreen = () => {
   return (
@@ -245,14 +245,14 @@ const styles = StyleSheet.create({
 export default WalletAddNewScreen;
 const Button = (props) => {
   return (
-    <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
+    <Pressable onPress={props.onPress} disabled={props.disabled}>
       <View style={[btnStyles.button, {
         backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
         height: props.height ? props.height : 49
       }]}>
         <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
       </View>
-    </TouchableHighlight>
+    </Pressable>
   );
 };
 
