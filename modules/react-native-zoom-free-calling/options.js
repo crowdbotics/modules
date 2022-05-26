@@ -10,10 +10,10 @@ const recurrentMeeting = {
   weekly: 12,
   monthly: 3
 };
-const CLIENT_ID = "jxMz2MegRdSgM5TF9QlYg";
-const CLIENT_SECRET = "SKt39I6s5kOwBBn2Eqvlo37tbuQ8RZEz";
-const SDK_KEY = "uGpAnqHR2dfkUkXi7vTmP4wqtRll4xZeQlio";
-const SDK_SECRET = "vqaYHwHdS0XyPCwqKDKd6NxeOa8npTvRQeea";
+const CLIENT_ID = "";
+const CLIENT_SECRET = "";
+const SDK_KEY = "";
+const SDK_SECRET = "";
 const REDIRECT_URI = "https://www.crowdbotics.com";
 
 const checkboxColor = { true: "#24ebde", false: "lightgray" };
