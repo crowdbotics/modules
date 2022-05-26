@@ -28,11 +28,12 @@ const App = () => {
     //     client.unsubscribeAll();
     //   }
     // });
+    let userIds = users.map((user) => {
+      return user._id;
+    })
     client.addListener(listener(state, dispatch));
     client.subscribe({
-      channelGroups: users.map((user) => {
-        return user._id;
-      }),
+      channelGroups: [options.user._id, ...userIds],
       withPresence: true
     });
     // return () => client.unsubscribeAll()

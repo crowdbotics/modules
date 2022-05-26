@@ -51,8 +51,13 @@ export const timeSince = (date) => {
   return Math.floor(seconds) + " seconds";
 };
 
+export const removeDuplication = (arr) => {
+  return arr.filter((v,i,a)=>a.findIndex(v2=>(v2._id===v._id))===i)
+}
+
 export const sortArray = (arr) => {
-  return arr
+  const newData = removeDuplication(arr)
+  return newData
     .sort((a, b) => {
       const keyA = new Date(a.createdAt);
       const keyB = new Date(b.createdAt);
