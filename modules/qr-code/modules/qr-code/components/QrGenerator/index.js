@@ -3,19 +3,30 @@ import { View, StyleSheet, Text, Image } from "react-native";
 import Input from "../TextInput";
 import Button from "../Button";
 import { getQr } from "../../api";
-const QrGenerator = (props) => {
+import Loader from "../Loader";
+
+const QrGenerator = () => {
   const [key, setKey] = useState("");
   const [qr, setQr] = useState(null);
+  const [isLoader, setIsLoader] = useState(false);
 
   const pressHandler = () => {
+    setIsLoader(true);
     getQr({ text: key })
       .then(res => res.json())
-      .then(res => setQr(res.qrcode))
-      .catch(e => console.log(e));
+      .then(res => {
+        setIsLoader(false);
+        setQr(res.qrcode);
+      })
+      .catch(e => {
+        setIsLoader(false);
+        console.log(e);
+      });
   };
 
   return (
     <View style={styles.container}>
+      { isLoader && <Loader /> }
       <View style={styles.input}>
         <Text style={styles.text}>Enter Qr Key:</Text>
         <Input placeholder='Enter' value={key} setValue={setKey} />
