@@ -1,22 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  Alert,
-  TextInput,
-  Platform,
-  TouchableOpacity,
-  Dimensions
-} from "react-native";
+import { Text, View, Alert, TextInput, Platform, TouchableOpacity, Dimensions } from "react-native";
 import { OptionsContext, getGlobalOptions } from "@options";
-import {
-  useApplePay,
-  useGooglePay,
-  useStripe,
-  presentGooglePay,
-  ApplePayButton,
-  GooglePayButton
-} from "@stripe/stripe-react-native";
+import { useApplePay, useGooglePay, useStripe, presentGooglePay, ApplePayButton, GooglePayButton } from "@stripe/stripe-react-native";
 import { fetchPaymentSheetParams } from "./api";
 const deviceWidth = Dimensions.get("window").width;
 
@@ -26,14 +12,7 @@ export const CheckoutScreen = (params) => {
   // continued from above
   const options = useContext(OptionsContext);
   const { styles, localOptions } = options;
-  const {
-    merchantName,
-    enableGooglePay,
-    enableApplePay,
-    merchantCountryCode,
-    stripeTestEnv,
-    merchantCurrency
-  } = localOptions;
+  const { merchantName, enableGooglePay, enableApplePay, merchantCountryCode, stripeTestEnv, merchantCurrency } = localOptions;
   const [value, setValue] = useState({
     amount: "1"
   });
@@ -44,8 +23,11 @@ export const CheckoutScreen = (params) => {
   const clientSecret = global.stripeSecretKey;
 
   const initializePaymentSheet = async () => {
-    const { paymentIntent, ephemeralKey, customer } =
-      await fetchPaymentSheetParams(value.amount);
+    const {
+      paymentIntent,
+      ephemeralKey,
+      customer
+    } = await fetchPaymentSheetParams(value.amount);
 
     const { error } = await initPaymentSheet({
       customerId: customer,
@@ -76,25 +58,28 @@ export const CheckoutScreen = (params) => {
   };
 
   // Apple Pay related config
-  const { presentApplePay, confirmApplePayPayment, isApplePaySupported } =
-    useApplePay({
-      onShippingMethodSelected: (shippingMethod) => {
-        __DEV__ && console.log("shippingMethod", shippingMethod);
-        // Update cart summary based on selected shipping method.
-      },
-      onShippingContactSelected: (shippingContact) => {
-        __DEV__ && console.log("shippingContact", shippingContact);
-        // Make modifications to cart here e.g. adding tax.
-        // handler(cart);
-      }
-    });
+  const { presentApplePay, confirmApplePayPayment, isApplePaySupported } = useApplePay({
+    onShippingMethodSelected: (shippingMethod) => {
+      __DEV__ && console.log("shippingMethod", shippingMethod);
+      // Update cart summary based on selected shipping method.
+    },
+    onShippingContactSelected: (shippingContact) => {
+      __DEV__ && console.log("shippingContact", shippingContact);
+      // Make modifications to cart here e.g. adding tax.
+      // handler(cart);
+    }
+  });
 
   const payApple = async () => {
     const { error, paymentMethod } = await presentApplePay({
       cartItems: [{ label: merchantName, amount: value.amount }],
       country: merchantCountryCode,
       currency: merchantCurrency,
-      requiredShippingAddressFields: ["emailAddress", "phoneNumber", "name"],
+      requiredShippingAddressFields: [
+        "emailAddress",
+        "phoneNumber",
+        "name"
+      ],
       requiredBillingContactFields: ["phoneNumber", "name"],
       jcbEnabled: true
     });
@@ -103,7 +88,11 @@ export const CheckoutScreen = (params) => {
       Alert.alert(error.code, error.message);
     } else {
       __DEV__ && console.log(JSON.stringify(paymentMethod, null, 2));
-      const { paymentIntent } = await fetchPaymentSheetParams(value.amount);
+      const {
+        paymentIntent,
+        ephemeralKey,
+        customer
+      } = await fetchPaymentSheetParams(value.amount);
 
       const { error: confirmApplePayError } = await confirmApplePayPayment(
         paymentIntent
@@ -148,7 +137,11 @@ export const CheckoutScreen = (params) => {
   }
 
   const payGoogle = async () => {
-    const { paymentIntent } = await fetchPaymentSheetParams(value.amount);
+    const {
+      paymentIntent,
+      ephemeralKey,
+      customer
+    } = await fetchPaymentSheetParams(value.amount);
     const { error } = await presentGooglePay({
       clientSecret: paymentIntent,
       currencyCode: merchantCurrency
@@ -162,45 +155,40 @@ export const CheckoutScreen = (params) => {
   };
 
   return (
-    <View>
-      <View style={{ paddingHorizontal: 15, margin: 20 }}>
-        <Text style={{}}>Amount</Text>
-        <TextInput
+      <View>
+        <View style={{ paddingHorizontal: 15, margin: 20 }}>
+          <Text style={{}}>Amount</Text>
+          <TextInput
           placeholder={"Enter Amount"}
-          value={value.amount}
-          onChangeText={(text) => setValue({ ...value, amount: text })}
+          value={value.amount} onChangeText={(text) => setValue({ ...value, amount: text })}
           style={styles.inputField}
-        ></TextInput>
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        <TouchableOpacity
-          style={[styles.button, styles.payNow]}
-          onPress={openPaymentSheet}
-        >
-          <Text style={styles.buttonText}>Pay Now</Text>
-        </TouchableOpacity>
+          ></TextInput>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TouchableOpacity
+            style={[styles.button, styles.payNow]}
+            onPress={openPaymentSheet}
+            ><Text style={styles.buttonText}>Pay Now</Text>
+            </TouchableOpacity>
 
-        {Platform.OS === "android" && enableGooglePay && (
-          <GooglePayButton
-            disabled={!gPayinitialized || loading}
-            style={[
-              styles.payButton,
-              { width: deviceWidth / 2.5, height: 52, marginTop: 5 }
-            ]}
-            type="pay"
-            onPress={payGoogle}
-          />
-        )}
+            {Platform.OS === "android" && enableGooglePay && (
+                <GooglePayButton
+                    disabled={!gPayinitialized || loading}
+                    style={[styles.payButton, { width: (deviceWidth / 2.5), height: 52, marginTop: 5 }]}
+                    type="pay"
+                    onPress={payGoogle}
+                />
+            )}
 
-        {enableApplePay && isApplePaySupported && (
-          <ApplePayButton
-            onPress={payApple}
-            type="plain"
-            borderRadius={4}
-            style={styles.payButton}
-          />
-        )}
+            {enableApplePay && isApplePaySupported && (
+            <ApplePayButton
+                onPress={payApple}
+                type="plain"
+                borderRadius={4}
+                style={styles.payButton}
+            />
+            )}
+        </View>
       </View>
-    </View>
   );
 };

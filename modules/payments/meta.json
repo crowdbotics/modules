@@ -1,6 +1,6 @@
 {
     "title": "Payments",
-    "description": "Payments Module",
+    "description": "This is a Stripe Payments Module which support payments through card, Apple Pay, Google Pay and one time Apple In-App Purchases.",
     "root": "/",
     "schema": {
       "buttonText": {
