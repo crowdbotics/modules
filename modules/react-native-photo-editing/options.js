@@ -70,21 +70,25 @@ export const settings = [
   // },
   {
     name: "contrast",
+    value: 1,
     minValue: -10.0,
     maxValue: 10.0
   },
   {
     name: "saturation",
+    value: 1,
     minValue: 0.0,
     maxValue: 2
   },
   {
     name: "brightness",
+    value: 1,
     minValue: 0,
     maxValue: 5
   },
   {
     name: "temperature",
+    value: 6500,
     minValue: 0.0,
     maxValue: 40000.0
   }

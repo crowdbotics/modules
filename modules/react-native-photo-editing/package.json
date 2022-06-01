@@ -4,22 +4,16 @@
   "description": "Edit your photo here.",
   "private": true,
   "main": "index.js",
-  "x-dependencies": {
-    "react-native-gl-image-filters": "0.5.0",
-    "gl-react" : "5.2.0",
-    "gl-react-native" : "4.0.1",
-    "buffer": "5.4.3",
-    "react-native-unimodules": "0.7.0",
-    "react-native-image-crop-tools" : "1.0.3"
-  },
   "author": "Crowdbotics",
   "license": "ISC",
-  "dependencies": {
+  "dependencies": {},
+  "x-dependencies": {
+    "gl-react-dom": "^4.0.1",
     "react-native-gl-image-filters": "0.5.0",
-    "gl-react" : "5.2.0",
-    "gl-react-native" : "4.0.1",
-    "buffer": "5.4.3",
-    "react-native-unimodules": "0.7.0",
-    "react-native-image-crop-tools" : "1.0.3"
+    "gl-react" : "^4.0.1",
+    "gl-react-native" : "^4.0.1",
+    "buffer": "^5.4.3",
+    "react-native-unimodules": "^0.7.0",
+    "@react-native-community/slider": "4.2.2"
   }
 }

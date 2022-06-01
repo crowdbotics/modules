@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
+import { View, StyleSheet, Text, Dimensions, ScrollView } from "react-native";
 import { CropRatioIcon } from "./components/CropRatioIcon";
 import options, { settings } from "./options";
+// @ts-ignore
+import ImageFilters from "react-native-gl-image-filters";
+import { Surface } from "gl-react-native";
 import Edits from "./components/Edits";
+import Button from "./components/Button";
 const PhotoEditing = () => {
+  const width = Dimensions.get("window").width - 40;
   const [selectedItem, setSelectedItem] = useState(null);
-  const [cropState, setCropState] = useState(false);
-  const [editState, setEditState] = useState(false);
-  const [filterState, setFilterState] = useState(false);
-  const [shadowState, setShadowState] = useState(false);
-  const [state, setState] = useState({
+  const [selectedTab, setSelectedTab] = useState("crop");
+  const [editSettings, setEditSettings] = useState({
     ...settings,
     contrast: 1,
     saturation: 1,
@@ -21,93 +23,63 @@ const PhotoEditing = () => {
     setSelectedItem(option);
   };
 
-  const handleState = (state) => {
-    switch (state) {
-      case "crop":
-        setCropState(true);
-        setEditState(false);
-        setFilterState(false);
-        setShadowState(false);
-        break;
-      case "filter":
-        setCropState(false);
-        setEditState(false);
-        setFilterState(true);
-        setShadowState(false);
-        break;
-      case "edit":
-        setCropState(false);
-        setEditState(true);
-        setFilterState(false);
-        setShadowState(false);
-        break;
-      case "shadow":
-        setCropState(false);
-        setEditState(false);
-        setFilterState(false);
-        setShadowState(true);
-        break;
-      default:
-        break;
-    }
+  const handleState = (tab) => {
+    setSelectedTab(tab);
   };
-  return (
-    <View style={styles.container}>
-      <Text style={styles.headingText}>Image editing</Text>
-      <View style={styles.imgContainer}>
-      </View>
-      <View style={styles.tabView}>
-        <View style={[styles.tabItem, cropState && styles.selectedTab]} >
-          <Text onPress={() => handleState("crop")}>Crop</Text>
-        </View>
-        <View style={[styles.tabItem, filterState && styles.selectedTab]} >
-          <Text onPress={() => handleState("filter")}>Filters</Text>
-        </View>
-        <View style={[styles.tabItem, editState && styles.selectedTab]}>
-          <Text onPress={() => handleState("edit")}>Edits</Text>
-        </View>
-        <View style={[styles.tabItem, shadowState && styles.selectedTab]}>
-          <Text onPress={() => handleState("shadow")}>Shadows</Text>
-        </View>
-      </View>
-      {editState && settings.map((filter) => (
-        <Edits
-          key={filter.name}
-          name={filter.name}
-          minimum={filter.minValue}
-          maximum={filter.maxValue}
-          onChange={(value) => {
-            setState((prevState) => ({
-              ...prevState,
-              name: value
-            }));
-          }}
-        />
-      ))}
 
-      {cropState && <View style={styles.cropContainer}>
-        {
-          options.ratio.map((option, index) =>
-            <CropRatioIcon dimensions={option.dimensions} label={option.text} key={index} selectionColor={selectedItem?.label} handlePress={handlePress} />
-          )
-        }
-      </View>}
-      <TouchableHighlight
-        underlayColor="#DDDDDD"
-      >
-        <View
-          style={[
-            styles.button,
-            {
-              backgroundColor: "#000000",
-              height: 49
-            }
-          ]}
-        >
-          <Text style={[styles.text, { color: "#ffffff" }]}>Apply</Text>
+  const handleFilter = (name, value) => {
+    setEditSettings({ ...editSettings, [name]: value });
+  };
+
+  return (
+    <ScrollView style={{ backgroundColor: "#fff" }}>
+      <View style={styles.container}>
+        <Text style={styles.headingText}>Image editing</Text>
+        <View style={styles.imgContainer}>
+          <Surface style={{ width: "100%", height: "100%", borderRadius: 10 }}>
+            <ImageFilters {...editSettings} width={width} height={width}>
+              {{ uri: "https://i.imgur.com/5EOyTDQ.jpg" }}
+            </ImageFilters>
+          </Surface>
         </View>
-      </TouchableHighlight>
-    </View>
+        <View style={styles.tabView}>
+          <View style={[styles.tabItem, selectedTab === "crop" && styles.selectedTab]} >
+            <Text onPress={() => handleState("crop")}>Crop</Text>
+          </View>
+          <View style={[styles.tabItem, selectedTab === "filter" && styles.selectedTab]} >
+            <Text onPress={() => handleState("filter")}>Filters</Text>
+          </View>
+          <View style={[styles.tabItem, selectedTab === "edit" && styles.selectedTab]}>
+            <Text onPress={() => handleState("edit")}>Edits</Text>
+          </View>
+          <View style={[styles.tabItem, selectedTab === "shadow" && styles.selectedTab]}>
+            <Text onPress={() => handleState("shadow")}>Shadows</Text>
+          </View>
+        </View>
+        <View style={styles.tabContent}>
+          {selectedTab === "crop" && <View style={styles.cropContainer}>
+            {
+              options.ratio.map((option, index) =>
+                <CropRatioIcon dimensions={option.dimensions} label={option.text} key={index} selectionColor={selectedItem?.label} handlePress={handlePress} />
+              )
+            }
+          </View>}
+          {selectedTab === "edit" && settings.map((filter) => (
+            <Edits
+              key={filter.name}
+              name={filter.name}
+              minimum={filter.minValue}
+              maximum={filter.maxValue}
+              value={filter.value}
+              onChange={handleFilter}
+            />
+          ))}
+
+        </View>
+
+        <Button />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -115,10 +87,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-    paddingHorizontal: 20
+    padding: 10,
+    height: "100%"
   },
-  headingText: { fontSize: 14, marginVertical: 20, fontWeight: "bold" },
-  imgContainer: { flexDirection: "row", height: 280, borderRadius: 10, backgroundColor: "#FFDAAF" },
+  headingText: { fontSize: 14, marginVertical: 20, fontWeight: "bold", marginLeft: 28, lineHeight: 16.41, color: "#1E2022" },
+  imgContainer: { flexDirection: "row", height: 280, width: 370, borderRadius: 10, backgroundColor: "#FFDAAF" },
   editImage: { height: "100%", width: "100%", borderRadius: 10 },
   tabView: {
     width: "100%",
@@ -147,27 +120,19 @@ const styles = StyleSheet.create({
     shadowColor: "gray",
     elevation: 10
   },
+  tabContent: {
+    padding: 20
+  },
   cropContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    justifyContent: "space-around",
+    alignItems: "flex-end",
     height: 70,
-    marginVertical: 18
+    width: "100%",
+    marginBottom: 20
   },
 
   cropScreen: { height: "100%", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" },
-  button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10,
-    marginHorizontal: 20,
-    marginTop: 50
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 15
-  },
   item: {
     backgroundColor: "#f9c2ff",
     padding: 20,
