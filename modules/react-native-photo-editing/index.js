@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, Dimensions, ScrollView } from "react-native";
+import { View, Image, StyleSheet, Text, Dimensions, ScrollView } from "react-native";
 import { CropRatioIcon } from "./components/CropRatioIcon";
 import options, { settings } from "./options";
 // @ts-ignore
@@ -7,9 +7,13 @@ import ImageFilters from "react-native-gl-image-filters";
 import { Surface } from "gl-react-native";
 import Edits from "./components/Edits";
 import Button from "./components/Button";
+import ImageResizer from "react-native-image-resizer";
+import sample from "./assets/sample.jpg";
+
 const PhotoEditing = () => {
   const width = Dimensions.get("window").width - 40;
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [uri, setUri] = useState(Image.resolveAssetSource(sample).uri);
+  const [selectedCropRatioItem, setSelectedCropRatioItem] = useState(null);
   const [selectedTab, setSelectedTab] = useState("crop");
   const [editSettings, setEditSettings] = useState({
     ...settings,
@@ -19,8 +23,26 @@ const PhotoEditing = () => {
     temperature: 6500
   });
 
-  const handlePress = (option) => {
-    setSelectedItem(option);
+  const handleCropRatioPress = (option) => {
+    setSelectedCropRatioItem(option);
+    const { height } = Image.resolveAssetSource(sample);
+    const w = Math.ceil((height * (option.horizontal_ratio / option.vertical_ratio)));
+    const h = height;
+    ImageResizer.createResizedImage(
+      uri,
+      w,
+      h,
+      "JPEG",
+      100,
+      0,
+      undefined,
+      false,
+      { mode: "stretch", onlyScaleDown: false }
+    ).then(response => {
+      setUri(response.uri);
+    }).catch(error => {
+      console.log("error", error);
+    });
   };
 
   const handleState = (tab) => {
@@ -36,11 +58,18 @@ const PhotoEditing = () => {
       <View style={styles.container}>
         <Text style={styles.headingText}>Image editing</Text>
         <View style={styles.imgContainer}>
-          <Surface style={{ width: "100%", height: "100%", borderRadius: 10 }}>
-            <ImageFilters {...editSettings} width={width} height={width}>
-              {{ uri: "https://i.imgur.com/5EOyTDQ.jpg" }}
-            </ImageFilters>
-          </Surface>
+          {
+            selectedTab === "crop" &&
+            <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: uri }} />
+          }
+          {
+            selectedTab === "edit" &&
+            <Surface style={{ width: "100%", height: "100%", borderRadius: 10 }}>
+              <ImageFilters {...editSettings} width={width} height={width}>
+                {{ uri: uri }}
+              </ImageFilters>
+            </Surface>
+          }
         </View>
         <View style={styles.tabView}>
           <View style={[styles.tabItem, selectedTab === "crop" && styles.selectedTab]} >
@@ -60,7 +89,7 @@ const PhotoEditing = () => {
           {selectedTab === "crop" && <View style={styles.cropContainer}>
             {
               options.ratio.map((option, index) =>
-                <CropRatioIcon dimensions={option.dimensions} label={option.text} key={index} selectionColor={selectedItem?.label} handlePress={handlePress} />
+                <CropRatioIcon option={option} key={index} selectionColor={selectedCropRatioItem?.label} handlePress={handleCropRatioPress} />
               )
             }
           </View>}

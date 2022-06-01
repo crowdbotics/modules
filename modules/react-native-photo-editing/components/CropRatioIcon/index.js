@@ -1,14 +1,14 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-export const CropRatioIcon = ({ dimensions, label, selectionColor, handlePress }) => {
+export const CropRatioIcon = ({ option, selectionColor, handlePress }) => {
   const handleClick = () => {
-    handlePress({ dimensions, label });
+    handlePress(option);
   };
 
   return (
     <TouchableOpacity style={styles.container} onPress={handleClick}>
-      <View style={[styles.border, { borderColor: selectionColor === label ? "#12D790" : "#77838F", width: dimensions.width, height: dimensions.height }]}></View>
-      <Text style={styles.textColor}>{label}</Text>
+      <View style={[styles.border, { borderColor: selectionColor === option.label ? "#12D790" : "#77838F", width: option.dimensions.width, height: option.dimensions.height }]}></View>
+      <Text style={styles.textColor}>{option.label}</Text>
     </TouchableOpacity>
   );
 };
