@@ -80,3 +80,31 @@ export const settings = [
     maxValue: 40000.0
   }
 ];
+
+export const FILTERS = [
+  {
+    id: 1,
+    name: "FIlter 1"
+  },
+  {
+    id: 2,
+    name: "FIlter 2"
+  },
+  {
+    id: 3,
+    name: "FIlter 3"
+  },
+  {
+    id: 4,
+    name: "FIlter 4"
+  },
+  {
+    id: 5,
+    name: "FIlter 5"
+  },
+  {
+    id: 6,
+    name: "FIlter 6"
+  }
+
+];

@@ -8,13 +8,18 @@ import { Surface } from "gl-react-native";
 import Edits from "./components/Edits";
 import Button from "./components/Button";
 import ImageResizer from "react-native-image-resizer";
+// @ts-ignore
+import { launchImageLibrary } from "react-native-image-picker";
+// @ts-ignore
 import sample from "./assets/sample.jpg";
-
+import Filter from "./components/Filters";
+import ImagePicker from "./components/ImagePicker";
 const PhotoEditing = () => {
   const width = Dimensions.get("window").width - 40;
   const [uri, setUri] = useState(Image.resolveAssetSource(sample).uri);
   const [selectedCropRatioItem, setSelectedCropRatioItem] = useState(null);
   const [selectedTab, setSelectedTab] = useState("crop");
+  const [imageSelected, setImageSelected] = useState(false);
   const [editSettings, setEditSettings] = useState({
     ...settings,
     contrast: 1,
@@ -53,17 +58,29 @@ const PhotoEditing = () => {
     setEditSettings({ ...editSettings, [name]: value });
   };
 
+  const handImagePicker = () => {
+    launchImageLibrary({ mediaType: "photo" }).then((res) => {
+      console.log("image picker response", res.assets[0].uri);
+      setUri(res.assets[0].uri);
+      setImageSelected(true);
+    }).catch((err) => {
+      console.log("There was an error while selecting image", err);
+    });
+  };
+
   return (
     <ScrollView style={{ backgroundColor: "#fff" }}>
       <View style={styles.container}>
         <Text style={styles.headingText}>Image editing</Text>
         <View style={styles.imgContainer}>
+          {!imageSelected && <ImagePicker handImagePicker={handImagePicker} />}
           {
-            selectedTab === "crop" &&
+            imageSelected && selectedTab === "crop" &&
             <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: uri }} />
           }
+
           {
-            selectedTab === "edit" &&
+            imageSelected && selectedTab === "edit" &&
             <Surface style={{ width: "100%", height: "100%", borderRadius: 10 }}>
               <ImageFilters {...editSettings} width={width} height={width}>
                 {{ uri: uri }}
@@ -93,6 +110,9 @@ const PhotoEditing = () => {
               )
             }
           </View>}
+          {
+            selectedTab === "filter" && <View style={styles.filterContainer}><Filter /></View>
+          }
           {selectedTab === "edit" && settings.map((filter) => (
             <Edits
               key={filter.name}
@@ -120,7 +140,7 @@ const styles = StyleSheet.create({
     height: "100%"
   },
   headingText: { fontSize: 14, marginVertical: 20, fontWeight: "bold", marginLeft: 28, lineHeight: 16.41, color: "#1E2022" },
-  imgContainer: { flexDirection: "row", height: 280, width: 370, borderRadius: 10, backgroundColor: "#FFDAAF" },
+  imgContainer: { flexDirection: "row", height: 280, width: 370, borderRadius: 10, backgroundColor: "#FCF1D6", justifyContent: "center", alignItems: "center" },
   editImage: { height: "100%", width: "100%", borderRadius: 10 },
   tabView: {
     width: "100%",
@@ -160,7 +180,10 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 20
   },
-
+  filterContainer: {
+    width: "120%",
+    left: -30
+  },
   cropScreen: { height: "100%", flexDirection: "column", justifyContent: "flex-end", alignItems: "center" },
   item: {
     backgroundColor: "#f9c2ff",
