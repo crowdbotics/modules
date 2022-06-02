@@ -1,17 +1,22 @@
 import React from "react";
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text, TouchableNativeFeedback } from "react-native";
 import { FILTERS } from "../../options";
 
-export default function Filter() {
+export default function Filter({ selectFilter }) {
   const colors = ["#FCF1D6", "#F9D8D9", "#D9DADD", "#FCF1D6", "#F9D8D9", "#D9DADD"];
 
   const titleColor = ["#d5f7cd", "#d1bfef", "#edc0c0", "#d5f7cd", "#d1bfef", "#edc0c0"];
 
+  const pressFilter = (name) => {
+    selectFilter(name);
+  };
   const ItemRender = ({ name, index }) => (
-    <View style={[styleSheet.item, { backgroundColor: colors[index % colors.length] }]}>
+    <TouchableNativeFeedback onPress={() => pressFilter(name)}>
+    <View style={[styleSheet.item, { backgroundColor: colors[index % colors.length] }]} >
       <Text style={[styleSheet.itemText]}></Text>
-      <Text style={[styleSheet.titleText, { backgroundColor: titleColor[index % colors.length] }]}>{name}</Text>
+      <Text style={[styleSheet.titleText, { backgroundColor: titleColor[index % colors.length] }]} >{name}</Text>
     </View>
+    </TouchableNativeFeedback>
   );
 
   const Separator = () => {

@@ -14,12 +14,16 @@ import { launchImageLibrary } from "react-native-image-picker";
 import sample from "./assets/sample.jpg";
 import Filter from "./components/Filters";
 import ImagePicker from "./components/ImagePicker";
+import { Colorify } from "./components/Utils/colorify";
+import scaleColors from "./components/Utils/scaleColors";
+
 const PhotoEditing = () => {
   const width = Dimensions.get("window").width - 40;
   const [uri, setUri] = useState(Image.resolveAssetSource(sample).uri);
   const [selectedCropRatioItem, setSelectedCropRatioItem] = useState(null);
   const [selectedTab, setSelectedTab] = useState("crop");
   const [imageSelected, setImageSelected] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("");
   const [editSettings, setEditSettings] = useState({
     ...settings,
     contrast: 1,
@@ -68,6 +72,11 @@ const PhotoEditing = () => {
     });
   };
 
+  const selectFilter = (filter) => {
+    console.log("selected filter", filter);
+    setSelectedFilter(filter);
+  };
+
   return (
     <ScrollView style={{ backgroundColor: "#fff" }}>
       <View style={styles.container}>
@@ -87,6 +96,16 @@ const PhotoEditing = () => {
               </ImageFilters>
             </Surface>
           }
+
+          {
+            imageSelected && selectedTab === "filter" &&
+            <Surface style={{ width: 400, height: 300 }}>
+              <Colorify colorScale={scaleColors[selectedFilter]} interpolation={"linear"}>
+                {{ uri }}
+              </Colorify>
+            </Surface>
+          }
+
         </View>
         <View style={styles.tabView}>
           <View style={[styles.tabItem, selectedTab === "crop" && styles.selectedTab]} >
@@ -111,7 +130,7 @@ const PhotoEditing = () => {
             }
           </View>}
           {
-            selectedTab === "filter" && <View style={styles.filterContainer}><Filter /></View>
+            selectedTab === "filter" && <View style={styles.filterContainer}><Filter selectFilter={selectFilter}/></View>
           }
           {selectedTab === "edit" && settings.map((filter) => (
             <Edits
@@ -123,7 +142,6 @@ const PhotoEditing = () => {
               onChange={handleFilter}
             />
           ))}
-
         </View>
 
         <Button />

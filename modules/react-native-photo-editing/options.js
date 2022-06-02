@@ -84,27 +84,91 @@ export const settings = [
 export const FILTERS = [
   {
     id: 1,
-    name: "FIlter 1"
+    name: "heatmap"
   },
   {
     id: 2,
-    name: "FIlter 2"
-  },
-  {
-    id: 3,
-    name: "FIlter 3"
+    name: "monochrome"
   },
   {
     id: 4,
-    name: "FIlter 4"
+    name: "OrRd"
   },
   {
     id: 5,
-    name: "FIlter 5"
+    name: "PuBu"
   },
   {
     id: 6,
-    name: "FIlter 6"
+    name: "BuPu"
+  },
+  {
+    id: 7,
+    name: "Oranges"
+  },
+  {
+    id: 8,
+    name: "BuGn"
+  },
+  {
+    id: 9,
+    name: "YlOrBr"
+  },
+  {
+    id: 10,
+    name: "YlGn"
+  },
+  {
+    id: 11,
+    name: "Reds"
+  },
+  {
+    id: 12,
+    name: "RdPu"
+  },
+  {
+    id: 13,
+    name: "Greens"
+  },
+  {
+    id: 14,
+    name: "YlGnBu"
+  },
+  {
+    id: 15,
+    name: "Purples"
+  },
+  {
+    id: 16,
+    name: "GnBu"
+  },
+  {
+    id: 17,
+    name: "Greys"
+  },
+  {
+    id: 18,
+    name: "YlOrRd"
+  },
+  {
+    id: 19,
+    name: "PuRd"
+  },
+  {
+    id: 20,
+    name: "Blues"
+  },
+  {
+    id: 21,
+    name: "PuBuGn"
+  },
+  {
+    id: 22,
+    name: "Spectral"
+  },
+  {
+    id: 23,
+    name: "RdYlGn"
   }
 
 ];

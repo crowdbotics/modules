@@ -9,9 +9,9 @@ const ImagePicker = ({ handImagePicker }) => {
 
   return (
 
-        <TouchableOpacity style={styles.pickerContainer} onPress={pickImage}>
-            <Text style={styles.text}>Select Photo</Text>
-        </TouchableOpacity>
+    <TouchableOpacity style={styles.pickerContainer} onPress={pickImage}>
+      <Text style={styles.text}>Select Photo</Text>
+    </TouchableOpacity>
 
   );
 };
