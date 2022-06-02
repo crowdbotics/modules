@@ -22,7 +22,8 @@ cat <<EOM
     "branch": "$CIRCLE_BRANCH",
     "build_url": "$CIRCLE_BUILD_URL",
     "compare_url": "$CIRCLE_COMPARE_URL",
-    "sha1": "$CIRCLE_SHA1"
+    "sha1": "$CIRCLE_SHA1",
+    "platform_id": "$PLATFORM_ID"
 }
 EOM
 )
