@@ -1,11 +1,15 @@
 import { Text, View, TouchableHighlight, StyleSheet } from "react-native";
 import React from "react";
 
-const Button = () => {
+const Button = ({ saveImage }) => {
+  const handlePress = () => {
+    saveImage();
+  };
   return (
 
     <TouchableHighlight
       underlayColor="#DDDDDD"
+      onPress={handlePress}
     >
       <View
         style={[

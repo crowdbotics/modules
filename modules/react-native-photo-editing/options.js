@@ -172,3 +172,43 @@ export const FILTERS = [
   }
 
 ];
+
+export const SHADOWS = [
+  {
+    id: 1,
+    url: "https://i.imgur.com/SzbbUvX.png"
+  },
+  {
+    id: 2,
+    url: "https://i.imgur.com/0PkQEk1.png"
+  },
+  {
+    id: 3,
+    url: "https://i.imgur.com/z2CQHpg.png"
+  },
+  {
+    id: 4,
+    url: "https://i.imgur.com/k9Eview.png"
+  },
+  {
+    id: 5,
+    url: "https://i.imgur.com/wh0On3P.png"
+  }
+
+];
+
+export const blurShadows = [
+  {
+    name: "Blur",
+    value: 3,
+    minValue: 0,
+    maxValue: 10.0
+  },
+  {
+    name: "Blur Passes",
+    value: 6,
+    minValue: 0,
+    maxValue: 15
+  }
+
+];

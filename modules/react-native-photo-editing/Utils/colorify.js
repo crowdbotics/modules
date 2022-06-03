@@ -12,7 +12,7 @@ const shaders = Shaders.create({
         vec4 original = texture2D(children, uv);
         vec4 newcolor = texture2D(colorScale, vec2(greyscale(original.rgb), 0.5));
         gl_FragColor = vec4(newcolor.rgb, original.a * newcolor.a);
-        }`
+      }`
   }
 });
 
