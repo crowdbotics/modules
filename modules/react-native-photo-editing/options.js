@@ -50,11 +50,8 @@ const ratio = [
     }
   }
 ];
-export default {
-  ratio: ratio
-};
 
-export const settings = [
+const settings = [
   {
     name: "contrast",
     value: 1,
@@ -81,7 +78,7 @@ export const settings = [
   }
 ];
 
-export const FILTERS = [
+const FILTERS = [
   {
     id: 1,
     name: "heatmap"
@@ -173,7 +170,7 @@ export const FILTERS = [
 
 ];
 
-export const SHADOWS = [
+const SHADOWS = [
   {
     id: 1,
     url: "https://i.imgur.com/SzbbUvX.png"
@@ -197,7 +194,7 @@ export const SHADOWS = [
 
 ];
 
-export const blurShadows = [
+const blurShadows = [
   {
     name: "Blur",
     value: 3,
@@ -212,3 +209,11 @@ export const blurShadows = [
   }
 
 ];
+
+export default {
+  ratio: ratio,
+  settings: settings,
+  FILTERS: FILTERS,
+  SHADOWS: SHADOWS,
+  blurShadows: blurShadows
+};

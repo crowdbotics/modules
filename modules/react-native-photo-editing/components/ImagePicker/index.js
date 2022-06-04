@@ -1,6 +1,6 @@
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import React from "react";
-// @ts-ignore
+import Button from "../Button";
 
 const ImagePicker = ({ handImagePicker }) => {
   const pickImage = () => {
@@ -8,24 +8,27 @@ const ImagePicker = ({ handImagePicker }) => {
   };
 
   return (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.text}>Choose Photo from Gallery</Text>
+        <Button onPress={pickImage}>
+          Choose Photo
+        </Button>
 
-    <TouchableOpacity style={styles.pickerContainer} onPress={pickImage}>
-      <Text style={styles.text}>Select Photo</Text>
-    </TouchableOpacity>
-
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  pickerContainer: {
-    height: 50,
-    width: 200,
-    backgroundColor: "#FCF1D6",
-    justifyContent: "center",
+  container: {
+    height: "100%",
+    backgroundColor: "#FFF",
+    display: "flex",
     alignItems: "center",
-    borderRadius: 5
+    justifyContent: "center"
   },
-  text: { fontSize: 20, fontWeight: "bold", color: "#FFF", textAlign: "center" }
+  text: { fontSize: 20, fontWeight: "bold", marginVertical: 20 }
 });
 
 export default ImagePicker;

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, FlatList, Image, TouchableNativeFeedback } from "react-native";
-import { SHADOWS } from "../../options";
+import options from "../../options";
 
 export default function Shadows({ handleBlurImage }) {
   const colors = ["#FCF1D6", "#F9D8D9", "#D9DADD", "#FCF1D6", "#F9D8D9", "#D9DADD"];
@@ -10,7 +10,7 @@ export default function Shadows({ handleBlurImage }) {
   };
   const ItemRender = ({ url, index }) => (
 
-        <TouchableNativeFeedback onPress={() => pressShadow(index)}>
+        <TouchableNativeFeedback onPress={() => pressShadow(url)}>
             <View style={[styleSheet.item, { backgroundColor: colors[index % colors.length] }]} >
                 <Image source={{ uri: url }} style={styleSheet.shadowImage} />
             </View>
@@ -33,9 +33,9 @@ export default function Shadows({ handleBlurImage }) {
   return (
 
         <FlatList
-            data={SHADOWS}
+            data={options.SHADOWS}
             renderItem={({ item, index }) => <ItemRender url={item.url} index={index} />}
-            keyExtractor={item => item.id}
+            keyExtractor={item => item.id.toString()}
             ItemSeparatorComponent={Separator}
             horizontal={true}
             showsHorizontalScrollIndicator={false}

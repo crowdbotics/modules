@@ -1,42 +1,32 @@
-import { Text, View, TouchableHighlight, StyleSheet } from "react-native";
 import React from "react";
+import { Text, View, StyleSheet, TouchableHighlight } from "react-native";
 
-const Button = ({ saveImage }) => {
-  const handlePress = () => {
-    saveImage();
-  };
+const Button = (props) => {
   return (
-
-    <TouchableHighlight
-      underlayColor="#DDDDDD"
-      onPress={handlePress}
-    >
-      <View
-        style={[
-          styles.button,
-          {
-            backgroundColor: "#000000",
-            height: 49
-          }
-        ]}
-      >
-        <Text style={[styles.text, { color: "#ffffff" }]}>Apply</Text>
-      </View>
-    </TouchableHighlight>
+      <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
+        <View style={[btnStyles.button, {
+          backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
+          height: props.height ? props.height : 49,
+          borderWidth: props.borderWidth ? props.borderWidth : 0,
+          borderColor: props.borderColor ? props.borderColor : "#000000"
+        }]}>
+          <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+        </View>
+      </TouchableHighlight>
   );
 };
 
-export default Button;
-const styles = StyleSheet.create({
+const btnStyles = StyleSheet.create({
   button: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 10,
-    marginHorizontal: 20
+    borderRadius: 10
   },
   text: {
     fontWeight: "bold",
     fontSize: 15
   }
 });
+
+export default Button;

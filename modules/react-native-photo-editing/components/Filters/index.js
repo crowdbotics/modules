@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, FlatList, Text, TouchableNativeFeedback } from "react-native";
-import { FILTERS } from "../../options";
+import options from "../../options";
 
 export default function Filter({ selectFilter }) {
   const colors = ["#FCF1D6", "#F9D8D9", "#D9DADD", "#FCF1D6", "#F9D8D9", "#D9DADD"];
@@ -34,9 +34,9 @@ export default function Filter({ selectFilter }) {
   return (
 
     <FlatList
-      data={FILTERS}
+      data={options.FILTERS}
       renderItem={({ item, index }) => <ItemRender name={item.name} index={index} />}
-      keyExtractor={item => item.id}
+      keyExtractor={item => item.id.toString()}
       ItemSeparatorComponent={Separator}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
