@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, {useEffect, useState, useContext} from "react";
 import { Text, StyleSheet, View, TextInput, Image, ScrollView } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import {getFollowers} from '../api';
+import { getFollowing } from "../api";
 import { GlobalOptionsContext } from "@options";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 
-const FollowersList = (params) => {
-  const [followers, setFollowers] = useState([]);
-  const [allFollowers, setAllFollowers] = useState([]);
+const FollowingList = (params) => {
+  const [following, setFollowing] = useState([]);
+  const [allFollowing, setAllFollowing] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const gOptions = useContext(GlobalOptionsContext);
   const BASE_URL = gOptions.url
   useEffect(() => {
-    getFollowers(BASE_URL, setLoading).then((data) => {
+    getFollowing(BASE_URL, setLoading).then((data) => {
       console.log("---------sss", data)
-      setFollowers(data?.results);
-      setAllFollowers(data?.results);
+      setFollowing(data?.results);
+      setAllFollowing(data?.results);
     })
   }, []);
   const alpha = Array.from(Array(26)).map((e, i) => i + 65);
@@ -24,9 +24,9 @@ const FollowersList = (params) => {
 
   useEffect(() => {
     if (searchQuery.length > 0) {
-      setFollowers(allFollowers.filter((follower) => follower.name.toLowerCase().includes(searchQuery.toLowerCase())));
+      setFollowing(allFollowing.filter((follower) => follower.name.toLowerCase().includes(searchQuery.toLowerCase())));
     }else{
-      setFollowers(allFollowers);
+      setFollowing(allFollowing);
     }
   }
   , [searchQuery]);
@@ -44,20 +44,20 @@ const FollowersList = (params) => {
           </View>
         </View>
         <View>
-          <Text style={styles.text}>{followers.length} Followers</Text>
+          <Text style={styles.text}>{following.length} Following</Text>
         </View>
         {alphabets.map((alpha) => {
           return (
             <>
-              {followers.filter((follower) => follower.name.charAt(0).toUpperCase() === alpha).length > 0 && (
+              {following.filter((following) => following.name.charAt(0).toUpperCase() === alpha).length > 0 && (
                 <View style={styles.frequently}>
                   <Text style={styles.frequentlyText}>{alpha}</Text>
                 </View>
               )}
               <View>
-                {followers.filter((follower) => follower.name.charAt(0).toUpperCase() === alpha).map((follower) => {
+                {following.filter((following) => following.name.charAt(0).toUpperCase() === alpha).map((following) => {
                   return (
-                    <Follower name={follower.name} bgcolor={follower.bgcolor} follow={follower.follow} />
+                    <Follower name={following.name} bgcolor={following.bgcolor} follow={!following.follow} />
                   )
                 }
                 )}
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 
 });
 
-export default FollowersList;
+export default FollowingList;
 
 const Follower = (props) => {
   return (
@@ -112,9 +112,7 @@ const Follower = (props) => {
         </View>
         <Text>{props.name}</Text>
       </View>
-      <TouchableOpacity>
-      {!props.follow && <Text>Follow Back</Text>}
-      </TouchableOpacity>
+      {props.follow && <TouchableOpacity><Text>Unfollow</Text></TouchableOpacity>}
     </View>
   );
 };

@@ -1,47 +1,75 @@
-import React from "react"
-import { View, ScrollView, Image, Text, StyleSheet } from "react-native"
+import React, { useContext, useState, useEffect} from "react"
+import { View, ScrollView, Image, Text, StyleSheet, FlatList, Touchable } from "react-native"
+import { OptionsContext, GlobalOptionsContext } from "@options";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { likePost, unLikePost } from '../api';
 
-const data = [
-  {
-    bgColor: "#FCF1D6",
-    key: 1,
-    text: "Mauris ultrices ut mauris ut elementum nunc. Quisque eu vulputate nunc. Sed odio lectus.",
-    likes: 12,
-    comments: 22,
-    image: require("./assets/tempImage.png")
-
-},
-  {
-    bgColor: "#FCF1D6",
-    key: 2,
-    text: "Mauris ultrices ut mauris ut elementum nunc. Quisque eu vulputate nunc. Sed odio lectus.",
-    likes: 12,
-    comments: 22,
-    image: require("./assets/tempImage.png")
+const SocialFeedScreen = (props) => {
+  const { navigation, params } = props;
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const gOptions = useContext(GlobalOptionsContext);
+  const BASE_URL = gOptions.url
+  const get_posts = () => {
+    fetch(`${BASE_URL}/modules/social-feed/my-feed/`, 
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Token cf1b4cf39330a955ba203ddbfefa2e6707006f64'
+      }
+    })
+    .then((response) => response.json())
+    .then((json) => setPosts(json))
+    .catch((error) => console.log(error))
+    .finally(() => setLoading(false));
   }
-];
-const SocialFeedScreen = () => {
+  useEffect(async () => {
+    get_posts();
+  }, []);
+
+  // More info on all the options is below in the API Reference... just some common use cases shown here
+  useEffect(async () => {
+    get_posts();
+  }, [loading]);
   return (
-    <ScrollView>
+    <View style={{marginTop: 60}}>
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Image
-            source={require("./assets/plus.png")}
-            style={styles.headerImage}
-          />
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          {/* search bar */}
+          <View style={styles.searchBar}>
+            <TextInput style={styles.searchBarInput} placeholder="Search" />
+            <Image source={require('./assets/search.png')} style={styles.searchIcon} />
+          </View>
+          {/* end search bar */}
+          <TouchableOpacity style={styles.headerContainer} onPress={()=>{navigation.navigate('Create Post')}}>
+            <Image
+              source={require("./assets/plus.png")}
+              style={styles.headerImage}
+            />
+          </TouchableOpacity>
         </View>
-        {data.map(item => (
-          <PostComponent
-            bgColor={item.bgColor}
-            text={item.text}
-            key={item.key}
-            likes={item.likes}
-            comments={item.comments}
-            image={item.image}
+        <FlatList
+          data={posts}
+          renderItem={({ item }) => (
+            <PostComponent
+              bgColor={item?.bgColor ? item.bgColor : "#acacac"}
+              key={item.id}
+              post = {item}
+              nav={navigation}
+              setLoading={setLoading}
           />
-        ))}
+          )}
+          keyExtractor={(item) => item.id}
+          onRefresh={() => {
+            get_posts();
+          }}
+          refreshing={loading}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -52,51 +80,82 @@ const styles = StyleSheet.create({
   headerContainer: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
+    padding: 10,
   },
-  headerImage: { height: 20, width: 20 }
+  headerImage: { height: 20, width: 20 },
+  searchBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e6e6e6',
+    backgroundColor: '#FFF',
+    flex: 1
+  },
+  searchBarInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+    paddingLeft: 10,
+    textAlign: 'center'
+  },
 });
 
-const PostComponent = ({ bgColor, text, likes, comments, image }) => {
+const PostComponent = ({ post, nav, setLoading }) => {
+  const gOptions = useContext(GlobalOptionsContext);
+  const BASE_URL = gOptions.url
+  const {color, id, caption, upvotes, comments, comments_count, media, user, liked } = post;
   return (
-    <View style={{margin: 10}}>
-      <View style={userPostStyles.usernameContainer}>
+    <TouchableOpacity style={{margin: 10}} onPress={()=>{nav.navigate("PostDetailsScreen", {id: id})}}>
+      <TouchableOpacity style={userPostStyles.usernameContainer} onPress={()=>{nav.navigate("SocialProfileScreen", {id: user?.id})}}>
         <View style={userPostStyles.userImageContainer}>
           <Image
-            source={image}
+            source={user?.image ? {uri: user.image} : require("./assets/user.png")}
             style={userPostStyles.userImage}
           />
         </View>
-        <Text style={userPostStyles.userText}>Username</Text>
-      </View>
+        <Text style={userPostStyles.userText}>{user?.name}</Text>
+      </TouchableOpacity>
       <View
-        style={[userPostStyles.userPostImage, { backgroundColor: bgColor }]}
+        style={[userPostStyles.userPostImage, { backgroundColor: color ? color : "#acacac" }]}
       >
         <Image
-          source={require("./assets/tempImage.png")}
+          source={{ uri: media?.[0]?.image }}
           style={userPostStyles.postImage}
         />
       </View>
       <View style={userPostStyles.postcontainer}>
         <View style={userPostStyles.leftContainer}>
-          <Image
-            source={require("./assets/like.png")}
-            style={userPostStyles.imageIcons}
-          />
-          <Text style={userPostStyles.mh10}>{likes}</Text>
+          <TouchableOpacity style={{flexDirection: 'row'}} 
+            onPress={()=>{
+              liked ? 
+              unLikePost(id, BASE_URL, setLoading)
+              : 
+              likePost(id, BASE_URL, setLoading)
+            }}
+          >
+            <Image
+              source={liked ? require('./assets/unlike.png'): require('./assets/like.png')}
+              style={userPostStyles.imageIcons}
+            />
+            <Text style={userPostStyles.mh10}>{upvotes}</Text>
+          </TouchableOpacity>
           <Image
             source={require("./assets/comment.png")}
             style={userPostStyles.imageIcons}
           />
-          <Text style={userPostStyles.mh10}>{comments}</Text>
+          <Text style={userPostStyles.mh10}>{comments_count}</Text>
         </View>
         <Image
           source={require("./assets/group.png")}
           style={[userPostStyles.imageIcons, userPostStyles.mr10]}
         />
       </View>
-      <Text style={userPostStyles.postText}>{text}</Text>
-    </View>
+      <Text style={userPostStyles.postText}>{caption}</Text>
+    </TouchableOpacity>
   );
 };
 const userPostStyles = StyleSheet.create({
@@ -119,25 +178,29 @@ const userPostStyles = StyleSheet.create({
     marginRight: 10
   },
   userImage: {
-    height: 20,
-    width: 20
+    height: 15,
+    width: 15,
   },
   userText: {
     color: "#3B566E"
   },
   userPostImage: {
-    height: 170,
-    width: "100%",
+    height: 200,
+    width: '100%',
     borderRadius: 10,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 10
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
   },
   postImage: {
-    height: 30,
-    width: 30
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'contain',
+    overflow: 'hidden',
+    borderRadius: 10,
   },
   postcontainer: {
     display: "flex",

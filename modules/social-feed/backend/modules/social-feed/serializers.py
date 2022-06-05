@@ -1,3 +1,4 @@
+import re
 from django.contrib.auth import get_user_model
 from .models import (
     Chat,
@@ -19,17 +20,33 @@ class PostMediaSerializer(serializers.ModelSerializer):
         model = PostMedia
         fields = "__all__"
 
+class CreatePostSerializer(serializers.ModelSerializer):
+    media = PostMediaSerializer(many=True)
+    
+    class Meta:
+        model = Post
+        fields = "__all__"
 
 class PostSerializer(serializers.ModelSerializer):
     media = PostMediaSerializer(many=True, source='postmedia_post')
     upvotes = serializers.SerializerMethodField()
     downvotes = serializers.SerializerMethodField()
+    liked = serializers.SerializerMethodField()
 
     def get_upvotes(self, obj):
         return obj.upvotepost_post.count()
 
     def get_downvotes(self, obj):
         return obj.downvotepost_post.count()
+
+    def get_liked(self, obj):
+        try:
+            user = self.context['request'].user
+            if user.is_authenticated:
+                return obj.upvotepost_post.filter(upvote_by=user).exists()
+            return False
+        except KeyError:
+            return False
 
     class Meta:
         model = Post
@@ -78,12 +95,35 @@ class ChatSerializer(serializers.ModelSerializer):
         model = Chat
         fields = "__all__"
 
+from home.api.v1.serializers import UserSerializer
 
 class PostDetailSerializer(serializers.ModelSerializer):
     media = PostMediaSerializer(many=True, source='postmedia_post')
     upvotes = serializers.SerializerMethodField()
     downvotes = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
+    comments_count = serializers.SerializerMethodField()
+    user = UserSerializer()
+    liked = serializers.SerializerMethodField()
+    is_owner = serializers.SerializerMethodField()
+
+    def get_liked(self, obj):
+        try:
+            user = self.context['request'].user
+            if user.is_authenticated:
+                return obj.upvotepost_post.filter(upvote_by=user).exists()
+            return False
+        except KeyError:
+            return False
+
+    def get_is_owner(self, obj):
+        try:
+            user = self.context['request'].user
+            if user.is_authenticated:
+                return obj.user == user
+            return False
+        except KeyError:
+            return False
 
     def get_downvotes(self, obj):
         return obj.downvotepost_post.count()
@@ -92,17 +132,78 @@ class PostDetailSerializer(serializers.ModelSerializer):
         return obj.upvotepost_post.count()
 
     def get_comments(self, obj):
-        all_comments = obj.postcomment_post.all()
-        x = []
-        for comment in all_comments.filter(ref_comment=None):
-            root = comment.as_dict()
+        all_comments_obj = obj.postcomment_post.all()
+        try:
+            user = self.context['request'].user
+        except KeyError:
+            user = None
+        all_comments = []
+        for comment in all_comments_obj.filter(ref_comment=None):
+            root = comment.as_dict(user)
             children = []
-            for child in all_comments.filter(ref_comment=comment):
-                children.append(child.as_dict())
+            for child in all_comments_obj.filter(ref_comment=comment):
+                children.append(child.as_dict(user))
             root['children'] = children
-            x.append(root)
-        return x
+            all_comments.append(root)
+        return all_comments
+
+
+    def get_comments_count(self, obj):
+        return obj.postcomment_post.count()
 
     class Meta:
         model = Post
         fields = "__all__"
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    posts = serializers.SerializerMethodField()
+    followers = serializers.SerializerMethodField()
+    following = serializers.SerializerMethodField()
+
+    def get_following(self, obj):
+        return obj.user_following.count()
+        
+    def get_followers(self, obj):
+        return obj.user_followers.count()
+        
+    def get_posts(self, obj):
+        return PostSerializer(obj.post_user, many=True).data
+
+    class Meta:
+        model = get_user_model()
+        fields = "__all__"
+
+class FollowingSerializer(serializers.ModelSerializer):
+    follow = serializers.SerializerMethodField()
+
+    def get_follow(self, obj):
+        try:
+            user = self.context['request'].user
+            if user.is_authenticated:
+                return obj.user_following.filter(follow=user).exists()
+            return False
+        except KeyError:
+            return False
+
+
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "username", "name", "follow")
+
+
+class FollowersSerializer(serializers.ModelSerializer):
+    follow = serializers.SerializerMethodField()
+
+    def get_follow(self, obj):
+        try:
+            user = self.context['request'].user
+            if user.is_authenticated:
+                return obj.user_followers.filter(user=user).exists()
+            return False
+        except KeyError:
+            return False
+
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "username", "name", 'follow')

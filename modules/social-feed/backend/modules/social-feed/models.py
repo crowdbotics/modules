@@ -2,6 +2,14 @@ from django.conf import settings
 from django.db import models
 
 
+class Follow(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_following')
+    follow = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_followers')
+
+    class Meta:
+        unique_together = ('user', 'follow')
+
+
 class Post(models.Model):
     "Generated Model"
     user = models.ForeignKey(
@@ -33,9 +41,28 @@ class PostMedia(models.Model):
         upload_to="post_media",
         blank=True,
     )
+    background = models.CharField(
+        max_length=256,
+        blank=True,
+        null=True,
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+@receiver(post_save, sender=PostMedia, dispatch_uid="post_media_post_save")
+def get_bg(sender, instance, **kwargs):
+    from PIL import Image
+    im = Image.open(instance.image)
+    from collections import defaultdict
+    by_color = defaultdict(int)
+    for pixel in im.getdata():
+        by_color[pixel] += 1
+
+    instance.background = by_color.__len__()
+    instance.save()
 
 
 class ReportPost(models.Model):
@@ -105,7 +132,10 @@ class PostComment(models.Model):
         related_name="postcomment_post",
     ) 
 
-    def as_dict(self):
+    def as_dict(self, logged_user=None):
+        """
+        Returns a dictionary representation of the model.
+        """
         return {
             'id': self.id,
             'created_at': self.created_at,
@@ -114,6 +144,14 @@ class PostComment(models.Model):
             'ref_comment': self.ref_comment.id if self.ref_comment else None,
             'post': self.post.id if self.post else None,
             'likes': self.likecomment_comment.count(),
+            'liked': True if logged_user and logged_user.id and logged_user.likecomment_liked_by.filter(comment=self).exists() else False,
+            'user': {
+                'id': self.user.id,
+                'username': self.user.username,
+                'name': self.user.name,
+                'email': self.user.email,
+            },
+            "is_owner": True if logged_user and logged_user.id and logged_user.id == self.user.id else False,
         }
 
 

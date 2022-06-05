@@ -1,4 +1,5 @@
 import * as React from "react"
+import {useState, useEffect, useContext} from 'react';
 import {
   Text,
   View,
@@ -7,19 +8,51 @@ import {
   StyleSheet,
   TouchableHighlight
 } from 'react-native'
+import { OptionsContext, GlobalOptionsContext } from "@options";
+import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 
-const pressed = () => {
-  console.log("pressed");
-};
 
-const SocialProfileScreen = () => {
+const SocialProfileScreen = ({navigation, route}) => {
+  const { id } = route.params;
+  const [userProfile, setUserProfile] = useState({});
+  const [loading, setLoading] = useState(false);
+  const gOptions = useContext(GlobalOptionsContext);
+  const BASE_URL = gOptions.url
+  const get_user_profile = () => {
+      fetch(`${BASE_URL}/modules/social-feed/profile/${id}/`,{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((response) => response.json())
+        .then((json) => setUserProfile(json))
+        .catch((error) => console.log(error))
+        .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    get_user_profile();
+  }, []);
+
+  const pressed = (id) => {
+    navigation.navigate("PostDetailsScreen", {id: id})
+  };
+
+  const openFollowers = () => {
+    navigation.navigate("FollowersList", {id: id})
+  };
+
+  const openFollowing = () => {
+    navigation.navigate("FollowingList", {id: id})
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <ProfileImage />
-          <Text style={styles.headerText}>Jay Mahanga</Text>
-          <Text style={styles.headerSubText}>jay@gmail.com</Text>
+          <Text style={styles.headerText}>{userProfile?.name}</Text>
+          <Text style={styles.headerSubText}>{userProfile?.email}</Text>
         </View>
         <View style={styles.followingSection}>
           <View style={styles.textarea}>
@@ -27,32 +60,50 @@ const SocialProfileScreen = () => {
               style={styles.postIcon}
               source={require('./assets/posts.png')}
             />
-            <Text>My post</Text>
+            <Text>{userProfile?.posts?.length} posts</Text>
           </View>
-          <View style={styles.textarea}>
+          <TouchableOpacity style={styles.textarea} onPress={()=> {openFollowers()}}>
+            <Image
+              style={styles.postIcon}
+              source={require('./assets/user.png')}
+            />
+            <Text>{userProfile?.followers} Followers</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.textarea} onPress={()=> {openFollowing()}}>
             <Image
               style={styles.followingIcon}
-              source={require('./assets/following.png')}
+              source={require('./assets/user.png')}
             />
-            <Text style={styles.followingText}>Following</Text>
-          </View>
+            <Text style={styles.followingText}>{userProfile?.following} Following</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.pt30}>
-          <View style={styles.galleryRow}>
-            <View style={styles.smallPost}>
-              <Post onPress={pressed} />
-            </View>
-            <View style={styles.smallPost}>
-              <Post onPress={pressed} />
-            </View>
-            <View style={styles.smallPost}>
-              <Post onPress={pressed} />
-            </View>
+          <View >
+            <FlatList
+              data={userProfile?.posts}
+              style={styles.galleryRow}
+              numColumns={3}
+              renderItem={({ item }) => (
+                <View style={styles.smallPost}>
+                  <Post onPress={()=>{pressed(item.id)}} data={item} />
+                </View>
+              )}
+              keyExtractor={(item) => item.id}
+              onRefresh={() => {
+                setLoading(true);
+                fetch(`${BASE_URL}/modules/social-feed/my-feed/`)
+                .then((response) => response.json())
+                .then((json) => setPosts(json))
+                .catch((error) => console.log(error))
+                .finally(() => setLoading(false));
+              }}
+              refreshing={loading}
+            />
           </View>
         </View>
 
-        <View style={styles.pt10}>
+        {/* <View style={styles.pt10}>
           <View style={styles.galleryRow}>
             <View style={styles.columnRow}>
               <View style={styles.smallPostcolumn}>
@@ -66,7 +117,7 @@ const SocialProfileScreen = () => {
               <Post />
             </View>
           </View>
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );
@@ -127,7 +178,6 @@ const styles = StyleSheet.create({
   },
   followingText: {
     fontSize: 14,
-    color: "#C4C4C4"
   },
   pt30: {
     paddingTop: 30
@@ -137,12 +187,14 @@ const styles = StyleSheet.create({
   },
   galleryRow: {
     display: "flex",
-    flexDirection: "row"
+    // flexDirection: "row",
+    // flexWrap: "wrap",
   },
   smallPost: {
     height: 120,
     width: "33%",
-    paddingHorizontal: 3
+    paddingHorizontal: 3,
+    marginVertical: 5
   },
   columnRow: {
     width: "33%"
@@ -170,7 +222,7 @@ const Post = props => {
     >
       <Image
         style={postStyles.editIcon}
-        source={require('./assets/edit.png')}
+        source={props?.data?.media?.[0]?.image ? {uri: props?.data?.media?.[0]?.image}  : require('./assets/edit.png')}
       />
     </TouchableHighlight>
   );
@@ -188,8 +240,9 @@ const postStyles = StyleSheet.create({
     marginRight: 5
   },
   editIcon: {
-    height: 35,
-    width: 35
+    height: '100%',
+    width: "100%",
+    borderRadius: 10
   }
 });
 
@@ -200,7 +253,7 @@ const ProfileImage = props => {
         <Image
           style={imageStyles.image}
           resizeMode="contain"
-          source={require('./assets/edit.png')}
+          source={require('./assets/user.png')}
         />
       </View>
     </TouchableHighlight>
@@ -214,7 +267,8 @@ const imageStyles = StyleSheet.create({
     width: 70,
     borderRadius: 35,
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: 'center'
   },
   image: {
     width: 20,
