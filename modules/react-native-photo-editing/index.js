@@ -1,6 +1,6 @@
 // @ts-ignore
 import React, { useState, Fragment } from "react";
-import { View, Image, StyleSheet, Text, Dimensions, ScrollView, PermissionsAndroid, Platform, Alert } from "react-native";
+import { View, Image, StyleSheet, Text, Dimensions, ScrollView, Platform, Alert } from "react-native";
 // @ts-ignore
 import CameraRoll from "@react-native-community/cameraroll";
 import { CropRatioIcon } from "./components/CropRatioIcon";
@@ -19,7 +19,7 @@ import ImagePicker from "./components/ImagePicker";
 import Shadows from "./components/Shadows";
 import { BlurV } from "./Utils/blurv";
 import ShadowBlurs from "./components/ShadowBlur";
-import { reSizeImage } from "./Utils/common";
+import { hasAndroidPermission, reSizeImage } from "./Utils/common";
 import Loader from "./components/Loader";
 
 const PhotoEditing = () => {
@@ -135,19 +135,7 @@ const PhotoEditing = () => {
     });
   };
 
-  async function hasAndroidPermission() {
-    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-
-    const hasPermission = await PermissionsAndroid.check(permission);
-    if (hasPermission) {
-      return true;
-    }
-
-    const status = await PermissionsAndroid.request(permission);
-    return status === "granted";
-  }
-
-  async function savePicture() {
+  const savePicture = async () => {
     setIsLoading(true);
     if (Platform.OS === "android" && !(await hasAndroidPermission())) {
       return;
@@ -170,7 +158,7 @@ const PhotoEditing = () => {
                 <Text style={styles.headingText} onPress={savePicture}>Save</Text>
               </View>
 
-              <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width, maxHeight: 400 }]}>
+              <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width }]}>
 
                 { selectedTab === "crop" &&
                   <Image resizeMode="contain" style={styles.imgContent} source={{ uri: uri }} />
@@ -269,7 +257,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   headingText: { fontSize: 14, fontWeight: "bold", lineHeight: 16.41, color: "#1E2022" },
-  imgContainer: { display: "flex", alignSelf: "center" },
+  imgContainer: { display: "flex", alignSelf: "center", maxHeight: 400 },
   imgContent: { width: "100%", height: "100%", borderRadius: 10 },
   topSection: { marginVertical: 20, marginHorizontal: 28, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   editImage: { height: "100%", width: "100%", borderRadius: 10 },
