@@ -81,91 +81,108 @@ const settings = [
 const FILTERS = [
   {
     id: 1,
-    name: "heatmap"
+    name: "Warm",
+    settings: {
+      blur: 0,
+      brightness: 1,
+      contrast: 1,
+      hue: 0,
+      negative: 0,
+      saturation: 1.609375,
+      sepia: 0,
+      sharpen: 0,
+      temperature: 6500
+    }
   },
   {
     id: 2,
-    name: "monochrome"
+    name: "Classic",
+    settings: {
+      blur: 0,
+      brightness: 1,
+      contrast: 1.40625,
+      hue: 0,
+      negative: 0,
+      saturation: 1,
+      sepia: 0.78125,
+      sharpen: 0,
+      temperature: 6500
+    }
+  },
+  {
+    id: 3,
+    name: "Vintage",
+    settings: {
+      blur: 0,
+      brightness: 1,
+      contrast: 0.46875,
+      hue: 1.8703125,
+      negative: -0.3125,
+      saturation: 0.09375,
+      sepia: 0.9375,
+      sharpen: 0,
+      temperature: 0
+    }
   },
   {
     id: 4,
-    name: "OrRd"
+    name: "Sharp",
+    settings: {
+      blur: 0,
+      brightness: 1,
+      contrast: 1,
+      hue: 0,
+      negative: 0,
+      saturation: 1,
+      sepia: 0,
+      sharpen: 1.5234375,
+      temperature: 6500
+    }
   },
   {
     id: 5,
-    name: "PuBu"
+    name: "Negative",
+    settings: {
+      blur: 0,
+      brightness: 1,
+      contrast: 1,
+      hue: 0,
+      negative: 0.90625,
+      saturation: 1,
+      sepia: 0,
+      sharpen: 0,
+      temperature: 6500
+    }
   },
   {
     id: 6,
-    name: "BuPu"
+    name: "Bright",
+    settings: {
+      blur: 0,
+      brightness: 2.03125,
+      contrast: 1,
+      hue: 0,
+      negative: 0,
+      saturation: 1,
+      sepia: 0,
+      sharpen: 0,
+      temperature: 6500
+    }
   },
   {
     id: 7,
-    name: "Oranges"
-  },
-  {
-    id: 8,
-    name: "BuGn"
-  },
-  {
-    id: 9,
-    name: "YlOrBr"
-  },
-  {
-    id: 10,
-    name: "YlGn"
-  },
-  {
-    id: 11,
-    name: "Reds"
-  },
-  {
-    id: 12,
-    name: "RdPu"
-  },
-  {
-    id: 13,
-    name: "Greens"
-  },
-  {
-    id: 14,
-    name: "YlGnBu"
-  },
-  {
-    id: 15,
-    name: "Purples"
-  },
-  {
-    id: 16,
-    name: "GnBu"
-  },
-  {
-    id: 17,
-    name: "Greys"
-  },
-  {
-    id: 18,
-    name: "YlOrRd"
-  },
-  {
-    id: 19,
-    name: "PuRd"
-  },
-  {
-    id: 20,
-    name: "Blues"
-  },
-  {
-    id: 21,
-    name: "PuBuGn"
-  },
-  {
-    id: 22,
-    name: "Spectral"
-  },
-  {
-    id: 23,
-    name: "RdYlGn"
+    name: "Cool",
+    settings: {
+      blur: 0,
+      brightness: 0.98125,
+      contrast: 0.46875,
+      hue: 6.3,
+      negative: -0.5,
+      saturation: 0.234375,
+      sepia: -1.71875,
+      sharpen: 0,
+      temperature: 5625
+    }
   }
 
 ];

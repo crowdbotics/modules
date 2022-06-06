@@ -16,8 +16,6 @@ import { launchImageLibrary } from "react-native-image-picker";
 import sample from "./assets/sample.jpg";
 import Filter from "./components/Filters";
 import ImagePicker from "./components/ImagePicker";
-import { Colorify } from "./Utils/colorify";
-import scaleColors from "./Utils/scaleColors";
 import Shadows from "./components/Shadows";
 import { BlurV } from "./Utils/blurv";
 import ShadowBlurs from "./components/ShadowBlur";
@@ -32,9 +30,20 @@ const PhotoEditing = () => {
   const [selectedCropRatioItem, setSelectedCropRatioItem] = useState(null);
   const [selectedTab, setSelectedTab] = useState("crop");
   const [imageSelected, setImageSelected] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState(options.FILTERS[0].name);
   const [selectedShadow, setSelectedShadow] = useState(options.SHADOWS[0].url);
   const [isLoading, setIsLoading] = useState(false);
+  const [filterSettings, setFilterSettings] = useState({
+    ...options.settings,
+    hue: 0,
+    blur: 0,
+    sepia: 0,
+    sharpen: 0,
+    negative: 0,
+    contrast: 1,
+    saturation: 1,
+    brightness: 1,
+    temperature: 6500
+  });
   const [editSettings, setEditSettings] = useState({
     ...options.settings,
     contrast: 1,
@@ -92,8 +101,8 @@ const PhotoEditing = () => {
     });
   };
 
-  const selectFilter = (filter) => {
-    setSelectedFilter(filter);
+  const selectFilter = (filter, settings) => {
+    setFilterSettings({ ...filterSettings, ...settings });
   };
 
   const handleBlurImage = (shadow) => {
@@ -169,9 +178,9 @@ const PhotoEditing = () => {
 
                 { selectedTab === "filter" &&
                   <Surface style={styles.imgContent} ref={setEditsRef}>
-                    <Colorify colorScale={scaleColors[selectedFilter]} interpolation={"linear"}>
+                    <ImageFilters {...filterSettings} width={width} height={width}>
                       {{ uri: uri }}
-                    </Colorify>
+                    </ImageFilters>
                   </Surface>
                 }
 

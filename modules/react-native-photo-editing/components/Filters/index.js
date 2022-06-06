@@ -7,11 +7,11 @@ export default function Filter({ selectFilter }) {
 
   const titleColor = ["#d5f7cd", "#d1bfef", "#edc0c0", "#d5f7cd", "#d1bfef", "#edc0c0"];
 
-  const pressFilter = (name) => {
-    selectFilter(name);
+  const pressFilter = (name, settings) => {
+    selectFilter(name, settings);
   };
-  const ItemRender = ({ name, index }) => (
-    <TouchableNativeFeedback onPress={() => pressFilter(name)}>
+  const ItemRender = ({ name, index, settings }) => (
+    <TouchableNativeFeedback onPress={() => pressFilter(name, settings)}>
     <View style={[styleSheet.item, { backgroundColor: colors[index % colors.length] }]} >
       <Text style={[styleSheet.itemText]}></Text>
       <Text style={[styleSheet.titleText, { backgroundColor: titleColor[index % colors.length] }]} >{name}</Text>
@@ -35,7 +35,7 @@ export default function Filter({ selectFilter }) {
 
     <FlatList
       data={options.FILTERS}
-      renderItem={({ item, index }) => <ItemRender name={item.name} index={index} />}
+      renderItem={({ item, index }) => <ItemRender name={item.name} index={index} settings={item.settings}/>}
       keyExtractor={item => item.id.toString()}
       ItemSeparatorComponent={Separator}
       horizontal={true}
