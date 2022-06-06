@@ -1,6 +1,6 @@
 // @ts-ignore
 import React, { useState, Fragment } from "react";
-import { View, Image, StyleSheet, Text, Dimensions, ScrollView, PermissionsAndroid, Platform } from "react-native";
+import { View, Image, StyleSheet, Text, Dimensions, ScrollView, PermissionsAndroid, Platform, Alert } from "react-native";
 // @ts-ignore
 import CameraRoll from "@react-native-community/cameraroll";
 import { CropRatioIcon } from "./components/CropRatioIcon";
@@ -22,16 +22,19 @@ import Shadows from "./components/Shadows";
 import { BlurV } from "./Utils/blurv";
 import ShadowBlurs from "./components/ShadowBlur";
 import { reSizeImage } from "./Utils/common";
+import Loader from "./components/Loader";
 
 const PhotoEditing = () => {
   const [editsRef, setEditsRef] = useState(null);
-  const width = Dimensions.get("window").width - 40;
+  const width = Dimensions.get("window").width;
+  const [imageContainerHW, setImageContainerHW] = useState({ w: 0, h: 0 });
   const [uri, setUri] = useState(Image.resolveAssetSource(sample).uri);
   const [selectedCropRatioItem, setSelectedCropRatioItem] = useState(null);
   const [selectedTab, setSelectedTab] = useState("crop");
   const [imageSelected, setImageSelected] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(options.FILTERS[0].name);
   const [selectedShadow, setSelectedShadow] = useState(options.SHADOWS[0].url);
+  const [isLoading, setIsLoading] = useState(false);
   const [editSettings, setEditSettings] = useState({
     ...options.settings,
     contrast: 1,
@@ -47,6 +50,10 @@ const PhotoEditing = () => {
       const w = Math.ceil((hImage * (option.horizontal_ratio / option.vertical_ratio)));
       const h = hImage;
       reSizeImage(uri, w, h).then(response => {
+        setImageContainerHW({
+          w: response.width,
+          h: response.height
+        });
         setUri(response.uri);
       }).catch(error => {
         console.log("error", error);
@@ -63,13 +70,20 @@ const PhotoEditing = () => {
   };
 
   const handImagePicker = () => {
+    setIsLoading(true);
     launchImageLibrary({ mediaType: "photo" }).then((res) => {
       if (res?.didCancel) {
+        setIsLoading(false);
         return;
       }
       reSizeImage(res.assets[0].uri, res.assets[0].width, res.assets[0].height).then(response => {
+        setImageContainerHW({
+          w: response.width,
+          h: response.height
+        });
         setImageSelected(true);
         setUri(response.uri);
+        setIsLoading(false);
       }).catch(error => {
         console.log("error", error);
       });
@@ -92,8 +106,19 @@ const PhotoEditing = () => {
 
   const saveImage = async () => {
     Image.getSize(uri, async (wImage, hImage) => {
-      const result = await editsRef.glView.capture();
+      let result = {
+        uri: null
+      };
+      if (selectedTab === "crop") {
+        result.uri = uri;
+      } else {
+        result = await editsRef.glView.capture();
+      }
       reSizeImage(result.uri, wImage, hImage).then(response => {
+        setImageContainerHW({
+          w: response.width,
+          h: response.height
+        });
         setUri(response.uri);
       }).catch(error => {
         console.log("error", error);
@@ -114,107 +139,112 @@ const PhotoEditing = () => {
   }
 
   async function savePicture() {
+    setIsLoading(true);
     if (Platform.OS === "android" && !(await hasAndroidPermission())) {
       return;
     }
 
-    CameraRoll.save(uri, { type: "photo" });
+    await CameraRoll.save(uri, { type: "photo" });
+    setIsLoading(false);
+    Alert.alert("Info", "Photo saved in Gallery.");
   };
 
   return (
     <Fragment>
+      {isLoading && <Loader />}
       {!imageSelected
         ? <ImagePicker handImagePicker={handImagePicker} />
         : <ScrollView style={{ backgroundColor: "#fff" }}>
-          <View style={styles.container}>
-            <View style={styles.topSection}>
-              <Text style={styles.headingText}>Image editing</Text>
-              <Text style={styles.headingText} onPress={savePicture}>Save</Text>
-            </View>
-
-            <View style={styles.imgContainer}>
-
-              { selectedTab === "crop" &&
-                <Image resizeMode="contain" style={{ width: "100%", height: "100%" }} source={{ uri: uri }} />
-              }
-
-              { selectedTab === "edit" &&
-                <Surface style={{ width: "100%", height: "100%", borderRadius: 10 }} ref={setEditsRef}>
-                  <ImageFilters {...editSettings} width={width} height={width}>
-                    {{ uri: uri }}
-                  </ImageFilters>
-                </Surface>
-              }
-
-              { selectedTab === "filter" &&
-                <Surface style={{ width: 400, height: 300 }} ref={setEditsRef}>
-                  <Colorify colorScale={scaleColors[selectedFilter]} interpolation={"linear"}>
-                    {{ uri: uri }}
-                  </Colorify>
-                </Surface>
-              }
-              { selectedTab === "shadow" &&
-                <Surface style={{ width: 370, height: 280 }} ref={setEditsRef}>
-                  <BlurV map={{ uri: selectedShadow }} passes={blurSettings["Blur Passes"]} factor={blurSettings.Blur}>
-                    {{ uri: uri }}
-                  </BlurV>
-                </Surface>
-              }
-
-            </View>
-            <View style={styles.tabView}>
-              <View style={[styles.tabItem, selectedTab === "crop" && styles.selectedTab]} >
-                <Text onPress={() => handleState("crop")}>Crop</Text>
+            <View style={styles.container}>
+              <View style={styles.topSection}>
+                <Text style={styles.headingText}>Image editing</Text>
+                <Text style={styles.headingText} onPress={savePicture}>Save</Text>
               </View>
-              <View style={[styles.tabItem, selectedTab === "filter" && styles.selectedTab]} >
-                <Text onPress={() => handleState("filter")}>Filters</Text>
+
+              <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width, maxHeight: 400 }]}>
+
+                { selectedTab === "crop" &&
+                  <Image resizeMode="contain" style={styles.imgContent} source={{ uri: uri }} />
+                }
+
+                { selectedTab === "filter" &&
+                  <Surface style={styles.imgContent} ref={setEditsRef}>
+                    <Colorify colorScale={scaleColors[selectedFilter]} interpolation={"linear"}>
+                      {{ uri: uri }}
+                    </Colorify>
+                  </Surface>
+                }
+
+                { selectedTab === "edit" &&
+                  <Surface style={styles.imgContent} ref={setEditsRef}>
+                    <ImageFilters {...editSettings} width={width} height={width}>
+                      {{ uri: uri }}
+                    </ImageFilters>
+                  </Surface>
+                }
+
+                { selectedTab === "shadow" &&
+                  <Surface style={styles.imgContent} ref={setEditsRef}>
+                    <BlurV map={{ uri: selectedShadow }} passes={blurSettings["Blur Passes"]} factor={blurSettings.Blur}>
+                      {{ uri: uri }}
+                    </BlurV>
+                  </Surface>
+                }
+
               </View>
-              <View style={[styles.tabItem, selectedTab === "edit" && styles.selectedTab]}>
-                <Text onPress={() => handleState("edit")}>Edits</Text>
+              <View style={styles.tabView}>
+                <View style={[styles.tabItem, selectedTab === "crop" && styles.selectedTab]} >
+                  <Text onPress={() => handleState("crop")}>Crop</Text>
+                </View>
+                <View style={[styles.tabItem, selectedTab === "filter" && styles.selectedTab]} >
+                  <Text onPress={() => handleState("filter")}>Filters</Text>
+                </View>
+                <View style={[styles.tabItem, selectedTab === "edit" && styles.selectedTab]}>
+                  <Text onPress={() => handleState("edit")}>Edits</Text>
+                </View>
+                <View style={[styles.tabItem, selectedTab === "shadow" && styles.selectedTab]}>
+                  <Text onPress={() => handleState("shadow")}>Shadows</Text>
+                </View>
               </View>
-              <View style={[styles.tabItem, selectedTab === "shadow" && styles.selectedTab]}>
-                <Text onPress={() => handleState("shadow")}>Shadows</Text>
-              </View>
-            </View>
-            <View style={styles.tabContent}>
-              {selectedTab === "crop" && <View style={styles.cropContainer}>
+              <View style={styles.tabContent}>
+                {selectedTab === "crop" && <View style={styles.cropContainer}>
+                  {
+                    options.ratio.map((option, index) =>
+                      <CropRatioIcon option={option} key={index} selectionColor={selectedCropRatioItem?.label} handlePress={handleCropRatioPress} />
+                    )
+                  }
+                </View>}
                 {
-                  options.ratio.map((option, index) =>
-                    <CropRatioIcon option={option} key={index} selectionColor={selectedCropRatioItem?.label} handlePress={handleCropRatioPress} />
-                  )
+                  selectedTab === "filter" && <View style={styles.filterContainer}><Filter selectFilter={selectFilter} /></View>
                 }
-              </View>}
-              {
-                selectedTab === "filter" && <View style={styles.filterContainer}><Filter selectFilter={selectFilter} /></View>
-              }
-              {selectedTab === "edit" && options.settings.map((filter) => (
-                <Edits
-                  key={filter.name}
-                  name={filter.name}
-                  minimum={filter.minValue}
-                  maximum={filter.maxValue}
-                  value={filter.value}
-                  onChange={handleFilter}
-                />
-              ))}
+                {selectedTab === "edit" && options.settings.map((filter) => (
+                  <Edits
+                    key={filter.name}
+                    name={filter.name}
+                    minimum={filter.minValue}
+                    maximum={filter.maxValue}
+                    value={filter.value}
+                    onChange={handleFilter}
+                  />
+                ))}
 
-              {selectedTab === "shadow" && <View style={styles.filterContainer}>
-                {options.blurShadows.map((shadow) =>
-                  <ShadowBlurs key={shadow.name}
-                    name={shadow.name}
-                    minimum={shadow.minValue}
-                    maximum={shadow.maxValue}
-                    value={shadow.value}
-                    onChange={handleBlur} />)
+                {selectedTab === "shadow" && <View style={styles.filterContainer}>
+                  {options.blurShadows.map((shadow) =>
+                    <ShadowBlurs key={shadow.name}
+                      name={shadow.name}
+                      minimum={shadow.minValue}
+                      maximum={shadow.maxValue}
+                      value={shadow.value}
+                      onChange={handleBlur} />)
 
-                }
-                <Shadows handleBlurImage={handleBlurImage} />
-              </View>}
+                  }
+                  <Shadows handleBlurImage={handleBlurImage} />
+                </View>}
 
+              </View>
+
+              <Button onPress={saveImage}>Apply</Button>
             </View>
-
-            <Button onPress={saveImage}>Apply</Button>
-          </View>
 
         </ScrollView>
       }
@@ -227,11 +257,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFF",
-    padding: 10,
-    height: "100%"
+    padding: 10
   },
   headingText: { fontSize: 14, fontWeight: "bold", lineHeight: 16.41, color: "#1E2022" },
-  imgContainer: { flexDirection: "row", height: 280, width: 370, borderRadius: 10, backgroundColor: "#FCF1D6", justifyContent: "center", alignItems: "center" },
+  imgContainer: { display: "flex", alignSelf: "center" },
+  imgContent: { width: "100%", height: "100%", borderRadius: 10 },
   topSection: { marginVertical: 20, marginHorizontal: 28, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   editImage: { height: "100%", width: "100%", borderRadius: 10 },
   tabView: {

@@ -48,8 +48,6 @@ export const BlurV1D = connectSize(
     <Node
       shader={shaders.blurV1D}
       uniforms={{ t, map, resolution: [width, height], direction }}
-      width={1017}
-      height={770}
     />
   )
 );

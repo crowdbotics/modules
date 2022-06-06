@@ -21,7 +21,5 @@ export const Colorify = ({ children, colorScale, interpolation }) => (
     shader={shaders.colorify}
     uniformsOptions={{ colorScale: { interpolation } }}
     uniforms={{ colorScale, children }}
-    width={1100}
-    height={825}
     />
 );
