@@ -48,6 +48,8 @@ platform(:ios) do
       itc_team_name: team_name
     )
 
+    sh("fastlane", "produce", "disable_services", "--game-center", "ios")
+
     if(File.file?(app_privacy_details))
       puts("app_privacy_details.json exists. Uploading APP Privacy Details to App Store...")
 
