@@ -138,8 +138,8 @@ jobs:
             mv fastlane/test_output/report.junit test-results/xcode/junit.xml
 
       - run:
-          name: Create and push a new beta build to TestFlight
-          command: bundle exec fastlane beta
+          name: Create and push a new $MOBILE_LANE build to App Store
+          command: bundle exec fastlane $MOBILE_LANE
           working_directory: ios
 
       - store_artifacts:
