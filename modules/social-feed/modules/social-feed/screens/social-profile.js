@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { OptionsContext, GlobalOptionsContext } from "@options";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-
+import {userToken, unFollowUser, followUser} from '../api';
 
 const SocialProfileScreen = ({navigation, route}) => {
   const { id } = route.params;
@@ -23,6 +23,7 @@ const SocialProfileScreen = ({navigation, route}) => {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
         }
       }).then((response) => response.json())
         .then((json) => setUserProfile(json))
@@ -32,7 +33,7 @@ const SocialProfileScreen = ({navigation, route}) => {
 
   useEffect(() => {
     get_user_profile();
-  }, []);
+  }, [loading]);
 
   const pressed = (id) => {
     navigation.navigate("PostDetailsScreen", {id: id})
@@ -58,24 +59,55 @@ const SocialProfileScreen = ({navigation, route}) => {
           <View style={styles.textarea}>
             <Image
               style={styles.postIcon}
-              source={require('./assets/posts.png')}
+              source={require('../assets/posts.png')}
             />
             <Text>{userProfile?.posts?.length} posts</Text>
           </View>
-          <TouchableOpacity style={styles.textarea} onPress={()=> {openFollowers()}}>
-            <Image
-              style={styles.postIcon}
-              source={require('./assets/user.png')}
-            />
-            <Text>{userProfile?.followers} Followers</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.textarea} onPress={()=> {openFollowing()}}>
-            <Image
-              style={styles.followingIcon}
-              source={require('./assets/user.png')}
-            />
-            <Text style={styles.followingText}>{userProfile?.following} Following</Text>
-          </TouchableOpacity>
+          {userProfile?.is_owner && (
+            <>
+              <TouchableOpacity style={styles.textarea} onPress={()=> {openFollowers()}}>
+                <Image
+                  style={styles.postIcon}
+                  source={require('../assets/user.png')}
+                />
+                <Text>{userProfile?.followers} Followers</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.textarea} onPress={()=> {openFollowing()}}>
+                <Image
+                  style={styles.followingIcon}
+                  source={require('../assets/user.png')}
+                />
+                <Text style={styles.followingText}>{userProfile?.following} Following</Text>
+              </TouchableOpacity>
+            </>
+          )}
+          {!userProfile?.is_owner && (
+            <>
+              {userProfile?.i_follow ? (
+                <TouchableOpacity style={styles.textarea} onPress={()=> {unFollowUser(userProfile.id, setLoading)}}>
+                  <Image
+                    style={styles.postIcon}
+                    source={require('../assets/user.png')}
+                  />
+                  <Text>UnFollow</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity style={styles.textarea} onPress={()=> {followUser(userProfile.id, setLoading)}}>
+                  <Image
+                    style={styles.followingIcon}
+                    source={require('../assets/user.png')}
+                  />
+                  <Text style={styles.followingText}>Follow</Text>
+                </TouchableOpacity>
+              )}
+              
+
+              
+            </>
+          )}
+          
+          
         </View>
 
         <View style={styles.pt30}>
@@ -222,7 +254,7 @@ const Post = props => {
     >
       <Image
         style={postStyles.editIcon}
-        source={props?.data?.media?.[0]?.image ? {uri: props?.data?.media?.[0]?.image}  : require('./assets/edit.png')}
+        source={props?.data?.media?.[0]?.image ? {uri: props?.data?.media?.[0]?.image}  : require('../assets/edit.png')}
       />
     </TouchableHighlight>
   );
@@ -253,7 +285,7 @@ const ProfileImage = props => {
         <Image
           style={imageStyles.image}
           resizeMode="contain"
-          source={require('./assets/user.png')}
+          source={require('../assets/user.png')}
         />
       </View>
     </TouchableHighlight>

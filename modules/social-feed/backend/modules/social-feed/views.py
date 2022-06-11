@@ -7,8 +7,11 @@ from rest_framework.pagination import PageNumberPagination
 from yaml import serialize
 from rest_framework.parsers import FileUploadParser
 from home.api.v1.serializers import UserSerializer
+from django.contrib.auth import get_user_model
 
-from .models import Post, PostMedia, ReportPost, FollowRequest, PostComment, LikeComment, UpvotePost, DownvotePost, Chat
+User =  get_user_model()
+
+from .models import Post, Follow, ReportPost, FollowRequest, PostComment, LikeComment, UpvotePost, DownvotePost, Chat
 from .serializers import (
     ChatSerializer,
     DownvotePostSerializer,
@@ -79,7 +82,7 @@ class GetProfile(APIView):
         from django.contrib.auth import get_user_model
         User = get_user_model()
         user = User.objects.get(pk=pk)
-        serializer = ProfileSerializer(user)
+        serializer = ProfileSerializer(user, context={'request': request})
         return Response(serializer.data)
 
 
@@ -213,4 +216,31 @@ class DeleteCommentView(APIView):
     def post(self, request):
         comment_id = request.data.get('comment_id')
         PostComment.objects.filter(id=comment_id).delete()
+        return Response(status=200)
+
+
+class FollowView(APIView):
+    authentication_classes = (
+        SessionAuthentication,
+        TokenAuthentication,
+    )
+
+    def post(self, request, pk):
+        try:
+            user = User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response(status=404)
+        Follow.objects.get_or_create(user=request.user, follow=user)
+        return Response(status=200)
+
+
+class UnFollowView(APIView):
+    authentication_classes = (
+        SessionAuthentication,
+        TokenAuthentication,
+    )
+
+    def post(self, request, pk):
+        user = request.user
+        Follow.objects.filter(user=user, follow_id=pk).delete()
         return Response(status=200)

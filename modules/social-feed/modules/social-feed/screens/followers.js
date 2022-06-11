@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Text, StyleSheet, View, TextInput, Image, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {getFollowers} from '../api';
+import {getFollowers, followUser} from '../api';
 import { GlobalOptionsContext } from "@options";
 
 
@@ -18,7 +18,7 @@ const FollowersList = (params) => {
       setFollowers(data?.results);
       setAllFollowers(data?.results);
     })
-  }, []);
+  }, [loading]);
   const alpha = Array.from(Array(26)).map((e, i) => i + 65);
   const alphabets = alpha.map((x) => String.fromCharCode(x));
 
@@ -40,7 +40,7 @@ const FollowersList = (params) => {
             <View style={{ width: "90%" }}>
               <Input placeholder="Enter" setValue={setSearchQuery}/>
             </View>
-            <Image source={require("./assets/search.png")}/>
+            <Image source={require("../assets/search.png")}/>
           </View>
         </View>
         <View>
@@ -57,7 +57,8 @@ const FollowersList = (params) => {
               <View>
                 {followers.filter((follower) => follower.name.charAt(0).toUpperCase() === alpha).map((follower) => {
                   return (
-                    <Follower name={follower.name} bgcolor={follower.bgcolor} follow={follower.follow} />
+                    <Follower id={follower.id} name={follower.name} bgcolor={follower.bgcolor} 
+                    follow={follower.follow} setLoading={setLoading}/>
                   )
                 }
                 )}
@@ -104,17 +105,20 @@ const styles = StyleSheet.create({
 export default FollowersList;
 
 const Follower = (props) => {
+  const { id, name, bgcolor, follow, setLoading } = props;
   return (
     <View style={FollowerStyles.follower}>
       <View style={FollowerStyles.main}>
         <View style={[FollowerStyles.image, { backgroundColor: props.bgcolor }]}>
-          <Image source={require("./assets/edit.png")}/>
+          <Image source={require("../assets/edit.png")}/>
         </View>
-        <Text>{props.name}</Text>
+        <Text>{name}</Text>
       </View>
-      <TouchableOpacity>
-      {!props.follow && <Text>Follow Back</Text>}
+      {!follow && 
+      <TouchableOpacity onPress={()=>{followUser(id, setLoading)}}>
+        <Text>Follow Back</Text>
       </TouchableOpacity>
+      }
     </View>
   );
 };

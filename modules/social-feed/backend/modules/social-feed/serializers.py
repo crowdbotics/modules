@@ -157,9 +157,14 @@ class PostDetailSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    """
+    User Profile Serializer
+    """
     posts = serializers.SerializerMethodField()
     followers = serializers.SerializerMethodField()
     following = serializers.SerializerMethodField()
+    i_follow = serializers.SerializerMethodField()
+    is_owner = serializers.SerializerMethodField()
 
     def get_following(self, obj):
         return obj.user_following.count()
@@ -170,9 +175,31 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_posts(self, obj):
         return PostSerializer(obj.post_user, many=True).data
 
+    def get_i_follow(self, obj):
+        try:
+            user = self.context['request'].user
+            if user.is_authenticated:
+                return obj.user_followers.filter(user=user).exists()
+            return False
+        except KeyError:
+            return False
+    
+    def get_is_owner(self, obj):
+        try:
+            user = self.context['request'].user
+            if user.is_authenticated:
+                return obj == user
+            return False
+        except KeyError:
+            return False
+
+
     class Meta:
         model = get_user_model()
-        fields = "__all__"
+        fields = (
+            "id", "username", "first_name", "last_name",
+             "email",  "posts", "followers", "following", "i_follow", "is_owner"
+        )
 
 class FollowingSerializer(serializers.ModelSerializer):
     follow = serializers.SerializerMethodField()

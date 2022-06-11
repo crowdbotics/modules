@@ -1,6 +1,8 @@
+import random
 from django.conf import settings
 from django.db import models
-
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Follow(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_following')
@@ -50,19 +52,25 @@ class PostMedia(models.Model):
         auto_now_add=True,
     )
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-@receiver(post_save, sender=PostMedia, dispatch_uid="post_media_post_save")
+
+@receiver(post_save, sender=PostMedia)
 def get_bg(sender, instance, **kwargs):
     from PIL import Image
-    im = Image.open(instance.image)
-    from collections import defaultdict
-    by_color = defaultdict(int)
-    for pixel in im.getdata():
-        by_color[pixel] += 1
-
-    instance.background = by_color.__len__()
-    instance.save()
+    if not getattr(instance, 'background', False):
+        width, height = 150,150
+        image = Image.open(instance.image)
+        image = image.resize((width, height),resample = 0)
+        #Get colors from image object
+        pixels = image.getcolors(width * height)
+        #Sort them by count number(first element of tuple)
+        sorted_pixels = sorted(pixels, key=lambda t: t[0])
+        #Get the most frequent color
+        dominant_color = sorted_pixels[-1][1]
+        # return dominant_color
+        r = lambda: random.randint(0,255)
+        # instance.background = '#80%02X%02X%02X' % (r(),r(),r())
+        instance.background = 'rgb'+str(dominant_color)
+        instance.save()
 
 
 class ReportPost(models.Model):

@@ -14,6 +14,7 @@ import { OptionsContext, GlobalOptionsContext } from "@options";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import ActionSheet from "react-native-actionsheet";
 import { pickFromCamera, pickFromGallery, uploadImage } from "../../camera/utils";
+import {userToken} from '../api';
 
 const CreatePostScreen = ({navigation, route}) => {
 
@@ -35,7 +36,7 @@ const CreatePostScreen = ({navigation, route}) => {
   const [caption, setCaption] = useState("");
   const ImagePickerOptions = ["Take Photo", "Choose from Gallery", "Cancel"];
   console.log("sdas", images);
-
+  
   const createPost = (res) => {
     setLoading(true);
     const data = new FormData();
@@ -51,7 +52,7 @@ const CreatePostScreen = ({navigation, route}) => {
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Authorization': 'Token cf1b4cf39330a955ba203ddbfefa2e6707006f64'
+        'Authorization': `Token ${userToken}`
       },
       body: data
     }).then((response) => response.json())

@@ -2,7 +2,8 @@ import React, { useContext, useState, useEffect} from "react"
 import { View, ScrollView, Image, Text, StyleSheet, FlatList, Touchable } from "react-native"
 import { OptionsContext, GlobalOptionsContext } from "@options";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { likePost, unLikePost } from '../api';
+import { likePost, unLikePost, userToken } from '../api';
+
 
 const SocialFeedScreen = (props) => {
   const { navigation, params } = props;
@@ -16,7 +17,7 @@ const SocialFeedScreen = (props) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Token cf1b4cf39330a955ba203ddbfefa2e6707006f64'
+        'Authorization': `Token ${userToken}`
       }
     })
     .then((response) => response.json())
@@ -39,12 +40,12 @@ const SocialFeedScreen = (props) => {
           {/* search bar */}
           <View style={styles.searchBar}>
             <TextInput style={styles.searchBarInput} placeholder="Search" />
-            <Image source={require('./assets/search.png')} style={styles.searchIcon} />
+            <Image source={require('../assets/search.png')} style={styles.searchIcon} />
           </View>
           {/* end search bar */}
           <TouchableOpacity style={styles.headerContainer} onPress={()=>{navigation.navigate('Create Post')}}>
             <Image
-              source={require("./assets/plus.png")}
+              source={require("../assets/plus.png")}
               style={styles.headerImage}
             />
           </TouchableOpacity>
@@ -53,7 +54,6 @@ const SocialFeedScreen = (props) => {
           data={posts}
           renderItem={({ item }) => (
             <PostComponent
-              bgColor={item?.bgColor ? item.bgColor : "#acacac"}
               key={item.id}
               post = {item}
               nav={navigation}
@@ -104,23 +104,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const PostComponent = ({ post, nav, setLoading }) => {
+const PostComponent = ({post, nav, setLoading }) => {
   const gOptions = useContext(GlobalOptionsContext);
   const BASE_URL = gOptions.url
-  const {color, id, caption, upvotes, comments, comments_count, media, user, liked } = post;
+  const {id, caption, upvotes, comments, comments_count, media, user, liked } = post;
   return (
     <TouchableOpacity style={{margin: 10}} onPress={()=>{nav.navigate("PostDetailsScreen", {id: id})}}>
       <TouchableOpacity style={userPostStyles.usernameContainer} onPress={()=>{nav.navigate("SocialProfileScreen", {id: user?.id})}}>
         <View style={userPostStyles.userImageContainer}>
           <Image
-            source={user?.image ? {uri: user.image} : require("./assets/user.png")}
+            source={user?.image ? {uri: user.image} : require("../assets/user.png")}
             style={userPostStyles.userImage}
           />
         </View>
         <Text style={userPostStyles.userText}>{user?.name}</Text>
       </TouchableOpacity>
       <View
-        style={[userPostStyles.userPostImage, { backgroundColor: color ? color : "#acacac" }]}
+        style={[userPostStyles.userPostImage, 
+          { backgroundColor: media?.[0]?.background ? 'rgb'+media?.[0]?.background : "#acacac" }]}
       >
         <Image
           source={{ uri: media?.[0]?.image }}
@@ -138,19 +139,19 @@ const PostComponent = ({ post, nav, setLoading }) => {
             }}
           >
             <Image
-              source={liked ? require('./assets/unlike.png'): require('./assets/like.png')}
+              source={liked ? require('../assets/unlike.png'): require('../assets/like.png')}
               style={userPostStyles.imageIcons}
             />
             <Text style={userPostStyles.mh10}>{upvotes}</Text>
           </TouchableOpacity>
           <Image
-            source={require("./assets/comment.png")}
+            source={require("../assets/comment.png")}
             style={userPostStyles.imageIcons}
           />
           <Text style={userPostStyles.mh10}>{comments_count}</Text>
         </View>
         <Image
-          source={require("./assets/group.png")}
+          source={require("../assets/group.png")}
           style={[userPostStyles.imageIcons, userPostStyles.mr10]}
         />
       </View>

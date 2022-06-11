@@ -22,6 +22,8 @@ urlpatterns = [
     path("profile/<int:pk>/", GetProfile.as_view()),
     path("my-followers/", MyFollowersView.as_view()),
     path("my-following/", MyFollowingView.as_view()),
+    path("follow/<int:pk>/", FollowView.as_view()),
+    path("unfollow/<int:pk>/", UnFollowView.as_view()),
     path("like-post/", LikePostView.as_view()),
     path("unlike-post/", UnlikePostView.as_view()),
     path("like-comment/", LikeCommentView.as_view()),
