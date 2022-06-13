@@ -213,16 +213,18 @@ const SHADOWS = [
 
 const blurShadows = [
   {
+    id: 1,
     name: "Blur",
     value: 3,
     minValue: 0,
     maxValue: 10.0
   },
   {
+    id: 2,
     name: "Blur Passes",
     value: 6,
-    minValue: 0,
-    maxValue: 15
+    minValue: 1,
+    maxValue: 15.0
   }
 
 ];

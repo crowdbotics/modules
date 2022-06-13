@@ -13,7 +13,9 @@ const ShadowBlurs = (props) => {
   }, []);
 
   const onValueChange = (value) => {
-    if (isInitialize) { props.onChange(props.name, value); }
+    if (isInitialize) {
+      props.onChange(props.name, value);
+    }
   };
 
   return (

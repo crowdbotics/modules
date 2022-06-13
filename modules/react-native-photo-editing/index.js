@@ -13,7 +13,6 @@ import Button from "./components/Button";
 // @ts-ignore
 import { launchImageLibrary } from "react-native-image-picker";
 // @ts-ignore
-import sample from "./assets/sample.jpg";
 import Filter from "./components/Filters";
 import ImagePicker from "./components/ImagePicker";
 import Shadows from "./components/Shadows";
@@ -26,7 +25,7 @@ const PhotoEditing = () => {
   const [editsRef, setEditsRef] = useState(null);
   const width = Dimensions.get("window").width;
   const [imageContainerHW, setImageContainerHW] = useState({ w: 0, h: 0 });
-  const [uri, setUri] = useState(Image.resolveAssetSource(sample).uri);
+  const [uri, setUri] = useState(null);
   const [selectedCropRatioItem, setSelectedCropRatioItem] = useState(null);
   const [selectedTab, setSelectedTab] = useState("crop");
   const [imageSelected, setImageSelected] = useState(false);
@@ -135,15 +134,28 @@ const PhotoEditing = () => {
     });
   };
 
+  const cancelEditing = () => {
+    setImageSelected(false);
+  };
+
   const savePicture = async () => {
     setIsLoading(true);
     if (Platform.OS === "android" && !(await hasAndroidPermission())) {
       return;
     }
-
     await CameraRoll.save(uri, { type: "photo" });
     setIsLoading(false);
-    Alert.alert("Info", "Photo saved in Gallery.");
+    Alert.alert(
+      "info",
+      "Photo saved in Gallery.",
+      [
+        {
+          text: "Ok",
+          onPress: cancelEditing
+        }
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -155,7 +167,11 @@ const PhotoEditing = () => {
             <View style={styles.container}>
               <View style={styles.topSection}>
                 <Text style={styles.headingText}>Image editing</Text>
+                <View style={styles.saveContainer}>
                 <Text style={styles.headingText} onPress={savePicture}>Save</Text>
+                <Text style={styles.cancelBtn} onPress={cancelEditing}>X</Text>
+                </View>
+
               </View>
 
               <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width }]}>
@@ -316,7 +332,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18
   },
-  cropView: {}
+  cancelBtn: { fontSize: 14, fontWeight: "bold", marginLeft: 20, backgroundColor: "#000", color: "#fff", paddingHorizontal: 8, paddingVertical: 3, borderRadius: 15 },
+  saveContainer: { flexDirection: "row", justifyContent: "center", alignItems: "center" }
 });
 
 export default {
