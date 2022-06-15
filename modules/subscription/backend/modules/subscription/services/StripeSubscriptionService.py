@@ -1,5 +1,4 @@
 import json
-from tkinter import N
 import stripe
 import environ
 
