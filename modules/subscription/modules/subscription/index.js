@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import { Text, View, FlatList, TouchableOpacity, Alert, Modal, Pressable, ActivityIndicator } from 'react-native';
-import { OptionsContext, GlobalOptionsContext } from "@options";
-import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
-import { fetchPlans , fetchPaymentSheetParams, cancelPlan} from "./api";
+import React, { useEffect, useState, useContext, useRef } from "react";
+import { Text, View, FlatList, TouchableOpacity, ActivityIndicator } from "react-native";
+import { OptionsContext } from "@options";
+import { StripeProvider, useStripe } from "@stripe/stripe-react-native";
+import { fetchPlans, fetchPaymentSheetParams, cancelPlan } from "./api";
 
-const Subscription = (params) => {
+const Subscription = () => {
   const options = useContext(OptionsContext);
   const { styles, localOptions } = options;
   const clientSecret = global.stripeSecretKey;
@@ -15,98 +15,95 @@ const Subscription = (params) => {
   const [preSelectedPlan, setPreSelectedPlan] = useState("");
   const [loading, setLoading] = useState(false);
   const [cancelLoading, setCancelLoading] = useState(false);
-  let flatListRef = useRef();
+  const flatListRef = useRef();
   const [subscribeBtn, setSubscribeBtn] = useState({
-      isActive: false,
-      text: ""
-  })
-  
+    isActive: false,
+    text: ""
+  });
 
   // More info on all the options is below in the API Reference... just some common use cases shown here
-  const subscribe = async () =>{
-    setLoading(true)
-    const {paymentIntent, ephemeralKey, customer} = await fetchPaymentSheetParams(selectedPlan)
-    let { error } = await initPaymentSheet({
+  const subscribe = async () => {
+    setLoading(true);
+    const { paymentIntent, ephemeralKey, customer } = await fetchPaymentSheetParams(selectedPlan);
+    await initPaymentSheet({
       customerId: customer,
       customerEphemeralKeySecret: ephemeralKey,
       paymentIntentClientSecret: paymentIntent,
       merchantDisplayName: "SHahraiz",
-      merchantCountryCode:  "US",
-      testEnv: __DEV__, // use test environment
+      merchantCountryCode: "US",
+      testEnv: __DEV__ // use test environment
     });
 
-    let result = await presentPaymentSheet({ clientSecret });
-    setLoading(false)
-    setTimeout(()=>{
-      setPreSelectedPlan(null)
-      refreshPlans()
-    }, 2000)
+    await presentPaymentSheet({ clientSecret });
+    setLoading(false);
+    setTimeout(() => {
+      setPreSelectedPlan(null);
+      refreshPlans();
+    }, 2000);
+  };
 
-  }
-
-  const refreshPlans = async() =>{
+  const refreshPlans = async () => {
     fetchPlans().then(response => response.json())
-    .then((json) => {
-      const { status, result } = json;
-      setPlans(result);
-      result.forEach((obj, i)=>{
-        if (obj.is_subscribed){
-          setSelectedPlan(obj.price_id)
-          setPreSelectedPlan(obj.price_id)
-          planSelected(obj)
-          setTimeout(()=>{
-            flatListRef.current.scrollToIndex({animated:true, index:i, viewPosition:0.5})
-          }, 200)
-        }
-      })
-    });
-  }
+      .then((json) => {
+        const { result } = json;
+        setPlans(result);
+        result.forEach((obj, i) => {
+          if (obj.is_subscribed) {
+            setSelectedPlan(obj.price_id);
+            setPreSelectedPlan(obj.price_id);
+            planSelected(obj);
+            setTimeout(() => {
+              flatListRef.current.scrollToIndex({ animated: true, index: i, viewPosition: 0.5 });
+            }, 200);
+          }
+        });
+      });
+  };
   useEffect(async () => {
-    await refreshPlans()
-  }, [preSelectedPlan])
+    await refreshPlans();
+  }, [preSelectedPlan]);
 
   const planSelected = (item) => {
-      setSelectedPlan(item.price_id)
-      let text = subscribeBtn.text
-      let isActive = subscribeBtn.isActive
-      if (item.price_id === preSelectedPlan){
-        text = "Already Subscribed"
-        isActive =  false
-      }else{
-        if (preSelectedPlan){
-          text = "Change Plan"
-        }else{
-          text = "Subscribe"
-        }
-        
-        isActive =  true
+    setSelectedPlan(item.price_id);
+    let text = subscribeBtn.text;
+    let isActive = subscribeBtn.isActive;
+    if (item.price_id === preSelectedPlan) {
+      text = "Already Subscribed";
+      isActive = false;
+    } else {
+      if (preSelectedPlan) {
+        text = "Change Plan";
+      } else {
+        text = "Subscribe";
       }
-      setSubscribeBtn({isActive,text})
-      
-  }
 
-  const cancelSub = async () =>{
-    setCancelLoading(true)
-    await cancelPlan()
-    setTimeout(()=>{
-      setPreSelectedPlan("")
-      refreshPlans()
-    }, 2000)
-    setCancelLoading(false)
-  }
+      isActive = true;
+    }
+    setSubscribeBtn({ isActive, text });
+  };
+
+  const cancelSub = async () => {
+    setCancelLoading(true);
+    await cancelPlan();
+    setTimeout(() => {
+      setPreSelectedPlan("");
+      refreshPlans();
+    }, 2000);
+    setCancelLoading(false);
+  };
   const renderItem = ({ item }) => {
     if (!item) return;
     return (
-        <TouchableOpacity style={[styles.listItemContainer, selectedPlan == item.price_id && styles.selected, {justifyContent: "space-between"}]} 
-            onPress={()=>{planSelected(item)}}>
-            {preSelectedPlan == item.price_id && <View style={styles.selectedPlanTag}><Text style={{color: 'white'}}>Current Plan</Text></View>}
-            <Text style={{fontSize: 24, fontWeight: "600"}}>{item.name}</Text>
+        <TouchableOpacity style={[styles.listItemContainer, selectedPlan === item.price_id && styles.selected, { justifyContent: "space-between" }]}
+            onPress={() => { planSelected(item); }}>
+            {preSelectedPlan === item.price_id && <View style={styles.selectedPlanTag}><Text style={{ color: "white" }}>Current Plan</Text></View>}
+            <Text style={{ fontSize: 24, fontWeight: "600" }}>{item.name}</Text>
             <Text>{item.description}</Text>
             <Text><Text style={styles.bold}>Price ID:</Text> {item.price_id}</Text>
-            <Text style={{fontSize: 24, fontWeight: "600", alignSelf: 'flex-end', alignContent: "flex-end"}}>${item.price}/{item.interval}</Text>
+            <Text style={{ fontSize: 24, fontWeight: "600", alignSelf: "flex-end", alignContent: "flex-end" }}>${item.price}/{item.interval}</Text>
         </TouchableOpacity>
-    )
-}
+    );
+  };
 
   return (
       <View>
@@ -115,9 +112,9 @@ const Subscription = (params) => {
           merchantIdentifier={merchantIdentifier}
         >
           <View style={styles.headerContainer}>
-              <Text style={{fontSize: 20}}>Choose a</Text>
-              <Text style={{fontSize: 54}}>Subscription</Text>
-              <Text style={{fontSize: 20}}>Plan</Text>
+              <Text style={{ fontSize: 20 }}>Choose a</Text>
+              <Text style={{ fontSize: 54 }}>Subscription</Text>
+              <Text style={{ fontSize: 20 }}>Plan</Text>
           </View>
           <FlatList
             horizontal={true}
@@ -130,11 +127,11 @@ const Subscription = (params) => {
             showsHorizontalScrollIndicator={false}
             ref={flatListRef}
         />
-        {subscribeBtn.isActive &&<TouchableOpacity onPress={()=> {subscribeBtn.isActive && subscribe()}} style={[styles.button]}>
-            {loading? <ActivityIndicator></ActivityIndicator>: <Text style={styles.buttonText}>{subscribeBtn.text}</Text>}
+        {subscribeBtn.isActive && <TouchableOpacity onPress={() => { subscribeBtn.isActive && subscribe(); }} style={[styles.button]}>
+            {loading ? <ActivityIndicator></ActivityIndicator> : <Text style={styles.buttonText}>{subscribeBtn.text}</Text>}
         </TouchableOpacity>}
-        {preSelectedPlan !== "" && <TouchableOpacity onPress={()=> {cancelSub()}} style={[styles.button, {backgroundColor: '#DF202C'}]}>
-          {cancelLoading? <ActivityIndicator></ActivityIndicator>: <Text style={styles.buttonText}>Cancel Subscription</Text>}
+        {preSelectedPlan !== "" && <TouchableOpacity onPress={() => { cancelSub(); }} style={[styles.button, { backgroundColor: "#DF202C" }]}>
+          {cancelLoading ? <ActivityIndicator></ActivityIndicator> : <Text style={styles.buttonText}>Cancel Subscription</Text>}
         </TouchableOpacity>}
         </StripeProvider>
       </View>
@@ -144,4 +141,4 @@ const Subscription = (params) => {
 export default {
   title: "Subscription",
   navigator: Subscription
-}
+};
