@@ -17,18 +17,22 @@ const Signature = () => {
               body,html {
               width: ${350}px; height: ${150}px;}`;
 
-  const handleOK = async (signature) => {
+  const handleOK = (signature) => {
     setIsLoading(true);
-    await saveSignature({ image: signature });
-    handleClear();
-    setIsLoading(false);
+    saveSignature({ image: signature }).then((res) => {
+      setIsLoading(false);
+      handleClear();
+    }).catch((error) => {
+      setIsLoading(false);
+      console.log("error", error);
+    });
   };
 
   const handleClear = () => {
     ref.current.clearSignature();
   };
   const handleEmpty = () => {
-    console.log("Empty");
+    console.log("Empty! No signature is detected");
   };
   const handleEnd = () => {
     ref.current.readSignature();
@@ -58,7 +62,6 @@ const Signature = () => {
       <View style={styles.btn}>
         <Button onPress={handleEnd}>Upload</Button>
       </View>
-
     </View>
   );
 };
