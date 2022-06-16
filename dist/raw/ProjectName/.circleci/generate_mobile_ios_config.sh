@@ -31,24 +31,10 @@ jobs:
           paths:
             - node_modules
 
-      #- run:
-      #    name: jest tests
-      #    command: |
-      #      mkdir -p test-results/jest
-      #      yarn run test
-      #    environment:
-      #      JEST_JUNIT_OUTPUT: test-results/jest/junit.xml
-
       - persist_to_workspace:
           root: ~/build
           paths:
             - node_modules
-
-      #- store_test_results:
-      #    path: test-results
-
-      #- store_artifacts:
-      #    path: test-results
 
       - run:
           name: Webhook Failed
@@ -151,23 +137,9 @@ jobs:
             mv fastlane/report.xml test-results/fastlane
             mv fastlane/test_output/report.junit test-results/xcode/junit.xml
 
-      #- store_test_results:
-      #    path: ios/test-results
-
-      #- store_artifacts:
-      #    path: ios/test-results
-
-      # - run:
-      #     name: Build and upload to appetize.io
-      #     command: bundle exec fastlane deploy_appetize
-      #     working_directory: ios
-
-      # - store_artifacts:
-      #     path: /tmp/fastlane_build/app.zip
-
       - run:
-          name: Create a new beta build for TestFlight
-          command: bundle exec fastlane create_build
+          name: Create and push a new $MOBILE_LANE build to App Store
+          command: bundle exec fastlane $MOBILE_LANE
           working_directory: ios
 
       - store_artifacts:
