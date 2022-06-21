@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Text, View, ScrollView, Switch, TouchableOpacity } from "react-native";
 // @ts-ignore
-import analytics, { firebase } from "@react-native-firebase/analytics";
-// @ts-ignore
 import { OptionsContext } from "@options";
 
 const App = () => {
   const options = useContext(OptionsContext);
   const {
-    styles, logBeginCheckout,
+    styles, setAnalyticsCollectionEnabled,
+    getAppInstanceId,
+    logBeginCheckout,
     logAddPaymentInfo,
     logAddShippingInfo,
     logAddToCart,
@@ -55,18 +55,313 @@ const App = () => {
   const [isEnabled, setIsEnabled] = useState(true);
 
   const trackingToggle = async () => {
-    await firebase.analytics().setAnalyticsCollectionEnabled(!isEnabled);
+    await setAnalyticsCollectionEnabled(!isEnabled);
     setIsEnabled(!isEnabled);
   };
 
   useEffect(() => {
     const appId = async () => {
-      const appInstanceId = await analytics().getAppInstanceId();
+      await logAppOpen();
+      const appInstanceId = await getAppInstanceId();
       setAppId(appInstanceId);
-      await analytics().logAppOpen();
     };
     appId();
   }, []);
+
+  const handlelogLogin = async () => {
+    await logLogin({
+      method: "facebook.com"
+
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogSignUp = async () => {
+    await logSignUp({
+      method: "email"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogAddToCart = async () => {
+    await logAddToCart({
+      currency: "usd",
+      items: [],
+      value: 1
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogAddToWishlist = async () => {
+    await logAddToWishlist({
+      currency: "usd",
+      items: [],
+      value: 1
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogAddShippingInfo = async () => {
+    await logAddShippingInfo({
+      shipping_tier: "clothing",
+      coupon: "co_1234567",
+      currency: "usd",
+      items: [],
+      value: 1
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogCampaignDetails = async () => {
+    await logCampaignDetails({
+      aclid: "clothing",
+      campaign: "promotion",
+      content: "clothing",
+      cp1: "abcd",
+      medium: "email",
+      source: "newsletter",
+      term: "abcd"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogEarnVirtualCurrency = async () => {
+    await logEarnVirtualCurrency({
+      virtual_currency_name: "usd",
+      value: 3
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogGenerateLead = async () => {
+    await logGenerateLead({
+      currency: "usd",
+      value: 2
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogJoinGroup = async () => {
+    await logJoinGroup({
+      group_id: "1234567"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogEvent = async () => {
+    await logEvent("basket", {
+      id: 3745092,
+      item: "mens grey t-shirt",
+      description: ["round neck", "long sleeved"],
+      size: "L"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogLevelEnd = async () => {
+    await logLevelEnd({
+      level: 2,
+      success: "abcd"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogLevelStart = async () => {
+    await logLevelStart({
+      level: 2
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogLevelUp = async () => {
+    await logLevelUp({
+      character: "ninja",
+      level: 2
+    }).catch((err) => console.log("error: ", err));
+  };
+  const handlelogPostScore = async () => {
+    await logPostScore({
+      character: "ninja",
+      level: 2,
+      score: 60
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogPurchase = async () => {
+    await logPurchase({
+      affiliation: "clothing",
+      coupon: "co_1234567",
+      currency: "usd",
+      tax: 32,
+      items: [],
+      shipping: 2,
+      transaction_id: "trans_1234567",
+      value: 1
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogRemoveFromCart = async () => {
+    await logRemoveFromCart({
+      currency: "usd",
+      items: [],
+      value: 32
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogScreenView = async () => {
+    await logScreenView({
+      screen_class: "gentsLogs",
+      screen_name: "Gents t-shirts"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogRefund = async () => {
+    await logRefund({
+      affiliation: "clothing",
+      coupon: "ref_2dsg323",
+      currency: "usd",
+      tax: 32,
+      items: [],
+      shipping: 2,
+      transaction_id: "df24234",
+      value: 1
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogSearch = async () => {
+    await logSearch({
+      destination: "new york",
+      end_date: "2022-02-04",
+      number_of_nights: 3,
+      number_of_passengers: 32,
+      number_of_rooms: 6,
+      origin: "new york",
+      search_term: "df24234",
+      start_date: "2022-02-03",
+      travel_class: "business"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogSelectContent = async () => {
+    await logSelectContent({
+      content_type: "shirts",
+      item_id: "abcd6568"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogSelectItem = async () => {
+    await logSelectItem({
+      content_type: "shirts",
+      item_list_id: "abcd6568",
+      item_list_name: "gents_shirt",
+      items: []
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogSelectPromotion = async () => {
+    await logSelectPromotion({
+      creative_name: "clothing",
+      creative_slot: "clothing",
+      items: [],
+      location_id: "nef24234",
+      promotion_id: "df24234",
+      promotion_name: "travel_class"
+    }).catch((err) => console.log("error: ", err));
+  };
+  const handlelogAddPaymentInfo = async () => {
+    await logAddPaymentInfo({
+      payment_type: "clothing",
+      coupon: "co_1234567",
+      currency: "usd",
+      items: [],
+      value: 1
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlesetUserId = async () => {
+    await setUserId("user_1234567").catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogUnlockAchievement = async () => {
+    await logUnlockAchievement({
+      achievement_id: "ac_32432432"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogViewCart = async () => {
+    await logViewCart({
+      currency: "usd",
+      items: [],
+      value: 32
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogViewItem = async () => {
+    await logViewItem({
+      currency: "aud",
+      value: 2,
+      items: []
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogViewItemList = async () => {
+    await logViewItemList({
+      item_list_id: "gs_fdf242345",
+      item_list_name: "gents_shirt",
+      items: []
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogViewPromotion = async () => {
+    await logViewPromotion({
+      creative_name: "clothing",
+      creative_slot: "clothing",
+      items: [],
+      location_id: "nef24234",
+      promotion_id: "df24234",
+      promotion_name: "travel_class"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogBeginCheckout = async () => {
+    await logBeginCheckout({
+      coupon: "co_1234567",
+      currency: "usd",
+      items: [],
+      value: 1
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogViewSearchResults = async () => {
+    await logViewSearchResults({
+      search_term: "sleeves"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogShare = async () => {
+    await logShare({
+      content_type: "clothing",
+      item_id: "abcd",
+      method: "facebook"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlesetUserProperty = async () => {
+    await setUserProperty("name", "john").catch((err) => console.log("error: ", err));
+  };
+
+  const handlesetUserProperties = async () => {
+    await setUserProperties({
+      name: "john",
+      value: "68568"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlesetSessionTimeoutDuration = async () => {
+    await setSessionTimeoutDuration(5000).catch((err) => console.log("error: ", err));
+  };
+
+  const handlelogSpendVirtualCurrency = async () => {
+    await logSpendVirtualCurrency({
+      item_name: "T-Shirt",
+      value: 56,
+      virtual_currency_name: "usd"
+    }).catch((err) => console.log("error: ", err));
+  };
+
+  const handlesetDefaultEventParameters = async () => {
+    await setDefaultEventParameters({
+      event_name: "search"
+    }).catch((err) => console.log("error: ", err));
+  };
 
   return (
     <View style={styles.container}>
@@ -87,30 +382,18 @@ const App = () => {
         </View>
         <View style={styles.sectionContainer}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logLogin({
-              method: "facebook.com"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogLogin} style={styles.button}>
               <Text style={styles.text}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logSignUp({
-              method: "email"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogSignUp} style={styles.button}>
               <Text style={styles.text}>SignUp</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logAddToCart({
-              currency: "usd",
-              items: [],
-              value: 1
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogAddToCart} style={styles.button}>
               <Text style={styles.text}>AddToCart</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logAddToWishlist({
-              currency: "usd",
-              items: [],
-              value: 1
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogAddToWishlist} style={styles.button}>
               <Text style={styles.text}>AddToWishlist</Text>
             </TouchableOpacity>
           </View>
@@ -118,179 +401,84 @@ const App = () => {
             <TouchableOpacity onPress={async () => logAppOpen()} style={styles.button}>
               <Text style={styles.text}>AppOpen</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logAddShippingInfo({
-              shipping_tier: "clothing",
-              coupon: "co_1234567",
-              currency: "usd",
-              items: [],
-              value: 1
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogAddShippingInfo} style={styles.button}>
               <Text style={styles.text}>AddShippingInfo</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logCampaignDetails({
-              aclid: "clothing",
-              campaign: "promotion",
-              content: "clothing",
-              cp1: "abcd",
-              medium: "email",
-              source: "newsletter",
-              term: "abcd"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogCampaignDetails} style={styles.button}>
               <Text style={styles.text}>CampaignDetails</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logEarnVirtualCurrency({
-              virtual_currency_name: "usd",
-              value: 3
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogEarnVirtualCurrency} style={styles.button}>
               <Text style={styles.text}>EarnVirtualCurrency</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logGenerateLead({
-              currency: "usd",
-              value: 2
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogGenerateLead} style={styles.button}>
               <Text style={styles.text}>GenerateLead</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logJoinGroup({
-              group_id: "1234567"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogJoinGroup} style={styles.button}>
               <Text style={styles.text}>JoinGroup</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logEvent("basket", {
-              id: 3745092,
-              item: "mens grey t-shirt",
-              description: ["round neck", "long sleeved"],
-              size: "L"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogEvent} style={styles.button}>
               <Text style={styles.text}>Event</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logLevelEnd({
-              level: 2,
-              success: "abcd"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogLevelEnd} style={styles.button}>
               <Text style={styles.text}>LevelEnd</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logLevelStart({
-              level: 2
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogLevelStart} style={styles.button}>
               <Text style={styles.text}>LevelStart</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logLevelUp({
-              character: "ninja",
-              level: 2
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogLevelUp} style={styles.button}>
               <Text style={styles.text}>LevelUp</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logPostScore({
-              character: "ninja",
-              level: 2,
-              score: 60
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogPostScore} style={styles.button}>
               <Text style={styles.text}>PostScore</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logPurchase({
-              affiliation: "clothing",
-              coupon: "co_1234567",
-              currency: "usd",
-              tax: 32,
-              items: [],
-              shipping: 2,
-              transaction_id: "trans_1234567",
-              value: 1
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogPurchase} style={styles.button}>
               <Text style={styles.text}>Purchase</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logRemoveFromCart({
-              currency: "usd",
-              items: [],
-              value: 32
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogRemoveFromCart} style={styles.button}>
               <Text style={styles.text}>RemoveFromCart</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logScreenView({
-              screen_class: "gentsLogs",
-              screen_name: "clothing"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogScreenView} style={styles.button}>
               <Text style={styles.text}>ScreenView</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logRefund({
-              affiliation: "clothing",
-              coupon: "ref_2dsg323",
-              currency: "usd",
-              tax: 32,
-              items: [],
-              shipping: 2,
-              transaction_id: "df24234",
-              value: 1
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogRefund} style={styles.button}>
               <Text style={styles.text}>Refund</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logSearch({
-              destination: "new york",
-              end_date: "2022-02-04",
-              number_of_nights: 3,
-              number_of_passengers: 32,
-              number_of_rooms: 6,
-              origin: "new york",
-              search_term: "df24234",
-              start_date: "2022-02-03",
-              travel_class: "business"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogSearch} style={styles.button}>
               <Text style={styles.text}>Search</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logSelectContent({
-              content_type: "shirts",
-              item_id: "abcd6568"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogSelectContent} style={styles.button}>
               <Text style={styles.text}>SelectContent</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logSelectItem({
-              content_type: "shirts",
-              item_list_id: "abcd6568",
-              item_list_name: "gents_shirt",
-              items: []
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogSelectItem} style={styles.button}>
               <Text style={styles.text}>SelectItem</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logSelectPromotion({
-              creative_name: "clothing",
-              creative_slot: "clothing",
-              items: [],
-              location_id: "nef24234",
-              promotion_id: "df24234",
-              promotion_name: "travel_class"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogSelectPromotion} style={styles.button}>
               <Text style={styles.text}>SelectPromotion</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => logAddPaymentInfo({
-              payment_type: "clothing",
-              coupon: "co_1234567",
-              currency: "usd",
-              items: [],
-              value: 1
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogAddPaymentInfo} style={styles.button}>
               <Text style={styles.text}>AddPaymentInfo</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => setUserId("user_1234567")} style={styles.button}>
+            <TouchableOpacity onPress={handlesetUserId} style={styles.button}>
               <Text style={styles.text}>setUserId</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={async () => logTutorialBegin()} style={styles.button}>
@@ -298,16 +486,10 @@ const App = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logUnlockAchievement({
-              achievement_id: "ac_32432432"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogUnlockAchievement} style={styles.button}>
               <Text style={styles.text}>UnlockAchievement</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logViewCart({
-              currency: "usd",
-              items: [],
-              value: 32
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogViewCart} style={styles.button}>
               <Text style={styles.text}>ViewCart</Text>
             </TouchableOpacity>
           </View>
@@ -315,40 +497,20 @@ const App = () => {
             <TouchableOpacity onPress={async () => logTutorialComplete()} style={styles.button}>
               <Text style={styles.text}>TutorialComplete</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logViewItem({
-              currency: "aud",
-              value: 2,
-              items: []
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogViewItem} style={styles.button}>
               <Text style={styles.text}>ViewItem</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logViewItemList({
-              item_list_id: "gs_fdf242345",
-              item_list_name: "gents_shirt",
-              items: []
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogViewItemList} style={styles.button}>
               <Text style={styles.text}>ViewItemList</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logViewPromotion({
-              creative_name: "clothing",
-              creative_slot: "clothing",
-              items: [],
-              location_id: "nef24234",
-              promotion_id: "df24234",
-              promotion_name: "travel_class"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogViewPromotion} style={styles.button}>
               <Text style={styles.text}>ViewPromotion</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logBeginCheckout({
-              coupon: "co_1234567",
-              currency: "usd",
-              items: [],
-              value: 1
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogBeginCheckout} style={styles.button}>
               <Text style={styles.text}>BeginCheckout</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={async () => resetAnalyticsData()} style={styles.button}>
@@ -356,46 +518,31 @@ const App = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => logViewSearchResults({
-              search_term: "sleeves"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogViewSearchResults} style={styles.button}>
               <Text style={styles.text}>ViewSearchResults</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logShare({
-              content_type: "clothing",
-              item_id: "abcd",
-              method: "facebook"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogShare} style={styles.button}>
               <Text style={styles.text}>Share</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => setUserProperty("saad", "abcd")} style={styles.button}>
+            <TouchableOpacity onPress={handlesetUserProperty} style={styles.button}>
               <Text style={styles.text}>SetUserProperty</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => setUserProperties({
-              name: "john",
-              value: "68568"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlesetUserProperties} style={styles.button}>
               <Text style={styles.text}>SetUserProperties</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => setSessionTimeoutDuration(5000)} style={styles.button}>
+            <TouchableOpacity onPress={handlesetSessionTimeoutDuration} style={styles.button}>
               <Text style={styles.text}>SetSessionTimeoutDuration</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={async () => logSpendVirtualCurrency({
-              item_name: "T-Shirt",
-              value: 56,
-              virtual_currency_name: "usd"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlelogSpendVirtualCurrency} style={styles.button}>
               <Text style={styles.text}>SpendVirtualCurrency</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={async () => setDefaultEventParameters({ // params:any
-              event_name: "search"
-            })} style={styles.button}>
+            <TouchableOpacity onPress={handlesetDefaultEventParameters} style={styles.button}>
               <Text style={styles.text}>SetDefaultEventParameters</Text>
             </TouchableOpacity>
           </View>

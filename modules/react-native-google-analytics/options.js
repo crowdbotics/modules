@@ -1,5 +1,5 @@
 // @ts-ignore
-import analytics from "@react-native-firebase/analytics";
+import analytics, { firebase } from "@react-native-firebase/analytics";
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
@@ -45,6 +45,11 @@ const styles = StyleSheet.create({
   },
   switch: { borderWidth: 2, borderColor: "#000" }
 });
+
+const setAnalyticsCollectionEnabled = async (isEnabled) => {
+  await firebase.analytics().setAnalyticsCollectionEnabled(isEnabled);
+};
+const getAppInstanceId = async () => await analytics().getAppInstanceId();
 
 const logBeginCheckout = async (data) => {
   await analytics().logBeginCheckout(data);
@@ -104,7 +109,7 @@ const logViewCart = async (data) => {
   await analytics().logViewCart(data);
 };
 
-const setUserProperty = async (name, value) => { // params: (String name, String value)
+const setUserProperty = async (name, value) => {
   await analytics().setUserProperty(name, value);
 };
 
@@ -196,11 +201,11 @@ const resetAnalyticsData = async () => {
   await analytics().resetAnalyticsData();
 };
 
-const setDefaultEventParameters = async (data) => { // params: any
+const setDefaultEventParameters = async (data) => {
   await analytics().setDefaultEventParameters(data);
 };
 
-const setSessionTimeoutDuration = async (timeInMilliseconds) => { // milliseconds
+const setSessionTimeoutDuration = async (timeInMilliseconds) => {
   await analytics().setSessionTimeoutDuration(timeInMilliseconds);
 };
 
@@ -210,45 +215,47 @@ const setUserId = async (userId) => {
 
 export default {
   styles: styles,
-  logBeginCheckout,
-  logAddPaymentInfo,
-  logAddShippingInfo,
-  logAddToCart,
-  logAddToWishlist,
-  logAppOpen,
-  logCampaignDetails,
-  logJoinGroup,
-  setUserProperty,
-  logViewCart,
-  logShare,
-  logSignUp,
-  logScreenView,
-  logRemoveFromCart,
-  logPurchase,
-  logLogin,
-  logEarnVirtualCurrency,
-  logEvent,
-  logGenerateLead,
-  logLevelEnd,
-  logLevelStart,
-  logLevelUp,
-  logPostScore,
-  logRefund,
-  logSearch,
-  logSelectContent,
-  logSelectItem,
-  logSelectPromotion,
-  logSpendVirtualCurrency,
-  logTutorialBegin,
-  logTutorialComplete,
-  logUnlockAchievement,
-  logViewItem,
-  logViewItemList,
-  logViewPromotion,
-  logViewSearchResults,
-  resetAnalyticsData,
-  setDefaultEventParameters,
-  setSessionTimeoutDuration,
-  setUserId,
-  setUserProperties
+  setAnalyticsCollectionEnabled: setAnalyticsCollectionEnabled,
+  getAppInstanceId: getAppInstanceId,
+  logBeginCheckout: logBeginCheckout,
+  logAddPaymentInfo: logAddPaymentInfo,
+  logAddShippingInfo: logAddShippingInfo,
+  logAddToCart: logAddToCart,
+  logAddToWishlist: logAddToWishlist,
+  logAppOpen: logAppOpen,
+  logCampaignDetails: logCampaignDetails,
+  logJoinGroup: logJoinGroup,
+  setUserProperty: setUserProperty,
+  logViewCart: logViewCart,
+  logShare: logShare,
+  logSignUp: logSignUp,
+  logScreenView: logScreenView,
+  logRemoveFromCart: logRemoveFromCart,
+  logPurchase: logPurchase,
+  logLogin: logLogin,
+  logEarnVirtualCurrency: logEarnVirtualCurrency,
+  logEvent: logEvent,
+  logGenerateLead: logGenerateLead,
+  logLevelEnd: logLevelEnd,
+  logLevelStart: logLevelStart,
+  logLevelUp: logLevelUp,
+  logPostScore: logPostScore,
+  logRefund: logRefund,
+  logSearch: logSearch,
+  logSelectContent: logSelectContent,
+  logSelectItem: logSelectItem,
+  logSelectPromotion: logSelectPromotion,
+  logSpendVirtualCurrency: logSpendVirtualCurrency,
+  logTutorialBegin: logTutorialBegin,
+  logTutorialComplete: logTutorialComplete,
+  logUnlockAchievement: logUnlockAchievement,
+  logViewItem: logViewItem,
+  logViewItemList: logViewItemList,
+  logViewPromotion: logViewPromotion,
+  logViewSearchResults: logViewSearchResults,
+  resetAnalyticsData: resetAnalyticsData,
+  setDefaultEventParameters: setDefaultEventParameters,
+  setSessionTimeoutDuration: setSessionTimeoutDuration,
+  setUserId: setUserId,
+  setUserProperties: setUserProperties
 };
