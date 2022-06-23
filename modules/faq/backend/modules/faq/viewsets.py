@@ -14,6 +14,15 @@ class FaqViewSet(ModelViewSet):
     search_fields = ['$question']
 
     def get_permissions(self):
-        if self.action == 'create' or self.action == 'update':
+
+        '''
+           Following Permissions are given for following operations:
+              a) Create: Only Admin
+              b) Update: Only Admin
+              c) Delete: Only Admin
+              d) Read : All users
+        '''
+
+        if self.action in ('create', 'update', 'destroy'):
             self.permission_classes = [IsAdminUser]
         return [permission() for permission in self.permission_classes]
