@@ -1,0 +1,9 @@
+{
+  "name": "@modules/faq",
+  "version": "1.0.0",
+  "description": "Frequently Asked Questions screen",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "license": "ISC"
+}
