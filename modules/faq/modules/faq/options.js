@@ -10,7 +10,7 @@ const recordsPerPage = 5;
 export const colors = {
   gray: '#E5E5E5',
   white: '#FFFFFF',
-  IvoryBlack: '#231F20',
+  ivoryBlack: '#231F20',
   whiteSmoke: '#F6F6F6',
   darkCharcoal: '#333333',
   darkGray: '#808080',

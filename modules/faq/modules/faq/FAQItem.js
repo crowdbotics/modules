@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   questionContainer: {
     flexDirection: 'row', justifyContent: 'space-between'
   },
-  questionText: { fontWeight: '500', fontSize: 16, lineHeight: 28, color: colors.IvoryBlack, },
-  answerText: { fontWeight: '400', fontSize: 12, lineHeight: 20, color: colors.IvoryBlack, marginBottom: 20, },
+  questionText: { fontWeight: '500', fontSize: 16, lineHeight: 28, color: colors.ivoryBlack, },
+  answerText: { fontWeight: '400', fontSize: 12, lineHeight: 20, color: colors.ivoryBlack, marginBottom: 20, },
   icon: { width: 14, height: 20, marginTop: 5 },
 })
