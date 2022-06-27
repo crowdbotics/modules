@@ -5,7 +5,7 @@ const path = "/modules/faq/";
 
 const title = "Support & FAQ";
 
-const recordsPerPage = 5;
+const recordsPerPage = 5; // by default per page return 5 FAQs, you can edit this as per your project requirement
 
 export const colors = {
   gray: '#E5E5E5',
