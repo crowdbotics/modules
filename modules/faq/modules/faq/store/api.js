@@ -1,6 +1,11 @@
 import axios from "axios";
 import options from "../options";
 
+/**
+ * 
+ * @param {base url (edit the url variable in `options/options.js`) } baseUrl 
+ * @returns instance of axios
+ */
 const getAxios = (baseUrl) => {
   return axios.create({
     baseURL: baseUrl,
