@@ -39,6 +39,16 @@ platform(:android) do
     upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'alpha')
   end
 
+  desc('Get Internal Releases')
+  lane(:get_internal_releases) do
+    google_play_track_release_names(track: 'internal')
+  end
+
+  desc('Promote from internal to alpha')
+  lane(:from_internal_to_alpha) do
+    upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'alpha')
+  end
+
   desc('Promote from alpha to beta')
   lane(:beta) do
     upload_to_play_store(rollout: '1', track: 'alpha', track_promote_to: 'beta')
@@ -80,6 +90,17 @@ platform(:android) do
     gradle(task: 'bundleRelease')
     sh "echo \"export BUILD_VERSION=#{build_version}\" >> $BASH_ENV"
     sh ". $BASH_ENV"
+  end
+
+  desc('create git tag')
+  lane(:build_git_tag) do
+
+    # Add a git tag for this build. This will automatically
+    # use an appropriate git tag name
+    add_git_tag(build_number: ENV["CIRCLE_BUILD_NUM"].to_i)
+
+    # Push the new commit and tag back to your git remote
+    push_to_git_remote
   end
 
   # Update app URL in CB app DB
