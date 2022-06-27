@@ -4,6 +4,11 @@ from rest_framework.response import Response
 
 class CustomPageNumberPagination(PageNumberPagination):
 
+    '''
+        This is the custom pagination class for responding FAQs
+        on the basis of page-set and records.
+    '''
+
     page_size = 5
     page_query_param = 'page'
     page_size_query_param = 'records'

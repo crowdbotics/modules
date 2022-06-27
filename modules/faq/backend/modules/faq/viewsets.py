@@ -7,6 +7,10 @@ from .pagination import CustomPageNumberPagination
 
 class FaqViewSet(ModelViewSet):
 
+    '''
+        This viewset performs all the CRUD operations on FAQ model
+    '''
+
     serializer_class = FaqSerializer
     queryset = Faq.objects.filter(is_active=True)
     pagination_class = CustomPageNumberPagination
