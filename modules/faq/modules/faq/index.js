@@ -2,12 +2,15 @@ import { GlobalOptionsContext, OptionsContext } from "@options";
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
-  FlatList, Image, Text, TextInput,
+  FlatList,
+  Image,
+  Text,
+  TextInput,
   TouchableOpacity,
   View
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Divider } from 'react-native-elements';
+import { Divider } from "react-native-elements";
 import { Images } from "./assets";
 import { FAQItem } from "./FAQItem";
 import { faqList, slice } from "./store";
@@ -19,7 +22,7 @@ const FAQ = () => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState("");
   const [pageNo, setPageNo] = useState(1);
-  const faqData = useSelector(state => state.Faq);
+  const faqData = useSelector((state) => state.Faq);
   const { faq } = faqData;
   const list = faq?.results ?? [];
   const dispatch = useDispatch();
@@ -28,7 +31,9 @@ const FAQ = () => {
     dispatch(faqList({ baseUrl: globalOptions.url, page: pageNo }));
   }, [pageNo, faqList]);
 
-  const filterList = list.filter(d => d.question.toLowerCase().includes(searchText.toLowerCase()))
+  const filterList = list.filter((d) =>
+    d.question.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const searchHandler = (text) => {
     setSearchText(text);
@@ -37,8 +42,11 @@ const FAQ = () => {
   const searchView = () => {
     return (
       <View style={options.styles.searchSection}>
-        <Image style={options.styles.searchIcon} source={Images.searchIcon}
-          resizeMode='contain' />
+        <Image
+          style={options.styles.searchIcon}
+          source={Images.searchIcon}
+          resizeMode="contain"
+        />
         <TextInput
           style={options.styles.input}
           placeholder="Search here"
@@ -52,35 +60,43 @@ const FAQ = () => {
 
   const fetchMoreData = () => {
     if (faq?.next && searchText.length === 0) {
-      if (faq.next != pageNo)
-        setPageNo(faq?.next);
+      if (faq.next !== pageNo) setPageNo(faq?.next);
     }
-  }
+  };
 
-  const _renderItem =
-    ({ item }) => {
-      return <FAQItem {...item}
+  const _renderItem = ({ item }) => {
+    return (
+      <FAQItem
+        {...item}
         prefixQuestion={faq?.prefix_question}
         prefixAnswer={faq?.prefix_answer}
       />
-    };
+    );
+  };
 
   const separator = () => {
-    return <Divider color={colors.darkCharcoal} />
-  }
+    return <Divider color={colors.darkCharcoal} />;
+  };
 
   return (
     <View style={options.styles.container}>
       <View style={options.styles.heading}>
-        <TouchableOpacity style={{ padding: 5 }} onPress={() => navigation.goBack()}>
-          <Image style={options.styles.backIcon} source={Images.backIcon} resizeMode='contain' />
+        <TouchableOpacity
+          style={{ padding: 5 }}
+          onPress={() => navigation.goBack()}
+        >
+          <Image
+            style={options.styles.backIcon}
+            source={Images.backIcon}
+            resizeMode="contain"
+          />
         </TouchableOpacity>
         <Text style={options.styles.title}>{options.title}</Text>
       </View>
       <FlatList
         data={filterList}
         renderItem={_renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         style={options.styles.list}
         ListHeaderComponent={searchView()}
         onEndReachedThreshold={0.1}
@@ -90,7 +106,7 @@ const FAQ = () => {
       />
     </View>
   );
-}
+};
 
 export default {
   title: "Support & FAQ",

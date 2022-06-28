@@ -8,31 +8,36 @@ const title = "Support & FAQ";
 const recordsPerPage = 5; // by default per page return 5 FAQs, you can edit this as per your project requirement
 
 export const colors = {
-  gray: '#E5E5E5',
-  white: '#FFFFFF',
-  ivoryBlack: '#231F20',
-  whiteSmoke: '#F6F6F6',
-  darkCharcoal: '#333333',
-  darkGray: '#808080',
-  black: '#000000'
-}
+  gray: "#E5E5E5",
+  white: "#FFFFFF",
+  ivoryBlack: "#231F20",
+  whiteSmoke: "#F6F6F6",
+  darkCharcoal: "#333333",
+  darkGray: "#808080",
+  black: "#000000"
+};
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 20 },
   heading: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     paddingVertical: 10
   },
   backIcon: { width: 20, height: 20 },
   title: {
-    fontSize: 16, flex: 1, alignSelf: 'center', textAlign: 'center',
+    fontSize: 16,
+    flex: 1,
+    alignSelf: "center",
+    textAlign: "center",
     marginEnd: 25
   },
   searchSection: {
-    flexDirection: 'row',
-    alignItems: 'center', backgroundColor: colors.whiteSmoke,
-    padding: 10, borderRadius: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: colors.whiteSmoke,
+    padding: 10,
+    borderRadius: 10
   },
   searchIcon: { width: 25, height: 20, marginEnd: 5 },
   input: {
