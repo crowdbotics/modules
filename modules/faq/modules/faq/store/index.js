@@ -18,7 +18,20 @@ const initialState = { faq: {}, api: { loading: constants.LOADING_IDLE, error: n
 export const slice = createSlice({
   name: "faq",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    updateItem: (state, action) => {
+      const faq = { ...state.faq }
+      const list = [...faq?.results];
+      const index = state?.faq?.results?.findIndex(i => i.id == action.payload);
+      if (index >= 0) {
+        const item = list[index];
+        item.isExpanded = !list[index].isExpanded;
+        list[index] = item;
+      }
+      faq.results = list;
+      state.faq = faq;
+    }
+  },
   extraReducers: {
     [faqList.pending]: (state) => {
       if (state.api.loading === constants.LOADING_IDLE) {
@@ -32,6 +45,11 @@ export const slice = createSlice({
         if (action.payload?.previous) {
           action.payload.results = [...state.faq.results, ...action.payload.results];
         }
+        // adding new property with name isExpanded for each FAQ. 
+        // The value will be set acc. to the backend configuration
+        action.payload.results.forEach(element => {
+          element[constants.IS_EXPANDED] = action.payload?.isExpanded ?? false;
+        });
         state.faq = action.payload;
         state.api.loading = constants.LOADING_IDLE;
       }

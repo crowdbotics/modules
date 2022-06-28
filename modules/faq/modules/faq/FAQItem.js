@@ -1,39 +1,38 @@
-import React, { useCallback, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { Images } from './assets';
-import { colors } from './options'
+import { colors } from './options';
+import { slice } from './store';
 
-export const FAQItem = React.memo((props) => {
-  const { question, answer, isExpanded = false, prefixQuestion,
-    prefixAnswer } = props;
-  const [expanded, toggleExpanded] = useState(isExpanded);
+export const FAQItem = (props) => {
+  const { question, answer, isExpanded, prefixQuestion,
+    prefixAnswer, id } = props;
+  const dispatch = useDispatch();
 
-  const _onClick = useCallback(() => {
-    toggleExpanded(!expanded);
-  }, [expanded, toggleExpanded]);
+  const _onClick = () => {
+    dispatch(slice.actions.updateItem(id));
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.questionContainer} onPress={_onClick} >
-        <Text style={[styles.questionText, { marginBottom: !expanded ? 20 : 5 }]}>
+        <Text style={[styles.questionText, { marginBottom: !isExpanded ? 20 : 5 }]}>
           <Text>{`${prefixQuestion} `}</Text>
           {`${question}`}</Text>
         <Image style={styles.icon}
-          source={expanded ? Images.expandedIcon : Images.collapsedIcon}
+          source={isExpanded ? Images.expandedIcon : Images.collapsedIcon}
           resizeMode='contain' />
       </TouchableOpacity>
-      {expanded && <Text style={styles.answerText}>
+      {isExpanded && <Text style={styles.answerText}>
         <Text style={[styles.questionText, { lineHeight: styles.answerText.lineHeight }]}>{`${prefixAnswer} `}</Text>
         {`${answer}`}</Text>}
     </View>
   )
-
-}, (prevProps, nextProps) => {
-  return prevProps.id === nextProps.id
-});
+}
 
 const styles = StyleSheet.create({
-  container: { marginTop: 20, paddingHorizontal: 20, borderBottomColor: colors.darkCharcoal, borderBottomWidth: StyleSheet.hairlineWidth, },
+  container: { marginTop: 20, paddingHorizontal: 20 },
   questionContainer: {
     flexDirection: 'row', justifyContent: 'space-between'
   },

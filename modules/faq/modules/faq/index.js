@@ -1,16 +1,17 @@
 import { GlobalOptionsContext, OptionsContext } from "@options";
 import { useNavigation } from "@react-navigation/native";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FlatList, Image, Text, TextInput,
   TouchableOpacity,
   View
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { Divider } from 'react-native-elements';
 import { Images } from "./assets";
-import constants from "./constants";
 import { FAQItem } from "./FAQItem";
 import { faqList, slice } from "./store";
+import { colors } from "./options";
 
 const FAQ = () => {
   const options = useContext(OptionsContext);
@@ -19,29 +20,21 @@ const FAQ = () => {
   const [searchText, setSearchText] = useState("");
   const [pageNo, setPageNo] = useState(1);
   const faqData = useSelector(state => state.Faq);
-  const { faq, api } = faqData;
+  const { faq } = faqData;
   const list = faq?.results ?? [];
-  const [filteredList, setFilteredList] = useState([]);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(faqList({ baseUrl: globalOptions.url, page: pageNo }));
   }, [pageNo, faqList]);
 
-  useEffect(() => {
-    if (api.loading == constants.LOADING_IDLE) {
-      setFilteredList(list)
-    }
-  }, [faqData])
+  const filterList = list.filter(d => d.question.toLowerCase().includes(searchText.toLowerCase()))
 
-  const searchHandler = useCallback((text) => {
-    const newList = list.filter(d => d.question.toLowerCase().includes(text.toLowerCase()))
-    setFilteredList(newList);
+  const searchHandler = (text) => {
     setSearchText(text);
-  }, [list, setFilteredList, setSearchText]);
+  };
 
-  const searchView = useCallback(() => {
+  const searchView = () => {
     return (
       <View style={options.styles.searchSection}>
         <Image style={options.styles.searchIcon} source={Images.searchIcon}
@@ -55,25 +48,26 @@ const FAQ = () => {
         />
       </View>
     );
-  }, [searchHandler, searchText]);
+  };
 
   const fetchMoreData = () => {
     if (faq?.next && searchText.length === 0) {
-      console.log(faq?.next);
       if (faq.next != pageNo)
         setPageNo(faq?.next);
     }
   }
 
-  const _renderItem = useCallback(
+  const _renderItem =
     ({ item }) => {
       return <FAQItem {...item}
         prefixQuestion={faq?.prefix_question}
         prefixAnswer={faq?.prefix_answer}
-        isExpanded={faq?.isExpanded} />
-    }
-    , [faq]);
+      />
+    };
 
+  const separator = () => {
+    return <Divider color={colors.darkCharcoal} />
+  }
 
   return (
     <View style={options.styles.container}>
@@ -84,14 +78,16 @@ const FAQ = () => {
         <Text style={options.styles.title}>{options.title}</Text>
       </View>
       <FlatList
-        data={filteredList}
+        data={filterList}
         renderItem={_renderItem}
         keyExtractor={item => item.id}
         style={options.styles.list}
         ListHeaderComponent={searchView()}
         onEndReachedThreshold={0.1}
         onEndReached={fetchMoreData}
-        showsVerticalScrollIndicator={false} />
+        showsVerticalScrollIndicator={false}
+        ItemSeparatorComponent={separator}
+      />
     </View>
   );
 }

@@ -25,6 +25,10 @@ export const globalOptions = {
 
 ```
 
+## Styling
+
+The parent view styling (which contains search bar and Flatlist) can be upodated from `options.js` of module and the render item (or Flatlist item) styling can be updated from `FAQItem.js`.
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
