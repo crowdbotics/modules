@@ -145,7 +145,7 @@ const MintingScreen = (params) => {
       </View>
 
       <View style={styles.buttonBottom}>
-        <Button>Upload</Button>
+        <Button>Create</Button>
         <Button backgroundColor="#fff" color="#000" borderWidth={1} >
           Cancel
         </Button>
