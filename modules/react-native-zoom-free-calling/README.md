@@ -154,3 +154,9 @@ about instant meetings.
 ## Perform batch registration (Not implemented)
 Prerequisites: The meeting host must be a Licensed user.
 Rate Limit Label: Heavy
+
+
+
+https://user-images.githubusercontent.com/76822297/176625854-0b51816d-d89d-4edc-8677-4c8572ff13b0.mp4
+
+
