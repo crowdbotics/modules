@@ -31,8 +31,10 @@ const FAQ = () => {
     dispatch(faqList({ baseUrl: globalOptions.url, page: pageNo }));
   }, [pageNo, faqList]);
 
-  const filterList = list.filter((d) =>
-    d.question.toLowerCase().includes(searchText.toLowerCase())
+  const filterList = list.filter(
+    (d) =>
+      d.question.toLowerCase().includes(searchText.toLowerCase()) ||
+      d.answer.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const searchHandler = (text) => {

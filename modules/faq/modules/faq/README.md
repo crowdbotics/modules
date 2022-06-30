@@ -29,6 +29,10 @@ export const globalOptions = {
 
 The parent view styling (which contains search bar and Flatlist) can be upodated from `options.js` of module and the render item (or Flatlist item) styling can be updated from `FAQItem.js`.
 
+## Pagination
+
+By default, per page returns 10 FAQs. If you want to change its value then you can update the recordsPerPage variable from `options.js`
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
