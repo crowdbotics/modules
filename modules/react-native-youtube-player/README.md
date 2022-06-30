@@ -14,3 +14,7 @@ The following are the key features of this module:
 * Play video on loop option
 * Back and Next options
 * Video sharing option
+
+
+https://user-images.githubusercontent.com/76822297/176699752-8f994563-6dab-4da7-8d7c-b781dbee8f35.mp4
+
