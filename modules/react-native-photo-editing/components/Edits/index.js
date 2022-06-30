@@ -9,7 +9,7 @@ const Edits = (props) => {
   useEffect(() => {
     setTimeout(() => {
       setIsInitialize(true);
-    }, 50);
+    }, 500);
   }, []);
 
   const onValueChange = (value) => {
