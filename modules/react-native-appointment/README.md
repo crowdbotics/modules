@@ -15,3 +15,8 @@ user can view list of appointments
 
 # Seach an appointment
 User can search appointments
+
+
+
+https://user-images.githubusercontent.com/76822297/176897194-9d6d20f9-9379-4f63-8d43-bb289321c176.mp4
+
