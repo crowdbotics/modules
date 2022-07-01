@@ -28,3 +28,7 @@ By scanning the QR code, Google Authenticator account sets up automatically.
 By clicking "Resend", the code is resent to Phone number or email
 
 
+
+
+https://user-images.githubusercontent.com/76822297/176921651-cd668d1f-bf0d-4fd3-9fd8-065b90c940be.mp4
+
