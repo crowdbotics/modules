@@ -1,4 +1,5 @@
 {
+  "root": true,
   "env": {
     "es2021": true,
     "node": true
@@ -12,7 +13,7 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "ignorePatterns": ["demo", "dist", "docs", "preview"],
+  "ignorePatterns": ["demo", "dist", "docs", "preview", "scaffold"],
   "rules": {
     "func-call-spacing": ["error", "never"],
     "quotes": [
