@@ -16,7 +16,7 @@ const Response = ({ res }) => {
         <View style={styles.card}>
           <Text style={styles.question}>{`Q. ${res.title}`}</Text>
           {res.type === "multiple_choice" && Choice(res.choices)}
-          <Text>{`A. ${res.form_answers.answer ? res.form_answers.answer : ''}`}</Text>
+          <Text>{`A. ${res.form_answers.answer ? res.form_answers.answer : ""}`}</Text>
         </View>
 
       </View>
