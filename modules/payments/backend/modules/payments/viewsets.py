@@ -1,3 +1,5 @@
+from .serializers import StripeSettingSerializer
+from .models import StripeSetting
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import authentication, permissions, status
@@ -19,8 +21,17 @@ class PaymentSheetView(APIView):
             stripe_profile.save()
         else:
             stripe_cus_id = stripe_profile.stripe_cus_id
+        
         cents = request.data.get('cents', 100)
-        response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents)
+        try:
+            query = StripeSetting.objects.get(user_id=self.request.user.id)
+            serializer = StripeSettingSerializer(query)
+            response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents,
+                                                                 serializer.data['application_fee'],
+                                                                 "acct_1LI8qAB4GBI1t6ZJ")
+        except Exception:
+            response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents)
+
         return Response(response, status=status.HTTP_200_OK)
 
 

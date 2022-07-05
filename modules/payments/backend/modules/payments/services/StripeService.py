@@ -4,19 +4,30 @@ import environ
 env = environ.Env()
 
 class StripeService:
-    stripe.api_key = env.str("STRIPE_SECRET_KEY")
+    stripe.api_key = env.str("STRIPE_SECRET_KEY", "sk_test_51LI8akAwbwH2uCeNj1qTVtaDWta5BI9sr8svVGQivWnPb37vCgAor8gVdsRIg3Uzn6MnXtxWwsMUvctH9ULOXJQd00zRame0Nm")
 
     @classmethod
-    def create_payment_intent_sheet(cls, cus_id, cents):
+    def create_payment_intent_sheet(cls, cus_id, cents, application_fee_amount=0, connected_stripe_account_id=None):
         ephemeralKey = stripe.EphemeralKey.create(
             customer=cus_id,
             stripe_version=env.str("STRIPE_VERSION", '2020-08-27'),
         )
-        paymentIntent = stripe.PaymentIntent.create(
-            amount=cents,
-            currency=env.str("STRIPE_CURRENCY", 'usd'),
-            customer=cus_id
-        )
+        if connected_stripe_account_id and application_fee_amount > 0:
+            paymentIntent = stripe.PaymentIntent.create(
+                amount=cents,
+                currency=env.str("STRIPE_CURRENCY", 'usd'),
+                customer=cus_id,
+                application_fee_amount= int((float(application_fee_amount / 100) * (float(cents) / 100)) * 100),
+                transfer_data={
+                    'destination': connected_stripe_account_id,
+                }
+            )
+        else:
+            paymentIntent = stripe.PaymentIntent.create(
+                amount=cents,
+                currency=env.str("STRIPE_CURRENCY", 'usd'),
+                customer=cus_id
+            )
 
         return {
             "paymentIntent": paymentIntent.client_secret,
