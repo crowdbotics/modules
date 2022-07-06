@@ -26,9 +26,12 @@ class PaymentSheetView(APIView):
         try:
             query = StripeSetting.objects.get(user_id=self.request.user.id)
             serializer = StripeSettingSerializer(query)
-            response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents,
+            if serializer.data['is_wallet_connect']:
+                response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents,
                                                                  serializer.data['application_fee'],
-                                                                 "acct_1LI8qAB4GBI1t6ZJ")
+                                                                 "connected_stripe_account_id")
+            else:
+                response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents)
         except Exception:
             response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents)
 
