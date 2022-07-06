@@ -28,4 +28,4 @@ post_save.connect(create_stripe_profile, sender=settings.AUTH_USER_MODEL, dispat
 class StripeSetting(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, unique=True)
     is_wallet_connect = models.BooleanField(default=False)
-    application_fee = models.IntegerField(default=0)
+    application_fee = models.IntegerField(default=0, help_text="input percentage of amount")
