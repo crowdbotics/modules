@@ -1,9 +1,19 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, SafeAreaView, Button, View, LogBox } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Button,
+  View,
+  LogBox
+} from "react-native";
 import EmojiSelector from "react-native-emoji-selector";
 import Chat from "./chat";
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
+
+import PubNub from "pubnub";
+import { PubNubProvider } from "pubnub-react";
 const Stack = createStackNavigator();
 
 const EmojiPicker = ({ navigation }) => {
@@ -11,7 +21,7 @@ const EmojiPicker = ({ navigation }) => {
   const [chosenEmoji, setEmoji] = useState(null);
 
   // This method will be called when our user selects an emoji
-  const handleEmojiSelected = emoji => {
+  const handleEmojiSelected = (emoji) => {
     setEmoji(emoji);
   };
 
@@ -84,7 +94,6 @@ const styles = StyleSheet.create({
   emoji: {
     width: "100%",
     height: "100%",
-    fontSize: 60,
     textAlign: "center",
     textAlignVertical: "center",
     fontSize: 60
@@ -95,9 +104,6 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0, 0, 0, 0.2)"
   }
 });
-
-import PubNub from "pubnub";
-import { PubNubProvider } from "pubnub-react";
 
 const pubnub = new PubNub({
   subscribeKey: "demo",
@@ -115,10 +121,10 @@ const ChatNavigator = () => {
         <Stack.Screen name="Chat" component={Chat} />
       </Stack.Navigator>
     </PubNubProvider>
-  )
-}
+  );
+};
 
 export default {
   title: "Chat",
-  navigator: ChatNavigator,
-}
+  navigator: ChatNavigator
+};

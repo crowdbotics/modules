@@ -1,7 +1,13 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
-import { Text, View, TouchableOpacity, FlatList, ImageBackground, } from 'react-native';
-import ActionSheet from 'react-native-actionsheet'
-import { pickFromCamera, pickFromGallery, uploadImage } from './utils'
+import React, { useRef, useContext, useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  ImageBackground
+} from "react-native";
+import ActionSheet from "react-native-actionsheet";
+import { pickFromCamera, pickFromGallery, uploadImage } from "./utils";
 import { OptionsContext, GlobalOptionsContext } from "@options";
 
 const Camera = () => {
@@ -9,46 +15,48 @@ const Camera = () => {
   const actionSheet = useRef(null);
   const options = useContext(OptionsContext);
   const gOptions = useContext(GlobalOptionsContext);
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setLoading] = useState(false);
-  const ImagePickerOptions = ['Take Photo', 'Choose from Gallery', 'Cancel'];
+  const ImagePickerOptions = ["Take Photo", "Choose from Gallery", "Cancel"];
   const [data, setData] = useState([]);
 
   const { styles, buttonText } = options;
 
-  const fetch_images = () => {
+  const fetchImages = () => {
     fetch(`${gOptions.url}/modules/camera/photos/user/`)
       .then((response) => response.json())
       .then((json) => setData(json))
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  }
+  };
 
   useEffect(() => {
-    fetch_images()
+    fetchImages();
   }, []);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity>
-      <ImageBackground source={{ uri: `${gOptions.url}/${item.image}` }} style={styles.image}>
-      </ImageBackground>
-    </TouchableOpacity >
-  )
+      <ImageBackground
+        source={{ uri: `${gOptions.url}/${item.image}` }}
+        style={styles.image}
+      ></ImageBackground>
+    </TouchableOpacity>
+  );
 
   return (
     <View
       style={{
-        flex: 1,
-      }}>
-
-
+        flex: 1
+      }}
+    >
       <FlatList
         data={data}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={renderItem}
       />
       <ActionSheet
         ref={actionSheet}
-        title={'Select Image'}
+        title={"Select Image"}
         options={ImagePickerOptions}
         cancelButtonIndex={2}
         onPress={async (index) => {
@@ -56,20 +64,22 @@ const Camera = () => {
           switch (index) {
             case 0:
               res = await pickFromCamera();
-              res && uploadImage(res, gOptions).then(() => {
-                fetch_images()
-              })
               break;
             case 1:
               res = await pickFromGallery();
-              res && uploadImage(res, gOptions).then(() => {
-                fetch_images()
-              })
               break;
+          }
+          if (res) {
+            uploadImage(res, gOptions).then(() => {
+              fetchImages();
+            });
           }
         }}
       />
-      <TouchableOpacity onPress={() => actionSheet.current.show()} style={styles.photoBtn}>
+      <TouchableOpacity
+        onPress={() => actionSheet.current.show()}
+        style={styles.photoBtn}
+      >
         <Text style={styles.photoBtnTxt}>{buttonText}</Text>
       </TouchableOpacity>
     </View>
@@ -79,4 +89,4 @@ const Camera = () => {
 export default {
   title: "Camera",
   navigator: Camera
-}
+};

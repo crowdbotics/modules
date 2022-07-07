@@ -30,6 +30,10 @@ fs.copyFileSync(
   path.join(cwd, "babel.config.js")
 );
 fs.copyFileSync(
+  path.join(customFiles, "webpack.config.js"),
+  path.join(cwd, "webpack.config.js")
+);
+fs.copyFileSync(
   path.join(customFiles, "heroku.yml"),
   path.join(cwd, "heroku.yml")
 );
@@ -44,10 +48,6 @@ fs.copyFileSync(
 fs.copyFileSync(
   path.join(customFiles, ".prettierrc.js"),
   path.join(cwd, ".prettierrc.js")
-);
-fs.copyFileSync(
-  path.join(customFiles, "config-overrides.js"),
-  path.join(cwd, "config-overrides.js")
 );
 fs.copyFileSync(
   path.join(customFiles, ".crowdbotics.json"),

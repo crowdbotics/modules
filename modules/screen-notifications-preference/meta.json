@@ -1,0 +1,5 @@
+{
+    "title": "Notification Preference Screen",
+    "description": "Notification preference screen",
+    "root": "/screens/notifications-preference"
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   Image,
   Alert,
@@ -6,22 +6,21 @@ import {
   TouchableOpacity,
   TextInput,
   Text
-} from "react-native"
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
-import { useSelector, useDispatch } from "react-redux"
-import { unwrapResult } from "@reduxjs/toolkit"
-import { styles, textInputStyles } from "./styles"
-import { validateEmail, LOGO_URL } from "./constants.js"
-import { resetPassword } from "../auth"
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useSelector, useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { styles, textInputStyles } from "./styles";
+import { validateEmail, LOGO_URL } from "./constants.js";
+import { resetPassword } from "../auth";
 
 const PasswordRecover = ({ navigation }) => {
-  const [email, setEmail] = useState("")
-  const { api } = useSelector(state => state.login)
-  const dispatch = useDispatch()
+  const [email, setEmail] = useState("");
+  const { api } = useSelector(state => state.login);
+  const dispatch = useDispatch();
 
   const handlePasswordReset = () => {
-    if (!validateEmail.test(email))
-      return Alert.alert("Error", "Please enter a valid email address.")
+    if (!validateEmail.test(email)) { return Alert.alert("Error", "Please enter a valid email address."); }
 
     dispatch(resetPassword({ email }))
       .then(unwrapResult)
@@ -29,17 +28,17 @@ const PasswordRecover = ({ navigation }) => {
         Alert.alert(
           "Password Reset",
           "Password reset link has been sent to your email address"
-        )
-        navigation.goBack()
+        );
+        navigation.goBack();
       })
-      .catch(err => console.log(err.message))
-  }
+      .catch(err => console.log(err.message));
+  };
 
   const renderImage = () => {
     const imageSize = {
       width: 365,
       height: 161
-    }
+    };
     return (
       <Image
         style={[styles.image, imageSize]}
@@ -47,8 +46,8 @@ const PasswordRecover = ({ navigation }) => {
           uri: LOGO_URL
         }}
       />
-    )
-  }
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -93,14 +92,14 @@ const PasswordRecover = ({ navigation }) => {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {
-            navigation.goBack()
+            navigation.goBack();
           }}
         >
           <Text style={[styles.textRow]}>Back to login?</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
     </View>
-  )
-}
+  );
+};
 
-export default PasswordRecover
+export default PasswordRecover;

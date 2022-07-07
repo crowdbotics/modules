@@ -1,12 +1,12 @@
-import { StyleSheet, Dimensions } from "react-native"
+import { StyleSheet, Dimensions } from "react-native";
 
-const { width, height } = Dimensions.get("window")
+const { width, height } = Dimensions.get("window");
 
-const guidelineBaseWidth = 350
-const guidelineBaseHeight = 680
+const guidelineBaseWidth = 350;
+const guidelineBaseHeight = 680;
 
-const scale = size => (width / guidelineBaseWidth) * size
-const scaleVertical = size => (height / guidelineBaseHeight) * size
+const scale = size => (width / guidelineBaseWidth) * size;
+const scaleVertical = size => (height / guidelineBaseHeight) * size;
 
 export const Color = {
   malibu: "#46E1FD",
@@ -17,7 +17,7 @@ export const Color = {
   facebook: "#3b5998",
   google: "#4285F4",
   red: "red"
-}
+};
 
 export const styles = StyleSheet.create({
   screen: {
@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "white",
-    //marginLeft: scale(10), marginRight: scale(10),
+    // marginLeft: scale(10), marginRight: scale(10),
     marginTop: scaleVertical(5),
     marginBottom: scaleVertical(5),
     borderRadius: 5,
@@ -147,7 +147,7 @@ export const styles = StyleSheet.create({
     margin: 10,
     fontSize: 18
   }
-})
+});
 
 export const buttonStyles = {
   viewStyle: {
@@ -166,7 +166,7 @@ export const buttonStyles = {
     marginHorizontal: 20,
     marginVertical: 10
   }
-}
+};
 
 export const textInputStyles = {
   textInput: {
@@ -181,4 +181,4 @@ export const textInputStyles = {
   },
   label: { color: "#6A6A6A", fontSize: 12 },
   error: { color: Color.red, fontSize: 9, marginLeft: 12 }
-}
+};

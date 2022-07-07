@@ -1,9 +1,9 @@
 // Please, update the values below as instructed in the README.md file.
-export const GOOGLE_WEB_CLIENT_ID = "XXXXXX.apps.googleusercontent.com"
-export const GOOGLE_IOS_CLIENT_ID = "YYYYYY.apps.googleusercontent.com"
-export const APPLE_SERVICE_ID = "com.crowdbotics.APP_NAME"
+export const GOOGLE_WEB_CLIENT_ID = "XXXXXX.apps.googleusercontent.com";
+export const GOOGLE_IOS_CLIENT_ID = "YYYYYY.apps.googleusercontent.com";
+export const APPLE_SERVICE_ID = "com.crowdbotics.APP_NAME";
 export const APPLE_REDIRECT_CALLBACK =
-  "https://your-app-here.com/accounts/apple/login/callback/"
+  "https://your-app-here.com/accounts/apple/login/callback/";
 
 // -----------------------------------------------------
 const messageMap = {
@@ -24,11 +24,11 @@ const messageMap = {
     message:
       "Network Error: It was not possible to establish a connection with the server."
   }
-}
+};
 
 export const mapErrorMessage = error => {
-  const message = error.message
+  const message = error.message;
   return messageMap[message]
     ? { ...messageMap[message] }
-    : { code: null, message }
-}
+    : { code: null, message };
+};

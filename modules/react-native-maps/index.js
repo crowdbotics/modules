@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { styles } from './styles'
+import { styles } from "./styles";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 const Maps = () => {
@@ -9,7 +9,7 @@ const Maps = () => {
     longitude: -122.4324,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421
-  }
+  };
 
   return (
     <View style={styles.view}>
@@ -20,9 +20,9 @@ const Maps = () => {
       />
     </View>
   );
-}
+};
 
 export default {
   title: "Maps",
   navigator: Maps
-}
+};

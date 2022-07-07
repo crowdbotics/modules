@@ -8,8 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "web": "react-app-rewired start",
-    "web-build": "react-app-rewired build && mkdir -p backend/web_build && cp -R build/* backend/web_build"
+    "web": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --live-reload --color --mode development",
+    "web:build": "./node_modules/.bin/webpack --config ./webpack.config.js --color --mode production"
   },
   "dependencies": {
     "react": "17.0.1",

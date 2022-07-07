@@ -5,14 +5,14 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import {
   NavigationHelpersContext,
   useNavigationBuilder,
   TabRouter,
   TabActions,
-  createNavigatorFactory,
+  createNavigatorFactory
 } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -29,19 +29,19 @@ const LoginTabBar = ({ navigation, state, descriptors }) => {
       {state.routes.map((route) => (
         <View
           key={route.key}
-          style={route.key == currentTab.key ? styles.activeTabStyle : null}
+          style={route.key === currentTab.key ? styles.activeTabStyle : null}
         >
           <TouchableOpacity
             onPress={() => {
               const event = navigation.emit({
                 type: "tabPress",
                 target: route.key,
-                canPreventDefault: true,
+                canPreventDefault: true
               });
               if (!event.defaultPrevented) {
                 navigation.dispatch({
                   ...TabActions.jumpTo(route.name),
-                  target: state.key,
+                  target: state.key
                 });
               }
             }}
@@ -60,7 +60,7 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
-    initialRouteName,
+    initialRouteName
   });
 
   return (
@@ -71,25 +71,25 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
             <View style={styles.imageContainer}>
               <ImageBackground
                 source={{
-                  uri: BACKGROUND_URL,
+                  uri: BACKGROUND_URL
                 }}
                 style={{
                   flex: 1,
                   justifyContent: "center",
                   resizeMode: "cover",
                   height: "100%",
-                  width: "100%",
+                  width: "100%"
                 }}
               >
                 <Image
                   source={{
-                    uri: LOGO_URL,
+                    uri: LOGO_URL
                   }}
                   style={{
                     width: 155,
                     height: 155,
                     alignSelf: "center",
-                    resizeMode: "contain",
+                    resizeMode: "contain"
                   }}
                 />
               </ImageBackground>
@@ -146,5 +146,5 @@ const LoginSignup = () => {
 export default {
   title: "login",
   navigator: LoginSignup,
-  slice: slice,
+  slice: slice
 };

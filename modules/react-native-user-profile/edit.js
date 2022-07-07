@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   TextInput,
   View,
@@ -6,24 +6,26 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator
-} from "react-native"
-import { Avatar } from "react-native-elements"
-import { inputStyles, Color, buttonStyles, styles } from "./styles"
-import { getInitials, transformLabel } from "./utils"
-import { updateUserById } from "./store"
-import { useSelector, useDispatch } from "react-redux"
+} from "react-native";
+import { Avatar } from "react-native-elements";
+import { inputStyles, Color, buttonStyles, styles } from "./styles";
+import { getInitials, transformLabel } from "./utils";
+import { updateUserById } from "./store";
+import { useSelector, useDispatch } from "react-redux";
 
 export const Button = props => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
     <View style={buttonStyles.view}>
-      {props.loading ? (
+      {props.loading
+        ? (
         <ActivityIndicator color={Color.white} />
-      ) : (
+          )
+        : (
         <Text style={buttonStyles.text}>{props.title}</Text>
-      )}
+          )}
     </View>
   </TouchableOpacity>
-)
+);
 
 export const InputContainer = props => (
   <View>
@@ -40,33 +42,33 @@ export const InputContainer = props => (
       {!!props.error && <Text style={inputStyles.error}>{props.error}</Text>}
     </View>
   </View>
-)
+);
 
 export const EditUser = props => {
-  const { user } = props
-  const initials = getInitials(user)
+  const { user } = props;
+  const initials = getInitials(user);
   const [form, setForm] = useState({
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
     bio: user.bio
-  })
+  });
   // code below depends on the existence of any login module - update as needed.
   const login = useSelector(state => {
-    return state?.login
-  })
-  const api = useSelector(state => state.userProfile.api)
-  const dispatch = useDispatch()
+    return state?.login;
+  });
+  const api = useSelector(state => state.userProfile.api);
+  const dispatch = useDispatch();
 
   const onUpdateForm = (key, value) => {
     setForm({
       ...form,
       [key]: value
-    })
-  }
+    });
+  };
 
   const onSaveProfile = async () => {
-    const payload = { data: { ...form, id: user.id }, token: login?.token }
+    const payload = { data: { ...form, id: user.id }, token: login?.token };
     dispatch(updateUserById(payload))
       .then(() =>
         Alert.alert(
@@ -76,13 +78,13 @@ export const EditUser = props => {
       )
       .catch(e => {
         // handle your custom error message here
-        console.log(e.message)
+        console.log(e.message);
         Alert.alert(
           "User Update Failed",
           `An unexpected error happened: ${e.message}`
-        )
-      })
-  }
+        );
+      });
+  };
   return (
     <View>
       <View style={styles.profileIcon}>
@@ -115,7 +117,7 @@ export const EditUser = props => {
         placeholder="email@email.com"
         onChangeText={value => onUpdateForm("email", value)}
         value={form.email}
-        error={form.email ? "" : `E-mail address field is required.`}
+        error={form.email ? "" : "E-mail address field is required."}
       />
       <InputContainer
         label="Bio"
@@ -131,5 +133,5 @@ export const EditUser = props => {
         onPress={onSaveProfile}
       />
     </View>
-  )
-}
+  );
+};

@@ -1,16 +1,13 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from "react-native";
 
-import { Dimensions } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 // Guideline sizes are based on standard ~5" screen mobile device
 const guidelineBaseWidth = 350;
 const guidelineBaseHeight = 680;
 
-const scale = size => (width / guidelineBaseWidth) * size;
-const scaleVertical = size => (height / guidelineBaseHeight) * size;
-const scaleModerate = (size, factor = 0.5) => size + ((scale(size) - size) * factor);
+const scale = (size) => (width / guidelineBaseWidth) * size;
+const scaleVertical = (size) => (height / guidelineBaseHeight) * size;
 
 export const styles = StyleSheet.create({
   view: {
@@ -27,12 +24,12 @@ export const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject
   },
   searchbar: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     marginLeft: scale(10),
     marginRight: scale(10),
     marginTop: scaleVertical(5),
     marginBottom: scaleVertical(5),
     borderRadius: 12,
-    borderColor: '#E5E5E5',
-  },
+    borderColor: "#E5E5E5"
+  }
 });
