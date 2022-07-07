@@ -6,14 +6,14 @@ import {
   Image,
   Text,
   TouchableOpacity,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import {
   NavigationHelpersContext,
   useNavigationBuilder,
   TabRouter,
   TabActions,
-  createNavigatorFactory,
+  createNavigatorFactory
 } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -23,26 +23,25 @@ import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
 const LoginTabBar = ({ navigation, state, descriptors }) => {
-
   const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
       {state.routes.map((route) => (
         <View
           key={route.key}
-          style={route.key == currentTab.key ? styles.activeTabStyle : null}
+          style={route.key === currentTab.key ? styles.activeTabStyle : null}
         >
           <TouchableOpacity
             onPress={() => {
               const event = navigation.emit({
                 type: "tabPress",
                 target: route.key,
-                canPreventDefault: true,
+                canPreventDefault: true
               });
               if (!event.defaultPrevented) {
                 navigation.dispatch({
                   ...TabActions.jumpTo(route.name),
-                  target: state.key,
+                  target: state.key
                 });
               }
             }}
@@ -61,7 +60,7 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
-    initialRouteName,
+    initialRouteName
   });
   const options = useContext(OptionsContext);
   return (
@@ -72,25 +71,25 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
             <View style={styles.imageContainer}>
               <ImageBackground
                 source={{
-                  uri: options.BACKGROUND_URL,
+                  uri: options.BACKGROUND_URL
                 }}
                 style={{
                   flex: 1,
                   justifyContent: "center",
                   resizeMode: "cover",
                   height: "100%",
-                  width: "100%",
+                  width: "100%"
                 }}
               >
                 <Image
                   source={{
-                    uri: options.LOGO_URL,
+                    uri: options.LOGO_URL
                   }}
                   style={{
                     width: 155,
                     height: 155,
                     alignSelf: "center",
-                    resizeMode: "contain",
+                    resizeMode: "contain"
                   }}
                 />
               </ImageBackground>
@@ -117,7 +116,7 @@ const createLoginNavigator = createNavigatorFactory(LoginSignupTabs);
 const LoginStack = createLoginNavigator();
 
 const LoginScreen = () => {
-  const options = useContext(OptionsContext)
+  const options = useContext(OptionsContext);
   return (
     <LoginStack.Navigator>
       <LoginStack.Screen
@@ -148,5 +147,5 @@ const Login = () => {
 export default {
   title: "Login",
   navigator: Login,
-  slice: slice,
+  slice: slice
 };

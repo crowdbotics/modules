@@ -48,6 +48,12 @@ platform(:ios) do
       itc_team_name: team_name
     )
 
+    # Disabling game-center capability cause deployment fails if its enabled
+    # Active forum post https://developer.apple.com/forums/thread/707506
+    # You can safely remove this if you've already accounted for this in your
+    # Entitlements configuration
+    sh("fastlane", "produce", "disable_services", "--game-center", "ios")
+
     if(File.file?(app_privacy_details))
       puts("app_privacy_details.json exists. Uploading APP Privacy Details to App Store...")
 
@@ -65,7 +71,9 @@ platform(:ios) do
 
   desc('Pre-build setup')
   lane (:build_setup) do
-    increment_build_number(xcodeproj: filename)
+    increment_build_number(
+      build_number: "$CIRCLE_BUILD_NUM"
+    )
 
     update_app_identifier(
       xcodeproj: filename,
@@ -111,6 +119,21 @@ platform(:ios) do
     upload_to_testflight(
       email: 'ProjectOwnerEmail',
       beta_app_description: "Beta version of #{app_name} uploaded by Crowdbotics"
+    )
+  end
+
+  desc('Upload Release to App Store')
+  lane(:upload_release) do
+    init_app
+
+    create_build
+
+    upload_to_app_store(
+      submit_for_review: true,
+      automatic_release: false,
+      force: true, # Set to true to skip verification of HTML preview
+      skip_metadata: true,
+      skip_screenshots: true
     )
   end
 
