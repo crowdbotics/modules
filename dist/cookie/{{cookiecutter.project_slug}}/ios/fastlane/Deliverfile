@@ -4,7 +4,8 @@ automatic_release false
 
 force true # Set to true to skip verification of HTML preview
 
-skip_screenshots true
+# Skip uploading screenshots from ./fastlane/screenshots/ directory
+# skip_screenshots true
 
 app_rating_config_path "./fastlane/metadata/app_rating_config.json"
 
