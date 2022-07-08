@@ -3,19 +3,19 @@ import path from "path";
 import config from "./config.js";
 
 const MODULE_TYPE = process.argv.slice(2)[0];
-const OUTPUT_FILE = path.join(config.dist.directory, `modules.json`);
+const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");
 
 const module = process.argv.slice(2)[1];
 const dataFile = path.join(process.cwd(), OUTPUT_FILE);
 const moduleDir = path.join(process.cwd(), "modules", MODULE_TYPE, module);
 
-let data = JSON.parse(
+const data = JSON.parse(
   fs.readFileSync(dataFile, "utf8")
 );
 
 console.log("Package:");
 if (MODULE_TYPE == "react-native") {
-  let packageJSON = JSON.parse(
+  const packageJSON = JSON.parse(
     fs.readFileSync(path.join(moduleDir, "package.json"), "utf8")
   );
   console.log(packageJSON.name);

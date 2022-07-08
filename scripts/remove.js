@@ -22,18 +22,18 @@ modules.map((module) => {
   // cleanup node_modules
   if (existsSync(path.join(originModuleDir, "node_modules"))) {
     fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
-      recursive: true,
+      recursive: true
     });
   }
   if (existsSync(path.join(targetModuleDir, "node_modules"))) {
     fs.rmdirSync(path.join(targetModuleDir, "node_modules"), { recursive: true });
   }
 
-  find.file(originModuleDir, function(files) {
-    let file = files.filter(filterPackageJSON)[0];
+  find.file(originModuleDir, function (files) {
+    const file = files.filter(filterPackageJSON)[0];
     if (file) {
       const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
-      let name = packageJSON.name;
+      const name = packageJSON.name;
       process.chdir(demoDir);
 
       try {
@@ -45,15 +45,15 @@ modules.map((module) => {
     }
 
     files.filter(filterMeta).map((file) => {
-      let targetFilePath = path.join(
+      const targetFilePath = path.join(
         targetModuleDir,
         path.relative(originModuleDir, file)
       );
 
       fs.rmSync(targetFilePath);
 
-      let dir = path.dirname(targetFilePath);
-      let files = fs.readdirSync(dir);
+      const dir = path.dirname(targetFilePath);
+      const files = fs.readdirSync(dir);
       if (files.length == 0) {
         fs.rmdirSync(dir);
       }

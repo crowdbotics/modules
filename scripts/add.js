@@ -27,7 +27,7 @@ modules.map((module) => {
   const targetModuleDir = path.join(demoDir, meta.root);
 
   const getDeps = (packageJSON) => {
-    let packages = [];
+    const packages = [];
     if (packageJSON.hasOwnProperty("x-dependencies")) {
       const deps = packageJSON["x-dependencies"];
       for (const [key, value] of Object.entries(deps)) {
@@ -40,7 +40,7 @@ modules.map((module) => {
   // cleanup node_modules
   if (existsSync(path.join(originModuleDir, "node_modules"))) {
     fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
-      recursive: true,
+      recursive: true
     });
   }
   if (existsSync(path.join(originModuleDir, "yarn.lock"))) {
@@ -49,7 +49,7 @@ modules.map((module) => {
 
   copy(originModuleDir, targetModuleDir);
 
-  find.file(originModuleDir, function(files) {
+  find.file(originModuleDir, function (files) {
     files.map((file) => {
       if (path.basename(file) == "package.json") {
         const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
@@ -58,7 +58,7 @@ modules.map((module) => {
           meta.root,
           path.dirname(file).replace(originModuleDir, "")
         );
-        let packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
+        const packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
 
         process.chdir(demoDir);
         try {

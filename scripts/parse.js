@@ -16,7 +16,7 @@ const ACCEPTED_EXTENSIONS = [
   ".jsx",
   ".tsx",
   ".md",
-  ".py",
+  ".py"
 ];
 const BASE_64_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 const META_FILE = ["meta.json"];
@@ -50,9 +50,9 @@ const parseModules = (dir) => {
         slug: module,
         options: { x: 0, y: 0, domTree: "" },
         setup:
-          "To properly configure this module, follow the instructions given in README.md inside the module folder.",
+          "To properly configure this module, follow the instructions given in README.md inside the module folder."
       },
-      files: {},
+      files: {}
     };
   };
 
@@ -61,41 +61,41 @@ const parseModules = (dir) => {
   };
 
   const parseModule = (moduleDir, callback) => {
-    let entries = fs.readdirSync(moduleDir);
+    const entries = fs.readdirSync(moduleDir);
     entries.map((entry) => {
-      let entryPath = path.join(moduleDir, entry);
-      let stats = fs.statSync(entryPath);
+      const entryPath = path.join(moduleDir, entry);
+      const stats = fs.statSync(entryPath);
       if (stats.isDirectory()) {
         parseModule(entryPath, callback);
       } else if (accepted(entryPath)) {
-        let content = fs.readFileSync(entryPath, "utf8");
-        let filePath = ignoreRootDirs(entryPath, 2);
+        const content = fs.readFileSync(entryPath, "utf8");
+        const filePath = ignoreRootDirs(entryPath, 2);
         callback(filePath, content);
       } else if (base64(entryPath)) {
-        let ext = path.extname(entryPath).replace(".", "");
-        let content = `data:image/${ext};base64,${fs.readFileSync(
+        const ext = path.extname(entryPath).replace(".", "");
+        const content = `data:image/${ext};base64,${fs.readFileSync(
           entryPath,
           "base64"
         )}`;
-        let filePath = ignoreRootDirs(entryPath, 2);
+        const filePath = ignoreRootDirs(entryPath, 2);
         callback(filePath, content);
       }
     });
   };
 
-  let data = {};
-  let modules = fs.readdirSync(dir);
+  const data = {};
+  const modules = fs.readdirSync(dir);
   console.log("");
   console.log("Parsing modules...", "\n");
 
   modules.map((module) => {
-    let modulePath = path.join(dir, module);
+    const modulePath = path.join(dir, module);
     data[module] = moduleDefaults(module);
 
     // cleanup node_modules
     if (existsSync(path.join(modulePath, "node_modules"))) {
       fs.rmdirSync(path.join(modulePath, "node_modules"), {
-        recursive: true,
+        recursive: true
       });
     }
     if (existsSync(path.join(modulePath, "yarn.lock"))) {
@@ -147,9 +147,9 @@ const parseModules = (dir) => {
 
     // Validate module options JSON Schema
     if (meta.schema) {
-      let schema = {
+      const schema = {
         type: "object",
-        properties: meta.schema,
+        properties: meta.schema
       };
       ajv.compile(schema);
       meta.schema = schema;
@@ -176,5 +176,5 @@ const parseModules = (dir) => {
   return data;
 };
 
-let data = parseModules(MODULES_DIR);
+const data = parseModules(MODULES_DIR);
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
