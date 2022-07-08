@@ -3,7 +3,7 @@ import path from "path";
 import config from "./config.js";
 import crypto from "crypto";
 import Ajv from "ajv";
-import addFormats from "ajv-formats"
+import addFormats from "ajv-formats";
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -118,12 +118,39 @@ const parseModules = (dir) => {
       return;
     }
 
+    // Validate screen only modules
+    if (module.split("-")[0].startsWith("screen")) {
+      if (path.dirname(meta.root) !== "/screens") {
+        invalid(module, "screen modules must have root starting with /screens");
+      }
+
+      const pkg = JSON.parse(data[module].files["package.json"]);
+
+      if (pkg.dependencies && Object.entries(pkg.dependencies).length) {
+        invalid(module, "screen modules must not have dependencies");
+        return;
+      }
+
+      if (!pkg.name.startsWith("@screens")) {
+        invalid(
+          module,
+          `screen modules name must start with @screens - got ${pkg.name}`
+        );
+        return;
+      }
+
+      if (!data[module].files["index.js"].includes("export default")) {
+        invalid(module, "screen module with missing export default");
+        return;
+      }
+    }
+
     // Validate module options JSON Schema
     if (meta.schema) {
       let schema = {
         type: "object",
-        properties: meta.schema
-      }
+        properties: meta.schema,
+      };
       ajv.compile(schema);
       meta.schema = schema;
     }
