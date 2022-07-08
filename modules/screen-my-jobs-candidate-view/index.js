@@ -1,13 +1,11 @@
 import React from "react";
 import { Text, StyleSheet, View, Image, ScrollView } from "react-native";
 
-const MyJobsCandidateViewScreen = (params) => {
+const MyJobsCandidateViewScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Image source={require(
-          // @ts-ignore
-          "./assets/back.png")} style={styles.back} />
+        <Image source={require("./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>My Jobs</Text>
         <Text />
       </View>
@@ -29,24 +27,22 @@ const MyJobsCandidateViewScreen = (params) => {
 
       <Text style={styles.mr10}>Status</Text>
       <View style={styles.chooseContainer}>
-      <View style={styles.sectionContainer}>
-        <View style={styles.checkboxContainer}>
-        <Image
-            source={require(// @ts-ignore
-              "./assets/box.png")}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>Available </Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.checkboxContainer}>
+            <Image
+              source={require("./assets/box.png")}
+              style={styles.checkbox}
+            />
+            <Text style={styles.label}>Available </Text>
+          </View>
+          <View style={[styles.checkboxContainer, { marginLeft: 100 }]}>
+            <Image
+              source={require("./assets/checkbox.png")}
+              style={styles.checkbox}
+            />
+            <Text style={styles.label}>Hired </Text>
+          </View>
         </View>
-        <View style={[styles.checkboxContainer, { marginLeft: 100 }]}>
-        <Image
-            source={require(// @ts-ignore
-              "./assets/checkbox.png")}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>Hired </Text>
-        </View>
-      </View>
       </View>
 
       <Text style={styles.mr10}>Department</Text>
@@ -66,9 +62,7 @@ const MyJobsCandidateViewScreen = (params) => {
       <Text style={styles.mr10}>See details</Text>
       <View style={styles.chooseContainer}>
         <Text>Link</Text>
-        <Image source={require(
-          // @ts-ignore
-          "./assets/link.png")} style={styles.linkImg} />
+        <Image source={require("./assets/link.png")} style={styles.linkImg} />
       </View>
     </ScrollView>
   );
@@ -142,8 +136,17 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  checkbox: { height: 24, width: 24, resizeMode: "contain", alignSelf: "center" },
-  sectionContainer: { flexDirection: "row", justifyContent: "flex-start", alignItems: "center" },
+  checkbox: {
+    height: 24,
+    width: 24,
+    resizeMode: "contain",
+    alignSelf: "center"
+  },
+  sectionContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
   checkboxContainer: {
     flexDirection: "row"
   },
