@@ -11,7 +11,7 @@ fs.rmdirSync(target, { recursive: true });
 fs.mkdirSync(target);
 
 const command = generateCommand([
-  `npx react-native`,
+  "npx react-native",
   `init ${config.dist.builds.raw.placeholderName}`,
   `--template ${template}`,
   `--version ${config.versions.rn}`,
