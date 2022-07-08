@@ -1,24 +1,23 @@
 import React from "react";
 import { Text, StyleSheet, View, Image, ScrollView } from "react-native";
 
-const JobDetailsProviderViewScreen = (params) => {
+const JobDetailsProviderViewScreen = () => {
   return (
-    <ScrollView >
+    <ScrollView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Image source={require(
-            // @ts-ignore
-            "./assets/back.png")} style={styles.back} />
+          <Image source={require("./assets/back.png")} style={styles.back} />
           <Text style={styles.heading}>Job details</Text>
           <View style={styles.messageContainer}>
-            <Image source={require(
-              // @ts-ignore
-              "./assets/pen.png")} style={styles.message} />
-               <Image source={require(
-                 // @ts-ignore
-                 "./assets/message.png")} style={styles.message} />
+            <Image
+              source={require("./assets/pen.png")}
+              style={styles.message}
+            />
+            <Image
+              source={require("./assets/message.png")}
+              style={styles.message}
+            />
           </View>
-
         </View>
         <View style={styles.tabView}>
           <View style={[styles.tabItem, styles.selectedTab]}>
@@ -50,25 +49,35 @@ const JobDetailsProviderViewScreen = (params) => {
         <View style={styles.descriptionContainer}>
           <Text style={styles.descriptionText}>Job description</Text>
           <Text style={styles.description}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa faucibus nisi egestas quis etiam nec feugiat. Scelerisque pellentesque at in accumsan cras tristique at id. At nullam lectus sapien nulla. At egestas cursus elit, tortor mattis gravida ornare proin ipsum. Duis purus turpis libero tristique dignissim.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Massa
+            faucibus nisi egestas quis etiam nec feugiat. Scelerisque
+            pellentesque at in accumsan cras tristique at id. At nullam lectus
+            sapien nulla. At egestas cursus elit, tortor mattis gravida ornare
+            proin ipsum. Duis purus turpis libero tristique dignissim.
           </Text>
         </View>
         <Text style={styles.mr10}>Number of Hours</Text>
-        <View style={[styles.chooseContainer, { justifyContent: "center", marginBottom: 0 }]}>
+        <View
+          style={[
+            styles.chooseContainer,
+            { justifyContent: "center", marginBottom: 0 }
+          ]}
+        >
           <Text>8</Text>
         </View>
         <View style={styles.bidContainer}>
-        <Text style={styles.bidText}>Mon-Fri</Text>
-      </View>
+          <Text style={styles.bidText}>Mon-Fri</Text>
+        </View>
         <Text style={styles.mr10}>Starting date</Text>
         <View style={styles.chooseContainer}>
           <Text>01/06/2022</Text>
         </View>
         <Text style={styles.mr10}>Salary</Text>
         <View style={styles.sliderContainer}>
-          <Image source={require(
-            // @ts-ignore
-            "./assets/slider.png")} style={styles.sliderImg} />
+          <Image
+            source={require("./assets/slider.png")}
+            style={styles.sliderImg}
+          />
         </View>
         <View style={styles.sliderTextContainer}>
           <Text style={styles.sliderText}>$40k</Text>
@@ -81,15 +90,16 @@ const JobDetailsProviderViewScreen = (params) => {
         <Text style={styles.mr10}>Candidates</Text>
         <View style={styles.chooseContainer}>
           <Text>List of interested candidates</Text>
-          <Image source={require(
-            // @ts-ignore
-            "./assets/down.png")} style={styles.downImg} />
+          <Image source={require("./assets/down.png")} style={styles.downImg} />
         </View>
 
         <View style={styles.walletCard}>
           <View style={styles.walletInner}>
             <View style={[styles.imgContainer, { backgroundColor: "#F9D8D9" }]}>
-              <Image source={require("./assets/edit.png")} style={styles.image} />
+              <Image
+                source={require("./assets/edit.png")}
+                style={styles.image}
+              />
             </View>
 
             <View style={styles.walletCarder}>
@@ -107,7 +117,10 @@ const JobDetailsProviderViewScreen = (params) => {
         <View style={styles.walletCard}>
           <View style={styles.walletInner}>
             <View style={[styles.imgContainer, { backgroundColor: "#FCF1D6" }]}>
-              <Image source={require("./assets/edit.png")} style={styles.image} />
+              <Image
+                source={require("./assets/edit.png")}
+                style={styles.image}
+              />
             </View>
 
             <View style={styles.walletCarder}>
@@ -125,7 +138,10 @@ const JobDetailsProviderViewScreen = (params) => {
         <View style={styles.walletCard}>
           <View style={styles.walletInner}>
             <View style={styles.imgContainer}>
-              <Image source={require("./assets/edit.png")} style={styles.image} />
+              <Image
+                source={require("./assets/edit.png")}
+                style={styles.image}
+              />
             </View>
 
             <View style={styles.walletCarder}>
@@ -143,7 +159,10 @@ const JobDetailsProviderViewScreen = (params) => {
         <View style={styles.walletCard}>
           <View style={styles.walletInner}>
             <View style={styles.imgContainer}>
-              <Image source={require("./assets/edit.png")} style={styles.image} />
+              <Image
+                source={require("./assets/edit.png")}
+                style={styles.image}
+              />
             </View>
 
             <View style={styles.walletCarder}>
@@ -198,7 +217,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 15
   },
-  tagText: { paddingVertical: 10, paddingHorizontal: 15, backgroundColor: "#F1F1F1", borderRadius: 10 },
+  tagText: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#F1F1F1",
+    borderRadius: 10
+  },
   chooseContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -212,7 +236,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginBottom: 20
   },
-  descriptionContainer: { paddingHorizontal: 15, marginTop: 10, marginBottom: 15 },
+  descriptionContainer: {
+    paddingHorizontal: 15,
+    marginTop: 10,
+    marginBottom: 15
+  },
   descriptionText: { fontSize: 16, fontWeight: "400", marginLeft: 10 },
   description: { fontSize: 12, marginVertical: 10, fontWeight: "500" },
   sliderContainer: {
@@ -224,7 +252,12 @@ const styles = StyleSheet.create({
     height: 15,
     resizeMode: "contain"
   },
-  sliderTextContainer: { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", marginBottom: 10 },
+  sliderTextContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    marginBottom: 10
+  },
   sliderText: { color: "#77838F", marginLeft: 33, marginTop: 3 },
   tabView: {
     height: 48,
@@ -293,8 +326,25 @@ const styles = StyleSheet.create({
     width: 115,
     marginVertical: 5
   },
-  view: { fontSize: 11, color: "#fff", backgroundColor: "#000", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, marginBottom: 8 },
-  reject: { fontSize: 11, color: "#000", backgroundColor: "#fff", paddingHorizontal: 10, paddingVertical: 5, borderRadius: 10, borderColor: "#000", borderWidth: 0.5 },
+  view: {
+    fontSize: 11,
+    color: "#fff",
+    backgroundColor: "#000",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    marginBottom: 8
+  },
+  reject: {
+    fontSize: 11,
+    color: "#000",
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 10,
+    borderColor: "#000",
+    borderWidth: 0.5
+  },
   attending: { color: "#505050", fontSize: 12, marginLeft: 10, width: 115 },
   imgContainer: {
     height: 80,
@@ -306,7 +356,11 @@ const styles = StyleSheet.create({
   },
   image: { resizeMode: "contain", height: 32, width: 32 },
   leftSection: { justifyContent: "center", alignItems: "center" },
-  bidContainer: { justifyContent: "center", alignItems: "center", marginTop: 3 },
+  bidContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 3
+  },
   bidText: { fontSize: 12, color: "#939396" }
 });
 
