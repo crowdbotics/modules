@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  Image,
-  ScrollView,
-  StyleSheet
-} from "react-native";
+import { Text, StyleSheet, View, Image, ScrollView } from "react-native";
 
 const SocialProfile = () => {
   const pressed = () => {
