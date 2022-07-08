@@ -8,7 +8,7 @@ const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
-modules.map((module) => {
+modules.forEach((module) => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "modules", module);
   const meta = JSON.parse(
@@ -16,8 +16,8 @@ modules.map((module) => {
   );
   const targetModuleDir = path.join(demoDir, meta.root);
 
-  const filterPackageJSON = (src, _) => path.basename(src) == "package.json";
-  const filterMeta = (src, _) => path.basename(src) != "meta.json";
+  const filterPackageJSON = (src, _) => path.basename(src) === "package.json";
+  const filterMeta = (src, _) => path.basename(src) !== "meta.json";
 
   // cleanup node_modules
   if (existsSync(path.join(originModuleDir, "node_modules"))) {
@@ -26,7 +26,9 @@ modules.map((module) => {
     });
   }
   if (existsSync(path.join(targetModuleDir, "node_modules"))) {
-    fs.rmdirSync(path.join(targetModuleDir, "node_modules"), { recursive: true });
+    fs.rmdirSync(path.join(targetModuleDir, "node_modules"), {
+      recursive: true
+    });
   }
 
   find.file(originModuleDir, function (files) {
@@ -44,7 +46,7 @@ modules.map((module) => {
       }
     }
 
-    files.filter(filterMeta).map((file) => {
+    files.filter(filterMeta).forEach((file) => {
       const targetFilePath = path.join(
         targetModuleDir,
         path.relative(originModuleDir, file)
@@ -54,7 +56,7 @@ modules.map((module) => {
 
       const dir = path.dirname(targetFilePath);
       const files = fs.readdirSync(dir);
-      if (files.length == 0) {
+      if (files.length === 0) {
         fs.rmdirSync(dir);
       }
     });
