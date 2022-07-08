@@ -62,7 +62,7 @@ const parseModules = (dir) => {
 
   const parseModule = (moduleDir, callback) => {
     const entries = fs.readdirSync(moduleDir);
-    entries.map((entry) => {
+    entries.forEach((entry) => {
       const entryPath = path.join(moduleDir, entry);
       const stats = fs.statSync(entryPath);
       if (stats.isDirectory()) {
@@ -88,7 +88,7 @@ const parseModules = (dir) => {
   console.log("");
   console.log("Parsing modules...", "\n");
 
-  modules.map((module) => {
+  modules.forEach((module) => {
     const modulePath = path.join(dir, module);
     data[module] = moduleDefaults(module);
 

@@ -18,7 +18,7 @@ const copy = (origin, target) => {
   fse.copySync(origin, target, { filter: filterFiles });
 };
 
-modules.map((module) => {
+modules.forEach((module) => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "modules", module);
   const meta = JSON.parse(
@@ -28,7 +28,7 @@ modules.map((module) => {
 
   const getDeps = (packageJSON) => {
     const packages = [];
-    if (packageJSON.hasOwnProperty("x-dependencies")) {
+    if (Object.prototype.hasOwnProperty.call(packageJSON, "x-dependencies")) {
       const deps = packageJSON["x-dependencies"];
       for (const [key, value] of Object.entries(deps)) {
         packages.push(`${key}@${value}`);
@@ -50,8 +50,8 @@ modules.map((module) => {
   copy(originModuleDir, targetModuleDir);
 
   find.file(originModuleDir, function (files) {
-    files.map((file) => {
-      if (path.basename(file) == "package.json") {
+    files.forEach((file) => {
+      if (path.basename(file) === "package.json") {
         const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
         const yarnPath = path.join(
           "file:.",
