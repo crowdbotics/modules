@@ -35,7 +35,7 @@
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.18.5",
     "@babel/generator": "^7.14.9",
-    "@babel/parser": "^7.18.4",
+    "@babel/parser": "^7.18.8",
     "@babel/preset-env": "^7.18.2",
     "@babel/template": "^7.16.7",
     "@babel/types": "^7.18.4",
@@ -46,7 +46,7 @@
     "prettier": "^2.6.2"
   },
   "devDependencies": {
-    "@react-native-community/cli": "5.0.1",
+    "@react-native-community/cli": "8.0.3",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.26.0",
