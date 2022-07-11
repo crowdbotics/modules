@@ -12,13 +12,14 @@
     "add": "node scripts/add.js",
     "remove": "node scripts/remove.js",
     "parse": "node scripts/parse.js",
+    "dist": "node scripts/parse.js --write",
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
     "template": "node scripts/template.js",
     "bootstrap": "npm run demo; npm run raw; npm run cookie; npm run parse",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "yarn run eslint modules"
+    "lint": "yarn run eslint modules scripts"
   },
   "repository": {
     "type": "git",
@@ -34,10 +35,10 @@
     "@babel/cli": "^7.17.10",
     "@babel/core": "^7.18.5",
     "@babel/generator": "^7.14.9",
-    "@babel/parser": "^7.18.4",
+    "@babel/parser": "^7.18.8",
     "@babel/preset-env": "^7.18.2",
     "@babel/template": "^7.16.7",
-    "@babel/types": "^7.18.4",
+    "@babel/types": "^7.18.8",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "find": "^0.3.0",

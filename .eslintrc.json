@@ -13,7 +13,14 @@
     "sourceType": "module"
   },
   "plugins": ["react"],
-  "ignorePatterns": ["demo", "dist", "docs", "preview", "scaffold"],
+  "ignorePatterns": [
+    "demo",
+    "dist",
+    "docs",
+    "preview",
+    "scaffold",
+    "node_modules"
+  ],
   "rules": {
     "func-call-spacing": ["error", "never"],
     "quotes": [
