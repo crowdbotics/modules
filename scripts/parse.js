@@ -28,6 +28,7 @@ const parseModules = (dir) => {
   };
 
   const invalid = (mod, message) => {
+    process.exitCode = 1;
     console.log("\u274C", mod, "=>", message);
   };
 
@@ -169,7 +170,7 @@ const parseModules = (dir) => {
 
     data[module].meta.preview = preview;
 
-    valid(module, "module passes all checks");
+    valid(module);
   });
   console.log("");
   console.log("Total of modules:", Object.keys(data).length);
@@ -177,4 +178,8 @@ const parseModules = (dir) => {
 };
 
 const data = parseModules(MODULES_DIR);
-fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
+
+// Write build files when --write argument is provided
+if (process.argv[2] === "--write" && process.exitCode !== 1) {
+  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
+}
