@@ -38,7 +38,7 @@
     "@babel/parser": "^7.18.8",
     "@babel/preset-env": "^7.18.2",
     "@babel/template": "^7.16.7",
-    "@babel/types": "^7.18.4",
+    "@babel/types": "^7.18.8",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "find": "^0.3.0",
