@@ -12,6 +12,7 @@
     "add": "node scripts/add.js",
     "remove": "node scripts/remove.js",
     "parse": "node scripts/parse.js",
+    "dist": "node scripts/parse.js --write",
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
