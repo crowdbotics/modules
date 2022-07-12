@@ -7,9 +7,11 @@ import { execSync } from "child_process";
 
 const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 
-fs.rmdirSync(path.join(process.cwd(), config.demo.directory), {
-  recursive: true
-});
+const demoDir = path.join(process.cwd(), config.demo.directory);
+
+if (fs.existsSync(demoDir)) {
+  fs.rmdirSync(demoDir, { recursive: true });
+}
 
 const command = generateCommand([
   "npx react-native",
@@ -31,4 +33,4 @@ const cookiecutterCommand = generateCommand([
 
 execSync(cookiecutterCommand);
 
-fse.moveSync(path.join("demo", "demo"), path.join("demo", "backend"));
+fse.moveSync(path.join(demoDir, "demo"), path.join(demoDir, "backend"));
