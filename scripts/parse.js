@@ -100,7 +100,7 @@ const parseModules = (dir) => {
       });
     }
     if (existsSync(path.join(modulePath, "yarn.lock"))) {
-      fs.rmdirSync(path.join(modulePath, "yarn.lock"), { recursive: true });
+      fs.rmSync(path.join(modulePath, "yarn.lock"));
     }
 
     parseModule(modulePath, (filePath, content) => {
