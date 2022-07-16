@@ -1,4 +1,14 @@
 # Appointment
+Appointment is a React Native based module. This module will enable new appointments to be created and synced with Google calendar. 
+
+## Update webClientId and androidClientId.
+Replace the webClientId and androidClientId keys In the options file.
+
+```javascript
+
+const androidClientId = "";
+const webClientId = "";
+```
 
 ## Features
 
