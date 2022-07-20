@@ -1,0 +1,13 @@
+{
+  "name": "@modules/splash-upgrade",
+  "version": "1.0.0",
+  "description": "Greet your users with an image or logo.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "prop-types" : "15.8.1"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}
