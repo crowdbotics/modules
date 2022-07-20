@@ -21,7 +21,6 @@ cat <<EOM
     "repo": "$CIRCLE_REPOSITORY_URL",
     "branch": "$CIRCLE_BRANCH",
     "build_url": "$CIRCLE_BUILD_URL",
-    "compare_url": "$CIRCLE_COMPARE_URL",
     "sha1": "$CIRCLE_SHA1",
     "platform_id": "$PLATFORM_ID"
 }
