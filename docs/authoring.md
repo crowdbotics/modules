@@ -9,6 +9,7 @@
 - [Running code on app load](#running-code-on-app-load)
 - [Modules Options](#modules-options)
 - [Screen modules](#screen-modules)
+- [Django modules](#django-modules)
 
 ## Guidelines
 
@@ -58,7 +59,7 @@ It should look like this:
 export default {
   title: "Maps", // required
   navigator: Maps, // optional
-  slice: MapsSlice, // optional
+  slice: MapsSlice // optional
 };
 ```
 
@@ -70,8 +71,8 @@ export default {
   navigator: Maps, // optional
   slice: {
     reducer: MapsReducer, // optional
-    actions: [...MapsActions], // optional
-  },
+    actions: [...MapsActions] // optional
+  }
 };
 ```
 
@@ -89,7 +90,7 @@ Which would be converted into this object:
 ```javascript
 export default {
   title: "MapsNavigator",
-  navigator: MapsNavigator,
+  navigator: MapsNavigator
 };
 ```
 
@@ -146,7 +147,7 @@ const useOneSignal = () => {
 };
 export default {
   title: "Push Notifications",
-  hook: useOneSignal,
+  hook: useOneSignal
 };
 ```
 
@@ -203,50 +204,43 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     borderBottomColor: "black",
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   container: {
     flex: 1,
     height: 100,
-    padding: 13,
+    padding: 13
   },
   text: {
     color: "black",
-    fontSize: 20,
+    fontSize: 20
   },
   buttonPressed: {
-    backgroundColor: "aquamarine",
+    backgroundColor: "aquamarine"
   },
   buttonNotPressed: {
-    backgroundColor: "blue",
+    backgroundColor: "blue"
   },
   button: {
     borderRadius: 4,
     padding: 15,
-    marginTop: 10,
+    marginTop: 10
   },
   buttonText: {
     color: "white",
     textAlign: "center",
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 });
 
 export default {
   title: "App Menu",
   copy: "Routes available",
-  styles: styles,
+  styles: styles
 };
 ```
 
 Its worth noting that the options file must `export default` a valid JSON object.
-
-For the Django modules, one writes an [options file](/modules/django-articles/articles/options.py) too:
-
-```python
-RECORDS_PER_PAGE = 50
-MEDIA_UPLOAD_PATH = "mediafiles/articles/"
-```
 
 ## Screen Modules
 
@@ -282,3 +276,105 @@ Finally, this type of modules should include a default export in the main file (
 ```
 export default LoginScreen;
 ```
+
+## Django Modules
+
+Django modules are encapsulated in a Python package in order to resolve dependencies. As such, they must have the following structure:
+
+```
+django-articles  # Module Slug
+├── django_articles  # Python Package dir
+│  ├── articles  # Package content
+│  │  ├── admin.py
+│  │  ├── apps.py  # Django Application file
+│  |  ├── __init__.py
+│  │  ├── migrations
+│  │  │  ├── 0001_articles_initial.py
+│  │  │  └── __init__.py
+│  │  ├── models.py
+│  │  ├── options.py  # Module's Options
+│  │  ├── README.md
+│  │  ├── serializers.py
+│  │  ├── urls.py
+│  │  └── viewsets.py
+│  ├── pyproject.toml  # Python Package file
+│  └── setup.py  # Python Package definition
+├── meta.json  # Module's meta.json
+└── preview.png  # Preview Image
+
+```
+
+The Python Package dir (`django_articles`) must reside in the `/backend/modules` directory of the Crowdbotics application. In the case of a stand-alone Django module, this can be specified in the Module's meta.json in the `root` key, whether in the mixed modules (those with RN code) the path must be created.
+
+### The Python Package directory
+
+This is a regular Python Package that will be installed in editable mode in order to resolve dependencies. An `egg` directory will be generated on install which should be ignored.
+
+The file strictly required is `setup.py` which has the following structure:
+
+```python
+from setuptools import setup
+from setuptools.command.build import build
+
+
+# Override build command
+class BuildCommand(build):
+    def initialize_options(self):
+        build.initialize_options(self)
+        self.build_base = "/tmp"
+
+
+setup(
+    name="cb_django_articles",  # Python Package name
+    version="0.1",
+    packages=["articles"],  # Directory with the Package content
+    install_requires=[],  # Dependencies to be installed
+    cmdclass={"build": BuildCommand},
+)
+```
+
+The Python Package name is namespaced to `cb` to avoid eventual clashes, and should be start with `cb_`, followd by the name of the python package directory (`django_articles` in this case). As this may be imported from other parts of the application, you should avoid using dots and dashes, as it prevents regular imports.
+
+The directory with the package content is where the actual code of the module resides - this level of the structure is only for packaging.
+
+Dependencies to be installed must be listed in the `install_requires` arg in the regular Python dependencies format, i.e. if the module requires just `Pillow`, `Django` 4 or greater and a pinned package, then:
+
+```python
+install_requires=["Pillow", "Django>=4", "somepackage==3.3.3"]
+```
+
+The custom `BuildCommand` should also be included as the building files may interfere with the discovery process of the module.
+
+At this time, `pyproject.toml` only contains the backend specification and should be included for the future.
+
+### The Python Package Content
+
+This is where the Module's actual code resides and should be a valid Django app, containing the corresponding `apps.py`, i.e.
+
+```python
+from django.apps import AppConfig
+
+
+class ArticlesConfig(AppConfig):
+    name = "modules.django_articles.articles"  # Python path to app
+    verbose_name = "Articles"
+```
+
+Having this, migrations should run, the admin will be included and urls will be hooked under `modules/<package-content-directory>/`.
+
+An options file may be present at the app's root, i.e. `/backend/modules/django_articles/articles/options.py`:
+
+```python
+RECORDS_PER_PAGE = 50
+MEDIA_UPLOAD_PATH = "mediafiles/articles/"
+```
+
+which can be accessed programatically by using `modules.utils.get_options()`, i.e.
+
+```
+from modules.utils import get_options
+
+MEDIA_UPLOAD_PATH = get_options("django_articles", "MEDIA_UPLOAD_PATH")
+```
+
+Note that for this to work correctly - users set the value via the front-end of Crowdbotics main app - the request for the module must be done by its slug, `django-articles` in this case - not `django_articles` (the python package directory) nor `articles` ("content-directory" of the package), as the options set by the users generated by the back-end of the main Crowdbotics app uses that key.

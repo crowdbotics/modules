@@ -8,7 +8,7 @@ const modules = process.argv.slice(2);
 const cwd = process.cwd();
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
-modules.map((module) => {
+modules.forEach((module) => {
   process.chdir(cwd);
   const originModuleDir = path.join(process.cwd(), "modules", module);
   const meta = JSON.parse(
@@ -16,24 +16,26 @@ modules.map((module) => {
   );
   const targetModuleDir = path.join(demoDir, meta.root);
 
-  const filterPackageJSON = (src, _) => path.basename(src) == "package.json";
-  const filterMeta = (src, _) => path.basename(src) != "meta.json";
+  const filterPackageJSON = (src, _) => path.basename(src) === "package.json";
+  const filterMeta = (src, _) => path.basename(src) !== "meta.json";
 
   // cleanup node_modules
   if (existsSync(path.join(originModuleDir, "node_modules"))) {
     fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
-      recursive: true,
+      recursive: true
     });
   }
   if (existsSync(path.join(targetModuleDir, "node_modules"))) {
-    fs.rmdirSync(path.join(targetModuleDir, "node_modules"), { recursive: true });
+    fs.rmdirSync(path.join(targetModuleDir, "node_modules"), {
+      recursive: true
+    });
   }
 
-  find.file(originModuleDir, function(files) {
-    let file = files.filter(filterPackageJSON)[0];
+  find.file(originModuleDir, function (files) {
+    const file = files.filter(filterPackageJSON)[0];
     if (file) {
       const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
-      let name = packageJSON.name;
+      const name = packageJSON.name;
       process.chdir(demoDir);
 
       try {
@@ -44,17 +46,17 @@ modules.map((module) => {
       }
     }
 
-    files.filter(filterMeta).map((file) => {
-      let targetFilePath = path.join(
+    files.filter(filterMeta).forEach((file) => {
+      const targetFilePath = path.join(
         targetModuleDir,
         path.relative(originModuleDir, file)
       );
 
       fs.rmSync(targetFilePath);
 
-      let dir = path.dirname(targetFilePath);
-      let files = fs.readdirSync(dir);
-      if (files.length == 0) {
+      const dir = path.dirname(targetFilePath);
+      const files = fs.readdirSync(dir);
+      if (files.length === 0) {
         fs.rmdirSync(dir);
       }
     });
