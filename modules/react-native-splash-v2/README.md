@@ -1,4 +1,4 @@
-# Splash Module
+# Splash-v2 Module
 The Splash Module is a React Native based splash Module, by that means, it truly isn't executed until after the app
 is fully loaded. If it's desired to appear during load, you will need to build a native screen in both Android and iOS directories of the project.
 
