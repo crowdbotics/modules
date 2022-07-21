@@ -52,6 +52,7 @@ Below is the list of all params that can be passed to the module.
 | renderPrevButton| `function` | Use to supply your own prev button.                        |
 | renderDoneButton| `function` | Use to supply your own done button                        |
 | renderSkipButton| `function` | Use to supply your own skip button                        |
+| mainContainerStyle      | `object`   | Style main container wrapping your all content on the onboarding screen.                        |
 | imageStyle      | `object`   | Style image displaying on the onboarding screen.                        |
 | titleStyle      | `object`   | Style title on the onboarding screen.                        |
 | descriptionStyle| `object`   | Style the description on the onboarding screen.                        |

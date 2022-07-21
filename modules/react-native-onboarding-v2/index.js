@@ -24,6 +24,7 @@ const Onboarding = ({
   renderPrevButton,
   renderDoneButton,
   renderSkipButton,
+  mainContainerStyle={},
   imageStyle = {},
   titleStyle = {},
   descriptionStyle = {}
@@ -43,7 +44,7 @@ const Onboarding = ({
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={[{flex: 1}, mainContainerStyle]}>
       {slidesData
         ? <AppIntroSlider
         renderItem={renderItem}
@@ -119,6 +120,7 @@ Onboarding.propTypes = {
   renderPrevButton: PropTypes.func,
   renderDoneButton: PropTypes.func,
   renderSkipButton: PropTypes.func,
+  mainContainerStyle: PropTypes.object,
   imageStyle: PropTypes.object,
   titleStyle: PropTypes.object,
   descriptionStyle: PropTypes.object
