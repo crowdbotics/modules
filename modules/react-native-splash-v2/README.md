@@ -4,7 +4,7 @@ is fully loaded. If it's desired to appear during load, you will need to build a
 
 ## Params
 
-Below is the list of all Params with their data types that are considered primitive or the basic ones needed for our module to work.
+Below is the list of all Params with data types that are considered primitive or the basic ones needed for the module to work.
 
 | Params              | Data Types         | Description                                                       |
 | -----------------------|:------------------:|:---------------------------------------------------------------|
@@ -12,7 +12,7 @@ Below is the list of all Params with their data types that are considered primit
 | duration (milliseconds)| Number             | Duration for Splash screen to be displayed                     |
 | onDurationEnd          | Callback Function()| A Function to navigate to other screen as the duration ends.   |
 | mainContainerStyle     | Object             | You can style image container according to your need.          |
-| imageResizeMode        | String             | Set image resizeMode (contain|cover|stretch|repeat|center)     |
+| imageResizeMode        | String             | Set image resizeMode (contain\|cover\|stretch\|repeat\|center) |
 | imageStyle             | Object             | Set splash image styles according to your need                 |
 
 
