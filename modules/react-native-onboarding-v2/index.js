@@ -47,28 +47,28 @@ const Onboarding = ({
     <View style={[{ flex: 1 }, mainContainerStyle]}>
       {slidesData
         ? <AppIntroSlider
-        renderItem={renderItem}
-        data={slidesData}
-        onDone={onDone || handleDone}
-        onSkip={onSkip || ""}
-        onSlideChange={onSlideChange || ""}
-        showSkipButton={showSkipButton}
-        bottomButton={bottomButton}
-        dotStyle={dotStyle}
-        activeDotStyle={activeDotStyle}
-        skipLabel={skipLabel}
-        doneLabel={doneLabel}
-        nextLabel={nextLabel}
-        prevLabel={prevLabel}
-        showPrevButton={showPrevButton}
-        showNextButton={showNextButton}
-        showDoneButton={showDoneButton}
-        renderNextButton={renderNextButton}
-        renderPrevButton={renderPrevButton}
-        renderDoneButton={renderDoneButton}
-        renderSkipButton={renderSkipButton}
-      />
-        : <Text style={styles.warText}><Text style={{ fontWeight: "bold" }}>No data found!</Text>{"\n"}Please pass your data</Text>}
+          renderItem={renderItem}
+          data={slidesData}
+          onDone={onDone || handleDone}
+          onSkip={onSkip || ""}
+          onSlideChange={onSlideChange || ""}
+          showSkipButton={showSkipButton}
+          bottomButton={bottomButton}
+          dotStyle={dotStyle}
+          activeDotStyle={activeDotStyle}
+          skipLabel={skipLabel}
+          doneLabel={doneLabel}
+          nextLabel={nextLabel}
+          prevLabel={prevLabel}
+          showPrevButton={showPrevButton}
+          showNextButton={showNextButton}
+          showDoneButton={showDoneButton}
+          renderNextButton={renderNextButton}
+          renderPrevButton={renderPrevButton}
+          renderDoneButton={renderDoneButton}
+          renderSkipButton={renderSkipButton}
+        />
+        : <Text style={styles.warText}>No data found!</Text>}
     </View>
   );
 };
@@ -97,7 +97,14 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center"
   },
-  warText: { top: "20%", marginHorizontal: "20%", textAlign: "center", fontSize: 20, fontFamily: "system-ui" }
+  warText: {
+    top: "20%",
+    marginHorizontal: "20%",
+    textAlign: "center",
+    fontSize: 20,
+    fontFamily: "system-ui",
+    fontWeight: "bold"
+  }
 });
 
 Onboarding.propTypes = {
