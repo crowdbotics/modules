@@ -8,12 +8,12 @@ Below is the list of all Params with data types that are considered primitive or
 
 | Params              | Data Types         | Description                                                       |
 | -----------------------|:------------------:|:---------------------------------------------------------------|
-| url (required)         | String             | URL of the splash/logo image to be displayed on splash screen  |
-| duration (milliseconds)| Number             | Duration for Splash screen to be displayed                     |
-| onDurationEnd          | Callback Function()| A Function to navigate to other screen as the duration ends.   |
-| mainContainerStyle     | Object             | You can style image container according to your need.          |
-| imageResizeMode        | String             | Set image resizeMode ( `contain` \| `cover` \| `stretch` \| `repeat` \| `center` )|
-| imageStyle             | Object             | Set splash image styles according to your need                 |
+| url (required)         | `string`             | URL of the splash/logo image to be displayed on splash screen  |
+| duration (milliseconds)| `number`             | Duration for Splash screen to be displayed                     |
+| onDurationEnd          | `funtion`            | A Function to navigate to other screen as the duration ends.   |
+| mainContainerStyle     | `object`             | You can style image container according to your need.          |
+| imageResizeMode        | `string`             | Set image resizeMode ( `contain` \| `cover` \| `stretch` \| `repeat` \| `center` )|
+| imageStyle             | `object`             | Set splash image styles according to your need                 |
 
 
 ## Manual Setup
