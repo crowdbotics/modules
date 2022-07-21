@@ -24,7 +24,7 @@ const Onboarding = ({
   renderPrevButton,
   renderDoneButton,
   renderSkipButton,
-  mainContainerStyle={},
+  mainContainerStyle = {},
   imageStyle = {},
   titleStyle = {},
   descriptionStyle = {}
@@ -44,7 +44,7 @@ const Onboarding = ({
   };
 
   return (
-    <View style={[{flex: 1}, mainContainerStyle]}>
+    <View style={[{ flex: 1 }, mainContainerStyle]}>
       {slidesData
         ? <AppIntroSlider
         renderItem={renderItem}
