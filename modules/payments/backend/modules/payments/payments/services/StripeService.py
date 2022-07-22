@@ -3,8 +3,9 @@ import environ
 
 env = environ.Env()
 
+
 class StripeService:
-    stripe.api_key = env.str("STRIPE_SECRET_KEY")
+    stripe.api_key = env.str("STRIPE_SECRET_KEY", "")
 
     @classmethod
     def create_payment_intent_sheet(cls, cus_id, cents):
