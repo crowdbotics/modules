@@ -40,12 +40,12 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
 
   const onMapPress = async (e) => {
     const coords = e.nativeEvent.coordinate;
-    if(onLatLngChange){
-      onLatLngChange(coords)
+    if (onLatLngChange) {
+      onLatLngChange(coords);
     }
 
     if (isDirection) {
-      setDestination({ latitude: coords.latitude, longitude: coords.longitude, title: '', description: '' });
+      setDestination({ latitude: coords.latitude, longitude: coords.longitude, title: "", description: "" });
     } else {
       setDefaultOrigin({ ...defaultOrigin, latitude: coords.latitude, longitude: coords.longitude });
     }
@@ -120,8 +120,8 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
     }
   };
 
-const setOriginAddress = async ()=>{
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${defaultOrigin.latitude},${defaultOrigin.longitude}&key=${apiKey}`;
+  const setOriginAddress = async () => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${defaultOrigin.latitude},${defaultOrigin.longitude}&key=${apiKey}`;
     try {
       const resp = await fetch(url);
       const respJson = await resp.json();
@@ -132,10 +132,10 @@ const setOriginAddress = async ()=>{
     } catch (error) {
       console.log("ERROR: ", error);
     }
-}
+  };
 
-const setDestinationAddress = async ()=>{
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${destination.latitude},${destination.longitude}&key=${apiKey}`;
+  const setDestinationAddress = async () => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${destination.latitude},${destination.longitude}&key=${apiKey}`;
     try {
       const resp = await fetch(url);
       const respJson = await resp.json();
@@ -146,7 +146,7 @@ const setDestinationAddress = async ()=>{
     } catch (error) {
       console.log("ERROR: ", error);
     }
-}
+  };
 
   return (
     <View style={[styles.view, mainContainerStyle]}>
