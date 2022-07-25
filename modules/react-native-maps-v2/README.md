@@ -67,7 +67,7 @@ import { modules } from '@modules';
 
 const Maps = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
 
-<Maps origin={obj} originTitle = {''} apiKey={GOOGLE_MAPS_APIKEY} onStart={func} .../>
+<Maps origin={obj} originTitle = {''} apiKey={GOOGLE_MAPS_APIKEY} onNavigationStart={func} .../>
 
 ```
 
