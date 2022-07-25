@@ -8,7 +8,7 @@ import MapViewDirections from "react-native-maps-directions";
 import MapView, { Marker } from "react-native-maps";
 import PropTypes from "prop-types";
 
-const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerImage, originTitle, originDescription, apiKey, onNavigationStart, onNavigationError, getDistance, getDuration, markerColor, getDestinationAddress, strokeColor, strokeWidth, markerImageStyle = {}, searchInputStyle = {} }) => {
+const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerImage, originTitle, originDescription, apiKey, onNavigationStart, onNavigationError, getDistance, getDuration, markerColor, getDestinationAddress, strokeColor, strokeWidth, markerImageStyle = {}, mainContainerStyle = {} }) => {
   const [mapRef, setMapRef] = useState(null);
   const [defaultOrigin, setDefaultOrigin] = useState({
     latitude: 37.78825,
@@ -128,7 +128,7 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
     console.log("GOT AN ERROR: ", errorMessage);
   };
   return (
-    <View style={styles.view}>
+    <View style={[styles.view, mainContainerStyle]}>
       <View style={{ zIndex: 1000, height: inputValue ? "100%" : 50 }}>
         {
           showSearchInput && <GooglePlacesAutocomplete
@@ -230,12 +230,12 @@ Maps.propTypes = {
   getDuration: PropTypes.func,
   getDestinationAddress: PropTypes.func,
   showSearchInput: PropTypes.bool,
-  searchInputStyle: PropTypes.object,
   strokeColor: PropTypes.string,
   strokeWidth: PropTypes.number,
   markerColor: PropTypes.string,
   markerImage: PropTypes.string,
-  markerImageStyle: PropTypes.object
+  markerImageStyle: PropTypes.object,
+  mainContainerStyle: PropTypes.object
 };
 export default {
   title: "Maps-v2",

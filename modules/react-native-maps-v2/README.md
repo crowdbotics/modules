@@ -1,21 +1,7 @@
 # Maps
-
-## Setup
-
-Update the map's initial location in:
-`modules/maps/index.js`
-
-This is the default value (San Francisco):
-
-```javascript
-const region = {
-  latitude: 37.78825,
-  longitude: -122.4324,
-};
-```
+Maps module is a react-native based module. Helps user to search and navigate to the required locations.
 
 ## Android
-
 ### Add Google Maps Key
 
 Update `android/app/src/main/AndroidManifest.xml` with the following XML meta tags:
@@ -27,8 +13,6 @@ Update `android/app/src/main/AndroidManifest.xml` with the following XML meta ta
             android:name="com.google.android.geo.API_KEY"
             android:value="Your Google maps API Key Here"/>
 
-        <!-- You will also only need to add this uses-library tag -->
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
     </application>
 ```
 
@@ -67,7 +51,7 @@ import { modules } from '@modules';
 
 const Maps = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
 
-<Maps origin={obj} originTitle = {''} apiKey={GOOGLE_MAPS_APIKEY} onStart={func} .../>
+<Maps origin={obj} originTitle = {''} apiKey={GOOGLE_MAPS_APIKEY} onNavigationStart={func} .../>
 
 ```
 
@@ -77,7 +61,7 @@ Below is the list of all params that can be passed to the module.
 
 | Name              | Type       | Description                                                    |
 | ---------------   |:----------:|:---------------------------------------------------------------|
-| origin `required` | `object`   | The origin location `{latitude: 37.78825, longitude: -122.4324}`to start routing from.|
+| origin `required` | `object`   | The origin location `{latitude: , longitude: }`to start routing from.|
 | originTitle       | `string`   | Title of the origin             |
 | originDescription | `string`   | Description of the provided origin.                 |
 | apiKey `required` | `string`   | Your Google Maps API Key. Make sure you've enabled the Google Maps Directions API for that key using the Google API Console. |
@@ -93,7 +77,7 @@ Below is the list of all params that can be passed to the module.
 | strokeColor       | `string`   | Color for the line connecting origin and destination.          |
 | strokeWidth       | `number`   | Width of the line connecting origin and destination.                        |
 | showSearchInput   | `boolean`  | Set `showSearchInput={true}` to show search bar on map to search location. It's default value is `false`. |
-
+| mainContainerStyle| `object`   | Set style for the maps main container.  |
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
