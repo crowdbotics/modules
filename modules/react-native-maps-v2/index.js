@@ -8,7 +8,7 @@ import MapViewDirections from "react-native-maps-directions";
 import MapView, { Marker } from "react-native-maps";
 import PropTypes from "prop-types";
 
-const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerImage, originTitle, originDescription, apiKey, onNavigationStart, onNavigationError, getDistance, getDuration, markerColor, getDestinationAddress, strokeColor, strokeWidth, markerImageStyle = {}, mainContainerStyle = {} }) => {
+const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerImage, originTitle, originDescription, apiKey, onNavigationStart, onNavigationError, getDistance, getDuration, markerColor, getDestinationAddress, strokeColor, strokeWidth, onLatLngChange, markerImageStyle = {}, mainContainerStyle = {} }) => {
   const [mapRef, setMapRef] = useState(null);
   const [defaultOrigin, setDefaultOrigin] = useState({
     latitude: 37.78825,
@@ -40,20 +40,14 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
 
   const onMapPress = async (e) => {
     const coords = e.nativeEvent.coordinate;
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${apiKey}`;
-    try {
-      const resp = await fetch(url);
-      const respJson = await resp.json();
-      const address = respJson.results[0].formatted_address;
-      const [title, ...desc] = address.split(",");
-      const description = desc.join(",");
-      if (isDirection) {
-        setDestination({ latitude: coords.latitude, longitude: coords.longitude, title: title, description: description });
-      } else {
-        setDefaultOrigin({ ...defaultOrigin, latitude: coords.latitude, longitude: coords.longitude, title: title, description: description });
-      }
-    } catch (error) {
-      console.log("ERROR: ", error);
+    if(onLatLngChange){
+      onLatLngChange(coords)
+    }
+
+    if (isDirection) {
+      setDestination({ latitude: coords.latitude, longitude: coords.longitude, title: '', description: '' });
+    } else {
+      setDefaultOrigin({ ...defaultOrigin, latitude: coords.latitude, longitude: coords.longitude });
     }
   };
 
@@ -116,17 +110,44 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
 
   const handleOnStart = (params) => {
     if (onNavigationStart) {
-      onNavigationStart();
+      onNavigationStart(params);
     }
-    console.log("Routing started between: " + params.origin + " and " + params.destination);
   };
 
   const handleOnError = (errorMessage) => {
     if (onNavigationError) {
-      onNavigationError();
+      onNavigationError(errorMessage);
     }
-    console.log("GOT AN ERROR: ", errorMessage);
   };
+
+const setOriginAddress = async ()=>{
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${defaultOrigin.latitude},${defaultOrigin.longitude}&key=${apiKey}`;
+    try {
+      const resp = await fetch(url);
+      const respJson = await resp.json();
+      const address = respJson.results[0].formatted_address;
+      const [title, ...desc] = address.split(",");
+      const description = desc.join(",");
+      setDefaultOrigin({ ...defaultOrigin, title: title, description: description });
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
+}
+
+const setDestinationAddress = async ()=>{
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${destination.latitude},${destination.longitude}&key=${apiKey}`;
+    try {
+      const resp = await fetch(url);
+      const respJson = await resp.json();
+      const address = respJson.results[0].formatted_address;
+      const [title, ...desc] = address.split(",");
+      const description = desc.join(",");
+      setDestination({ ...destination, title: title, description: description });
+    } catch (error) {
+      console.log("ERROR: ", error);
+    }
+}
+
   return (
     <View style={[styles.view, mainContainerStyle]}>
       <View style={{ zIndex: 1000, height: inputValue ? "100%" : 50 }}>
@@ -168,6 +189,7 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
           title={defaultOrigin?.title}
           description={defaultOrigin?.description}
           pinColor={markerColor || null}
+          onPress={setOriginAddress}
         >
           {markerImage && (
             <Image
@@ -183,6 +205,7 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
             title={destination?.title}
             description={destination?.description}
             pinColor={markerColor || null}
+            onPress={setDestinationAddress}
           >
             {markerImage && (
               <Image
@@ -235,7 +258,8 @@ Maps.propTypes = {
   markerColor: PropTypes.string,
   markerImage: PropTypes.string,
   markerImageStyle: PropTypes.object,
-  mainContainerStyle: PropTypes.object
+  mainContainerStyle: PropTypes.object,
+  onLatLngChange: PropTypes.func
 };
 export default {
   title: "Maps-v2",

@@ -68,6 +68,7 @@ Below is the list of all params that can be passed to the module.
 | enableDirections  | `boolean`  |Set `enableDirections=true` if you want to choose destination and start navigation between origin and destination.|
 | onNavigationStart | `function` | Called in case the navigation has started between origin to destination|
 | onNavigationError | `function` | Called in case the navigation has failed.           |
+| onLatLngChange | `function` | Called in case the marker has moved to new location.           |
 | getDistance (km)  | `function` | Returns the distance(as function param) between origin and destination.  |
 | getDuration (minutes)| `function` | Returns estimated time(as function param), needed to get from origin to destination|
 | markerColor       | `string`   | Custom color for the marker.                     |
