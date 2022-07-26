@@ -15,7 +15,7 @@ jobs:
           node-version: 16
           cache: "yarn"
       - run: yarn install
-      - uses: danielsousaio/action-eslint@220fde5fb47094f54a96995c4ea1eb6cb1cd05c1
+      - uses: danielsousaio/action-eslint@master
         with:
           eslint-args: "--config .eslintrc.json --ignore-path=.gitignore --quiet"
           extensions: "js,jsx,ts,tsx"
