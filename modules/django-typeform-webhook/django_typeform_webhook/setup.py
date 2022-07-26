@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_django_typeform_webhook",
     version="0.1",
-    packages=["typeformWebhook"],
+    packages=["typeform-webhook"],
     install_requires=["django-jsonfield"],
     cmdclass={"build": BuildCommand},
 )
