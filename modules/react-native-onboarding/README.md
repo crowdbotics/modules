@@ -57,7 +57,7 @@ Below is the list of all params that can be passed to the module.
 | titleStyle      | `object`   | Style title on the onboarding screen.                        |
 | descriptionStyle| `object`   | Style the description on the onboarding screen.                        |
 
-### `slidesData` array of objects
+### Param `slidesData` array of objects
 
 The first param `slidesData` is an array of objects. Each object in `slidesData ` array will have following properties inside it.
 
