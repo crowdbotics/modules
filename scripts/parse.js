@@ -16,7 +16,8 @@ const ACCEPTED_EXTENSIONS = [
   ".jsx",
   ".tsx",
   ".md",
-  ".py"
+  ".py",
+  ".toml"
 ];
 const BASE_64_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 const META_FILE = ["meta.json"];
@@ -100,7 +101,7 @@ const parseModules = (dir) => {
       });
     }
     if (existsSync(path.join(modulePath, "yarn.lock"))) {
-      fs.rmdirSync(path.join(modulePath, "yarn.lock"), { recursive: true });
+      fs.rmSync(path.join(modulePath, "yarn.lock"));
     }
 
     parseModule(modulePath, (filePath, content) => {
