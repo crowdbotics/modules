@@ -38,7 +38,7 @@ https://github.com/react-native-maps/react-native-maps/blob/master/docs/installa
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
 ```javascript
-import Maps from "@modules/maps-v2";
+import Maps from "@modules/maps";
 
 const { title, navigator } = Maps;
 ```
