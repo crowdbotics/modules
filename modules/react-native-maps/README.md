@@ -74,12 +74,12 @@ Below is the list of all params that can be passed to the module.
 | markerColor       | `string`   | Custom color for the marker.                     |
 | markerImage       | `string`   | URL of the image to be displayed as marker.                     |
 | markerImageStyle  | `object`   | Set style for the marker image. e.g (`height`, `width`, `resizeMode`) etc. |
-| getDestinationAddress| `function` | Returns  `{latitude: , longitude}` of the destination.       |
+| getDestinationAddress| `function` | Returns  `{latitude: 37.78825, longitude: -122.4324}` of the destination.       |
 | strokeColor       | `string`   | Color for the line connecting origin and destination.          |
 | strokeWidth       | `number`   | Width of the line connecting origin and destination.                        |
 | showSearchInput   | `boolean`  | Set `showSearchInput={true}` to show search bar on map to search location. It's default value is `false`. |
 | mainContainerStyle| `object`   | Set style for the maps main container.  |
-| markedLocations   | `array` | Array of objects. Each object should have latitude, longitude, title and description for the location to be marked on the map.  |
+| markedLocations   | `array` | Array of objects. Each object should have latitude, longitude, title and description for the location to be marked on the map. e.g `{latitude: 37.78825, longitude: -122.4324, title: '', description: ''}`|
 | onDragStart         | `function` | Callback that is called when the user initiates a drag on this marker.|
 | onDrag         | `function` | Callback called continuously as the marker is dragged.|
 | onDragEnd         | `function` | Callback that is called when a drag on this marker finishes. Returns locations longitude and latitude as function param.|
