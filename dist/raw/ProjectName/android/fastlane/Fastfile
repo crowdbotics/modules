@@ -102,17 +102,6 @@ platform(:android) do
     sh ". $BASH_ENV"
   end
 
-  desc('create git tag')
-  lane(:build_git_tag) do
-
-    # Add a git tag for this build. This will automatically
-    # use an appropriate git tag name
-    add_git_tag(build_number: ENV["CIRCLE_BUILD_NUM"].to_i)
-
-    # Push the new commit and tag back to your git remote
-    push_to_git_remote
-  end
-
   # Update app URL in CB app DB
   private_lane(:update_url) do |options|
     url = "https://#{ENV['WEBHOOK_HOSTNAME']}/api/v2/apps/#{ENV['PROJECT_ID']}/metadata-webhook/"
