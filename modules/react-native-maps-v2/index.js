@@ -8,13 +8,13 @@ import MapViewDirections from "react-native-maps-directions";
 import MapView, { Marker } from "react-native-maps";
 import PropTypes from "prop-types";
 
-const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerImage, originTitle, originDescription, apiKey, onNavigationStart, onNavigationError, getDistance, getDuration, markerColor, getDestinationAddress, strokeColor, strokeWidth, onLatLngChange, markerImageStyle = {}, mainContainerStyle = {} }) => {
+const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerImage, originTitle, originDescription, apiKey, onNavigationStart, onNavigationError, getDistance, getDuration, markerColor, getDestinationAddress, strokeColor, strokeWidth, onLatLngChange, markerImageStyle = {}, mainContainerStyle = {}, markedLocations, onDragEnd, onDrag, onDragStart }) => {
   const [mapRef, setMapRef] = useState(null);
   const [defaultOrigin, setDefaultOrigin] = useState({
     latitude: 37.78825,
     longitude: -122.4324,
-    title: "San Francisco",
-    description: "San Francisco, officially the City and County of San Francisco"
+    title: "",
+    description: ""
   });
   const [inputValue, setInputValue] = useState("");
   const [destination, setDestination] = useState(null);
@@ -74,6 +74,9 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
 
   const getAddressHandle = (address) => {
     setInputValue("");
+    if (onLatLngChange) {
+      onLatLngChange(address.geometry.location);
+    }
     const title = address.name;
     const description = address.formatted_address;
     const latitude = address.geometry.location.lat;
@@ -120,31 +123,55 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
     }
   };
 
-  const setOriginAddress = async () => {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${defaultOrigin.latitude},${defaultOrigin.longitude}&key=${apiKey}`;
+  const setOriginAddress = async (latlng, locTitle) => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng.latitude},${latlng.longitude}&key=${apiKey}`;
     try {
       const resp = await fetch(url);
       const respJson = await resp.json();
       const address = respJson.results[0].formatted_address;
       const [title, ...desc] = address.split(",");
       const description = desc.join(",");
-      setDefaultOrigin({ ...defaultOrigin, title: title, description: description });
+      if (locTitle === "origin") {
+        setDefaultOrigin({ ...defaultOrigin, title: title, description: description });
+      } else {
+        setDestination({ ...destination, title: title, description: description });
+      }
     } catch (error) {
       console.log("ERROR: ", error);
     }
   };
 
-  const setDestinationAddress = async () => {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${destination.latitude},${destination.longitude}&key=${apiKey}`;
-    try {
-      const resp = await fetch(url);
-      const respJson = await resp.json();
-      const address = respJson.results[0].formatted_address;
-      const [title, ...desc] = address.split(",");
-      const description = desc.join(",");
-      setDestination({ ...destination, title: title, description: description });
-    } catch (error) {
-      console.log("ERROR: ", error);
+  const handleDragOrigin = (e) => {
+    const coords = e.nativeEvent.coordinate;
+    setDefaultOrigin({ ...defaultOrigin, latitude: coords.latitude, longitude: coords.longitude, title: "", description: "" });
+    if (onLatLngChange) {
+      onLatLngChange(coords);
+    }
+    if (onDragEnd) {
+      onDragEnd(coords);
+    }
+  };
+
+  const handleDragDest = (e) => {
+    const coords = e.nativeEvent.coordinate;
+    setDestination({ ...destination, latitude: coords.latitude, longitude: coords.longitude, title: "", description: "" });
+    if (onLatLngChange) {
+      onLatLngChange(coords);
+    }
+    if (onDragEnd) {
+      onDragEnd(coords);
+    }
+  };
+
+  const handleOnDrag = () => {
+    if (onDrag) {
+      onDrag();
+    }
+  };
+
+  const handleOnDragStart = () => {
+    if (onDragStart) {
+      onDragStart();
     }
   };
 
@@ -182,14 +209,34 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
         onPress={onMapPress}
         style={styles.map}
       >
+        {markedLocations && markedLocations.map((item, index) =>
+          <Marker
+            key={index}
+            coordinate={{ latitude: item.latitude, longitude: item.longitude }}
+            title={item?.title}
+            description={item?.description}
+            pinColor={markerColor}
+          >
+            {markerImage && (
+              <Image
+                source={{ uri: markerImage }}
+                style={[styles.marker, markerImageStyle]}
+              />
+            )}
+          </Marker>
+        )}
 
         <Marker
           key={1}
+          draggable
           coordinate={{ latitude: defaultOrigin.latitude, longitude: defaultOrigin.longitude }}
           title={defaultOrigin?.title}
           description={defaultOrigin?.description}
           pinColor={markerColor || null}
-          onPress={setOriginAddress}
+          onPress={() => setOriginAddress(defaultOrigin, "origin")}
+          onDrag={() => handleOnDrag()}
+          onDragStart={() => handleOnDragStart()}
+          onDragEnd={(e) => handleDragOrigin(e)}
         >
           {markerImage && (
             <Image
@@ -201,11 +248,16 @@ const Maps = ({ origin, enableDirections = true, showSearchInput = true, markerI
         {destination && (
           <Marker
             key={2}
+            draggable
             coordinate={destination}
             title={destination?.title}
             description={destination?.description}
             pinColor={markerColor || null}
-            onPress={setDestinationAddress}
+            onPress={() => setOriginAddress(destination, "destination")}
+            onDrag={() => handleOnDrag()}
+            onDragStart={() => handleOnDragStart()}
+            onDragEnd={(e) => handleDragDest(e)}
+
           >
             {markerImage && (
               <Image
@@ -259,7 +311,10 @@ Maps.propTypes = {
   markerImage: PropTypes.string,
   markerImageStyle: PropTypes.object,
   mainContainerStyle: PropTypes.object,
-  onLatLngChange: PropTypes.func
+  onLatLngChange: PropTypes.func,
+  markedLocations: PropTypes.array,
+  onDrag: PropTypes.func,
+  onDragEnd: PropTypes.func
 };
 export default {
   title: "Maps-v2",

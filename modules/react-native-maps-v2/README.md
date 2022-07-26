@@ -79,6 +79,12 @@ Below is the list of all params that can be passed to the module.
 | strokeWidth       | `number`   | Width of the line connecting origin and destination.                        |
 | showSearchInput   | `boolean`  | Set `showSearchInput={true}` to show search bar on map to search location. It's default value is `false`. |
 | mainContainerStyle| `object`   | Set style for the maps main container.  |
+| markedLocations   | `array` | Array of objects. Each object should have latitude, longitude, title and description for the location to be marked on the map.  |
+| onDragStart         | `function` | Callback that is called when the user initiates a drag on this marker.|
+| onDrag         | `function` | Callback called continuously as the marker is dragged.|
+| onDragEnd         | `function` | Callback that is called when a drag on this marker finishes. Returns locations longitude and latitude as function param.|
+
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
