@@ -21,7 +21,7 @@ Below is the list of all Params with their data types that are considered primit
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
 ```javascript
-import Splash from "@modules/splash-upgrade";
+import Splash from "@modules/splash";
 
 const { title, navigator } = Splash;
 
