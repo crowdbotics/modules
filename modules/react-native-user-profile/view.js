@@ -20,14 +20,14 @@ const ViewUser = props => {
     <View>
       {user.id
         ? (
-        <View>
+        <View style={props.userInfoContainerStyle}>
           <View style={styles.profileIcon}>
             <Avatar
               size="large"
               rounded
               icon={{ name: "user", type: "font-awesome" }}
               title={initials}
-              containerStyle={{ backgroundColor: Color.pink }}
+              containerStyle={[{ backgroundColor: Color.pink }, props.avatarStyle]}
             />
           </View>
           <UserInfo

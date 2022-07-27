@@ -57,6 +57,28 @@ import UserProfile from "@modules/user-profile";
 const { title, navigator, slice } = UserProfile;
 ```
 
+2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
+```javascript
+import { modules } from '@modules';
+
+const UserProfile = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+
+<UserProfile  />;
+```
+
+## Params
+
+Below is the list of all params that can be passed to the module.
+
+| Name            | Type       | Description                                                    |
+| --------------- |:----------:|:---------------------------------------------------------------|
+| avatarStyle       | `object` | Set style for for the profile avatar.                   |
+| backgroundImgStyle | `object` | Set style for the background image if you have set any.|
+| editContainerStyle | `object`  | Set style for the main container wrapping the whole content of edit profile page.|
+| userInfoContainerStyle| `object`   | Set style for the container containing user info.    |
+| textInputStyle  | `object`   | Set custom style for the text inputs.          |
+| buttonStyle     | `object`   | Set custom style for the buttons.                       |
+| buttonTextStyle | `object`   | Set custom style for buttons text. |
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

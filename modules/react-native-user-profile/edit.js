@@ -15,13 +15,13 @@ import { useSelector, useDispatch } from "react-redux";
 
 export const Button = props => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
-    <View style={buttonStyles.view}>
+    <View style={[buttonStyles.view, props.buttonStyle]}>
       {props.loading
         ? (
         <ActivityIndicator color={Color.white} />
           )
         : (
-        <Text style={buttonStyles.text}>{props.title}</Text>
+        <Text style={[buttonStyles.text, props.buttonTextStyle]}>{props.title}</Text>
           )}
     </View>
   </TouchableOpacity>
@@ -33,7 +33,7 @@ export const InputContainer = props => (
     <View>
       <TextInput
         autoCapitalize="none"
-        style={inputStyles.input}
+        style={[inputStyles.input, props.textInputStyle]}
         placeholderTextColor={Color.steel}
         underlineColorAndroid={"transparent"}
         {...props}
@@ -86,14 +86,14 @@ export const EditUser = props => {
       });
   };
   return (
-    <View>
+    <View style={props.editContainerStyle}>
       <View style={styles.profileIcon}>
         <Avatar
           size="large"
           rounded
           icon={{ name: "user", type: "font-awesome" }}
           title={initials}
-          containerStyle={{ backgroundColor: Color.pink }}
+          containerStyle={[{ backgroundColor: Color.pink }, props.avatarStyle]}
         />
       </View>
 
@@ -103,6 +103,7 @@ export const EditUser = props => {
         placeholder="John"
         onChangeText={value => onUpdateForm("first_name", value)}
         value={form.first_name}
+        textInputStyle={props.textInputStyle}
       />
       <InputContainer
         keyboardType="default"
@@ -110,6 +111,7 @@ export const EditUser = props => {
         placeholder="Doe"
         onChangeText={value => onUpdateForm("last_name", value)}
         value={form.last_name}
+        textInputStyle={props.textInputStyle}
       />
       <InputContainer
         keyboardType="email-address"
@@ -118,6 +120,7 @@ export const EditUser = props => {
         onChangeText={value => onUpdateForm("email", value)}
         value={form.email}
         error={form.email ? "" : "E-mail address field is required."}
+        textInputStyle={props.textInputStyle}
       />
       <InputContainer
         label="Bio"
@@ -126,11 +129,14 @@ export const EditUser = props => {
         placeholder="Write something about yourself."
         onChangeText={value => onUpdateForm("bio", value)}
         value={form.bio}
+        textInputStyle={props.textInputStyle}
       />
       <Button
         title="Save"
         loading={api.loading === "pending"}
         onPress={onSaveProfile}
+        buttonStyle = {props.buttonStyle}
+        buttonTextStyle = {props.buttonTextStyle}
       />
     </View>
   );
