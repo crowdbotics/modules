@@ -33,7 +33,7 @@ export const TextInputField = (props) => (
 // Custom Button
 export const Button = (props) => (
   <TouchableOpacity onPress={props.onPress} disabled={props.loading}>
-    <View style={[buttonStyles.viewStyle, props.viewStyle]}>
+    <View style={[buttonStyles.viewStyle, props.buttonStyle]}>
       {props.loading
         ? (
         <ActivityIndicator
@@ -42,7 +42,7 @@ export const Button = (props) => (
         />
           )
         : (
-          <Text style={[buttonStyles.textStyle, props.textStyle]}>
+          <Text style={[buttonStyles.textStyle, props.buttonTextStyle]}>
             {props.title}
           </Text>
           )}
@@ -52,8 +52,9 @@ export const Button = (props) => (
 
 // Signup Component Tab
 
-export const SignupTab = (navigation) => {
+export const SignupTab = ({navigation, route}) => {
   const options = useContext(OptionsContext);
+  const {textInputStyle, buttonStyle, buttonTextStyle} = route.params;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -107,6 +108,7 @@ export const SignupTab = (navigation) => {
           onChangeText={(value) => setEmail(value)}
           value={email}
           error={validationError.email}
+          textInputStyle={textInputStyle}
         />
         <TextInputField
           label="Password"
@@ -115,6 +117,7 @@ export const SignupTab = (navigation) => {
           onChangeText={(value) => setPassword(value)}
           value={password}
           error={validationError.password}
+          textInputStyle={textInputStyle}
         />
         <TextInputField
           label="Confirm Password"
@@ -122,12 +125,15 @@ export const SignupTab = (navigation) => {
           secureTextEntry={true}
           onChangeText={(value) => setConfirmPassword(value)}
           value={confirmPassword}
+          textInputStyle={textInputStyle}
         />
       </View>
       <Button
         title={options.SignUpButtonText}
         loading={api.loading === "pending"}
         onPress={onSignupPress}
+        buttonStyle={buttonStyle}
+        buttonTextStyle={buttonTextStyle}
       />
       {!!api.error && (
         <Text style={textInputStyles.error}>{api.error.message}</Text>
@@ -136,8 +142,9 @@ export const SignupTab = (navigation) => {
   );
 };
 
-export const SignInTab = ({ navigation }) => {
+export const SignInTab = ({ navigation, route }) => {
   const options = useContext(OptionsContext);
+  const {textInputStyle, buttonStyle, buttonTextStyle} = route.params;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({
@@ -181,6 +188,7 @@ export const SignInTab = ({ navigation }) => {
           onChangeText={(value) => setEmail(value)}
           value={email}
           error={validationError.email}
+          textInputStyle={textInputStyle}
         />
         <TextInputField
           label="Password"
@@ -189,6 +197,7 @@ export const SignInTab = ({ navigation }) => {
           onChangeText={(value) => setPassword(value)}
           value={password}
           error={validationError.password}
+          textInputStyle={textInputStyle}
         />
       </View>
 
@@ -196,6 +205,8 @@ export const SignInTab = ({ navigation }) => {
         title={options.SignInButtonText}
         loading={api.loading === "pending"}
         onPress={onSigninPress}
+        buttonStyle={buttonStyle}
+        buttonTextStyle={buttonTextStyle}
       />
       {!!api.error && (
         <Text style={textInputStyles.error}>{api.error.message}</Text>

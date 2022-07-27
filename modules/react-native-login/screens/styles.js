@@ -25,7 +25,8 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
     justifyContent: "flex-start",
     paddingHorizontal: 26,
-    alignItems: "center"
+    alignItems: "center",
+    height: '100%'
   },
   input: {
     backgroundColor: "white",
@@ -133,6 +134,23 @@ export const styles = StyleSheet.create({
     justifyContent: "space-around",
     margin: 10,
     fontSize: 18
+  },
+  backgroundImg: {
+    flex: 1,
+    justifyContent: "center",
+    resizeMode: "cover",
+    height: "100%",
+    width: "100%"
+  },
+  logoImg : {
+    width: 155,
+    height: 155,
+    alignSelf: "center",
+    resizeMode: "contain"
+  },
+  resetText: {
+    color: "#fff",
+    fontSize: 15
   }
 });
 

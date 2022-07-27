@@ -9,7 +9,7 @@ const messageMap = {
   },
   "Request failed with status code 500": {
     code: 500,
-    message: "Unexpected Server Error."
+    message: "Unexpected Server Error.",
   },
   "Network Error": {
     code: null,

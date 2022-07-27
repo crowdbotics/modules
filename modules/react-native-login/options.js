@@ -35,5 +35,5 @@ export default {
   SignInNavText: "Sign In",
   SignUpNavText: "Sign Up",
   SignInButtonText: "Login",
-  SignUpButtonText: "Sign Up"
+  SignUpButtonText: "Sign Up",
 };
