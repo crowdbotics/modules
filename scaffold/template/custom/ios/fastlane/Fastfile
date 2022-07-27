@@ -126,15 +126,9 @@ platform(:ios) do
   lane(:upload_release) do
     init_app
 
-    create_build
+    create_build    
 
-    upload_to_app_store(
-      submit_for_review: true,
-      automatic_release: false,
-      force: true, # Set to true to skip verification of HTML preview
-      skip_metadata: true,
-      skip_screenshots: true
-    )
+    upload_to_app_store # configured in Deliverfile
   end
 
   desc('Deployment to Appetize')
