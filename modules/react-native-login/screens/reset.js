@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import {
   Image,
   Alert,
@@ -11,14 +11,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { styles, textInputStyles } from "./styles";
-import { OptionsContext } from "@options";
 import { validateEmail } from "../constants";
 import { resetPassword } from "../auth";
 
 const PasswordRecover = ({ navigation, route }) => {
-  const options = useContext(OptionsContext);
-  const {LOGO_IMAGE, textInputStyle, buttonStyle, buttonTextStyle} = route.params;
-  console.log('PasswordRecover: ', route.params)
+  const { LOGO_IMAGE, textInputStyle, buttonStyle, buttonTextStyle } = route.params;
+  console.log("PasswordRecover: ", route.params);
   const [email, setEmail] = useState("");
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
@@ -55,7 +53,7 @@ const PasswordRecover = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <KeyboardAwareScrollView contentContainerStyle={[styles.screen,{justifyContent: 'center'}]}>
+      <KeyboardAwareScrollView contentContainerStyle={[styles.screen, { justifyContent: "center" }]}>
         {LOGO_IMAGE && renderImage()}
         <Text style={styles.heading}>{"Password Recovery"}</Text>
         <View style={styles.fieldContainer}>

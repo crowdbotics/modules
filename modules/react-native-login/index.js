@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { OptionsContext } from "@options";
-import PropTypes from "prop-types"
+import PropTypes from "prop-types";
 import {
   View,
   ImageBackground,
   Image,
   Text,
   TouchableOpacity,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import {
   NavigationHelpersContext,
@@ -24,7 +24,7 @@ import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
 const LoginTabBar = ({ navigation, state, descriptors, activeTabStyle }) => {
-  console.log('activeTabStyle: ', activeTabStyle)
+  console.log("activeTabStyle: ", activeTabStyle);
   const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
@@ -64,7 +64,7 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
     screenOptions,
     initialRouteName
   });
-  const options = useContext(OptionsContext);
+
   const { LOGO_IMAGE, logoStyle, BACKGROUND_IMAGE, backgroundImgStyle, mainContainerStyle, imageContainerStyle, signInContainerStyle, activeTabStyle } = screenOptions;
   return (
     <NavigationHelpersContext.Provider value={navigation}>
@@ -86,9 +86,9 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
                   />
                 </ImageBackground>
               </View>
-        
+
           </View>
-          <View style={[styles.cardView, signInContainerStyle, {marginTop: LOGO_IMAGE || BACKGROUND_IMAGE ? -90 : '-40%' }]}>
+          <View style={[styles.cardView, signInContainerStyle, { marginTop: LOGO_IMAGE || BACKGROUND_IMAGE ? -90 : "-40%" }]}>
             <LoginTabBar
               navigation={navigation}
               state={state}
@@ -133,7 +133,6 @@ const LoginScreen = ({ navigation, route }) => {
 const Stack = createStackNavigator();
 
 const Login = ({ LOGO_IMAGE, logoStyle = {}, BACKGROUND_IMAGE, backgroundImgStyle = {}, mainContainerStyle = {}, imageContainerStyle = {}, signInContainerStyle = {}, textInputStyle = {}, buttonStyle = {}, buttonTextStyle = {}, activeTabStyle = {} }) => {
-
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="LoginScreen" component={LoginScreen} initialParams={{ LOGO_IMAGE, logoStyle, BACKGROUND_IMAGE, backgroundImgStyle, mainContainerStyle, imageContainerStyle, signInContainerStyle, textInputStyle, buttonStyle, buttonTextStyle, activeTabStyle }} />

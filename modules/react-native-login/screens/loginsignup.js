@@ -52,9 +52,9 @@ export const Button = (props) => (
 
 // Signup Component Tab
 
-export const SignupTab = ({navigation, route}) => {
+export const SignupTab = ({ navigation, route }) => {
   const options = useContext(OptionsContext);
-  const {textInputStyle, buttonStyle, buttonTextStyle} = route.params;
+  const { textInputStyle, buttonStyle, buttonTextStyle } = route.params;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -144,7 +144,7 @@ export const SignupTab = ({navigation, route}) => {
 
 export const SignInTab = ({ navigation, route }) => {
   const options = useContext(OptionsContext);
-  const {textInputStyle, buttonStyle, buttonTextStyle} = route.params;
+  const { textInputStyle, buttonStyle, buttonTextStyle } = route.params;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({

@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-start",
     paddingHorizontal: 26,
     alignItems: "center",
-    height: '100%'
+    height: "100%"
   },
   input: {
     backgroundColor: "white",
@@ -142,7 +142,7 @@ export const styles = StyleSheet.create({
     height: "100%",
     width: "100%"
   },
-  logoImg : {
+  logoImg: {
     width: 155,
     height: 155,
     alignSelf: "center",
