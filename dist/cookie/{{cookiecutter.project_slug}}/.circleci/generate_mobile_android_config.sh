@@ -109,6 +109,19 @@ jobs:
             echo "$ANDROID_KEYSTORE" | base64 --decode > upload-key.keystore
 
       - run:
+          name: Add key.json file
+          working_directory: android
+          command:  |
+            echo "$GOOGLE_PLAY_CONSOLE_API_KEY" | base64 --decode > key.json
+
+      - run:
+          name: Add my-upload-key.keystore file
+          working_directory: android
+          command:  |
+            cd app
+            echo "$MYAPP_UPLOAD_STORE_FILE" | base64 --decode > my-upload-key.keystore
+
+      - run:
           name: Build and upload to appetize.io
           command: bundle exec fastlane deploy_appetize
           working_directory: android
@@ -133,6 +146,19 @@ jobs:
           name: Webhook Failed
           command: bash .circleci/webhook_callback.sh "failure"
           when: on_fail
+
+      - run:
+          name: Create git tag
+          working_directory: android
+          command: |
+            git config user.email "leandrobono85@gmail.com"
+            git config user.name "Leandro Bono"
+            bundle exec fastlane build_git_tag
+
+      - run:
+          name: Create and push a new $MOBILE_LANE build to Play Store
+          command: bundle exec fastlane $MOBILE_LANE
+          working_directory: android
 
 workflows:
   version: 2.1
