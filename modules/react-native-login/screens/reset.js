@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { OptionsContext } from "@options";
 import {
   Image,
   Alert,
@@ -15,6 +16,7 @@ import { validateEmail } from "../constants";
 import { resetPassword } from "../auth";
 
 const PasswordRecover = ({ navigation, route }) => {
+  const options = useContext(OptionsContext);
   const { LOGO_IMAGE, textInputStyle, buttonStyle, buttonTextStyle } = route.params;
   console.log("PasswordRecover: ", route.params);
   const [email, setEmail] = useState("");
@@ -45,7 +47,7 @@ const PasswordRecover = ({ navigation, route }) => {
       <Image
         style={[styles.image, imageSize]}
         source={{
-          uri: LOGO_IMAGE
+          uri: LOGO_IMAGE || options.LOGO_URL
         }}
       />
     );
@@ -54,7 +56,7 @@ const PasswordRecover = ({ navigation, route }) => {
   return (
     <View style={{ flex: 1 }}>
       <KeyboardAwareScrollView contentContainerStyle={[styles.screen, { justifyContent: "center" }]}>
-        {LOGO_IMAGE && renderImage()}
+        {renderImage()}
         <Text style={styles.heading}>{"Password Recovery"}</Text>
         <View style={styles.fieldContainer}>
           <Text style={styles.label}>Email Address</Text>

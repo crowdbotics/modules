@@ -24,7 +24,6 @@ import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
 const LoginTabBar = ({ navigation, state, descriptors, activeTabStyle }) => {
-  console.log("activeTabStyle: ", activeTabStyle);
   const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
@@ -59,6 +58,7 @@ const LoginTabBar = ({ navigation, state, descriptors, activeTabStyle }) => {
 };
 
 function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
+  const options = useContext(OptionsContext);
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
@@ -74,13 +74,13 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
              <View style={[styles.imageContainer, imageContainerStyle]}>
                 <ImageBackground
                   source={{
-                    uri: BACKGROUND_IMAGE
+                    uri: BACKGROUND_IMAGE || options.BACKGROUND_URL
                   }}
                   style={[styles.backgroundImg, backgroundImgStyle]}
                 >
                   <Image
                     source={{
-                      uri: LOGO_IMAGE
+                      uri: LOGO_IMAGE || options.LOGO_URL
                     }}
                     style={[styles.logoImg, logoStyle]}
                   />
@@ -88,7 +88,7 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
               </View>
 
           </View>
-          <View style={[styles.cardView, signInContainerStyle, { marginTop: LOGO_IMAGE || BACKGROUND_IMAGE ? -90 : "-40%" }]}>
+          <View style={[styles.cardView, signInContainerStyle]}>
             <LoginTabBar
               navigation={navigation}
               state={state}
