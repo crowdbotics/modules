@@ -15,8 +15,8 @@ jobs:
           node-version: 16
           cache: "yarn"
       - run: yarn install
-      - uses: crowdbotics/action-eslint@v2.2.1
+      - uses: sibiraj-s/action-eslint@v2.1.1
         with:
-          eslint-args: "--config .eslintrc.json --ignore-path=.gitignore --quiet"
+          eslint-args: "--config .eslintrc.json --ignore-path=.eslintignore --quiet"
           extensions: "js,jsx,ts,tsx"
           annotations: true
