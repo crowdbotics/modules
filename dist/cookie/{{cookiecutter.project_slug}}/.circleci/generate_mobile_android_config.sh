@@ -153,14 +153,6 @@ jobs:
           when: on_fail
 
       - run:
-          name: Create git tag
-          working_directory: android
-          command: |
-            git config user.email "leandrobono85@gmail.com"
-            git config user.name "Leandro Bono"
-            bundle exec fastlane build_git_tag
-
-      - run:
           name: Create and push a new $MOBILE_LANE build to Play Store
           command: bundle exec fastlane $MOBILE_LANE
           working_directory: android
