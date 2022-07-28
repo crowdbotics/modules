@@ -154,9 +154,9 @@ android {
         }
         release {
             storeFile file('my-upload-key.keystore')
-            storePassword ENV['MYAPP_UPLOAD_KEY_PASSWORD']
-            keyAlias ENV["MYAPP_UPLOAD_KEY_ALIAS"]
-            keyPassword ENV['MYAPP_UPLOAD_KEY_PASSWORD']
+            storePassword "$System.env.MYAPP_UPLOAD_KEY_PASSWORD"
+            keyAlias "$System.env.MYAPP_UPLOAD_KEY_ALIAS"
+            keyPassword "$System.env.MYAPP_UPLOAD_KEY_PASSWORD"
         }
     }
     buildTypes {
