@@ -18,7 +18,6 @@ import { resetPassword } from "../auth";
 const PasswordRecover = ({ navigation, route }) => {
   const options = useContext(OptionsContext);
   const { LOGO_IMAGE, textInputStyle, buttonStyle, buttonTextStyle } = route.params;
-  console.log("PasswordRecover: ", route.params);
   const [email, setEmail] = useState("");
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
