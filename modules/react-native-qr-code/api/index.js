@@ -2,7 +2,7 @@
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL = global.url;
+const BASE_URL = global;
 
 export const getQr = async (data) => {
   try {
