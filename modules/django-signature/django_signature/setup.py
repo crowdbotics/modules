@@ -13,6 +13,6 @@ setup(
     name="cb_django_signature",
     version="0.1",
     packages=["signature"],
-    install_requires=[""],
+    install_requires=[],
     cmdclass={"build": BuildCommand},
 )
