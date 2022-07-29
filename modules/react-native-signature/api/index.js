@@ -1,7 +1,7 @@
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
-const BASE_URL = global;
+const BASE_URL = global.url;
 
 export const saveSignature = async (data) => {
   try {
