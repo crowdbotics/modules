@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 // @ts-ignore
 import SignatureScreen from "react-native-signature-canvas";
 import { saveSignature } from "./api";
@@ -22,9 +22,10 @@ const Signature = () => {
     saveSignature({ image: signature }).then((res) => {
       setIsLoading(false);
       handleClear();
+      Alert.alert("Info", "Signature uploaded successfully.");
     }).catch((error) => {
       setIsLoading(false);
-      console.log("error", error);
+      console.log("Error: ", error);
     });
   };
 
@@ -40,24 +41,24 @@ const Signature = () => {
 
   return (
     <View style={styles.container}>
-      {isLoading && <Loader/>}
+      {isLoading && <Loader />}
       <View style={styles.head}>
         <Text style={styles.signatureText}>My signature</Text>
         <TouchableOpacity onPress={handleClear}>
-          <Image source={require("./assets/image.png")} style={styles.image}/>
+          <Image source={require("./assets/image.png")} style={styles.image} />
         </TouchableOpacity>
       </View>
       <View style={styles.signatureContainer}>
         <SignatureScreen
-        ref={ref}
-        onOK={handleOK}
-        onEmpty={handleEmpty}
-        webStyle={style}
-        trimWhitespace={true}
+          ref={ref}
+          onOK={handleOK}
+          onEmpty={handleEmpty}
+          webStyle={style}
+          trimWhitespace={true}
         />
       </View>
       <View>
-       <Text>{options.text}</Text>
+        <Text>{options.text}</Text>
       </View>
       <View style={styles.btn}>
         <Button onPress={handleEnd}>Upload</Button>
