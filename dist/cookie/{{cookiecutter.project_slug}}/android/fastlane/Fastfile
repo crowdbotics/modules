@@ -61,11 +61,13 @@ platform(:android) do
 
   desc('create a new android app bundle build')
   lane(:build_aab) do
-    increment_version_code(
-      gradle_file_path: 'app/build.gradle'
+    build_version = increment_version_code(
+      version_code: ENV["CIRCLE_BUILD_NUM"].to_i
     )
 
     gradle(task: 'bundleRelease')
+    sh "echo \"export BUILD_VERSION=#{build_version}\" >> $BASH_ENV"
+    sh ". $BASH_ENV"
   end
 
   # Update app URL in CB app DB
