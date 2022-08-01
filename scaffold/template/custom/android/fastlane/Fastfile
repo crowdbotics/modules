@@ -81,6 +81,8 @@ platform(:android) do
     )
 
     gradle(task: 'bundleRelease')
+    sh "echo \"export BUILD_VERSION=#{build_version}\" >> $BASH_ENV"
+    sh ". $BASH_ENV"
   end
 
   desc('create git tag')
