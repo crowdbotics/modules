@@ -31,8 +31,7 @@ platform(:android) do
     upload_to_play_store(track: 'internal',
                          version_code: ENV["CIRCLE_BUILD_NUM"].to_i,
                          version_name: ENV["CIRCLE_BUILD_NUM"].to_s,
-                         track_promote_to: 'alpha',
-                         release_status: 'draft')
+                         track_promote_to: 'alpha')
   end
 
   desc('Promote from internal to alpha')
