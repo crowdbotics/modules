@@ -48,11 +48,6 @@ export const globalOptions = {
 }
 ```
 
-## Configuring the Privacy Policy Frontend
-All that is required to configure the frontend is to edit the url in `index.js` to point to your app's url on the web. On line 14 of `index.js`, replace <APP_URL_HERE> with your App's url (you can get this from the crowdbotics dashboard). 
-`fetch('https://<APP_URL_HERE>.botics.co/modules/terms-and-conditions/')`
-
-
 Additional url configuration is possible by changing your main urls.py (not the privacy urls.py) and/or changing privacy/urls.py
 
 ## Contributing
