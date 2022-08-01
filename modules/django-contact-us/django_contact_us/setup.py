@@ -13,6 +13,6 @@ setup(
     name="cb_django_contact_us",
     version="0.1",
     packages=["contact-us"],
-    install_requires=[],
+    install_requires=["sendgrid"],
     cmdclass={"build": BuildCommand},
 )  
