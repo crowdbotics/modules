@@ -11,41 +11,17 @@ android {
     }
 }
 ```
-2. In your MainApplication.java inside of onCreate add 
-SoLoader.loadLibrary("zoom");
+2. In MainApplication.java inside of onCreate method add:
 ```
 @Override
 public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
     SoLoader.loadLibrary("zoom"); // <-- ADD THIS LINE
-    initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    return packages;
 }
 ```
-3. Add this to /android/app/src/main/res/xml/network_security_config.xml
-```
-<?xml version="1.0" encoding="utf-8"?>
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">ocsp.digicert.com</domain>
-        <domain includeSubdomains="true">crl3.digicert.com</domain>
-        <domain includeSubdomains="true">crl4.digicert.com</domain>
-        <domain includeSubdomains="true">crl.godaddy.com</domain>
-        <domain includeSubdomains="true">certificates.godaddy.com</domain>
-        <domain includeSubdomains="true">crl.starfieldtech.com</domain>
-        <domain includeSubdomains="true">certificates.starfieldtech.com</domain>
-        <domain includeSubdomains="true">ocsp.godaddy.com</domain>
-        <domain includeSubdomains="true">ocsp.starfieldtech.com</domain>
-    </domain-config>
-</network-security-config>
-```
-4. Then add this to /android/app/src/main/AndroidManifest.xml
-```
-<application
-  ...
-  android:networkSecurityConfig="@xml/network_security_config"
->
-```
+
 ### iOS
 1. Make sure you have appropriate description in Info.plist:
 ```
@@ -64,6 +40,21 @@ public void onCreate() {
 2. Update pods using cd ios/ && pod install && cd ..
 3. Make sure to set ENABLE_BITCODE = NO; for both Debug and Release because bitcode is not supported by Zoom iOS SDK
 4. Optional: Implement custom UI See [docs](https://marketplace.zoom.us/docs/sdk/native-sdks/iOS/mastering-zoom-sdk/in-meeting-function/customized-in-meeting-ui/overview/) for more details.
+
+
+### known issues
+
+* Undefined symbol: _OBJC_CLASS_$_MobileRTCMeetingJoinParam
+* Undefined symbol: _OBJC_CLASS_$_MobileRTCMeetingStartParam4WithoutLoginUser
+* Undefined symbol: __swift_FORCE_LOAD_$_swiftCoreFoundation
+
+------------------------------------------------------
+
+* Library not found for -lDoubleConversion
+
+```
+add "arm64" in Pods >> Build Settings >> Excluded Architectures
+```
 
 ### Configurations Keys
 ```
