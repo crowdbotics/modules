@@ -152,29 +152,6 @@ jobs:
           command: bash .circleci/webhook_callback.sh "failure"
           when: on_fail
 
-      - run:
-          name: Create git tag
-          working_directory: android
-          command: |
-            git config user.email "leandrobono85@gmail.com"
-            git config user.name "Leandro Bono"
-            bundle exec fastlane build_git_tag
-
-      - run:
-          name: Create internal upload
-          working_directory: android
-          command: bundle exec fastlane internal
-
-      - run:
-          name: Get internal releases
-          working_directory: android
-          command: bundle exec fastlane get_internal_releases
-
-      - run:
-          name: Promote from internal to alpha
-          working_directory: android
-          command: bundle exec fastlane from_internal_to_alpha
-
 workflows:
   version: 2.1
   node-android:
