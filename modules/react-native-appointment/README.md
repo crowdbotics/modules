@@ -2,12 +2,39 @@
 Appointment is a React Native based module. This module will enable new appointments to be created and synced with Google calendar. 
 
 ## Update webClientId and androidClientId.
-Replace the webClientId and androidClientId keys In the options file.
+Replace the webClientId, iosClientId and androidClientId keys In the options file.
 
 ```javascript
 
 const androidClientId = "";
 const webClientId = "";
+const iosClientId = ""
+```
+
+### IOS 
+
+Add the following schemes to your info.plist
+
+```
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>***Your bundle ID***<</string>
+        </array>
+    </dict>
+    <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>***Your iosClientId ID***</string>
+        </array>
+    </dict>
+</array>
 ```
 
 ## Features
