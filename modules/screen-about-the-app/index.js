@@ -1,26 +1,45 @@
-import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import React, { useState } from 'react';
+import { Text, StyleSheet, View, SafeAreaView, Image } from 'react-native';
 
-const AboutTheAppScreen = (params) => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.headingTxt}>About the App Screen</Text>
-    </View>
-  );
+const AboutTheAppScreen = params => {
+  const [ImageSource, setImageSource] = useState(require('./assets/Frame21.png'));
+  const [text1, setText1] = useState('I understand that uses my dolor sit amet, consectetur adipiscing elit. Viverra auctor laoreet sodales congue sit volutpat quisque. Mattis nisl in convallis sed et. Est turpis aliquam est, ut mattis nisi, amet feugiat. Aliquet odio consequat, nisl mauris ullamcorper malesuada velit sem dolor. Dui morbi porttitor integer felis, pellentesque quam. Et accumsan justo, massa tincidunt arcu fermentum est. Sed nibh id vel, diam ut feugiat nec, placerat mauris. Neque lorem netus lacinia elit est libero sed. Commodo viverra et, neque augue augue mauris, nunc ut nec.');
+  const [text2, setText2] = useState('I understand that uses my dolor sit amet, consectetur adipiscing elit. Viverra auctor laoreet sodales congue sit volutpat quisque. Mattis nisl in convallis sed et. Est turpis aliquam est, ut mattis nisi, amet feugiat. Aliquet odio consequat, nisl mauris ullamcorper malesuada velit sem dolor. Dui morbi porttitor integer felis, pellentesque quam. Et accumsan justo, massa tincidunt arcu fermentum est. Sed nibh id vel, diam ut feugiat nec, placerat mauris. Neque lorem netus lacinia elit est libero sed. Commodo viverra et, neque augue augue mauris, nunc ut nec.');
+  return <SafeAreaView style={styles.container}>
+      <View style={styles.imgScroller}>
+        <Image source={ImageSource} />
+        <Image style={styles.threeDots} source={require('./assets/3Dots.png')} />
+      </View>
+      <View style={styles.textContainer}>
+        <Text style={styles.text}>{text1}</Text>
+        <Text style={styles.text}>{text2}</Text>
+      </View>
+    </SafeAreaView>;
 };
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
     flex: 1,
-    justifyContent: "space-around"
+    justifyContent: 'flex-start',
+    backgroundColor: '#fff'
   },
-  headingTxt: {
-    fontSize: 24,
-    fontWeight: "bold",
-    padding: 2,
-    marginVertical: 12
+  imgScroller: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 20
+  },
+  threeDots: {
+    marginTop: 20
+  },
+  textContainer: {
+    paddingHorizontal: 20
+  },
+  text: {
+    fontSize: 14,
+    textAlign: 'justify',
+    lineHeight: 18,
+    marginVertical: 10
   }
 });
-
 export default AboutTheAppScreen;
