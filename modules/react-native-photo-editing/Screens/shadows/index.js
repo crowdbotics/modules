@@ -12,6 +12,7 @@ import { BlurV } from "../../Utils/blurv";
 import { reSizeImage } from "../../Utils/common";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
+import Header from "../../Components/Header";
 
 const Shadows = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -40,9 +41,7 @@ const Shadows = ({ navigation }) => {
       let result = {
         uri: null
       };
-
       result = await editsRef.glView.capture();
-
       reSizeImage(result.uri, wImage, hImage).then(response => {
         setImageContainerHW({
           w: response.width,
@@ -57,6 +56,7 @@ const Shadows = ({ navigation }) => {
 
   return (
     <Fragment>
+      <Header></Header>
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={styles.container}>
           <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width }]}>

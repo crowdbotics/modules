@@ -1,7 +1,9 @@
 # Photo Editing
 
 
-## Configuration for react-native-unimodules
+## Configuration for Android
+
+### Configuration for react-native-unimodules
 
 1. Open up android/app/src/main/java/[...]/MainApplication.java. Add following lines to the imports at the top of the file.
 ```
@@ -50,6 +52,7 @@ Add below lines in getPackages function
     }
 ```
 
+
 ### Configuration for @react-native-community_camerarol
 
 1. Open up android/app/src/main/java/[...]/MainApplication.java. Append the given lines to imports.
@@ -75,6 +78,92 @@ Add below lines in getPackages function
     <application  android:requestLegacyExternalStorage="true" /> 
     </application>
 ```
+
+### Update buildScript in android/build.gradle
+In android/build.gradle update your `buildTools`, `compileSdkVersion` and `targetSdkVersion` to at least version 30.
+```javascript
+
+buildToolsVersion = "30.0.3"
+compileSdkVersion = 30
+targetSdkVersion = 30
+
+```
+
+## Configuration for iOS
+
+### Configuration for react-native-unimodules
+
+1. In ios/MyApp/AppDelegate.h
+```
+- @interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate> //remove this line
+
++ #import <UMCore/UMAppDelegateWrapper.h>                                         //add these two lines
++ @interface AppDelegate : UMAppDelegateWrapper <UIApplicationDelegate, RCTBridgeDelegate>
+```
+
+2. In ios/MyApp/AppDelegate.m add following lines:
+
+```
+#import <UMCore/UMModuleRegistry.h>
+#import <UMReactNativeAdapter/UMNativeModulesProxy.h>
+#import <UMReactNativeAdapter/UMModuleRegistryAdapter.h>
+```
+
+```
+@interface AppDelegate () <RCTBridgeDelegate>
+ 
+@property (nonatomic, strong) UMModuleRegistryAdapter *moduleRegistryAdapter;
+ 
+@end
+```
+```
+  self.moduleRegistryAdapter = [[UMModuleRegistryAdapter alloc] initWithModuleRegistryProvider:[[UMModuleRegistryProvider alloc] init]];
+```
+
+```
+[super application:application didFinishLaunchingWithOptions:launchOptions];
+```
+
+```
+- (NSArray<id<RCTBridgeModule>> *)extraModulesForBridge:(RCTBridge *)bridge
+{
+    NSArray<id<RCTBridgeModule>> *extraModules = [_moduleRegistryAdapter extraModulesForBridge:bridge];
+    // If you'd like to export some custom RCTBridgeModules that are not Expo modules, add them here!
+    return extraModules;
+}
+```
+
+3. In ios/Podfile 
+```
+//Remove these two lines
+require_relative '../node_modules/react-native/scripts/react_native_pods'
+require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+
+//Add these lines
+require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
+require File.join(File.dirname(`node --print "require.resolve('@react-native-community/cli-platform-ios/package.json')"`), "native_modules")
+require File.join(File.dirname(`node --print "require.resolve('react-native-unimodules/package.json')"`), "cocoapods")
+```
+```
+ platform :ios, '10.0' //remove this line
+ platform :ios, '11.0' //add this line
+```
+```
+ use_unimodules! //add this line
+```
+4. Install pods
+```
+npx pod-install
+```
+
+### Configuration for @react-native-community_camerarol
+
+1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
+2. Go to `node_modules` ➜ `@react-native-community/cameraroll` and add `RNCCameraroll.xcodeproj`
+3. In XCode, in the project navigator, select your project. Add `libRNCCameraroll.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
+4. Run your project `(Cmd+R)`<
+
+
 ## Features
 
 This module contains the following list of features.
@@ -114,8 +203,4 @@ Add Shadows to the image by adjusting
 1. Blur
 2. Blur Passes
 3. List of Maps
-
-
-
-https://user-images.githubusercontent.com/76822297/176692806-1d5c99fc-8dc6-49e4-b9a1-bd2bea983cd0.mp4
 

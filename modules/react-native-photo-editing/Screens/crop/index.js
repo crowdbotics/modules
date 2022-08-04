@@ -9,6 +9,7 @@ import options from "../../options";
 import { reSizeImage } from "../../Utils/common";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
+import Header from "../../Components/Header";
 
 const Crop = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -58,6 +59,7 @@ const Crop = ({ navigation }) => {
 
   return (
     <Fragment>
+      <Header></Header>
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={styles.container}>
           <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width }]}>
