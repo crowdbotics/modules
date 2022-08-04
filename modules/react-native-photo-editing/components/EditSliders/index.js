@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from "react-native";
 // @ts-ignore
 import Slider from "@react-native-community/slider";
 
-const Edits = (props) => {
+const EditSliders = (props) => {
   const [isInitialize, setIsInitialize] = useState(false);
 
   useEffect(() => {
@@ -49,4 +49,4 @@ const styles = StyleSheet.create({
   slider: { width: "75%" }
 });
 
-export default Edits;
+export default EditSliders;
