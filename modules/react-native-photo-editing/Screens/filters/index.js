@@ -14,6 +14,7 @@ import { reSizeImage } from "../../Utils/common";
 import Button from "../../Components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
+import Header from "../../Components/Header";
 
 const Filters = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -62,6 +63,7 @@ const Filters = ({ navigation }) => {
 
   return (
     <Fragment>
+      <Header></Header>
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={styles.container}>
           <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width }]}>

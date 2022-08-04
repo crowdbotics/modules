@@ -12,6 +12,7 @@ import Button from "../../Components/Button";
 import EditSliders from "../../Components/EditSliders";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
+import Header from "../../Components/Header";
 
 const Edits = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const Edits = ({ navigation }) => {
 
   return (
     <Fragment>
+      <Header></Header>
       <ScrollView style={{ backgroundColor: "#fff" }}>
         <View style={styles.container}>
           <View style={[styles.imgContainer, { width: imageContainerHW.w, maxWidth: width }]}>
