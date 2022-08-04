@@ -17,7 +17,7 @@ const ImagePicker = ({ navigation }) => {
       reSizeImage(res.assets[0].uri, res.assets[0].width, res.assets[0].height).then(response => {
         reSizeImage(response.uri, response.width, response.height).then(response => {
           dispatch(setImageUri(response));
-          navigation.navigate("crop");
+          navigation.replace("crop");
         }).catch(error => {
           console.log("error", error);
         });

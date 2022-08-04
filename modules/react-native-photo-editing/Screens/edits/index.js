@@ -29,7 +29,7 @@ const Edits = ({ navigation }) => {
   });
 
   const handleState = (tab) => {
-    navigation.navigate(tab);
+    navigation.replace(tab);
   };
 
   const handleFilter = (name, value) => {

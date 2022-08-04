@@ -9,7 +9,7 @@ import ImagePicker from "../Screens/imagePicker";
 const Stack = createStackNavigator();
 
 const Navigator = () => {
-  return <Stack.Navigator screenOptions={{ headerStyle: { elevation: 0 }, cardStyle: { backgroundColor: "#fff" } }}>
+  return <Stack.Navigator screenOptions={{ headerStyle: { elevation: 0 }, animationEnabled: false, cardStyle: { backgroundColor: "#fff" } }}>
     <Stack.Screen options={{ headerShown: false }} name="imagePicker" component={ImagePicker} />
     <Stack.Screen options={{ headerShown: false }} name="crop" component={Crop} />
     <Stack.Screen options={{ headerShown: false }} name="filter" component={Filters}/>

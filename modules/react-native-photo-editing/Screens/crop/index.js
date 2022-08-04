@@ -35,7 +35,7 @@ const Crop = ({ navigation }) => {
   };
 
   const handleState = (tab) => {
-    navigation.navigate(tab);
+    navigation.replace(tab);
   };
 
   const saveImage = async () => {

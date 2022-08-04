@@ -24,7 +24,7 @@ const Shadows = ({ navigation }) => {
   const [blurSettings, setBlurSettings] = useState({ Blur: 6, "Blur Passes": 3 });
 
   const handleState = (tab) => {
-    navigation.navigate(tab);
+    navigation.replace(tab);
   };
 
   const handleBlurImage = (shadow) => {
