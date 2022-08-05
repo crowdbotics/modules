@@ -43,39 +43,40 @@ platform(:android) do
   lane(:deploy_appetize) do
     gradle(task: 'assemble', build_type: 'Release')
 
-    public_key = get_appetize_public_key('android', base_name)
-
     appetize(
       path: get_last_apk_path,
-      public_key: public_key,
       platform: 'android',
       note: base_name
     )
 
     update_url(
       platform: 'android',
-      public_key: public_key || lane_context[SharedValues::APPETIZE_PUBLIC_KEY],
+      public_key: lane_context[SharedValues::APPETIZE_PUBLIC_KEY],
       url: lane_context[SharedValues::APPETIZE_APP_URL]
     )
   end
 
   desc('create a new android app bundle build')
   lane(:build_aab) do
-    increment_version_code(
-      gradle_file_path: 'app/build.gradle'
+    build_version = increment_version_code(
+      version_code: ENV["CIRCLE_BUILD_NUM"].to_i
     )
 
     gradle(task: 'bundleRelease')
+    sh "echo \"export BUILD_VERSION=#{build_version}\" >> $BASH_ENV"
+    sh ". $BASH_ENV"
   end
 
   # Update app URL in CB app DB
   private_lane(:update_url) do |options|
     url = "https://#{ENV['WEBHOOK_HOSTNAME']}/api/v2/apps/#{ENV['PROJECT_ID']}/metadata-webhook/"
     data = {
+      platform_id: ENV['PLATFORM_ID'],
       provider: 'circleci',
       metadata: {
         appetize: {
           options[:platform] => {
+            version: ENV['CIRCLE_BUILD_NUM'],
             public_key: options[:public_key],
             url: options[:url]
           }
@@ -92,22 +93,6 @@ platform(:android) do
 
     response.success?
   end
-end
-
-# get the publicKey of the appetizeApp corresponding to your base_name
-def get_appetize_public_key(platform, base_name)
-  return ENV['APPETIZE_PUBLIC_KEY'] unless ENV['APPETIZE_PUBLIC_KEY'].nil?
-
-  response =
-    HTTParty.get("https://#{ENV['APPETIZE_API_TOKEN']}@api.appetize.io/v1/apps")
-
-  return nil unless response.success?
-
-  item = JSON.parse(response.body)['data'].find do |app_app|
-    app_app['note'] == base_name && app_app['platform'] == platform
-  end
-
-  item['publicKey'] if item
 end
 
 def get_last_apk_path
