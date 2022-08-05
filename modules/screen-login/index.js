@@ -1,6 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, Dimensions, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { Text, StyleSheet, Dimensions, View, TouchableOpacity } from "react-native";
 
 const deviceWidth = Dimensions.get("window").width;
 
