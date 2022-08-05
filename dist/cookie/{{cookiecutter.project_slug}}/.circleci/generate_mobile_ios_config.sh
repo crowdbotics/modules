@@ -138,6 +138,14 @@ jobs:
             mv fastlane/test_output/report.junit test-results/xcode/junit.xml
 
       - run:
+          name: Build and upload to appetize.io
+          command: bundle exec fastlane deploy_appetize
+          working_directory: ios
+      
+      - store_artifacts:
+          path: /tmp/fastlane_build/app.zip
+
+      - run:
           name: Create and push a new $MOBILE_LANE build to App Store
           command: bundle exec fastlane $MOBILE_LANE
           working_directory: ios
