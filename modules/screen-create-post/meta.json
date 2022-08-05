@@ -1,5 +1,5 @@
 {
-    "title": "Create Post Screen 2",
-    "description": "Create Post Screen 2.",
-    "root": "/screens/create-post-2"
+  "title": "create Post",
+  "description": "Create post",
+  "root": "/screens/create-post"
 }
