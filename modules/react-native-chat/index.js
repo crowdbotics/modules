@@ -4,11 +4,10 @@ import Pubnub from "pubnub";
 // @ts-ignore
 import { PubNubProvider } from "pubnub-react";
 import Navigator from "./Navigator";
-import { useStore, uuid } from "./Store/store";
-import listener from "./Store/model";
+import { useStore, uuid } from "./Store";
+import { listener } from "./utils";
 import options from "./options";
 import { LogBox } from "react-native";
-import { users } from "./Store/storage";
 import { MenuProvider } from "react-native-popup-menu";
 
 LogBox.ignoreLogs(["Setting a timer"]);
@@ -23,12 +22,7 @@ const client = new Pubnub({
 const App = () => {
   const { state, dispatch } = useStore();
   useEffect(() => {
-    // AppState.addEventListener('change', (nextState) => {
-    //   if (nextState.match(/inactive|background/)) {
-    //     client.unsubscribeAll();
-    //   }
-    // });
-    const userIds = users.map((user) => {
+    const userIds = options.users.map((user) => {
       return user._id;
     });
     client.addListener(listener(state, dispatch));
@@ -36,7 +30,6 @@ const App = () => {
       channelGroups: [options.user._id, ...userIds],
       withPresence: true
     });
-    // return () => client.unsubscribeAll()
   }, []);
 
   return (

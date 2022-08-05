@@ -7,11 +7,11 @@ import {
   View,
   StyleSheet
 } from "react-native";
-import { ChannelType, useStore } from "../Store/store";
+import { ChannelType, useStore } from "../Store";
 import Circle from "../Components/Circle";
 // @ts-ignore
 import CheckBox from "@react-native-community/checkbox";
-import { cloneArray } from "../utils";
+import { cloneArray, createGroupChannel } from "../utils";
 // @ts-ignore
 import { usePubNub } from "pubnub-react";
 import Loader from "../Components/loader";
@@ -69,36 +69,17 @@ export default function CreateChannel({ navigation }) {
       return;
     }
     setLoading(true);
-    const channel = contacts
-      .filter((obj) => {
-        return obj.isSelected;
-      })
-      .map((user) => user._id)
-      .join("-");
-    await pubnub.objects.setChannelMetadata({
-      channel,
-      data: {
-        name,
-        custom: { type: ChannelType.Group, owner: state.user._id }
-      }
-    });
-    await pubnub.objects.setChannelMembers({
-      channel,
-      uuids: contacts
-        .filter((obj) => {
-          return obj.isSelected;
-        })
-        .map((user) => user._id)
-    });
-    await pubnub.channelGroups.addChannels({
-      channels: [channel],
-      channelGroup: state.user._id
-    });
+    const res = await createGroupChannel(
+      pubnub,
+      contacts,
+      state.user._id,
+      { name, custom: { type: ChannelType.Group, owner: state.user._id } }
+    );
     dispatch({
       channels: {
         ...state.channels,
-        [channel]: {
-          id: channel,
+        [res.channel]: {
+          id: res.channel,
           name,
           custom: { type: ChannelType.Group, owner: state.user._id }
         }
@@ -113,7 +94,7 @@ export default function CreateChannel({ navigation }) {
           name: "Channel",
           params: {
             item: {
-              id: channel,
+              id: res.channel,
               name,
               custom: { type: ChannelType.Group, owner: state.user._id }
             }

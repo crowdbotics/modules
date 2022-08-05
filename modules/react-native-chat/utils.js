@@ -98,3 +98,162 @@ export const loadHistory = (data) => {
     }
   });
 };
+
+export const listener = (state, dispatch) => ({
+  message: payload => {
+    // channel, subscription, timetoken, message, publisher
+    const channelMessages = state.messages[payload.channel] || [];
+    state.messages[payload.channel] = [...channelMessages, payload.message];
+    dispatch({ messages: state.messages });
+  },
+  file: envelop => {
+    const channelMessages = state.messages[envelop.channel] || [];
+    state.messages[envelop.channel] = [...channelMessages, {
+      _id: envelop.file.id,
+      name: envelop.file.name,
+      [envelop.message.type]: envelop.file.url,
+      createdAt: new Date((envelop.timetoken / 10000000) * 1000),
+      user: state.user
+    }];
+    dispatch({ messages: state.messages });
+  },
+  presence: event => {
+    // action, channel, occupancy, state
+    if (event.channel in state.channels) {
+      state.channels[event.channel].last_seen = event?.state?.last_seen;
+      dispatch({ channels: state.channels });
+    }
+  },
+  signal: signal => {
+  },
+  objects: objectEvent => {
+  },
+  messageAction: messageAction => {
+  },
+  status: status => {
+    dispatch({ status });
+  }
+});
+
+export const makeChannelsList = (list) => {
+  const channels = Object.entries(list).map(([id, rest]) => ({
+    id,
+    ...rest
+  }));
+  const DATA = [
+    {
+      title: "Channels",
+      data: channels
+        .filter((item) => {
+          return item.custom.type === 1;
+        })
+        .map((obj) => ({ ...obj }))
+    },
+    {
+      title: "Direct Chats",
+      data: channels
+        .filter((item) => {
+          return item.custom.type === 0;
+        })
+        .map((obj) => ({ ...obj }))
+    }
+  ];
+  return DATA;
+};
+
+export const createDirectChannel = (pubnub, userId, chatWithId, customData) => {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
+    const channel = `${userId}-${chatWithId}`;
+    await pubnub.objects.setChannelMetadata({
+      channel,
+      data: customData
+    });
+    await pubnub.objects.setChannelMembers({
+      channel,
+      uuids: [{ id: userId }, { id: `${chatWithId}` }]
+    });
+    await pubnub.channelGroups.addChannels({
+      channels: [channel],
+      channelGroup: userId
+    });
+    resolve({ channel: channel });
+  });
+};
+
+export const createGroupChannel = async (pubnub, chatWithContactsIds, userId, customData) => {
+  // eslint-disable-next-line no-async-promise-executor
+  return new Promise(async (resolve, reject) => {
+    const channel = chatWithContactsIds.filter((obj) => { return obj.isSelected; }).map((user) => user._id).join("-");
+    await pubnub.objects.setChannelMetadata({
+      channel,
+      data: customData
+    });
+    await pubnub.objects.setChannelMembers({
+      channel,
+      uuids: chatWithContactsIds.filter((obj) => { return obj.isSelected; }).map((user) => user._id)
+    });
+    await pubnub.channelGroups.addChannels({
+      channels: [channel],
+      channelGroup: userId
+    });
+    resolve({ channel: channel });
+  });
+};
+
+export const setChannelMetadata = (pubnub, channelId, data) => {
+  return pubnub.objects.setChannelMetadata({
+    channel: channelId,
+    data: data
+  });
+};
+
+export const removePubnubChannel = (pubnub, userId, channelId) => {
+  return Promise.all([
+    pubnub.objects.removeChannelMetadata({ channel: channelId }),
+    pubnub.channelGroups.removeChannels({
+      channelGroup: userId,
+      channels: [channelId]
+    })
+  ]);
+};
+
+export const leavePubnubChannel = (pubnub, userId, channelId) => {
+  return Promise.all([
+    pubnub.objects.removeChannelMembers({
+      channel: channelId,
+      uuids: [userId]
+    }),
+    pubnub.channelGroups.removeChannels({
+      channelGroup: userId,
+      channels: [channelId]
+    }),
+    pubnub.objects.removeChannelMetadata({
+      channel: channelId
+    })
+  ]);
+};
+
+export const sendMessage = (pubnub, channelId, message) => {
+  return new Promise((resolve, reject) => {
+    pubnub.publish({ channel: channelId, message: message },
+      (status, response) => {
+        resolve({ status, response });
+      }
+    );
+  });
+};
+
+export const setChannelMembers = (pubnub, channelId, memberId) => {
+  return pubnub.objects.setChannelMembers({
+    channel: channelId,
+    uuids: [memberId]
+  });
+};
+
+export const removeChannelMembers = (pubnub, channelId, memberId) => {
+  return pubnub.objects.removeChannelMembers({
+    channel: channelId,
+    uuids: [memberId]
+  });
+};

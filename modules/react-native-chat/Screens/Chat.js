@@ -1,10 +1,10 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
-import { user, useStore } from "../Store/store";
+import { user, useStore } from "../Store";
 // @ts-ignore
 import { GiftedChat, InputToolbar } from "react-native-gifted-chat";
 // @ts-ignore
 import { usePubNub } from "pubnub-react";
-import { cloneArray, getUrl, loadHistory, sortArray } from "../utils";
+import { cloneArray, getUrl, loadHistory, sendMessage, sortArray } from "../utils";
 // @ts-ignore
 import { launchImageLibrary } from "react-native-image-picker";
 import { StyleSheet, Image, View, Text } from "react-native";
@@ -156,13 +156,7 @@ const Chat = ({ route, navigation }) => {
     tmpMessages.push({ text: message[0].text, pending: true, user: user });
     setMessages(tmpMessages);
     setTextInput(null);
-    pubnub.publish(
-      { channel: item.id, message: message[0] },
-      (status, response) => {
-        console.log(status);
-        console.log(response);
-      }
-    );
+    sendMessage(pubnub, item.id, message[0]).then(res => console.log(res));
   };
 
   const renderMessageVideo = (props) => {

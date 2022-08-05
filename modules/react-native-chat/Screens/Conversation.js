@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useStore } from "../Store/store";
+import { useStore } from "../Store";
 import {
   Text,
   TouchableOpacity,
@@ -11,7 +11,7 @@ import {
 } from "react-native";
 // @ts-ignore
 import { usePubNub } from "pubnub-react";
-import { fetchChannels, getByValue, timeSince } from "../utils";
+import { fetchChannels, getByValue, makeChannelsList, timeSince } from "../utils";
 import Circle from "../Components/Circle";
 import SearchBar from "../Components/SearchBar";
 // @ts-ignore
@@ -39,34 +39,9 @@ const Conversations = ({ navigation }) => {
     bootstrap();
   }, []);
 
-  const makeList = (list) => {
-    const channels = Object.entries(list).map(([id, rest]) => ({
-      id,
-      ...rest
-    }));
-    const DATA = [
-      {
-        title: "Channels",
-        data: channels
-          .filter((item) => {
-            return item.custom.type === 1;
-          })
-          .map((obj) => ({ ...obj }))
-      },
-      {
-        title: "Direct Chats",
-        data: channels
-          .filter((item) => {
-            return item.custom.type === 0;
-          })
-          .map((obj) => ({ ...obj }))
-      }
-    ];
-    setConversationList(DATA);
-  };
-
   useEffect(() => {
-    makeList(state.channels);
+    const DATA = makeChannelsList(state.channels);
+    setConversationList(DATA);
   }, [state.channels]);
 
   useEffect(() => {
@@ -78,9 +53,11 @@ const Conversations = ({ navigation }) => {
       const filterChannels = channels.filter((channel) =>
         channel.name.toLowerCase().includes(search.toLowerCase())
       );
-      makeList(filterChannels);
+      const DATA = makeChannelsList(filterChannels);
+      setConversationList(DATA);
     } else {
-      makeList(state.channels);
+      const DATA = makeChannelsList(state.channels);
+      setConversationList(DATA);
     }
   }, [search]);
 

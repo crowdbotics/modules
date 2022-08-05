@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useStore } from "../Store/store";
+import { useStore } from "../Store";
 // @ts-ignore
 import { usePubNub } from "pubnub-react";
 import {
@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import Circle from "../Components/Circle";
 import Loader from "../Components/loader";
+import { setChannelMembers } from "../utils";
 
 export default function AddMember({ navigation, route }) {
   const { state, dispatch } = useStore();
@@ -23,10 +24,7 @@ export default function AddMember({ navigation, route }) {
       return;
     }
     setLoading(true);
-    await pubnub.objects.setChannelMembers({
-      channel: route.params.item.id,
-      uuids: [user._id]
-    });
+    await setChannelMembers(pubnub, route.params.item.id, user._id);
     const channel = route.params.item.id;
     const _members = [...state.members[channel], user];
     dispatch({ members: { ...state.members, [channel]: _members } });

@@ -1,7 +1,6 @@
 // @ts-ignore
 import create from "zustand";
 import options from "../options";
-import { users } from "./storage";
 export const uuid = options.user._id;
 export const user = options.user;
 export const ChannelType = {
@@ -14,7 +13,7 @@ export const useStore = create((setState) => ({
     channels: {},
     messages: {},
     members: {},
-    contacts: [options.user, ...users],
+    contacts: [options.user, ...options.users],
     user
   },
   dispatch: (newState) =>

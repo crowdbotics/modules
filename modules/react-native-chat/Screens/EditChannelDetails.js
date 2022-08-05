@@ -2,11 +2,12 @@ import React, { useState, Fragment } from "react";
 import { Button, TextInput, View, Text, StyleSheet } from "react-native";
 import ImagePicker from "react-native-image-crop-picker";
 import CirclePrompt from "../Components/CirclePrompt";
-import { upload } from "../Store/storage";
-import { useStore } from "../Store/store";
+import { useStore } from "../Store";
 import { usePubNub } from "pubnub-react";
 import options from "../options";
 import Loader from "../Components/loader";
+import { upload } from "../Api";
+import { setChannelMetadata } from "../utils";
 
 const EditChannelDetails = ({ navigation, route }) => {
   const { state, dispatch } = useStore();
@@ -18,19 +19,12 @@ const EditChannelDetails = ({ navigation, route }) => {
 
   const submit = async () => {
     setLoading(true);
-    await pubnub.objects.setChannelMetadata({
-      channel: route.params.item.id,
-      data: { name }
-    });
+    await setChannelMetadata(pubnub, route.params.item.id, { name });
     const channel = state.channels[route.params.item.id];
     if (image) {
       try {
         const file = await upload(image);
-
-        await pubnub.objects.setChannelMetadata({
-          channel: route.params.item.id,
-          data: { custom: { ...channel.custom, caption: file.url } }
-        });
+        await setChannelMetadata(pubnub, route.params.item.id, { custom: { ...channel.custom, caption: file.url } });
         dispatch({
           channels: {
             ...state.channels,
@@ -47,6 +41,17 @@ const EditChannelDetails = ({ navigation, route }) => {
         console.log("failed to upload a file", e);
         setLoading(false);
       }
+    } else {
+      dispatch({
+        channels: {
+          ...state.channels,
+          [route.params.item.id]: {
+            ...channel,
+            name
+          }
+        }
+      });
+      setLoading(false);
     }
   };
 

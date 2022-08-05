@@ -8,10 +8,10 @@ import {
   StyleSheet
 } from "react-native";
 import { usePubNub } from "pubnub-react";
-import { ChannelType, useStore } from "../Store/store";
-import { fetchChannels } from "../utils";
+import { fetchChannels, leavePubnubChannel, removeChannelMembers, removePubnubChannel } from "../utils";
 import Circle from "../Components/Circle";
 import { useFocusEffect } from "@react-navigation/native";
+import { ChannelType, useStore } from "../Store";
 
 export default function ChannelDetails({ route, navigation }) {
   const item = route.params.item;
@@ -30,13 +30,7 @@ const DirectChatDetails = ({ route, navigation }) => {
 
   const deleteChannel = () => {
     setLoading(true);
-    Promise.all([
-      pubnub.objects.removeChannelMetadata({ channel: route.params.item.id }),
-      pubnub.channelGroups.removeChannels({
-        channelGroup: state.user._id,
-        channels: [route.params.item.id]
-      })
-    ]).then(() => {
+    removePubnubChannel(pubnub, state.user._id, route.params.item.id).then(() => {
       fetchChannels(pubnub, state.user._id).then((channels) => {
         dispatch({ channels });
         setLoading(false);
@@ -44,6 +38,7 @@ const DirectChatDetails = ({ route, navigation }) => {
       });
     });
   };
+
   return (
     <View>
       <View style={styles.Container}>
@@ -84,10 +79,7 @@ const GroupChatDetails = ({ route, navigation }) => {
 
   const removeMember = async (member) => {
     setLoading(true);
-    await pubnub.objects.removeChannelMembers({
-      channel: params.id,
-      uuids: [member._id]
-    });
+    await removeChannelMembers(pubnub, params.id, member._id);
     const _members = state.members[params.id].filter(
       (m) => m._id !== member._id
     );
@@ -103,19 +95,7 @@ const GroupChatDetails = ({ route, navigation }) => {
 
   const leaveChannel = () => {
     setLoading(true);
-    Promise.all([
-      pubnub.objects.removeChannelMembers({
-        channel: params.id,
-        uuids: [state.user._id]
-      }),
-      pubnub.channelGroups.removeChannels({
-        channelGroup: state.user._id,
-        channels: [params.id]
-      }),
-      pubnub.objects.removeChannelMetadata({
-        channel: params.id
-      })
-    ]).then(() => {
+    leavePubnubChannel(pubnub, state.user._id, params.id).then(() => {
       fetchChannels(pubnub, state.user._id).then((channels) => {
         dispatch({ channels });
         setLoading(false);

@@ -7,11 +7,12 @@ import {
   Text
 } from "react-native";
 import SearchBar from "../Components/SearchBar";
-import { ChannelType, useStore } from "../Store/store";
+import { ChannelType, useStore } from "../Store";
 // @ts-ignore
 import { usePubNub } from "pubnub-react";
 import Circle from "../Components/Circle";
 import Loader from "../Components/loader";
+import { createDirectChannel } from "../utils";
 
 const CreateDirectChannel = ({ navigation }) => {
   const pubnub = usePubNub();
@@ -23,27 +24,17 @@ const CreateDirectChannel = ({ navigation }) => {
     : state.contacts;
 
   const createChat = async (item) => {
-    const channel = `${state.user._id}-${item._id}`;
-    await pubnub.objects.setChannelMetadata({
-      channel,
-      data: {
-        name: state.user.name + " - " + item.name,
-        custom: { type: ChannelType.Direct, owner: state.user._id }
-      }
-    });
-    await pubnub.objects.setChannelMembers({
-      channel,
-      uuids: [{ id: state.user._id }, { id: `${item._id}` }]
-    });
-    await pubnub.channelGroups.addChannels({
-      channels: [channel],
-      channelGroup: state.user._id
-    });
+    const res = await createDirectChannel(
+      pubnub,
+      state.user._id,
+      item._id,
+      { name: state.user.name + " - " + item.name, custom: { type: 0, owner: state.user._id } }
+    );
     dispatch({
       channels: {
         ...state.channels,
-        [channel]: {
-          id: channel,
+        [res.channel]: {
+          id: res.channel,
           name: state.user.name + " - " + item.name,
           custom: { type: ChannelType.Direct, owner: state.user._id }
         }
@@ -52,7 +43,7 @@ const CreateDirectChannel = ({ navigation }) => {
     setLoading(false);
     navigation.replace("Channel", {
       item: {
-        id: channel,
+        id: res.channel,
         name: state.user.name + " - " + item.name,
         custom: { type: ChannelType.Direct, owner: state.user._id }
       }
