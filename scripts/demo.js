@@ -7,28 +7,30 @@ import { execSync } from "child_process";
 
 const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 
-fs.rmdirSync(path.join(process.cwd(), config.demo.directory), {
-  recursive: true,
-});
+const demoDir = path.join(process.cwd(), config.demo.directory);
+
+if (fs.existsSync(demoDir)) {
+  fs.rmdirSync(demoDir, { recursive: true });
+}
 
 const command = generateCommand([
-  `npx react-native`,
+  "npx react-native",
   `init ${config.demo.placeholderName}`,
   `--template ${template}`,
-  `--version ${config.versions.rn}`,
+  `--version ${config.versions.rn}`
 ]);
 
 execSync(command);
 
-const cookiecutter_command = generateCommand([
-  `pipenv run cookiecutter`,
-  `gh:crowdbotics/django-scaffold`,
-  `--checkout develop`,
-  `--config-file cookiecutter.yaml`,
-  `--output-dir demo`,
-  `--no-input`,
+const cookiecutterCommand = generateCommand([
+  "pipenv run cookiecutter",
+  "gh:crowdbotics/django-scaffold",
+  "--checkout master",
+  "--config-file cookiecutter.yaml",
+  "--output-dir demo",
+  "--no-input"
 ]);
 
-execSync(cookiecutter_command);
+execSync(cookiecutterCommand);
 
-fse.moveSync(path.join("demo", "demo"), path.join("demo", "backend"));
+fse.moveSync(path.join(demoDir, "demo"), path.join(demoDir, "backend"));
