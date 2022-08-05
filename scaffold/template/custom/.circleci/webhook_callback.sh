@@ -18,10 +18,10 @@ cat <<EOM
     "status": "$1",
     "job": "$CIRCLE_JOB",
     "build_num": "$CIRCLE_BUILD_NUM",
+    "build_version": "${BUILD_VERSION-1}",
     "repo": "$CIRCLE_REPOSITORY_URL",
     "branch": "$CIRCLE_BRANCH",
     "build_url": "$CIRCLE_BUILD_URL",
-    "compare_url": "$CIRCLE_COMPARE_URL",
     "sha1": "$CIRCLE_SHA1",
     "platform_id": "$PLATFORM_ID"
 }
