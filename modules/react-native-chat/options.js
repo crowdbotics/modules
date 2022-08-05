@@ -55,8 +55,8 @@ export const ListViewStyle = StyleSheet.create({
   }
 });
 
-const PUBNUB_PUB = "pub-c-09dc7d68-298a-4dd5-9623-7cc67ddaa937";
-const PUBNUB_SUB = "sub-c-253106be-97d7-11ec-b249-a68c05a281ab";
+const PUBNUB_PUB = "Your pubnub publish key";
+const PUBNUB_SUB = "Your pubnub subscribe key";
 const FILESTACK_KEY = "AAPKloXQDQy61KlIW09M6z";
 
 const user = {

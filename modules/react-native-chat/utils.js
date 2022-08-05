@@ -5,12 +5,12 @@ export const cloneArray = (data) => {
   return JSON.parse(JSON.stringify(data));
 };
 
-export const fetchChannels = (pubnub, channelGroup) => {
+export const fetchChannels = (pubnub, userId) => {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve) => {
     const channels = {};
     const metadata = await pubnub.objects.getAllChannelMetadata({
-      filter: `id LIKE "*${channelGroup}*"`,
+      filter: `id LIKE "*${userId}*"`,
       include: { customFields: true }
     });
     metadata.data.forEach(({ id, name, updated, custom }) => {
