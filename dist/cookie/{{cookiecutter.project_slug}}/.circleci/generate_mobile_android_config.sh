@@ -138,6 +138,11 @@ jobs:
           path: android/app/build/outputs/bundle/release/app-release.aab
 
       - run:
+          name: Create and push a new $MOBILE_LANE build to Play Store
+          command: bundle exec fastlane $MOBILE_LANE
+          working_directory: android
+
+      - run:
           name: Webhook Success
           command: bash .circleci/webhook_callback.sh "success"
           when: on_success
@@ -146,11 +151,6 @@ jobs:
           name: Webhook Failed
           command: bash .circleci/webhook_callback.sh "failure"
           when: on_fail
-
-      - run:
-          name: Create and push a new $MOBILE_LANE build to Play Store
-          command: bundle exec fastlane $MOBILE_LANE
-          working_directory: android
 
 workflows:
   version: 2.1
