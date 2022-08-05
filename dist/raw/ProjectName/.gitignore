@@ -50,7 +50,10 @@ buck-out/
 
 */fastlane/report.xml
 */fastlane/Preview.html
-*/fastlane/screenshots
+
+# Commenting this out cause we need to store screenshots in the repo for
+# deployment through CircleCI.
+# */fastlane/screenshots
 
 # Bundle artifact
 *.jsbundle
