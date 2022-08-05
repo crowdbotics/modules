@@ -104,10 +104,10 @@ Below is the list of  the major functions used to create the chat modules.
 | Name              | Params              |  Description                                       |
 | ----------------- |:-------------------:|:---------------------------------------------------|
 | fetchChannels     | ` pubnub, userId ` |Takes `pubnub` instance, and `userId`. Returns a list of all channels against the user_id.|
-| setChannelMembers | ` pubnub, channelId, memberId ` |Takes `pubnub` instance, channelId and memberId. Adds new user in channel whose id is passed. |
-| removeChannelMembers | ` pubnub, channelId, memberId ` |Takes `pubnub` instance, memberId and channelId. Removes user from the channel whose id is passed.|
-| removePubnubChannel| ` pubnub, userId, channelId ` |Takes `pubnub` instance, userId and channelId. Deletes channel from user's channels list.|
-| leavePubnubChannel| ` pubnub, userId, channelId ` |Takes `pubnub` instance, userId and channelId. Removes user from channel and channel is deleted from the user's channel list.|
+| setChannelMembers | ` pubnub, channelId, memberId ` |Takes `pubnub` instance, `channelId` and `memberId`. Adds new user in channel whose id is passed. |
+| removeChannelMembers | ` pubnub, channelId, memberId ` |Takes `pubnub` instance, `memberId` and `channelId`. Removes user from the channel whose id is passed.|
+| removePubnubChannel| ` pubnub, userId, channelId ` |Takes `pubnub` instance, `userId` and `channelId`. Deletes channel from user's channels list.|
+| leavePubnubChannel| ` pubnub, userId, channelId ` |Takes `pubnub` instance, `userId` and `channelId`. Removes user from channel and channel is deleted from the user's channel list.|
 | createGroupChannel| ` pubnub, chatWithContactsIds, userId, customData ` |Takes `pubnub` instance, `userId` of the user who is creating channel, `chatWithContactsIds` of users going to be added in the group and `customData` for the channel being created. Creates group chat with selected users.|
 | createDirectChannel|` pubnub, userId, chatWithId, customData ` |Takes `pubnub` instance, `userId` of the user who is creating channel, `chatWithId` id of the second user and `customData` for the channel being created. Creates direct chat between two users.|
 | setChannelMetadata|` pubnub, channelId, data` |Takes `pubnub` instance, `channelId` of the channel whose data needs to be updated. Updates the channel according to the provided `data`.|
