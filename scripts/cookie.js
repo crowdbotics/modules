@@ -6,20 +6,23 @@ import config from "./config.js";
 import edit from "../node_modules/@react-native-community/cli/build/commands/init/editTemplate.js";
 const replace = edit.changePlaceholderInTemplate;
 
-const source = path.join(
-  process.cwd(),
-  config.dist.builds.raw.directory
-);
-const target = path.join(
-  process.cwd(),
-  config.dist.builds.cookie.directory
+const source = path.join(process.cwd(), config.dist.builds.raw.directory);
+const target = path.join(process.cwd(), config.dist.builds.cookie.directory);
+
+if (fs.existsSync(target)) {
+  fs.rmdirSync(target, { recursive: true });
+}
+
+const rawNodeModules = path.join(
+  source,
+  config.dist.builds.raw.placeholderName,
+  "node_modules"
 );
 
-fs.rmdirSync(target, { recursive: true });
-fs.rmdirSync(
-  path.join(source, config.dist.builds.raw.placeholderName, "node_modules"),
-  { recursive: true }
-);
+if (fs.existsSync(rawNodeModules)) {
+  fs.rmdirSync(rawNodeModules, { recursive: true });
+}
+
 fse.copySync(source, target);
 process.chdir(target);
 fs.renameSync(
