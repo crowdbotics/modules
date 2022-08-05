@@ -48,6 +48,12 @@ platform(:ios) do
       itc_team_name: team_name
     )
 
+    # Disabling game-center capability cause deployment fails if its enabled
+    # Active forum post https://developer.apple.com/forums/thread/707506
+    # You can safely remove this if you've already accounted for this in your
+    # Entitlements configuration
+    sh("fastlane", "produce", "disable_services", "--game-center", "ios")
+
     if(File.file?(app_privacy_details))
       puts("app_privacy_details.json exists. Uploading APP Privacy Details to App Store...")
 
@@ -65,7 +71,9 @@ platform(:ios) do
 
   desc('Pre-build setup')
   lane (:build_setup) do
-    increment_build_number(xcodeproj: filename)
+    increment_build_number(
+      build_number: "$CIRCLE_BUILD_NUM"
+    )
 
     update_app_identifier(
       xcodeproj: filename,
@@ -114,6 +122,15 @@ platform(:ios) do
     )
   end
 
+  desc('Upload Release to App Store')
+  lane(:upload_release) do
+    init_app
+
+    create_build    
+
+    upload_to_app_store # configured in Deliverfile
+  end
+
   desc('Deployment to Appetize')
   lane(:deploy_appetize) do
     init_app
@@ -127,7 +144,6 @@ platform(:ios) do
       configuration: 'Release',
       sdk: 'iphonesimulator',
       derivedDataPath: tmp_path,
-      xcargs: "CONFIGURATION_BUILD_DIR=#{tmp_path}",
       scheme: base_name
     )
 
@@ -135,17 +151,15 @@ platform(:ios) do
 
     zipped_bundle = zip(path: app_path, output_path: File.join(tmp_path, 'app.zip'))
 
-    public_key = get_appetize_public_key('ios', base_name)
-
     appetize(
       path: zipped_bundle,
-      public_key: public_key,
+      platform: 'ios',
       note: base_name
     )
 
     update_url(
       platform: 'ios',
-      public_key: public_key || lane_context[SharedValues::APPETIZE_PUBLIC_KEY],
+      public_key: lane_context[SharedValues::APPETIZE_PUBLIC_KEY],
       url: lane_context[SharedValues::APPETIZE_APP_URL]
     )
   end
@@ -154,10 +168,12 @@ platform(:ios) do
   private_lane(:update_url) do |options|
     url = "https://#{ENV['WEBHOOK_HOSTNAME']}/api/v2/apps/#{ENV['PROJECT_ID']}/metadata-webhook/"
     data = {
+      platform_id: ENV['PLATFORM_ID'],
       provider: 'circleci',
       metadata: {
         appetize: {
           options[:platform] => {
+            version: ENV['CIRCLE_BUILD_NUM'],
             public_key: options[:public_key],
             url: options[:url]
           }
@@ -175,22 +191,3 @@ platform(:ios) do
     response.success?
   end
 end
-
-def get_appetize_public_key(platform, base_name)
-  appetize_key = ENV['APPETIZE_PUBLIC_KEY']
-  appetize_key ||= fetch_appetize_public_key(platform, base_name)
-end
-
-def fetch_appetize_public_key(platform, base_name)
-  response =
-    HTTParty.get("https://#{ENV['APPETIZE_API_TOKEN']}@api.appetize.io/v1/apps")
-
-  return nil unless response.success?
-
-  item = JSON.parse(response.body)['data'].find do |app_app|
-    app_app['note'] == base_name && app_app['platform'] == platform
-  end
-
-  item['publicKey']
-end
-
