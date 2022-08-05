@@ -76,24 +76,13 @@ platform(:android) do
 
   desc('create a new android app bundle build')
   lane(:build_aab) do
-    increment_version_code(
+    build_version = increment_version_code(
       version_code: ENV["CIRCLE_BUILD_NUM"].to_i
     )
 
     gradle(task: 'bundleRelease')
     sh "echo \"export BUILD_VERSION=#{build_version}\" >> $BASH_ENV"
     sh ". $BASH_ENV"
-  end
-
-  desc('create git tag')
-  lane(:build_git_tag) do
-
-    # Add a git tag for this build. This will automatically
-    # use an appropriate git tag name
-    add_git_tag(build_number: ENV["CIRCLE_BUILD_NUM"].to_i)
-
-    # Push the new commit and tag back to your git remote
-    push_to_git_remote
   end
 
   # Update app URL in CB app DB
