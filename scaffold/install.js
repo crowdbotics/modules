@@ -57,6 +57,10 @@ fs.copyFileSync(
   path.join(customFiles, "package.json"),
   path.join(cwd, "package.json")
 );
+fs.copyFileSync(
+  path.join(customFiles, ".gitignore"),
+  path.join(cwd, ".gitignore")
+);
 
 // dotenv
 fs.copyFileSync(path.join(customFiles, ".env"), path.join(cwd, ".env"));
