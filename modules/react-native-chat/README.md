@@ -84,3 +84,7 @@ import Chat from "@modules/chat";
 
 const { title, navigator } = Chat;
 ```
+
+
+https://user-images.githubusercontent.com/76822297/176646195-11c59762-841f-4612-a411-16a37e152c8b.mp4
+
