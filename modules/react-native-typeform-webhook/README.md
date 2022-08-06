@@ -10,6 +10,23 @@ CLIENT_SECRET
 REDIRECT_URI
 WEBHOOK_URL 
 
+## Manual Setup
+
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import TypeformWebhooks from "@modules/typeform-webhook";
+
+const { title, navigator } = TypeformWebhooks;
+```
+
+2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+
+```javascript
+import { modules } from '@modules';
+const TypeformWebhooks = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+<TypeformWebhooks />
+```
 ## Features
 
 ## Retrieve forms from Typeform
