@@ -98,12 +98,12 @@ const styles = StyleSheet.create({
     marginVertical: 12
   },
   list: {
-    padding: 10,
     paddingTop: 0,
-    marginHorizontal: 20
+    marginHorizontal: 20,
+    backgroundColor: "#f1f1f1"
   },
   listContainer: {
-    margin: 0 // backgroundColor: '#f1f1f1',
+    margin: 0
   }
 });
 export default AppointmentListScreen;
@@ -136,9 +136,7 @@ const appointmentStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: "#e6e6e6"
+    padding: 10
   },
   imgContainer: {
     justifyContent: "center",
