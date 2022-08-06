@@ -58,7 +58,7 @@ export const globalOptions = {
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
 ```javascript
-import Camera from "@modules/payments";
+import Camera from "@modules/camera";
 
 const { title, navigator } = Camera;
 ```
