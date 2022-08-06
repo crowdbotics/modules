@@ -13,6 +13,23 @@ const YOUTUBE_API_KEY = "Your youtube api key";
 const VIDEOS_IDS = ["uMK0prafzw0"];
 
 ```
+## Manual Setup
+
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import YouTubePlayer from "@modules/youtube-player";
+
+const { title, navigator } = YouTubePlayer;
+```
+
+2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+
+```javascript
+import { modules } from '@modules';
+const YouTubePlayer = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+<YouTubePlayer />
+```
 
 ## Features
 The following are the key features of this module:
