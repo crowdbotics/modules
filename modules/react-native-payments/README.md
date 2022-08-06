@@ -64,3 +64,21 @@ const token = "Token c47e419eb3....";
 python manage.py runserver 192.168.100.7:8000
 
 here ip is local ip (can get it from ifconfig of your network settings)
+
+## Manual Setup
+
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import Payments from "@modules/payments";
+
+const { title, navigator } = Payments;
+```
+
+2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+
+```javascript
+import { modules } from '@modules';
+const Payments = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+<Payments />
+```
