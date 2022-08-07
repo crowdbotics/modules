@@ -5,10 +5,11 @@ import {
   View,
   TextInput,
   FlatList,
-  Image
+  Image,
+  Pressable
 } from "react-native";
 
-const ChatListingScreen = (params) => {
+const ChatListingScreen = params => {
   const [username, setUsername] = useState("");
   const [messages, setMessages] = useState([]);
   useEffect(() => {
@@ -85,7 +86,7 @@ const ChatListingScreen = (params) => {
           <Text style={styles.inputText}>Search</Text>
           <TextInput
             style={styles.input}
-            onChangeText={(text) => setUsername(text)}
+            onChangeText={text => setUsername(text)}
             value={username}
             placeholder="Search Username"
             placeholderTextColor="#9B9B9B"
@@ -101,9 +102,14 @@ const ChatListingScreen = (params) => {
       <TabView tabTitles={["Select all", "Delete selected"]} selected={0} />
       <FlatList
         data={messages}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => <ChatListingItem message={item} />}
       />
+      <View style={styles.newBtn}>
+        <Pressable>
+          <Image source={require("./assets/plusIcon.png")} />
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -144,6 +150,16 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 30,
     top: 35
+  },
+  newBtn: {
+    position: "absolute",
+    backgroundColor: "black",
+    bottom: 30,
+    right: 30,
+    padding: 20,
+    borderRadius: 50,
+    elevation: 10,
+    shadowColor: "grey"
   }
 });
 export default ChatListingScreen;
@@ -173,8 +189,7 @@ const ChatListingItem = ({ message }) => {
             <Text
               style={{
                 color: "#fff"
-              }}
-            >
+              }}>
               {message.unread}
             </Text>
           </View>
@@ -250,8 +265,7 @@ const TabView = ({ tabTitles, selected }) => {
               ? tabViewStyles.selected
               : tabViewStyles.unSelected
           }
-          key={index}
-        >
+          key={index}>
           <Text>{title}</Text>
         </View>
       ))}
