@@ -7,6 +7,10 @@ from rest_framework import viewsets
 
 class ReadOnly(BasePermission):
     def has_permission(self, request, view):
+        """
+        has_permission Grants permission to the authenticated user. Method will be called on all (GET, POST, PUT, DELETE) HTTP request.
+        :param request: Method to make https requests.
+        """
         return request.method in SAFE_METHODS
 
 class TermAndConditionViewSet(viewsets.ModelViewSet):
