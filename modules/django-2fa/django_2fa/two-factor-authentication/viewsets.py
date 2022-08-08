@@ -31,7 +31,7 @@ class PhoneNumberViewset(ModelViewSet):
     def send_otp(self, request):
         """
         send_otp Sends otp code to the given phone number or email address. Verifies wether your email or phone number is registered or not.
-        
+        :param request: Contains an object named 'data' which has email and phone number on which otp will be sent.
         """
         phone = request.data.get('phone_number')
         email = request.data.get('email')
@@ -92,6 +92,7 @@ class VerifyViewSet(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         """
         destroy verifies the otp and phone number or email match the opt code sent to the phone number or email. Deletes record after verifying.
+        :param request: Contains an object named 'data' which has otp, email and phone number on which otp code was sent.
         """
         phone_num = request.data.get('phone_number')
         email = request.data.get('email')
