@@ -18,6 +18,9 @@ class SignatureUploadView(APIView):
 	parser_class = (FileUploadParser,)
 	
 	def post(self, request, *args, **kwargs):
+		"""
+		Upload image to the location created in the models.py by fileName method.
+		"""
 		try:
 			image = request.data['image']
 			format, imgstr = image.split(';base64,')
