@@ -20,6 +20,7 @@ class SignatureUploadView(APIView):
 	def post(self, request, *args, **kwargs):
 		"""
 		Upload image to the location created in the models.py by fileName method.
+		:param request: Contains object named data which has image 64base converted image to be uploaded. 
 		"""
 		try:
 			image = request.data['image']
