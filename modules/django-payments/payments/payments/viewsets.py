@@ -10,6 +10,9 @@ class PaymentSheetView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        """
+        Creates paymentIntent and Ephemeral key for the customer. If no customer exists, first creates one.
+        """
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
@@ -29,6 +32,9 @@ class GetStripePaymentsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        """
+        Returns array of PaymentIntents for a stripe customer.
+        """
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
@@ -48,6 +54,9 @@ class GetPaymentMethodsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        """
+        Returns returns a list of PaymentMethods attached to the customer's StripeAccount.
+        """
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
