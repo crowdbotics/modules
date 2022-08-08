@@ -17,6 +17,9 @@ import random
 
 def generate_opt():
     otp = random.randint(111111, 999999)
+    """
+    generate_opt generates otp code between 111111 to 999999.
+    """
     return otp
 
 
@@ -26,6 +29,10 @@ class PhoneNumberViewset(ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def send_otp(self, request):
+        """
+        send_otp Sends otp code to the given phone number or email address. Verifies wether your email or phone number is registered or not.
+        
+        """
         phone = request.data.get('phone_number')
         email = request.data.get('email')
         otp_code = generate_opt()
@@ -83,6 +90,9 @@ class VerifyViewSet(ModelViewSet):
     http_method_names = ['delete']
 
     def destroy(self, request, *args, **kwargs):
+        """
+        destroy verifies the otp and phone number or email match the opt code sent to the phone number or email. Deletes record after verifying.
+        """
         phone_num = request.data.get('phone_number')
         email = request.data.get('email')
         code = request.data.get('code')
