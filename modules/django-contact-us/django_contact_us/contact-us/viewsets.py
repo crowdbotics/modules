@@ -8,6 +8,9 @@ from sendgrid import SendGridAPIClient
 
 class ContactUs(APIView):
 	def post(self, request, *args, **kwargs):
+		"""
+		Sends a message and name of the sender as mail to to your email that you have configured in settings.py as 'TO_EMAILS'.
+		"""
 		email = request.data.get('email')
 		name = request.data.get('name')
 		message = request.data.get('message')
