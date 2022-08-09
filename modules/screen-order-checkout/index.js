@@ -270,13 +270,7 @@ const OrderCard = () => {
           <View style={orderStyles.bottomComponent}>
             <View style={orderStyles.quantity}>
               <Text>-</Text>
-              <Text
-                style={{
-                  fontWeight: "bold"
-                }}
-              >
-                3
-              </Text>
+              <Text style={orderStyles.boldText}>3</Text>
               <Text>+</Text>
             </View>
             <Image
@@ -346,6 +340,9 @@ const orderStyles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     marginRight: 10
+  },
+  boldText: {
+    fontWeight: "bold"
   }
 });
 
