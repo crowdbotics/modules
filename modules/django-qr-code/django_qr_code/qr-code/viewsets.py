@@ -9,6 +9,10 @@ import base64
 class QRCodeView(APIView):
 
     def post(self, request, *args, **kwargs):
+        """
+        This function takes text as input and returns Qrcode Image converted into base64 string.
+        :param request: The Param contains an object 'data' inside it. This object contains text needs to be converted into qrcode. 
+        """
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_H,
