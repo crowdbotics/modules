@@ -49,6 +49,13 @@ const Edits = ({ navigation }) => {
           h: response.height
         });
         dispatch(setImageUri(response));
+        setEditSettings({
+          ...options.settings,
+          contrast: 1,
+          saturation: 1,
+          brightness: 1,
+          temperature: 6500
+        });
       }).catch(error => {
         console.log("error", error);
       });
