@@ -56,29 +56,18 @@ const SocialFollowersScreen = (params) => {
       <View style={styles.container}>
         <View style={styles.searchBar}>
           <Text style={styles.searchText}>Search</Text>
-          <View
-            style={{
-              borderWidth: 1,
-              borderRadius: 10,
-              borderColor: "#C4C4C4",
-              flexDirection: "row",
-              alignItems: "center"
-            }}
-          >
-            <View
-              style={{
-                width: "90%"
-              }}
-            >
-              <TextInput
-                style={textStyles.input}
-                placeholder="Enter"
-                value={value}
-                onChangeText={(text) => setValue(text)}
-                placeholderTextColor="#ddd"
-              />
-            </View>
-            <Image source={require("./assets/search.png")} />
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={textStyles.input}
+              placeholder="Enter"
+              value={value}
+              onChangeText={(text) => setValue(text)}
+              placeholderTextColor="#ddd"
+            />
+            <Image
+              source={require("./assets/search.png")}
+              style={styles.searchIcon}
+            />
           </View>
         </View>
         <Text style={styles.numFollowers}>{numFollowers} Followers</Text>
@@ -119,6 +108,17 @@ const styles = StyleSheet.create({
   searchText: {
     marginLeft: 10,
     marginBottom: 10
+  },
+  inputContainer: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#C4C4C4",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  searchIcon: {
+    position: "absolute",
+    right: 20
   },
   text: {
     marginLeft: 30,
