@@ -22,7 +22,7 @@ const Shadows = ({ navigation }) => {
   const width = Dimensions.get("window").width;
   const [selectedShadow, setSelectedShadow] = useState(options.SHADOWS[0].url);
 
-  const [blurSettings, setBlurSettings] = useState({ Blur: 6, "Blur Passes": 3 });
+  const [blurSettings, setBlurSettings] = useState({ Blur: 1, "Blur Passes": 1 });
 
   const handleState = (tab) => {
     navigation.replace(tab);
@@ -48,6 +48,7 @@ const Shadows = ({ navigation }) => {
           h: response.height
         });
         dispatch(setImageUri(response));
+        setBlurSettings({ Blur: 1, "Blur Passes": 1 });
       }).catch(error => {
         console.log("error", error);
       });

@@ -55,6 +55,18 @@ const Filters = ({ navigation }) => {
           h: response.height
         });
         dispatch(setImageUri(response));
+        setFilterSettings({
+          ...options.settings,
+          hue: 0,
+          blur: 0,
+          sepia: 0,
+          sharpen: 0,
+          negative: 0,
+          contrast: 1,
+          saturation: 1,
+          brightness: 1,
+          temperature: 6500
+        });
       }).catch(error => {
         console.log("error", error);
       });
