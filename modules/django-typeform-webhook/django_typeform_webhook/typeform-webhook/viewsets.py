@@ -10,6 +10,10 @@ from .serializers import FormAnswersSerializer, FormDefinitionSerializer
 class FormDefinitionView(APIView):
 
     def post(self, request, *args, **kwargs):
+        """
+        This function  uploads each typeform data that is created by the user.
+        :param request: This param each form response submitted by the user
+        """
         formResponse = request.data["form_response"]
         isForm = FormDefinition.objects.filter(form_id=formResponse["form_id"]).exists()
 
@@ -69,6 +73,10 @@ class FormDefinitionView(APIView):
 class FormDefinitionDetailView(APIView):
 
     def get(self, request, form_id=None, *args, **kwargs):
+        """
+        This function  takes the id for each typeform data that is created by the user. Returns the response saved against that id. 
+        :param form_id: The id of the typeform whose response is to be returned.
+        """
         formDefinitions = FormDefinition.objects.filter(form_id=form_id)
         response = []
 
