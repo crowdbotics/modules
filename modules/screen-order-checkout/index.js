@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -13,6 +13,15 @@ import {
 const BillingPreferencesScreen = (params) => {
   const [billingAddress, setBillingAddress] = useState("");
   const [shippingAddress, setShippingAddress] = useState("");
+  const [cardDetails, setCardDetails] = useState({});
+  useEffect(() => {
+    setCardDetails({
+      balance: "11,225.11",
+      type: "Visa",
+      cardNumber: "XXXX XXXX XXXX 9001",
+      validThru: "10/24"
+    });
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -24,10 +33,7 @@ const BillingPreferencesScreen = (params) => {
           />
         </View>
         <View style={styles.cardInfo}>
-          <Image
-            source={require("./assets/Card-large.png")}
-            style={styles.card}
-          />
+          <DebitCard cardDetails={cardDetails} />
           <Image
             source={require("./assets/3Dots.png")}
             style={styles.threeDots}
@@ -392,5 +398,113 @@ const buttonStyles = StyleSheet.create({
   childrenContainer: {
     justifyContent: "center",
     alignItems: "center"
+  }
+});
+
+const DebitCard = (props) => {
+  return (
+    <View style={debitCardStyles.container}>
+      <View style={debitCardStyles.upperHalf}>
+        <View style={debitCardStyles.balanceContainer}>
+          <Text style={debitCardStyles.balanceText}>Balance</Text>
+          <Text style={debitCardStyles.balance}>
+            ${props.cardDetails.balance}
+          </Text>
+        </View>
+        <View style={debitCardStyles.cardTypeContainer}>
+          {props.cardDetails.type === "Visa"
+            ? (
+            <Image
+              source={require("./assets/visa.png")}
+              style={debitCardStyles.cardTypeImage}
+            />
+              )
+            : (
+            <Image
+              source={require("./assets/masterCard.png")}
+              style={debitCardStyles.cardTypeImage}
+            />
+              )}
+        </View>
+      </View>
+      <View style={debitCardStyles.lowerHalf}>
+        <View style={debitCardStyles.numberContainer}>
+          <Text style={debitCardStyles.numberText}>
+            {props.cardDetails.cardNumber}
+          </Text>
+        </View>
+        <View style={debitCardStyles.validityContainer}>
+          <Text style={debitCardStyles.validityText}>
+            {props.cardDetails.validThru}
+          </Text>
+          <Text style={debitCardStyles.validityText}>Valid Thru</Text>
+        </View>
+      </View>
+    </View>
+  );
+};
+const debitCardStyles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: 164,
+    backgroundColor: "#000",
+    borderRadius: 10,
+    elevation: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 20
+  },
+  whiteText: {
+    color: "#fff"
+  },
+  upperHalf: {
+    flex: 1,
+    flexDirection: "row"
+  },
+  lowerHalf: {
+    flex: 1,
+    flexDirection: "row"
+  },
+  balanceContainer: {
+    flex: 1,
+    justifyContent: "center"
+  },
+  balanceText: {
+    fontSize: 13,
+    color: "#e6e6e6"
+  },
+  balance: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#fff"
+  },
+  cardTypeContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "flex-end"
+  },
+  cardTypeImage: {
+    height: 80,
+    width: 100,
+    marginBottom: 10,
+    resizeMode: "contain",
+    marginLeft: 10
+  },
+  numberContainer: {
+    flex: 1,
+    justifyContent: "flex-end"
+  },
+  numberText: {
+    fontSize: 13,
+    color: "#fff"
+  },
+  validityContainer: {
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end"
+  },
+  validityText: {
+    fontSize: 13,
+    color: "#fff",
+    marginRight: 10
   }
 });
