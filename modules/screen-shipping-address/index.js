@@ -109,13 +109,7 @@ const ShippingAddressScreen = (params) => {
           <View style={styles.inputContainer}>
             <Text style={styles.inputText}>Confirmation</Text>
             <View style={[styles.input, styles.confirmationBox]}>
-              <Text
-                style={{
-                  color: "#9B9B9B"
-                }}
-              >
-                Confitmation
-              </Text>
+              <Text style={styles.placeholderText}>Confitmation</Text>
               <Image source={require("./assets/checkbox.png")} />
             </View>
           </View>
@@ -193,6 +187,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     width: "100%",
     height: 50
+  },
+  placeholderText: {
+    color: "#9B9B9B"
   },
   dropdownIcon: {
     position: "absolute",
