@@ -38,13 +38,7 @@ const RecordMemoScreen = (params) => {
           <Image source={require("./assets/crossIcon.png")} />
         </Pressable>
         <Pressable style={styles.largeBtn}>
-          <Text
-            style={{
-              color: "white"
-            }}
-          >
-            Start
-          </Text>
+          <Text style={styles.whiteText}>Start</Text>
         </Pressable>
         <Pressable style={styles.smallBtn}>
           <Image source={require("./assets/tickIcon.png")} />
@@ -111,6 +105,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 50
+  },
+  whiteText: {
+    color: "#fff"
   }
 });
 export default RecordMemoScreen;
