@@ -31,6 +31,20 @@ const YouTubePlayer = modules[module_index].value.navigator;  //module_index : p
 <YouTubePlayer />
 ```
 
+## Params
+
+Below is the list of all params that can be passed to the module.
+
+| Name                         | Type       | Description                                                    |
+| -----------------------------|:----------:|:---------------------------------------------------------------|
+| youtubeApiKey                | `string`   | Your youtube api key.                                          |
+| playerSetting                | `object`   | Player configrutations {isReady: false, status: null, quality: null, error: null, isPlaying: true, isLooping: true, currentTime: 0, videosIndex: 0, fullscreen: false, playerWidth: Dimensions.get("window").width }             |
+| videoIds                     | `array`    | List of videos.                                                |
+| forwordTimeDurationInSeconds | `number`   | Seconds to forword video time                                  |
+| backwordTimeDurationInSeconds| `number`   | Seconds to backword video time                                 |
+| isForwordTimeDuration        | `bool`     | Show forword time button                                       |
+| isBackwordTimeDuration       | `bool`     | Show backword time button                                      |
+
 ## Features
 The following are the key features of this module:
 * Quality options for video

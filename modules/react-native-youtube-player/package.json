@@ -6,7 +6,8 @@
     "main": "index.js",
     "x-dependencies": {
         "react-native-youtube": "2.0.2",
-        "react-native-vector-icons": "9.1.0"
+        "react-native-vector-icons": "9.1.0",
+        "prop-types": "15.8.1"
     },
     "author": "Crowdbotics",
     "license": "ISC",
