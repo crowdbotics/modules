@@ -1,8 +1,8 @@
 // @ts-ignore
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 const YOUTUBE_API_KEY = "";
-const VIDEOS_IDS = ["uMK0prafzw0"];
+const VIDEOS_IDS = [];
 
 export const styles = StyleSheet.create({
   container: {
@@ -50,8 +50,22 @@ export const styles = StyleSheet.create({
   }
 });
 
+const playerDefaultSetting = {
+  isReady: false,
+  status: null,
+  quality: null,
+  error: null,
+  isPlaying: true,
+  isLooping: true,
+  currentTime: 0,
+  videosIndex: 0,
+  fullscreen: false,
+  playerWidth: Dimensions.get("window").width
+};
+
 export default {
   styles: styles,
+  playerDefaultSetting: playerDefaultSetting,
   YOUTUBE_API_KEY: YOUTUBE_API_KEY,
   VIDEOS_IDS: VIDEOS_IDS
 };
