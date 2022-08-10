@@ -1,4 +1,4 @@
-name: Lint PR
+name: Lint
 
 on:
   pull_request:
@@ -13,9 +13,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: "yarn"
       - run: yarn install
-      - uses: sibiraj-s/action-eslint@v2
+      - uses: crowdbotics/action-eslint@v2.2.1
         with:
-          eslint-args: "--ignore-path=.gitignore --quiet"
+          eslint-args: "--config .eslintrc.json --ignore-path=.gitignore --quiet"
           extensions: "js,jsx,ts,tsx"
           annotations: true
