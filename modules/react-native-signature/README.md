@@ -31,6 +31,12 @@ export const globalOptions = {
 }
 ```
 
+## local Configs
+Update text in modules/signature/options.js
+
+```
+const text = "I understand ...";
+```
 ## Features
 
 ## In app signature

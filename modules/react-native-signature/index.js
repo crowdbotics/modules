@@ -1,13 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 // @ts-ignore
 import SignatureScreen from "react-native-signature-canvas";
 import { saveSignature } from "./api";
 import Button from "./components/Button";
 import Loader from "./components/Loader";
-import options from "./options";
-
+import { OptionsContext } from "@options";
 const Signature = () => {
+  const options = useContext(OptionsContext);
   const ref = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
 
