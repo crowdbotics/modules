@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
 // @ts-ignore
 import emailIcon from "../emailIcon.png";
-import options from "../options";
+import { OptionsContext } from "@options";
 
 const ContactUs = (props) => {
+  const options = useContext(OptionsContext);
   return (
     <View style={styles.pt30}>
       <Text style={{ fontSize: 15 }}>{options.textMessage}</Text>
