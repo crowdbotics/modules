@@ -108,7 +108,7 @@ is greater than this module's compileSdkVersion (android-30).
 
 ```
 
-** Solution **: Set both compileSdkVersion and targetSdkVersion to 31 in your android/build.gradle file.
+**Solution**: Set both compileSdkVersion and targetSdkVersion to 31 in your android/build.gradle file.
 
 ```
 buildscript {
