@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { set2faMethod } from "../../api";
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
-import options from "../../options";
-
+import { OptionsContext } from "@options";
 const AuthTypes = (props) => {
+  const options = useContext(OptionsContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const onSMS = async () => {

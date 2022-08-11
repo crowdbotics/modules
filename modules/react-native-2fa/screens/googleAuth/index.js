@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Text, StyleSheet, View, Linking } from "react-native";
 import Loader from "../../components/Loader";
 import { getCode } from "../../api";
 // @ts-ignore
 import QRCode from "react-native-qrcode-svg";
-import options from "../../options";
+import { OptionsContext } from "@options";
 import Button from "../../components/Button";
 
 const GoogleAuth = (props) => {
+  const options = useContext(OptionsContext);
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState(false);
   const [key, setKey] = useState(false);
