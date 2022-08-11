@@ -16,8 +16,8 @@ import ActionSheet from "react-native-actionsheet";
 import { pickFromCamera, pickFromGallery, uploadImage } from "../../camera/utils";
 import {userToken} from '../api';
 
-const CreatePostScreen = ({navigation, route}) => {
-
+const CreatePostScreen = (props) => {
+  const {navigation, route} = props;
   const actionSheet = useRef(null);
   const [userProfile, setUserProfile] = useState({});
   const [loading, setLoading] = useState(false);
@@ -95,7 +95,7 @@ const CreatePostScreen = ({navigation, route}) => {
               {images.length > 0 ? (
                 <Image source={{ uri: images[0] }} style={styles.imageLarge} />
              ) : (
-                <Image style={styles.placeholderImage} source={require('./assets/add-photo.png')} />
+                <Image style={styles.placeholderImage} source={require('../assets/add-photo.png')} />
               )}
             </TouchableOpacity>
             

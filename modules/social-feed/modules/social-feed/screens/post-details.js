@@ -14,7 +14,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import ActionSheet from "react-native-actionsheet";
 import {PostComponent} from "../components/post";
 
-export default function PostDetailScreen({ navigation, route }) {
+export default function PostDetailScreen(props) {
+  const { navigation, route } = props;
   const actionSheet = useRef(null);
   const { id } = route.params;
   const [postDetails, setPostDetails] = React.useState({});

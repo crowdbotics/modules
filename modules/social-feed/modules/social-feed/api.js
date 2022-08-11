@@ -4,7 +4,7 @@ import React, { useRef, useContext, useEffect, useState } from "react";
 import { OptionsContext, GlobalOptionsContext } from "@options";
 
 // export const userToken = "f8a43f025f341a5f64f3a8a4d303622cd0a6d5d4";
-export const userToken = "cf1b4cf39330a955ba203ddbfefa2e6707006f64";
+export const userToken = "TOKEN";
 
 export const getMyFeed = async () => {
 const gOptions = useContext(GlobalOptionsContext);
