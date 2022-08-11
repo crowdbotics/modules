@@ -13,6 +13,15 @@ export const globalOptions = {
    ...
 }
 ```
+
+# Local Configs
+## Update local options  in modules/contact-us/options.js
+```
+export default {
+  email: "admin@admin.com",
+  textMessage: "textMessage"
+};
+```
 ## Manual Setup
 
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
