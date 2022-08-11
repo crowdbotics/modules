@@ -1,15 +1,17 @@
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { sendVerification, getUser, verify2FA, verifyCode } from "../../api";
 import Loader from "../../components/Loader";
-import options from "../../options";
+import { OptionsContext } from "@options";
+
 // @ts-ignore
 import { useFocusEffect } from "@react-navigation/native";
 
 const Verification = (props) => {
+  const options = useContext(OptionsContext);
   const [code, setCode] = useState("");
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
