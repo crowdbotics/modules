@@ -41,6 +41,7 @@ dependencies {
 
 
 # Global configs
+
 ## Update api url in options/options.js
 in options/options.js
 
@@ -50,13 +51,24 @@ export const globalOptions = {
   ....
   url: "http://192.168.100.7:8000",
   api: "http://192.168.100.7:8000/api/v1",
-  stripe_secret_key: "sk_test_xxxxxxxx"
+  stripeSecretKey: "sk_test_xxxxxxxx"
 }
+
+# Local configs
 
 ## Update token in modules/payments/api.js
 Update your django authorization token to make authorized api calls.
 ```
 const token = "Token c47e419eb3....";
+```
+
+## Update stripePublishKey in modules/payments/options.js
+Update your stripePublishKey.
+```
+export const localOptions = {
+  ...
+  stripePublishKey: "pk_test_xxxxxxxxxxxx"
+};
 ```
 
 # Server
@@ -81,4 +93,31 @@ const { title, navigator } = Payments;
 import { modules } from '@modules';
 const Payments = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
 <Payments />
+```
+
+## Known Errors
+
+1. You might run into an error mentioned below: 
+```
+What went wrong:
+Execution failed for task ':app:checkDebugAarMetadata'.
+A failure occurred while executing com.android.build.gradle.internal.tasks.CheckAarMetadataWorkAction
+The minCompileSdk (31) specified in a
+dependency's AAR metadata (META-INF/com/android/build/gradle/aar-metadata.properties)
+is greater than this module's compileSdkVersion (android-30).
+
+```
+
+** Solution **: Set both compileSdkVersion and targetSdkVersion to 31 in your android/app/build.gradle file.
+
+```
+buildscript {
+    ext {
+        ...
+        compileSdkVersion = 31
+        targetSdkVersion = 31
+        ...
+    }
+    ...
+}
 ```
