@@ -1,15 +1,30 @@
 # Typeform Webhook
 
-## Configurations
-options.js
 
-Add the following:
+## Global Configs
+### Update api url in options/options.js
 
-Add CLIENT_ID 
-CLIENT_SECRET 
-REDIRECT_URI
-WEBHOOK_URL 
+Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
 
+```
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+}
+```
+
+## Local Configs
+In modules/typeform-webhook/options.js, update the following:
+
+```
+const REDIRECT_URI = "";
+const CLIENT_ID = "";
+const CLIENT_SECRET = "";
+const WEBHOOK_URL = "";
+const WEBHOOK_TAG = "";
+
+```
 ## Manual Setup
 
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.

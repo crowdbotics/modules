@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useContext } from "react";
 import {
   Text,
   View,
@@ -7,13 +7,14 @@ import {
 
 // @ts-ignore
 import { WebView } from "react-native-webview";
-import options from "../options";
+import { OptionsContext } from "@options";
 import { createWebHook, getForms } from "../api";
 import { getOauthToken, parseQueryString } from "../utils";
 import FormItem from "../components/FormItem";
 import Loader from "../components/Loader";
 
 const TypeformWebhook = (props) => {
+  const options = useContext(OptionsContext);
   const userAgent = "Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36";
   const [oauthToken, setOauthToken] = useState(null);
   const [formList, setFormList] = useState([]);
