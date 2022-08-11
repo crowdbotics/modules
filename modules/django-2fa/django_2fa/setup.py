@@ -13,6 +13,6 @@ setup(
     name="cb_django_2fa",
     version="0.1",
     packages=["two-factor-authentication"],
-    install_requires=["twilio", "sendgrid"],
+    install_requires=["twilio", "sendgrid", "django-phonenumber-field", "phonenumbers"],
     cmdclass={"build": BuildCommand},
 ) 
