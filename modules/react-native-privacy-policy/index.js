@@ -16,7 +16,7 @@ const PrivacyPolicy = ({ navigation, headingContainerStyle = {}, headingTextStyl
   const [htmlContent, setHtmlContent] = useState(
     "<h3> Loading Privacy Policy... </h3>"
   );
-  console.log("Html: ", htmlContent);
+
   useEffect(() => {
     fetch(`${gOptions.url}/modules/privacy-policy/`)
       .then((response) => response.json())
