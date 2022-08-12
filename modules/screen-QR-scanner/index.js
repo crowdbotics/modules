@@ -1,26 +1,26 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { StyleSheet, View, Image } from "react-native";
 
 const QRScannerScreen = (params) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.headingTxt}>QR Scanner Screen</Text>
+      <Image
+        resizeMode="contain"
+        style={styles.image}
+        source={require("./assets/qrCode.png")}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
-    flex: 1,
-    justifyContent: "space-around"
+    padding: 10,
+    justifyContent: "center"
   },
-  headingTxt: {
-    fontSize: 24,
-    fontWeight: "bold",
-    padding: 2,
-    marginVertical: 12
+  image: {
+    width: "100%",
+    height: "100%"
   }
 });
-
 export default QRScannerScreen;

@@ -1,5 +1,5 @@
 {
-    "title": "Social Profile Screen",
-    "description": "Social Profile  Sceeen",
-    "root": "/screens/social-profile"
+  "title": "Social Profile screen",
+  "description": "Social Profile screen.",
+  "root": "/screens/social-profile"
 }
