@@ -164,6 +164,24 @@ npx pod-install
 4. Run your project `(Cmd+R)`<
 
 
+## Manual Setup
+
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+
+```javascript
+import PhotoEditing from "@modules/photo-editing";
+const { title, navigator } = PhotoEditing;
+```
+
+2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+
+```javascript
+import { modules } from '@modules';
+const PhotoEditing = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+<PhotoEditing  />
+```
+
+
 ## Features
 
 This module contains the following list of features.

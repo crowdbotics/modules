@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, FlatList, Image, TouchableNativeFeedback } from "react-native";
-import options from "../../options";
+import { OptionsContext } from "@options";
 
 const ShadowsList = ({ handleBlurImage }) => {
+  const options = useContext(OptionsContext);
   const colors = ["#FCF1D6", "#F9D8D9", "#D9DADD", "#FCF1D6", "#F9D8D9", "#D9DADD"];
   const pressShadow = (index) => {
     handleBlurImage(index);

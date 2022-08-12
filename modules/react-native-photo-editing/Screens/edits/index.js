@@ -1,12 +1,12 @@
 // @ts-ignore
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 // @ts-ignore
 import { Surface } from "gl-react-native";
 // @ts-ignore
 import ImageFilters from "react-native-gl-image-filters";
 import Tabs from "../../Components/Tabs";
-import options from "../../options";
+import { OptionsContext } from "@options";
 import { reSizeImage } from "../../Utils/common";
 import Button from "../../Components/Button";
 import EditSliders from "../../Components/EditSliders";
@@ -15,6 +15,7 @@ import { setImageUri } from "../../Store";
 import Header from "../../Components/Header";
 
 const Edits = ({ navigation }) => {
+  const options = useContext(OptionsContext);
   const dispatch = useDispatch();
   const state = useSelector(state => state.uri);
   const [imageContainerHW, setImageContainerHW] = useState({ w: state.width, h: state.height });
