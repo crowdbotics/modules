@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, FlatList, Text, TouchableNativeFeedback } from "react-native";
-import options from "../../options";
+import { OptionsContext } from "@options";
 
 export default function Filter({ selectFilter }) {
+  const options = useContext(OptionsContext);
   const colors = ["#FCF1D6", "#F9D8D9", "#D9DADD", "#FCF1D6", "#F9D8D9", "#D9DADD"];
 
   const titleColor = ["#d5f7cd", "#d1bfef", "#edc0c0", "#d5f7cd", "#d1bfef", "#edc0c0"];
