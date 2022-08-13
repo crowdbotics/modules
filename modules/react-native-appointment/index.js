@@ -1,11 +1,12 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useContext } from "react";
 import Navigator from "./Navigator";
 import { LogBox } from "react-native";
 // @ts-ignore
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import options from "./options";
+import { OptionsContext } from "@options";
 
 const Appointment = () => {
+  const options = useContext(OptionsContext);
   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   const [isToken, setIsToken] = useState(false);
 
