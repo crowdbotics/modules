@@ -1,5 +1,7 @@
 # Crowdbotics Modules
 
+[![Lint](https://github.com/crowdbotics/modules/actions/workflows/lint.yml/badge.svg)](https://github.com/crowdbotics/modules/actions/workflows/lint.yml) [![Parse and validate modules](https://github.com/crowdbotics/modules/actions/workflows/parse.yml/badge.svg)](https://github.com/crowdbotics/modules/actions/workflows/parse.yml)
+
 This is a monorepo which holds the source code for the various modules we built,
 for tracking purposes and to ease the creation of new ones. There's a complete React Native custom template in [scaffold](/scaffold). It also includes utilities for modules installation and removal.
 

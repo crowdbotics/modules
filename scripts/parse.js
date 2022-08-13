@@ -3,7 +3,7 @@ import path from "path";
 import config from "./config.js";
 import crypto from "crypto";
 import Ajv from "ajv";
-import addFormats from "ajv-formats"
+import addFormats from "ajv-formats";
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
@@ -17,6 +17,7 @@ const ACCEPTED_EXTENSIONS = [
   ".tsx",
   ".md",
   ".py",
+  ".toml"
 ];
 const BASE_64_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 const META_FILE = ["meta.json"];
@@ -28,6 +29,7 @@ const parseModules = (dir) => {
   };
 
   const invalid = (mod, message) => {
+    process.exitCode = 1;
     console.log("\u274C", mod, "=>", message);
   };
 
@@ -50,9 +52,9 @@ const parseModules = (dir) => {
         slug: module,
         options: { x: 0, y: 0, domTree: "" },
         setup:
-          "To properly configure this module, follow the instructions given in README.md inside the module folder.",
+          "To properly configure this module, follow the instructions given in README.md inside the module folder."
       },
-      files: {},
+      files: {}
     };
   };
 
@@ -61,45 +63,45 @@ const parseModules = (dir) => {
   };
 
   const parseModule = (moduleDir, callback) => {
-    let entries = fs.readdirSync(moduleDir);
-    entries.map((entry) => {
-      let entryPath = path.join(moduleDir, entry);
-      let stats = fs.statSync(entryPath);
+    const entries = fs.readdirSync(moduleDir);
+    entries.forEach((entry) => {
+      const entryPath = path.join(moduleDir, entry);
+      const stats = fs.statSync(entryPath);
       if (stats.isDirectory()) {
         parseModule(entryPath, callback);
       } else if (accepted(entryPath)) {
-        let content = fs.readFileSync(entryPath, "utf8");
-        let filePath = ignoreRootDirs(entryPath, 2);
+        const content = fs.readFileSync(entryPath, "utf8");
+        const filePath = ignoreRootDirs(entryPath, 2);
         callback(filePath, content);
       } else if (base64(entryPath)) {
-        let ext = path.extname(entryPath).replace(".", "");
-        let content = `data:image/${ext};base64,${fs.readFileSync(
+        const ext = path.extname(entryPath).replace(".", "");
+        const content = `data:image/${ext};base64,${fs.readFileSync(
           entryPath,
           "base64"
         )}`;
-        let filePath = ignoreRootDirs(entryPath, 2);
+        const filePath = ignoreRootDirs(entryPath, 2);
         callback(filePath, content);
       }
     });
   };
 
-  let data = {};
-  let modules = fs.readdirSync(dir);
+  const data = {};
+  const modules = fs.readdirSync(dir);
   console.log("");
   console.log("Parsing modules...", "\n");
 
-  modules.map((module) => {
-    let modulePath = path.join(dir, module);
+  modules.forEach((module) => {
+    const modulePath = path.join(dir, module);
     data[module] = moduleDefaults(module);
 
     // cleanup node_modules
     if (existsSync(path.join(modulePath, "node_modules"))) {
       fs.rmdirSync(path.join(modulePath, "node_modules"), {
-        recursive: true,
+        recursive: true
       });
     }
     if (existsSync(path.join(modulePath, "yarn.lock"))) {
-      fs.rmdirSync(path.join(modulePath, "yarn.lock"), { recursive: true });
+      fs.rmSync(path.join(modulePath, "yarn.lock"));
     }
 
     parseModule(modulePath, (filePath, content) => {
@@ -118,12 +120,39 @@ const parseModules = (dir) => {
       return;
     }
 
+    // Validate screen only modules
+    if (module.split("-")[0].startsWith("screen")) {
+      if (path.dirname(meta.root) !== "/screens") {
+        invalid(module, "screen modules must have root starting with /screens");
+      }
+
+      const pkg = JSON.parse(data[module].files["package.json"]);
+
+      if (pkg.dependencies && Object.entries(pkg.dependencies).length) {
+        invalid(module, "screen modules must not have dependencies");
+        return;
+      }
+
+      if (!pkg.name.startsWith("@screens")) {
+        invalid(
+          module,
+          `screen modules name must start with @screens - got ${pkg.name}`
+        );
+        return;
+      }
+
+      if (!data[module].files["index.js"].includes("export default")) {
+        invalid(module, "screen module with missing export default");
+        return;
+      }
+    }
+
     // Validate module options JSON Schema
     if (meta.schema) {
-      let schema = {
+      const schema = {
         type: "object",
         properties: meta.schema
-      }
+      };
       ajv.compile(schema);
       meta.schema = schema;
     }
@@ -142,12 +171,16 @@ const parseModules = (dir) => {
 
     data[module].meta.preview = preview;
 
-    valid(module, "module passes all checks");
+    valid(module);
   });
   console.log("");
   console.log("Total of modules:", Object.keys(data).length);
   return data;
 };
 
-let data = parseModules(MODULES_DIR);
-fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
+const data = parseModules(MODULES_DIR);
+
+// Write build files when --write argument is provided
+if (process.argv[2] === "--write" && process.exitCode !== 1) {
+  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
+}
