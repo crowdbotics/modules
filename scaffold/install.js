@@ -30,6 +30,10 @@ fs.copyFileSync(
   path.join(cwd, "babel.config.js")
 );
 fs.copyFileSync(
+  path.join(customFiles, "webpack.config.js"),
+  path.join(cwd, "webpack.config.js")
+);
+fs.copyFileSync(
   path.join(customFiles, "heroku.yml"),
   path.join(cwd, "heroku.yml")
 );
@@ -46,16 +50,16 @@ fs.copyFileSync(
   path.join(cwd, ".prettierrc.js")
 );
 fs.copyFileSync(
-  path.join(customFiles, "config-overrides.js"),
-  path.join(cwd, "config-overrides.js")
-);
-fs.copyFileSync(
   path.join(customFiles, ".crowdbotics.json"),
   path.join(cwd, ".crowdbotics.json")
 );
 fs.copyFileSync(
   path.join(customFiles, "package.json"),
   path.join(cwd, "package.json")
+);
+fs.copyFileSync(
+  path.join(customFiles, ".gitignore"),
+  path.join(cwd, ".gitignore")
 );
 
 // dotenv
