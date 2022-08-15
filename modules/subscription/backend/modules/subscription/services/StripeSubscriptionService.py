@@ -31,18 +31,39 @@ class StripeSubscriptionService:
     @classmethod
     def get_products(self):
         products = stripe.Product.list(limit=100, active=True)
+        """
+            get_products returns an object with a data property that contains an array of up to limit products. Each entry in the array is a separate product object. If no more products are available, the resulting array will be empty.
+
+            :param limit: A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.
+            :param active: Only return products that are active or inactive (e.g., pass false to list all inactive products
+        """
         return products
 
     @classmethod
     def get_product_prices(cls, p_id):
+        """
+            get_product_prices returns an object with a data property that contains an array of up to limit prices. If no more prices are available, the resulting array will be empty.
+
+            :param p_id: ID of the product whose prices are needed.
+        """
         return stripe.Price.list(product=p_id)
 
     @classmethod
     def get_price_details(self, p_id):
+        """
+        get_price_details returns a price if a valid price or plan ID was provided. Throws an error otherwise.
+
+        :param p_id: Price or plan ID whose detail is to be retrieved.
+        """
         return stripe.Price.retrieve(p_id)
 
     @classmethod
     def get_product_details(cls, p_id):
+        """
+        get_product_details Retrieves the details of an existing product. Supply the unique product ID from either a product creation request or the product list, and Stripe will return the corresponding product information.
+
+        :param p_id:  Unique product ID whose detail is to be returned. 
+        """
         product_details = stripe.Product.retrieve(p_id)
         product_details.prices = cls.get_product_prices(p_id)
         return product_details
@@ -56,6 +77,11 @@ class StripeSubscriptionService:
 
     @classmethod
     def get_portal_session(cls, cust_id):
+        """
+        get_portal_session returns a portal session object.
+        
+        :param cust_id: The ID of an existing customer.
+        """
         session = stripe.billing_portal.Session.create(
             customer=cust_id,
             return_url='https://example.com/account',
@@ -69,10 +95,22 @@ class StripeSubscriptionService:
 
     @classmethod
     def create_subscription(cls, cust_id, price_id):
+        """
+        create_subscription creates a new subscription on an existing customer. Each customer can have up to 500 active or scheduled subscriptions.
+        
+        :param cust_id: The identifier of the customer to subscribe.
+        :param price_id: The ID of the price object.
+        """
         return cls.create_invoice_intent_sheet(cust_id, price_id, behavior='default_incomplete')
 
     @classmethod
     def update_subscription(cls, sub_id, price_id):
+        """
+        update_subscription updates an existing subscription to match the specified parameters. Returns the newly updated Subscription object.
+
+        :param sub_id: ID of the subscription item to update.
+        :param price_id: The ID of the price object.
+        """
         try:
             subscription = stripe.Subscription.retrieve(sub_id)
 
@@ -90,6 +128,11 @@ class StripeSubscriptionService:
 
     @classmethod
     def cancel_subscription(cls, sub_id):
+        """
+        cancel_subscription cancels a customer’s subscription immediately. Returns the canceled Subscription object. Its subscription status will be set to canceled.
+
+        :param sub_id: ID of the subscription item to update
+        """
         try:
             # Cancel the subscription by deleting it
             deletedSubscription = stripe.Subscription.delete(sub_id)
@@ -100,6 +143,12 @@ class StripeSubscriptionService:
 
     @classmethod
     def create_invoice_intent_sheet(cls, cust_id, price_id, behavior='default_incomplete'):
+        """
+        create_invoice_intent_sheet creates a new incomplete status subscription and respective intent to capture payment. If there already exist an incomplete intent against this user and price fetch the payment intent of that.
+
+        :param cust_id: The ID of an existing customer.
+        :param price_id: The ID of the price object.
+        """
         subscriptions = stripe.Subscription.list(customer=cust_id, status=StripeSubStatus.INCOMPLETE, price=price_id)
         subscriptions = subscriptions.get('data')
         if not subscriptions:
@@ -132,6 +181,11 @@ class StripeSubscriptionService:
 
     @classmethod
     def validate_webhook_payload(cls, payload):
+        """
+        Validates a event occurred in the app is by the stripe.
+        
+        :param payload: Event object occurred in app.
+        """
         try:
             payload = json.loads(payload)
             if "id" not in payload:
@@ -155,6 +209,10 @@ class StripeSubscriptionService:
 
     @classmethod
     def handle_webhook_events(cls, event):
+        """
+        handle_webhook_events Handles EVENTS created by the stripe.
+        :param event: Object containing event details
+        """
         # Handle the event
         if event.type == 'invoice.payment_succeeded':
             payment_intent = event.data.object  # contains a stripe.PaymentIntent
@@ -220,6 +278,11 @@ class StripeSubscriptionService:
 
     @classmethod
     def log_stripe_event(cls, event):
+        """
+        log_stripe_event creates  stripe webhook log for the specified event.
+
+        :param event: Object of the event whose log is to be created.
+        """
         from modules.subscription.models import StripeWebhookLog
         try:
             data = json.dumps(event.data.object)

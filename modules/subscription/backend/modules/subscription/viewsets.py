@@ -13,6 +13,10 @@ class SubscriptionPlanView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        """
+        Returns all the active subscription plans.
+        :param request: Object containing user data.  
+        """
         plans = SubscriptionPlan.objects.filter(is_active=True)
         response = SubscriptionPlanSerializer(plans, many=True, context={'user': request.user})
         return Response({
@@ -26,6 +30,11 @@ class BuySubscriptionPlanView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        """
+        Updates the existing subscription if there is one. Creates a new subscription otherwise.
+        
+        :param request: Object containing user data. 
+        """
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
@@ -52,6 +61,11 @@ class CancelSubscriptionPlanView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        """
+        Cancels an existing subscription.
+
+        :param request: Object containing existing user data. 
+        """
         user = request.user
         already_has_a_plan = StripeSubscriptionService.already_has_a_plan(user)
         deletedSubscription = StripeSubscriptionService.cancel_subscription(already_has_a_plan.subscription_id)
@@ -64,6 +78,10 @@ class CancelSubscriptionPlanView(APIView):
 class StripeWebhookView(APIView):
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles EVENTS created by the stripe.
+        :param request: Event details by stripe
+        """
         payload = request.body
         sig_header = request.META['HTTP_STRIPE_SIGNATURE']
         try:
