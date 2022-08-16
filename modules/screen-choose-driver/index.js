@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ChooseDriver",
-  navigator: ChooseDriver
-};
+export default ChooseDriver;

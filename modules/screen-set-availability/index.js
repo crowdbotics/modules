@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "SetAvailability",
-  navigator: SetAvailability
-};
+export default SetAvailability;

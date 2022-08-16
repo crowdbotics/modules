@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "LoadFunds",
-  navigator: LoadFunds
-};
+export default LoadFunds;

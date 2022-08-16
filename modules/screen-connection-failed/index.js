@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ConnectionFailed",
-  navigator: ConnectionFailed
-};
+export default ConnectionFailed;

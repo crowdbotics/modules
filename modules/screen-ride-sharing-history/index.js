@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "RideSharingHistory",
-  navigator: RideSharingHistory
-};
+export default RideSharingHistory;

@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "LoadFundsInvoice",
-  navigator: LoadFundsInvoice
-};
+export default LoadFundsInvoice;

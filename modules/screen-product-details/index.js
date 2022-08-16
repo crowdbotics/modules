@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ProductDetails",
-  navigator: ProductDetails
-};
+export default ProductDetails;

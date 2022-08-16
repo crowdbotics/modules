@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "Feedback",
-  navigator: Feedback
-};
+export default Feedback;

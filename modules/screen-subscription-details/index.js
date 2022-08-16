@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "SubscriptionDetails",
-  navigator: SubscriptionDetails
-};
+export default SubscriptionDetails;

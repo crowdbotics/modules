@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "AddTaskVehicle",
-  navigator: AddTaskVehicle
-};
+export default AddTaskVehicle;

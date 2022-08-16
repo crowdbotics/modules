@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "BondNFT",
-  navigator: BondNFT
-};
+export default BondNFT;

@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "StakingRequirements",
-  navigator: StakingRequirements
-};
+export default StakingRequirements;

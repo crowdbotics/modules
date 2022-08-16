@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "FoodCategory",
-  navigator: FoodCategory
-};
+export default FoodCategory;

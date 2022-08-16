@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "BudgetFilter",
-  navigator: BudgetFilter
-};
+export default BudgetFilter;

@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "DaysFilter",
-  navigator: DaysFilter
-};
+export default DaysFilter;

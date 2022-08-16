@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "BanksFilter",
-  navigator: BanksFilter
-};
+export default BanksFilter;

@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "TipDriver",
-  navigator: TipDriver
-};
+export default TipDriver;

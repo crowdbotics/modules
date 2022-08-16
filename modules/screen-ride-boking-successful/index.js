@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "RideBokingSuccessful",
-  navigator: RideBokingSuccessful
-};
+export default RideBokingSuccessful;

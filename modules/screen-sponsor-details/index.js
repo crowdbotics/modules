@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "SponsorDetails",
-  navigator: SponsorDetails
-};
+export default SponsorDetails;

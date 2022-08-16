@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ScheduleFilter",
-  navigator: ScheduleFilter
-};
+export default ScheduleFilter;

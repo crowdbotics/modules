@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "Register",
-  navigator: Register
-};
+export default Register;

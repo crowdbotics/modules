@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "PaymentMethods",
-  navigator: PaymentMethods
-};
+export default PaymentMethods;

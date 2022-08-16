@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "StripeConnectedAccounts",
-  navigator: StripeConnectedAccounts
-};
+export default StripeConnectedAccounts;

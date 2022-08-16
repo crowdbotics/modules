@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "WriteReviewAndRate",
-  navigator: WriteReviewAndRate
-};
+export default WriteReviewAndRate;

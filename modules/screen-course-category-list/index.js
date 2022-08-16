@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "CourseCategoryList",
-  navigator: CourseCategoryList
-};
+export default CourseCategoryList;

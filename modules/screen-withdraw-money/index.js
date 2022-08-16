@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "WithdrawMoney",
-  navigator: WithdrawMoney
-};
+export default WithdrawMoney;

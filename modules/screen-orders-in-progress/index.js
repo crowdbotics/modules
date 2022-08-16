@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "OrdersInProgress",
-  navigator: OrdersInProgress
-};
+export default OrdersInProgress;

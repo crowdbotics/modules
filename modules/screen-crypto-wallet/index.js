@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "CryptoWallet",
-  navigator: CryptoWallet
-};
+export default CryptoWallet;

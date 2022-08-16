@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "TaskersListing",
-  navigator: TaskersListing
-};
+export default TaskersListing;

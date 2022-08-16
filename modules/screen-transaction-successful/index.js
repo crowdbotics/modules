@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "TransactionSuccessful",
-  navigator: TransactionSuccessful
-};
+export default TransactionSuccessful;

@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ClientTaskerProfile",
-  navigator: ClientTaskerProfile
-};
+export default ClientTaskerProfile;

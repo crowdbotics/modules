@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "TouchID",
-  navigator: TouchID
-};
+export default TouchID;

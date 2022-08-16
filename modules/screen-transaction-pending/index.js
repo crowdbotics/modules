@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "TransactionPending",
-  navigator: TransactionPending
-};
+export default TransactionPending;

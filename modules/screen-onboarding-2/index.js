@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "Onboarding2",
-  navigator: Onboarding2
-};
+export default Onboarding2;

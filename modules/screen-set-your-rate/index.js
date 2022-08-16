@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "SetYourRate",
-  navigator: SetYourRate
-};
+export default SetYourRate;
