@@ -15,7 +15,7 @@ const MyJobsCandidateViewActiveJobsScreen = (params) => {
         <View style={styles.tabItem}>
           <Text style={[styles.tabText, styles.selectedTab]}>Job Posts</Text>
         </View>
-        <View style={[styles.tabItem]}>
+        <View style={styles.tabItem}>
           <Text style={styles.tabText}>Active Jobs</Text>
         </View>
         <View style={styles.tabItem}>
@@ -25,8 +25,8 @@ const MyJobsCandidateViewActiveJobsScreen = (params) => {
       <Text style={styles.subHeading}>List of requested jobs</Text>
       <View style={styles.cardWrapper}>
         <View style={styles.walletCard}>
-        <View style={[styles.leftSection, { alignItems: "flex-start" }]}>
-            <Text style={[styles.eventName]}>Job title:</Text>
+        <View style={[styles.leftSection, styles.flexItem]}>
+            <Text style={styles.eventName}>Job title:</Text>
             <Text style={styles.text}>Department:</Text>
             <Text style={styles.text}>Starting date:</Text>
             <Text style={styles.text}>Starting time:</Text>
@@ -47,8 +47,8 @@ const MyJobsCandidateViewActiveJobsScreen = (params) => {
       </View>
       <View style={styles.cardWrapper}>
         <View style={styles.walletCard}>
-        <View style={[styles.leftSection, { alignItems: "flex-start" }]}>
-            <Text style={[styles.eventName]}>Job title:</Text>
+        <View style={[styles.leftSection, styles.flexItem]}>
+            <Text style={styles.eventName}>Job title:</Text>
             <Text style={styles.text}>Department:</Text>
             <Text style={styles.text}>Starting date:</Text>
             <Text style={styles.text}>Starting time:</Text>
@@ -68,7 +68,7 @@ const MyJobsCandidateViewActiveJobsScreen = (params) => {
       </View>
       <View style={styles.cardWrapper}>
         <View style={styles.walletCard}>
-          <View style={[styles.leftSection, { alignItems: "flex-start" }]}>
+          <View style={[styles.leftSection, styles.flexItem]}>
             <Text style={[styles.eventName]}>Job title:</Text>
             <Text style={styles.text}>Department:</Text>
             <Text style={styles.text}>Starting date:</Text>
@@ -171,7 +171,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     marginBottom: 10
-  }
+  },
+  flexItem: { alignItems: "flex-start" }
 });
 
 const Button = (props) => {
