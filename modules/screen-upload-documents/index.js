@@ -38,7 +38,7 @@ const UploadDocuments = (params) => {
       </View>
 
       <View style={styles.skipSection}>
-<Text style={{ fontSize: 16 }}>Skip for now</Text>
+<Text style={styles.skipText}>Skip for now</Text>
 <Image source={require(
   // @ts-ignore
   "./assets/skip.png")} style={styles.skipImg}/>
@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   skipSection: { flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  skipImg: { height: 9, width: 14, resizeMode: "contain", marginTop: 3, marginLeft: 7 }
+  skipImg: { height: 9, width: 14, resizeMode: "contain", marginTop: 3, marginLeft: 7 },
+  skipText: { fontSize: 16 }
 });
 
 export default UploadDocuments;
