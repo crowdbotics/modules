@@ -23,7 +23,7 @@ const DocumentsScreen = (params) => {
 
       <View style={styles.cardWrapper}>
         <View style={styles.walletCard}>
-        <View style={[styles.leftSection, { alignItems: "flex-start" }]}>
+        <View style={[styles.leftSection, styles.flexItem]}>
             <Text style={styles.text}>Document ID</Text>
             <Text style={styles.text}>Document Title</Text>
             <Text style={styles.text}>Date signed</Text>
@@ -41,7 +41,7 @@ const DocumentsScreen = (params) => {
       </View>
       <View style={styles.cardWrapper}>
         <View style={styles.walletCard}>
-        <View style={[styles.leftSection, { alignItems: "flex-start" }]}>
+        <View style={[styles.leftSection, styles.flexItem]}>
             <Text style={styles.text}>Document ID</Text>
             <Text style={styles.text}>Document Title</Text>
             <Text style={styles.text}>Date signed</Text>
@@ -59,7 +59,7 @@ const DocumentsScreen = (params) => {
       </View>
       <View style={styles.cardWrapper}>
         <View style={styles.walletCard}>
-        <View style={[styles.leftSection, { alignItems: "flex-start" }]}>
+        <View style={[styles.leftSection, styles.flexItem]}>
             <Text style={styles.text}>Document ID</Text>
             <Text style={styles.text}>Document Title</Text>
             <Text style={styles.text}>Date signed</Text>
@@ -77,7 +77,7 @@ const DocumentsScreen = (params) => {
       </View>
       <View style={styles.cardWrapper}>
         <View style={styles.walletCard}>
-          <View style={[styles.leftSection, { alignItems: "flex-start" }]}>
+          <View style={[styles.leftSection, styles.flexItem]}>
             <Text style={styles.text}>Document ID</Text>
             <Text style={styles.text}>Document Title</Text>
             <Text style={styles.text}>Date signed</Text>
@@ -163,7 +163,8 @@ const styles = StyleSheet.create({
   },
   leftSection: { justifyContent: "space-evenly", alignItems: "flex-end" },
   text: { fontSize: 13, color: "#000", paddingTop: 10 },
-  downloadImg: { width: 20.4, height: 14.4, resizeMode: "contain", marginTop: 10 }
+  downloadImg: { width: 20.4, height: 14.4, resizeMode: "contain", marginTop: 10 },
+  flexItem: { alignItems: "flex-start" }
 });
 
 export default DocumentsScreen;
