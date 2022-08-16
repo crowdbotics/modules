@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "LinkedBankAccountsDetails",
-  navigator: LinkedBankAccountsDetails
-};
+export default LinkedBankAccountsDetails;

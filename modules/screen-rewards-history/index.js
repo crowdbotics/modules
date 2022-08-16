@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "RewardsHistory",
-  navigator: RewardsHistory
-};
+export default RewardsHistory;

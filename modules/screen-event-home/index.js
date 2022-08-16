@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "EventHome",
-  navigator: EventHome
-};
+export default EventHome;

@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "SearchHotelsList",
-  navigator: SearchHotelsList
-};
+export default SearchHotelsList;

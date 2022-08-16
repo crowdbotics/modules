@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ProfileSetupSuccess",
-  navigator: ProfileSetupSuccess
-};
+export default ProfileSetupSuccess;

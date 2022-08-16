@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "LoginPreferences",
-  navigator: LoginPreferences
-};
+export default LoginPreferences;

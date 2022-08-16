@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "OrderHistory",
-  navigator: OrderHistory
-};
+export default OrderHistory;

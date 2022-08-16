@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "MealProductListingScreen",
-  navigator: MealProductListingScreen
-};
+export default MealProductListingScreen;

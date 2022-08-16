@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "EventDetails",
-  navigator: EventDetails
-};
+export default EventDetails;

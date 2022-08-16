@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "AddBankAccount",
-  navigator: AddBankAccount
-};
+export default AddBankAccount;

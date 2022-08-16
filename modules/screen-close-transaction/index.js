@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "CloseTransaction",
-  navigator: CloseTransaction
-};
+export default CloseTransaction;

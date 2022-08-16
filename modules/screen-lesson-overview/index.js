@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "LessonOverview",
-  navigator: LessonOverview
-};
+export default LessonOverview;

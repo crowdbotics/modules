@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "StripeAddProduct",
-  navigator: StripeAddProduct
-};
+export default StripeAddProduct;

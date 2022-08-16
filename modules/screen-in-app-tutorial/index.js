@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "InAppTutorial",
-  navigator: InAppTutorial
-};
+export default InAppTutorial;

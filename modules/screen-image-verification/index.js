@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ImageVerification",
-  navigator: ImageVerification
-};
+export default ImageVerification;

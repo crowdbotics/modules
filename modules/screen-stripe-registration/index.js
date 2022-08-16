@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "StripeRegistration",
-  navigator: StripeRegistration
-};
+export default StripeRegistration;

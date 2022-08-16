@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "PassengerProfile",
-  navigator: PassengerProfile
-};
+export default PassengerProfile;

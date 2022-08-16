@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "TaskSummary",
-  navigator: TaskSummary
-};
+export default TaskSummary;

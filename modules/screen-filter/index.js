@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "Filter",
-  navigator: Filter
-};
+export default Filter;

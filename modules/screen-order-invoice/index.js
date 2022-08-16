@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "OrderInvoice",
-  navigator: OrderInvoice
-};
+export default OrderInvoice;

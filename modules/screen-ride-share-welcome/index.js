@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "RideShareWelcome",
-  navigator: RideShareWelcome
-};
+export default RideShareWelcome;

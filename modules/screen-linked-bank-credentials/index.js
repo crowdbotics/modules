@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "LinkedBankCredentials",
-  navigator: LinkedBankCredentials
-};
+export default LinkedBankCredentials;

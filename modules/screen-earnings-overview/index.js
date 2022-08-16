@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "EarningsOverview",
-  navigator: EarningsOverview
-};
+export default EarningsOverview;

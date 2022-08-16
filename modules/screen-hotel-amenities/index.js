@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "HotelAmenities",
-  navigator: HotelAmenities
-};
+export default HotelAmenities;

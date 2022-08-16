@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "AddPhoneNumber",
-  navigator: AddPhoneNumber
-};
+export default AddPhoneNumber;

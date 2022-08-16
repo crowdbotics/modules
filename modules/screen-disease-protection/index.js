@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "DiseaseProtection",
-  navigator: DiseaseProtection
-};
+export default DiseaseProtection;

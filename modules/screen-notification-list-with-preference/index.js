@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "NotificationListWithPreference",
-  navigator: NotificationListWithPreference
-};
+export default NotificationListWithPreference;

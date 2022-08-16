@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "ConnectWallet",
-  navigator: ConnectWallet
-};
+export default ConnectWallet;

@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "DiagnoseUndertaking",
-  navigator: DiagnoseUndertaking
-};
+export default DiagnoseUndertaking;

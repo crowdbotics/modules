@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "StripeAccountActivity",
-  navigator: StripeAccountActivity
-};
+export default StripeAccountActivity;

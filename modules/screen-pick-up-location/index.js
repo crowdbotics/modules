@@ -22,7 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "PickUpLocation",
-  navigator: PickUpLocation
-};
+export default PickUpLocation;
