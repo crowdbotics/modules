@@ -4,7 +4,9 @@
   "description": "A simple login and signup screen with email and password.",
   "private": true,
   "main": "index.js",
-  "x-dependencies": {},
+  "x-dependencies": {
+    "@react-native-async-storage/async-storage": "1.17.9"
+  },
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {

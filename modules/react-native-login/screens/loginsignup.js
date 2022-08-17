@@ -1,19 +1,15 @@
-import React, { useState, useContext } from "react";
 import { OptionsContext } from "@options";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableOpacity,
-  TextInput,
-  ActivityIndicator,
-  Alert
-} from "react-native";
-import { buttonStyles, textInputStyles, Color } from "./styles";
-import { useSelector, useDispatch } from "react-redux";
-import { loginRequest, signupRequest } from "../auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useContext, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert, KeyboardAvoidingView, Text, TextInput, TouchableOpacity, View
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { loginRequest, signupRequest } from "../auth";
 import { validateEmail } from "../constants";
+import { buttonStyles, Color, textInputStyles } from "./styles";
 
 // Custom Text Input
 export const TextInputField = (props) => (
@@ -172,8 +168,11 @@ export const SignInTab = ({ navigation, route }) => {
 
     dispatch(loginRequest({ username: email, password }))
       .then(unwrapResult)
-      .then((res) => {
-        if (res.token) navigation.navigate(options.HOME_SCREEN_NAME);
+      .then(async (res) => {
+        if (res.token) {
+          await AsyncStorage.setItem("token", res.token);
+          navigation.navigate(options.HOME_SCREEN_NAME);
+        }
       })
       .catch((err) => console.log(err.message));
   };
