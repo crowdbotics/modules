@@ -34,7 +34,7 @@ const AddBankAccount = () => {
             <Text style={styles.inputText}>Bank account number</Text>
             <TextInput
               style={styles.input}
-              onChangeText={text => setAccountNumber(text)}
+              onChangeText={(text) => setAccountNumber(text)}
               value={accountNumber}
               placeholder="Enter bank account number"
               placeholderTextColor="#9B9B9B"
@@ -50,7 +50,7 @@ const AddBankAccount = () => {
             <Text style={styles.inputText}>Confirm Bank account number</Text>
             <TextInput
               style={styles.input}
-              onChangeText={text => setConfirmAccountNumber(text)}
+              onChangeText={(text) => setConfirmAccountNumber(text)}
               value={confirmAccountNumber}
               placeholder="Confirm bank account number"
               placeholderTextColor="#9B9B9B"
@@ -66,7 +66,7 @@ const AddBankAccount = () => {
             <Text style={styles.inputText}>Bank routing number</Text>
             <TextInput
               style={styles.input}
-              onChangeText={text => setRoutingNumber(text)}
+              onChangeText={(text) => setRoutingNumber(text)}
               value={routingNumber}
               placeholder="Enter bank routing number"
               placeholderTextColor="#9B9B9B"
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
 
 export default AddBankAccount;
 
-const Footer = props => {
+const Footer = (props) => {
   return (
     <View style={footerStyles.footer}>
       {props.titles.map((title, index) => (
@@ -178,7 +178,8 @@ const Footer = props => {
             style={[
               footerStyles.footerItemText,
               index === props.active ? footerStyles.active : null
-            ]}>
+            ]}
+          >
             {title}
           </Text>
         </View>
@@ -221,7 +222,7 @@ const footerStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const btnStyle = {
     backgroundColor: params.outline ? "#fff" : "#000",
     borderColor: params.outline ? "#000" : "#fff",
