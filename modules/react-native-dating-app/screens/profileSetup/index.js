@@ -2,9 +2,7 @@ import React, { useState, useContext } from "react";
 import { StyleSheet, View, ScrollView, Text, TextInput, Image, Button, Alert, Pressable} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {storage} from "../../../../utils/storage";
-import { showError } from "../../api/errorMessage";
 import CBTextInput from "../../components/CBTextInput";
-import ProfileIcon from "../../components/ProfileIcon"
 import BackButton from "../../components/BackButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { OptionsContext, GlobalOptionsContext } from "@options";
@@ -55,7 +53,7 @@ export const ProfileSetup = (props) => {
         'Authorization': `Token ${userToken}`
       },
       body: data
-    }).then(navigation.goBack())
+    }).then(navigation.navigate('Home'))
     .then((response) => response.json())
     .catch((error) => console.log(error))
     .finally(() => setLoading(false));

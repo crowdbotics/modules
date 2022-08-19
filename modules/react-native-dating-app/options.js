@@ -69,6 +69,8 @@ const styles = StyleSheet.create({
 });
 
 export default {
-  configs: "test_configs",
+  nextScreenAnonymous: "Log in",
+  nextScreenLoggedIn: "Home",
+  nextCompleteProfileScreen: "ProfileSetup",
   styles: styles
 };

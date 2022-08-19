@@ -9,7 +9,8 @@ import {
     loginScreen,
     signUp,
     PostDetailScreen,
-    CreatePostScreen
+    CreatePostScreen,
+    Splash
 } from '../screens';
 import ChatDetailsScreen from '../screens/chat/chatDetails';
 import { forgotPass } from '../screens/forgotPass';
@@ -21,6 +22,7 @@ const Stack = createStackNavigator();
 export const AppNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="Splash" component={Splash} options={{headerShown:false}} />
       <Stack.Screen name="Log in" component={loginScreen} options={{headerShown:false}} />
       <Stack.Screen name="ProfileSetup" component={ProfileSetup} options={{headerShown:false}} />
       <Stack.Screen name="Sign up" component={signUp} />
