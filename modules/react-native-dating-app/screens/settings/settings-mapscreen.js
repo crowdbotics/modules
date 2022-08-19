@@ -22,7 +22,7 @@ const region = {
 };
 const FirstRoute = () => (
   <View>
-    <Text>Max's settings Screen</Text>
+    <Text>Max&apos;s settings Screen</Text>
   </View>
 );
 const SecondRoute = () => (

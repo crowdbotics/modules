@@ -33,7 +33,6 @@ export const ProfileSetup = (props) => {
 
   const doSomething = async (res) => {
     console.log("do something clicked");
-    setLoading(true);
     const data = new FormData();
     data.append("name", name);
     data.append("biography", biography);
@@ -54,8 +53,7 @@ export const ProfileSetup = (props) => {
       body: data
     }).then(navigation.navigate("Home"))
       .then((response) => response.json())
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
+      .catch((error) => console.log(error));
   };
 
   return (

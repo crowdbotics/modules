@@ -3,7 +3,7 @@ import { View, StyleSheet, Image } from "react-native";
 import { storage } from "@modules/storage";
 import { useDispatch } from "react-redux";
 import { setToken, profileRequest } from "../../api/redux";
-import { OptionsContext, GlobalOptionsContext } from "@options";
+import { OptionsContext } from "@options";
 const NEXT_SCREEN_NAME_GUEST = "";
 const NEXT_SCREEN_NAME_LOGGED = "";
 const NEXT_COMPLETE_PROFILE_SCREEN = "";
@@ -24,7 +24,6 @@ export const Splash = ({ navigation }) => {
 
     dispatch(profileRequest()).then(
       (res) => {
-        setUser(res.payload);
         storage.getToken().then(token => {
           if (token) {
             dispatch(setToken(token));

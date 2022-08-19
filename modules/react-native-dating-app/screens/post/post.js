@@ -1,23 +1,19 @@
-import React, { useEffect, useContext, useState, useRef } from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
   Image,
-  ScrollView,
   StyleSheet,
-  Dimensions,
-  TextInput, TouchableOpacity, Alert
+  TouchableOpacity
 } from "react-native";
-import { OptionsContext, GlobalOptionsContext } from "@options";
-// import { likePost, unLikePost } from "../api";
+import { GlobalOptionsContext } from "@options";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import ActionSheet from "react-native-actionsheet";
 import { CommentComponent } from "./comment";
 
 export const PostComponent = ({ postDetails, setLoading, navigation, actionSheet, baseOptions, setPostOptions }) => {
   const gOptions = useContext(GlobalOptionsContext);
   const BASE_URL = gOptions.url;
-  const { caption, media, description, upvotes, comments, comments_count, user, id, liked, is_owner } = postDetails;
+  const { media, description, upvotes, comments, commentsCount, user, id, liked, isOwner } = postDetails;
   return (
       <KeyboardAwareScrollView style={{ margin: 10 }}>
 
@@ -34,7 +30,7 @@ export const PostComponent = ({ postDetails, setLoading, navigation, actionSheet
           </TouchableOpacity>
           <View style={{ justifyContent: "space-evenly" }}>
             <TouchableOpacity onPress={() => {
-              is_owner && setPostOptions([...baseOptions, "Delete Post"]);
+              isOwner && setPostOptions([...baseOptions, "Delete Post"]);
               setTimeout(() => {
                 actionSheet.current.show();
               }, 100);
@@ -57,11 +53,7 @@ export const PostComponent = ({ postDetails, setLoading, navigation, actionSheet
         <Text style={userPostStyles.postText}>{description}</Text>
         <View style={userPostStyles.postcontainer}>
           <View style={userPostStyles.leftContainer}>
-            <TouchableOpacity onPress={() => {
-              liked
-                ? unLikePost(id, BASE_URL, setLoading)
-                : likePost(id, BASE_URL, setLoading);
-            }} style={{ flexDirection: "row" }} >
+            <TouchableOpacity onPress={() => {}} style={{ flexDirection: "row" }} >
               <Image
                 source={liked ? require("./assets/unlike.png") : require("./assets/like.png")}
                 style={userPostStyles.imageIcons}
@@ -73,7 +65,7 @@ export const PostComponent = ({ postDetails, setLoading, navigation, actionSheet
                 source={require("./assets/comment.png")}
                 style={userPostStyles.imageIcons}
               />
-              <Text style={userPostStyles.mh10}>{comments_count}</Text>
+              <Text style={userPostStyles.mh10}>{commentsCount}</Text>
             </TouchableOpacity>
           </View>
           <Image
