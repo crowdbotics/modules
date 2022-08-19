@@ -1,14 +1,12 @@
-import React, { Profiler } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
   HomeScreen,
   SettingScreen,
   Profile,
   ChatScreen,
-  Settings,
   loginScreen,
   signUp,
-  PostDetailScreen,
   CreatePostScreen,
   Splash
 } from "../screens";
@@ -34,7 +32,6 @@ export const AppNavigator = () => {
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="ChatDetails" component={ChatDetailsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CreatePost" component={CreatePostScreen}/>
-      <Stack.Screen name="PostDetailScreen" component={PostDetailScreen} />
     </Stack.Navigator>
   );
 };

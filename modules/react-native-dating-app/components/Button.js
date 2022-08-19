@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
-import { OptionsContext, GlobalOptionsContext } from "@options";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { OptionsContext } from "@options";
 
 // create button component
 const Button = ({ onPress, title, btnStyle, txtStyle, btnContainerStyle }) => {

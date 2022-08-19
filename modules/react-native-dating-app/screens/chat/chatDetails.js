@@ -6,13 +6,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { FlatList, TextInput } from "react-native-gesture-handler";
 import { chatDetailsRequest, sendMessageRequest } from "../../api/redux";
 
-import database, { firebase } from "@react-native-firebase/database";
+import database from "@react-native-firebase/database";
 import BackButton from "../../components/BackButton";
 import ProfileIcon from "../../components/ProfileIcon";
 
 const ChatScreen = (params) => {
   const { navigation, route } = params;
-  const { user_id } = route?.params;
+  const { userId } = route?.params;
   const store = useSelector((state) => state.App);
   const [profileDetails, setProfileDetails] = useState({});
   const [messages, setMessages] = useState([]);
@@ -20,16 +20,16 @@ const ChatScreen = (params) => {
   const dispatch = useDispatch();
   useEffect(() => {
     console.log("store:", store);
-    dispatch(chatDetailsRequest({ id: user_id })).then(
+    dispatch(chatDetailsRequest({ id: userId })).then(
       (res) => {
         setMessages(res.payload?.messages);
         setProfileDetails(res.payload?.user);
       } // end of then
     ); // end of dispatch
-    const sender_id = store.myProfile?.id;
-    console.log("sender-----", user_id, sender_id);
-    const reference1 = database().ref("/matches/" + user_id + "-" + sender_id);
-    const reference2 = database().ref("/matches/" + sender_id + "-" + user_id);
+    const senderId = store.myProfile?.id;
+    console.log("sender-----", userId, senderId);
+    const reference1 = database().ref("/matches/" + userId + "-" + senderId);
+    const reference2 = database().ref("/matches/" + senderId + "-" + userId);
     reference1.on("value", (snapshot) => {
       console.log("snapshot reference1:", snapshot.val());
       setTriggerFB(snapshot.val());
@@ -41,7 +41,7 @@ const ChatScreen = (params) => {
   }, []);
 
   useEffect(() => {
-    dispatch(chatDetailsRequest({ id: user_id })).then(
+    dispatch(chatDetailsRequest({ id: userId })).then(
       (res) => {
         setMessages(res.payload?.messages);
         setProfileDetails(res.payload?.user);
@@ -55,8 +55,8 @@ const ChatScreen = (params) => {
   }, [triggerFB]);
 
   useEffect(() => {
-    if (store.api.loading == "pending") {
-      dispatch(chatDetailsRequest({ id: user_id })).then(
+    if (store.api.loading === "pending") {
+      dispatch(chatDetailsRequest({ id: userId })).then(
         (res) => {
           setMessages(res.payload?.messages);
           setProfileDetails(res.payload?.user);
@@ -65,7 +65,7 @@ const ChatScreen = (params) => {
     }
     console.log("messages:", messages);
   }, [store.api.loading]);
-  const flatListRef = React.useRef();
+  let flatListRef = React.useRef();
   const [loaded, setLoaded] = useState(false);
   const deviceHeight = Math.round(Dimensions.get("window").height);
   return (
@@ -87,7 +87,7 @@ const ChatScreen = (params) => {
         >
           <View style={{ flex: 1 }}>
             <FlatList
-              reference={(ref) => flatListRef = ref}
+              reference={(ref) => { flatListRef = ref; }}
               style={{ flex: 0.8 }}
                 data={messages}
                 renderItem={({ item }) => (

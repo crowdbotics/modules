@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import ChatIcon from "../../components/Icons/ChatIcon";
 import LoveChat from "../../components/Icons/LoveChat";
 import ProfileIcon from "../../components/Icons/ProfileIcon";

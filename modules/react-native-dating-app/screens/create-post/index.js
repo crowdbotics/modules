@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useContext, useRef } from "react";
 import {
   Text,
   View,
@@ -12,24 +12,16 @@ import {
 } from "react-native";
 import { GlobalOptionsContext } from "@options";
 import ActionSheet from "react-native-actionsheet";
-import { pickFromCamera, pickFromGallery, uploadImage } from "@modules/camera/utils";
+import { pickFromCamera, pickFromGallery } from "@modules/camera/utils";
 import { storage } from "@modules/storage";
 
 export const CreatePostScreen = (props) => {
   console.log("props", props);
-  const { navigation, route } = props;
+  const { navigation } = props;
   const actionSheet = useRef(null);
-  const [userProfile, setUserProfile] = useState({});
   const [loading, setLoading] = useState(false);
   const gOptions = useContext(GlobalOptionsContext);
   const BASE_URL = gOptions.url;
-  const get_user_profile = () => {
-
-  };
-
-  useEffect(() => {
-    get_user_profile();
-  }, []);
 
   const [images, setImages] = useState([]);
   const [res, setRes] = useState([]);
@@ -76,7 +68,7 @@ export const CreatePostScreen = (props) => {
               res = await pickFromCamera();
               break;
             case 1:
-              res = await pickFromGallery(cropWidth = 400, cropHeight = 230);
+              res = await pickFromGallery();
               break;
           }
           if (res) {
@@ -109,7 +101,7 @@ export const CreatePostScreen = (props) => {
                         value={caption}
                         />
                 </View>
-                <TouchableOpacity style={[styles.SubmitPostButton, (images.length == 0 || !caption) ? styles.inactive : { backgroundColor: "black" }]} onPress={() => { caption && images.length > 0 && createPost(res); }}>
+                <TouchableOpacity style={[styles.SubmitPostButton, (images.length === 0 || !caption) ? styles.inactive : { backgroundColor: "black" }]} onPress={() => { caption && images.length > 0 && createPost(res); }}>
                 {loading ? <ActivityIndicator/> : <Text style={styles.SubmitPostButtonText}>Create Post</Text>}
                 </TouchableOpacity>
             </View>

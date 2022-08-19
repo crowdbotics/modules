@@ -37,7 +37,7 @@ const FirstRoute = ({ matches, navigation, query, setQuery }) => (
         <View style={styles.EveronesConversation}>
           {matches.length > 0 && matches.map((message, index) => {
             return (
-              <TouchableOpacity style={styles.messageContainer} onPress={() => { navigation.navigate("ChatDetails", { user_id: message?.id }); }}>
+              <TouchableOpacity key={index} style={styles.messageContainer} onPress={() => { navigation.navigate("ChatDetails", { user_id: message?.id }); }}>
                 <ProfileIcon image_src={message?.profile_info?.profile_image} />
                 <View style={styles.messageTextContainer}>
                   <Text style={styles.messageSenderName}>{message?.name}</Text>
@@ -341,36 +341,12 @@ const HeaderSectionComponent = ({ message, query, setQuery }) => {
   );
 };
 
-const MatchesComponent = () => {
-  return (
-    <View style={styles.firstmessagecontainerr}>
-        <Text style={styles.newMatches}>New matches</Text>
-    </View>
-  );
-};
-
-const MatchesNameComponent = () => {
-  return (
-    <TouchableOpacity style={styles.messageContainer} onPress={() => { navigation.navigate("ChatDetails", { user_id: 1 }); }}>
-      <ProfileIcon onPress={() => {}}/>
-      <Text style={styles.message2}>Cody Fisher</Text>
-    </TouchableOpacity>
-  );
-};
-const ConversationsComponent = () => {
-  return (
-    <View style={styles.firstmessagecontainerr}>
-        <Text style={styles.newMatches}>Conversations</Text>
-    </View>
-  );
-};
-
 const NameConversations = ({ messages, navigation }) => {
   return (
     <View style={styles.EveronesConversation}>
       {messages.length > 0 && messages.map((message, index) => {
         return (
-          <TouchableOpacity style={styles.messageContainer} onPress={() => { navigation.navigate("ChatDetails", { user_id: message?.id }); }}>
+          <TouchableOpacity style={styles.messageContainer} key={index} onPress={() => { navigation.navigate("ChatDetails", { user_id: message?.id }); }}>
             <ProfileIcon />
             <View style={styles.messageTextContainer}>
               <Text style={styles.messageSenderName}>{message?.name}</Text>

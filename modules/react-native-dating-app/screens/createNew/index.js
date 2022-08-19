@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import { loginRequest } from "../../api/redux";
@@ -7,14 +7,12 @@ import { storage } from "@modules/storage";
 
 export const createNew = (props) => {
   const { navigation } = props;
-  const [email, setEmail] = useState("shahraiz@cb.com");
-  const [password, setPassword] = useState("Admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-  // navigation.navigate('Home')
 
   const doSomething = () => {
-    // navigation.navigate('Home')
     dispatch(loginRequest({ username: email, password }))
       .then((res) => {
         const result = res.payload;
@@ -34,9 +32,9 @@ export const createNew = (props) => {
         <TextInput
           style={styles.input}
           value={Text}
-          onChangeText={newText => setPassword(newText)}
-          defaultValue={password}
-          placeholder="Password"
+          onChangeText={newText => setEmail(newText)}
+          defaultValue={email}
+          placeholder="Email"
           maxLength={20}
         />
 

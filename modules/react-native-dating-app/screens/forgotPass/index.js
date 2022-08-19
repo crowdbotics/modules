@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { useDispatch } from "react-redux";
 
 export const forgotPass = (props) => {
   const { navigation } = props;
   const [email, setEmail] = useState("shahraiz@cb.com");
-  const [password, setPassword] = useState("Admin123");
-
-  const dispatch = useDispatch();
-  // navigation.navigate('Home')
 
   const doSomething = () => {
     navigation.navigate("create");

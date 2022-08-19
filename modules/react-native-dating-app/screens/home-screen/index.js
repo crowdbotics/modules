@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image, Platform, Dimensions } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Image, Dimensions } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import { HomeHeader } from "./home-header";
 import LikeUnlikeSVG from "./LikeUnlikeSVG";
-import { OptionsContext, GlobalOptionsContext } from "@options";
+import { OptionsContext } from "@options";
 
-import { profileRequest, allProfilesRequest, requestMatch, deniedMatch } from "../../api/redux";
-import database, { firebase } from "@react-native-firebase/database";
+import { allProfilesRequest, requestMatch, deniedMatch } from "../../api/redux";
+import database from "@react-native-firebase/database";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const deviceWidth = Dimensions.get("window").width;
 const deviceHeight = Dimensions.get("window").height;
 
 export const HomeScreen = (props) => {
@@ -28,6 +27,7 @@ export const HomeScreen = (props) => {
   const user = store?.myProfile;
 
   useEffect(() => {
+    setSwiperSort([]);
     dispatch(allProfilesRequest()).then(
       (res) => {
         setMatches(res.payload);
@@ -45,27 +45,25 @@ export const HomeScreen = (props) => {
     // which user id to send to the backend
     // that the logged in user has matched with
     console.log("matches", matches);
-    const top_card_user = matches[index];
-    top_card_user.match_requested = true;
+    const topCardUser = matches[index];
+    topCardUser.match_requested = true;
     setMatches([...matches]);
     swiperSort.push(1);
-    console.log("matches", matches);
-    console.log("top_card_user", top_card_user);
     dispatch(
       requestMatch({
-        match_for: top_card_user.id
+        match_for: topCardUser.id
       })
     );
   };
 
   const swipeLeft = (index) => {
     console.log("swipe left", index);
-    const top_card_user = matches[index];
+    const topCardUser = matches[index];
     swiperSort.push(0);
-    console.log("top_card_user", top_card_user);
+    console.log("topCardUser", topCardUser);
     dispatch(
       deniedMatch({
-        match_denied_with: top_card_user.id
+        match_denied_with: topCardUser.id
       })
     );
   };
@@ -80,18 +78,18 @@ export const HomeScreen = (props) => {
             ref={swiper => {
               t.swiper = swiper;
             }}
-            onSwiped={() => console.log("onSwiped")}
+            onSwiped={() => {}}
             onSwipedLeft={(index) => {
-              swipeLeft(index = index);
+              swipeLeft(index);
             }}
             onSwipedRight={(index) => {
               // TODO: dispatch a match request
-              swipeRight(index = index);
+              swipeRight(index);
             }}
           >
             {matches.map((item, index) => {
               return (
-                <Card style={[styles.card, styles.card1]} user={item}>
+                <Card style={[styles.card, styles.card1]} user={item} key={index}>
                     <UserCard user={item} navigation={navigation}/>
                 </Card>
               );
@@ -291,7 +289,7 @@ const styles = StyleSheet.create({
 });
 
 const UserCard = ({ user, navigation }) => {
-  const { id, name, profile_pic, age } = user;
+  const { id } = user;
 
   // Consume module's own options in this component
   const options = useContext(OptionsContext);

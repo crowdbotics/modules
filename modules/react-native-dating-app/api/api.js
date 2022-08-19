@@ -1,6 +1,5 @@
 import axios from "axios";
 import { getGlobalOptions } from "@options";
-import { slice } from "./redux";
 import { storage } from "@modules/storage";
 
 const global = getGlobalOptions();

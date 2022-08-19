@@ -4,6 +4,5 @@ export * from "./profile";
 export * from "./chat";
 export * from "./loginScreen";
 export * from "./signUp";
-export * from "./post";
 export * from "./create-post";
 export * from "./splash";
