@@ -50,7 +50,7 @@ export const CreatePostScreen = (props) => {
       data: res.data
     });
     const userToken = await storage.getToken();
-    fetch(`${BASE_URL}/api/v1/create-post/`,{
+    fetch(`${BASE_URL}/modules/dating-app-backend/create-post/`,{
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',

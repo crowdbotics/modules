@@ -46,7 +46,7 @@ export const ProfileSetup = (props) => {
     data.append("interests", interests);
     data.append("skills", skills);
     const userToken = await storage.getToken();
-    fetch(`${BASE_URL}/api/v1/setup-profile/`,{
+    fetch(`${BASE_URL}/modules/dating-app-backend/setup-profile/`,{
       method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',

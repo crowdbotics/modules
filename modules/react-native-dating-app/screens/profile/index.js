@@ -13,6 +13,7 @@ import SettingsIcon from "../../components/Icons/SettingsIcon";
 import {useIsFocused} from '@react-navigation/native';
 import ExitIcon from "../../components/Icons/ExitIcon";
 import { storage } from "@modules/storage";
+import Button from "../../components/Button";
 
 export const Profile = (params) => {
   const { navigation } = params;
@@ -53,11 +54,15 @@ export const Profile = (params) => {
                       <UserProfile profile={profileDetails} navigation={navigation}/>
                       <Biography profile={profileDetails}/>
                       { profileDetails?.is_owner &&
-                        <TouchableOpacity style={styles.createPostBtn} onPress={()=>{
+                        // <TouchableOpacity style={styles.createPostBtn} onPress={()=>{
+                        //   navigation.navigate('CreatePost')
+                        // }}>
+                        //   <Text style={styles.createPostBtnText}>+ Add Post</Text>
+                        // </TouchableOpacity>
+                        <Button title="Create Post" onPress={()=>{
                           navigation.navigate('CreatePost')
-                        }}>
-                          <Text style={styles.createPostBtnText}>+ Add Post</Text>
-                        </TouchableOpacity>
+                        }
+                        }/>
                       }
                       {posts && posts.length > 0 && <View style={styles.postsInnerTopContainer}>
                         {

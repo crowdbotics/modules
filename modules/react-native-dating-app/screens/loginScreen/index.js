@@ -16,19 +16,16 @@ export const loginScreen = (props) => {
   const [password, setPassword] = useState('Admin123');
   const [showTextEntry, setShowTextEntry] = useState(false);
   const dispatch = useDispatch();
-  // navigation.navigate('Home')
 
   const doSomething = () => {
-      // navigation.navigate('Home')
       dispatch(loginRequest({ username: email, password }))
       .then((res)=> {
-        console.log("result login  ---- ", res)
+        __DEV__ && console.log("result login  ---- ", res)
         if (res?.error){
           showError(res.error);
         }else{
           let result = res.payload;
           if (result.token) {
-              console.log("shahraiz@cb.com", result.token);
               storage.setToken(result.token);
               navigation.replace('Home');
           }

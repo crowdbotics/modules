@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { OptionsContext, GlobalOptionsContext } from "@options";
 
 // create button component
 const Button = ({ onPress, title, btnStyle, txtStyle, btnContainerStyle}) => {
+  // Consume module's own options in this component
+  const options = useContext(OptionsContext);
+
   return (
     <TouchableOpacity onPress={onPress} style={[styles.buttonContainer, btnContainerStyle]}>
-      <View style={[styles.button, btnStyle]}>
+      <View style={[styles.button,
+        {backgroundColor: options.colors.primary},
+        btnStyle]}>
         <Text style={[styles.buttonText, txtStyle]}>
           {title}
         </Text>
