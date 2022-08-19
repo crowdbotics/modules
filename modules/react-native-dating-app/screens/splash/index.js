@@ -1,21 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import { storage } from "@modules/storage";
+import { useDispatch } from "react-redux";
+import { setToken, profileRequest } from "../../api/redux";
+import { OptionsContext, GlobalOptionsContext } from "@options";
 const NEXT_SCREEN_NAME_GUEST = "";
 const NEXT_SCREEN_NAME_LOGGED = "";
 const NEXT_COMPLETE_PROFILE_SCREEN = "";
-import { useSelector, useDispatch } from "react-redux";
-import { setToken, profileRequest } from "../../api/redux"
-import { OptionsContext, GlobalOptionsContext } from "@options";
 
 export const Splash = ({ navigation }) => {
-
-  const [user, setUser] = useState({})
   // Consume module's own options in this component
   const options = useContext(OptionsContext);
-
-  // Consume app's global options in this component
-  const global = useContext(GlobalOptionsContext);
 
   const [nextScreenAnonymous, setNextScreenAnonymous] = useState(NEXT_SCREEN_NAME_GUEST);
   const [nextScreenLoggedIn, setNextScreenLoggedIn] = useState(NEXT_SCREEN_NAME_LOGGED);
@@ -29,22 +24,22 @@ export const Splash = ({ navigation }) => {
 
     dispatch(profileRequest()).then(
       (res) => {
-        setUser(res.payload)
+        setUser(res.payload);
         storage.getToken().then(token => {
           if (token) {
             dispatch(setToken(token));
             // if the profile is not set, go to profile setup
-            const profile_info = res?.payload?.profile_info;
-            if (profile_info === undefined) {
+            const profileInfo = res?.payload?.profile_info;
+            if (profileInfo === undefined) {
               navigation.replace(nextCompleteProfileScreen);
-            }else{
+            } else {
               navigation.replace(nextScreenLoggedIn);
             }
-          }else{
+          } else {
             navigation.replace(nextScreenAnonymous);
           }
         }
-      );
+        );
       }
     );
   }, [nextCompleteProfileScreen]);

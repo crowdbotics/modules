@@ -1,17 +1,17 @@
 
 import React, { useState, useEffect, useContext } from "react";
-import { StyleSheet, View, Text, ScrollView, Image, StatusBar, Pressable } from "react-native";
+import { StyleSheet, View, Text, Image, StatusBar, Pressable } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector, useDispatch } from "react-redux";
 import LikeIcon from "../../components/Icons/LikeIcon";
 import DislikeIcon from "../../components/Icons/DislikeIcon";
-import { OptionsContext, GlobalOptionsContext } from "@options";
+import { OptionsContext } from "@options";
 
-import { userProfileDetails } from '../../api/redux';
+import { userProfileDetails } from "../../api/redux";
 import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../../components/BackButton";
 import SettingsIcon from "../../components/Icons/SettingsIcon";
-import {useIsFocused} from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 import ExitIcon from "../../components/Icons/ExitIcon";
 import { storage } from "@modules/storage";
 import Button from "../../components/Button";
@@ -19,26 +19,26 @@ import Button from "../../components/Button";
 export const Profile = (params) => {
   const { navigation } = params;
   const [posts, setPosts] = useState([{}, {}, {}, {}]);
-  console.log(params, " from profile")
+  console.log(params, " from profile");
   const dispatch = useDispatch();
   const [profileDetails, setProfileDetails] = useState({});
   const store = useSelector((state) => state.App);
   const isFocused = useIsFocused();
   useEffect(() => {
-    console.log('profile result store:', store);
+    console.log("profile result store:", store);
     dispatch(userProfileDetails(params.route.params.id)).then(
       (res) => {
-        //setProfileDetails(res.payload)
-        console.log('profile result:', res.payload);
+        // setProfileDetails(res.payload)
+        console.log("profile result:", res.payload);
       }
     );
-    console.log('profile result store:', store);
+    console.log("profile result store:", store);
   }, [isFocused]);
 
   useEffect(() => {
-    console.log('store:', store);
-    setProfileDetails(store.userDetails)
-    setPosts(store.userDetails.profile_posts)
+    console.log("store:", store);
+    setProfileDetails(store.userDetails);
+    setPosts(store.userDetails.profile_posts);
   }, [store]);
 
   return (
@@ -60,29 +60,27 @@ export const Profile = (params) => {
                         // }}>
                         //   <Text style={styles.createPostBtnText}>+ Add Post</Text>
                         // </TouchableOpacity>
-                        <Button title="Create Post" onPress={()=>{
-                          navigation.navigate('CreatePost')
+                        <Button title="Create Post" onPress={() => {
+                          navigation.navigate("CreatePost");
                         }
                         }/>
                       }
                       {posts && posts.length > 0 && <View style={styles.postsInnerTopContainer}>
                         {
-                          profileDetails?.is_owner ?
-                          <Text style={{ fontSize: 16 }}>My Posts</Text>
-                          :
-                          <Text style={{ fontSize: 16 }}>User Posts</Text>
+                          profileDetails?.is_owner
+                            ? <Text style={{ fontSize: 16 }}>My Posts</Text>
+                            : <Text style={{ fontSize: 16 }}>User Posts</Text>
                         }
                       </View>}
-                      
-                      
+
                     </View>
-                  )
+                  );
                 }
               }
               renderItem={({ item }) => (
                 <Post navigation={navigation} post={item} />
               )}
-              columnWrapperStyle={{padding: 2}}
+              columnWrapperStyle={{ padding: 2 }}
               style = {styles.postsFlatList}
               numColumns={3}
               showsVerticalScrollIndicator={false}
@@ -98,57 +96,57 @@ export const Profile = (params) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#FFFFFF"
   },
   userOuterContainer: {
-    
+
   },
   userPictureContainer: {
     height: 300,
     justifyContent: "center",
     alignItems: "center",
-    zIndex: -1,
+    zIndex: -1
   },
   userDetailsOuterContainer: {
     // backgroundColor: "rgba(255, 255, 255, 0.6)",
     height: 120,
     flexDirection: "row",
     justifyContent: "space-between",
-    zIndex: 1000100000,
+    zIndex: 1000100000
   },
   userDetailsInnerLeftContainer: {
-    //flex: 1,
+    // flex: 1,
     paddingLeft: 15,
     justifyContent: "space-around",
-    marginVertical: 15,
+    marginVertical: 15
   },
   userDetailsInnerRightContainer: {
-    //flex: 1,
-    alignItems: 'flex-end',
+    // flex: 1,
+    alignItems: "flex-end",
     marginTop: 35,
-    marginRight: 25,
-    
+    marginRight: 25
+
   },
   usernameText: {
     fontWeight: "bold",
     fontSize: 20
   },
-  createPostBtn:{
-    backgroundColor: 'black',
+  createPostBtn: {
+    backgroundColor: "black",
     padding: 10,
-    alignSelf: 'center',
+    alignSelf: "center",
     borderRadius: 20,
     width: 200,
-    marginBottom: 20,
+    marginBottom: 20
   },
-  createPostBtnText:{
-    color: 'white',
+  createPostBtnText: {
+    color: "white",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center"
 
   },
   biographyOuterContainer: {
-    //flex: 1,
+    // flex: 1,
     flexDirection: "column",
     justifyContent: "space-evenly",
     backgroundColor: "#FFFFFF",
@@ -157,10 +155,10 @@ const styles = StyleSheet.create({
   biographyInnerTopContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 30,
+    marginBottom: 30
   },
   biographyInnerBottomContainer: {
-    marginRight: 25,
+    marginRight: 25
   },
   postsOuterContainer: {
     backgroundColor: "#FFFFFF"
@@ -174,90 +172,90 @@ const styles = StyleSheet.create({
   },
   post: {
     height: 110,
-    width: '30%',
+    width: "30%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
     marginLeft: 10,
     borderWidth: 1,
-    borderColor: "#C4C4C4",
-    
+    borderColor: "#C4C4C4"
+
   },
   postImage: {
     height: 100,
     width: 100
   },
   likeBtnContainer: {
-    flexDirection: 'row', 
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center"
   },
   unLikeBtnContainer: {
-    flexDirection: 'row', 
-    alignItems: 'center',
-    marginLeft: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 10
   },
-  profileRoundImage: { 
-    height: 100, 
-    width: 100, 
-    position: 'absolute', 
-    bottom: -20, 
-    left: 20, 
-    borderRadius: 50, 
-    borderWidth: 3, 
-    borderColor: '#FFFFFF',
-    shadowColor: 'rgba(0,0,0,0.3)',
+  profileRoundImage: {
+    height: 100,
+    width: 100,
+    position: "absolute",
+    bottom: -20,
+    left: 20,
+    borderRadius: 50,
+    borderWidth: 3,
+    borderColor: "#FFFFFF",
+    shadowColor: "rgba(0,0,0,0.3)",
     shadowOffset: {
       width: 0,
       height: 1
     },
-    shadowOpacity:0.5,
+    shadowOpacity: 0.5,
     elevation: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF"
   }
 });
 
 export const UserProfile = (params) => {
-  //const [likeCount, setLikeCount] = useState(1500)
-  //const [dislikeCount, setDisikeCount] = useState(200)
-  const {profile, navigation} = params
+  // const [likeCount, setLikeCount] = useState(1500)
+  // const [dislikeCount, setDisikeCount] = useState(200)
+  const { profile, navigation } = params;
   const logout = () => {
-    storage.removeToken()
-    navigation.replace('Log in')
-  }
+    storage.removeToken();
+    navigation.replace("Log in");
+  };
   // Consume module's own options in this component
   const options = useContext(OptionsContext);
 
   return (
-    <View style={[{backgroundColor: options.colors.secondary}, styles.userOuterContainer]}>
+    <View style={[{ backgroundColor: options.colors.secondary }, styles.userOuterContainer]}>
       <View>
-        <Pressable onPress={()=>{navigation.goBack()}}
+        <Pressable onPress={() => { navigation.goBack(); }}
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 15,
             top: 15,
-            zIndex: 3,
+            zIndex: 3
           }}
         >
           <BackButton/>
         </Pressable>
         {profile?.is_owner &&
-          <Pressable onPress={()=>{logout()}}
+          <Pressable onPress={() => { logout(); }}
             style={{
-              position: 'absolute',
+              position: "absolute",
               right: 15,
               top: 15,
-              zIndex: 3,
+              zIndex: 3
             }}
           >
             <ExitIcon width={35} height={35}/>
           </Pressable>
         }
-        <Pressable onPress={()=>{navigation.navigate('ProfileSetup')}}
+        <Pressable onPress={() => { navigation.navigate("ProfileSetup"); }}
           style={{
-            position: 'absolute',
+            position: "absolute",
             right: 60,
             top: 15,
-            zIndex: 3,
+            zIndex: 3
           }}
         >
           <SettingsIcon width={35} height={35}/>
@@ -267,7 +265,7 @@ export const UserProfile = (params) => {
       <View style={styles.userPictureContainer}>
         <Image
           source={{ uri: profile?.profile_info?.cover_image }}
-          style={{ height: '100%', width: '100%',zIndex: -1  }}
+          style={{ height: "100%", width: "100%", zIndex: -1 }}
         >
         </Image>
         <Image
@@ -275,10 +273,9 @@ export const UserProfile = (params) => {
           style={styles.profileRoundImage}
         >
         </Image>
-        
+
       </View>
-      
-      
+
       <View style={styles.userDetailsOuterContainer}>
         <View style={styles.userDetailsInnerLeftContainer}>
           <Text style={{ fontWeight: "bold", fontSize: 20 }}>
@@ -291,8 +288,8 @@ export const UserProfile = (params) => {
         <View style={styles.userDetailsInnerRightContainer}>
           {
             !profile?.is_owner && (
-              <View style={{marginBottom: 10}}>
-                <TouchableOpacity onPress={()=>{ navigation.navigate('ChatDetails', {user_id:profile?.id}) }}> 
+              <View style={{ marginBottom: 10 }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("ChatDetails", { user_id: profile?.id }); }}>
                   <Image source={require("./assets/chat-icon.png")}/>
                 </TouchableOpacity>
               </View>
@@ -300,37 +297,37 @@ export const UserProfile = (params) => {
           }
           {
             profile?.is_owner && (
-              <View style={{marginBottom: 10}}>
-                <TouchableOpacity onPress={()=>{ navigation.navigate('Settings') }}> 
+              <View style={{ marginBottom: 10 }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("Settings"); }}>
                   <Text>Settings</Text>
                 </TouchableOpacity>
               </View>
             )
           }
-          
-          <View style={{flexDirection: "row", }}>
-            <TouchableOpacity style={styles.likeBtnContainer} onPress={()=>{}}>
+
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity style={styles.likeBtnContainer} onPress={() => {}}>
               <Text style={{ fontSize: 14, paddingHorizontal: 5 }}>
                 {profile.swipe_rights}
               </Text>
               {/* <Image source={require("./assets/like.png")}/> */}
               <LikeIcon/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.unLikeBtnContainer} onPress={()=>{}}> 
+            <TouchableOpacity style={styles.unLikeBtnContainer} onPress={() => {}}>
               <Text style={{ fontSize: 14, paddingRight: 5 }}>
                 {profile.swipe_lefts}
               </Text>
               <DislikeIcon/>
             </TouchableOpacity>
           </View>
-          
+
         </View>
       </View>
     </View>
   );
 };
 
-const Biography = ({profile}) => {
+const Biography = ({ profile }) => {
   return (
     <View style={styles.biographyOuterContainer}>
       <View style={styles.biographyInnerTopContainer}>
@@ -339,7 +336,7 @@ const Biography = ({profile}) => {
         </Text>
       </View>
       <View style={styles.biographyInnerBottomContainer}>
-        <Text style={{ fontSize: 11, textAlign: 'justify'}}>
+        <Text style={{ fontSize: 11, textAlign: "justify" }}>
           {profile?.profile_info?.bio}
         </Text>
       </View>
@@ -347,19 +344,19 @@ const Biography = ({profile}) => {
   );
 };
 
-const Post = ({navigation, post}) => {
+const Post = ({ navigation, post }) => {
   return (
-    <View style={[styles.post, {backgroundColor: post?.media?.[0]?.background}]}>
-      <TouchableOpacity style={{flex:1, justifyContent: 'center',}} onPress={
+    <View style={[styles.post, { backgroundColor: post?.media?.[0]?.background }]}>
+      <TouchableOpacity style={{ flex: 1, justifyContent: "center" }} onPress={
         () => {
-          navigation.navigate('PostDetailScreen', {id: post.id})
+          navigation.navigate("PostDetailScreen", { id: post.id });
         }
       }>
           <Image
             source={{ uri: post?.media?.[0]?.image }}
             style={styles.postImage}
-            resizeMode={'contain'}/>
+            resizeMode={"contain"}/>
       </TouchableOpacity>
     </View>
   );
-}; 
+};

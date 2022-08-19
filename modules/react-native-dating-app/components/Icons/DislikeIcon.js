@@ -1,5 +1,5 @@
-import * as React from "react"
-import Svg, { Circle, Path } from "react-native-svg"
+import * as React from "react";
+import Svg, { Circle, Path } from "react-native-svg";
 
 function DislikeIcon(props) {
   return (
@@ -17,7 +17,7 @@ function DislikeIcon(props) {
         fill="#FF7C95"
       />
     </Svg>
-  )
+  );
 }
 
-export default DislikeIcon
+export default DislikeIcon;

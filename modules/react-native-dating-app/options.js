@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   btnStyle: {
-    backgroundColor: "red",
+    backgroundColor: "red"
   }
 });
 
@@ -14,7 +14,7 @@ export default {
     primary: "black",
     secondary: "#FCE5E4",
     primaryText: "black",
-    secondaryText: "white",
+    secondaryText: "white"
   },
   styles: styles
 };

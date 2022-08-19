@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Alert} from "react-native";
+import { StyleSheet, View, Text, TextInput, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import { signupRequest } from "../../api/redux";
-import {showError} from "../../api/errorMessage";
+import { showError } from "../../api/errorMessage";
 
 import Button from "../../components/Button";
 
-export const  signUp = (props) => {
+export const signUp = (props) => {
   console.log("signUp props", props);
-  const {navigation } = props;
+  const { navigation } = props;
   const [email, setEmail] = useState("");
   const [password1, setPassword1] = useState("");
   const [password2, setPassword2] = useState("");
@@ -18,27 +18,27 @@ export const  signUp = (props) => {
   // navigation.navigate('Home')
 
   const doSomething = () => {
-      // navigation.navigate('Home')
-      if (password1 !== password2) {
-        Alert.alert(
-          "Something went wrong",
-          "Passwords do not match",
-          [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ]
-        );
-        return;
-      }
+    // navigation.navigate('Home')
+    if (password1 !== password2) {
+      Alert.alert(
+        "Something went wrong",
+        "Passwords do not match",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ]
+      );
+      return;
+    }
 
-      dispatch(signupRequest({ email: email, password:password1 }))
-      .then((res)=> {
-        if (res?.error){
+    dispatch(signupRequest({ email: email, password: password1 }))
+      .then((res) => {
+        if (res?.error) {
           showError(res.error);
-        }else{
-          console.log("result signup", res)
-          let result = res.payload;
+        } else {
+          console.log("result signup", res);
+          const result = res.payload;
           if (result?.id) {
-              navigation.replace('Log in');
+            navigation.replace("Log in");
           }
         }
       })
@@ -77,77 +77,77 @@ export const  signUp = (props) => {
             placeholder="Password"
             secureTextEntry={true}
             maxLength={20}
-          />  
+          />
 
       </View>
-      <Button title="Sign Up" onPress={()=>{ doSomething()  }}
+      <Button title="Sign Up" onPress={() => { doSomething(); }}
             btnContainerStyle={styles.buttonContainer}
             btnTextStyle={styles.btnText}
             btnStyle={styles.btn}
       />
-     
+
       <Text style={styles.grey}>Or</Text>
       <View style={styles.signupcontainer}>
       <Text style={styles.haveAccount}>Already have an account?</Text>
-      <TouchableOpacity onPress={()=> {navigation.navigate('Log in')}} >
+      <TouchableOpacity onPress={() => { navigation.navigate("Log in"); }} >
               <Text style={styles.loginBtnTxt}>
               Log in
               </Text>
       </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
-  signupcontainer:{
-    flexDirection:'row',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent:'center',
+  signupcontainer: {
+    flexDirection: "row",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center"
   },
-  sign:{
+  sign: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "black",
     padding: 13,
-    textAlign: 'center',
-    flexDirection:'row',
+    textAlign: "center",
+    flexDirection: "row"
   },
-  grey:{
+  grey: {
     fontSize: 13,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "gray",
-    textAlign: 'center',
-    marginTop: 10,
+    textAlign: "center",
+    marginTop: 10
   },
-  button:{
-    borderRadius:10,
+  button: {
+    borderRadius: 10,
     padding: 10,
-    backgroundColor: 'red'
+    backgroundColor: "red"
   },
   btn: {
     paddingHorizontal: 40,
     paddingVertical: 10,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     borderRadius: 10,
     width: 300,
     height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center"
   },
   btnText: {
-    color: 'white',
+    color: "white"
   },
-  underText:{
+  underText: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "black",
-    padding: 13,
+    padding: 13
   },
   subTextContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: 0,
     paddingTop: 20
   },
@@ -156,18 +156,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 45,
     paddingHorizontal: 15,
-    borderColor: '#C4C4C4'
+    borderColor: "#C4C4C4"
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 30
   },
-  subText:{
+  subText: {
     fontSize: 14,
-    padding:10,
-    fontWeight: '400',
+    padding: 10,
+    fontWeight: "400",
     color: "black",
-    textAlign: 'left'
+    textAlign: "left"
   },
   container: {
     flex: 1,
@@ -177,10 +177,10 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 42,
-    fontWeight: '700',
+    fontWeight: "700",
     color: "black",
-    textAlign: 'center',
-    paddingVertical:50
+    textAlign: "center",
+    paddingVertical: 50
   },
   haveAccount: {
     fontSize: 16,
@@ -189,6 +189,6 @@ const styles = StyleSheet.create({
   loginBtnTxt: {
     fontSize: 16,
     marginLeft: 10,
-    fontWeight: '600',
+    fontWeight: "600"
   }
-})
+});

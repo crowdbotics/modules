@@ -1,5 +1,5 @@
-import * as React from "react"
-import {useState, useEffect, useContext, useRef} from 'react';
+import * as React from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import {
   Text,
   View,
@@ -9,38 +9,38 @@ import {
   TextInput,
   ActivityIndicator,
   TouchableOpacity
-} from 'react-native'
+} from "react-native";
 import { GlobalOptionsContext } from "@options";
 import ActionSheet from "react-native-actionsheet";
 import { pickFromCamera, pickFromGallery, uploadImage } from "@modules/camera/utils";
 import { storage } from "@modules/storage";
 
 export const CreatePostScreen = (props) => {
-  console.log("props", props)
-  const {navigation, route} = props;
+  console.log("props", props);
+  const { navigation, route } = props;
   const actionSheet = useRef(null);
   const [userProfile, setUserProfile] = useState({});
   const [loading, setLoading] = useState(false);
   const gOptions = useContext(GlobalOptionsContext);
-  const BASE_URL = gOptions.url
+  const BASE_URL = gOptions.url;
   const get_user_profile = () => {
-      
-  }
+
+  };
 
   useEffect(() => {
     get_user_profile();
   }, []);
-  
+
   const [images, setImages] = useState([]);
   const [res, setRes] = useState([]);
   const [caption, setCaption] = useState("");
   const ImagePickerOptions = ["Take Photo", "Choose from Gallery", "Cancel"];
   console.log("sdas", images);
-  
+
   const createPost = async (res) => {
     setLoading(true);
     const data = new FormData();
-    res = res?.[0]
+    res = res?.[0];
     data.append("caption", caption);
     data.append("media", {
       name: `rnd-${res?.path}`,
@@ -49,20 +49,18 @@ export const CreatePostScreen = (props) => {
       data: res.data
     });
     const userToken = await storage.getToken();
-    fetch(`${BASE_URL}/modules/dating-app-backend/create-post/`,{
-      method: 'POST',
+    fetch(`${BASE_URL}/modules/dating-app-backend/create-post/`, {
+      method: "POST",
       headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Token ${userToken}`
+        "Content-Type": "multipart/form-data",
+        Authorization: `Token ${userToken}`
       },
       body: data
     }).then((response) => response.json())
-      .then((json) => {navigation.goBack()})
+      .then((json) => { navigation.goBack(); })
       .catch((error) => console.log(error))
       .finally(() => setLoading(false));
-  }
-
-
+  };
 
   return (
     <ScrollView>
@@ -78,39 +76,41 @@ export const CreatePostScreen = (props) => {
               res = await pickFromCamera();
               break;
             case 1:
-              res = await pickFromGallery(cropWidth=400, cropHeight=230);
+              res = await pickFromGallery(cropWidth = 400, cropHeight = 230);
               break;
           }
           if (res) {
-            setImages(["data:image/png;base64,"+res?.data])
-            setRes([res])
+            setImages(["data:image/png;base64," + res?.data]);
+            setRes([res]);
           }
         }}
       />
       <View style={styles.container}>
         <View style={styles.formContainer}>
-          
+
           <View>
             <Text style={styles.headerText}>Image</Text>
             <TouchableOpacity style={styles.imageLarge} onPress={() => actionSheet.current.show()}>
-              {images.length > 0 ? (
+              {images.length > 0
+                ? (
                 <Image source={{ uri: images[0] }} style={styles.imageLarge} />
-             ) : (
-                <Image style={styles.placeholderImage} source={require('./assets/add-photo.png')} />
-              )}
+                  )
+                : (
+                <Image style={styles.placeholderImage} source={require("./assets/add-photo.png")} />
+                  )}
             </TouchableOpacity>
             <View>
                 <View>
                     <Text style={styles.headerText} >Caption</Text>
-                    <TextInput 
-                        style={styles.textInput} 
+                    <TextInput
+                        style={styles.textInput}
                         placeholder="What's on your mind?" multiline={true}
                         onChangeText={(text) => setCaption(text)}
                         value={caption}
                         />
                 </View>
-                <TouchableOpacity style={[styles.SubmitPostButton, (images.length == 0 || !caption ) ? styles.inactive : {backgroundColor: 'black'}]} onPress={()=>{ caption && images.length >0 && createPost(res)}}>
-                {loading ? <ActivityIndicator/>:<Text style={styles.SubmitPostButtonText}>Create Post</Text>}
+                <TouchableOpacity style={[styles.SubmitPostButton, (images.length == 0 || !caption) ? styles.inactive : { backgroundColor: "black" }]} onPress={() => { caption && images.length > 0 && createPost(res); }}>
+                {loading ? <ActivityIndicator/> : <Text style={styles.SubmitPostButtonText}>Create Post</Text>}
                 </TouchableOpacity>
             </View>
           </View>
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "white"
   },
-  textInput:{
+  textInput: {
     height: 60,
     borderColor: "gray",
     borderBottomWidth: 1,
@@ -137,11 +137,11 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderRadius: 12,
     borderWidth: 1,
-    resizeMode: 'contain',
+    resizeMode: "contain",
     marginBottom: 10,
     marginTop: 10,
-    backgroundColor: '#eee',
-    justifyContent: 'center',
+    backgroundColor: "#eee",
+    justifyContent: "center"
   },
   AddMoreButton: {
     height: 100,
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
     marginBottom: 10,
-    justifyContent: 'center',
-    textAlign: 'center',
+    justifyContent: "center",
+    textAlign: "center",
     marginHorizontal: 10
   },
   AddMoreButtonText: {
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   inactive: {
-    backgroundColor: "gray",
+    backgroundColor: "gray"
   },
   SubmitPostButton: {
     height: 50,
@@ -168,8 +168,8 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     padding: 5,
     borderRadius: 5,
-    justifyContent: 'center',
-    textAlign: 'center',
+    justifyContent: "center",
+    textAlign: "center",
     marginBottom: 10
   },
   SubmitPostButtonText: {
@@ -179,16 +179,17 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-    overflow: 'hidden',
-    borderRadius: 10,
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
+    overflow: "hidden",
+    borderRadius: 10
   },
   placeholderImage: {
-    alignSelf: 'center', 
-    width: 50, height: 42
- },
+    alignSelf: "center",
+    width: 50,
+    height: 42
+  },
   headerContainer: {
     display: "flex",
     flexDirection: "column",
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   followingText: {
-    fontSize: 14,
+    fontSize: 14
   },
   pt30: {
     paddingTop: 30
@@ -237,7 +238,7 @@ const styles = StyleSheet.create({
     paddingTop: 5
   },
   galleryRow: {
-    display: "flex",
+    display: "flex"
     // flexDirection: "row",
     // flexWrap: "wrap",
   },

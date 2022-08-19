@@ -1,8 +1,8 @@
-import { AppNavigator } from './navigation';
-import {slice} from './api/redux';
+import { AppNavigator } from "./navigation";
+import { slice } from "./api/redux";
 
 export default {
-  title: 'App',
+  title: "App",
   navigator: AppNavigator,
   slice: slice
 };

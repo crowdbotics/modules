@@ -1,38 +1,37 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput} from "react-native";
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import { loginRequest } from "../../api/redux";
 import { storage } from "@modules/storage";
 import { showError } from "../../api/errorMessage";
-import CheckBox from '@react-native-community/checkbox';
+import CheckBox from "@react-native-community/checkbox";
 
 import Button from "../../components/Button";
 
 export const loginScreen = (props) => {
-
-  const {navigation } = props;
-  const [email, setEmail] = useState('shahraiz@cb.com');
-  const [password, setPassword] = useState('Admin123');
+  const { navigation } = props;
+  const [email, setEmail] = useState("shahraiz@cb.com");
+  const [password, setPassword] = useState("Admin123");
   const [showTextEntry, setShowTextEntry] = useState(false);
   const dispatch = useDispatch();
 
   const doSomething = () => {
-      dispatch(loginRequest({ username: email, password }))
-      .then((res)=> {
-        __DEV__ && console.log("result login  ---- ", res)
-        if (res?.error){
+    dispatch(loginRequest({ username: email, password }))
+      .then((res) => {
+        __DEV__ && console.log("result login  ---- ", res);
+        if (res?.error) {
           showError(res.error);
-        }else{
-          let result = res.payload;
+        } else {
+          const result = res.payload;
           if (result.token) {
-              storage.setToken(result.token);
-              navigation.replace('Home');
+            storage.setToken(result.token);
+            navigation.replace("Home");
           }
         }
       })
       .catch((err) => {
-        console.log("error during login", err)
+        console.log("error during login", err);
       });
   };
 
@@ -61,9 +60,9 @@ export const loginScreen = (props) => {
         />
       </View>
       <View style={styles.subTextContainer}>
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={() => setShowTextEntry(!showTextEntry)}
-        style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+        style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
             <CheckBox
               style={styles.showPassCheckbox}
               disabled={false}
@@ -74,112 +73,112 @@ export const loginScreen = (props) => {
               Show Password
             </Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=> { navigation.navigate('forgot') }}>
+        <TouchableOpacity onPress={() => { navigation.navigate("forgot"); }}>
           <Text>
           Forgot Password?
           </Text>
         </TouchableOpacity>
       </View>
-      <Button title="Login" onPress={()=>{ doSomething()  }} 
-              btnStyle={styles.btn} txtStyle={styles.btnText} 
+      <Button title="Login" onPress={() => { doSomething(); }}
+              btnStyle={styles.btn} txtStyle={styles.btnText}
               btnContainerStyle={styles.buttonContainer}
               />
       <Text style={styles.grey}>Or</Text>
       <View style={styles.signupcontainer}>
       <Text style={styles.haveAccount}>Dont have an account?</Text>
-      <TouchableOpacity onPress={()=> { navigation.navigate('Sign up') }}>
+      <TouchableOpacity onPress={() => { navigation.navigate("Sign up"); }}>
         <Text style={styles.signUpBtnTxt}>Sign up</Text>
       </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
-  signupcontainer:{
-    flexDirection:'row',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent:'center',
+  signupcontainer: {
+    flexDirection: "row",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center"
   },
-  sign:{
+  sign: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "black",
     padding: 13,
-    textAlign: 'center',
+    textAlign: "center"
   },
-  grey:{
+  grey: {
     fontSize: 13,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "gray",
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 30
   },
-  button:{
-    borderRadius:10,
+  button: {
+    borderRadius: 10,
     padding: 10,
-    backgroundColor: 'red',
-    
+    backgroundColor: "red"
+
   },
-  showPassCheckbox:{
+  showPassCheckbox: {
     marginRight: 10,
     marginLeft: 10,
     height: 20,
-    width: 20,
+    width: 20
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 30
   },
   btn: {
     width: 300,
-    height: 49,
+    height: 49
   },
   btnText: {
-    color: 'white',
+    color: "white"
   },
-  underText:{
+  underText: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "black",
-    padding: 13,
+    padding: 13
 
   },
   subTextContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: 0,
     paddingTop: 20
-  },  
+  },
   input: {
     borderRadius: 10,
     borderWidth: 1,
     height: 45,
     paddingHorizontal: 15,
-    borderColor: '#C4C4C4'
+    borderColor: "#C4C4C4"
   },
 
-  subText:{
+  subText: {
     fontSize: 14,
-    padding:10,
-    fontWeight: '400',
+    padding: 10,
+    fontWeight: "400",
     color: "black",
-    textAlign: 'left'
+    textAlign: "left"
   },
   container: {
     flex: 1,
     height: 100,
     padding: 13,
     backgroundColor: "white",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   text: {
     fontSize: 42,
-    fontWeight: '700',
+    fontWeight: "700",
     color: "black",
-    textAlign: 'center',
-    paddingVertical:50
+    textAlign: "center",
+    paddingVertical: 50
   },
   haveAccount: {
     fontSize: 16,
@@ -188,9 +187,6 @@ const styles = StyleSheet.create({
   signUpBtnTxt: {
     fontSize: 16,
     marginLeft: 10,
-    fontWeight: '600',
+    fontWeight: "600"
   }
-})
-
-
-
+});

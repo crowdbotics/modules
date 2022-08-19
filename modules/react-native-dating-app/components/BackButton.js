@@ -1,5 +1,5 @@
-import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import * as React from "react";
+import Svg, { Path } from "react-native-svg";
 
 function BackButton(props) {
   const { bgColor } = props;
@@ -22,7 +22,7 @@ function BackButton(props) {
         fill="#231F20"
       />
     </Svg>
-  )
+  );
 }
 
-export default BackButton
+export default BackButton;

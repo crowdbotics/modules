@@ -1,5 +1,5 @@
-import * as React from "react"
-import Svg, { Path } from "react-native-svg"
+import * as React from "react";
+import Svg, { Path } from "react-native-svg";
 
 function ExitIcon(props) {
   return (
@@ -29,7 +29,7 @@ function ExitIcon(props) {
         strokeLinejoin="round"
       />
     </Svg>
-  )
+  );
 }
 
-export default ExitIcon
+export default ExitIcon;

@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert} from "react-native";
+import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 
 export const forgotPass = (props) => {
-  const {navigation } = props;
-  const [email, setEmail] = useState('shahraiz@cb.com');
-  const [password, setPassword] = useState('Admin123');
+  const { navigation } = props;
+  const [email, setEmail] = useState("shahraiz@cb.com");
+  const [password, setPassword] = useState("Admin123");
 
   const dispatch = useDispatch();
   // navigation.navigate('Home')
 
   const doSomething = () => {
-      navigation.navigate('create')
-      
+    navigation.navigate("create");
   };
 
   return (
@@ -32,7 +31,7 @@ export const forgotPass = (props) => {
       </View>
       {/* <Text style={styles.underText}>Remember me Forgot Password?</Text> */}
       <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.btn]} onPress={()=>{ doSomething() }}>
+          <TouchableOpacity style={[styles.btn]} onPress={() => { doSomething(); }}>
             <Text style={styles.btnText}>
             Send Verification
             </Text>
@@ -48,83 +47,83 @@ export const forgotPass = (props) => {
       </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({
-  signupcontainer:{
-    flexDirection:'row',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent:'center',
+  signupcontainer: {
+    flexDirection: "row",
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center"
   },
-  sign:{
+  sign: {
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "black",
     padding: 13,
-    textAlign: 'center',
+    textAlign: "center"
   },
-  grey:{
+  grey: {
     fontSize: 13,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "gray",
-    textAlign: 'center',
-    padding: 35,
+    textAlign: "center",
+    padding: 35
   },
-  button:{
-    borderRadius:10,
+  button: {
+    borderRadius: 10,
     padding: 10,
-    backgroundColor: 'red'
+    backgroundColor: "red"
   },
   btn: {
     paddingHorizontal: 40,
     paddingVertical: 10,
-    backgroundColor: 'black',
+    backgroundColor: "black",
     borderRadius: 10
   },
-  underText:{
+  underText: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: "400",
     color: "black",
-    padding: 13,
+    padding: 13
 
   },
   btnText: {
-    color: 'white'
+    color: "white"
   },
   subTextContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingHorizontal: 0,
     paddingTop: 20
-  },  
+  },
   inputEmail: {
     borderRadius: 10,
     borderWidth: 1,
     height: 45,
     paddingHorizontal: 15,
-    borderColor: '#C4C4C4',
-    textAlign: 'center',
+    borderColor: "#C4C4C4",
+    textAlign: "center"
   },
   input: {
     borderRadius: 10,
     borderWidth: 1,
     height: 45,
     paddingHorizontal: 15,
-    borderColor: '#C4C4C4'
+    borderColor: "#C4C4C4"
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1,
     paddingTop: 15
   },
-  subText:{
+  subText: {
     fontSize: 14,
-    padding:10,
-    fontWeight: '400',
+    padding: 10,
+    fontWeight: "400",
     color: "black",
-    textAlign: 'center'
+    textAlign: "center"
   },
   container: {
     flex: 1,
@@ -134,12 +133,9 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 42,
-    fontWeight: '700',
+    fontWeight: "700",
     color: "black",
-    textAlign: 'center',
-    padding:60
-  },
-})
-
-
-
+    textAlign: "center",
+    padding: 60
+  }
+});
