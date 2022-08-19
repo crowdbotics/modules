@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { OptionsContext, GlobalOptionsContext } from "@options";
 
 // create button component
 const ProfileIcon = ({ onPress, image_src, styleContainer={}, styleLiveStatus={}, styleImage={}, color="red"}) => {
-  return (
-    <TouchableOpacity onPress={onPress} style={[styles.profileContainer, styleContainer]}>
+    // Consume module's own options in this component
+    const options = useContext(OptionsContext);
+    return (
+    <TouchableOpacity onPress={onPress} style={[styles.profileContainer, {backgroundColor: options.colors.secondary},  styleContainer]}>
         <Image source={{uri: image_src }} style={[styles.profileImage, styleImage]}/>
         <View style={[styles.liveStatus, styles.red, {backgroundColor: color}, styleLiveStatus]} />
     </TouchableOpacity>

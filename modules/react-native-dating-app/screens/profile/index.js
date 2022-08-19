@@ -1,10 +1,11 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, Text, ScrollView, Image, StatusBar, Pressable } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector, useDispatch } from "react-redux";
 import LikeIcon from "../../components/Icons/LikeIcon";
 import DislikeIcon from "../../components/Icons/DislikeIcon";
+import { OptionsContext, GlobalOptionsContext } from "@options";
 
 import { userProfileDetails } from '../../api/redux';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   userOuterContainer: {
-    backgroundColor: "#FCE5E4",
+    
   },
   userPictureContainer: {
     height: 300,
@@ -223,8 +224,11 @@ export const UserProfile = (params) => {
     storage.removeToken()
     navigation.replace('Log in')
   }
+  // Consume module's own options in this component
+  const options = useContext(OptionsContext);
+
   return (
-    <View style={styles.userOuterContainer}>
+    <View style={[{backgroundColor: options.colors.secondary}, styles.userOuterContainer]}>
       <View>
         <Pressable onPress={()=>{navigation.goBack()}}
           style={{

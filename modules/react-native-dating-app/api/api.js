@@ -49,11 +49,11 @@ async function apiMatchDenied(payload) {
 }
 
 async function apiLoginRequest(payload) {
-    return authAPI.post("/modules/dating-app-backend/login/", payload);
+    return authAPI.post("/api/v1/login/", payload);
 }
 
 async function apiSignupRequest(payload) {
-    return authAPI.post("/modules/dating-app-backend/signup/", payload);
+    return authAPI.post("/api/v1/signup/", payload);
 }
 
 

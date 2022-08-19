@@ -11,7 +11,6 @@ import BackButton from "../../components/BackButton";
 import ProfileIcon from "../../components/ProfileIcon";
 
 const ChatScreen = (params) => {
-  console.log(params)
   const { navigation, route } = params;
   const { user_id } = route?.params;
   const store = useSelector((state) => state.App);
@@ -21,14 +20,12 @@ const ChatScreen = (params) => {
   const dispatch  = useDispatch();
   useEffect(() => {
     console.log('store:', store);
-    // setInterval(() => {
       dispatch(chatDetailsRequest({id: user_id})).then(
         (res) => {
           setMessages(res.payload?.messages);
           setProfileDetails(res.payload?.user);
         } // end of then
       ); // end of dispatch
-    // }, 1000);
     const sender_id = store.myProfile?.id;
     console.log('sender-----', user_id, sender_id, );
     const reference1  =  database().ref('/matches/' + user_id + "-" +sender_id);
@@ -293,9 +290,7 @@ const HeaderSectionComponent = ({profileDetails, navigation}) => {
           styleContainer={styles.tinyLogoHeader}
           styleImage={{width: 40, height: 40,}}
           styleLiveStatus={styles.styleLiveStatus}
-          // is_live={message?.is_live}
           />
-        {/* <Image  style={styles.tinyLogoHeader} source={require("./assets/redonline.png")} /> */}
         <Text style={styles.usernameheader}>{profileDetails?.name}</Text>
       </View>
       <View style={styles.headerRightIcon}>
@@ -310,9 +305,6 @@ const HeaderSectionComponent = ({profileDetails, navigation}) => {
 const SenderMessageComponent = ({message}) => {
   return(
     <View style={styles.firstmessagecontainerr}>
-        {/* <TouchableOpacity style={styles.item}>
-          <Image  style={styles.tinyLogo} source={require("./assets/online.png")} />
-        </TouchableOpacity> */}
         <ProfileIcon 
           color="green" 
           image_src={message?.user_profile_image} 
@@ -338,9 +330,6 @@ const RecieverMessageComponent = ({message}) => {
           round={true}
           >{message?.text}</Text>
         </View>
-         {/* <TouchableOpacity style={styles.redlogo2}>
-          <Image  style={styles.tinyLogoRight} source={require("./assets/redonline.png")} />
-        </TouchableOpacity> */}
         <ProfileIcon 
           image_src={message?.user_profile_image}  
           styleContainer={styles.redlogo2}

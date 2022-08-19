@@ -4,7 +4,6 @@ import {
   Dimensions,
 } from 'react-native'
 import { OptionsContext, GlobalOptionsContext } from "@options";
-// import { likePost, unLikePost, userToken } from "../api";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import ActionSheet from "react-native-actionsheet";
 import {PostComponent} from "./post"

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, Alert, TouchableOpacityBase,useWindowDimensions,Dimensions} from "react-native";
-import MapView, { PROVIDER_GOOGLE,Marker, Circle } from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from "react-native-maps";
 import { Button } from "react-native-elements";
 import { SceneMap, TabView, TabBar} from "react-native-tab-view";
 import {SettingsScreen} from "./settings-screen"

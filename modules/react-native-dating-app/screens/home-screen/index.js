@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, Platform, Dimensions } from 'react-native';
 import { useSelector, useDispatch } from "react-redux";
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import  {HomeHeader} from './home-header';
 import LikeUnlikeSVG from './LikeUnlikeSVG';
+import { OptionsContext, GlobalOptionsContext } from "@options";
 
 import { profileRequest, allProfilesRequest, requestMatch, deniedMatch } from '../../api/redux';
 import database, { firebase } from '@react-native-firebase/database';
@@ -272,7 +273,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 300,
     height: 470,
-    backgroundColor: '#DADADA',
     borderRadius: 12
   },
   cardDescSection: {
@@ -300,8 +300,11 @@ const styles = StyleSheet.create({
 
 const UserCard = ({ user, navigation }) => {
   const { id, name, profile_pic, age,} = user;
+
+  // Consume module's own options in this component
+  const options = useContext(OptionsContext);
   return (
-    <TouchableOpacity style={styles.cardContainer} onPress={()=>{
+    <TouchableOpacity style={[{backgroundColor: options.colors.secondary}, styles.cardContainer]} onPress={()=>{
       navigation.navigate('Profile', {id: id});
     }}>
           <View style={styles.cardImageSection}>

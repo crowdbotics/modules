@@ -1,5 +1,5 @@
-import React,{useEffect, useState, } from "react";
-import { StyleSheet, View, Text, Image,ScrollView, TextInput, Dimensions } from "react-native";
+import React, {useEffect, useState, } from "react";
+import { StyleSheet, View, Text, Image, TextInput, Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SceneMap, TabView, TabBar} from "react-native-tab-view";
@@ -98,9 +98,6 @@ export default function Conversations(props){
   }, [query])
 
   useEffect(() => {
-      console.log('navigation', navigation)
-      // dispatch chatListRequest()
-
       dispatch(chatListRequest()).then(
           (res) => {
               setMessages(res.payload)
@@ -133,8 +130,6 @@ export default function Conversations(props){
 }
 
 const styles = StyleSheet.create({
-  //this stylesheet is for the top section header
-  
   container: {
     flex: 1,
     fontSize: 20,

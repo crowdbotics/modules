@@ -6,14 +6,13 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  TouchableHighlight,
   TextInput,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity
 } from 'react-native'
-import { OptionsContext, GlobalOptionsContext } from "@options";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
+import { GlobalOptionsContext } from "@options";
 import ActionSheet from "react-native-actionsheet";
-// import { pickFromCamera, pickFromGallery, uploadImage } from "../../../camera/utils";
+import { pickFromCamera, pickFromGallery, uploadImage } from "@modules/camera/utils";
 import { storage } from "@modules/storage";
 
 export const CreatePostScreen = (props) => {

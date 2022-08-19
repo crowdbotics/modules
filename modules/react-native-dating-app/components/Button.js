@@ -9,10 +9,13 @@ const Button = ({ onPress, title, btnStyle, txtStyle, btnContainerStyle}) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.buttonContainer, btnContainerStyle]}>
-      <View style={[styles.button,
-        {backgroundColor: options.colors.primary},
-        btnStyle]}>
-        <Text style={[styles.buttonText, txtStyle]}>
+      <View style={[styles.button, {
+        backgroundColor: options.colors.primary,
+      }, btnStyle]}>
+        <Text style={[
+          styles.buttonText,
+          {color: options.colors.secondaryText},
+          txtStyle]}>
           {title}
         </Text>
       </View>
