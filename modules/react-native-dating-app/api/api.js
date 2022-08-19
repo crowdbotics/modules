@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getGlobalOptions } from "@options";
 import { slice } from "./redux";
-import { storage } from "../../../utils/storage";
+import { storage } from "@modules/storage";
 
 const global = getGlobalOptions();
 const BASE_URL = global.url; // change your BASE_URL in `options/options.js` to edit this value
@@ -15,45 +15,45 @@ const authAPI = axios.create({
 
 async function apiProfileRequest(payload) {
     var t = await storage.getToken();
-    return authAPI.get("/api/v1/my-profile", {
+    return authAPI.get("/modules/dating-app-backend/my-profile", {
         headers: { Authorization: `Token ${t}` }
     });
 }
 
 async function apiProfileDetails(payload) {
     var t = await storage.getToken();
-    return authAPI.get(`/api/v1/profile-details?id=${payload}`, {
+    return authAPI.get(`/modules/dating-app-backend/profile-details?id=${payload}`, {
         headers: { Authorization: `Token ${t}` }
     });
 }
 
 async function apiAllProfilesRequest(payload) {
     var t = await storage.getToken();
-    return authAPI.get("/api/v1/all-profiles", {
+    return authAPI.get("/modules/dating-app-backend/all-profiles", {
         headers: { Authorization: `Token ${t}` }
     });
 }
 
 async function apiRequestMatch(payload) {
     var t = await storage.getToken();
-    return authAPI.post("/api/v1/match-request/", payload, {
+    return authAPI.post("/modules/dating-app-backend/match-request/", payload, {
         headers: { Authorization: `Token ${t}` }
     });
 }
 
 async function apiMatchDenied(payload) {
     var t = await storage.getToken();
-    return authAPI.post("/api/v1/un-match-request/", payload, {
+    return authAPI.post("/modules/dating-app-backend/un-match-request/", payload, {
         headers: { Authorization: `Token ${t}` }
     });
 }
 
 async function apiLoginRequest(payload) {
-    return authAPI.post("/api/v1/login/", payload);
+    return authAPI.post("/modules/dating-app-backend/login/", payload);
 }
 
 async function apiSignupRequest(payload) {
-    return authAPI.post("/api/v1/signup/", payload);
+    return authAPI.post("/modules/dating-app-backend/signup/", payload);
 }
 
 
@@ -81,7 +81,7 @@ async function apiSendMessageRequest(payload) {
 
 async function apiGetMatchesRequest(payload) {
     var t = await storage.getToken();
-    return authAPI.get("/api/v1/get-matches/", {
+    return authAPI.get("/modules/dating-app-backend/get-matches/", {
         headers: { Authorization: `Token ${t}` }
     });
 }

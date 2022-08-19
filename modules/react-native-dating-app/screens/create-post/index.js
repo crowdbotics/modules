@@ -14,7 +14,7 @@ import { OptionsContext, GlobalOptionsContext } from "@options";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import ActionSheet from "react-native-actionsheet";
 // import { pickFromCamera, pickFromGallery, uploadImage } from "../../../camera/utils";
-import {storage} from "../../../../utils/storage";
+import { storage } from "@modules/storage";
 
 export const CreatePostScreen = (props) => {
   console.log("props", props)

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ScrollView, Image, StatusBar, Pressable } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { useSelector, useDispatch } from "react-redux";
-import Feather from "react-native-vector-icons/Feather"
 import LikeIcon from "../../components/Icons/LikeIcon";
 import DislikeIcon from "../../components/Icons/DislikeIcon";
 
@@ -13,7 +12,7 @@ import BackButton from "../../components/BackButton";
 import SettingsIcon from "../../components/Icons/SettingsIcon";
 import {useIsFocused} from '@react-navigation/native';
 import ExitIcon from "../../components/Icons/ExitIcon";
-import {storage} from '../../../../utils/storage';
+import { storage } from "@modules/storage";
 
 export const Profile = (params) => {
   const { navigation } = params;
@@ -329,9 +328,6 @@ const Biography = ({profile}) => {
         <Text style={{ fontSize: 16 }}>
           Biography
         </Text>
-        <TouchableOpacity>
-          <Feather name="more-horizontal" style={{ fontSize: 20 }}/>
-        </TouchableOpacity>
       </View>
       <View style={styles.biographyInnerBottomContainer}>
         <Text style={{ fontSize: 11, textAlign: 'justify'}}>

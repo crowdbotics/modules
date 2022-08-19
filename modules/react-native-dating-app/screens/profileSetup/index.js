@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { StyleSheet, View, ScrollView, Text, TextInput, Image, Button, Alert, Pressable} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {storage} from "../../../../utils/storage";
+import { storage } from "@modules/storage";
 import CBTextInput from "../../components/CBTextInput";
 import BackButton from "../../components/BackButton";
 import { SafeAreaView } from "react-native-safe-area-context";

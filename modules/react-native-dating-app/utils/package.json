@@ -1,0 +1,14 @@
+{
+    "name": "@modules/storage",
+    "version": "1.0.0",
+    "description": "encrypted Storage sub module.",
+    "private": true,
+    "main": "index.js",
+    "x-dependencies": {},
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+      "react-native-encrypted-storage": "^4.0.2"
+    }
+  }
+  

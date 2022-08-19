@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { View, StyleSheet, Image } from "react-native";
-import { storage } from "../../../../utils/storage";
+import { storage } from "@modules/storage";
 const NEXT_SCREEN_NAME_GUEST = "";
 const NEXT_SCREEN_NAME_LOGGED = "";
 const NEXT_COMPLETE_PROFILE_SCREEN = "";
@@ -34,9 +34,8 @@ export const Splash = ({ navigation }) => {
           if (token) {
             dispatch(setToken(token));
             // if the profile is not set, go to profile setup
-            const gender = res?.payload?.profile_info?.gender;
-            console.log("user?.profile_info?.gender", gender)
-            if (gender === undefined) {
+            const profile_info = res?.payload?.profile_info;
+            if (profile_info === undefined) {
               navigation.replace(nextCompleteProfileScreen);
             }else{
               navigation.replace(nextScreenLoggedIn);

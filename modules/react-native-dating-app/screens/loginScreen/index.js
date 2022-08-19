@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TextInput} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch } from "react-redux";
 import { loginRequest } from "../../api/redux";
-import {storage} from "../../../../utils/storage";
+import { storage } from "@modules/storage";
 import { showError } from "../../api/errorMessage";
 import CheckBox from '@react-native-community/checkbox';
 
