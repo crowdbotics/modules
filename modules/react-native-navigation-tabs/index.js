@@ -5,15 +5,15 @@ import PropTypes from "prop-types";
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs({ tabList = [], headerShown = false, tabBarShowLabel = true, tabBarLabelPosition = "below-icon", tabBarActiveTintColor = "#e91e63", tabBarInactiveTintColor = "#893498", tabBarActiveBackgroundColor = "", tabBarInactiveBackgroundColor = "", tabBarStyle = {} }) {
+function MyTabs({ tabList = [], headerShown = false, tabBarShowLabel = true, tabBarLabelPosition = "below-icon", tabBarActiveTintColor = "", tabBarInactiveTintColor = "", tabBarActiveBackgroundColor = "", tabBarInactiveBackgroundColor = "", tabBarStyle = {} }) {
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: headerShown,
         tabBarShowLabel: tabBarShowLabel,
         tabBarLabelPosition: tabBarLabelPosition,
-        tabBarActiveTintColor: tabBarActiveTintColor,
-        tabBarInactiveTintColor: tabBarInactiveTintColor,
+        tabBarActiveTintColor: tabBarActiveTintColor || "#dc4555",
+        tabBarInactiveTintColor: tabBarInactiveTintColor || "#7f4062",
         tabBarActiveBackgroundColor: tabBarActiveBackgroundColor,
         tabBarInactiveBackgroundColor: tabBarInactiveBackgroundColor,
         tabBarStyle: tabBarStyle
