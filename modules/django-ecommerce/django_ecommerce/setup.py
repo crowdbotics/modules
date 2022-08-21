@@ -16,7 +16,8 @@ setup(
     install_requires=[
         "django-oscar==3.1",
         "django-oscar-accounts==3.0.1",
-        "django-oscar-api==3.1.0"
+        "django-oscar-api==3.1.0",
+        "sorl-thumbnail==12.8.0"
     ],
     cmdclass={"build": BuildCommand},
 )
