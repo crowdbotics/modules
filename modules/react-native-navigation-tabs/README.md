@@ -28,7 +28,7 @@ Below is the list of all params that can be passed to the module.
 
 | Name                 | Type       | Description                                                    |
 | ---------------------|:----------:|:---------------------------------------------------------------|
-| tabList ` required ` | ` array ` | An array of objects, Each object contains properties ( `key`, `title`, `description`, `imageURL`, `backgroundColor` ). |
+| tabList ` required ` | ` array ` | An array of objects, Each object contains properties ( `name`, `component`, `label`, `tabBarIcon`, `tabBarIconStyle`, `tabBarBadge`, `tabBarBadgeStyle`, `tabBarLabelStyle`, `tabBarItemStyle` ). |
 | tabBarStyle​          | ` object ` | Style object for the tab bar. You can configure styles such as background color here. |
 | tabBarShowLabel      | ` string ` | Whether the tab label should be visible. Defaults to true.       |
 | tabBarLabelPosition  | ` below-icon or beside-icon ` | Whether the label is shown below the icon or beside the icon.|
