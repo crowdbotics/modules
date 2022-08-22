@@ -197,3 +197,6 @@ celerybeat-schedule
 venv/
 ENV/
 myvenv/
+
+.DS_Store
+dist/
