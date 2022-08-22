@@ -106,3 +106,6 @@ typings/
 demo
 
 notebooks
+
+.DS_Store
+dist/
