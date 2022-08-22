@@ -199,3 +199,4 @@ ENV/
 myvenv/
 
 .DS_Store
+dist/
