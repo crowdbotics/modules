@@ -48,7 +48,7 @@ The first param ` tabList ` is an array of objects. Each object in ` tabList ` a
 | ------------------|:--------:|:---------------------------------------------------------------|
 | name              | `string` | Name of the route to jump to                                |
 | component         | `function` | screen components to be mounted.|
-| label             | `string` | Description for onboarding screen                              |
+| label             | `string` | Title string of a tab displayed in the tab bar.              |
 | tabBarIcon        | `function` | Function that returns a React.Node, to display in the tab bar.  |
 | tabBarIconStyle   | `object` | A unique number for each object                                |
 | tabBarBadge       | `string/number` | Text to show in a badge on the tab icon. Accepts a string or a number.|
