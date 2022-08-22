@@ -26,18 +26,18 @@ const NavigationTabs = modules[module_index].value.navigator;  //module_index : 
 
 Below is the list of all params that can be passed to the module.
 
-| Name                  | Type       | Description                                                    |
-| --------------------- |:----------:|:---------------------------------------------------------------|
+| Name                 | Type       | Description                                                    |
+| ---------------------|:----------:|:---------------------------------------------------------------|
 | tabList ` required ` | ` array ` | An array of objects, Each object contains properties ( `key`, `title`, `description`, `imageURL`, `backgroundColor` ). |
-| tabBarStyle​ | ` string ` | Style object for the tab bar. You can configure styles such as background color here. |
-| tabBarShowLabel | ` string ` | Whether the tab label should be visible. Defaults to true.       |
-| tabBarLabelPosition | ` below-icon or beside-icon ` | Whether the label is shown below the icon or beside the icon.|
-| headerShown | ` object ` | Whether to show or hide the header for the screen. The header is shown by default. Setting this to false hides the header.|
-| tabBarActiveTintColor | ` string ` | Color for the icon and label in the active tab. |
+| tabBarStyle​          | ` object ` | Style object for the tab bar. You can configure styles such as background color here. |
+| tabBarShowLabel      | ` string ` | Whether the tab label should be visible. Defaults to true.       |
+| tabBarLabelPosition  | ` below-icon or beside-icon ` | Whether the label is shown below the icon or beside the icon.|
+| headerShown          | ` boolean ` | Whether to show or hide the header for the screen. The header is shown by default. Setting this to false hides the header.|
+| tabBarActiveTintColor| ` string ` | Color for the icon and label in the active tab. |
 | tabBarInactiveTintColor | ` string ` | Color for the icon and label in the inactive tab.|
 | tabBarActiveBackgroundColor | ` string ` | Background color for the active tab. |
-| tabBarInactiveBackgroundColor | ` string ` | Background color for the inactive tabs..|
-| centeredTabBar | ` object ` | Tabbar that will be places in center of the tabs and will be rised a bit from all the  the tab label should be visible. Defaults to true.       |
+| tabBarInactiveBackgroundColor | ` string ` | Background color for the inactive tabs.|
+| riseCenteredBtn      | ` boolean ` | Tab that is in center will be risen a bit from all the tab. Defaults to false. |
 
 
 ### Param ` tabList ` array of objects
@@ -46,14 +46,14 @@ The first param ` tabList ` is an array of objects. Each object in ` tabList ` a
 
 | Name              | Type     | Description                                                    |
 | ------------------|:--------:|:---------------------------------------------------------------|
-| name              | `number` | Name of the route to jump to                                |
-| component         | `string` | screen components to be mounted.|
+| name              | `string` | Name of the route to jump to                                |
+| component         | `function` | screen components to be mounted.|
 | label             | `string` | Description for onboarding screen                              |
 | tabBarIcon        | `function` | Function that returns a React.Node, to display in the tab bar.  |
-| tabBarIconStyle   | `number` | A unique number for each object                                |
+| tabBarIconStyle   | `object` | A unique number for each object                                |
 | tabBarBadge       | `string/number` | Text to show in a badge on the tab icon. Accepts a string or a number.|
 | tabBarBadgeStyle  | `object` | Style for the badge on the tab icon. You can specify a background color or text color here.|
-| tabBarLabelStyle  | `string` | Style object for the tab label.       |
+| tabBarLabelStyle  | `object` | Style object for the tab label.       |
 | tabBarItemStyle   | `object` | Style object for the tab item container. |
 
 
