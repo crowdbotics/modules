@@ -1,5 +1,5 @@
 {
-    "name": "@screens/meal-product-listing-screen",
+    "name": "@screens/meal-product-listing",
     "version": "1.0.0",
     "description": "",
     "private": true,
