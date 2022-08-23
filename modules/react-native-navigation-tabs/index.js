@@ -9,11 +9,22 @@ const Tab = createBottomTabNavigator();
 function MyTabs({ tabList = null, headerShown = false, tabBarShowLabel = true, tabBarLabelPosition = "below-icon", tabBarActiveTintColor = "", tabBarInactiveTintColor = "", tabBarActiveBackgroundColor = "", tabBarInactiveBackgroundColor = "", tabBarStyle = {}, riseCenteredBtn = false }) {
   const [tabData, setTabData] = useState(null);
 
-  useEffect(() => {
-    if (riseCenteredBtn) {
+  const checkLength = (length) => {
+    if (length % 2 == 0) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  // @ts-ignore
+  useEffect(async () => {
+    const tabLength = tabList.length;
+    const check = await checkLength(tabLength);
+    if (riseCenteredBtn && check) {
       const theMiddle = Math.floor(tabList.length / 2);
       const value = tabList[theMiddle];
-      value.tabBarItemStyle = { marginTop: -30, backgroundColor: "#fff", height: 70, borderRadius: 60 };
+      value.tabBarItemStyle = { marginTop: -30, backgroundColor: value?.tabBarItemStyle?.backgroundColor || tabBarStyle?.backgroundColor || "#fff", height: 70, borderRadius: 60 };
     }
     setTabData(tabList);
   }, []);
@@ -22,7 +33,7 @@ function MyTabs({ tabList = null, headerShown = false, tabBarShowLabel = true, t
     <Fragment>
       {
         !tabData
-          ? <View style={styles.warning}><Text style={styles.text}>No Tab Data Found</Text></View>
+          ? <View style={styles.warning}><Text style={styles.text}>No Data Found!</Text></View>
           : <Tab.Navigator
           screenOptions={{
             headerShown: headerShown,
@@ -72,7 +83,8 @@ MyTabs.propTypes = {
   tabBarInactiveTintColor: PropTypes.string,
   tabBarActiveBackgroundColor: PropTypes.string,
   tabBarInactiveBackgroundColor: PropTypes.string,
-  tabBarBackground: PropTypes.string
+  tabBarBackground: PropTypes.string,
+  riseCenteredBtn: PropTypes.bool
 };
 export default {
   title: "MyTabs",
