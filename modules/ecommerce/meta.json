@@ -1,0 +1,5 @@
+{
+    "title": "Ecommerce",
+    "description": "Backend for the Ecommerce module.",
+    "root": "/backend/modules"
+}
