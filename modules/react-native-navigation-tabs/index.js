@@ -10,7 +10,7 @@ function MyTabs({ tabList = null, headerShown = false, tabBarShowLabel = true, t
   const [tabData, setTabData] = useState(null);
 
   const checkLength = (length) => {
-    if (length % 2 == 0) {
+    if (length % 2 === 0) {
       return false;
     } else {
       return true;
