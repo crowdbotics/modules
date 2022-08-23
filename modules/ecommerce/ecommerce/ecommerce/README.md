@@ -108,7 +108,6 @@ HAYSTACK_CONNECTIONS = {
 ```console
 
 pip install django-oscar django-oscar-api sorl-thumbnail
-export SECRET_KEY='YOUR DJANGO SECRETKEY'
 python manage.py migrate
 python manage.py runserver 192.168.1.11:8000
 
