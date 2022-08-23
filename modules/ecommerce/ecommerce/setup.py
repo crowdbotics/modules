@@ -13,6 +13,6 @@ setup(
     name="cb_django_ecommerce",
     version="0.1",
     packages=["ecommerce"],
-    install_requires=["django-oscar == 3.0.0", "django-oscar-api == 3.0.0", "sorl-thumbnail"],
+    install_requires=["django-oscar", "django-oscar-api", "sorl-thumbnail"],
     cmdclass={"build": BuildCommand},
 )
