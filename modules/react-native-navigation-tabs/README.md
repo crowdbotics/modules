@@ -98,6 +98,17 @@ const tabList = [
   ...
 ]
 ```
+you can pass the props to the component by calling component like an inline function, like this:
+```
+const tabList = [
+  {
+    ...
+    component: () => Gallery("1234"),
+    ...
+  },
+  ...
+]
+```
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
