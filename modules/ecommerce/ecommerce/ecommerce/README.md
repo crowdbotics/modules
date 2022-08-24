@@ -178,3 +178,4 @@ Here is list of Django Oscar API endpoints with params needed for these apis.
 | `/api/admin/partners/` | -No params- | The partners api retrieves list of all available partners. A partner can be an individual or company who can fulfil products. E.g. for physical goods, somebody with a warehouse and means of delivery.|
 | `/api/admin/users/` | -No params- | The users api retrieves list of all users, either frontend or admin users.|
 | `/api/admin/productclasses/` | -No params- | The productclasses api retrieves list of all classes available for products.|
+| `/api/admin/products/` | -No params- | Use this api for synchronizing data from another datasource. This api endpoint supports POST, PUT and PATCH, which means it can be used for creating, but also for updating. |
