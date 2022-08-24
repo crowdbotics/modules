@@ -41,7 +41,7 @@ export const Splash = ({ navigation }) => {
         );
       }
     );
-  }, [nextCompleteProfileScreen]);
+  }, [nextCompleteProfileScreen, nextScreenAnonymous, nextScreenLoggedIn]);
 
   return (
     <View style={styles.container}>

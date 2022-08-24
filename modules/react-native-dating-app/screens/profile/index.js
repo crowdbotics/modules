@@ -289,7 +289,7 @@ export const UserProfile = (params) => {
           {
             !profile?.is_owner && (
               <View style={{ marginBottom: 10 }}>
-                <TouchableOpacity onPress={() => { navigation.navigate("ChatDetails", { user_id: profile?.id }); }}>
+                <TouchableOpacity onPress={() => { navigation.navigate("ChatDetails", { userId: profile?.id }); }}>
                   <Image source={require("./assets/chat-icon.png")}/>
                 </TouchableOpacity>
               </View>
