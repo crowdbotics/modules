@@ -37,7 +37,7 @@ const FirstRoute = ({ matches, navigation, query, setQuery }) => (
         <View style={styles.EveronesConversation}>
           {matches.length > 0 && matches.map((message, index) => {
             return (
-              <TouchableOpacity key={index} style={styles.messageContainer} onPress={() => { navigation.navigate("ChatDetails", { user_id: message?.id }); }}>
+              <TouchableOpacity key={index} style={styles.messageContainer} onPress={() => { navigation.navigate("ChatDetails", { userId: message?.id }); }}>
                 <ProfileIcon image_src={message?.profile_info?.profile_image} />
                 <View style={styles.messageTextContainer}>
                   <Text style={styles.messageSenderName}>{message?.name}</Text>
@@ -346,7 +346,7 @@ const NameConversations = ({ messages, navigation }) => {
     <View style={styles.EveronesConversation}>
       {messages.length > 0 && messages.map((message, index) => {
         return (
-          <TouchableOpacity style={styles.messageContainer} key={index} onPress={() => { navigation.navigate("ChatDetails", { user_id: message?.id }); }}>
+          <TouchableOpacity style={styles.messageContainer} key={index} onPress={() => { navigation.navigate("ChatDetails", { userId: message?.id }); }}>
             <ProfileIcon />
             <View style={styles.messageTextContainer}>
               <Text style={styles.messageSenderName}>{message?.name}</Text>
