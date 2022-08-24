@@ -3,6 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.parsers import FileUploadParser
 from django.contrib.auth import get_user_model
+from django.views.decorators.csrf import csrf_exempt
 
 User =  get_user_model()
 
@@ -21,7 +22,7 @@ from .serializers import (
 
 
 class CreatePostView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    authentication_classes = (TokenAuthentication,)
     parser_class = (FileUploadParser,)
 
     def post(self, request):

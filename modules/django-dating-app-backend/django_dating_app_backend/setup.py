@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_dating-app-backend",
+    name="cb_django_dating_app_backend",
     version="0.1",
-    packages=["dating-app-backend"],
+    packages=["dating_app_backend"],
     install_requires=[],
     cmdclass={"build": BuildCommand},
 )
