@@ -1,14 +1,15 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useContext } from "react";
 // @ts-ignore
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import PropTypes from "prop-types";
 import { View, Text, StyleSheet } from "react-native";
-
+// @ts-ignore
+import { OptionsContext } from "@options";
 const Tab = createBottomTabNavigator();
 
-function MyTabs({ tabList = null, headerShown = false, tabBarShowLabel = true, tabBarLabelPosition = "below-icon", tabBarActiveTintColor = "", tabBarInactiveTintColor = "", tabBarActiveBackgroundColor = "", tabBarInactiveBackgroundColor = "", tabBarStyle = {}, riseCenteredBtn = false }) {
+function MyTabs({ tabList = [], headerShown = false, tabBarShowLabel = true, tabBarLabelPosition = "below-icon", tabBarActiveTintColor = "", tabBarInactiveTintColor = "", tabBarActiveBackgroundColor = "", tabBarInactiveBackgroundColor = "", tabBarStyle = {}, riseCenteredBtn = false }) {
   const [tabData, setTabData] = useState(null);
-
+  const options = useContext(OptionsContext);
   const checkLength = (length) => {
     if (length % 2 === 0) {
       return false;
@@ -19,15 +20,27 @@ function MyTabs({ tabList = null, headerShown = false, tabBarShowLabel = true, t
 
   // @ts-ignore
   useEffect(async () => {
-    const tabLength = tabList.length;
-    const check = await checkLength(tabLength);
-    if (riseCenteredBtn && check) {
-      const theMiddle = Math.floor(tabList.length / 2);
-      const value = tabList[theMiddle];
-      value.tabBarItemStyle = { marginTop: -30, backgroundColor: value?.tabBarItemStyle?.backgroundColor || tabBarStyle?.backgroundColor || "#fff", height: 70, borderRadius: 60 };
+    if (tabList.length !== 0) {
+      const tabLength = tabList.length;
+      const check = await checkLength(tabLength);
+      if (riseCenteredBtn && check) {
+        const theMiddle = Math.floor(tabList.length / 2);
+        const value = tabList[theMiddle];
+        value.tabBarItemStyle = { marginTop: -30, backgroundColor: value?.tabBarItemStyle?.backgroundColor || tabBarStyle?.backgroundColor || "#fff", height: 70, borderRadius: 60 };
+      }
+      setTabData(tabList);
+    } else {
+      const tabArray = options.tabList;
+      const tabLength = tabArray.length;
+      const check = await checkLength(tabLength);
+      if (riseCenteredBtn && check) {
+        const theMiddle = Math.floor(tabArray.length / 2);
+        const value = tabArray[theMiddle];
+        value.tabBarItemStyle = { marginTop: -30, backgroundColor: value?.tabBarItemStyle?.backgroundColor || tabBarStyle?.backgroundColor || "#fff", height: 70, borderRadius: 60 };
+      }
+      setTabData(options.tabList);
     }
-    setTabData(tabList);
-  }, []);
+  }, [riseCenteredBtn, tabList, options.tabList]);
 
   return (
     <Fragment>
@@ -35,38 +48,38 @@ function MyTabs({ tabList = null, headerShown = false, tabBarShowLabel = true, t
         !tabData
           ? <View style={styles.warning}><Text style={styles.text}>No Data Found!</Text></View>
           : <Tab.Navigator
-          screenOptions={{
-            headerShown: headerShown,
-            tabBarShowLabel: tabBarShowLabel,
-            tabBarLabelPosition: tabBarLabelPosition,
-            tabBarActiveTintColor: tabBarActiveTintColor || "#dc4555",
-            tabBarInactiveTintColor: tabBarInactiveTintColor || "#7f4062",
-            tabBarActiveBackgroundColor: tabBarActiveBackgroundColor,
-            tabBarInactiveBackgroundColor: tabBarInactiveBackgroundColor,
-            tabBarStyle: tabBarStyle
-          }}
-        >
-          {
-            tabData?.map((tab, index) => {
-              return (
-                <Tab.Screen
-                  key={index}
-                  name={tab?.name}
-                  component={tab?.component}
-                  options={{
-                    tabBarItemStyle: tab?.tabBarItemStyle,
-                    tabBarLabel: tab?.label,
-                    tabBarIcon: tab?.tabBarIcon,
-                    tabBarIconStyle: tab?.tabBarIconStyle,
-                    tabBarBadge: tab?.tabBarBadge,
-                    tabBarBadgeStyle: tab?.tabBarBadgeStyle,
-                    tabBarLabelStyle: tab?.tabBarLabelStyle
-                  }}
-                />
-              );
-            })
-          }
-        </Tab.Navigator>
+            screenOptions={{
+              headerShown: headerShown,
+              tabBarShowLabel: tabBarShowLabel,
+              tabBarLabelPosition: tabBarLabelPosition,
+              tabBarActiveTintColor: tabBarActiveTintColor || "#dc4555",
+              tabBarInactiveTintColor: tabBarInactiveTintColor || "#7f4062",
+              tabBarActiveBackgroundColor: tabBarActiveBackgroundColor,
+              tabBarInactiveBackgroundColor: tabBarInactiveBackgroundColor,
+              tabBarStyle: tabBarStyle
+            }}
+          >
+            {
+              tabData?.map((tab, index) => {
+                return (
+                  <Tab.Screen
+                    key={index}
+                    name={tab?.name}
+                    component={tab?.component}
+                    options={{
+                      tabBarItemStyle: tab?.tabBarItemStyle,
+                      tabBarLabel: tab?.label,
+                      tabBarIcon: tab?.tabBarIcon,
+                      tabBarIconStyle: tab?.tabBarIconStyle,
+                      tabBarBadge: tab?.tabBarBadge,
+                      tabBarBadgeStyle: tab?.tabBarBadgeStyle,
+                      tabBarLabelStyle: tab?.tabBarLabelStyle
+                    }}
+                  />
+                );
+              })
+            }
+          </Tab.Navigator>
       }
     </Fragment>
 

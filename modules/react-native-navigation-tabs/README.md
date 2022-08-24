@@ -77,6 +77,27 @@ const tabList = [
   ...
 ]
 ```
+
+## Local Configs
+You can update the tabList in options file as well.
+```
+const tabList = [
+  {
+     name: "Gallery",
+      component: Gallery,
+      label: "Gallery",
+      tabIcon: ({ color, size }) => (
+        <MaterialCommunityIcons name="view-gallery" color={color} size={size} />
+      ),
+      tabBarIconStyle: {color: "black"},
+      tabBarBadge: 2,
+      tabBarBadgeStyle: {color: "black"},
+      tabBarLabelStyle: {fontSize: 14},
+      tabBarItemStyle:{backgroundColor: "blue"}
+  },
+  ...
+]
+```
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
