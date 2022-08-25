@@ -9,7 +9,7 @@ class BuildCommand(build):
         self.build_base = '/tmp'
 
 
-setup(name='cb_push_notifications',
+setup(name='cb_fcm',
       version='0.1',
       packages=[],
       install_requires=[],
