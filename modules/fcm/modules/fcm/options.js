@@ -1,6 +1,10 @@
+
 import { StyleSheet } from "react-native";
 
-export const styles = StyleSheet.create({
+const authToken = "71ff6f22e983ed6da5df25ff8524057ee5830400";
+const senderID = "678501629451";
+
+const styles = StyleSheet.create({
   heading: {
     height: 60,
     backgroundColor: "#333333",
@@ -19,3 +23,9 @@ export const styles = StyleSheet.create({
   scrollview: { flex: 1, padding: 20 },
   header: { color: "#fff", fontSize: 16 }
 });
+
+export default {
+  authToken: authToken,
+  senderID: senderID,
+  styles: styles
+};

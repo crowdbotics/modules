@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import {
-  Text,
-  View,
-  TouchableOpacity
+  Text, TouchableOpacity, View
 } from "react-native";
-import { styles } from "./styles";
+import RemotePushController from "./utils";
+import { OptionsContext } from "@options";
 
 const PushNotifications = ({ navigation }) => {
+  const options = useContext(OptionsContext);
+  const { senderID, authToken, styles } = options;
+
+  useEffect(() => {
+    RemotePushController(senderID, authToken);
+  }, []);
+
   return (
     <View
       style={{
