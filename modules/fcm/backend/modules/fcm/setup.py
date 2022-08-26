@@ -12,6 +12,6 @@ class BuildCommand(build):
 setup(name='cb_fcm',
       version='0.1',
       packages=[],
-      install_requires=[],
+      install_requires=["fcm_django == 0.3.4"],
       cmdclass={"build": BuildCommand}
       )

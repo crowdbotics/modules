@@ -13,7 +13,6 @@
 		"@react-native-firebase/firestore": "^12.7.2",
 		"@react-native-community/push-notification-ios": "^1.8.0",
 		"react-native-push-notification": "^7.3.1",
-		"@react-native-community/async-storage": "^1.12.1",
 		"react-native-device-info": "^8.1.3"
 	}
 }

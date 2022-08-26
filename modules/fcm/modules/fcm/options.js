@@ -1,27 +1,69 @@
-
 import { StyleSheet } from "react-native";
 
-const authToken = "71ff6f22e983ed6da5df25ff8524057ee5830400";
-const senderID = "678501629451";
+const authToken = "Your Authentication token";
+const senderID = "FCM Sender ID";
 
 const styles = StyleSheet.create({
-  heading: {
-    height: 60,
-    backgroundColor: "#333333",
-    padding: 20,
-    alignItems: "flex-end",
+  walletCard: {
+    backgroundColor: "#fff",
+    padding: 10,
+    display: "flex",
     flexDirection: "row",
-    justifyContent: "center"
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+    marginTop: 15,
+    borderRadius: 8,
+    elevation: 15,
+    shadowColor: "#ccc9c9"
   },
-  text: {
-    color: "#000000",
+  walletInner: {
+    display: "flex",
+    flexDirection: "row"
+  },
+  walletCarder: {
+    alignSelf: "center",
+    display: "flex",
+    flexDirection: "column"
+  },
+  eventName: {
+    color: "#000",
     fontSize: 16,
-    width: "100%"
+    marginLeft: 10,
+    width: 115,
+    fontWeight: "bold"
   },
-  icon: { width: 18, height: 16 },
-  touchableopacity: { padding: 5 },
-  scrollview: { flex: 1, padding: 20 },
-  header: { color: "#fff", fontSize: 16 }
+  eventType: {
+    color: "#6e7075",
+    fontSize: 14,
+    marginLeft: 10,
+    width: 115,
+    marginVertical: 5
+  },
+  imgContainer: {
+    height: 70,
+    width: 70,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#dadada",
+    borderRadius: 10
+  },
+  image: { height: 70, width: 70, borderRadius: 10 },
+  listStyle: { marginHorizontal: 15, marginTop: 15, paddingBottom: 10, fontWeight: "bold" },
+  view: {
+    fontSize: 12,
+    color: "#6e7075",
+    paddingHorizontal: 10,
+    marginBottom: 10
+  },
+  leftSection: { justifyContent: "flex-start", alignItems: "flex-start" },
+  reject: {
+    fontSize: 12,
+    color: "#6e7075",
+    backgroundColor: "#fff",
+    paddingHorizontal: 10
+  }
+
 });
 
 export default {

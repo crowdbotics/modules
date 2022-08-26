@@ -1,4 +1,3 @@
-// @ts-ignore
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
@@ -14,6 +13,20 @@ export const registerDeviceInfoAPI = async (data, authToken) => {
     body: JSON.stringify(data)
   });
 
+  const res = await response.json();
+  return res;
+};
+
+export const fetchNotifications = async () => {
+  const response = await fetch(
+    `${BASE_URL}/modules/fcm/notification/`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: "Basic YWRtaW46YWRtaW4="
+      }
+    }
+  );
   const res = await response.json();
   return res;
 };
