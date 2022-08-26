@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 
 from .viewsets import (
     UserFCMDeviceAdd,
-    SendTestNotification,
     NotificationViewSet,
     UserNotificationViewSet
 )
@@ -16,7 +15,5 @@ router.register("user-notification", UserNotificationViewSet, basename="user_not
 
 urlpatterns = [
     path("", include(router.urls)),
-
     path('user_fcm_device_add/', UserFCMDeviceAdd.as_view(), name='user_fcm_device_add'),
-    path('test-notification/', SendTestNotification.as_view(), name='user_test_notification'),
 ]

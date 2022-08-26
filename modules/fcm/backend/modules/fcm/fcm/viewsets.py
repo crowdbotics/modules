@@ -31,18 +31,6 @@ class UserFCMDeviceAdd(CreateAPIView):
             return super(UserFCMDeviceAdd, self).create(request, *args, **kwargs)
 
 
-class SendTestNotification(APIView):
-    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-
-    @staticmethod
-    def get(request, *args, **kwargs):
-        from users.tasks import send_user_custom_notification
-
-        send_user_custom_notification(request.user.id, 'Test Title', 'Test Message')
-        return Response('ok')
-
-
 class NotificationViewSet(ModelViewSet):
     serializer_class = NotificationSerializer
     queryset = Notification.objects.all()
@@ -50,13 +38,6 @@ class NotificationViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset.order_by("-created")
         queryset = queryset.filter(Q(receiver_id=self.request.user) | Q(receiver_id=None))
-        queryset = queryset.annotate(
-                                     review=Avg("sender__user_employees__employee_review__rating"),
-                                     booking_id=F("employee_category__category_booking__id"),
-                                     transaction_status=F("employee_category__category_booking__transaction_status"),
-                                     tip=F("employee_category__service_payment__tip"),
-                                     amount=F("employee_category__service_payment__amount")).distinct()
-                                     # booking_id=F("sender__user_booking__id"))
         return queryset
 
 
