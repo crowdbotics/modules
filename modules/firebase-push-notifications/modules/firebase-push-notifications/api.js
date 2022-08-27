@@ -23,7 +23,7 @@ export const fetchNotifications = async (authToken) => {
     {
       method: "GET",
       headers: {
-        Authorization: "Basic " + authToken
+        Authorization: "Token " + authToken
       }
     }
   );

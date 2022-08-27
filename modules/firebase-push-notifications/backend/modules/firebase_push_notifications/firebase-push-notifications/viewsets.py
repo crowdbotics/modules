@@ -32,6 +32,8 @@ class UserFCMDeviceAdd(CreateAPIView):
 
 
 class NotificationViewSet(ModelViewSet):
+    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = NotificationSerializer
     queryset = Notification.objects.all()
 
@@ -42,9 +44,10 @@ class NotificationViewSet(ModelViewSet):
 
 
 class UserNotificationViewSet(ModelViewSet):
+    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserNotificationSerializer
     queryset = UserNotification.objects.all()
-    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         notification_id = request.data.get("notification")
