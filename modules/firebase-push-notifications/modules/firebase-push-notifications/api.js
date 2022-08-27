@@ -17,13 +17,13 @@ export const registerDeviceInfoAPI = async (data, authToken) => {
   return res;
 };
 
-export const fetchNotifications = async () => {
+export const fetchNotifications = async (authToken) => {
   const response = await fetch(
     `${BASE_URL}/modules/fcm/notification/`,
     {
       method: "GET",
       headers: {
-        Authorization: "Basic YWRtaW46YWRtaW4="
+        Authorization: "Basic " + authToken
       }
     }
   );

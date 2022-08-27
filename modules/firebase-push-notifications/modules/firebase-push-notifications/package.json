@@ -1,7 +1,7 @@
 {
-	"name": "@modules/fcm",
+	"name": "@modules/firebase-push-notifications",
 	"version": "1.0.0",
-	"description": "Push Notifications Screen",
+	"description": "Firebase Push Notifications",
 	"private": true,
 	"main": "index.js",
 	"author": "Crowdbotics",

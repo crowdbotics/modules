@@ -7,16 +7,14 @@ import { registerDeviceInfoAPI } from "./api";
 const RemotePushController = (senderID, authToken) => {
   PushNotification.configure({
     onRegister: async function (token) {
-      console.log("TOKEN:", token);
       const androidId = await getAndroidId();
 
-      const res = await registerDeviceInfoAPI({
+      await registerDeviceInfoAPI({
         registration_id: token.token,
         type: Platform.OS,
         name: getModel(),
         device_id: androidId
       }, authToken);
-      console.log("res", res);
     },
 
     onNotification: function (notification) {

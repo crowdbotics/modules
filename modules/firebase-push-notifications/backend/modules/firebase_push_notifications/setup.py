@@ -9,7 +9,7 @@ class BuildCommand(build):
         self.build_base = '/tmp'
 
 
-setup(name='cb_fcm',
+setup(name='cb_firebase_push_notifications',
       version='0.1',
       packages=[],
       install_requires=["fcm_django == 0.3.4"],

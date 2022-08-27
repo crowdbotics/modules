@@ -2,15 +2,16 @@ import React, { useEffect, useState, useContext } from "react";
 import { Text, View, FlatList, Image } from "react-native";
 import { OptionsContext } from "@options";
 import { fetchNotifications } from "./api";
+
 const Notifications = () => {
   const options = useContext(OptionsContext);
-  const { styles } = options;
+  const { authToken, styles } = options;
   const [messages, setMessages] = useState([]);
   const [refresh, setRefresh] = useState(true);
 
   const getNotifications = async () => {
     setRefresh(true);
-    const res = await fetchNotifications();
+    const res = await fetchNotifications(authToken);
     setMessages(res);
     setRefresh(false);
   };

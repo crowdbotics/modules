@@ -7,7 +7,7 @@ Using FCM module, you can notify a client app that new email or other data is av
 
 ```console
 
-FCM_DJANGO_SETTINGS = {"FCM_SERVER_KEY": "Your FCM Server Key")}
+FCM_DJANGO_SETTINGS = {"FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "Your FCM Server Key")}
 
 ```
 
