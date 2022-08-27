@@ -4,6 +4,7 @@ const authToken = "Your Authentication token";
 const senderID = "FCM Sender ID";
 
 const styles = StyleSheet.create({
+  container: { flex: 1 },
   walletCard: {
     backgroundColor: "#fff",
     padding: 10,

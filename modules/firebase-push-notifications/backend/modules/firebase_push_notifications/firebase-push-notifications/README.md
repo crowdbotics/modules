@@ -35,5 +35,5 @@ List of api's endpoints with params needed for these apis.
 
 | Api Name                       | Param        | Description                                                    |
 | ------------------------------ |:------------:|:---------------------------------------------------------------|
-| `/modules/fcm/notification/`| -No Params-  | Returns notification list. |
-| `/modules/fcm/user_fcm_device_add/`|  object `{name: "", registration_id: "", type, device_id: ""}`  |Adds a new device against the provided details.|
+| `/modules/firebase-push-notifications/notification/`| -No Params-  | Returns notification list. |
+| `/modules/firebase-push-notifications/user_fcm_device_add/`|  object `{name: "", registration_id: "", type, device_id: ""}`  |Adds a new device against the provided details.|
