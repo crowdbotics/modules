@@ -168,8 +168,6 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 and then add the following lines:
 
 ```
-pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec', :modular_headers => false
-  pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec', :modular_headers => false
 
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
@@ -178,8 +176,6 @@ pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-po
 
   pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
   
-  permissions_path = '../node_modules/react-native-permissions/ios'
-  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
 ```
 
 
