@@ -170,7 +170,7 @@ export const SignInTab = ({ navigation, route }) => {
       .then(unwrapResult)
       .then(async (res) => {
         if (res.token) {
-          await AsyncStorage.setItem("token", res.token);
+          await AsyncStorage.setItem("access_token", res.token);
           navigation.navigate(options.HOME_SCREEN_NAME);
         }
       })
