@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
+import { OptionsContext } from "@options";
 import {
   Image,
   Alert,
@@ -11,12 +12,12 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { styles, textInputStyles } from "./styles";
-import { OptionsContext } from "@options";
 import { validateEmail } from "../constants";
 import { resetPassword } from "../auth";
 
-const PasswordRecover = ({ navigation }) => {
+const PasswordRecover = ({ navigation, route }) => {
   const options = useContext(OptionsContext);
+  const { LOGO_IMAGE, textInputStyle, buttonStyle, buttonTextStyle } = route.params;
   const [email, setEmail] = useState("");
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ const PasswordRecover = ({ navigation }) => {
       <Image
         style={[styles.image, imageSize]}
         source={{
-          uri: options.LOGO_URL
+          uri: LOGO_IMAGE || options.LOGO_URL
         }}
       />
     );
@@ -53,7 +54,7 @@ const PasswordRecover = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <KeyboardAwareScrollView contentContainerStyle={styles.screen}>
+      <KeyboardAwareScrollView contentContainerStyle={[styles.screen, { justifyContent: "center" }]}>
         {renderImage()}
         <Text style={styles.heading}>{"Password Recovery"}</Text>
         <View style={styles.fieldContainer}>
@@ -63,7 +64,7 @@ const PasswordRecover = ({ navigation }) => {
             onChangeText={(value) => setEmail(value)}
             placeholder="eg: yourname@gmail.com"
             size="small"
-            style={styles.input}
+            style={[styles.input, textInputStyle]}
             keyboardType="email-address"
             textStyle={styles.text}
             autoCapitalize="none"
@@ -79,14 +80,11 @@ const PasswordRecover = ({ navigation }) => {
         <TouchableOpacity
           disabled={api.loading === "pending"}
           activeOpacity={0.7}
-          style={[styles.actionButon]}
+          style={[styles.actionButon, buttonStyle]}
           onPress={handlePasswordReset}
         >
           <Text
-            style={{
-              color: "#fff",
-              fontSize: 15
-            }}
+            style={[styles.resetText, buttonTextStyle]}
           >
             Reset Password
           </Text>
