@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     flexDirection: "row",
     justifyContent: "center"
-  },
+  }
 });
 
 export default {
