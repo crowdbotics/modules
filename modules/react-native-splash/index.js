@@ -1,24 +1,22 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Image } from "react-native";
+import PropTypes from "prop-types";
 
-const NEXT_SCREEN_NAME = "TermsAndConditions";
-
-const Splash = ({ navigation }) => {
+const Splash = ({ url, duration, mainContainerStyle = {}, imageResizeMode, imageStyle = {}, onDurationEnd }) => {
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate(NEXT_SCREEN_NAME);
-    }, 3000);
+    if (duration) {
+      setTimeout(() => {
+        onDurationEnd();
+      }, duration);
+    }
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, mainContainerStyle]}>
       <Image
-        resizeMode="cover"
-        style={styles.image}
-        source={{
-          uri:
-            "https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/20577/3d82cb85-9133-48e4-bb4a-a1c8dd140bc4.png"
-        }}
+        resizeMode={imageResizeMode || "cover" }
+        style={[styles.image, imageStyle]}
+        source={{ uri: url }}
       />
     </View>
   );
@@ -32,7 +30,16 @@ const styles = StyleSheet.create({
   image: { width: "100%", height: "100%" }
 });
 
+Splash.propTypes = {
+  url: PropTypes.string,
+  duration: PropTypes.number,
+  mainContainerStyle: PropTypes.object,
+  imageResizeMode: PropTypes.string,
+  imageStyle: PropTypes.object,
+  onDurationEnd: PropTypes.func
+};
+
 export default {
-  title: "SplashScreen",
+  title: "Splash",
   navigator: Splash
 };
