@@ -1,12 +1,6 @@
 {
-    "title": "Payments",
-    "description": "Payments Module",
-    "root": "/",
-    "schema": {
-      "buttonText": {
-        "type": "string",
-        "minLength": 1
-      }
-    }
+    "title": "Django Payments",
+    "description": "Django Payments Module",
+    "root": "/backend/modules"
   }
   
