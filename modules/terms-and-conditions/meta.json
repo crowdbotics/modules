@@ -1,17 +1,5 @@
 {
-  "title": "Terms and Conditions",
-  "description": "Terms and Conditions screen",
-  "root": "/",
-  "schema": {
-    "title": {
-      "type": "string",
-      "minLength": 3,
-      "pattern": "^[A-Z]"
-    },
-    "path": {
-      "type": "string",
-      "minLength": 1,
-      "format": "uri-reference"
-    }
-  }
+  "title": "Django Terms and Conditions",
+  "description": "Terms and Conditions module",
+  "root": "/backend/modules"
 }
