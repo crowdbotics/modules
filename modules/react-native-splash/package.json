@@ -4,7 +4,9 @@
   "description": "Greet your users with an image or logo.",
   "private": true,
   "main": "index.js",
-  "x-dependencies": {},
+  "x-dependencies": {
+    "prop-types" : "15.8.1"
+  },
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {}
