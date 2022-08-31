@@ -10,7 +10,7 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_social_auth",
+    name="cb_social_auth",
     version="0.1",
     packages=["social_auth"],
     install_requires=[],
