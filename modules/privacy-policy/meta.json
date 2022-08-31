@@ -1,5 +1,5 @@
 {
-  "title": "Privacy Policy",
-  "description": "Privacy Policy Screen",
-  "root": "/"
+  "title": "Django Privacy Policy",
+  "description": "Privacy Policy module",
+  "root": "/backend/modules"
 }
