@@ -14,7 +14,7 @@ const messageMap = {
   "Network Error": {
     code: null,
     message:
-      "Network Error: It was not possible to establish a connection with the server."
+      "Network Error: Problem occurred while establishing a connection with the server."
   }
 };
 
