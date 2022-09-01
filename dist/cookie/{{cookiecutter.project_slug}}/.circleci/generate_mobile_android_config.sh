@@ -125,6 +125,11 @@ jobs:
           path: android/app/build/outputs/bundle/release/app-release.aab
 
       - run:
+          name: get android metadata
+          command: bundle exec fastlane supply init
+          working_directory: android
+
+      - run:
           name: Webhook Success
           command: bash .circleci/webhook_callback.sh "success"
           when: on_success
