@@ -16,7 +16,7 @@ const FingerprintAuthentication = ({ onAuthentication, onAuthenticationError }) 
             "Fingerprints have been matched and verified successfully"
           );
         } else {
-          AlertIOS.prompt("Authenticated Successfully!",
+          AlertIOS.alert("Authenticated Successfully!",
             "Fingerprints have been matched and verified successfully");
         }
         FingerprintScanner.release();
@@ -32,7 +32,7 @@ const FingerprintAuthentication = ({ onAuthentication, onAuthenticationError }) 
             arr[1]
           );
         } else {
-          AlertIOS.prompt(arr[0],
+          AlertIOS.alert(arr[0],
             arr[1]);
         }
         FingerprintScanner.release();
