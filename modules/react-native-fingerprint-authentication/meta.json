@@ -1,0 +1,5 @@
+{
+  "title": "Fingerprint Authentication",
+  "description": "Module helps user to verify a person's identity based on one or more of their fingerprints",
+  "root": "/modules/fingerprint-authentication"
+}
