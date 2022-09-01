@@ -68,7 +68,6 @@ Below is the list of all params that can be passed to the module.
 | --------------- |:----------:|:---------------------------------------------------------------|
 | onAuthentication| `function` | Called after successfully fingerprint authentication.|
 | onAuthenticationError| `function` | Called fingerprint authentication gets failed by any reason.  |
-| onDismissed     | `function` | Called when user presses the `Dismiss` button.                   |
 
 
 ## Contributing

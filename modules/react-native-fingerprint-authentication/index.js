@@ -1,63 +1,49 @@
-import React, { useState, useEffect, useContext } from "react";
-import {
-  View
-} from "react-native";
+import React, { useEffect } from "react";
+import { View, Alert, Platform, AlertIOS } from "react-native";
 import FingerprintScanner from "react-native-fingerprint-scanner";
 
-import { OptionsContext } from "@options";
-import FingerprintPopup from "./popup";
-
-const FingerprintAuthentication = ({ onAuthentication, onAuthenticationError, onDismissed }) => {
-  const [popupShowed, SetPopupShowed] = useState(true);
-
-  const options = useContext(OptionsContext);
-  const { popupStyles } = options;
-
-  const handleAuthentication = () => {
-    if (onAuthentication) {
-      onAuthentication();
-      SetPopupShowed(false);
-    };
-  };
-
-  const detectFingerprintAvailable = () => {
+const FingerprintAuthentication = ({ onAuthentication, onAuthenticationError }) => {
+  const authCurrent = () => {
     FingerprintScanner
-      .isSensorAvailable()
-      .catch(error => console.log(error));
-  };
-
-  const handleAuthenticationError = () => {
-    if (onAuthenticationError) {
-      onAuthenticationError();
-      SetPopupShowed(false);
-    };
-  };
-
-  const handleDismissed = () => {
-    if (onDismissed) {
-      onDismissed();
-      SetPopupShowed(false);
-    };
+      .authenticate({ title: "Log in with Biometrics" })
+      .then((res) => {
+        if (onAuthentication) {
+          onAuthentication();
+        }
+        if (Platform.OS === "android") {
+          Alert.alert(
+            "Authenticated Successfully!",
+            "Fingerprints have been matched and verified successfully"
+          );
+        } else {
+          AlertIOS.prompt("Authenticated Successfully!",
+            "Fingerprints have been matched and verified successfully");
+        }
+        FingerprintScanner.release();
+      }).catch((err) => {
+        if (onAuthenticationError) {
+          onAuthenticationError();
+        }
+        const string = err.toString();
+        const arr = string.split(":");
+        if (Platform.OS === "android") {
+          Alert.alert(
+            arr[0],
+            arr[1]
+          );
+        } else {
+          AlertIOS.prompt(arr[0],
+            arr[1]);
+        }
+        FingerprintScanner.release();
+      });
   };
 
   useEffect(() => {
-    detectFingerprintAvailable();
+    authCurrent();
   }, []);
 
-  return (
-    <View style={popupStyles.mainContainer}>
-
-      {popupShowed && (
-        <FingerprintPopup
-          style={popupStyles.popup}
-          onAuthentication={handleAuthentication}
-          onAuthenticationError={handleAuthenticationError}
-          handleDismissed={handleDismissed}
-        />
-      )}
-
-    </View>
-  );
+  return <View></View>;
 };
 
 export default {
