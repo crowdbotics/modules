@@ -125,6 +125,11 @@ jobs:
           path: android/app/build/outputs/bundle/release/app-release.aab
 
       - run:
+          name: get android metadata
+          command: bundle exec fastlane supply init
+          working_directory: android
+
+      - run:
           name: Webhook Success
           command: bash .circleci/webhook_callback.sh "success"
           when: on_success
@@ -134,36 +139,13 @@ jobs:
           command: bash .circleci/webhook_callback.sh "failure"
           when: on_fail
 
-  android-metadata:
-    working_directory: ~/build
-    docker:
-      - image: reactnativecommunity/react-native-android:3.2
-    steps:
-      - run:
-          name: get android metadata
-          command: bundle exec fastlane supply init
-          working_directory: android
-
 workflows:
   version: 2.1
   node-android:
-    when: << pipeline.parameters.run_workflow_node_android >>
     jobs:
       - node
       - android:
           requires:
             - node
-  android-metadata:
-    when: << pipeline.parameters.run_workflow_android_metadata >>
-    jobs:
-      - android-metadata
-
-parameters:
-  run_workflow_node_android:
-    default: true
-    type: boolean
-  run_workflow_android_metadata:
-    default: false
-    type: boolean
 {%- endraw %}
 EOF
