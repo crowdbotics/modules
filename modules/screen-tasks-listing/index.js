@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  subHeading: { fontSize: 16, fontWeight: "400", marginLeft: 20, color: "#4A4A4A", marginTop: 20 },
+  subHeading: { fontSize: 20, fontWeight: "400", marginLeft: 20, color: "#4A4A4A", marginTop: 20 },
   tabView: {
     width: "65%",
     height: 48,
