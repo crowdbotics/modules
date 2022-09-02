@@ -48,9 +48,9 @@ const TaskersListing = () => {
           </View>
         </View>
         <View style={styles.buttonBottom}>
-          <Button>Create</Button>
+          <Button>View Details</Button>
           <Button backgroundColor="#fff" color="#000" borderWidth={1} >
-            Cancel
+            Message
           </Button>
         </View>
       </View>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF"
   },
 
-  subHeading: { fontSize: 16, fontWeight: "400", marginLeft: 20, color: "#4A4A4A", marginTop: 20 },
+  subHeading: { fontSize: 20, fontWeight: "400", marginLeft: 20, color: "#4A4A4A", marginTop: 20 },
   tabView: {
     width: "65%",
     height: 48,
@@ -192,9 +192,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginHorizontal: 10,
     marginTop: 15,
-    borderRadius: 8
+    borderRadius: 8,
+    marginVertical: 10
   },
-  bottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 20, paddingHorizontal: 20, backgroundColor: "#C4C4C4" },
+  bottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 20, paddingHorizontal: 20, height: 74, backgroundColor: "#C4C4C4" },
   star: { width: 35, height: 40, resizeMode: "contain" },
   task: { width: 28, height: 34, resizeMode: "contain" },
   chat: { width: 28, height: 38, resizeMode: "contain" },
