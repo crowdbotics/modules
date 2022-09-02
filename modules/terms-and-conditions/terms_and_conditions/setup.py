@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_terms-and-conditions",
+    name="cb_terms_and_conditions",
     version="0.1",
-    packages=["terms-and-conditions"],
+    packages=["terms_and_conditions"],
     install_requires=[],
     cmdclass={"build": BuildCommand},
 )
