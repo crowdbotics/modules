@@ -86,7 +86,7 @@ const TaskersListing = () => {
           </View>
         </View>
         <View style={styles.buttonBottom}>
-          <Button>View Detail</Button>
+          <Button>View Details</Button>
           <Button backgroundColor="#fff" color="#000" borderWidth={1} >
             Message
           </Button>
