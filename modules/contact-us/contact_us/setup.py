@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_contact_us",
+    name="cb_contact_us",
     version="0.1",
-    packages=["contact-us"],
+    packages=["contact_us"],
     install_requires=["sendgrid"],
     cmdclass={"build": BuildCommand},
 )  
