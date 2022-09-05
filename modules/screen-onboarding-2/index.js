@@ -16,14 +16,13 @@ const Onboarding2 = () => {
 
       <View style={styles.imgContainer}>
       </View>
-      <Text style={styles.title}>Video Conference</Text>
+      <Text style={styles.title}>Onboarding</Text>
       <View style={styles.descContainer}>
         <Text style={styles.desc}>
           There is no better advertisement  campaign that’s is low and also successful at the same time. Great business ideas.
         </Text>
       </View>
-      <Button buttonText={"Next"} />
-      <Text style={styles.skipText}>Skip</Text>
+      <Button buttonText={"Get started"} />
     </ScrollView>
   );
 };
@@ -45,8 +44,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 30, marginHorizontal: 25, marginTop: 10, marginBottom: 10 },
   descContainer: { paddingHorizontal: 25 },
   desc: { color: "#757575", marginBottom: 5 },
-  imgContainer: { height: 460, width: 343, backgroundColor: "#E5E5EA", borderRadius: 10, alignSelf: "center" },
-  skipText: { alignSelf: "center", fontSize: 21, color: "#22292E", marginBottom: 20 }
+  imgContainer: { height: 460, width: 343, backgroundColor: "#E5E5EA", borderRadius: 10, alignSelf: "center" }
 });
 
 const Button = (params) => {
@@ -72,8 +70,8 @@ const buttonStyles = StyleSheet.create({
   btnContainer: {
     paddingHorizontal: 40,
     justifyContent: "center",
-    marginBottom: 10,
-    marginTop: 50
+    marginBottom: 20,
+    marginTop: 40
   },
   btn: {
     backgroundColor: "#12D790",
