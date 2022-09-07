@@ -122,8 +122,11 @@ jobs:
             echo "$MYAPP_UPLOAD_STORE_FILE" | base64 --decode > my-upload-key.keystore
 
       - run:
-          name: Create and push a new $MOBILE_LANE build to Play Store
-          command: bundle exec fastlane $MOBILE_LANE
+          name: Deploy appetize and build
+          command: |
+            if [ $MOBILE_LANE == "internal" ]; then
+              bundle exec fastlane deploy_and_build
+            fi
           working_directory: android
 
       - store_artifacts:
@@ -131,6 +134,11 @@ jobs:
 
       - store_artifacts:
           path: android/app/build/outputs/bundle/release/app-release.aab
+
+      - run:
+          name: Create and push a new $MOBILE_LANE build to Play Store
+          command: bundle exec fastlane $MOBILE_LANE
+          working_directory: android
 
       - run:
           name: Webhook Success
