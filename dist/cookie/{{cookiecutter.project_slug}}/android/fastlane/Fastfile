@@ -24,13 +24,18 @@ platform(:android) do
     gradle(task: 'test')
   end
 
+  desc('deploy appetize and build')
+  lane(:deploy_and_build) do
+    deploy_appetize()
+    build_aab()
+  end
+
   desc('Submit a new Internal Build')
   lane(:internal) do
-    internal_files = google_play_track_version_codes(track:"internal")
+    begin
+      internal_files = google_play_track_version_codes(track:"internal")
 
-    internal_files.length > 0
-        deploy_appetize()
-        build_aab()
+      internal_files.length > 0
 
         gradle(task: 'clean bundleRelease')
 
@@ -38,6 +43,9 @@ platform(:android) do
                              version_code: ENV["CIRCLE_BUILD_NUM"].to_i,
                              version_name: ENV["CIRCLE_BUILD_NUM"].to_s,
                              track_promote_to: 'alpha')
+    rescue => ex
+      UI.error(ex)
+    end
   end
 
   desc('Promote from internal to alpha')
