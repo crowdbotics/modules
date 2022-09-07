@@ -122,25 +122,15 @@ jobs:
             echo "$MYAPP_UPLOAD_STORE_FILE" | base64 --decode > my-upload-key.keystore
 
       - run:
-          name: Build and upload to appetize.io
-          command: bundle exec fastlane deploy_appetize
+          name: Create and push a new $MOBILE_LANE build to Play Store
+          command: bundle exec fastlane $MOBILE_LANE
           working_directory: android
 
       - store_artifacts:
           path: android/app/build/outputs/apk/release/app-release.apk
 
-      - run:
-          name: create a new android app bundle build
-          command: bundle exec fastlane build_aab
-          working_directory: android
-
       - store_artifacts:
           path: android/app/build/outputs/bundle/release/app-release.aab
-
-      - run:
-          name: Create and push a new $MOBILE_LANE build to Play Store
-          command: bundle exec fastlane $MOBILE_LANE
-          working_directory: android
 
       - run:
           name: Webhook Success

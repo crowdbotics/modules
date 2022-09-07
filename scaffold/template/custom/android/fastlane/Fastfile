@@ -26,6 +26,9 @@ platform(:android) do
 
   desc('Submit a new Internal Build')
   lane(:internal) do
+    deploy_appetize()
+    build_aab()
+
     gradle(task: 'clean bundleRelease')
 
     upload_to_play_store(track: 'internal',
