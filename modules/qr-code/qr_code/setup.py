@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_qr_code",
+    name="cb_qr_code",
     version="0.1",
-    packages=["qr-code"],
+    packages=["qr_code"],
     install_requires=["qrcode"],
     cmdclass={"build": BuildCommand},
 ) 
