@@ -18,7 +18,7 @@ const PrivacyPolicyWebview = ({ navigation, url }) => {
   }, []);
 
   return (
-    <WebView source={{ uri: uri || "https://www.crowdbotics.com/privacy-policy" }} />
+    <WebView source={{ uri: uri }} />
   );
 };
 
