@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { View } from "react-native";
 import { OptionsContext } from "@options";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import PropTypes from "prop-types";
 
 navigator.geolocation = require("@react-native-community/geolocation");
 
@@ -42,7 +43,7 @@ const AddressAutoComplete = ({
 
   const handleChange = (text) => {
     if (onChangeText) {
-      onChangeText();
+      onChangeText(text);
     }
     setInputValue(text);
   };
@@ -61,7 +62,7 @@ const AddressAutoComplete = ({
 
   return (
 
-    <View style={{ zIndex: 1000, height: inputValue ? "100%" : 200 }}>
+    <View style={{ zIndex: 1000, height: inputValue ? "100%" : 50 }}>
       <GooglePlacesAutocomplete
         autoFillOnNotFound={autoFillOnNotFound}
         placeholder={placeholder}
@@ -97,6 +98,29 @@ const AddressAutoComplete = ({
   );
 };
 
+AddressAutoComplete.propTypes = {
+  googleApiKey: PropTypes.string,
+  placeholder: PropTypes.string,
+  minLength: PropTypes.number,
+  fetchDetails: PropTypes.bool,
+  onChangeText: PropTypes.func,
+  onPress: PropTypes.func,
+  onFail: PropTypes.func,
+  onNotFound: PropTypes.func,
+  styles: PropTypes.object,
+  predefinedPlaces: PropTypes.array,
+  predefinedPlacesAlwaysVisible: PropTypes.bool,
+  autoFillOnNotFound: PropTypes.bool,
+  disableScroll: PropTypes.bool,
+  enablePoweredByContainer: PropTypes.bool,
+  isRowScrollable: PropTypes.bool,
+  listUnderlayColor: PropTypes.string,
+  timeout: PropTypes.number,
+  currentLocation: PropTypes.bool,
+  currentLocationLabel: PropTypes.string,
+  renderLeftButton: PropTypes.func,
+  renderRightButton: PropTypes.func
+};
 export default {
   title: "AddressAutoComplete",
   navigator: AddressAutoComplete
