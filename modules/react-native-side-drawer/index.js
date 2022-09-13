@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { OptionsContext } from "@options";
+import PropTypes from "prop-types";
+
 const Drawer = createDrawerNavigator();
 
 const SideDrawer = ({
@@ -54,6 +56,20 @@ const SideDrawer = ({
 
     </Drawer.Navigator>
   );
+};
+
+SideDrawer.propTypes = {
+  screenSet: PropTypes.array,
+  initialRouteName: PropTypes.string,
+  drawerType: PropTypes.string,
+  screenOptions: PropTypes.object,
+  drawerPosition: PropTypes.string,
+  drawerStyle: PropTypes.object,
+  overlayColor: PropTypes.string,
+  hideStatusBar: PropTypes.bool,
+  edgeWidth: PropTypes.number,
+  keyboardDismissMode: PropTypes.string,
+  minSwipeDistance: PropTypes.number
 };
 
 export default {

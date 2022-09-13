@@ -6,8 +6,9 @@
 	"main": "index.js",
 	"author": "Crowdbotics",
 	"license": "ISC",
-  "dependencies": {},
+    "dependencies": {},
 	"x-dependencies": {
-		"@react-navigation/drawer": "^5.12.9"
+		"@react-navigation/drawer": "^5.12.9",
+		"prop-types" : "15.8.1"
 	}
 }
