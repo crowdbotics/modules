@@ -26,6 +26,30 @@ THIRD_PARTY_APPS = [
 
 You should now deploy your app's backend in order to proceed to the next step.
 
+## Updating URLS
+1. In `/backend/<project_name>/urls.py` update following paths in `urlpatterns` section.
+
+```py
+urlpatterns = [
+
+    ## replace `rest_auth.urls` with `dj_rest_auth.urls`
+    path("rest-auth/", include("dj_rest_auth.urls")),
+
+    ## replace `rest_auth.registration.urls` with `dj_rest_auth.registration.urls`
+    path("rest-auth/registration/", include("dj_rest_auth.registration.urls")),
+]
+
+```
+
+2. In `/backend/home/api/v1/serializers.py `
+
+```py
+
+##replace `rest_auth.serializers` with `dj_rest_auth.serializers`
+from dj_rest_auth.serializers import PasswordResetSerializer
+
+```
+
 ## Configuring Facebook
 You need to setup Facebook SDK to get social login properly configured in your app. Ideally, these steps should be done by the project owner or with an project owner account, as it needs to be properly configured for app store release, but it can be done with debug configuration during the development phase. 
 
