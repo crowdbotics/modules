@@ -140,13 +140,18 @@ jobs:
           command: bundle exec fastlane $MOBILE_LANE
           working_directory: android
 
+
       - run:
           name: get android metadata
           command:  |
             if [ $MOBILE_LANE == "production" ]; then
-              bundle exec fastlane supply init
               git config --global user.email "team@crowdbotics.com"
               git config --global user.name "Crowdbotics"
+              rm -rf fastlane/metadata
+              git add fastlane/metadata
+              git commit -m "CI Work: remove metadata and screenshots to download new one"
+              git push -q https://$GITHUB_WRITE_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git master
+              bundle exec fastlane supply init
               git add fastlane/metadata app/build.gradle fastlane/README.md
               git commit -m "CI Work: metadata and screenshots updated"
               git push -q https://$GITHUB_WRITE_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git master
