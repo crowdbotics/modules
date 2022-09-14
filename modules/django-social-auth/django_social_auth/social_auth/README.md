@@ -13,26 +13,15 @@ Once the file is opened, locate in the code a declaration for `THIRD_PARTY_APPS`
 THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
-    'rest_auth.registration',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-
-    # More apps added before here...
-
-    'allauth.socialaccount.providers.facebook', # add this line here
-    'allauth.socialaccount.providers.apple', # add this other line
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.twitter',
 ]
-```
-
-Go to the end of the file and add the following code:
-
-```js
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-    ),
-}
 ```
 
 You should now deploy your app's backend in order to proceed to the next step.

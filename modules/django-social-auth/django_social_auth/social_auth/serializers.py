@@ -1,4 +1,4 @@
-from rest_auth.registration.serializers import SocialLoginSerializer, SocialConnectMixin
+from dj_rest_auth.registration.serializers import SocialLoginSerializer, SocialConnectMixin
 from rest_framework import serializers
 from django.http import HttpRequest
 from django.contrib.auth import get_user_model

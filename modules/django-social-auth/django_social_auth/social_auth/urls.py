@@ -7,7 +7,7 @@ from .views import (
     GoogleConnect,
     AppleConnect,
 )
-from rest_auth.registration.views import (
+from dj_rest_auth.registration.views import (
     SocialAccountListView,
     SocialAccountDisconnectView,
 )
