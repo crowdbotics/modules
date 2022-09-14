@@ -34,10 +34,8 @@ platform(:android) do
   lane(:internal) do
     begin
       internal_files = google_play_track_version_codes(track:"internal")
-      beta_files = google_play_track_version_codes(track:"beta")
-      production_files = google_play_track_version_codes(track:"production")
 
-      internal_files.length > 0 || beta_files.length > 0 || production_files.length > 0
+      internal_files.length > 0
 
         gradle(task: 'clean bundleRelease')
 
