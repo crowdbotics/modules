@@ -9,7 +9,7 @@ class BuildCommand(build):
         self.build_base = '/tmp'
         
 
-setup(name='cb_privacy_policy',
+setup(name='cb_django_privacy_policy',
       version='0.1',
       packages=['privacy_policy'],
       install_requires=[],
