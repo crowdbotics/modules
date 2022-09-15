@@ -18,7 +18,7 @@ const TermsAndConditionsWebview = ({ navigation, url }) => {
   }, []);
 
   return (
-    <WebView source={{ uri: uri || "https://www.crowdbotics.com/terms-of-service" }} />
+    <WebView source={{ uri: uri }} />
   );
 };
 
