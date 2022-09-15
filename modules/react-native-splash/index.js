@@ -1,23 +1,16 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Image } from "react-native";
-import PropTypes from "prop-types";
+import { View, StyleSheet, Text } from "react-native";
+import SplashScreen from "react-native-splash-screen";
 
-const Splash = ({ url, duration, mainContainerStyle = {}, imageResizeMode, imageStyle = {}, onDurationEnd }) => {
+const Splash = ({ navigation }) => {
   useEffect(() => {
-    if (duration) {
-      setTimeout(() => {
-        onDurationEnd();
-      }, duration);
-    }
+    // Hide the splash image as this component is loaded.
+    SplashScreen.hide();
   }, []);
 
   return (
-    <View style={[styles.container, mainContainerStyle]}>
-      <Image
-        resizeMode={imageResizeMode || "cover" }
-        style={[styles.image, imageStyle]}
-        source={{ uri: url }}
-      />
+    <View style={styles.container}>
+     <Text style={styles.text}>Welcome Onboard!</Text>
     </View>
   );
 };
@@ -25,19 +18,13 @@ const Splash = ({ url, duration, mainContainerStyle = {}, imageResizeMode, image
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF"
+    backgroundColor: "#FFF",
+    justifyContent: "center",
+    alignItems: "center"
   },
-  image: { width: "100%", height: "100%" }
-});
+  text: { fontSize: 18, fontWeight: "bold" }
 
-Splash.propTypes = {
-  url: PropTypes.string,
-  duration: PropTypes.number,
-  mainContainerStyle: PropTypes.object,
-  imageResizeMode: PropTypes.string,
-  imageStyle: PropTypes.object,
-  onDurationEnd: PropTypes.func
-};
+});
 
 export default {
   title: "Splash",

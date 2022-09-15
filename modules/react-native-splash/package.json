@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "x-dependencies": {
-    "prop-types" : "15.8.1"
+    "react-native-splash-screen" : "3.3.0"
   },
   "author": "Crowdbotics",
   "license": "ISC",
