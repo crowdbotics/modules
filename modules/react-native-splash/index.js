@@ -1,30 +1,41 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, Text } from "react-native";
-import SplashScreen from "react-native-splash-screen";
+import React, { useEffect, useContext } from "react";
+import { View } from "react-native";
+import PropTypes from "prop-types";
+import { OptionsContext } from "@options";
 
-const Splash = ({ navigation }) => {
+const Splash = ({ duration, onDurationEnd }) => {
+  const options = useContext(OptionsContext);
+
+  const handleDurationEnd = () => {
+    options.hide();
+    if (onDurationEnd) {
+      onDurationEnd();
+    }
+    if (options.onDurationEnd) {
+      options.onDurationEnd();
+    }
+  };
+
   useEffect(() => {
-    // Hide the splash image as this component is loaded.
-    SplashScreen.hide();
+    if (duration || options.duration) {
+      setTimeout(() => {
+        handleDurationEnd();
+      }, duration || options.duration);
+    } else {
+      handleDurationEnd();
+    }
   }, []);
 
   return (
-    <View style={styles.container}>
-     <Text style={styles.text}>Welcome Onboard!</Text>
+    <View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  text: { fontSize: 18, fontWeight: "bold" }
-
-});
+Splash.propTypes = {
+  duration: PropTypes.number,
+  onDurationEnd: PropTypes.func
+};
 
 export default {
   title: "Splash",
