@@ -5,7 +5,7 @@ import {
   StyleSheet
 } from "react-native";
 
-const WithdrawScreen = () => {
+const Withdraw = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Withdraw Screen</Text>
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default WithdrawScreen;
+export default Withdraw;
