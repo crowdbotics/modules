@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_2fa",
+    name="cb_django_two_factor_authentication",
     version="0.1",
-    packages=["two-factor-authentication"],
-    install_requires=["twilio", "sendgrid", "django-phonenumber-field==6.1.0", "phonenumbers==8.12.45"],
+    packages=["two_factor_authentication"],
+    install_requires=["twilio", "sendgrid", "django-phonenumber-field==6.1.0", "phonenumbers==8.12.45", "pyotp"],
     cmdclass={"build": BuildCommand},
 ) 
