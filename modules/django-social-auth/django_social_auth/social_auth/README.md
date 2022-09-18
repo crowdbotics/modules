@@ -1,6 +1,9 @@
 # Crowdbotics Social Login Module - Backend
 This module contains all needed resources and information to set up Social Login in your app backend.
 
+## Deprecated Package
+` django-rest-auth ` package is deprecated since 2019 and not being maintained. It is compatible with ` djangorestframework ` up to the ` 3.11.1 ` version only. This package needs to be replaced by the ` dj-rest-auth package `.
+
 ## Requirements
 - The project must have `django-allauth` with version 0.43.0 or higher in order to support Apple provider
 
