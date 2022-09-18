@@ -1,41 +1,39 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import React, { useEffect, useContext } from "react";
+import { View } from "react-native";
 import PropTypes from "prop-types";
+import { OptionsContext } from "@options";
 
-const Splash = ({ url, duration, mainContainerStyle = {}, imageResizeMode, imageStyle = {}, onDurationEnd }) => {
+const Splash = ({ duration, onDurationEnd }) => {
+  const options = useContext(OptionsContext);
+
+  const handleDurationEnd = () => {
+    options.hide();
+    if (onDurationEnd) {
+      onDurationEnd();
+    }
+    if (options.onDurationEnd) {
+      options.onDurationEnd();
+    }
+  };
+
   useEffect(() => {
-    if (duration) {
+    if (duration || options.duration) {
       setTimeout(() => {
-        onDurationEnd();
-      }, duration);
+        handleDurationEnd();
+      }, duration || options.duration);
+    } else {
+      handleDurationEnd();
     }
   }, []);
 
   return (
-    <View style={[styles.container, mainContainerStyle]}>
-      <Image
-        resizeMode={imageResizeMode || "cover" }
-        style={[styles.image, imageStyle]}
-        source={{ uri: url }}
-      />
+    <View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF"
-  },
-  image: { width: "100%", height: "100%" }
-});
-
 Splash.propTypes = {
-  url: PropTypes.string,
   duration: PropTypes.number,
-  mainContainerStyle: PropTypes.object,
-  imageResizeMode: PropTypes.string,
-  imageStyle: PropTypes.object,
   onDurationEnd: PropTypes.func
 };
 
