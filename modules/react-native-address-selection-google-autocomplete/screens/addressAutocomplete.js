@@ -7,106 +7,88 @@ import Icon from "react-native-vector-icons/Feather";
 navigator.geolocation = require("@react-native-community/geolocation");
 
 const AutoComplete = ({ navigation, route }) => {
-  const {
-    googleApiKey,
-    placeholder,
-    minLength,
-    fetchDetails,
-    onChangeText,
-    onPress,
-    onFail,
-    onNotFound,
-    styles,
-    predefinedPlaces,
-    predefinedPlacesAlwaysVisible,
-    autoFillOnNotFound,
-    disableScroll,
-    enablePoweredByContainer,
-    isRowScrollable,
-    listUnderlayColor,
-    listViewDisplayed,
-    timeout,
-    currentLocation,
-    currentLocationLabel,
-    renderLeftButton,
-    renderRightButton
-  } = route.params?.props;
 
-  const { address } = route.params;
   const [inputValue, setInputValue] = useState("");
-  const [placeHolderState, setPlaceHolderState] = useState("");
+  const [defaultValue, setDefaultValue] = useState("This is me");
   const options = useContext(OptionsContext);
-  const { apiKey, autoCompleteStyles } = options;
+  const { apiKey, autoCompleteStyles, settings } = options;
+
 
   const getAddressHandle = (data, address) => {
-    if (onPress) {
-      onPress(data, address);
+    if (settings.onPress) {
+      settings.onPress(data, address);
     }
+    setDefaultValue(data.description);
   };
 
   const handleChange = (text) => {
-    if (onChangeText) {
-      onChangeText(text);
+    if (settings.onChangeText) {
+      settings.onChangeText(text);
     }
     setInputValue(text);
-    setPlaceHolderState("");
+    setDefaultValue(text)
   };
 
   const handleFail = () => {
-    if (onFail) {
-      onFail();
+    if (settings.onFail) {
+      settings.onFail();
     }
   };
 
   const handleNotFound = () => {
-    if (onNotFound) {
-      onNotFound();
+    if (settings.onNotFound) {
+      settings.onNotFound();
     }
   };
 
   useEffect(() => {
-    if (address) {
-      setPlaceHolderState(address.formatted_address);
-      if (onPress) {
-        onPress("", address);
+    if (route?.params?.address) {
+      const {address} = route.params
+      setDefaultValue(address.formatted_address);
+      if (settings.onPress) {
+        settings.onPress("", address);
       }
     }
   }, [route.params]);
 
+ 
   return (
     <View style={autoCompleteStyles.mainContainer}>
       <View style={{ zIndex: 1000, height: inputValue ? "100%" : 50, width: "90%" }}>
         <GooglePlacesAutocomplete
-          autoFillOnNotFound={autoFillOnNotFound || false}
-          placeholder={placeHolderState || placeholder || "Address"}
-          minLength={minLength || 2}
+          autoFillOnNotFound={settings.autoFillOnNotFound || false}
+          placeholder={settings.placeholder || "Address"}
+          minLength={settings.minLength || 2}
           autoFocus={false}
           returnKeyType={"default"}
-          fetchDetails={fetchDetails || true}
+          fetchDetails={settings.fetchDetails || true}
           textInputProps={{
-            onChangeText: (text) => { handleChange(text); }
-
+            onChangeText: (text) => handleChange(text),
+            value: defaultValue
+          }}
+          getDefaultValue={() => {
+            return defaultValue; // text input default value
           }}
           onPress={(data, details = null) => getAddressHandle(data, details)}
           query={{
-            key: googleApiKey || apiKey,
+            key: apiKey,
             language: "en"
           }}
-          styles={styles || autoCompleteStyles}
-          currentLocation={currentLocation}
-          currentLocationLabel={currentLocationLabel}
-          predefinedPlaces={predefinedPlaces}
-          predefinedPlacesAlwaysVisible={predefinedPlacesAlwaysVisible || false}
-          disableScroll={disableScroll || false}
-          enablePoweredByContainer={enablePoweredByContainer || false}
-          isRowScrollable={isRowScrollable || true}
-          listUnderlayColor={listUnderlayColor || "#c8c7cc"}
-          listViewDisplayed={listViewDisplayed || "auto"}
+          styles={settings.styles || autoCompleteStyles}
+          currentLocation={settings.currentLocation}
+          currentLocationLabel={settings.currentLocationLabel}
+          predefinedPlaces={settings.predefinedPlaces}
+          predefinedPlacesAlwaysVisible={settings.predefinedPlacesAlwaysVisible || false}
+          disableScroll={settings.disableScroll || false}
+          enablePoweredByContainer={settings.enablePoweredByContainer || false}
+          isRowScrollable={settings.isRowScrollable || true}
+          listUnderlayColor={settings.listUnderlayColor || "#c8c7cc"}
+          listViewDisplayed={settings.listViewDisplayed || "auto"}
           onFail={handleFail}
           onNotFound={handleNotFound}
-          timeout={timeout || 20000}
-          renderLeftButton={renderLeftButton}
-          renderRightButton={renderRightButton}
+          timeout={settings.timeout || 20000}
+          renderLeftButton={settings.renderLeftButton}
+          renderRightButton={settings.renderRightButton}
         />
       </View>
       <Pressable onPress={() => navigation.navigate("Maps")}>

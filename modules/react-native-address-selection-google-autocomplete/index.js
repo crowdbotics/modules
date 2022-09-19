@@ -2,9 +2,9 @@
 import React from "react";
 import Navigator from "./Navigator";
 
-const AddressAutoComplete = (props) => {
+const AddressAutoComplete = () => {
   return (
-        <Navigator props={props} />
+        <Navigator  />
   );
 };
 

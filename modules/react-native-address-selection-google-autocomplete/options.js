@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const GOOGLE_API_KEY = "AIzaSyCCVxYoYX8Gd70B6w7ZoGntENMnFfKJrI4";
 const { width, height } = Dimensions.get("window");
 
 // Guideline sizes are based on standard ~5" screen mobile device
@@ -68,8 +67,35 @@ export const autoCompleteStyles = StyleSheet.create({
   }
 });
 
+const GOOGLE_API_KEY = "Your Google Api Key";
+const addressAutocompleteOptions = {
+  placeholder : "Search",
+  minLength : 2,
+  fetchDetails: true,
+  onChangeText: (text) =>{},
+  onPress: (data, details) =>{},
+  onFail: () =>{},
+  onNotFound: () =>{},
+  styles: "",
+  predefinedPlaces: [],
+  predefinedPlacesAlwaysVisible: true,
+  autoFillOnNotFound: true,
+  disableScroll: false,
+  enablePoweredByContainer: false,
+  isRowScrollable: true,
+  listUnderlayColor: "#c8c7cc",
+  listViewDisplayed: "auto",
+  timeout: 20000,
+  currentLocation: false,
+  currentLocationLabel: "",
+  renderLeftButton: ()=>{},
+  renderRightButton: ()=>{}
+}
+
+
 export default {
   apiKey: GOOGLE_API_KEY,
   autoCompleteStyles: autoCompleteStyles,
-  styles: styles
+  styles: styles,
+  settings: addressAutocompleteOptions
 };

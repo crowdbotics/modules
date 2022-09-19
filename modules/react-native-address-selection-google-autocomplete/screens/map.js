@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions,LogBox } from "react-native";
 import { OptionsContext } from "@options";
 // @ts-ignore
 import MapView, { Marker } from "react-native-maps";
@@ -45,6 +45,8 @@ const Maps = ({ navigation }) => {
     });
   };
 
+  LogBox.ignoreLogs(['Non-serializable values were found in the navigation state']);
+
   const handleDragOrigin = async (e) => {
     const coords = e.nativeEvent.coordinate;
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.latitude},${coords.longitude}&key=${apiKey}`;
@@ -61,6 +63,8 @@ const Maps = ({ navigation }) => {
       console.log("ERROR: ", error);
     }
   };
+
+ 
 
   return (
     <View style={[styles.view]}>
@@ -108,5 +112,6 @@ const Maps = ({ navigation }) => {
     </View>
   );
 };
+
 
 export default Maps;

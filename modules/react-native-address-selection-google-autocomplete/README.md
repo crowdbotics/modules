@@ -1,14 +1,115 @@
 # Address Selection (Google Autocomplete) module
  Address Selection Autocomplete module reflect real searches. To determine what predictions to show, module looks for common queries that match when someone starts to enter into the search box. 
 
+
+## Installation
+
+### Android
+Add your API key to your manifest file `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<application>
+   <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+   <meta-data
+     android:name="com.google.android.geo.API_KEY"
+     android:value="Your Google maps API Key Here"/>
+</application>
+```
+
+### iOS
+After installing the npm package, we need to install the pod.
+
+1. (cd ios && pod install)
+//# --- or ---
+2. npx pod-install
+
+3. **Enabling Google Maps**
+If you want to enable Google Maps on iOS, obtain the Google API key and edit your `AppDelegate.m` as follows:
+
+```diff
+#import <GoogleMaps/GoogleMaps.h>  //ad in imports at top.
+
+(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+[GMSServices provideAPIKey:@"_YOUR_API_KEY_"]; // add this line using the api key obtained from Google Console
+...
+
+```
+The [GMSServices provideAPIKey] should be the first call of the method.
+
+4. Also make sure that your Podfile deployment target is set to >= 13.0 at the top of your Podfile, eg:
+```ruby
+platform :ios, '13.0'
+
+```
+
+5. Add the following to your Podfile above the use_native_modules! function and run pod install in the ios folder:
+
+```ruby
+# React Native Maps dependencies
+rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-google-maps', :path => rn_maps_path
+```
+
 ## Local Configs
-In `modules/address-selection-autocomplete/options.js` provide your `GOOGLE_API_KEY`.
+In `modules/address-selection-autocomplete/options.js` provide your `GOOGLE_API_KEY` and configure and use `addressAutocompleteOptions` as your needs.
 
 ```javascript
 
-const GOOGLE_API_KEY = "Your Google API key";
+const GOOGLE_API_KEY = "Your Google Api Key";
+const addressAutocompleteOptions = {
+  placeholder : "Search",
+  minLength : 2,
+  fetchDetails: true,
+  onChangeText: (text) =>{},
+  onPress: (data, details) =>{},
+  onFail: () =>{},
+  onNotFound: () =>{},
+  styles:"",
+  predefinedPlaces: [],
+  predefinedPlacesAlwaysVisible: true,
+  autoFillOnNotFound: true,
+  disableScroll: false,
+  enablePoweredByContainer: false,
+  isRowScrollable: true,
+  listUnderlayColor: "#635634",
+  listViewDisplayed: "auto",
+  timeout: 20000,
+  currentLocation: false,
+  currentLocationLabel: "",
+  renderLeftButton: ()=>{},
+  renderRightButton: ()=>{}
+}
 
 ```
+
+### `addressAutocompleteOptions` properties:
+
+Here is the list of the properties that `addressAutocompleteOptions` object holds.
+
+| Name              | Type       | Description                                                    |
+| ---------------   |:----------:|:---------------------------------------------------------------|
+| placeholder       | `string`   | placeholder text for the TextInput field.             |
+| minLength | `number`   | minimum length of text to trigger a search.                 |
+| fetchDetails  | `boolean`  | get more place details about the selected option from the Place Details API. |
+| onChangeText  | `function`  |Callback function returns input text as it's param.|
+| onPress | `function` | Called when after a suggestion is selected, returns `data` and `details` as it's params.|
+| onFail | `function` | Called if an unspecified error comes back from the API.|
+| onNotFound | `function` | Called if the Google Places Details API returns a 'not found' code (when you press a suggestion).|
+| styles | `object` | Style object to style the search places field.           |
+| predefinedPlaces | `array` | Array of object, each object contains a locations. This location object will be something like this `{description: "", geometry{location: {lat:48.8152937, lng:2.4597668} } }`. |
+| predefinedPlacesAlwaysVisible | `boolean` | Shows predefined places at the top of the search results. By default it's false.|
+| autoFillOnNotFound | `boolean` | Displays the result from autocomplete if the place details api return not found.|
+| currentLocation | `boolean` | Will add a 'Current location' button at the top of the predefined places list. |
+| currentLocationLabel | `string` | Change the display label for the current location button.|
+| disableScroll | `boolean` | Disable scroll on the results list.|
+| enablePoweredByContainer | `boolean` | Show "powered by Google" at the bottom of the search results list. |
+| isRowScrollable | `boolean` | Enable/disable horizontal scrolling of a list result.|
+| listUnderlayColor | `string` | Underlay color of the list result when pressed. |
+| listViewDisplayed | `string` | Override the default behavior of showing the list (results) view. Can select one from `'auto' | true | false` options.|
+| renderLeftButton | `function` | Add a component to the left side of the Text Input|
+| renderRightButton | `function` | Add a component to the right side of the Text Input. |
+| timeout | `number` | How many milliseconds until the request will timeout. Default value is `20000` ms.|
 
 ## Manual Setup
 
@@ -31,34 +132,7 @@ const AddressAutoComplete = modules[module_index].value.navigator;  //module_ind
 
 ```
 
-## Params
 
-Below is the list of all params that can be passed to the module.
-
-| Name              | Type       | Description                                                    |
-| ---------------   |:----------:|:---------------------------------------------------------------|
-| googleApiKey `required` | `string`   | Your Google Maps API Key. Make sure you've enabled the Google Places API Web Service for that key using the Google API Console.|
-| placeholder       | `string`   | placeholder text for the TextInput field.             |
-| minLength | `number`   | minimum length of text to trigger a search.                 |
-| fetchDetails  | `boolean`  | get more place details about the selected option from the Place Details API. |
-| onChangeText  | `function`  |Callback function returns input text as it's param.|
-| onPress | `function` | Called when after a suggestion is selected, returns `data` and `details` as it's params.|
-| onFail | `function` | Called if an unspecified error comes back from the API.|
-| onNotFound | `function` | Called if the Google Places Details API returns a 'not found' code (when you press a suggestion).|
-| styles | `object` | Style object to style the search places field.           |
-| predefinedPlaces | `array` | Array of object, each object contains a locations. This location object will be something like this `{description: "", geometry{location: {lat:48.8152937, lng:2.4597668} } }`. |
-| predefinedPlacesAlwaysVisible | `boolean` | Shows predefined places at the top of the search results. By default it's false.|
-| autoFillOnNotFound | `boolean` | Displays the result from autocomplete if the place details api return not found.|
-| currentLocation | `boolean` | Will add a 'Current location' button at the top of the predefined places list. |
-| currentLocationLabel | `string` | Change the display label for the current location button.|
-| disableScroll | `boolean` | Disable scroll on the results list.|
-| enablePoweredByContainer | `boolean` | Show "powered by Google" at the bottom of the search results list. |
-| isRowScrollable | `boolean` | Enable/disable horizontal scrolling of a list result.|
-| listUnderlayColor | `string` | Underlay color of the list result when pressed. |
-| listViewDisplayed | `string` | Override the default behavior of showing the list (results) view. Can select one from `'auto' | true | false` options.|
-| renderLeftButton | `function` | Add a component to the left side of the Text Input|
-| renderRightButton | `function` | Add a component to the right side of the Text Input. |
-| timeout | `number` | How many milliseconds until the request will timeout. Default value is `20000` ms.|
 
 
 ## Contributing

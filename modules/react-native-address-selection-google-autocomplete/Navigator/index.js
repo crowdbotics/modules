@@ -6,11 +6,10 @@ import Maps from "../screens/map";
 
 const Stack = createStackNavigator();
 
-const Navigator = (props) => {
-  console.log("Props", props);
+const Navigator = () => {
   return (
     <Stack.Navigator screenOptions ={{ headerShown: false }}>
-      <Stack.Screen initialParams={props} name="AutoComplete" component={AutoComplete} />
+      <Stack.Screen name="AutoComplete" component={AutoComplete} />
       <Stack.Screen name="Maps" component={Maps} />
     </Stack.Navigator>
   );
