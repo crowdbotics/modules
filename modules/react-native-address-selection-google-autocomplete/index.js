@@ -4,7 +4,7 @@ import Navigator from "./Navigator";
 
 const AddressAutoComplete = () => {
   return (
-        <Navigator  />
+        <Navigator />
   );
 };
 

@@ -69,13 +69,13 @@ export const autoCompleteStyles = StyleSheet.create({
 
 const GOOGLE_API_KEY = "Your Google Api Key";
 const addressAutocompleteOptions = {
-  placeholder : "Search",
-  minLength : 2,
+  placeholder: "Search",
+  minLength: 2,
   fetchDetails: true,
-  onChangeText: (text) =>{},
-  onPress: (data, details) =>{},
-  onFail: () =>{},
-  onNotFound: () =>{},
+  onChangeText: (text) => {},
+  onPress: (data, details) => {},
+  onFail: () => {},
+  onNotFound: () => {},
   styles: "",
   predefinedPlaces: [],
   predefinedPlacesAlwaysVisible: true,
@@ -88,10 +88,9 @@ const addressAutocompleteOptions = {
   timeout: 20000,
   currentLocation: false,
   currentLocationLabel: "",
-  renderLeftButton: ()=>{},
-  renderRightButton: ()=>{}
-}
-
+  renderLeftButton: () => {},
+  renderRightButton: () => {}
+};
 
 export default {
   apiKey: GOOGLE_API_KEY,

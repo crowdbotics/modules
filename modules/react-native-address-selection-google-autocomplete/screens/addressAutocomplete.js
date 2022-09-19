@@ -7,12 +7,10 @@ import Icon from "react-native-vector-icons/Feather";
 navigator.geolocation = require("@react-native-community/geolocation");
 
 const AutoComplete = ({ navigation, route }) => {
-
   const [inputValue, setInputValue] = useState("");
   const [defaultValue, setDefaultValue] = useState("This is me");
   const options = useContext(OptionsContext);
   const { apiKey, autoCompleteStyles, settings } = options;
-
 
   const getAddressHandle = (data, address) => {
     if (settings.onPress) {
@@ -26,7 +24,7 @@ const AutoComplete = ({ navigation, route }) => {
       settings.onChangeText(text);
     }
     setInputValue(text);
-    setDefaultValue(text)
+    setDefaultValue(text);
   };
 
   const handleFail = () => {
@@ -43,7 +41,7 @@ const AutoComplete = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route?.params?.address) {
-      const {address} = route.params
+      const { address } = route.params;
       setDefaultValue(address.formatted_address);
       if (settings.onPress) {
         settings.onPress("", address);
@@ -51,7 +49,6 @@ const AutoComplete = ({ navigation, route }) => {
     }
   }, [route.params]);
 
- 
   return (
     <View style={autoCompleteStyles.mainContainer}>
       <View style={{ zIndex: 1000, height: inputValue ? "100%" : 50, width: "90%" }}>
