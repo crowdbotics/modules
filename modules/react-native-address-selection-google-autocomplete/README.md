@@ -59,13 +59,16 @@ In `modules/address-selection-autocomplete/options.js` provide your `GOOGLE_API_
 const GOOGLE_API_KEY = "Your Google Api Key";
 const addressAutocompleteOptions = {
   placeholder : "Search",
+  initialRegion: { latitude: 37.871666, longitude: -122.272781, latitudeDelta: 0.09219995, longitudeDelta: 0.09224524},
   minLength : 2,
   fetchDetails: true,
   onChangeText: (text) =>{},
-  onPress: (data, details) =>{},
+  onAddressSelect: (data, details) =>{},
   onFail: () =>{},
   onNotFound: () =>{},
   styles:"",
+  hideMap: true,
+  country: "",
   predefinedPlaces: [],
   predefinedPlacesAlwaysVisible: true,
   autoFillOnNotFound: true,
@@ -79,6 +82,8 @@ const addressAutocompleteOptions = {
   currentLocationLabel: "",
   renderLeftButton: ()=>{},
   renderRightButton: ()=>{}
+  markerUrl: "",
+  markerStyles: {}
 }
 
 ```
@@ -88,28 +93,33 @@ const addressAutocompleteOptions = {
 Here is the list of the properties that `addressAutocompleteOptions` object holds.
 
 | Name              | Type       | Description                                                    |
-| ---------------   |:----------:|:---------------------------------------------------------------|
-| placeholder       | `string`   | placeholder text for the TextInput field.             |
-| minLength | `number`   | minimum length of text to trigger a search.                 |
-| fetchDetails  | `boolean`  | get more place details about the selected option from the Place Details API. |
-| onChangeText  | `function`  |Callback function returns input text as it's param.|
-| onPress | `function` | Called when after a suggestion is selected, returns `data` and `details` as it's params.|
-| onFail | `function` | Called if an unspecified error comes back from the API.|
-| onNotFound | `function` | Called if the Google Places Details API returns a 'not found' code (when you press a suggestion).|
-| styles | `object` | Style object to style the search places field.           |
-| predefinedPlaces | `array` | Array of object, each object contains a locations. This location object will be something like this `{description: "", geometry{location: {lat:48.8152937, lng:2.4597668} } }`. |
+| ---------------|:----------:|:---------------------------------------------------------------|
+| placeholder    | `string`   | placeholder text for the TextInput field.             |
+| initialRegion  | `object`   | Initial region to be displayed on the map.             |
+| minLength      | `number`   | minimum length of text to trigger a search.                 |
+| fetchDetails   | `boolean`  | get more place details about the selected option from the Place Details API. |
+| onChangeText   | `function` |Callback function returns input text as it's param.|
+| onAddressSelect        | `function` | Called when after a suggestion is selected, returns `data` and `details` as it's params.|
+| onFail         | `function` | Called if an unspecified error comes back from the API.|
+| onNotFound     | `function` | Called if the Google Places Details API returns a 'not found' code (when you press a suggestion).|
+| styles         | `object`   | Style object to style the search places field.           |
+| hideMap        | `boolean`  | Set it `false` to select the address from the the map. |
+| country        | `string`   | Restrict search for a specific country by providing two character [ISO 3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) code of the country. |
+| markerUrl      | `string`   | Marker image url to be displayed on the map. |
+| markerStyles   | `object`   | Style object for the marker. |
+| predefinedPlaces| `array`   | Array of object, each object contains a locations. This location object will be something like this `{description: "", geometry{location: {lat:48.8152937, lng:2.4597668} } }`. |
 | predefinedPlacesAlwaysVisible | `boolean` | Shows predefined places at the top of the search results. By default it's false.|
 | autoFillOnNotFound | `boolean` | Displays the result from autocomplete if the place details api return not found.|
-| currentLocation | `boolean` | Will add a 'Current location' button at the top of the predefined places list. |
+| currentLocation| `boolean`  | Will add a 'Current location' button at the top of the predefined places list. |
 | currentLocationLabel | `string` | Change the display label for the current location button.|
-| disableScroll | `boolean` | Disable scroll on the results list.|
+| disableScroll  | `boolean`  | Disable scroll on the results list.|
 | enablePoweredByContainer | `boolean` | Show "powered by Google" at the bottom of the search results list. |
-| isRowScrollable | `boolean` | Enable/disable horizontal scrolling of a list result.|
-| listUnderlayColor | `string` | Underlay color of the list result when pressed. |
-| listViewDisplayed | `string` | Override the default behavior of showing the list (results) view. Can select one from `'auto' | true | false` options.|
-| renderLeftButton | `function` | Add a component to the left side of the Text Input|
+| isRowScrollable| `boolean`  | Enable/disable horizontal scrolling of a list result.|
+| listUnderlayColor| `string` | Underlay color of the list result when pressed. |
+| listViewDisplayed| `string` | Override the default behavior of showing the list (results) view. Can select one from `'auto' | true | false` options.|
+| renderLeftButton|`function`| Add a component to the left side of the Text Input|
 | renderRightButton | `function` | Add a component to the right side of the Text Input. |
-| timeout | `number` | How many milliseconds until the request will timeout. Default value is `20000` ms.|
+| timeout        |`number`| How many milliseconds until the request will timeout. Default value is `20000` ms.|
 
 ## Manual Setup
 

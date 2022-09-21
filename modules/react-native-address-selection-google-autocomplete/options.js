@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
-
+const ASPECT_RATIO = width / height;
 // Guideline sizes are based on standard ~5" screen mobile device
 const guidelineBaseWidth = 350;
 const guidelineBaseHeight = 680;
@@ -46,12 +46,45 @@ export const styles = StyleSheet.create({
     elevation: 5
   },
   marker: { height: 40, width: 40, resizeMode: "contain" },
-  tooltip: { height: 100, width: 150, backgroundColor: "#F4F1F1", borderRadius: 10, padding: 0, margin: 0 }
+  markerFixed: {
+    left: "50%",
+    marginLeft: -24,
+    marginTop: -48,
+    position: "absolute",
+    top: "50%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 11
+    },
+    shadowOpacity: 0.57,
+    shadowRadius: 15.19,
+
+    elevation: 23
+  },
+  done: {
+    zIndex: 1000,
+    left: "80%",
+    position: "absolute",
+    top: "85%",
+    backgroundColor: "#76b830",
+    padding: 5,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 11
+    },
+    shadowOpacity: 0.57,
+    shadowRadius: 15.19,
+    elevation: 23
+  }
 
 });
 
 export const autoCompleteStyles = StyleSheet.create({
-  mainContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingHorizontal: 15, paddingRight: 10, height: "100%" },
+  mainContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", paddingHorizontal: 15, height: "100%" },
+  autoCompleteCOntainer: { zIndex: 1000, width: "90%", alignSelf: "center" },
   textInputContainer: {
     marginTop: 15,
     zIndex: 1000
@@ -70,13 +103,21 @@ export const autoCompleteStyles = StyleSheet.create({
 const GOOGLE_API_KEY = "Your Google Api Key";
 const addressAutocompleteOptions = {
   placeholder: "Search",
+  initialRegion: {
+    latitude: 37.871666,
+    longitude: -122.272781,
+    latitudeDelta: 0.09219995170899864,
+    longitudeDelta: 0.0922 * ASPECT_RATIO
+  },
   minLength: 2,
   fetchDetails: true,
-  onChangeText: (text) => {},
-  onPress: (data, details) => {},
-  onFail: () => {},
-  onNotFound: () => {},
+  onChangeText: (text) => { },
+  onAddressSelect: (data, details) => { },
+  onFail: () => { },
+  onNotFound: () => { },
   styles: "",
+  hideMap: true,
+  country: "US",
   predefinedPlaces: [],
   predefinedPlacesAlwaysVisible: true,
   autoFillOnNotFound: true,
@@ -88,8 +129,10 @@ const addressAutocompleteOptions = {
   timeout: 20000,
   currentLocation: false,
   currentLocationLabel: "",
-  renderLeftButton: () => {},
-  renderRightButton: () => {}
+  renderLeftButton: () => { },
+  renderRightButton: () => { },
+  markerUrl: "https://cdn2.iconfinder.com/data/icons/IconsLandVistaMapMarkersIconsDemo/256/MapMarker_Marker_Outside_Chartreuse.png",
+  markerStyles: null
 };
 
 export default {

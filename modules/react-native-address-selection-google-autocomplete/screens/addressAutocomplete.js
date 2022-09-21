@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Pressable, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { OptionsContext } from "@options";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Icon from "react-native-vector-icons/Feather";
@@ -8,13 +8,14 @@ navigator.geolocation = require("@react-native-community/geolocation");
 
 const AutoComplete = ({ navigation, route }) => {
   const [inputValue, setInputValue] = useState("");
-  const [defaultValue, setDefaultValue] = useState("This is me");
+  const [defaultValue, setDefaultValue] = useState("");
   const options = useContext(OptionsContext);
   const { apiKey, autoCompleteStyles, settings } = options;
 
   const getAddressHandle = (data, address) => {
-    if (settings.onPress) {
-      settings.onPress(data, address);
+    console.log(data, "==========", address);
+    if (settings.onAddressSelect) {
+      settings.onAddressSelect(data, address);
     }
     setDefaultValue(data.description);
   };
@@ -42,16 +43,17 @@ const AutoComplete = ({ navigation, route }) => {
   useEffect(() => {
     if (route?.params?.address) {
       const { address } = route.params;
+      console.log("=============>>>>", address);
       setDefaultValue(address.formatted_address);
-      if (settings.onPress) {
-        settings.onPress("", address);
+      if (settings.onAddressSelect) {
+        settings.onAddressSelect("", address);
       }
     }
   }, [route.params]);
 
   return (
-    <View style={autoCompleteStyles.mainContainer}>
-      <View style={{ zIndex: 1000, height: inputValue ? "100%" : 50, width: "90%" }}>
+    <View style={[autoCompleteStyles.mainContainer, { height: inputValue ? "100%" : 50 }]}>
+      <View style={[autoCompleteStyles.autoCompleteCOntainer, { width: settings.hideMap ? "100%" : "90%" }]}>
         <GooglePlacesAutocomplete
           autoFillOnNotFound={settings.autoFillOnNotFound || false}
           placeholder={settings.placeholder || "Address"}
@@ -63,13 +65,11 @@ const AutoComplete = ({ navigation, route }) => {
             onChangeText: (text) => handleChange(text),
             value: defaultValue
           }}
-          getDefaultValue={() => {
-            return defaultValue; // text input default value
-          }}
           onPress={(data, details = null) => getAddressHandle(data, details)}
           query={{
             key: apiKey,
-            language: "en"
+            language: "en",
+            components: `country:${settings.country}`
           }}
           styles={settings.styles || autoCompleteStyles}
           currentLocation={settings.currentLocation}
@@ -88,9 +88,12 @@ const AutoComplete = ({ navigation, route }) => {
           renderRightButton={settings.renderRightButton}
         />
       </View>
-      <Pressable onPress={() => navigation.navigate("Maps")}>
-        <Icon name="map-pin" size={30} color="#95C93F" style={{ marginTop: 20 }} />
-      </Pressable>
+      {
+        !settings.hideMap && <TouchableOpacity onPress={() => navigation.navigate("Maps")}>
+          <Icon name="map-pin" size={30} color="#95C93F" style={{ marginTop: 20 }} />
+        </TouchableOpacity>
+      }
+
     </View>
   );
 };
