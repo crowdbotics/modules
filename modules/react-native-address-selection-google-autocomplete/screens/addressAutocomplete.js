@@ -13,7 +13,6 @@ const AutoComplete = ({ navigation, route }) => {
   const { apiKey, autoCompleteStyles, settings } = options;
 
   const getAddressHandle = (data, address) => {
-    console.log(data, "==========", address);
     if (settings.onAddressSelect) {
       settings.onAddressSelect(data, address);
     }
@@ -43,7 +42,6 @@ const AutoComplete = ({ navigation, route }) => {
   useEffect(() => {
     if (route?.params?.address) {
       const { address } = route.params;
-      console.log("=============>>>>", address);
       setDefaultValue(address.formatted_address);
       if (settings.onAddressSelect) {
         settings.onAddressSelect("", address);
