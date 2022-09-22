@@ -24,19 +24,50 @@ platform(:android) do
     gradle(task: 'test')
   end
 
-  desc('Submit a new Beta Build')
+  desc('deploy appetize and build')
+  lane(:deploy_and_build) do
+    deploy_appetize()
+    build_aab()
+  end
+
+  desc('Submit a new Internal Build')
+  lane(:internal) do
+    begin
+      internal_files = google_play_track_version_codes(track:"internal")
+
+      internal_files.length > 0
+
+        gradle(task: 'clean bundleRelease')
+
+        upload_to_play_store(track: 'internal',
+                             version_code: ENV["CIRCLE_BUILD_NUM"].to_i,
+                             version_name: ENV["CIRCLE_BUILD_NUM"].to_s,
+                             track_promote_to: 'alpha',
+                             skip_upload_metadata: true)
+    rescue => ex
+      UI.error(ex)
+    end
+  end
+
+  desc('Promote from internal to alpha')
+  lane(:alpha) do
+    upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'alpha')
+  end
+
+  desc('Promote from internal to beta')
   lane(:beta) do
-    gradle(task: 'clean assembleRelease')
+    versions = google_play_track_version_codes(track: "internal")
+    version_code = versions[0]
 
-    upload_to_play_store(track: 'beta')
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+    upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'beta', version_code: version_code, skip_upload_metadata: true)
   end
 
   desc('Deploy a new version to the Google Play')
-  lane(:deploy) do
-    upload_to_play_store(track: 'beta', track_promote_to: 'production')
+  lane(:production) do
+    versions = google_play_track_version_codes(track: "beta")
+    version_code = versions[0]
+
+    upload_to_play_store(rollout: '1', track: 'beta', track_promote_to: 'production', version_code: version_code, skip_upload_metadata: true)
   end
 
   desc('Deployment to Appetize')
