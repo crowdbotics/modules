@@ -49,29 +49,9 @@ depends on. Also set ``SITE_ID``:
         'django.contrib.flatpages',
 
         'oscar.config.Shop',
-        'oscar.apps.analytics.apps.AnalyticsConfig',
-        'oscar.apps.checkout.apps.CheckoutConfig',
-        'oscar.apps.address.apps.AddressConfig',
-        'oscar.apps.shipping.apps.ShippingConfig',
-        'oscar.apps.catalogue.apps.CatalogueConfig',
         'oscar.apps.catalogue.reviews.apps.CatalogueReviewsConfig',
-        'oscar.apps.communication.apps.CommunicationConfig',
-        'oscar.apps.partner.apps.PartnerConfig',
-        'oscar.apps.basket.apps.BasketConfig',
-        'oscar.apps.payment.apps.PaymentConfig',
-        'oscar.apps.offer.apps.OfferConfig',
-        'oscar.apps.order.apps.OrderConfig',
-        'oscar.apps.customer.apps.CustomerConfig',
         'oscar.apps.search.apps.SearchConfig',
-        'oscar.apps.voucher.apps.VoucherConfig',
-        'oscar.apps.wishlists.apps.WishlistsConfig',
-        'oscar.apps.dashboard.apps.DashboardConfig',
-        'oscar.apps.dashboard.reports.apps.ReportsDashboardConfig',
-        'oscar.apps.dashboard.users.apps.UsersDashboardConfig',
-        'oscar.apps.dashboard.orders.apps.OrdersDashboardConfig',
-        'oscar.apps.dashboard.catalogue.apps.CatalogueDashboardConfig',
         'oscar.apps.dashboard.offers.apps.OffersDashboardConfig',
-        'oscar.apps.dashboard.partners.apps.PartnersDashboardConfig',
         'oscar.apps.dashboard.pages.apps.PagesDashboardConfig',
         'oscar.apps.dashboard.ranges.apps.RangesDashboardConfig',
         'oscar.apps.dashboard.reviews.apps.ReviewsDashboardConfig',
@@ -86,6 +66,11 @@ depends on. Also set ``SITE_ID``:
         'sorl.thumbnail',   # Default thumbnail backend, can be replaced
         'django_tables2',
     ]
+    OSCARAPI_OVERRIDE_MODULES = ["modules.ecommerce.api_extensions"]
+
+    MODULES_APPS = get_modules()
+
+    INSTALLED_APPS += THIRD_PARTY_APPS + MODULES_APPS + OSCAR_APPS + LOCAL_APPS
 
     SITE_ID = 1
 
