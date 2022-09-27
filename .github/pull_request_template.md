@@ -16,14 +16,26 @@ In order to run the included demo app, run `yarn run bootstrap` and then `cd dem
 
 ## Review checklist for new or updated modules
 
-[ ] I have made no modules changes - ignore this section questions in that case
-[ ] I have included a `meta.json` file in the module's root directory
-[ ] I have included a `preview.png` image in the module's root directory
-[ ] `yarn run parse` checks pass
-[ ] I updated the modules build (`/dist` directory) with `yarn run dist`
-[ ] `yarn run demo` and `yarn run add app-menu <your-module>` runs correctly
-[ ] **"Running the demo"** app shows the App Menu screen with an entry for your module
-[ ] Clicking your module entry in the menu loads your module's initial screen correctly
+Please go through the following checks:
+
+- [ ] I have made no modules changes - ignore this section questions in that case
+- [ ] I have included a `meta.json` file in the module's root directory
+- [ ] I have included a `preview.png` image in the module's root directory
+- [ ] `yarn run parse` checks pass
+- [ ] I updated the modules build (`/dist` directory) with `yarn run dist`
+
+React Native modules specific checks:
+
+- [ ] `yarn run demo` and `yarn run add app-menu <your-module>` runs correctly
+- [ ] **"Running the demo"** app shows the App Menu screen with an entry for your module
+- [ ] Clicking your module entry in the menu loads your module's initial screen correctly
+
+Django modules specific checks:
+
+- [ ] `python manage.py show_urls` shows that the module's urls are resolved correctly
+- [ ] I have checked that the migrations are detected and run correctly
+
+If your module is a "supermodule" and therefore contains both React Native and Django code, then please go through all of the checks above.
 
 ## Review checklist for scaffold changes
 
