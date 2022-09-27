@@ -1,0 +1,19 @@
+{
+  "name": "@modules/live-camera-filters",
+  "version": "1.0.0",
+  "description": "Module that shows available routes in a menu with links",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "@react-native-community/cameraroll": "^4.1.2",
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-filter-camera": "0.1.18"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {
+    "@react-native-community/cameraroll": "^4.1.2",
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-filter-camera": "0.1.18"
+  }
+}

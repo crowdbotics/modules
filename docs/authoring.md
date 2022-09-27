@@ -242,6 +242,11 @@ export default {
 
 Its worth noting that the options file must `export default` a valid JSON object.
 
+<<<<<<< HEAD
+=======
+Styles rules values can only be literal numbers or strings, no variable references allowed.
+
+>>>>>>> edb7c8072aaed6b661f9236f5dfec1851a714215
 ## Screen Modules
 
 Screen modules are client only modules that depend on `react` and `react-native` libraries exclusively, and are compatible with the initial release of Studio.
