@@ -39,11 +39,11 @@ If your module is a "supermodule" and therefore contains both React Native and D
 
 ## Review checklist for scaffold changes
 
-[ ] I have made no scaffold changes - ignore this section questions in that case
-[ ] `yarn run template` produces no changes
-[ ] `yarn run raw && yarn run cookie` produces no changes, except for `yarn.lock`
-[ ] `yarn run demo` finishes successfully, `demo` directory gets created locally
-[ ] **"Running the demo"** opens the app correctly in the welcome screen
+- [ ] I have made no scaffold changes - ignore this section questions in that case
+- [ ] `yarn run template` produces no changes
+- [ ] `yarn run raw && yarn run cookie` produces no changes, except for `yarn.lock`
+- [ ] `yarn run demo` finishes successfully, `demo` directory gets created locally
+- [ ] **"Running the demo"** opens the app correctly in the welcome screen
 
 ## Changes introduced
 
