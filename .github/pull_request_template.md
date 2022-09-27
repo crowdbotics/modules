@@ -34,6 +34,7 @@ Django modules specific checks:
 
 - [ ] `python manage.py show_urls` shows that the module's urls are resolved correctly
 - [ ] I have checked that the migrations are detected and run correctly
+- [ ] I have checked that the admin is working correctly for the module
 
 If your module is a "supermodule" and therefore contains both React Native and Django code, then please go through all of the checks above.
 
