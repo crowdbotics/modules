@@ -28,7 +28,7 @@ export default {
       cookie: {
         directory: path.join(DISTRIBUTION_DIRECTORY, "cookie"),
         config: {
-          project_name: "",
+          project_name: "{{cookiecutter.project_name}}",
           project_slug:
             "{{cookiecutter.project_name|lower|replace(' ', '')|replace('-', '_')}}",
           project_dash_slug: "{{cookiecutter.project_slug|replace('_', '-')}}",
