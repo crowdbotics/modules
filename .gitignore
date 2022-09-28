@@ -199,5 +199,3 @@ celerybeat-schedule
 venv/
 ENV/
 myvenv/
-
-.idea/
