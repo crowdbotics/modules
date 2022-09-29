@@ -107,11 +107,8 @@ demo
 
 notebooks
 
-<<<<<<< HEAD
-=======
 .idea
 
->>>>>>> edb7c8072aaed6b661f9236f5dfec1851a714215
 ## Python template
 
 # Byte-compiled / optimized / DLL files
@@ -202,8 +199,3 @@ celerybeat-schedule
 venv/
 ENV/
 myvenv/
-<<<<<<< HEAD
-=======
-
-.idea/
->>>>>>> edb7c8072aaed6b661f9236f5dfec1851a714215
