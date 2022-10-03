@@ -38,8 +38,8 @@ platform(:android) do
     rescue => ex
       upload = false
       UI.error(ex)
-    end
-    if upload == true
+    else
+      if upload == true and internal_files.length > 0
         gradle(task: 'clean bundleRelease')
 
         upload_to_play_store(track: 'internal',
@@ -47,6 +47,8 @@ platform(:android) do
                              version_name: ENV["CIRCLE_BUILD_NUM"].to_s,
                              track_promote_to: 'alpha',
                              skip_upload_metadata: true)
+      end
+    end
   end
 
   desc('Promote from internal to alpha')
