@@ -1,0 +1,5 @@
+{
+  "title": "Audio Player module",
+  "description": "This module provides simple player functionalities for both android and ios platforms.",
+  "root": "/modules/audio-player"
+}
