@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Image, LogBox, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Image, LogBox, SafeAreaView, StyleSheet, PermissionsAndroid, Text, TouchableOpacity, View, Alert } from "react-native";
 import Slider from "react-native-slider";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AudioRecorderPlayer from "react-native-audio-recorder-player";
@@ -7,7 +7,7 @@ import PlayButton from "./playButton";
 import TracksList from "./trackList";
 import { tracks } from "./options";
 import PropTypes from "prop-types";
-
+import RNFetchBlob from "rn-fetch-blob";
 const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackItemSelect }) => {
   const [isAlreadyPlay, setIsAlreadyPlay] = useState(false);
   const [duration, setDuration] = useState("00:00:00");
@@ -101,11 +101,63 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
       }
     });
   };
+  const requestToPermissions = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: "Audio Player",
+          message: "App needs access to your Files... ",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) { startDownload(); }
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  };
 
-  LogBox.ignoreLogs(["Warning: componentWillReceiveProps has been renamed, and is not recommended for use"]);
+  const getUrlExtension = (url) => {
+    return url.split(/[#?]/)[0].split(".").pop().trim();
+  };
+
+  const startDownload = async () => {
+    const { path, title } = selectedTrack;
+
+    const ext = await getUrlExtension(path);
+
+    RNFetchBlob.config({
+      fileCache: true,
+      appendExt: ext,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        title: title,
+        path: RNFetchBlob.fs.dirs.DownloadDir + `${title}`, // Android platform
+        description: "Downloading the file"
+      }
+    }
+    ).fetch("GET", path)
+      .then(res => {
+        Alert.alert("Download Completed", `The file is save to ${res.path()}`);
+      }
+      );
+  };
+
+  useEffect(() => {
+    LogBox.ignoreAllLogs();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.downloadContainer}>
+      <TouchableOpacity onPress={() => requestToPermissions()}>
+          <FontAwesome name="download" size={25} color="#93A8B3" />
+      </TouchableOpacity>
+      </View>
+
       <View style={{ alignItems: "center" }}>
         <View style={styles.coverContainer}>
           <Image
@@ -117,7 +169,7 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
         </View>
 
         <View style={styles.trackName}>
-          <Text style={[styles.textDark, { fontSize: 18, fontWeight: "500" }]}>
+          <Text style={[styles.textDark]}>
             {selectedTrack?.title || ""}
           </Text>
         </View>
@@ -152,18 +204,18 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
         </TouchableOpacity>
         {!isAlreadyPlay
           ? (
-          <PlayButton onPress={() => onStartPress()} state="play" />
+            <PlayButton onPress={() => onStartPress()} state="play" />
             )
           : (
-          <PlayButton onPress={() => onPausePress()} state="pause" />
+            <PlayButton onPress={() => onPausePress()} state="pause" />
             )}
         <TouchableOpacity onPress={() => onForward()}>
           <FontAwesome name="forward" size={32} color="#93A8B3" />
         </TouchableOpacity>
       </View>
-      <TracksList onTrackItemPress={onTrackItemPress}/>
+      <TracksList onTrackItemPress={onTrackItemPress} />
     </SafeAreaView>
-  //
+    //
   );
 };
 
@@ -188,7 +240,9 @@ const styles = StyleSheet.create({
   },
   titleContainer: { alignItems: "center", marginTop: 24 },
   textDark: {
-    color: "#3D425C"
+    color: "#3D425C",
+    fontSize: 18,
+    fontWeight: "500"
   },
   buttonContainer: {
     flexDirection: "row",
@@ -196,8 +250,10 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   coverContainer: {
-    marginTop: 20,
-    width: 100,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
     height: 100,
     shadowColor: "#5D3F6A",
     shadowOffset: { height: 15 },
@@ -230,7 +286,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between"
   },
-  trackName: { alignItems: "center", marginTop: 20 }
+  trackName: { alignItems: "center", marginTop: 20 },
+  downloadContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingRight: 30,
+    paddingTop: 20
+  }
 });
 export default {
   title: "AudioPlayer",

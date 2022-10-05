@@ -6,7 +6,8 @@
 	"main": "index.js",
 	"x-dependencies": {
 		"react-native-audio-recorder-player": "2.6.2",
-		"react-native-slider": "^0.11.0"
+		"react-native-slider": "^0.11.0",
+		"rn-fetch-blob": "0.12.0"
 	},
 	"author": "Crowdbotics",
 	"license": "ISC",
