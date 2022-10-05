@@ -58,7 +58,6 @@ export const tracks = [
       title: '', //Title of the audio
       artwork: '', //Url of the image
       album: '', //Title for album
-      duration: , //Duration of the audio
   },
 ```
 
@@ -67,9 +66,13 @@ export const tracks = [
 Below is the list of all Params with their data types that are considered primitive or the basic ones needed for our module to work.
 
 | Params              | Data Types         | Description                                                       |
-| -----------------------|:------------------:|:---------------------------------------------------------------|
+| --------------------|:------------------:|:---------------------------------------------------------------|
 | onPlay              | `function` | Called when an audio start playing.                     |
 | onPause             | `function` | Called when the audio is stopped.   |
+| onBackwardCall      | `function` | Called when backward button of the player is clicked.    |
+| onForwardCall       | `function` | Called when forward button of the player is clicked.   |
+| onTrackItemSelect   | `function` | Called when user clicks on an audio in the audio list. Returns an object containing the details about the selected audio track. |
+
 
 ## Contributing
 

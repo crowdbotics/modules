@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, LogBox, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Slider from "react-native-slider";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import AudioRecorderPlayer from "react-native-audio-recorder-player";
 import PlayButton from "./playButton";
 import TracksList from "./trackList";
 import { tracks } from "./options";
-const AudioPlayer = ({ onPlay, onPause }) => {
+import PropTypes from "prop-types";
+
+const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackItemSelect }) => {
   const [isAlreadyPlay, setIsAlreadyPlay] = useState(false);
   const [duration, setDuration] = useState("00:00:00");
   const [timeElapsed, setTimeElapsed] = useState("00:00:00");
@@ -30,6 +32,9 @@ const AudioPlayer = ({ onPlay, onPause }) => {
     }
     onStopPress().then(async () => {
       await onStartPress();
+      if (onBackwardCall) {
+        onBackwardCall();
+      }
     });
   };
 
@@ -76,6 +81,9 @@ const AudioPlayer = ({ onPlay, onPause }) => {
 
     onStopPress().then(async () => {
       await onStartPress();
+      if (onForwardCall) {
+        onForwardCall();
+      }
     });
   };
 
@@ -88,8 +96,13 @@ const AudioPlayer = ({ onPlay, onPause }) => {
     setSelectedTrack(item);
     onStopPress().then(async () => {
       await onStartPress();
+      if (onTrackItemSelect) {
+        onTrackItemSelect(item);
+      }
     });
   };
+
+  LogBox.ignoreLogs(["Warning: componentWillReceiveProps has been renamed, and is not recommended for use"]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -152,6 +165,14 @@ const AudioPlayer = ({ onPlay, onPause }) => {
     </SafeAreaView>
   //
   );
+};
+
+AudioPlayer.propTypes = {
+  onPlay: PropTypes.func,
+  onPause: PropTypes.func,
+  onBackwardCall: PropTypes.func,
+  onForwardCall: PropTypes.func,
+  onTrackItemSelect: PropTypes.func
 };
 
 const styles = StyleSheet.create({
