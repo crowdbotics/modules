@@ -1,0 +1,14 @@
+{
+  "name": "@modules/image-gallery",
+  "version": "1.0.0",
+  "description": "React native based module for accessing, and displaying images, albums and videos from the device using.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "@react-native-camera-roll/camera-roll" : "5.0.2",
+    "prop-types": "15.8.1"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}

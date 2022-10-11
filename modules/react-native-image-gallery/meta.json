@@ -1,0 +1,5 @@
+{
+  "title": "Image Gallery module",
+  "description": "React native based module for accessing, and displaying images, albums and videos from the device using",
+  "root": "/modules/image-gallery"
+}
