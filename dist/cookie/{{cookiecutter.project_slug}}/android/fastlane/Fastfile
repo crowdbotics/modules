@@ -48,11 +48,6 @@ platform(:android) do
     end
   end
 
-  desc('Download metadata')
-  lane(:metadata_download) do
-    supply init
-  end
-
   desc('Promote from internal to alpha')
   lane(:alpha) do
     upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'alpha')
