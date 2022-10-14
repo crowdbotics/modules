@@ -144,7 +144,7 @@ jobs:
       - run:
           name: get android metadata
           command:  |
-            if [ $MOBILE_LANE == "production" ]; then
+            if [ $MOBILE_LANE == "internal" ]; then
               git config --global user.email "team@crowdbotics.com"
               git config --global user.name "Crowdbotics"
               rm -rf fastlane/metadata
