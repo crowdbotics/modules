@@ -151,7 +151,7 @@ jobs:
               git add fastlane/metadata
               git commit -m "CI Work: remove metadata and screenshots to download new one"
               git push -q https://$GITHUB_WRITE_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git master
-              bundle exec fastlane supply init
+              bundle exec fastlane metadata_download
               git add fastlane/metadata app/build.gradle fastlane/README.md
               git commit -m "CI Work: metadata and screenshots updated"
               git push -q https://$GITHUB_WRITE_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git master
