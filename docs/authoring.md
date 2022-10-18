@@ -242,7 +242,6 @@ export default {
 
 Its worth noting that the options file must `export default` a valid JSON object.
 
-
 Styles rules values can only be literal numbers or strings, no variable references allowed.
 
 ## Screen Modules
