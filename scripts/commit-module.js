@@ -1,4 +1,4 @@
-import fs, { existsSync } from "fs";
+import fs from "fs";
 import fse from "fs-extra";
 import path from "path";
 import config from "./config.js";
@@ -18,66 +18,64 @@ const copy = (origin, target) => {
 
 // define ENUMS
 const MODULE_TYPE = {
-    BACKEND: "backend",
-    FRONTEND: "frontend",
-    SCREEN: "screen",
-    FULL: "full",
-}
+  BACKEND: "backend",
+  FRONTEND: "frontend",
+  SCREEN: "screen",
+  FULL: "full"
+};
 
 const getModuleType = (moduleName) => {
-    // if name starts with django, it's a backend only module
-    if (moduleName.startsWith("django")) {
-        return MODULE_TYPE.BACKEND;
-    }
-    // if name starts with screen, it's a screen only module
-    if (moduleName.startsWith("screen")) {
-        return MODULE_TYPE.SCREEN;
-    }
-    // if name starts with react-native, it's a frontend only module
-    if (moduleName.startsWith("react-native")) {
-        return MODULE_TYPE.FRONTEND;
-    }
-    // otherwise it's a full module
-    return MODULE_TYPE.FULL;
-
-}
+  // if name starts with django, it's a backend only module
+  if (moduleName.startsWith("django")) {
+    return MODULE_TYPE.BACKEND;
+  }
+  // if name starts with screen, it's a screen only module
+  if (moduleName.startsWith("screen")) {
+    return MODULE_TYPE.SCREEN;
+  }
+  // if name starts with react-native, it's a frontend only module
+  if (moduleName.startsWith("react-native")) {
+    return MODULE_TYPE.FRONTEND;
+  }
+  // otherwise it's a full module
+  return MODULE_TYPE.FULL;
+};
 
 const copyFullModule = (module, originModuleDir, meta) => {
   const backendeModuleName = module.replace(/-/g, "_");
-  const sourceBackend= path.join(demoDir, "backend",  "modules", backendeModuleName, meta.root);
+  const sourceBackend = path.join(demoDir, "backend", "modules", backendeModuleName, meta.root);
   const destBackend = path.join(originModuleDir, "backend", "modules", backendeModuleName);
-  console.log("backend copying ...\n", sourceBackend, destBackend)
+  console.log("backend copying ...\n", sourceBackend, destBackend);
   copy(sourceBackend, destBackend);
 
-  console.log("\n")
-  const sourceFrontend= path.join(demoDir, "modules", module, meta.root);
+  console.log("\n");
+  const sourceFrontend = path.join(demoDir, "modules", module, meta.root);
   const destFrontend = path.join(originModuleDir, "modules", module);
-  console.log("frontend copying ...\n", sourceFrontend, destFrontend)
+  console.log("frontend copying ...\n", sourceFrontend, destFrontend);
   copy(sourceFrontend, destFrontend);
-}
+};
 
 const copyBackendModule = (module, originModuleDir, meta) => {
   const backendeModuleName = module.replace(/-/g, "_");
-  const sourceBackend= path.join(demoDir, "backend",  "modules", backendeModuleName);
+  const sourceBackend = path.join(demoDir, "backend", "modules", backendeModuleName);
   const destBackend = path.join(originModuleDir, backendeModuleName);
-  console.log("backend copying ...\n", sourceBackend, destBackend)
+  console.log("backend copying ...\n", sourceBackend, destBackend);
   copy(sourceBackend, destBackend);
-}
-
+};
 
 const copyFrontendModule = (module, originModuleDir, meta) => {
-  const sourceFrontend= path.join(demoDir, meta.root);
+  const sourceFrontend = path.join(demoDir, meta.root);
   const destFrontend = path.join(originModuleDir);
-  console.log("frontend copying ...\n", sourceFrontend, destFrontend)
+  console.log("frontend copying ...\n", sourceFrontend, destFrontend);
   copy(sourceFrontend, destFrontend);
-}
+};
 
 const copyScreenModule = (module, originModuleDir, meta) => {
-  const sourceFrontend= path.join(demoDir, meta.root);
+  const sourceFrontend = path.join(demoDir, meta.root);
   const destFrontend = path.join(originModuleDir);
-  console.log("frontend copying ...\n", sourceFrontend, destFrontend)
+  console.log("frontend copying ...\n", sourceFrontend, destFrontend);
   copy(sourceFrontend, destFrontend);
-}
+};
 
 modules.forEach((module) => {
   process.chdir(cwd);
@@ -103,4 +101,3 @@ modules.forEach((module) => {
       console.log("Module type not recognized");
   }
 });
-
