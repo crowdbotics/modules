@@ -26,7 +26,7 @@ const BondConfirmation = () => {
       <Text style={styles.requirementsText}>{requirements}</Text>
       <View style={styles.detailsContainer}>
         <View style={styles.flexRow}>
-          <Text style={[styles.fnt16, styles.bold]}>Recieving ammount</Text>
+          <Text style={[styles.fnt16, styles.bold]}>Receiving amount</Text>
           <Text style={styles.fnt18}>{tokenValue.toFixed(2)} ETH</Text>
         </View>
         <View style={styles.flexRow}>
