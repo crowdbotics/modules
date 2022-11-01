@@ -147,3 +147,14 @@ Lint modules source code with a pre-configured ESLint setup:
 ```
 yarn lint
 ```
+
+
+## Copy an in developmet module from demo to root modules
+
+This is helpful during the development when you make changes to the demo directory on a specific module, and you are done making the changes you want to copy the code from `demo/modules/[<module_name>]` and `demo/backend/modules/[<module_name>]` to the main modules directory `modules/[<module_name>]`
+
+Run following command:
+
+```
+yarn run commit-module [<module_name>]
+```
