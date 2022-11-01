@@ -3,7 +3,9 @@ import {
   Text,
   View,
   StyleSheet,
-  Image, ScrollView, TouchableHighlight
+  Image,
+  ScrollView,
+  TouchableHighlight
 } from "react-native";
 
 const TaskSummary = () => {
@@ -12,24 +14,25 @@ const TaskSummary = () => {
       <View style={styles.walletCard}>
         <View style={styles.walletInner}>
           <View style={styles.imgContainer}>
-            <Image
-              source={require("./assets/edit.png")}
-              style={styles.image}
-            />
+            <Image source={require("./assets/edit.png")} style={styles.image} />
           </View>
           <View style={styles.walletCarder}>
             <View style={styles.cardTop}>
               <Text style={styles.eventName}>Tasker name</Text>
               <Text style={styles.view}>$40/hr</Text>
             </View>
-            <Text style={styles.eventType}><Text style={styles.rating}>4.9</Text> (15 Review)</Text>
+            <Text style={styles.eventType}>
+              <Text style={styles.rating}>4.9</Text> (15 Review)
+            </Text>
             <Text style={styles.date}>15 Cleaning Jobs</Text>
           </View>
         </View>
       </View>
       <View style={styles.info}>
         <Text style={styles.infoTitle}>How I can help</Text>
-        <Text style={styles.infoText}>Fast and has great attention to details, thatdescribes my work! </Text>
+        <Text style={styles.infoText}>
+          Fast and has great attention to details, that describes my work!{" "}
+        </Text>
       </View>
       <View style={styles.reviewContainer}>
         <Text style={styles.review}>Review booking details</Text>
@@ -50,9 +53,7 @@ const TaskSummary = () => {
           <Text style={styles.dateTime}>LOCATION</Text>
           <Text style={styles.locText}>1077 Brown Bear Drive</Text>
         </View>
-        <View
-          style={styles.line}
-        />
+        <View style={styles.line} />
         <Text style={styles.service}>Service Details</Text>
         <View style={styles.firstContainer}>
           <Text style={styles.rate}>TASK SIZE</Text>
@@ -68,7 +69,6 @@ const TaskSummary = () => {
         </View>
       </View>
       <Button>Confirm</Button>
-
     </ScrollView>
   );
 };
@@ -116,21 +116,48 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   image: { height: 32, width: 32, resizeMode: "contain" },
-  cardTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", width: 250 },
-  view: { fontSize: 30, color: "#000", fontWeight: "bold", marginBottom: -30, marginRight: -30 },
+  cardTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: 250
+  },
+  view: {
+    fontSize: 30,
+    color: "#000",
+    fontWeight: "bold",
+    marginBottom: -30,
+    marginRight: -30
+  },
   container: { backgroundColor: "#DADADA26", flex: 1 },
   info: { marginHorizontal: 15, marginVertical: 20 },
   infoTitle: { fontSize: 18 },
   infoText: { fontSize: 14, color: "#7E7D7D", marginVertical: 5 },
-  reviewContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "#fff", paddingHorizontal: 20, paddingVertical: 20 },
+  reviewContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 20
+  },
   review: { fontSize: 18, color: "#000" },
   edit: { color: "#D70404", fontSize: 12 },
   text: { fontSize: 12, marginVertical: 15, marginHorizontal: 30 },
-  firstContainer: { flexDirection: "row", justifyContent: "flex-start", alignItems: "center" },
+  firstContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
   taskDetails: { backgroundColor: "#fff", padding: 20, marginHorizontal: 20 },
   rate: { fontSize: 10, width: 100 },
   dateTime: { fontSize: 10 },
-  secondContainer: { flexDirection: "row", justifyContent: "flex-start", alignItems: "center", paddingVertical: 5 },
+  secondContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    paddingVertical: 5
+  },
   location: { marginTop: 10 },
   locText: { marginVertical: 5 },
   service: { color: "#7E7D7D", fontSize: 12, marginBottom: 10 },
@@ -148,14 +175,21 @@ const Button = (props) => {
         style={[
           btnStyles.button,
           {
-            backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
+            backgroundColor: props.backgroundColor
+              ? props.backgroundColor
+              : "#000000",
             height: props.height ? props.height : 49,
             borderWidth: props.borderWidth ? props.borderWidth : 0,
             borderColor: props.borderColor ? props.borderColor : "#000000"
           }
         ]}
       >
-        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>
+        <Text
+          style={[
+            btnStyles.text,
+            { color: props.color ? props.color : "#ffffff" }
+          ]}
+        >
           {props.children}
         </Text>
       </View>
