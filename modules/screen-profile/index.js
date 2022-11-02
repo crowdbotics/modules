@@ -1,5 +1,13 @@
 import React from "react";
-import { ScrollView, Text, View, StyleSheet, TouchableHighlight, Image, TextInput } from "react-native";
+import {
+  ScrollView,
+  Text,
+  View,
+  StyleSheet,
+  TouchableHighlight,
+  Image,
+  TextInput
+} from "react-native";
 
 const pressed = () => {
   console.log("pressed");
@@ -22,24 +30,26 @@ const Profile = () => {
         </View>
         <View style={styles.mainBody}>
           <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Name</Text>
+            <Text style={styles.textLabel}>Name</Text>
             <Input placeholder="Name" />
           </View>
           <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Email address</Text>
+            <Text style={styles.textLabel}>Email address</Text>
             <Input placeholder="Email address" />
           </View>
           <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Gender</Text>
+            <Text style={styles.textLabel}>Gender</Text>
             <Input placeholder="Gender" />
           </View>
           <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Password</Text>
+            <Text style={styles.textLabel}>Password</Text>
             <Input placeholder="Password" />
           </View>
         </View>
         <View style={styles.btnSave}>
-          <Button onPress={pressed} height={49}>Save</Button>
+          <Button onPress={pressed} height={49}>
+            Save
+          </Button>
         </View>
       </View>
     </ScrollView>
@@ -92,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#FF6848"
   },
-  lextLabel: {
+  textLabel: {
     fontSize: 14,
     marginLeft: 15,
     marginBottom: 5,
@@ -113,14 +123,28 @@ export default Profile;
 
 const Button = (props) => {
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
-      <View style={[btnStyles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-        height: props.height ? props.height : 49,
-        borderWidth: props.borderWidth ? props.borderWidth : 0,
-        borderColor: props.borderColor ? props.borderColor : "#000000"
-      }]}>
-        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+    <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">
+      <View
+        style={[
+          btnStyles.button,
+          {
+            backgroundColor: props.backgroundColor
+              ? props.backgroundColor
+              : "#000000",
+            height: props.height ? props.height : 49,
+            borderWidth: props.borderWidth ? props.borderWidth : 0,
+            borderColor: props.borderColor ? props.borderColor : "#000000"
+          }
+        ]}
+      >
+        <Text
+          style={[
+            btnStyles.text,
+            { color: props.color ? props.color : "#ffffff" }
+          ]}
+        >
+          {props.children}
+        </Text>
       </View>
     </TouchableHighlight>
   );
@@ -141,9 +165,13 @@ const btnStyles = StyleSheet.create({
 
 const ProfileImage = (props) => {
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
+    <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">
       <View style={profileStyles.container}>
-        <Image style={profileStyles.image} resizeMode="contain" source={require("./assets/edit.png")} />
+        <Image
+          style={profileStyles.image}
+          resizeMode="contain"
+          source={require("./assets/edit.png")}
+        />
       </View>
     </TouchableHighlight>
   );
@@ -171,10 +199,14 @@ const Input = (props) => {
         placeholder={props.placeholder}
         value={props.value}
         onChangeText={(num) => props.setValue(num)}
-        placeholderTextColor='#ddd'
+        placeholderTextColor="#ddd"
         editable={props.editable !== false}
       />
-      {props.errorText ? <Text style={inputStyles.error}>{props.errorText}</Text> : null}
+      {props.errorText
+        ? (
+        <Text style={inputStyles.error}>{props.errorText}</Text>
+          )
+        : null}
     </View>
   );
 };
