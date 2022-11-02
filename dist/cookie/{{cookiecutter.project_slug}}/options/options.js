@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native"
 
 export const globalOptions = {
-  name: "{{cookiecutter.project_slug}}",
+  name: "{{cookiecutter.project_dash_slug}}",
   url: "https://{{cookiecutter.project_dash_slug}}.botics.co",
   api: "https://{{cookiecutter.project_dash_slug}}.botics.co/api/v1"
 }
