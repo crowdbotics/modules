@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 const OrdersInProgress = () => {
-  const [selectecTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     setOrders([
@@ -70,13 +70,13 @@ const OrdersInProgress = () => {
         ListHeaderComponent={() => (
           <TabView
             tabTitles={["In Progress", "Completed"]}
-            selected={selectecTab}
+            selected={selectedTab}
             onPress={setSelectedTab}
             style={styles.tabView}
           />
         )}
         data={orders}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.productContainer}>
             <View style={styles.productHeader}>
@@ -89,7 +89,8 @@ const OrdersInProgress = () => {
                 style={[
                   styles.statusBtn,
                   item.status === "in-progress" ? null : styles.green
-                ]}>
+                ]}
+              >
                 <Image
                   source={
                     item.status === "in-progress"
@@ -252,7 +253,8 @@ const TabView = ({
   const propStyle = style || {};
   return (
     <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
+      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
+    >
       {tabTitles.map((title, index) => (
         <Pressable
           onPress={() => (onPress ? onPress(index) : null)}
@@ -265,7 +267,8 @@ const TabView = ({
                   tabViewStyles.tabItem
                 ]
           }
-          key={index}>
+          key={index}
+        >
           {icons
             ? (
             <Image
