@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native"
 
 export const globalOptions = {
-  name: "HelloWorld",
+  name: "ProjectNameIdentifier",
   url: "https://ProjectNameIdentifier.botics.co",
   api: "https://ProjectNameIdentifier.botics.co/api/v1"
 }
