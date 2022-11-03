@@ -20,9 +20,9 @@ const Filter = () => {
   const [age, setAge] = useState("");
   const [grades, setGrades] = useState("");
   const [interests, setInterests] = useState("");
-  const handleSeletion = title => {
+  const handleSelection = (title) => {
     if (selected.includes(title)) {
-      setSelected(selected.filter(item => item !== title));
+      setSelected(selected.filter((item) => item !== title));
     } else {
       setSelected([...selected, title]);
     }
@@ -40,29 +40,29 @@ const Filter = () => {
         <Tile
           title={"Sunday"}
           selected={selected.includes("Sunday")}
-          onPress={x => handleSeletion(x)}
+          onPress={(x) => handleSelection(x)}
         />
         <Tile
           title={"Wednesday"}
           selected={selected.includes("Wednesday")}
-          onPress={x => handleSeletion(x)}
+          onPress={(x) => handleSelection(x)}
         />
         <Separator title={"Desired Days"} />
         <Tile
           title={"Half-Day Mornins"}
           selected={selected.includes("Half-Day Mornins")}
-          onPress={x => handleSeletion(x)}
+          onPress={(x) => handleSelection(x)}
         />
         <Tile
           title={"Full Day"}
           selected={selected.includes("Full Day")}
-          onPress={x => handleSeletion(x)}
+          onPress={(x) => handleSelection(x)}
         />
         <Separator title={"Budget"} />
         <Tile
           title={"Per week"}
           selected={selected.includes("Per week")}
-          onPress={x => handleSeletion(x)}
+          onPress={(x) => handleSelection(x)}
         />
         <View style={styles.halfInputs}>
           <Input
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
 });
 
 export default Filter;
-const Input = props => {
+const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
       {props.text
@@ -157,7 +157,7 @@ const Input = props => {
         ]}
         placeholder={props.placeholder ? props.placeholder : "Enter"}
         value={props.value}
-        onChangeText={text => props.onChange(text)}
+        onChangeText={(text) => props.onChange(text)}
         placeholderTextColor={
           props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
         }
@@ -246,7 +246,8 @@ const TabView = ({
   const propStyle = style || {};
   return (
     <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
+      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
+    >
       {tabTitles.map((title, index) => (
         <Pressable
           onPress={() => (onPress ? onPress(index) : null)}
@@ -255,7 +256,8 @@ const TabView = ({
               ? [tabViewStyles.selected, tabColorStyle]
               : [tabViewStyles.unSelected, backgroundColorStyle]
           }
-          key={index}>
+          key={index}
+        >
           <Text>{title}</Text>
         </Pressable>
       ))}
@@ -325,13 +327,14 @@ const separatorStyles = StyleSheet.create({
   }
 });
 
-const Checkbox = props => {
+const Checkbox = (props) => {
   return (
     <Pressable
       onPress={() => {
         props.setValue(!props.value);
       }}
-      style={[checkboxStyles.container, props.style]}>
+      style={[checkboxStyles.container, props.style]}
+    >
       <Image
         source={
           props.value
@@ -382,7 +385,7 @@ const tileStyles = StyleSheet.create({
     color: "#111112"
   }
 });
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color ? params.color : "#000";
   const textColor = params.textColor ? params.textColor : "#fff";
   const btnStyle = {
@@ -398,7 +401,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle, params.style]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
