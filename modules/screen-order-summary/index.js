@@ -43,16 +43,16 @@ const OrderSummaryScreen = (params) => {
           </View>
           <View style={styles.detailsCard}>
             <View style={styles.details}>
-              <Text style={styles.detialsText}>Card Number</Text>
-              <Text style={styles.detialsText}>XXXX XXXX XXXX 9001</Text>
+              <Text style={styles.detailsText}>Card Number</Text>
+              <Text style={styles.detailsText}>XXXX XXXX XXXX 9001</Text>
             </View>
             <View style={styles.details}>
-              <Text style={styles.detialsText}>Expiration date</Text>
-              <Text style={styles.detialsText}>10/24</Text>
+              <Text style={styles.detailsText}>Expiration date</Text>
+              <Text style={styles.detailsText}>10/24</Text>
             </View>
             <View style={styles.details}>
-              <Text style={styles.detialsText}>Card Holder</Text>
-              <Text style={styles.detialsText}>Username</Text>
+              <Text style={styles.detailsText}>Card Holder</Text>
+              <Text style={styles.detailsText}>Username</Text>
             </View>
           </View>
           <View style={styles.inputContainer}>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     lineHeight: 20
   },
-  detialsText: {
+  detailsText: {
     fontSize: 14,
     lineHeight: 20,
     marginVertical: 1,

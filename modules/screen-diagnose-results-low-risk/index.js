@@ -12,7 +12,7 @@ const DiagnoseResultsLowRisk = () => {
   const [result, setResult] = useState("");
   useEffect(() => {
     setResult(
-      "Based on your answers you have a less tendence on having COVID-19"
+      "Based on your answers you have a less tendency of having COVID-19"
     );
   }, []);
   return (
@@ -36,7 +36,7 @@ const DiagnoseResultsLowRisk = () => {
         />
         <Text style={styles.resultText}>{result}</Text>
         <Button
-          buttonText="How to pretect yourself"
+          buttonText="How to protect yourself"
           outline={true}
           hideShadow={true}
         />
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
 });
 
 export default DiagnoseResultsLowRisk;
-const Footer = props => {
+const Footer = (props) => {
   const generator = props.hideTitle ? props.images : props.titles;
   return (
     <View style={footerStyles.footer}>
@@ -127,7 +127,8 @@ const Footer = props => {
               style={[
                 footerStyles.footerItemText,
                 index === props.active ? footerStyles.active : null
-              ]}>
+              ]}
+            >
               {title}
             </Text>
               )}
@@ -169,7 +170,7 @@ const footerStyles = StyleSheet.create({
     color: "#000"
   }
 });
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color ? params.color : "#000";
   const textColor = params.textColor ? params.textColor : "#fff";
   const btnStyle = {
@@ -185,7 +186,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle, params.style]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

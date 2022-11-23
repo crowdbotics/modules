@@ -19,7 +19,8 @@
     "template": "node scripts/template.js",
     "bootstrap": "npm run demo; npm run raw; npm run cookie; npm run parse",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "yarn run eslint modules scripts"
+    "lint": "yarn run eslint modules scripts",
+    "commit-module": "node scripts/commit-module.js"
   },
   "repository": {
     "type": "git",

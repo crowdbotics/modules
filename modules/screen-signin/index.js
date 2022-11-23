@@ -7,20 +7,33 @@ const pressed = () => {
 
 const SignIn = () => {
   return (
-    <View style={styles.conatainer}>
+    <View style={styles.container}>
       <View style={styles.signinContainer}>
         <Text style={styles.signinText}>Sign in</Text>
       </View>
       <View>
         <View style={styles.textBox}>
           <Text style={styles.welcomeText}>Welcome Back</Text>
-          <Text style={styles.text}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</Text>
+          <Text style={styles.text}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor
+          </Text>
         </View>
         <View style={styles.footerContainer}>
           <View style={styles.mb35}>
-            <Button onPress={pressed} height={50}>Sign Up</Button>
+            <Button onPress={pressed} height={50}>
+              Sign Up
+            </Button>
           </View>
-          <Button onPress={pressed} height={50} borderWidth={1} backgroundColor='#FFF' color='#000'>Log In</Button>
+          <Button
+            onPress={pressed}
+            height={50}
+            borderWidth={1}
+            backgroundColor="#FFF"
+            color="#000"
+          >
+            Log In
+          </Button>
         </View>
       </View>
     </View>
@@ -64,7 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  conatainer: {
+  container: {
     backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
@@ -72,21 +85,34 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     height: "100%"
   }
-
 });
 
 export default SignIn;
 
 const Button = (props) => {
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
-      <View style={[btnStyles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-        height: props.height ? props.height : 49,
-        borderWidth: props.borderWidth ? props.borderWidth : 0,
-        borderColor: props.borderColor ? props.borderColor : "#000000"
-      }]}>
-        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+    <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">
+      <View
+        style={[
+          btnStyles.button,
+          {
+            backgroundColor: props.backgroundColor
+              ? props.backgroundColor
+              : "#000000",
+            height: props.height ? props.height : 49,
+            borderWidth: props.borderWidth ? props.borderWidth : 0,
+            borderColor: props.borderColor ? props.borderColor : "#000000"
+          }
+        ]}
+      >
+        <Text
+          style={[
+            btnStyles.text,
+            { color: props.color ? props.color : "#ffffff" }
+          ]}
+        >
+          {props.children}
+        </Text>
       </View>
     </TouchableHighlight>
   );

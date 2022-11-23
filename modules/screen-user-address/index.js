@@ -63,7 +63,7 @@ const UserAddressScreen = (params) => {
             <Text style={styles.grey}>{order.shipping}</Text>
             <Image source={require("./assets/Score.png")} />
           </View>
-          <View style={styles.detailPallete}>
+          <View style={styles.detailPallet}>
             <View style={styles.orderDetails}>
               <Text style={styles.mainText}>{order.orderName}</Text>
               <Text style={styles.subText}>Additional info</Text>
@@ -73,7 +73,7 @@ const UserAddressScreen = (params) => {
               <Text style={styles.subText}>/Kg</Text>
             </View>
           </View>
-          <View style={styles.detailPallete}>
+          <View style={styles.detailPallet}>
             <View style={styles.orderDetails}>
               <Text style={styles.mainText}>{order.customerName}</Text>
               <Text style={styles.subText}>Additional info</Text>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   fnt16: {
     fontSize: 16
   },
-  detailPallete: {
+  detailPallet: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 10,

@@ -14,7 +14,7 @@ const CloseTransaction = () => {
       <View style={styles.body}>
         <Text style={styles.bodyHeading}>Attention!</Text>
         <Text style={styles.bodyText}>
-          The process of moving funds will be stallet.
+          The process of moving funds will be stalled.
         </Text>
       </View>
       <Button buttonText={"Continue the process"} />
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 });
 
 export default CloseTransaction;
-const Button = params => {
+const Button = (params) => {
   const btnStyle = {
     backgroundColor: params.outline ? "#fff" : "#000",
     borderColor: params.outline ? "#000" : "#fff",

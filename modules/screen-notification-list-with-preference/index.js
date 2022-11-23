@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import {
   Text,
   View,
-  StyleSheet, Image, Switch, ScrollView
+  StyleSheet,
+  Image,
+  Switch,
+  ScrollView
 } from "react-native";
 
 const NotificationListWithPreference = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [isEnabled1, setIsEnabled1] = useState(false);
-  const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -45,63 +48,55 @@ const NotificationListWithPreference = () => {
       <View style={styles.listContainer}>
         <Text style={styles.timeText}>5 hours ago</Text>
         <View style={styles.walletCard}>
-          <Image
-            source={require("./assets/done.png")}
-            style={styles.image}
-          />
+          <Image source={require("./assets/done.png")} style={styles.image} />
           <View style={styles.walletCarder}>
-            <Text style={styles.eventName}>You have enrolled to a new class</Text>
-            <Text style={styles.eventType}>See more detials</Text>
+            <Text style={styles.eventName}>
+              You have enrolled to a new class
+            </Text>
+            <Text style={styles.eventType}>See more details</Text>
           </View>
         </View>
 
         <Text style={styles.timeText}>5 hours ago</Text>
         <View style={styles.walletCard}>
-          <Image
-            source={require("./assets/cross.png")}
-            style={styles.cross}
-          />
+          <Image source={require("./assets/cross.png")} style={styles.cross} />
           <View style={styles.walletCarder}>
             <Text style={styles.eventName}>Your class is Cancelled</Text>
-            <Text style={styles.eventType}>See more detials</Text>
+            <Text style={styles.eventType}>See more details</Text>
           </View>
         </View>
 
         <Text style={styles.timeText}>5 hours ago</Text>
         <View style={styles.walletCard}>
-          <Image
-            source={require("./assets/clock.png")}
-            style={styles.cross}
-          />
+          <Image source={require("./assets/clock.png")} style={styles.cross} />
           <View style={styles.walletCarder}>
-            <Text style={styles.eventName}>Good progress, first 1 hours finished</Text>
-            <Text style={styles.eventType}>See more detials</Text>
+            <Text style={styles.eventName}>
+              Good progress, first 1 hours finished
+            </Text>
+            <Text style={styles.eventType}>See more details</Text>
           </View>
         </View>
 
         <Text style={styles.timeText}>5 hours ago</Text>
         <View style={styles.walletCard}>
-          <Image
-            source={require("./assets/done.png")}
-            style={styles.image}
-          />
+          <Image source={require("./assets/done.png")} style={styles.image} />
           <View style={styles.walletCarder}>
-            <Text style={styles.eventName}>You have enrolled to a new class</Text>
-            <Text style={styles.eventType}>See more detials</Text>
+            <Text style={styles.eventName}>
+              You have enrolled to a new class
+            </Text>
+            <Text style={styles.eventType}>See more details</Text>
           </View>
         </View>
         <Text style={styles.timeText}>5 hours ago</Text>
         <View style={styles.walletCard}>
-          <Image
-            source={require("./assets/done.png")}
-            style={styles.image}
-          />
+          <Image source={require("./assets/done.png")} style={styles.image} />
           <View style={styles.walletCarder}>
-            <Text style={styles.eventName}>You have enrolled to a new class</Text>
-            <Text style={styles.eventType}>See more detials</Text>
+            <Text style={styles.eventName}>
+              You have enrolled to a new class
+            </Text>
+            <Text style={styles.eventType}>See more details</Text>
           </View>
         </View>
-
       </View>
 
       <View style={styles.bottom}>
@@ -146,8 +141,19 @@ const styles = StyleSheet.create({
     paddingVertical: 10
   },
   label: { fontSize: 16, fontWeight: "400" },
-  subHeading: { fontSize: 12, fontWeight: "400", color: "#7C7C7C", marginLeft: 20, marginBottom: 10 },
-  listContainer: { backgroundColor: "#FFF", marginVertical: 30, paddingHorizontal: 10, paddingVertical: 30 },
+  subHeading: {
+    fontSize: 12,
+    fontWeight: "400",
+    color: "#7C7C7C",
+    marginLeft: 20,
+    marginBottom: 10
+  },
+  listContainer: {
+    backgroundColor: "#FFF",
+    marginVertical: 30,
+    paddingHorizontal: 10,
+    paddingVertical: 30
+  },
   walletCard: {
     backgroundColor: "#fff",
     marginHorizontal: 15,
@@ -178,9 +184,24 @@ const styles = StyleSheet.create({
   },
   image: { resizeMode: "contain", height: 22, width: 18, marginTop: -15 },
   cross: { resizeMode: "contain", height: 21, width: 21, marginTop: -15 },
-  timeText: { fontSize: 12, color: "#300C1C", alignSelf: "flex-end", marginRight: 40, marginBottom: -5, zIndex: 99 },
+  timeText: {
+    fontSize: 12,
+    color: "#300C1C",
+    alignSelf: "flex-end",
+    marginRight: 40,
+    marginBottom: -5,
+    zIndex: 99
+  },
   home: { height: 22, width: 24, resizeMode: "contain" },
-  bottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 20, paddingHorizontal: 30, backgroundColor: "#C4C4C4", height: 74 }
+  bottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 30,
+    backgroundColor: "#C4C4C4",
+    height: 74
+  }
 });
 
 export default NotificationListWithPreference;

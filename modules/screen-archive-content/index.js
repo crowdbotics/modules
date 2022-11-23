@@ -8,7 +8,7 @@ import {
   Image
 } from "react-native";
 
-const ArchiveContent = params => {
+const ArchiveContent = (params) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     setData([
@@ -111,7 +111,7 @@ const ArchiveContent = params => {
         data={data}
         numColumns={3}
         renderItem={({ item }) => <Post post={item} />}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         columnWrapperStyle={{
           justifyContent: "space-between"
         }}
@@ -122,7 +122,7 @@ const ArchiveContent = params => {
 
 const Post = ({ post }) => {
   return (
-    <View style={styles.postContianer}>
+    <View style={styles.postContainer}>
       <Image source={post.imageSrc} style={styles.image} />
       <Text style={styles.archiveDate}>{post.archiveDate}</Text>
     </View>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%"
   },
-  postContianer: {
+  postContainer: {
     height: 125,
     width: 125,
     borderRadius: 10,

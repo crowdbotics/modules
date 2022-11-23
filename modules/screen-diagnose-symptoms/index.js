@@ -14,9 +14,9 @@ const DiagnoseSymptoms = () => {
   const [temperature, setTemperature] = useState("");
   const [feverTime, setFeverTime] = useState("");
   const [isFeverIncreasing, setIsFeverIncreasing] = useState(false);
-  const [coughtLevel, setCoughtLevel] = useState(0);
-  const [coughtTime, setCoughtTime] = useState("");
-  const [wetCought, setWetCought] = useState("");
+  const [coughLevel, setCoughLevel] = useState(0);
+  const [coughTime, setCoughTime] = useState("");
+  const [wetCough, setWetCough] = useState("");
   const [isMucus, setIsMucus] = useState(false);
   const [coughColor, setCoughColor] = useState("");
   const [shortBreathLevel, setShortBreathLevel] = useState(0);
@@ -36,85 +36,85 @@ const DiagnoseSymptoms = () => {
         </View>
         <View style={styles.symptomItem}>
           <Text style={styles.symptomText}>Fever</Text>
-          <SymptomLevel level={feverLevel} setLevel={x => setFeverLevel(x)} />
+          <SymptomLevel level={feverLevel} setLevel={(x) => setFeverLevel(x)} />
           <View style={styles.halfInputs}>
             <Input
-              text="Faremheit for US Celcius for all other"
+              text="Fahrenheit for US Celsius for all other"
               value={temperature}
-              onChange={x => setTemperature(x)}
+              onChange={(x) => setTemperature(x)}
               containerStyle={styles.input}
             />
             <Input
               text="How long have you had your fever?"
               value={feverTime}
-              onChange={x => setFeverTime(x)}
+              onChange={(x) => setFeverTime(x)}
               containerStyle={styles.input}
             />
           </View>
           <BinaryQuestion
             question="Has your temperature increase over this time?"
             value={isFeverIncreasing}
-            setValue={x => setIsFeverIncreasing(x)}
+            setValue={(x) => setIsFeverIncreasing(x)}
           />
         </View>
         <View style={styles.symptomItem}>
           <Text style={styles.symptomText}>Cough</Text>
-          <SymptomLevel level={coughtLevel} setLevel={x => setCoughtLevel(x)} />
+          <SymptomLevel level={coughLevel} setLevel={(x) => setCoughLevel(x)} />
           <View style={styles.halfInputs}>
             <Input
               text="How long have you had your cough?"
-              value={coughtTime}
-              onChange={x => setCoughtTime(x)}
+              value={coughTime}
+              onChange={(x) => setCoughTime(x)}
               containerStyle={styles.input}
             />
             <Input
-              text="Is your cought wet or dry?"
-              value={wetCought}
-              onChange={x => setWetCought(x)}
+              text="Is your cough wet or dry?"
+              value={wetCough}
+              onChange={(x) => setWetCough(x)}
               containerStyle={styles.input}
             />
           </View>
           <BinaryQuestion
-            question="Are you choughing up mucus?"
+            question="Are you coughing up mucus?"
             value={isMucus}
-            setValue={x => setIsMucus(x)}
+            setValue={(x) => setIsMucus(x)}
           />
           <Input
             text="What color is mucus?"
             value={coughColor}
-            onChange={x => setCoughColor(x)}
+            onChange={(x) => setCoughColor(x)}
           />
         </View>
         <View style={styles.symptomItem}>
           <Text style={styles.symptomText}>Shortness of Breath</Text>
           <SymptomLevel
             level={shortBreathLevel}
-            setLevel={x => setShortBreathLevel(x)}
+            setLevel={(x) => setShortBreathLevel(x)}
           />
           <Input
             text="How long have you had shortness of breath?"
             value={shortBreathTime}
-            onChange={x => setShortBreathTime(x)}
+            onChange={(x) => setShortBreathTime(x)}
             containerStyle={styles.input}
           />
           <BinaryQuestion
             question="Has your temperature increase over this time?"
             value={isBreathingPain}
-            setValue={x => setIsBreathingPain(x)}
+            setValue={(x) => setIsBreathingPain(x)}
           />
         </View>
         <View style={styles.symptomItem}>
           <Text style={styles.symptomText}>Muscle/Joint Pain</Text>
           <SymptomLevel
             level={musclePainLevel}
-            setLevel={x => setMusclePainLevel(x)}
+            setLevel={(x) => setMusclePainLevel(x)}
           />
         </View>
         <View style={styles.symptomItem}>
           <Text style={styles.symptomText}>Chest Pressure</Text>
           <SymptomLevel
             level={chestPressureLevel}
-            setLevel={x => setChestPressureLevel(x)}
+            setLevel={(x) => setChestPressureLevel(x)}
           />
         </View>
         <Button buttonText="Next" />
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
 });
 
 export default DiagnoseSymptoms;
-const Footer = props => {
+const Footer = (props) => {
   const generator = props.hideTitle ? props.images : props.titles;
   return (
     <View style={footerStyles.footer}>
@@ -202,7 +202,8 @@ const Footer = props => {
               style={[
                 footerStyles.footerItemText,
                 index === props.active ? footerStyles.active : null
-              ]}>
+              ]}
+            >
               {title}
             </Text>
               )}
@@ -250,7 +251,7 @@ const SymptomLevel = ({ level, setLevel }) => {
   let width = 20;
   let height = 20;
   let radius = 5;
-  const giveDimentions = () => {
+  const giveDimensions = () => {
     return {
       width: (width += 4),
       height: (height += 4),
@@ -268,7 +269,7 @@ const SymptomLevel = ({ level, setLevel }) => {
           key={index}
           style={[
             symptomLevelStyles.check,
-            giveDimentions(),
+            giveDimensions(),
             item === currentLevel ? symptomLevelStyles.fill : null
           ]}
         />
@@ -295,7 +296,7 @@ const symptomLevelStyles = StyleSheet.create({
   }
 });
 
-const Input = props => {
+const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
       {props.text
@@ -312,7 +313,7 @@ const Input = props => {
         ]}
         placeholder={props.placeholder ? props.placeholder : "Enter"}
         value={props.value}
-        onChangeText={text => props.onChange(text)}
+        onChangeText={(text) => props.onChange(text)}
         placeholderTextColor={
           props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
         }
@@ -378,7 +379,7 @@ const inputStyles = StyleSheet.create({
   children: {}
 });
 
-const BinaryQuestion = props => {
+const BinaryQuestion = (props) => {
   return (
     <View style={binaryQuestionStyles.questionContainer}>
       <Text style={binaryQuestionStyles.questionText}>{props.question}</Text>
@@ -432,7 +433,7 @@ const binaryQuestionStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color ? params.color : "#000";
   const textColor = params.textColor ? params.textColor : "#fff";
   const btnStyle = {
@@ -448,7 +449,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle, params.style]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

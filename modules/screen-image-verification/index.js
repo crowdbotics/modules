@@ -10,7 +10,7 @@ import {
 
 const ImageVerification = () => {
   const [selectedTab, setSelectedTab] = useState(0);
-  const [asapectRatios, setAspectRatios] = useState([]);
+  const [aspectRatios, setAspectRatios] = useState([]);
   const [selectedAspectRatio, setSelectedAspectRatio] = useState(null);
   const [tips, setTips] = useState([]);
   useEffect(() => {
@@ -18,11 +18,11 @@ const ImageVerification = () => {
     setTips([
       "Center yourself and smile at the camera",
       "Take a headshot - from the chest up",
-      "Make sure it's focused andd well lit",
+      "Make sure it's focused and well lit",
       "Remove any hats or sunglasses"
     ]);
   }, []);
-  const getAspectRatio = name => {
+  const getAspectRatio = (name) => {
     const dimension = name.split(":");
     const style = {
       width: 10 * parseInt(dimension[0], 10),
@@ -46,11 +46,12 @@ const ImageVerification = () => {
           onPress={setSelectedTab}
         />
         <View style={styles.ratiosContainer}>
-          {asapectRatios.map((ratio, index) => (
+          {aspectRatios.map((ratio, index) => (
             <Pressable
               key={index}
               style={styles.ratioItem}
-              onPress={() => setSelectedAspectRatio(ratio)}>
+              onPress={() => setSelectedAspectRatio(ratio)}
+            >
               <View
                 style={[
                   getAspectRatio(ratio),
@@ -63,7 +64,7 @@ const ImageVerification = () => {
           ))}
         </View>
         <Text style={styles.title}>
-          A good photo increases your likehood of being hired. Some photo tips
+          A good photo increases your likelihood of being hired. Some photo tips
           include
         </Text>
         {tips.map((tip, index) => (
@@ -74,7 +75,7 @@ const ImageVerification = () => {
         ))}
         <Text>
           There may be a delay in account activation if your photo does not meet
-          these guidlines. <Text style={styles.red}>More info</Text>
+          these guidelines. <Text style={styles.red}>More info</Text>
         </Text>
         <Button buttonText="Upload Photo" style={styles.button} />
       </ScrollView>
@@ -170,7 +171,8 @@ const TabView = ({
   const propStyle = style || {};
   return (
     <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
+      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
+    >
       {tabTitles.map((title, index) => (
         <Pressable
           onPress={() => (onPress ? onPress(index) : null)}
@@ -183,7 +185,8 @@ const TabView = ({
                   tabViewStyles.tabItem
                 ]
           }
-          key={index}>
+          key={index}
+        >
           {icons
             ? (
             <Image
@@ -243,7 +246,7 @@ const tabViewStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -259,7 +262,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle, params.style]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

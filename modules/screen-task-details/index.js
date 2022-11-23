@@ -52,9 +52,9 @@ const TaskDetails = () => {
       }
     ]);
   }, []);
-  const handleExpand = index => {
+  const handleExpand = (index) => {
     if (expanded.includes(index)) {
-      setExpanded(expanded.filter(i => i !== index));
+      setExpanded(expanded.filter((i) => i !== index));
     } else {
       setExpanded([...expanded, index]);
     }
@@ -62,7 +62,7 @@ const TaskDetails = () => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.felxRow}>
+        <View style={styles.flexRow}>
           <Text style={styles.heading}>Task Details</Text>
           <Image
             style={styles.icon}
@@ -93,7 +93,7 @@ const TaskDetails = () => {
             />
           </View>
         </View>
-        <Pressable style={styles.felxRow} onPress={() => handleExpand(0)}>
+        <Pressable style={styles.flexRow} onPress={() => handleExpand(0)}>
           <Text style={styles.title}>
             What is the estimated size of your task?
           </Text>
@@ -123,7 +123,7 @@ const TaskDetails = () => {
           </View>
         )}
 
-        <Pressable style={styles.felxRow} onPress={() => handleExpand(1)}>
+        <Pressable style={styles.flexRow} onPress={() => handleExpand(1)}>
           <Text style={styles.title}>
             What is the amount of work you can handle?
           </Text>
@@ -155,7 +155,7 @@ const TaskDetails = () => {
           </View>
         )}
 
-        <View style={styles.felxRow}>
+        <View style={styles.flexRow}>
           <Text style={styles.title}>What else should we know?</Text>
         </View>
         <Input
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#4A4A4A"
   },
-  felxRow: {
+  flexRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -241,13 +241,14 @@ const styles = StyleSheet.create({
 
 export default TaskDetails;
 
-const Checkbox = props => {
+const Checkbox = (props) => {
   return (
     <Pressable
       onPress={() => {
         props.setValue(!props.value);
       }}
-      style={[checkboxStyles.container, props.style]}>
+      style={[checkboxStyles.container, props.style]}
+    >
       <Image
         source={
           props.value
@@ -271,7 +272,7 @@ const checkboxStyles = StyleSheet.create({
   }
 });
 
-const Input = props => {
+const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
       {props.text
@@ -288,7 +289,7 @@ const Input = props => {
         ]}
         placeholder={props.placeholder ? props.placeholder : "Enter"}
         value={props.value}
-        onChangeText={text => props.onChange(text)}
+        onChangeText={(text) => props.onChange(text)}
         placeholderTextColor={
           props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
         }
@@ -360,7 +361,7 @@ const inputStyles = StyleSheet.create({
   children: {}
 });
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -376,7 +377,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

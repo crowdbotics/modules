@@ -58,7 +58,8 @@ const ProductDetails = () => {
               style={[
                 styles.sizeText,
                 index === size - 1 ? styles.boldSizeText : null
-              ]}>
+              ]}
+            >
               {item}
             </Text>
           ))}
@@ -68,14 +69,15 @@ const ProductDetails = () => {
             <Text style={styles.priceText}>
               ${product.discountedPrice && product.discountedPrice.toFixed(2)}
             </Text>
-            <Text style={styles.acctualPrice}>
+            <Text style={styles.actualPrice}>
               ${product.price && product.price.toFixed(2)}
             </Text>
           </View>
           <View style={styles.counter}>
             <Pressable
               style={[styles.counterBtn, styles.decrement]}
-              onPress={() => decrement()}>
+              onPress={() => decrement()}
+            >
               <Image
                 source={require("./assets/minusIcon.png")}
                 style={styles.icon}
@@ -84,7 +86,8 @@ const ProductDetails = () => {
             <Text style={styles.counterText}>{quantity}</Text>
             <Pressable
               style={[styles.counterBtn, styles.increment]}
-              onPress={() => increment()}>
+              onPress={() => increment()}
+            >
               <Image
                 source={require("./assets/plusIcon.png")}
                 style={styles.icon}
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold"
   },
-  acctualPrice: {
+  actualPrice: {
     fontSize: 16,
     color: "#9A9A9A",
     textDecorationLine: "line-through",
@@ -218,7 +221,7 @@ const styles = StyleSheet.create({
 
 export default ProductDetails;
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -234,7 +237,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

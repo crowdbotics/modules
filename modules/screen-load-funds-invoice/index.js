@@ -7,7 +7,7 @@ const LoadFundsInvoice = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Enter your amount</Text>
-      <Text style={styles.subHeading}>Specify the ammount</Text>
+      <Text style={styles.subHeading}>Specify the amount</Text>
 
       <TabView
         tabTitles={["Dollar", "Bitcoin", "Euro", "Pound"]}
@@ -19,13 +19,13 @@ const LoadFundsInvoice = () => {
           require("./assets/poundIcon.png")
         ]}
         hideTitles={true}
-        onPress={index => setSelectedTab(index)}
+        onPress={(index) => setSelectedTab(index)}
         style={styles.tabView}
       />
 
       <InputToken
         value={tokenValue}
-        onChange={x => setTokenValue(x)}
+        onChange={(x) => setTokenValue(x)}
         step={1}
       />
 
@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
 
 export default LoadFundsInvoice;
 
-const InputToken = props => {
+const InputToken = (props) => {
   const step = props.step;
-  const decrement = value => {
+  const decrement = (value) => {
     return (value -= step);
   };
-  const increment = value => {
+  const increment = (value) => {
     return (value += step);
   };
   return (
@@ -173,7 +173,8 @@ const TabView = ({
   const generator = icons || tabTitles;
   return (
     <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
+      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
+    >
       {generator.map((item, index) => (
         <Pressable
           onPress={() => (onPress ? onPress(index) : null)}
@@ -186,7 +187,8 @@ const TabView = ({
                   tabViewStyles.tabItem
                 ]
           }
-          key={index}>
+          key={index}
+        >
           {icons
             ? (
             <Image
@@ -246,7 +248,7 @@ const tabViewStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -262,7 +264,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

@@ -78,7 +78,7 @@ const AddBankAccount = () => {
         <View style={styles.bottomTextContainer}>
           <Image source={require("./assets/lockIcon.png")} />
           <Text style={styles.bottomText}>
-            Your personal informatino is securely stored and kept confidential!
+            Your personal information is securely stored and kept confidential!
           </Text>
         </View>
         <Button buttonText={"Save"} />

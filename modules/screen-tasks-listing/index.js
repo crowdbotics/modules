@@ -3,15 +3,17 @@ import {
   Text,
   View,
   StyleSheet,
-  Image, ScrollView, TouchableHighlight
+  Image,
+  ScrollView,
+  TouchableHighlight
 } from "react-native";
 
 const TasksListing = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.tabSection}>
-      <Text style={styles.subHeading}>My Tasker</Text>
-      <Image source={require("./assets/file.png")} style={styles.addImg} />
+        <Text style={styles.subHeading}>My Tasker</Text>
+        <Image source={require("./assets/file.png")} style={styles.addImg} />
       </View>
 
       <View style={styles.tabView}>
@@ -32,15 +34,19 @@ const TasksListing = () => {
               />
             </View>
             <View style={styles.walletCarder}>
-                <Text style={styles.eventName}>Tasker name</Text>
-                <Text style={styles.eventType}><Text style={styles.rating}>4.9</Text> (15 Review)</Text>
-                <Text style={styles.date}>15 Cleaning Jobs</Text>
+              <Text style={styles.eventName}>Tasker name</Text>
+              <Text style={styles.eventType}>
+                <Text style={styles.rating}>4.9</Text> (15 Review)
+              </Text>
+              <Text style={styles.date}>15 Cleaning Jobs</Text>
             </View>
           </View>
         </View>
         <View style={styles.info}>
           <Text style={styles.infoTitle}>Info</Text>
-          <Text style={styles.infoText}>Fast and has great attention to details, thatdescribes my work! </Text>
+          <Text style={styles.infoText}>
+            Fast and has great attention to details, that describes my work!{" "}
+          </Text>
         </View>
         <View style={styles.buttonBottom}>
           <Button>View Profile</Button>
@@ -57,15 +63,19 @@ const TasksListing = () => {
               />
             </View>
             <View style={styles.walletCarder}>
-                <Text style={styles.eventName}>Tasker name</Text>
-                <Text style={styles.eventType}><Text style={styles.rating}>4.9</Text> (15 Review)</Text>
-                <Text style={styles.date}>15 Cleaning Jobs</Text>
+              <Text style={styles.eventName}>Tasker name</Text>
+              <Text style={styles.eventType}>
+                <Text style={styles.rating}>4.9</Text> (15 Review)
+              </Text>
+              <Text style={styles.date}>15 Cleaning Jobs</Text>
             </View>
           </View>
         </View>
         <View style={styles.info}>
           <Text style={styles.infoTitle}>Info</Text>
-          <Text style={styles.infoText}>Fast and has great attention to details, thatdescribes my work! </Text>
+          <Text style={styles.infoText}>
+            Fast and has great attention to details, that describes my work!{" "}
+          </Text>
         </View>
         <View style={styles.buttonBottom}>
           <Button>View Profile</Button>
@@ -77,9 +87,12 @@ const TasksListing = () => {
         <Image source={require("./assets/task.png")} style={styles.task} />
         <Image source={require("./assets/tasker.png")} style={styles.tasker} />
         <Image source={require("./assets/chat.png")} style={styles.chat} />
-        <Image source={require("./assets/profile.png")} style={styles.profile} />
+        <Image
+          source={require("./assets/profile.png")}
+          style={styles.profile}
+        />
       </View>
-      </ScrollView>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -87,7 +100,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  subHeading: { fontSize: 20, fontWeight: "400", marginLeft: 20, color: "#4A4A4A", marginTop: 20 },
+  subHeading: {
+    fontSize: 20,
+    fontWeight: "400",
+    marginLeft: 20,
+    color: "#4A4A4A",
+    marginTop: 20
+  },
   tabView: {
     width: "65%",
     height: 48,
@@ -122,7 +141,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  addImg: { width: 16, height: 16, marginRight: 40, marginTop: 17, resizeMode: "contain" },
+  addImg: {
+    width: 16,
+    height: 16,
+    marginRight: 40,
+    marginTop: 17,
+    resizeMode: "contain"
+  },
   walletCard: {
     padding: 10,
     display: "flex",
@@ -186,7 +211,15 @@ const styles = StyleSheet.create({
   info: { marginHorizontal: 15, marginVertical: 5 },
   infoTitle: {},
   infoText: { fontSize: 12, color: "#7E7D7D" },
-  bottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 20, paddingHorizontal: 20, backgroundColor: "#C4C4C4", height: 74 },
+  bottom: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 20,
+    backgroundColor: "#C4C4C4",
+    height: 74
+  },
   star: { width: 35, height: 40, resizeMode: "contain" },
   task: { width: 28, height: 34, resizeMode: "contain" },
   chat: { width: 28, height: 38, resizeMode: "contain" },
@@ -202,14 +235,21 @@ const Button = (props) => {
         style={[
           btnStyles.button,
           {
-            backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
+            backgroundColor: props.backgroundColor
+              ? props.backgroundColor
+              : "#000000",
             height: props.height ? props.height : 49,
             borderWidth: props.borderWidth ? props.borderWidth : 0,
             borderColor: props.borderColor ? props.borderColor : "#000000"
           }
         ]}
       >
-        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>
+        <Text
+          style={[
+            btnStyles.text,
+            { color: props.color ? props.color : "#ffffff" }
+          ]}
+        >
           {props.children}
         </Text>
       </View>

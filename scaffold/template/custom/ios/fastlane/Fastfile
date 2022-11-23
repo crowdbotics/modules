@@ -118,7 +118,8 @@ platform(:ios) do
 
     upload_to_testflight(
       email: 'ProjectOwnerEmail',
-      beta_app_description: "Beta version of #{app_name} uploaded by Crowdbotics"
+      beta_app_description: "Beta version of #{app_name} uploaded by Crowdbotics",
+      itc_provider: team_id
     )
   end
 

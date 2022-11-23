@@ -54,7 +54,7 @@ const EarningsOverview = () => {
             <Image source={user.image} style={styles.userImage} />
           </View>
         </View>
-        <Button buttonText="Request withdrawl" />
+        <Button buttonText="Request withdrawal" />
       </ScrollView>
     </View>
   );
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 
 export default EarningsOverview;
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color ? params.color : "#000";
   const textColor = params.textColor ? params.textColor : "#fff";
   const btnStyle = {
@@ -150,7 +150,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle, params.style]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
