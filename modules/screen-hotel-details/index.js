@@ -23,7 +23,7 @@ const HotelAmenities = () => {
       "catering",
       "room-service",
       "massage",
-      "laundary",
+      "laundry",
       "valet-parking"
     ]);
     setRatings([
@@ -112,8 +112,8 @@ const HotelAmenities = () => {
     }
   ];
 
-  const getIcon = name => {
-    const icon = icons.find(item => item.name === name);
+  const getIcon = (name) => {
+    const icon = icons.find((item) => item.name === name);
     return icon.image;
   };
   return (
@@ -488,7 +488,7 @@ const commentStyles = StyleSheet.create({
   }
 });
 
-const Input = props => {
+const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
       {props.text
@@ -505,7 +505,7 @@ const Input = props => {
         ]}
         placeholder={props.placeholder ? props.placeholder : "Enter"}
         value={props.value}
-        onChangeText={text => props.onChange(text)}
+        onChangeText={(text) => props.onChange(text)}
         placeholderTextColor={
           props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
         }
@@ -576,7 +576,7 @@ const inputStyles = StyleSheet.create({
   },
   children: {}
 });
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color ? params.color : "#000";
   const textColor = params.textColor ? params.textColor : "#fff";
   const btnStyle = {
@@ -592,7 +592,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle, params.style]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
