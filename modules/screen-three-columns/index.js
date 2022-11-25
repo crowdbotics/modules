@@ -5,10 +5,10 @@ import {
   StyleSheet
 } from "react-native";
 
-const SmallGrid = () => {
+const ThreeColumns = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>small grid</Text>
+      <Text style={styles.heading}>three columns</Text>
     </View>
   );
 };
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SmallGrid;
+export default ThreeColumns;
