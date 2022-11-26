@@ -2,24 +2,50 @@ import React from "react";
 import {
   Text,
   View,
-  StyleSheet
+  StyleSheet,
+  ScrollView
 } from "react-native";
 
 const TwoColumns = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>two columns</Text>
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.sectionContainer}>
+        <View style={styles.section}>
+          <Text style={styles.textHeading1}>1</Text>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.textHeading1}>2</Text>
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
     backgroundColor: "#fff"
   },
-  heading: {
-    fontSize: 20
-  }
+  sectionContainer : {
+    flex: 1,
+    flexDirection: "row",
+    margin: 10,
+    padding: 5,
+  },
+  section: {
+    flex: 1,
+    backgroundColor: "pink",
+    marginHorizontal: 5,
+    padding: 15,
+    justifyContent: "center",
+    alignItems: "center",
+
+  },
+  textHeading1: {
+    fontSize: 20,
+    fontWeight: "bold"
+  },
 });
+
 
 export default TwoColumns;
