@@ -44,7 +44,8 @@ platform(:android) do
                              version_name: ENV["CIRCLE_BUILD_NUM"].to_s,
                              track_promote_to: 'alpha',
                              skip_upload_metadata: true,
-                             skip_upload_screenshots: true)
+                             skip_upload_screenshots: true,
+                             skip_upload_images: true)
     rescue => ex
       UI.error(ex)
     end
@@ -60,7 +61,7 @@ platform(:android) do
     versions = google_play_track_version_codes(track: "internal")
     version_code = versions[0]
 
-    upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'beta', version_code: version_code, skip_upload_metadata: true, skip_upload_screenshots: true)
+    upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'beta', version_code: version_code, skip_upload_metadata: true, skip_upload_screenshots: true, skip_upload_images: true)
   end
 
   desc('Deploy a new version to the Google Play')
