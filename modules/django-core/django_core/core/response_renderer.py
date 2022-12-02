@@ -3,13 +3,20 @@ from rest_framework.renderers import JSONRenderer
 
 STATUS_CODE_MESSAGES = {
     200: "OK",
-    201: "Created",
+    201: "Created.",
+    202: "Accepted.",
+    302: "Found.",
     400: "Bad Request",
-    401: "Unauthorized",
-    403: "Forbidden",
-    404: "Not Found",
-    405: "Method Not Allowed",
-    408: "Request Timeout"
+    401: "Unauthorized.",
+    403: "You do not have permission to perform this action.",
+    404: "Not Found.",
+    405: "Method Not Allowed.",
+    406: "Not Acceptable.",
+    408: "Request Timeout.",
+    413: "Request Payload Too Large.",
+    414: "URI Too Long.",
+    415: "Unsupported Media Type.",
+    429: "Request was throttled.",
 }
 
 
