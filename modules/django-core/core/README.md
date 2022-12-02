@@ -4,14 +4,13 @@
 ```
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
-        'modules.core.JSONRenderer.ApiRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+        'modules.core.response_renderer.CustomJSONRenderer',
     ),
 }
 ```
 
 ```
 MIDDLEWARE = [
-    'modules.core.ApiMiddleware.ApiResponse',
+    'modules.core.exception_handler.ApiExceptionResponse',
 ]
 ```
