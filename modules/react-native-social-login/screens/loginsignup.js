@@ -15,7 +15,7 @@ import {
 } from "@invertase/react-native-apple-authentication";
 import { useSelector, useDispatch } from "react-redux";
 import { HOME_SCREEN_NAME, validateEmail } from "./constants";
-import { buttonStyles, textInputStyles, Color } from "./styles";
+import { buttonStyles, textInputStyles, Color, styles } from "./styles";
 import {
   GoogleSigninButton,
   GoogleSignin,
@@ -109,7 +109,7 @@ const SocialButtonsView = (props) => (
   </View>
 );
 
-const onFacebookConnect = async (dispatch, navigation) => {
+const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
   try {
     const fbResult = await LoginManager.logInWithPermissions([
       "public_profile",
@@ -124,11 +124,15 @@ const onFacebookConnect = async (dispatch, navigation) => {
         });
     }
   } catch (err) {
-    console.log("Facebook Login Failed: ", JSON.stringify(err));
+    setErrorResponse(errorResponse => [...errorResponse, err])
   }
 };
 
-const onGoogleConnect = async (dispatch, navigation) => {
+const onGoogleConnect = async (
+  dispatch,
+  navigation,
+  setErrorResponse
+) => {
   GoogleSignin.configure({
     webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
@@ -143,15 +147,25 @@ const onGoogleConnect = async (dispatch, navigation) => {
       .then(unwrapResult)
       .then((res) => {
         if (res.key) navigation.navigate(HOME_SCREEN_NAME);
-      });
+      })
+      .catch(err => {
+        setErrorResponse(errorResponse => [...errorResponse, err])
+      })
   } catch (err) {
     if (err.code === statusCodes.SIGN_IN_CANCELLED) {
-      Alert.alert("Error", "The user canceled the signin request.");
+      setErrorResponse(errorResponse => [
+        ...errorResponse,
+        { error: "The user canceled the signin request." }
+      ])
     }
   }
 };
 
-const onAppleConnect = async (dispatch, navigation) => {
+const onAppleConnect = async (
+  dispatch,
+  navigation,
+  setErrorResponse
+) => {
   try {
     const signinFunction = Platform.select({
       ios: appleForiOS,
@@ -159,21 +173,29 @@ const onAppleConnect = async (dispatch, navigation) => {
     });
     const result = await signinFunction();
     dispatch(
-      appleLogin({ id_token: result.id_token, access_token: result.code })
+      appleLogin({
+        id_token: result.identityToken,
+        access_token: result.authorizationCode
+      })
     )
       .then(unwrapResult)
       .then((res) => {
-        if (res.key) navigation.navigate(HOME_SCREEN_NAME);
-      });
+        if (res.key) navigation.navigate(HOME_SCREEN_NAME)
+      })
+      .catch(error => {
+        setErrorResponse(errorResponse => [...errorResponse, error])
+      })
   } catch (err) {
-    console.log(JSON.stringify(err));
+    setErrorResponse(errorResponse => [...errorResponse, err])
   }
-};
+}
 
 export const SignupTab = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorResponse, setErrorResponse] = useState([])
+  const [apiError, setApiError] = useState([])
   const [validationError, setValidationError] = useState({
     email: "",
     password: ""
@@ -212,7 +234,7 @@ export const SignupTab = ({ navigation }) => {
           "Registration Successful. A confirmation will be sent to your e-mail address."
         );
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {  setApiError(apiError => [...apiError, err])});
   };
 
   return (
@@ -247,21 +269,32 @@ export const SignupTab = ({ navigation }) => {
         loading={api.loading === "pending"}
         onPress={onSignupPress}
       />
+        {apiError.map((value, index) =>
+        <View key={index}>
+          <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+        </View>
+      )}
       <SocialButtonsView
         loading={api.loading === "pending"}
-        onFacebookConnect={() => onFacebookConnect(dispatch, navigation)}
-        onGoogleConnect={() => onGoogleConnect(dispatch, navigation)}
-        onAppleConnect={() => onAppleConnect(dispatch, navigation)}
+        onFacebookConnect={() => onFacebookConnect(dispatch, navigation, setErrorResponse)}
+        onGoogleConnect={() => onGoogleConnect(dispatch, navigation, setErrorResponse)}
+        onAppleConnect={() => onAppleConnect(dispatch, navigation, setErrorResponse)}
       />
-      {!!api.error && (
-        <Text style={textInputStyles.error}>{api.error.message}</Text>
-      )}
+      {
+        errorResponse.map((value, index) =>
+          <View key={index}>
+            <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+          </View>
+        )
+      }
     </KeyboardAvoidingView>
   );
 };
 
 export const SignInTab = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [errorResponse, setErrorResponse] = useState([])
+  const [apiError, setApiError] = useState([])
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
@@ -291,7 +324,9 @@ export const SignInTab = ({ navigation }) => {
       .then((res) => {
         if (res.token) navigation.navigate(HOME_SCREEN_NAME);
       })
-      .catch((err) => console.log(err.message));
+      .catch((err) => {
+        setApiError(apiError => [...apiError, err])
+      });
   };
 
   return (
@@ -320,9 +355,10 @@ export const SignInTab = ({ navigation }) => {
         loading={api.loading === "pending"}
         onPress={onSigninPress}
       />
-
-      {!!api.error && (
-        <Text style={textInputStyles.error}>{api.error.message}</Text>
+      {apiError.map((value, index) =>
+        <View key={index}>
+          <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+        </View>
       )}
       <View
         style={{
@@ -342,10 +378,17 @@ export const SignInTab = ({ navigation }) => {
       </View>
       <SocialButtonsView
         loading={api.loading === "pending"}
-        onFacebookConnect={() => onFacebookConnect(dispatch)}
-        onGoogleConnect={() => onGoogleConnect(dispatch)}
-        onAppleConnect={() => onAppleConnect(dispatch)}
+        onFacebookConnect={() => onFacebookConnect(dispatch, navigation, setErrorResponse)}
+        onGoogleConnect={() => onGoogleConnect(dispatch, navigation, setErrorResponse)}
+        onAppleConnect={() => onAppleConnect(dispatch, navigation, setErrorResponse)}
       />
+      {
+        errorResponse.map((value, index) =>
+          <View key={index}>
+            <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+          </View>
+        )
+      }
     </KeyboardAvoidingView>
   );
 };

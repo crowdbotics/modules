@@ -146,7 +146,14 @@ export const styles = StyleSheet.create({
     justifyContent: "space-around",
     margin: 10,
     fontSize: 18
-  }
+  },
+  error1: {
+    color: '#f77474',
+    fontStyle: 'italic',
+    fontSize: 14,
+    paddingTop: 10,
+    alignSelf: "center"
+  },
 });
 
 export const buttonStyles = {

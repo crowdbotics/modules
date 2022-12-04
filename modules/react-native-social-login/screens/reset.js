@@ -16,6 +16,7 @@ import { resetPassword } from "../auth";
 
 const PasswordRecover = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [errorResponse, setErrorResponse] = useState([])
   const { api } = useSelector(state => state.login);
   const dispatch = useDispatch();
 
@@ -31,7 +32,7 @@ const PasswordRecover = ({ navigation }) => {
         );
         navigation.goBack();
       })
-      .catch(err => console.log(err.message));
+      .catch(err => { setErrorResponse(errorResponse => [...errorResponse, err])});
   };
 
   const renderImage = () => {
@@ -67,13 +68,6 @@ const PasswordRecover = ({ navigation }) => {
             autoCapitalize="none"
           />
         </View>
-        {!!api.error && (
-          <Text
-            style={[textInputStyles.error, { marginBottom: 10, fontSize: 12 }]}
-          >
-            {api.error.message}
-          </Text>
-        )}
         <TouchableOpacity
           disabled={api.loading === "pending"}
           activeOpacity={0.7}
@@ -89,6 +83,13 @@ const PasswordRecover = ({ navigation }) => {
             Reset Password
           </Text>
         </TouchableOpacity>
+        {
+        errorResponse.map((value, index) =>
+          <View key={index}>
+            <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+          </View>
+        )
+      }
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {

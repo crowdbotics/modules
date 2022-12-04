@@ -4,65 +4,97 @@ import { api } from "./api";
 
 export const loginRequest = createAsyncThunk(
   "login/loginRequest",
-  async (payload) => {
-    const response = await api.apiLoginRequest(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiLoginRequest(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 
 export const signupRequest = createAsyncThunk(
   "login/signupRequest",
-  async (payload) => {
-    const response = await api.apiSignupRequest(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiSignupRequest(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 
 export const logoutRequest = createAsyncThunk(
   "login/logoutRequest",
-  async (payload) => {
-    const response = await api.apiLogoutRequest(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiLogoutRequest(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 
 export const getAuthUser = createAsyncThunk(
   "login/getAuthUser",
-  async (payload) => {
-    const response = await api.apiAuthUserRequest(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiAuthUserRequest(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 export const resetPassword = createAsyncThunk(
   "login/resetPassword",
-  async (payload) => {
-    const response = await api.apiResetPasswordRequest(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiResetPasswordRequest(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 
 export const facebookLogin = createAsyncThunk(
   "login/facebookLogin",
-  async (payload) => {
-    const response = await api.apiFacebookLogin(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiFacebookLogin(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 
 export const googleLogin = createAsyncThunk(
   "login/googleLogin",
-  async (payload) => {
-    const response = await api.apiGoogleLogin(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiGoogleLogin(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 export const appleLogin = createAsyncThunk(
   "login/appleLogin",
-  async (payload) => {
-    const response = await api.apiAppleLogin(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.apiAppleLogin(payload)
+      return response.data
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
-);
+)
 
 const initialState = {
   token: null,
