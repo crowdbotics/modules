@@ -17,7 +17,7 @@ class Booking(TimeStamp):
     address = models.TextField()
 
     def __str__(self):
-        return self.id
+        return str(self.user)
 
 
 class BookingPlan(TimeStamp):
