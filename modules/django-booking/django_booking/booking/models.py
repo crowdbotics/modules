@@ -17,11 +17,11 @@ class Booking(TimeStamp):
     address = models.TextField()
 
     def __str__(self):
-        return str(self.user)
+        return self.id
 
 
 class BookingPlan(TimeStamp):
-    plan = models.CharField(blank=False, null=False)
+    plan = models.CharField(max_length=100)
     description = models.TextField()
     charges = models.DecimalField(max_digits=6, decimal_places=2)
 
@@ -30,15 +30,15 @@ class BookingPlan(TimeStamp):
 
 
 class BookingPenalty(TimeStamp):
-    title = models.CharField(max_length=50, blank=False, null=False)
+    title = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField()
-    charges = models.DecimalField(max_digits=6, decimal_places=2)
+    charge = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
         return self.title
 
 
-class BookingDetails(TimeStamp):
+class BookingDetail(TimeStamp):
     STATUS = (
         ('pending', 'Pending'),
         ('accepted',  'Accepted'),
@@ -46,26 +46,20 @@ class BookingDetails(TimeStamp):
         ('delivered', 'Delivered'),
         ('occupied',  'Occupied'),
         ('canceled',  'Canceled'),
-        ('not_available ', 'Not Available')
+        ('not_available', 'Not Available')
     )
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="booking_details")
-    booking_plan = models.ManyToManyField(BookingPlan, related_name="booking_plan")
-    booking_penalty = models.ForeignKey(BookingPenalty, on_delete=models.CASCADE, related_name="booking_penalty")
-    identity_number = models.ForeignKey("", on_delete=models.SET_NULL)
+    plan = models.ManyToManyField(BookingPlan, related_name="booking_plan")
+    penalty = models.ForeignKey(BookingPenalty, on_delete=models.CASCADE, related_name="booking_penalty", null=True, blank=True)
+    identity_number = models.IntegerField(unique=True) #this is an optional foreign key for what we are booking
     type = models.CharField(max_length=100)
     description = models.TextField()
     occupancy = models.CharField(max_length=100)
     from_date = models.DateField()
     to_date = models.DateField()
-    status = models.CharField(max_length=13, choices=STATUS)
+    status = models.CharField(max_length=13, choices=STATUS, default="pending")
 
     def __str__(self):
         return str(self.identity_number)
-
-
-
-
-
-
 
 
