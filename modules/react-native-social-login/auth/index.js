@@ -154,6 +154,7 @@ export const slice = createSlice({
     },
     [logoutRequest.fulfilled]: (state) => {
       if (state.api.loading === "pending") {
+        state.api.loading = "idle";
         return initialState;
       }
     },
@@ -212,6 +213,7 @@ export const slice = createSlice({
       if (state.api.loading === "pending") {
         state.user = action.payload.user;
         state.token = action.payload.key;
+        state.api.loading = "idle";
         state.api.error = null;
       }
     },
@@ -231,6 +233,7 @@ export const slice = createSlice({
       if (state.api.loading === "pending") {
         state.user = action.payload.user;
         state.token = action.payload.key;
+        state.api.loading = "idle";
         state.api.error = null;
       }
     },
@@ -250,6 +253,7 @@ export const slice = createSlice({
       if (state.api.loading === "pending") {
         state.user = action.payload.user;
         state.token = action.payload.key;
+        state.api.loading = "idle";
         state.api.error = null;
       }
     },

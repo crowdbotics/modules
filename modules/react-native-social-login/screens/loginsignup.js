@@ -201,10 +201,11 @@ export const SignupTab = ({ navigation }) => {
     password: ""
   });
 
-  const { api } = useSelector((state) => state.login);
+  const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const onSignupPress = async () => {
+    setApiError([])
     setValidationError({ email: "", password: "" });
     if (!validateEmail.test(email)) {
       return setValidationError({
@@ -237,6 +238,21 @@ export const SignupTab = ({ navigation }) => {
       .catch((err) => {  setApiError(apiError => [...apiError, err])});
   };
 
+  const handleEmailChange = (value) =>{
+    setEmail(value)
+    setValidationError({...validationError, email: "" });
+  }
+
+  const handlePasswordChange = (value) =>{
+    setPassword(value)
+    setValidationError({...validationError, password: "" });
+  }
+
+  const handleConfirmPasswordChange = (value) =>{
+    setConfirmPassword(value)
+    setValidationError({...validationError, password: "" });
+  }
+
   return (
     <KeyboardAvoidingView>
       <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
@@ -244,7 +260,7 @@ export const SignupTab = ({ navigation }) => {
           keyboardType="email-address"
           label="Email address"
           placeholder="Email address"
-          onChangeText={(value) => setEmail(value)}
+          onChangeText={(value) => handleEmailChange(value)}
           value={email}
           error={validationError.email}
         />
@@ -252,7 +268,7 @@ export const SignupTab = ({ navigation }) => {
           label="Password"
           placeholder="Password"
           secureTextEntry={true}
-          onChangeText={(value) => setPassword(value)}
+          onChangeText={(value) => handlePasswordChange(value)}
           value={password}
           error={validationError.password}
         />
@@ -260,7 +276,7 @@ export const SignupTab = ({ navigation }) => {
           label="Confirm Password"
           placeholder="Confirm Password"
           secureTextEntry={true}
-          onChangeText={(value) => setConfirmPassword(value)}
+          onChangeText={(value) => handleConfirmPasswordChange(value)}
           value={confirmPassword}
         />
       </View>
@@ -276,9 +292,21 @@ export const SignupTab = ({ navigation }) => {
       )}
       <SocialButtonsView
         loading={api.loading === "pending"}
-        onFacebookConnect={() => onFacebookConnect(dispatch, navigation, setErrorResponse)}
-        onGoogleConnect={() => onGoogleConnect(dispatch, navigation, setErrorResponse)}
-        onAppleConnect={() => onAppleConnect(dispatch, navigation, setErrorResponse)}
+        onFacebookConnect={() => {
+          setErrorResponse([]);
+          onFacebookConnect(dispatch, navigation, setErrorResponse)
+        }
+        }
+        onGoogleConnect={() => {
+          setErrorResponse([]);
+          onGoogleConnect(dispatch, navigation, setErrorResponse)
+        }
+        }
+        onAppleConnect={() => {
+          setErrorResponse([]);
+          onAppleConnect(dispatch, navigation, setErrorResponse)
+        }
+        }
       />
       {
         errorResponse.map((value, index) =>
@@ -301,10 +329,11 @@ export const SignInTab = ({ navigation }) => {
     password: ""
   });
 
-  const { api } = useSelector((state) => state.login);
+  const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
   const onSigninPress = async () => {
+    setApiError([])
     if (!validateEmail.test(email)) {
       return setValidationError({
         email: "Please enter a valid email address.",
@@ -329,6 +358,15 @@ export const SignInTab = ({ navigation }) => {
       });
   };
 
+  const handleEmailChange = (value) =>{
+    setEmail(value)
+    setValidationError({...validationError, email: "" });
+  }
+
+  const handlePasswordChange = (value) =>{
+    setPassword(value)
+    setValidationError({...validationError, password: "" });
+  }
   return (
     <KeyboardAvoidingView>
       <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
@@ -336,7 +374,7 @@ export const SignInTab = ({ navigation }) => {
           keyboardType="email-address"
           label="Email address"
           placeholder="Email address"
-          onChangeText={(value) => setEmail(value)}
+          onChangeText={(value) => handleEmailChange(value)}
           value={email}
           error={validationError.email}
         />
@@ -344,7 +382,7 @@ export const SignInTab = ({ navigation }) => {
           label="Password"
           placeholder="Password"
           secureTextEntry={true}
-          onChangeText={(value) => setPassword(value)}
+          onChangeText={(value) => handlePasswordChange(value)}
           value={password}
           error={validationError.password}
         />
@@ -378,9 +416,21 @@ export const SignInTab = ({ navigation }) => {
       </View>
       <SocialButtonsView
         loading={api.loading === "pending"}
-        onFacebookConnect={() => onFacebookConnect(dispatch, navigation, setErrorResponse)}
-        onGoogleConnect={() => onGoogleConnect(dispatch, navigation, setErrorResponse)}
-        onAppleConnect={() => onAppleConnect(dispatch, navigation, setErrorResponse)}
+        onFacebookConnect={() => {
+          setErrorResponse([]);
+          onFacebookConnect(dispatch, navigation, setErrorResponse)
+        }
+        }
+        onGoogleConnect={() => {
+          setErrorResponse([]);
+          onGoogleConnect(dispatch, navigation, setErrorResponse)
+        }
+        }
+        onAppleConnect={() => {
+          setErrorResponse([]);
+          onAppleConnect(dispatch, navigation, setErrorResponse)
+        }
+        }
       />
       {
         errorResponse.map((value, index) =>

@@ -17,7 +17,7 @@ import { resetPassword } from "../auth";
 const PasswordRecover = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [errorResponse, setErrorResponse] = useState([])
-  const { api } = useSelector(state => state.login);
+  const { api } = useSelector(state => state.Login);
   const dispatch = useDispatch();
 
   const handlePasswordReset = () => {
