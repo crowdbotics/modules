@@ -120,7 +120,12 @@ const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
       dispatch(facebookLogin({ access_token: data.accessToken }))
         .then(unwrapResult)
         .then((res) => {
-          if (res.key) navigation.navigate(HOME_SCREEN_NAME);
+          if (res.key){
+            Alert.alert(
+              "SignIn Success",
+              "You are Logged In Successfully with Facebook Account.")
+              navigation.navigate(HOME_SCREEN_NAME);
+          }
         });
     }
   } catch (err) {
@@ -146,7 +151,13 @@ const onGoogleConnect = async (
     dispatch(googleLogin({ access_token: tokens.accessToken }))
       .then(unwrapResult)
       .then((res) => {
-        if (res.key) navigation.navigate(HOME_SCREEN_NAME);
+        if (res.key){
+          console.log("Logged In")
+          Alert.alert(
+            "SignIn Success",
+            "You are Logged In Successfully with Google Account.")
+            navigation.navigate(HOME_SCREEN_NAME);
+        } 
       })
       .catch(err => {
         setErrorResponse(errorResponse => [...errorResponse, err])
@@ -180,7 +191,12 @@ const onAppleConnect = async (
     )
       .then(unwrapResult)
       .then((res) => {
-        if (res.key) navigation.navigate(HOME_SCREEN_NAME)
+        if (res.key) {
+          Alert.alert(
+            "SignIn Success",
+            "You are Logged In Successfully with Apple Account.")
+            navigation.navigate(HOME_SCREEN_NAME);
+        }
       })
       .catch(error => {
         setErrorResponse(errorResponse => [...errorResponse, error])
@@ -234,6 +250,9 @@ export const SignupTab = ({ navigation }) => {
           "Signup Success",
           "Registration Successful. A confirmation will be sent to your e-mail address."
         );
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
       })
       .catch((err) => {  setApiError(apiError => [...apiError, err])});
   };
@@ -351,7 +370,14 @@ export const SignInTab = ({ navigation }) => {
     dispatch(loginRequest({ username: email, password }))
       .then(unwrapResult)
       .then((res) => {
-        if (res.token) navigation.navigate(HOME_SCREEN_NAME);
+        if (res.token) {
+          Alert.alert(
+          "Login Success",
+          "You are Logged In successfully")
+          setEmail('')
+          setPassword('')
+          navigation.navigate(HOME_SCREEN_NAME)
+        };
       })
       .catch((err) => {
         setApiError(apiError => [...apiError, err])
