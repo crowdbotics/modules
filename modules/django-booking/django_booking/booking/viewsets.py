@@ -1,8 +1,14 @@
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.utils import json
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail
+from demo import settings
+import requests
 
 
 class BookingView(ModelViewSet):
@@ -29,4 +35,90 @@ class BookingDetailView(ModelViewSet):
     queryset = BookingDetail.objects.all()
 
 
+class CreateCartView(APIView):
 
+    def post(self, request, *args, **kwargs):
+        try:
+            query = """mutation cartCreate($lines: [CartLineInput!]!) {
+                cartCreate(
+                    input: {
+                    lines: $lines
+                    }
+                ) {
+                    cart {
+                    id
+                    createdAt
+                    updatedAt
+                    lines(first: 1) {
+                        edges {
+                        node {
+                            id
+                            merchandise {
+                            ... on ProductVariant {
+                                id
+                            }
+                            }
+                        }
+                        }
+                    }
+                    attributes {
+                        key
+                        value
+                        }
+                    }
+                 }
+                }"""
+
+            payload = {
+                "query": query,
+                "variables": {
+                    "lines": request.data["lines"]
+                }
+            }
+            req = requests.post(settings.SHOPIFY_STORE_URL + 'api/2022-10/graphql.json/', json=payload,
+                                headers={"X-Shopify-Storefront-Access-Token": settings.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+                                         "Content-Type": "application/json"})
+            return Response(json.loads(req.text), status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, *args, **kwargs):
+        try:
+            query = """query cart($cartId: ID!){
+              cart(
+                id: $cartId
+              ) {
+                id
+                createdAt
+                updatedAt
+                lines(first: 2) {
+                  edges {
+                    node {
+                      id
+                      quantity
+                      merchandise {
+                        ... on ProductVariant {
+                          id
+                        }
+                      }
+                    attributes {
+                        key
+                        value
+                      }
+                    }
+                  }
+                }
+              }
+            }"""
+            payload = {
+                "query": query,
+                "variables": {
+                    "cartId": request.data["cartId"]
+                }
+            }
+            r = requests.post(settings.SHOPIFY_STORE_URL + '/api/2022-10/graphql.json/', json=payload,
+                              headers={"X-Shopify-Storefront-Access-Token": settings.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+                                       "Content-Type": "application/json"})
+            return Response(json.loads(r.text), status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
