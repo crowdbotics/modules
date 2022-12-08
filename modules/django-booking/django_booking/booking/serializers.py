@@ -36,9 +36,10 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         model = BookingDetail
         fields = '__all__'
 
-    def validate(self, data):
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
         if not self.instance:
-            if BookingDetail.objects.filter(identity_number=data['identity_number'],
-                                            from_date__lte=data['to_date'], to_date__gte=data['from_date']).exists():
+            if BookingDetail.objects.filter(identity_number=attrs['identity_number'],
+                                            from_date__lte=attrs['to_date'], to_date__gte=attrs['from_date']).exists():
                 raise serializers.ValidationError(f'This Booking slot is already booked.')
-            return data
+        return attrs
