@@ -20,20 +20,45 @@ Booking model will save the following information.
  * **`Venue`**:  Venue will be the location on which a hotel or cinema/theater or car rental store.
  * **`address`**: Brief address with the name the booked place.
 
+ ***Example***
+
+**1. Booking a hotel room**
+1. `quantity` will be the number of the rooms that a user has booked
+2. `Venue`:  Venue will be the location on which a hotel
+
+**2. Booking a ticket**
+1. `quantity`: will be the number of the tickets that a user has booked
+2. `Venue`:  Venue will be the location theater/cinema
+
+**2. Renting a car**
+1. `quantity`: will be the number of the cars that a user has booked
+2. `Venue`:  Venue will be the location of the car rental store.
+
 
 
 ### 2. BookingPlan Model
-
 A generic model for plans or offers that are offered to the booker.
 BookingPlan model saves the following information about the plan:
 * **`plane`** : The title for the plan
  * **`quantity`**: Description of the plan.
  * **`charges`**: The amount that a costumer will be charged with after availing the plan.
 
+ ***Example***
+
+**1. Plan for Booking a hotel room**
+1. On three day stay user will have a discount of 10%.
+2. On one week stay user will have a discount up to 15%.
+
+**2. Booking a ticket**
+1. If a user books four tickets will get one ticket free.   
+
+
 
  ### 3. BookingPenalty Model
 
 This model save the information about the charges or penalities that a user will have to pay in case of booking cancellation or refund.
+For example, a user has booked a room payed the charges for the room. On the exact date he/she didn't appear or cancels the reservation. User will be charged with the 10% charged from the original amount. 
+
 BookingPenalty Model has following fields:
 * **`title`** : The title for the penalty plan.
  * **`description`**: Description of the penalty plan.
@@ -61,7 +86,7 @@ List of api's endpoints with params needed for these apis.
 
 | Api Name                       | Param        | Description                                                    |
 | ------------------------------ |:------------:|:---------------------------------------------------------------|
-| `/modules/booking/booking/` | object `{quantity, venue, address}` | `quantity` is the number rooms or tickets. `Venue` the location and `address` is the brief address with booker name. |
+| `/modules/booking/booking/` | object `{quantity, venue, address}` | Will take the `quantity` is the number rooms or tickets. `Venue` the location and `address` is the brief address with booker name. |
 | `/modules/booking/penalties/` | object `{title, description, charge'}` | Will accept `title`, `description` and `charge` for the penalty plan in `POST` request. Will return the same fields in `GET` request. |
 | `/modules/booking/plans/` | object `{plan, description, charges'}` | Will accept `plan`, as title for the plan `description` and `charges` against that plan `POST` request. Will return the same fields in `GET` request.|
 | `/modules/booking/booking-details/` | object `{identity_number, type, description, occupancy, from_date, to_date, status, booking, penalty, plan}` | Will take the unique `identity_number` for the booking, `type`, `description` and `status` of the booking, id of the selected plan, booking and penalty as `plan`, `booking` and `penalty` in `POST` request. |
@@ -95,12 +120,12 @@ To add the booking into cart a booking `variantId` will be and `quantity` will b
     "lines": [
                 {
                 "quantity": 2,
-                "merchandiseId": "gid://shopify/ProductVariant/45605661606119",
+                "merchandiseId": "gid://shopify/ProductVariant/11223344",
                 "attributes": [{ "key": "to_date", "value": "2022-10-02" },{ "key": "from_date", "value": "2022-10-03" } ,{ "key": "address", "value": "Avenfield apartment, london"}]
                 },
                 {
                 "quantity": 3,
-                "merchandiseId": "gid://shopify/ProductVariant/45605670879463",
+                "merchandiseId": "gid://shopify/ProductVariant/55667788",
                 "attributes": { "key": "address", "value": "New York, USA" }
                 }
             ]

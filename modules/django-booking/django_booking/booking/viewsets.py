@@ -48,6 +48,10 @@ class CreateCartView(APIView):
     queryset = ShopifyBooking.objects.all()
 
     def post(self, request, *args, **kwargs):
+        """
+        Using cartCreate mutation to create a new cart and add a line item to the cart.
+        In the input, include the product variant ID (merchandiseId), include the line item quantity (quantity) and any attributes (attributes) associated with the product/booking.
+        """
         try:
             query = """mutation cartCreate($lines: [CartLineInput!]!) {
                 cartCreate(
@@ -96,6 +100,9 @@ class CreateCartView(APIView):
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, *args, **kwargs):
+        """
+        Using the cart query to retrieve a cart stored on Shopify.
+        In the query, supplying the cart ID as input."""
         try:
             query = """query cart($cartId: ID!){
               cart(

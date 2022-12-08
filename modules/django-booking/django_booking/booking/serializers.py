@@ -37,6 +37,10 @@ class BookingCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attrs):
+        """
+        Before creating a booking, validating if there is a booking already exists of the same product/booking variantId
+        for the selected date.
+        """
         attrs = super().validate(attrs)
         if not self.instance:
             if BookingDetail.objects.filter(identity_number=attrs['identity_number'],
