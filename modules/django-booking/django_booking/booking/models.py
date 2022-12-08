@@ -63,3 +63,9 @@ class BookingDetail(TimeStamp):
         return str(self.identity_number)
 
 
+class ShopifyBooking(TimeStamp):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="shopify_cart_user")
+    shopify_cart_id = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.shopify_cart_id)

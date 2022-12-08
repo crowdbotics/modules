@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer
-from .models import Booking, BookingPlan, BookingPenalty, BookingDetail
+from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
 from demo import settings
 import requests
 
@@ -35,7 +35,11 @@ class BookingDetailView(ModelViewSet):
     queryset = BookingDetail.objects.all()
 
 
+
 class CreateCartView(APIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = ShopifyBooking.objects.all()
 
     def post(self, request, *args, **kwargs):
         try:
@@ -78,7 +82,10 @@ class CreateCartView(APIView):
             req = requests.post(settings.SHOPIFY_STORE_URL + 'api/2022-10/graphql.json/', json=payload,
                                 headers={"X-Shopify-Storefront-Access-Token": settings.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
                                          "Content-Type": "application/json"})
-            return Response(json.loads(req.text), status=status.HTTP_200_OK)
+            load = json.loads(req.text)
+            shopify_id = ShopifyBooking.objects.create(user=request.user, shopify_cart_id=load["data"]["cartCreate"]["cart"]["id"])
+            shopify_id.save()
+            return Response(load, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
