@@ -51,7 +51,7 @@ class BookingDetail(TimeStamp):
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="booking_details")
     plan = models.ManyToManyField(BookingPlan, related_name="booking_plan")
     penalty = models.ForeignKey(BookingPenalty, on_delete=models.CASCADE, related_name="booking_penalty", null=True, blank=True)
-    identity_number = models.IntegerField(unique=True) #this is an optional foreign key for what we are booking
+    identity_number = models.IntegerField() #this is an optional foreign key for what we are booking
     type = models.CharField(max_length=100)
     description = models.TextField()
     occupancy = models.CharField(max_length=100)
