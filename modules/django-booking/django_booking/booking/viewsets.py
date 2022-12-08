@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer
+from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer, BookingCreateSerializer
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
 from demo import settings
 import requests
@@ -34,6 +34,12 @@ class BookingDetailView(ModelViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     queryset = BookingDetail.objects.all()
 
+
+class CreateBookingView(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    serializer_class = BookingCreateSerializer
+    queryset = BookingDetail.objects.all()
 
 
 class CreateCartView(APIView):
