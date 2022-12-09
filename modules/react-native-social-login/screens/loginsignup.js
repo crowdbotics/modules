@@ -120,16 +120,16 @@ const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
       dispatch(facebookLogin({ access_token: data.accessToken }))
         .then(unwrapResult)
         .then((res) => {
-          if (res.key){
+          if (res.key) {
             Alert.alert(
               "SignIn Success",
-              "You are Logged In Successfully with Facebook Account.")
-              navigation.navigate(HOME_SCREEN_NAME);
+              "You are Logged In Successfully with Facebook Account.");
+            navigation.navigate(HOME_SCREEN_NAME);
           }
         });
     }
   } catch (err) {
-    setErrorResponse(errorResponse => [...errorResponse, err])
+    setErrorResponse(errorResponse => [...errorResponse, err]);
   }
 };
 
@@ -151,23 +151,22 @@ const onGoogleConnect = async (
     dispatch(googleLogin({ access_token: tokens.accessToken }))
       .then(unwrapResult)
       .then((res) => {
-        if (res.key){
-          console.log("Logged In")
+        if (res.key) {
           Alert.alert(
             "SignIn Success",
-            "You are Logged In Successfully with Google Account.")
-            navigation.navigate(HOME_SCREEN_NAME);
-        } 
+            "You are Logged In Successfully with Google Account.");
+          navigation.navigate(HOME_SCREEN_NAME);
+        }
       })
       .catch(err => {
-        setErrorResponse(errorResponse => [...errorResponse, err])
-      })
+        setErrorResponse(errorResponse => [...errorResponse, err]);
+      });
   } catch (err) {
     if (err.code === statusCodes.SIGN_IN_CANCELLED) {
       setErrorResponse(errorResponse => [
         ...errorResponse,
         { error: "The user canceled the signin request." }
-      ])
+      ]);
     }
   }
 };
@@ -194,24 +193,25 @@ const onAppleConnect = async (
         if (res.key) {
           Alert.alert(
             "SignIn Success",
-            "You are Logged In Successfully with Apple Account.")
-            navigation.navigate(HOME_SCREEN_NAME);
+            "You are Logged In Successfully with Apple Account.");
+          navigation.navigate(HOME_SCREEN_NAME);
         }
       })
       .catch(error => {
-        setErrorResponse(errorResponse => [...errorResponse, error])
-      })
+        setErrorResponse(errorResponse => [...errorResponse, error]);
+      });
   } catch (err) {
-    setErrorResponse(errorResponse => [...errorResponse, err])
+    const errObj = { error: err };
+    setErrorResponse(errorResponse => [...errorResponse, errObj]);
   }
-}
+};
 
 export const SignupTab = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorResponse, setErrorResponse] = useState([])
-  const [apiError, setApiError] = useState([])
+  const [errorResponse, setErrorResponse] = useState([]);
+  const [apiError, setApiError] = useState([]);
   const [validationError, setValidationError] = useState({
     email: "",
     password: ""
@@ -221,7 +221,7 @@ export const SignupTab = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const onSignupPress = async () => {
-    setApiError([])
+    setApiError([]);
     setValidationError({ email: "", password: "" });
     if (!validateEmail.test(email)) {
       return setValidationError({
@@ -250,27 +250,27 @@ export const SignupTab = ({ navigation }) => {
           "Signup Success",
           "Registration Successful. A confirmation will be sent to your e-mail address."
         );
-        setEmail('')
-        setPassword('')
-        setConfirmPassword('')
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
       })
-      .catch((err) => {  setApiError(apiError => [...apiError, err])});
+      .catch((err) => { setApiError(apiError => [...apiError, err]); });
   };
 
-  const handleEmailChange = (value) =>{
-    setEmail(value)
-    setValidationError({...validationError, email: "" });
-  }
+  const handleEmailChange = (value) => {
+    setEmail(value);
+    setValidationError({ ...validationError, email: "" });
+  };
 
-  const handlePasswordChange = (value) =>{
-    setPassword(value)
-    setValidationError({...validationError, password: "" });
-  }
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    setValidationError({ ...validationError, password: "" });
+  };
 
-  const handleConfirmPasswordChange = (value) =>{
-    setConfirmPassword(value)
-    setValidationError({...validationError, password: "" });
-  }
+  const handleConfirmPasswordChange = (value) => {
+    setConfirmPassword(value);
+    setValidationError({ ...validationError, password: "" });
+  };
 
   return (
     <KeyboardAvoidingView>
@@ -308,22 +308,22 @@ export const SignupTab = ({ navigation }) => {
         <View key={index}>
           <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
         </View>
-      )}
+        )}
       <SocialButtonsView
         loading={api.loading === "pending"}
         onFacebookConnect={() => {
           setErrorResponse([]);
-          onFacebookConnect(dispatch, navigation, setErrorResponse)
+          onFacebookConnect(dispatch, navigation, setErrorResponse);
         }
         }
         onGoogleConnect={() => {
           setErrorResponse([]);
-          onGoogleConnect(dispatch, navigation, setErrorResponse)
+          onGoogleConnect(dispatch, navigation, setErrorResponse);
         }
         }
         onAppleConnect={() => {
           setErrorResponse([]);
-          onAppleConnect(dispatch, navigation, setErrorResponse)
+          onAppleConnect(dispatch, navigation, setErrorResponse);
         }
         }
       />
@@ -340,8 +340,8 @@ export const SignupTab = ({ navigation }) => {
 
 export const SignInTab = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [errorResponse, setErrorResponse] = useState([])
-  const [apiError, setApiError] = useState([])
+  const [errorResponse, setErrorResponse] = useState([]);
+  const [apiError, setApiError] = useState([]);
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
@@ -352,7 +352,7 @@ export const SignInTab = ({ navigation }) => {
   const dispatch = useDispatch();
 
   const onSigninPress = async () => {
-    setApiError([])
+    setApiError([]);
     if (!validateEmail.test(email)) {
       return setValidationError({
         email: "Please enter a valid email address.",
@@ -372,27 +372,27 @@ export const SignInTab = ({ navigation }) => {
       .then((res) => {
         if (res.token) {
           Alert.alert(
-          "Login Success",
-          "You are Logged In successfully")
-          setEmail('')
-          setPassword('')
-          navigation.navigate(HOME_SCREEN_NAME)
+            "Login Success",
+            "You are Logged In successfully");
+          setEmail("");
+          setPassword("");
+          navigation.navigate(HOME_SCREEN_NAME);
         };
       })
       .catch((err) => {
-        setApiError(apiError => [...apiError, err])
+        setApiError(apiError => [...apiError, err]);
       });
   };
 
-  const handleEmailChange = (value) =>{
-    setEmail(value)
-    setValidationError({...validationError, email: "" });
-  }
+  const handleEmailChange = (value) => {
+    setEmail(value);
+    setValidationError({ ...validationError, email: "" });
+  };
 
-  const handlePasswordChange = (value) =>{
-    setPassword(value)
-    setValidationError({...validationError, password: "" });
-  }
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    setValidationError({ ...validationError, password: "" });
+  };
   return (
     <KeyboardAvoidingView>
       <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
@@ -444,17 +444,17 @@ export const SignInTab = ({ navigation }) => {
         loading={api.loading === "pending"}
         onFacebookConnect={() => {
           setErrorResponse([]);
-          onFacebookConnect(dispatch, navigation, setErrorResponse)
+          onFacebookConnect(dispatch, navigation, setErrorResponse);
         }
         }
         onGoogleConnect={() => {
           setErrorResponse([]);
-          onGoogleConnect(dispatch, navigation, setErrorResponse)
+          onGoogleConnect(dispatch, navigation, setErrorResponse);
         }
         }
         onAppleConnect={() => {
           setErrorResponse([]);
-          onAppleConnect(dispatch, navigation, setErrorResponse)
+          onAppleConnect(dispatch, navigation, setErrorResponse);
         }
         }
       />

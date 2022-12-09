@@ -148,12 +148,12 @@ export const styles = StyleSheet.create({
     fontSize: 18
   },
   error1: {
-    color: '#f77474',
-    fontStyle: 'italic',
+    color: "#f77474",
+    fontStyle: "italic",
     fontSize: 14,
     paddingTop: 10,
     alignSelf: "center"
-  },
+  }
 });
 
 export const buttonStyles = {

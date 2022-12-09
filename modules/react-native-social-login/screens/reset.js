@@ -10,13 +10,13 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { styles, textInputStyles } from "./styles";
+import { styles } from "./styles";
 import { validateEmail, LOGO_URL } from "./constants.js";
 import { resetPassword } from "../auth";
 
 const PasswordRecover = ({ navigation }) => {
   const [email, setEmail] = useState("");
-  const [errorResponse, setErrorResponse] = useState([])
+  const [errorResponse, setErrorResponse] = useState([]);
   const { api } = useSelector(state => state.Login);
   const dispatch = useDispatch();
 
@@ -32,7 +32,7 @@ const PasswordRecover = ({ navigation }) => {
         );
         navigation.goBack();
       })
-      .catch(err => { setErrorResponse(errorResponse => [...errorResponse, err])});
+      .catch(err => { setErrorResponse(errorResponse => [...errorResponse, err]); });
   };
 
   const renderImage = () => {
