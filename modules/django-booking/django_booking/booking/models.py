@@ -1,5 +1,7 @@
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
+
+User = get_user_model()
 
 
 class TimeStamp(models.Model):
@@ -15,7 +17,7 @@ class Booking(TimeStamp):
     Booking model: This model will save the user information, the quantity(number of rooms, car or tickets) 
     and the address of the hotel, car rental store or a cinema/theater.
     """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="booking_user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="booking_user")
     quantity = models.IntegerField(default=1)
     venue = models.CharField(max_length=50)
     address = models.TextField()
@@ -71,8 +73,8 @@ class BookingDetail(TimeStamp):
     type = models.CharField(max_length=100)
     description = models.TextField()
     occupancy = models.CharField(max_length=100)
-    from_date = models.DateField()
-    to_date = models.DateField()
+    from_date = models.DateTimeField()
+    to_date = models.DateTimeField()
     status = models.CharField(max_length=13, choices=STATUS, default="pending")
 
     def __str__(self):
@@ -83,7 +85,7 @@ class ShopifyBooking(TimeStamp):
     """
     ShopifyBooking model: The model will save the cart id against a user. This id will be used to access the cart from the shopify.
     """
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="shopify_cart_user")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shopify_cart_user")
     shopify_cart_id = models.CharField(max_length=100)
 
     def __str__(self):

@@ -9,6 +9,7 @@ from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDet
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
 from demo import settings
 import requests
+import os
 
 
 class BookingView(ModelViewSet):
@@ -89,8 +90,8 @@ class CreateCartView(APIView):
                     "lines": request.data["lines"]
                 }
             }
-            req = requests.post(settings.SHOPIFY_STORE_URL + 'api/2022-10/graphql.json/', json=payload,
-                                headers={"X-Shopify-Storefront-Access-Token": settings.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+            req = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + 'api/2022-10/graphql.json/', json=payload,
+                                headers={"X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
                                          "Content-Type": "application/json"})
             load = json.loads(req.text)
             shopify_id = ShopifyBooking.objects.create(user=request.user, shopify_cart_id=load["data"]["cartCreate"]["cart"]["id"])
@@ -136,8 +137,8 @@ class CreateCartView(APIView):
                     "cartId": request.data["cartId"]
                 }
             }
-            r = requests.post(settings.SHOPIFY_STORE_URL + '/api/2022-10/graphql.json/', json=payload,
-                              headers={"X-Shopify-Storefront-Access-Token": settings.SHOPIFY_STOREFRONT_ACCESS_TOKEN,
+            r = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
+                              headers={"X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
                                        "Content-Type": "application/json"})
             return Response(json.loads(r.text), status=status.HTTP_200_OK)
         except Exception as e:
