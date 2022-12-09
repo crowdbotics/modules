@@ -37,7 +37,9 @@ Will take the unique `identity_number` for item, the booking, `type`, `descripti
 urlpatterns = [
     path("", include(router.urls)),
     path("shopify/booking/", CreateCartView.as_view()),
-    """
-    It will create a new cart add line_items to cart, retrieve cart from shopify. The cart id will be saved in the in DB using ShopifyBooking model
-    """
+    
 ]
+
+"""
+ (shopify/booking/)  It will create a new cart add line_items to cart, retrieve cart from shopify. The cart id will be saved in the in DB using ShopifyBooking model
+"""
