@@ -11,13 +11,13 @@ const ThreeColumns = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.sectionContainer}>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>1</Text>
+          {/* YOUR CODE HERE */}
         </View>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>2</Text>
+          {/* YOUR CODE HERE */}
         </View>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>3</Text>
+          {/* YOUR CODE HERE */}
         </View>
       </View>
     </ScrollView>

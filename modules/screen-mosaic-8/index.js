@@ -14,40 +14,40 @@ const Mosaic8 = () => {
           <View style={styles.col}>
             <View style={[styles.row, styles.f5]}>
               <View style={styles.col}>
-                <Text style={styles.textHeading1}>b</Text>
+                <Text style={styles.textHeading1}>b1</Text>
               </View>
             </View>
             <View style={[styles.row, styles.f3]}>
               <View style={styles.col}>
-                <Text style={styles.textHeading1}>b</Text>
+                <Text style={styles.textHeading1}>b2</Text>
               </View>
               <View style={styles.col}>
-                <Text style={styles.textHeading1}>b</Text>
+                <Text style={styles.textHeading1}>b3</Text>
               </View>
             </View>
           </View>
           <View style={styles.col}>
             <View style={[styles.row, styles.f1]}>
               <View style={[styles.col, styles.f1]}>
-                <Text style={styles.textHeading1}>d</Text>
+                <Text style={styles.textHeading1}>d1</Text>
               </View>
               <View style={[styles.col, styles.f1]}>
-                <Text style={styles.textHeading1}>e</Text>
+                <Text style={styles.textHeading1}>e1</Text>
               </View>
             </View>
             <View style={[styles.row, styles.f3]}>
               <View style={styles.col}>
-                <Text style={styles.textHeading1}>d</Text>
+                <Text style={styles.textHeading1}>d2</Text>
               </View>
               <View style={styles.col}>
                 <View style={styles.row}>
                   <View style={styles.col}>
-                    <Text style={styles.textHeading1}>f</Text>
+                    <Text style={styles.textHeading1}>f1</Text>
                   </View>
                 </View>
                 <View style={styles.row}>
                   <View style={styles.col}>
-                    <Text style={styles.textHeading1}>f</Text>
+                    <Text style={styles.textHeading1}>f2</Text>
                   </View>
                 </View>
               </View>
@@ -59,10 +59,10 @@ const Mosaic8 = () => {
             <View style={styles.row}>
               <View style={[styles.row]}>
                 <View style={[styles.col, styles.f3]}>
-                  <Text style={styles.textHeading1}>b</Text>
+                  <Text style={styles.textHeading1}>b4</Text>
                 </View>
                 <View style={[styles.col, styles.f2]}>
-                  <Text style={styles.textHeading1}>b</Text>
+                  <Text style={styles.textHeading1}>b5</Text>
                 </View>
               </View>
             </View>
@@ -70,29 +70,29 @@ const Mosaic8 = () => {
                 <View style={[styles.col, styles.f1]}>
                   <View style={[styles.row]}>
                     <View style={styles.col}>
-                      <Text style={styles.textHeading1}>f</Text>
+                      <Text style={styles.textHeading1}>f3</Text>
                     </View>
                   </View>
                   <View style={styles.row}>
                     <View style={styles.col}>
-                      <Text style={styles.textHeading1}>f</Text>
+                      <Text style={styles.textHeading1}>f4</Text>
                     </View>
                   </View>
                 </View>
                 <View style={[styles.col, styles.f2]}>
-                  <Text style={styles.textHeading1}>b2</Text>
+                  <Text style={styles.textHeading1}>b6</Text>
                 </View>
               </View>
           </View>
           <View style={[styles.col, styles.f1]}>
             <View style={[styles.row, styles.f4]}>
               <View style={[styles.col, styles.f1]}>
-                <Text style={styles.textHeading1}>d</Text>
+                <Text style={styles.textHeading1}>d3</Text>
               </View>
             </View>
             <View style={[styles.row, styles.f2]}>
               <View style={styles.col}>
-                <Text style={styles.textHeading1}>d</Text>
+                <Text style={styles.textHeading1}>d4</Text>
               </View>
             </View>
           </View>

@@ -11,19 +11,19 @@ const FiveRows = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.sectionContainer}>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>Section 1</Text>
+          {/* YOUR CODE HERE */}
         </View>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>Section 2</Text>
+          {/* YOUR CODE HERE */}
         </View>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>Section 3</Text>
+          {/* YOUR CODE HERE */}
         </View>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>Section 4</Text>
+          {/* YOUR CODE HERE */}
         </View>
         <View style={styles.section}>
-          <Text style={styles.textHeading1}>Section 5</Text>
+          {/* YOUR CODE HERE */}
         </View>
       </View>
     </ScrollView>

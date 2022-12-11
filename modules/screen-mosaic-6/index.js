@@ -11,7 +11,7 @@ const Mosaic6 = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.sectionContainer}>
         <View style={styles.row}>
-          <View style={[styles.col, styles.f1]}>
+          <View style={[styles.col]}>
             <View style={[styles.row]}>
               <View style={styles.col}>
                 <View style={[styles.row, styles.f2]}>

@@ -11,10 +11,10 @@ const Mosaic1 = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.sectionContainer}>
         <View style={[styles.section, styles.sectoinTop]}>
-          <Text style={styles.textHeading1}>Section 1</Text>
+          {/* YOUR CODE HERE */}
         </View>
         <View style={[styles.section, styles.sectionBottom]}>
-          <Text style={styles.textHeading1}>Section 2</Text>
+          {/* YOUR CODE HERE */}
         </View>
       </View>
     </ScrollView>

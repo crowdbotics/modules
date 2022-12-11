@@ -12,26 +12,26 @@ const LargeGrid = () => {
       <View style={styles.gridContainer}>
         <View style={styles.row}>
           <View style={styles.col}>
-            <Text style={styles.textHeading1}>(R1,C1)</Text>
+            {/* YOUR CODE HERE */}
           </View>
           <View style={styles.col}>
-            <Text style={styles.textHeading1}>R1,C2</Text>
-          </View>
-        </View>
-        <View style={styles.row}>
-          <View style={styles.col}>
-            <Text style={styles.textHeading1}>R2,C1</Text>
-          </View>
-          <View style={styles.col}>
-            <Text style={styles.textHeading1}>R2,C2</Text>
+            {/* YOUR CODE HERE */}
           </View>
         </View>
         <View style={styles.row}>
           <View style={styles.col}>
-            <Text style={styles.textHeading1}>R3,C1</Text>
+            {/* YOUR CODE HERE */}
           </View>
           <View style={styles.col}>
-            <Text style={styles.textHeading1}>R3,C3</Text>
+            {/* YOUR CODE HERE */}
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.col}>
+            {/* YOUR CODE HERE */}
+          </View>
+          <View style={styles.col}>
+            {/* YOUR CODE HERE */}
           </View>
         </View>
       </View>

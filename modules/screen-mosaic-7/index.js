@@ -14,7 +14,7 @@ const Mosaic7 = () => {
           <View style={[styles.col, styles.f2]}>
             <View style={[styles.row]}>
               <View style={styles.col}>
-                <Text style={styles.textHeading1}>b</Text>
+                {/* YOUR CODE HERE */}
               </View>
             </View>
           </View>
@@ -23,12 +23,12 @@ const Mosaic7 = () => {
               <View style={styles.col}>
                 <View style={styles.row}>
                   <View style={styles.col}>
-                    <Text style={styles.textHeading1}>f</Text>
+                    {/* YOUR CODE HERE */}
                   </View>
                 </View>
                 <View style={styles.row}>
                   <View style={styles.col}>
-                    <Text style={styles.textHeading1}>f</Text>
+                    {/* YOUR CODE HERE */}
                   </View>
                 </View>
               </View>
@@ -41,12 +41,12 @@ const Mosaic7 = () => {
               <View style={styles.col}>
                 <View style={styles.row}>
                   <View style={styles.col}>
-                    <Text style={styles.textHeading1}>f</Text>
+                    {/* YOUR CODE HERE */}
                   </View>
                 </View>
                 <View style={styles.row}>
                   <View style={styles.col}>
-                    <Text style={styles.textHeading1}>f</Text>
+                    {/* YOUR CODE HERE */}
                   </View>
                 </View>
               </View>
@@ -55,7 +55,7 @@ const Mosaic7 = () => {
           <View style={[styles.col, styles.f2]}>
             <View style={[styles.row]}>
               <View style={styles.col}>
-                <Text style={styles.textHeading1}>b</Text>
+                {/* YOUR CODE HERE */}
               </View>
             </View>
           </View>
