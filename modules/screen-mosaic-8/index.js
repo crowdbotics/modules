@@ -103,14 +103,14 @@ const Mosaic8 = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
-  sectionContainer : {
+  sectionContainer: {
     flex: 1,
     backgroundColor: "white",
     marginHorizontal: 10,
     marginVertical: 5,
-    padding: 15,
+    padding: 15
   },
   section: {
     flex: 1,
@@ -118,15 +118,15 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     padding: 15,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   sectoinTop: {
-    flex: 5,
+    flex: 5
   },
   sectionBottom: {
     flex: 1,
     margin: 0,
-    padding: 0,
+    padding: 0
   },
   textHeading1: {
     fontSize: 20,
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "white",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   col: {
     flex: 1,
@@ -145,38 +145,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: "white"
   },
   f1: {
-    flex: 1,
+    flex: 1
   },
   f2: {
-    flex: 2,
+    flex: 2
   },
   f3: {
-    flex: 3,
+    flex: 3
   },
   f4: {
-    flex: 4,
+    flex: 4
   },
   f5: {
-    flex: 5,
+    flex: 5
   },
   f6: {
-    flex: 6,
+    flex: 6
   },
   f7: {
-    flex: 7,
+    flex: 7
   },
   f8: {
-    flex: 8,
+    flex: 8
   },
   f9: {
-    flex: 9,
+    flex: 9
   },
   f10: {
-    flex: 10,
-  },
+    flex: 10
+  }
 });
 
 export default Mosaic8;

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Text,
   View,
   StyleSheet,
   ScrollView
@@ -31,12 +30,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  sectionContainer : {
+  sectionContainer: {
     flex: 1,
     backgroundColor: "pink",
     marginHorizontal: 10,
     marginVertical: 5,
-    padding: 15,
+    padding: 15
   },
   section: {
     flex: 1,
@@ -44,12 +43,12 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     padding: 15,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   textHeading1: {
     fontSize: 20,
     fontWeight: "bold"
-  },
+  }
 });
 
 export default FourRows;

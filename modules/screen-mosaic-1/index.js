@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Text,
   View,
   StyleSheet,
   ScrollView
@@ -22,14 +21,14 @@ const Mosaic1 = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
-  sectionContainer : {
+  sectionContainer: {
     flex: 1,
     backgroundColor: "white",
     marginHorizontal: 10,
     marginVertical: 5,
-    padding: 15,
+    padding: 15
   },
   section: {
     flex: 1,
@@ -37,19 +36,18 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     padding: 15,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   sectoinTop: {
-    flex: 5,
+    flex: 5
   },
   sectionBottom: {
-    flex: 1,
+    flex: 1
   },
   textHeading1: {
     fontSize: 20,
     fontWeight: "bold"
-  },
+  }
 });
-
 
 export default Mosaic1;

@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Text,
   View,
   StyleSheet,
   ScrollView
@@ -23,14 +22,14 @@ const TwoColumns = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
+
     backgroundColor: "#fff"
   },
-  sectionContainer : {
+  sectionContainer: {
     flex: 1,
     flexDirection: "row",
     margin: 10,
-    padding: 5,
+    padding: 5
   },
   section: {
     flex: 1,
@@ -38,14 +37,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     padding: 15,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
 
   },
   textHeading1: {
     fontSize: 20,
     fontWeight: "bold"
-  },
+  }
 });
-
 
 export default TwoColumns;
