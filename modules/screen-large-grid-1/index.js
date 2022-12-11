@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Text,
   View,
   StyleSheet,
   ScrollView
@@ -32,10 +31,10 @@ const LargeGrid1 = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   gridContainer: {
-    flex: 1,
+    flex: 1
   },
   row: {
     flex: 1,
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginHorizontal: 5,
     padding: 5,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   col: {
     flex: 1,
@@ -52,12 +51,12 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
-    overflow: "hidden",
+    overflow: "hidden"
   },
   textHeading1: {
     fontSize: 20,
     fontWeight: "bold"
-  },
+  }
 
 });
 
