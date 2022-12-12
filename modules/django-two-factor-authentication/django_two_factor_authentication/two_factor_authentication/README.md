@@ -20,21 +20,20 @@ pip install sendgrid
 ## Configurations Keys
 settings.py
 ```
-TIME_ZONE = 'asia/Karachi'
+SENDGRID_API_KEY = env.str("SENDGRID_API_KEY", "")
+ACCOUNT_SID = env.str("ACCOUNT_SID", "")
+AUTH_TOKEN = env.str("AUTH_TOKEN", "")
+TOTP_SECRET = env.str("TOTP_SECRET", "3232323232323232")
+OTP_EXPIRATION_TIME = env.str("OTP_EXPIRATION_TIME", 60)
+EMAIL_SUBJECT = env.str("EMAIL_SUBJECT", "Crowdbotics 2FA code")
 
-SENDGRID_API_KEY = '...'
-ACCOUNT_SID = '...'
-AUTH_TOKEN = '...'
-TOTP_SECRET = '3232323232323232'
-OTP_EXPIRATION_TIME = 60
-
-EMAIL_HOST = "smtp.sendgrid.net"
-EMAIL_HOST_USER = '...'
+EMAIL_HOST = env.str("EMAIL_HOST", "")
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL='...'
-PHONE='...'
+EMAIL=env.str("EMAIL", "")
+PHONE=env.str("PHONE", "")
 ```
 
 ## Api Table

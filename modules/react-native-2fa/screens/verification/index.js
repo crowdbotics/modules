@@ -1,83 +1,60 @@
 
-import React, { useState, useCallback, useContext } from "react";
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import React, { Fragment, useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
-import { sendVerification, getUser, verify2FA, verifyCode } from "../../api";
+import { sendVerification, verifyCode } from "../../api";
 import Loader from "../../components/Loader";
-import { OptionsContext } from "@options";
+import { useRoute } from '@react-navigation/native';
 
-// @ts-ignore
-import { useFocusEffect } from "@react-navigation/native";
 
 const Verification = (props) => {
-  const options = useContext(OptionsContext);
+  const route = useRoute();
   const [code, setCode] = useState("");
-  const [error, setError] = useState(false);
+  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [networkError, setNetworkError] = useState(false);
 
-  useFocusEffect(useCallback(() => {
-    setError(false);
-    setIsLoading(true);
-    getUser({ id: options.user.id }).then(async res => {
-      options.user = res;
-      setIsLoading(false);
-      if (!res.method) {
-        methodHandler();
-      } else {
-        await handleVerification();
-      }
-    }).catch((err) => {
-      setIsLoading(false);
-      console.log("Error: ", err);
-    });
-  }, []));
 
-  const clickHandler = async () => {
-    try {
-      setIsLoading(true);
-      let response = null;
-      if (options.user.method === "SMS") {
-        response = await verifyCode({ code: +code, phone_number: options.user.phone_number });
-      } else if (options.user.method === "EMAIL") {
-        response = await verifyCode({ code: +code, email: options.user.email });
-      } else if (options.user.method === "2FA") {
-        response = await verify2FA({ id: options.user.id, otp: code });
-      }
-      setIsLoading(false);
-      if (response.ok) {
-        props.navigation.navigate("Home");
-      } else {
-        setError(true);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      setNetworkError(true);
-    }
-  };
   const handleVerification = async () => {
     setIsLoading(true);
-    if (options.user.method === "SMS") {
-      await sendVerification({ phone_number: options.user.phone_number });
-    } else if (options.user.method === "EMAIL") {
-      await sendVerification({ email: options.user.email });
-    }
+    const api_res = await verifyCode({ method: route.params["method"], code: code })
+    const payload = await api_res.json()
     setIsLoading(false);
+    if (api_res.ok) {
+      props.navigation.navigate("Home");
+    } else {
+      setErrors(payload)
+    }
   };
 
-  const methodHandler = () => {
-    props.navigation.navigate("AuthTypes");
+
+  const handleResendCode = async () => {
+    setIsLoading(true);
+    const api_res = await sendVerification({ method: route.params["method"] })
+    const payload = await api_res.json()
+    setIsLoading(false);
+    if (api_res.ok) {
+      props.navigation.navigate("Verification", { method: route.params["method"], link: payload?.link });
+    } else {
+      setErrors(payload)
+    }
   };
+
+  const handleQRCode = () => {
+    props.navigation.navigate("GoogleAuth", {
+      link: route.params["link"]
+    });
+  }
 
   return (
-    <>
+    <Fragment>
       {isLoading && <Loader />}
       <View style={styles.main}>
         <View>
-          {options.user.method !== "2FA"
-            ? <Text style={styles.text}>Verification code has been sent to your {options.user.method === "SMS" ? `phone number, ${options.user.phone_number}` : `email, ${options.user.email}`}</Text>
-            : <Text style={styles.text}>Enter your 6-digits code from Google Authenticator App</Text>
+          {route.params["method"] == "google_authenticator"
+            ? <Text style={styles.text}>Enter your 6-digits code from Google Authenticator App</Text>
+            : <Text style={styles.text}>Verification code has been sent to your {
+              route.params["method"] == "phone_number" ? "Phone number" : "Email"}</Text>
           }
           <Input
             label="Enter Code"
@@ -86,28 +63,35 @@ const Verification = (props) => {
             setValue={setCode}
             autoCapitalize="none"
             placeholder="Verification code"
-            errorText={(error && "The code does not match") || (networkError && "Network Error")}
           />
-
+          {
+            Object.keys(errors).map(key => (
+              <Fragment>
+                {errors[key].map(obj => <Text key={key} style={styles.error}>{key}: {obj}</Text>)}
+              </Fragment>
+            ))
+          }
           <View>
-            <Button mode="contained" onPress={clickHandler} disabled={code === ""}>
+            <Button mode="contained" onPress={handleVerification}>
               Verify
             </Button>
           </View>
-          {options.user.method !== "2FA" &&
+          {route.params["method"] != "google_authenticator" &&
             <View style={styles.resend}>
               <Text>Did not receive a code? </Text>
-              <TouchableOpacity onPress={handleVerification}><Text style={styles.textPurple}>Resend</Text></TouchableOpacity>
+              <TouchableOpacity onPress={handleResendCode}><Text style={styles.textPurple}>Resend</Text></TouchableOpacity>
             </View>
           }
         </View>
-        <View style={styles.pt15}>
-          <Button mode="contained" onPress={methodHandler}>
-            Change 2FA method
-          </Button>
-        </View>
+        {route.params["method"] == "google_authenticator" &&
+          <View style={styles.pt15}>
+            <Button mode="contained" onPress={handleQRCode}>
+              Google Authenticator QR Code
+            </Button>
+          </View>
+        }
       </View>
-    </>
+    </Fragment>
   );
 };
 export default Verification;
@@ -140,5 +124,10 @@ const styles = StyleSheet.create({
   },
   pt15: {
     paddingTop: 15
+  },
+  error: {
+    paddingLeft: 5,
+    fontStyle: "italic",
+    color: "red"
   }
 });

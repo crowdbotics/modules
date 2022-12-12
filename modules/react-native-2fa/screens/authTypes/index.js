@@ -1,80 +1,66 @@
-import React, { useState, useContext } from "react";
+import React, { Fragment, useState, useContext } from "react";
 import { Text, StyleSheet, View } from "react-native";
-import { set2faMethod } from "../../api";
+import { getGoogleAuthenticatorQR, sendVerification } from "../../api";
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import { OptionsContext } from "@options";
+
+
 const AuthTypes = (props) => {
   const options = useContext(OptionsContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  const onSMS = async () => {
+  const onHandleMethod = async (method) => {
     setIsLoading(true);
-    await set2faMethod({
-      id: options.user.id,
-      method: "SMS"
-    }).then((res) => {
-      setIsLoading(false);
-      props.navigation.navigate("Verification");
-    }).catch((err) => {
-      setIsLoading(false);
-      console.log("Error: ", err);
-    });
-  };
-
-  const onEmail = async () => {
-    setIsLoading(true);
-    await set2faMethod({
-      id: options.user.id,
-      method: "EMAIL"
-    }).then((res) => {
-      setIsLoading(false);
-      props.navigation.navigate("Verification");
-    }).catch((err) => {
-      setIsLoading(false);
-      console.log("Error: ", err);
-    });
-  };
-
-  const on2FA = async () => {
-    setIsLoading(true);
-    await set2faMethod({
-      id: options.user.id,
-      method: "2FA"
-    }).then((res) => {
-      setIsLoading(false);
-      props.navigation.navigate("GoogleAuth");
-    }).catch((err) => {
-      setIsLoading(false);
-      console.log("Error: ", err);
-    });
-  };
+    let api_res = null
+    if (method == "google_authenticator")
+      api_res = await getGoogleAuthenticatorQR()
+    else
+      api_res = await sendVerification({ method: method })
+    const payload = await api_res.json()
+    setIsLoading(false);
+    if (api_res.ok) {
+      props.navigation.navigate("Verification", { method: method, link: payload?.link });
+    } else {
+      setErrors(payload)
+    }
+  }
 
   return (
-    <>
-      {isLoading && <Loader/>}
+    <Fragment>
+      {isLoading && <Loader />}
       <View style={styles.main}>
         <Text style={styles.text}>Verification methods</Text>
         <Text style={styles.text13}>Please select an option for verification from the following:</Text>
         <View style={options.styles.FlexRowSpaceBetween}>
           <View style={[options.styles.wp50, options.styles.p5]}>
-            <Button onPress={onSMS} clicked={options.user.method === "SMS"}>
+            <Button onPress={() => onHandleMethod("phone_number")}>
               SMS
             </Button>
           </View>
           <View style={[options.styles.wp50, options.styles.p5]}>
-            <Button onPress={onEmail} clicked={options.user.method === "EMAIL"}>
+            <Button onPress={() => onHandleMethod("email")}>
               Email
             </Button>
           </View>
         </View>
         <View style={[options.styles.wp100, options.styles.p5]}>
-          <Button onPress={on2FA} clicked={options.user.method === "2FA"}>
-            2FA
+          <Button onPress={() => onHandleMethod("google_authenticator")}>
+            Google Authenticator
           </Button>
         </View>
       </View>
-    </>
+      <View style={styles.main}>
+        {
+          Object.keys(errors).map(key => (
+            <Fragment>
+              {errors[key].map(obj => <Text key={key} style={styles.error}>{key}: {obj}</Text>)}
+            </Fragment>
+          ))
+        }
+      </View>
+    </Fragment>
   );
 };
 
@@ -91,8 +77,12 @@ const styles = StyleSheet.create({
   text13: {
     fontSize: 13,
     marginBottom: 12
+  },
+  error: {
+    paddingLeft: 5,
+    fontStyle: "italic",
+    color: "red"
   }
-
 });
 
 export default AuthTypes;

@@ -18,15 +18,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const user = {
-  id: 1,
-  email: "",
-  phone_number: "",
-  secret: "",
-  method: ""
-};
+const token = "fa2c8cfafd4bba89b9c34106c6ce7a0dd53de4c0"
 
 export default {
   styles: styles,
-  user
+  token
 };

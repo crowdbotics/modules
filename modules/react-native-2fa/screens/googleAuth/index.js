@@ -1,18 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Text, StyleSheet, View, Linking } from "react-native";
-import Loader from "../../components/Loader";
-import { getCode } from "../../api";
-// @ts-ignore
+import React, { useEffect, useState } from "react";
+import { Linking, StyleSheet, View } from "react-native";
+import { useRoute } from '@react-navigation/native';
 import QRCode from "react-native-qrcode-svg";
-import { OptionsContext } from "@options";
 import Button from "../../components/Button";
 
-const GoogleAuth = (props) => {
-  const options = useContext(OptionsContext);
-  const [isLoading, setIsLoading] = useState(true);
-  const [name, setName] = useState(false);
-  const [key, setKey] = useState(false);
-  const [link, setLink] = useState("");
+
+const GoogleAuth = () => {
+  const [link, setLink] = useState(null);
+  const route = useRoute();
 
   const openLink = () => {
     const supported = Linking.canOpenURL(link);
@@ -22,39 +17,21 @@ const GoogleAuth = (props) => {
   };
 
   useEffect(() => {
-    getCode(options.user.id).then(res => {
-      setKey(res.secret);
-      setLink(res.link);
-      setName(res.name);
-      setIsLoading(false);
-    }).catch(err => err);
+    setLink(route.params["link"])
   }, []);
 
   return (
     <View style={styles.main}>
-      {isLoading
-        ? <Loader />
-        : <>
-        <View>
-          <View style={styles.sameDevice}>
-            <Button onPress={openLink}>
-              Set up on same device
-            </Button>
-          </View>
+      <View style={styles.pt30}>
+        {link && <QRCode value={link} size={150} />}
+      </View>
+      <View>
+        <View style={styles.sameDevice}>
+          <Button onPress={openLink}>
+            Set up on same device
+          </Button>
         </View>
-        <View style={styles.pt30}>
-          <QRCode value={link} size={150}/>
-        </View>
-        <View style={styles.pt30}>
-          <Text style={[styles.text, styles.description]}>Please enter the below credentials in the Google authenticator app to get a code and verify.</Text>
-        </View>
-
-        <View style={styles.credentials}>
-          <Text style={ styles.auth}>Authenticator Credential</Text>
-          <Text style={styles.text}>Account Name: {name} </Text>
-          <Text style={styles.text}>Account Key: {key} </Text>
-        </View>
-      </>}
+      </View>
     </View>
   );
 };
@@ -68,28 +45,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column"
   },
-  text: {
-    fontWeight: "bold"
-  },
-  credentials: {
-    paddingTop: 12,
-    marginBottom: 50,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  auth: {
-    color: "#2E5984",
-    fontSize: 15
-  },
-  description: {
-    fontSize: 15,
-    color: "#2E5984",
-    fontWeight: "bold"
-  },
   sameDevice: {
-    paddingTop: 15,
+    paddingTop: 30,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
