@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const token = "fa2c8cfafd4bba89b9c34106c6ce7a0dd53de4c0"
+// User token
+const token = ""
 
 export default {
   styles: styles,

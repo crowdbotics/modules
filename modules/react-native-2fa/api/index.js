@@ -30,7 +30,7 @@ export const getGoogleAuthenticatorQR = async () => {
         "Authorization": `Token ${options.token}`
       }
     });
-    return await response
+    return response
   } catch (error) {
     throw new Error("NETWORK_ERROR").message;
   }
