@@ -20,11 +20,15 @@ pip install sendgrid
 ## Configurations Keys
 settings.py
 ```
+TIME_ZONE = 'asia/Karachi'
+
 SENDGRID_API_KEY = '...'
 ACCOUNT_SID = '...'
 AUTH_TOKEN = '...'
+TOTP_SECRET = '3232323232323232'
+OTP_EXPIRATION_TIME = 60
 
-EMAIL_HOST = '...'
+EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = '...'
 EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
 EMAIL_PORT = 587
@@ -38,10 +42,9 @@ List of api's endpoints with params needed for these apis.
 
 | Api Name                           | Param        | Description                                                    |
 | ------------------------------------------------------------|:------------:|-----------------------------------|
-| `two-factor-authentication/twofactorauth/send_otp/` <br /> method: `POST`| object <br />`{email: ''} or {phone_number: ''}`  | Takes an object containing email or phone number to send the OTP code.|
-| `two-factor-authentication/twofactorauth/send_otp/` <br /> method: `DELETE`|  object <br /> `{code: "", email or phone_number: ""}`  |Takes object containing otp code that was sent and email or phone number on to the code was sent. |
-| `/two-factor-authentication/2fa?id=${id}` <br /> method: `GET`|  user_id |Takes user id and returns object containing secret, name and link. |
-| `/two-factor-authentication/2fa` <br /> method: `POST`| object <br />`{id: '', otp: ''}` |Takes object containing user id and otp code that was sent. Returns response Ok in case of successful hit.|
-| `/two-factor-authentication/twofactorauth/${id}/` <br /> method: `PATCH`| object <br />`{id: '', method: ''}` |Takes object containing user id and 2fa method. Method can be email, sms or 2fa. Sets two-factor-authentication method for the user against the provided id.|
-| `/two-factor-authentication/twofactorauth/${id}/` <br /> method: `GET`| id |Takes user id and returns an object containing user details.|
+| `/two-factor-authentication/send-otp/` <br /> method: `POST`| object <br />`{ "method": "email" }`  | Takes an object containing method email, phone_number or google_authenticator|
+| `/two-factor-authentication/verify-otp/` <br /> method: `POST`|  object <br /> `{ "method": "email", "code": ""}`  |Takes object containing method and code|
+
+
+
 
