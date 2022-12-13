@@ -1,0 +1,11 @@
+{
+  "title": "Basiq Payments",
+  "description": "Basiq Payments Module, Unlock the potential of Open Finance.",
+  "root": "/",
+  "schema": {
+    "buttonText": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

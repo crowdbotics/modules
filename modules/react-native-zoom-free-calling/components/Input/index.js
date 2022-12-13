@@ -1,5 +1,5 @@
-import React from "react"
-import { StyleSheet, TextInput, View, Text } from 'react-native';
+import React from "react";
+import { StyleSheet, TextInput, View, Text } from "react-native";
 
 const Input = (props) => {
   return (
@@ -12,10 +12,10 @@ const Input = (props) => {
         value={props.value}
         onChangeText={props.onChangeText}
       />
-      { ('errorMessage' in props && props.errorMessage != "") && <Text style={styles.inputError}>{props.errorMessage}</Text>}
+      { ("errorMessage" in props && props.errorMessage !== "") && <Text style={styles.inputError}>{props.errorMessage}</Text>}
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   input: {
@@ -29,18 +29,17 @@ const styles = StyleSheet.create({
   inputError: {
     marginLeft: 4,
     fontStyle: "italic",
-    color: '#FA060D'
+    color: "#FA060D"
   },
   Mt10: {
     marginTop: 10
   },
   FwBold: {
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   color: {
-    color: '#000000'
+    color: "#000000"
   }
 });
 
-
-export default Input
+export default Input;

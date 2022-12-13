@@ -3,11 +3,11 @@ import path from "path";
 import fse from "fs-extra";
 import config from "./config.js";
 
-let cwd = process.cwd();
+const cwd = process.cwd();
 
-let template = path.join(cwd, config.scaffold.directory, "template");
-let custom = path.join(template, "custom");
-let parent = path.dirname(template);
+const template = path.join(cwd, config.scaffold.directory, "template");
+const custom = path.join(template, "custom");
+const parent = path.dirname(template);
 
 fse.ensureDir(template);
 fse.ensureDir(custom);

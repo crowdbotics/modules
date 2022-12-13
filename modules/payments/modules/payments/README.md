@@ -52,6 +52,30 @@ export const globalOptions = {
   stripe_secret_key: "sk_test_xxxxxxxx"
 }
 
+# Local configs
+1. in modules/payments/options.js
+
+configure your local options like this
+
+```
+export const localOptions = {
+  merchantName: "Example Inc.",
+  enableGooglePay: true,
+  enableApplePay: true,
+  merchantIdentifier: "merchant.com.crowdbotics.inaday",
+  merchantCountryCode: "US",
+  merchantCurrency: "USD",
+  stripeTestEnv: true,
+  stripePublishKey: "pk_test_xxxxxxxxxx"
+};
+```
+
+2. in modules/payments/api.js
+
+Update the token to make the api call with Authorization
+```
+const token = "Token 676364403988909cde7f501aa2efeaf9ca30d18c";
+```
 # Server
 
 python manage.py runserver 192.168.100.7:8000

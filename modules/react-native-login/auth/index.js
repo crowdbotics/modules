@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { mapErrorMessage } from "./utils";
 import { api } from "./api";
-
 export const loginRequest = createAsyncThunk(
   "login/loginRequest",
   async (payload) => {
@@ -44,7 +43,7 @@ export const resetPassword = createAsyncThunk(
 const initialState = {
   token: null,
   user: {},
-  api: { loading: "idle", error: null },
+  api: { loading: "idle", error: null }
 };
 export const slice = createSlice({
   name: "login",
@@ -146,6 +145,6 @@ export const slice = createSlice({
         state.api.error = mapErrorMessage(action.error);
         state.api.loading = "idle";
       }
-    },
-  },
+    }
+  }
 });

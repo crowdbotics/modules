@@ -1,0 +1,14 @@
+{
+    "name": "@modules/google-analytics",
+    "version": "1.0.0",
+    "description": "Google Analytics",
+    "private": true,
+    "main": "index.js",
+    "x-dependencies": {
+        "@react-native-firebase/app": "14.11.0",
+        "@react-native-firebase/analytics": "14.11.0"
+    },
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {}
+}

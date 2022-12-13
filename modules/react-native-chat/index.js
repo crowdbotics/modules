@@ -1,17 +1,16 @@
-import React, { useEffect } from 'react';
-import 'react-native-gesture-handler';
-import Pubnub from 'pubnub';
+import React, { useEffect } from "react";
+import "react-native-gesture-handler";
+import Pubnub from "pubnub";
 // @ts-ignore
 import { PubNubProvider } from "pubnub-react";
-import Navigator from './Navigator';
-import { useStore, uuid } from './Store/store';
-import listener from './Store/model';
-import options from './options';
-import { LogBox } from 'react-native';
-import { users } from './Store/storage';
-import { MenuProvider } from 'react-native-popup-menu';
+import Navigator from "./Navigator";
+import { useStore, uuid } from "./Store";
+import { listener } from "./utils";
+import options from "./options";
+import { LogBox } from "react-native";
+import { MenuProvider } from "react-native-popup-menu";
 
-LogBox.ignoreLogs(['Setting a timer'])
+LogBox.ignoreLogs(["Setting a timer"]);
 
 const client = new Pubnub({
   subscribeKey: options.PUBNUB_SUB,
@@ -23,28 +22,25 @@ const client = new Pubnub({
 const App = () => {
   const { state, dispatch } = useStore();
   useEffect(() => {
-    // AppState.addEventListener('change', (nextState) => {
-    //   if (nextState.match(/inactive|background/)) {
-    //     client.unsubscribeAll();
-    //   }
-    // });
+    const userIds = options.users.map((user) => {
+      return user._id;
+    });
     client.addListener(listener(state, dispatch));
     client.subscribe({
-      channelGroups: users.map(user => {return user._id}),
+      channelGroups: [options.user._id, ...userIds],
       withPresence: true
     });
-    // return () => client.unsubscribeAll()
   }, []);
-  
-  return <>
+
+  return (
     <PubNubProvider client={client}>
       <MenuProvider>
         <Navigator />
       </MenuProvider>
     </PubNubProvider>
-  </>;
+  );
 };
 export default {
-  title: 'Chat',
+  title: "Chat",
   navigator: App
-}
+};

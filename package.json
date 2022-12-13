@@ -12,12 +12,15 @@
     "add": "node scripts/add.js",
     "remove": "node scripts/remove.js",
     "parse": "node scripts/parse.js",
+    "dist": "node scripts/parse.js --write",
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
     "template": "node scripts/template.js",
     "bootstrap": "npm run demo; npm run raw; npm run cookie; npm run parse",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "yarn run eslint modules scripts",
+    "commit-module": "node scripts/commit-module.js"
   },
   "repository": {
     "type": "git",
@@ -30,21 +33,27 @@
   },
   "homepage": "https://github.com/crowdbotics/modules#readme",
   "dependencies": {
-    "@babel/cli": "^7.14.8",
-    "@babel/core": "^7.15.0",
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.5",
     "@babel/generator": "^7.14.9",
-    "@babel/parser": "^7.15.3",
-    "@babel/preset-env": "^7.15.0",
-    "@babel/template": "^7.12.7",
-    "@babel/types": "^7.15.0",
-    "ajv": "^8.6.3",
+    "@babel/parser": "^7.18.8",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/template": "^7.16.7",
+    "@babel/types": "^7.18.8",
+    "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "find": "^0.3.0",
-    "fs-extra": "^10.0.0",
-    "prettier": "^2.3.2"
+    "fs-extra": "^10.1.0",
+    "prettier": "^2.6.2"
   },
   "devDependencies": {
     "@react-native-community/cli": "5.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-react": "^7.30.0",
     "react-native": "0.64.2"
   }
 }

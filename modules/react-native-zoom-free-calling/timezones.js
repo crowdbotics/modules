@@ -1,10 +1,10 @@
 export const timezones = [
-  { value: 'Pacific/Midway', label: 'Midway Island, Samoa' },
-  { value: 'Pacific/Pago_Pago', label: 'Pago Pago' },
-  { value: 'Pacific/Honolulu', label: 'Hawaii' },
-  { value: 'America/Anchorage', label: 'Alaska' },
-  { value: 'America/Vancouver', label: 'Vancouver' },
-  { value: 'America/Los_Angeles', label: 'Pacific Time (US and Canada)' },
+  { value: "Pacific/Midway", label: "Midway Island, Samoa" },
+  { value: "Pacific/Pago_Pago", label: "Pago Pago" },
+  { value: "Pacific/Honolulu", label: "Hawaii" },
+  { value: "America/Anchorage", label: "Alaska" },
+  { value: "America/Vancouver", label: "Vancouver" },
+  { value: "America/Los_Angeles", label: "Pacific Time (US and Canada)" },
   { value: "America/Tijuana", label: "Tijuana" },
   { value: "America/Edmonton", label: "Edmonton" },
   { value: "America/Denver", label: "Mountain Time (US and Canada)" },
@@ -31,7 +31,7 @@ export const timezones = [
   { value: "America/St_Johns", label: "Newfoundland and Labrador" },
   { value: "America/Montevideo", label: "Montevideo" },
   { value: "America/Araguaina", label: "Brasilia" },
-  { value: "America/Argentina", label: "Buenos_Aires	Buenos Aires, Georgetown" },
+  { value: "America/Argentina", label: "Buenos_Aires Buenos Aires, Georgetown" },
   { value: "America/Godthab", label: "Greenland" },
   { value: "America/Sao_Paulo", label: "Sao Paulo" },
   { value: "Atlantic/Azores", label: "Azores" },
@@ -133,5 +133,5 @@ export const timezones = [
   { value: "Asia/Kolkata", label: "Mumbai, Kolkata, New Delhi" },
   { value: "Europe/Kiev", label: "Kiev" },
   { value: "America/Tegucigalpa", label: "Tegucigalpa" },
-  { value: "Pacific/Apia", label: "Independent State of Samoa" },
+  { value: "Pacific/Apia", label: "Independent State of Samoa" }
 ];

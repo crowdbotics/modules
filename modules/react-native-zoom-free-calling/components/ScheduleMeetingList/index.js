@@ -1,24 +1,22 @@
-import React from 'react';
-import { View, Text, Pressable, SectionList } from "react-native";
-import { parse_meeting_id,} from '../../utils';
-import { StyleSheet } from 'react-native';
-import { timezones } from '../../timezones';
+import React from "react";
+import { View, Text, Pressable, SectionList, StyleSheet } from "react-native";
+import { parseMeetingId } from "../../utils";
+import { timezones } from "../../timezones";
 
 const ScheduleMeetingList = (props) => {
-
   const listItem = (item) => {
     return (
       <View style={styles.TimeArea}>
         <View style={styles.TimeAndLocation}>
-          <Text style={styles.TimeText}>{("start_time" in item) ? new Date(item.start_time).toLocaleString(): "Recurring"}</Text>
-          <Text numberOfLines={2} style={styles.LocationText}>{timezones.find(obj => obj.value == item.timezone).label}</Text>
+          <Text style={styles.TimeText}>{("start_time" in item) ? new Date(item.start_time).toLocaleString() : "Recurring"}</Text>
+          <Text numberOfLines={2} style={styles.LocationText}>{timezones.find(obj => obj.value === item.timezone).label}</Text>
         </View>
         <View style={styles.MeetingDay}>
           <Text numberOfLines={3} style={styles.TimeText}>{item.topic}</Text>
-          <Text style={styles.MeetingIDText}>Meeting ID: {parse_meeting_id(item.join_url).replace(/(\d{3})/g, '$1 ')}</Text>
+          <Text style={styles.MeetingIDText}>Meeting ID: {parseMeetingId(item.join_url).replace(/(\d{3})/g, "$1 ")}</Text>
         </View>
         <View style={styles.ButtonArea}>
-          <Pressable onPress={() => props.joinMeeting(parse_meeting_id(item.join_url))} style={[styles.EditButton, styles.EditBtn]}>
+          <Pressable onPress={() => props.joinMeeting(parseMeetingId(item.join_url))} style={[styles.EditButton, styles.EditBtn]}>
             <Text style={styles.textStyle}>Join</Text>
           </Pressable>
           <Pressable onPress={() => props.handleRemoveMeeting(item)} style={[styles.EditButton, styles.DeleteBtn]}>
@@ -26,8 +24,8 @@ const ScheduleMeetingList = (props) => {
           </Pressable>
         </View>
       </View>
-    )
-  }
+    );
+  };
   return (
     <SectionList
       sections={props.upcomingMeetingsList}
@@ -43,24 +41,24 @@ const ScheduleMeetingList = (props) => {
         </View>
       )}
     />
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   ButtonArea: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: '40%',
-    alignItems: 'center',
-    textAlign: 'center',
+    display: "flex",
+    flexDirection: "row",
+    width: "40%",
+    alignItems: "center",
+    textAlign: "center"
   },
   buttonOpen: {
-    backgroundColor: "#FA060D",
+    backgroundColor: "#FA060D"
   },
   EditBtn: {
-    backgroundColor: '#0e71eb',
+    backgroundColor: "#0e71eb"
   },
   DeleteBtn: {
-    backgroundColor: '#FA060D',
+    backgroundColor: "#FA060D"
   },
   EditButton: {
     borderRadius: 6,
@@ -71,104 +69,104 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingBottom: 10,
     fontSize: 12,
-    textAlign: 'center',
-    alignItems: 'center',
-    display: 'flex',
+    textAlign: "center",
+    alignItems: "center",
+    display: "flex"
   },
   buttonClose: {
-    backgroundColor: "#2D8CFF",
+    backgroundColor: "#2D8CFF"
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "center"
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: "center"
   },
   heading: {
     fontSize: 24,
-    color: 'black',
-    fontWeight: 'bold',
-    marginRight: 40,
+    color: "black",
+    fontWeight: "bold",
+    marginRight: 40
   },
   ModalContent: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   InputLabels: {
-    width: "49%",
+    width: "49%"
   },
   MeetingID: {
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontWeight: "bold",
+    fontSize: 14
   },
   MeetingRow: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 5,
+    marginTop: 5
   },
   InputsArea: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     width: "50%",
-    paddingRight: 5,
+    paddingRight: 5
   },
   RadioButtons: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "row"
   },
   VideoText: {
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontWeight: "bold",
+    fontSize: 14
   },
   TimeAndLocation: {
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     width: "30%"
   },
   TimeText: {
-    fontSize: 12,
+    fontSize: 12
   },
   MeetingDay: {
     marginLeft: 10,
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
     width: 130
   },
   LocationText: {
-    color: '#747487',
+    color: "#747487",
     fontSize: 11
   },
   TimeArea: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     padding: 5
   },
   MeetingIDText: {
     fontSize: 11,
-    color: '#747487'
+    color: "#747487"
   },
   TitleText: {
     marginBottom: 10,
     marginLeft: 5,
     fontSize: 16,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   UpcomingText: {
     marginLeft: 10,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold"
   },
   NewMeetingText: {
     marginTop: 50,
-    color: '#747487',
+    color: "#747487",
     padding: 40,
-    textAlign: 'center',
-    fontSize: 13,
-  },
+    textAlign: "center",
+    fontSize: 13
+  }
 });
-export default ScheduleMeetingList
+export default ScheduleMeetingList;
