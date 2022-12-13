@@ -5,7 +5,6 @@ import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import { OptionsContext } from "@options";
 
-
 const AuthTypes = (props) => {
   const options = useContext(OptionsContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,19 +12,17 @@ const AuthTypes = (props) => {
 
   const onHandleMethod = async (method) => {
     setIsLoading(true);
-    let api_res = null
-    if (method == "google_authenticator")
-      api_res = await getGoogleAuthenticatorQR()
-    else
-      api_res = await sendVerification({ method: method })
-    const payload = await api_res.json()
+    let apiResult = null;
+    if (method === "google_authenticator") { apiResult = await getGoogleAuthenticatorQR(); } else { apiResult = await sendVerification({ method: method }); }
+    const payload = await apiResult.json();
+    console.log("payload", payload);
     setIsLoading(false);
-    if (api_res.ok) {
+    if (apiResult.ok) {
       props.navigation.navigate("Verification", { method: method, link: payload?.link });
     } else {
-      setErrors(payload)
+      setErrors(payload);
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -54,8 +51,12 @@ const AuthTypes = (props) => {
       <View style={styles.main}>
         {
           Object.keys(errors).map(key => (
-            <Fragment>
-              {errors[key].map(obj => <Text key={key} style={styles.error}>{key}: {obj}</Text>)}
+            <Fragment key={key}>
+              {
+                errors.length
+                  ? errors[key].map((obj, index) => <Text key={index} style={styles.error}>{key}: {obj}</Text>)
+                  : <Text style={styles.error}>{ errors[key] }</Text>
+              }
             </Fragment>
           ))
         }

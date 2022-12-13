@@ -11,11 +11,11 @@ export const sendVerification = async (data) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Token ${options.token}`
+        Authorization: `Token ${options.token}`
       },
       body: JSON.stringify(data)
     });
-    return await response
+    return await response;
   } catch (error) {
     throw new Error("NETWORK_ERROR").message;
   }
@@ -27,10 +27,10 @@ export const getGoogleAuthenticatorQR = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Token ${options.token}`
+        Authorization: `Token ${options.token}`
       }
     });
-    return response
+    return response;
   } catch (error) {
     throw new Error("NETWORK_ERROR").message;
   }
@@ -42,7 +42,7 @@ export const verifyCode = async (data) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Token ${options.token}`
+        Authorization: `Token ${options.token}`
       },
       body: JSON.stringify(data)
     });
@@ -51,5 +51,3 @@ export const verifyCode = async (data) => {
     throw new Error("NETWORK_ERROR").message;
   }
 };
-
-

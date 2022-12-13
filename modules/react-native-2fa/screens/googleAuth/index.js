@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Linking, StyleSheet, View } from "react-native";
-import { useRoute } from '@react-navigation/native';
+import { useRoute } from "@react-navigation/native";
 import QRCode from "react-native-qrcode-svg";
 import Button from "../../components/Button";
-
 
 const GoogleAuth = () => {
   const [link, setLink] = useState(null);
@@ -17,7 +16,7 @@ const GoogleAuth = () => {
   };
 
   useEffect(() => {
-    setLink(route.params["link"])
+    setLink(route.params.link);
   }, []);
 
   return (

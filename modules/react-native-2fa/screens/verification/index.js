@@ -5,8 +5,7 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { sendVerification, verifyCode } from "../../api";
 import Loader from "../../components/Loader";
-import { useRoute } from '@react-navigation/native';
-
+import { useRoute } from "@react-navigation/native";
 
 const Verification = (props) => {
   const route = useRoute();
@@ -14,47 +13,45 @@ const Verification = (props) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-
   const handleVerification = async () => {
     setIsLoading(true);
-    const api_res = await verifyCode({ method: route.params["method"], code: code })
-    const payload = await api_res.json()
+    const apiResult = await verifyCode({ method: route.params.method, code: code });
+    const payload = await apiResult.json();
     setIsLoading(false);
-    if (api_res.ok) {
+    if (apiResult.ok) {
       props.navigation.navigate("Home");
     } else {
-      setErrors(payload)
+      setErrors(payload);
     }
   };
 
-
   const handleResendCode = async () => {
     setIsLoading(true);
-    const api_res = await sendVerification({ method: route.params["method"] })
-    const payload = await api_res.json()
+    const apiResult = await sendVerification({ method: route.params.method });
+    const payload = await apiResult.json();
     setIsLoading(false);
-    if (api_res.ok) {
-      props.navigation.navigate("Verification", { method: route.params["method"], link: payload?.link });
+    if (apiResult.ok) {
+      props.navigation.navigate("Verification", { method: route.params.method, link: payload?.link });
     } else {
-      setErrors(payload)
+      setErrors(payload);
     }
   };
 
   const handleQRCode = () => {
     props.navigation.navigate("GoogleAuth", {
-      link: route.params["link"]
+      link: route.params.link
     });
-  }
+  };
 
   return (
     <Fragment>
       {isLoading && <Loader />}
       <View style={styles.main}>
         <View>
-          {route.params["method"] == "google_authenticator"
+          {route.params.method === "google_authenticator"
             ? <Text style={styles.text}>Enter your 6-digits code from Google Authenticator App</Text>
             : <Text style={styles.text}>Verification code has been sent to your {
-              route.params["method"] == "phone_number" ? "Phone number" : "Email"}</Text>
+              route.params.method === "phone_number" ? "Phone number" : "Email"}</Text>
           }
           <Input
             label="Enter Code"
@@ -66,8 +63,12 @@ const Verification = (props) => {
           />
           {
             Object.keys(errors).map(key => (
-              <Fragment>
-                {errors[key].map(obj => <Text key={key} style={styles.error}>{key}: {obj}</Text>)}
+              <Fragment key={key}>
+                {
+                  errors.length
+                    ? errors[key].map((obj, index) => <Text key={index} style={styles.error}>{key}: {obj}</Text>)
+                    : <Text style={styles.error}>{ errors[key] }</Text>
+                }
               </Fragment>
             ))
           }
@@ -76,14 +77,14 @@ const Verification = (props) => {
               Verify
             </Button>
           </View>
-          {route.params["method"] != "google_authenticator" &&
+          {route.params.method !== "google_authenticator" &&
             <View style={styles.resend}>
               <Text>Did not receive a code? </Text>
               <TouchableOpacity onPress={handleResendCode}><Text style={styles.textPurple}>Resend</Text></TouchableOpacity>
             </View>
           }
         </View>
-        {route.params["method"] == "google_authenticator" &&
+        {route.params.method === "google_authenticator" &&
           <View style={styles.pt15}>
             <Button mode="contained" onPress={handleQRCode}>
               Google Authenticator QR Code
