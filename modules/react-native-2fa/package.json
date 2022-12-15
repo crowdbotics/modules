@@ -1,0 +1,18 @@
+{
+    "name": "@modules/2fa",
+    "version": "1.0.1",
+    "description": "Two Factor Authentication Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+        "react-native-country-picker-modal":"2.0.0",
+        "react-native-qrcode-svg": "6.1.2",
+        "react-native-svg":"12.3.0"
+    },
+    "x-dependencies": {
+        "react-native-qrcode-svg": "6.1.2",
+        "react-native-svg":"12.3.0"
+    }
+}

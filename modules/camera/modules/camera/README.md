@@ -38,3 +38,14 @@ Then from the root directory run:
 cd ios
 pod install
 ```
+
+# Global configs
+in options/options.js
+
+configue your server endpoints like this
+
+export const globalOptions = {
+  ...
+  url: "http://192.168.100.7:8000",
+  api: "http://192.168.100.7:8000/api/v1",
+}

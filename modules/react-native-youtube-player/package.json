@@ -1,0 +1,15 @@
+{
+    "name": "@modules/youtube-player",
+    "version": "1.0.0",
+    "description": "Youtube Player",
+    "private": true,
+    "main": "index.js",
+    "x-dependencies": {
+        "react-native-youtube": "2.0.2",
+        "react-native-vector-icons": "9.1.0",
+        "prop-types": "15.8.1"
+    },
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {}
+}

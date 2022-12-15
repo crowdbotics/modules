@@ -1,0 +1,10 @@
+{
+    "name": "@screens/bank-account-details",
+    "version": "1.0.0",
+    "description": "",
+    "private": true,
+    "main": "index.js",
+    "files": ["*"],
+    "author": "Crowdbotics",
+    "license": "ISC"
+}

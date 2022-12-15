@@ -1,0 +1,19 @@
+{
+    "name": "@modules/typeform-webhook",
+    "version": "1.0.0",
+    "description": "Typeform Webhook Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+        "react-native-base64": "0.2.1",
+        "@react-navigation/native": "6.0.8",
+        "@react-navigation/native-stack": "6.5.0",
+        "react-native-screens": "3.10.2",
+        "react-native-typeform-embed": "1.0.4"
+    },
+    "x-dependencies": {
+        "react-native-webview": "^11.17.0"
+    }
+}

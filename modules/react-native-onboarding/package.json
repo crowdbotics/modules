@@ -8,6 +8,7 @@
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {
-    "react-native-app-intro-slider": "^4.0.4"
-  }
+    "react-native-app-intro-slider": "^4.0.4",
+    "prop-types" : "^15.8.1"
+    }
 }

@@ -1,0 +1,17 @@
+{
+    "title": "Frequently Asked Questions",
+    "description": "Frequently Asked Questions screen",
+    "root": "/",
+    "schema": {
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "pattern": "^[A-Z]"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "format": "uri-reference"
+    }
+  }
+}

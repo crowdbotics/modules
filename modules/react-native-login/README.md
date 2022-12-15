@@ -35,35 +35,46 @@ If you desire, you can also update your logo and background image URL (be mindfu
 . Finally, if you would like to change the email validation logic, you can modify the regex in that same options.js file as well.
 
 
-## Modify backend (optional)
-The configuration steps below will allow your app to send emails like verification email and password reset emails. 
-If your app's backend does not have SENDGRID environmental variables available, _make changes to project backend files (in /backend/YOUR_PROJECT folder):_
 
-**MODIFY: /backend/YOUR_PROJECT_NAME/settings.py** version in your project backend folder
+## Manual Setup
 
-**ADD** above AWS S3 Config lines:
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
-```sh
-EMAIL_HOST = env.str("EMAIL_HOST", "smtp.sendgrid.net")
-EMAIL_HOST_USER = env.str("SENDGRID_USERNAME", "")
-EMAIL_HOST_PASSWORD = env.str("SENDGRID_PASSWORD", "")
+```javascript
+import Login from "@modules/splash";
+const { title, navigator } = Login;
 ```
 
-If this code already exists, you can just skip this step.
+2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
 
-### Setup SendGrid account and keep reference to username and password.
+```javascript
+import { modules } from '@modules';
 
-Reference website [Sendgrid](https://wwww.sendgrid.com)
+const Login = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
 
-### Configure Environment Variables.
-
-Using the Crowdbotics Dashboard, navigate to "Settings" and select the tab "Environment Variables", here you will add the following variables:
+<Login LOGO_IMAGE={''} BACKGROUND_IMAGE = {''} />;
 
 ```
-SENDGRID_USERNAME
-SENDGRID_PASSWORD
-```
 
+## Params
+
+Below is the list of all params that can be passed to the module.
+
+| Name            | Type       | Description                                                    |
+| --------------- |:----------:|:---------------------------------------------------------------|
+| LOGO_IMAGE      | `string`   | URL of your logo to be displayed on signIn/signUp page.|
+| BACKGROUND_IMAGE| `string` | URL of your background image to be displayed on signIn/signUp page.     |
+| logoStyle       | `object` | Set style for for the logo.                   |
+| backgroundImgStyle | `object` | Set style for the background image if you have set any.|
+| mainContainerStyle | `object`  | Set style for the container wrapping the whole content of the signIn/signUp page.|
+| imageContainerStyle| `object`   | Set style for the container containing logo and background image.    |
+| signInContainerStyle| `object`   | Set style for the container containing just signin and signup section. |
+| textInputStyle  | `object`   | Set custom style for the text inputs.          |
+| buttonStyle     | `object`   | Set custom style for the signin and signup buttons.                       |
+| buttonTextStyle | `object`   | Set custom style for the signin and signup buttons text. |
+| activeTabStyle  | `object`   | Set custom style for active tab on the signIn/signUp page.             |
+
+ 
 ## Old Crowdbotics Scaffold (optional)
 If your project does not use the latest version of Crowdbotics scaffold, you might need manually configure this module in order for it to work properly, including:
 - Adding the module to the main apps' navigation tree

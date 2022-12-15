@@ -1,0 +1,23 @@
+{
+  "name": "@modules/photo-editing",
+  "version": "1.0.0",
+  "description": "Edit your photo here.",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {},
+  "x-dependencies": {
+    "gl-react" : "^4.0.1",
+    "gl-react-native" : "^4.0.1",
+    "react-native-gl-image-filters": "0.5.0",
+    "react-native-unimodules": "0.13.3",
+    "@react-native-community/slider": "4.2.2",
+    "react-native-image-resizer": "1.4.5",
+    "react-native-image-picker": "4.8.3",
+    "@react-native-community/cameraroll": "4.1.2",
+    "@react-navigation/native-stack": "6.5.0",
+    "react-native-screens": "3.10.2",
+    "react-native-calendars": "1.1282.0"
+  }
+}

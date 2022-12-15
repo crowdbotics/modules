@@ -7,11 +7,14 @@ import { generateCommand } from "./utils.js";
 const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 const target = path.join(process.cwd(), config.dist.builds.raw.directory);
 
-fs.rmdirSync(target, { recursive: true });
+if (fs.existsSync(target)) {
+  fs.rmdirSync(target, { recursive: true });
+}
+
 fs.mkdirSync(target);
 
 const command = generateCommand([
-  `npx react-native`,
+  "npx react-native",
   `init ${config.dist.builds.raw.placeholderName}`,
   `--template ${template}`,
   `--version ${config.versions.rn}`,
