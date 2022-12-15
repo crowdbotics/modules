@@ -1,16 +1,7 @@
-from django.urls import path, include
-from .views import (
-    FacebookLogin,
-    GoogleLogin,
-    AppleLogin,
-    FacebookConnect,
-    GoogleConnect,
-    AppleConnect,
-)
-from rest_auth.registration.views import (
-    SocialAccountListView,
-    SocialAccountDisconnectView,
-)
+from dj_rest_auth.registration.views import SocialAccountListView, SocialAccountDisconnectView
+from django.urls import path
+
+from .views import FacebookLogin, GoogleLogin, AppleLogin
 
 urlpatterns = [
     # login endpoints - used in social login
