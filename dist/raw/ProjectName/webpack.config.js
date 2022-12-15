@@ -30,8 +30,15 @@
  */
 const path = require("path")
 const webpack = require("webpack")
+const HTMLWebpackPlugin = require("html-webpack-plugin")
 const babelOptions = require("./babel.config.js")
 const appDirectory = path.resolve(__dirname)
+
+const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
+  template: path.resolve(appDirectory, "./public/index.html"),
+  filename: "index.html",
+  inject: false
+})
 
 // This is needed for webpack to compile JavaScript.
 // Many OSS React Native packages are not compiled to ES5 before being
@@ -78,8 +85,10 @@ module.exports = {
 
   // configures where the build ends up
   output: {
-    filename: "bundle.web.js",
-    path: path.resolve(appDirectory, "backend", "web_build")
+    filename: "static/bundle.[hash].js",
+    path: path.resolve(appDirectory, "backend", "web_build"),
+    publicPath: "/",
+    clean: true
   },
 
   // ...the rest of your config
@@ -87,7 +96,7 @@ module.exports = {
   module: {
     rules: [babelLoaderConfiguration, imageLoaderConfiguration]
   },
-
+  plugins: [HTMLWebpackPluginConfig],
   resolve: {
     alias: {
       "react-native$": "react-native-web",
