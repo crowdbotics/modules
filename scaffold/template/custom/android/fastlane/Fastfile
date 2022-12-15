@@ -24,58 +24,90 @@ platform(:android) do
     gradle(task: 'test')
   end
 
-  desc('Submit a new Beta Build')
+  desc('deploy appetize and build')
+  lane(:deploy_and_build) do
+    deploy_appetize()
+    build_aab()
+  end
+
+  desc('Submit a new Internal Build')
+  lane(:internal) do
+    begin
+      internal_files = google_play_track_version_codes(track:"internal")
+
+      internal_files.length > 0
+
+        gradle(task: 'clean bundleRelease')
+
+        upload_to_play_store(track: 'internal',
+                             version_code: ENV["CIRCLE_BUILD_NUM"].to_i,
+                             version_name: ENV["CIRCLE_BUILD_NUM"].to_s,
+                             track_promote_to: 'alpha',
+                             skip_upload_metadata: true)
+    rescue => ex
+      UI.error(ex)
+    end
+  end
+
+  desc('Promote from internal to alpha')
+  lane(:alpha) do
+    upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'alpha')
+  end
+
+  desc('Promote from internal to beta')
   lane(:beta) do
-    gradle(task: 'clean assembleRelease')
+    versions = google_play_track_version_codes(track: "internal")
+    version_code = versions[0]
 
-    upload_to_play_store(track: 'beta')
-
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
+    upload_to_play_store(rollout: '1', track: 'internal', track_promote_to: 'beta', version_code: version_code, skip_upload_metadata: true)
   end
 
   desc('Deploy a new version to the Google Play')
-  lane(:deploy) do
-    upload_to_play_store(track: 'beta', track_promote_to: 'production')
+  lane(:production) do
+    versions = google_play_track_version_codes(track: "beta")
+    version_code = versions[0]
+
+    upload_to_play_store(rollout: '1', track: 'beta', track_promote_to: 'production', version_code: version_code, skip_upload_metadata: true)
   end
 
   desc('Deployment to Appetize')
   lane(:deploy_appetize) do
     gradle(task: 'assemble', build_type: 'Release')
 
-    public_key = get_appetize_public_key('android', base_name)
-
     appetize(
       path: get_last_apk_path,
-      public_key: public_key,
       platform: 'android',
       note: base_name
     )
 
     update_url(
       platform: 'android',
-      public_key: public_key || lane_context[SharedValues::APPETIZE_PUBLIC_KEY],
+      public_key: lane_context[SharedValues::APPETIZE_PUBLIC_KEY],
       url: lane_context[SharedValues::APPETIZE_APP_URL]
     )
   end
 
   desc('create a new android app bundle build')
   lane(:build_aab) do
-    increment_version_code(
-      gradle_file_path: 'app/build.gradle'
+    build_version = increment_version_code(
+      version_code: ENV["CIRCLE_BUILD_NUM"].to_i
     )
 
     gradle(task: 'bundleRelease')
+    sh "echo \"export BUILD_VERSION=#{build_version}\" >> $BASH_ENV"
+    sh ". $BASH_ENV"
   end
 
   # Update app URL in CB app DB
   private_lane(:update_url) do |options|
     url = "https://#{ENV['WEBHOOK_HOSTNAME']}/api/v2/apps/#{ENV['PROJECT_ID']}/metadata-webhook/"
     data = {
+      platform_id: ENV['PLATFORM_ID'],
       provider: 'circleci',
       metadata: {
         appetize: {
           options[:platform] => {
+            version: ENV['CIRCLE_BUILD_NUM'],
             public_key: options[:public_key],
             url: options[:url]
           }
@@ -92,22 +124,6 @@ platform(:android) do
 
     response.success?
   end
-end
-
-# get the publicKey of the appetizeApp corresponding to your base_name
-def get_appetize_public_key(platform, base_name)
-  return ENV['APPETIZE_PUBLIC_KEY'] unless ENV['APPETIZE_PUBLIC_KEY'].nil?
-
-  response =
-    HTTParty.get("https://#{ENV['APPETIZE_API_TOKEN']}@api.appetize.io/v1/apps")
-
-  return nil unless response.success?
-
-  item = JSON.parse(response.body)['data'].find do |app_app|
-    app_app['note'] == base_name && app_app['platform'] == platform
-  end
-
-  item['publicKey'] if item
 end
 
 def get_last_apk_path

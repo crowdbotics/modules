@@ -1,0 +1,24 @@
+{
+    "name": "@modules/zoom-free-calling",
+    "version": "1.0.1",
+    "description": "Zoom Free Calling",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+        "react-native-base64": "0.2.1",
+        "react-native-dialog-input": "1.0.8",
+        "react-native-paper": "4.11.2",
+        "react-native-dropdown-picker": "5.3.0"
+    },
+    "x-dependencies": {
+        "react-native-vector-icons": "8.1.0",
+        "react-native-webview": "^11.17.2",
+        "react-native-zoom-us": "6.6.1",
+        "react-native-sha256": "1.4.7",
+        "react-native-date-picker": "4.1.5",
+        "@react-native-cookies/cookies": "6.0.11",
+        "@react-native-community/checkbox": "0.5.10"
+    }
+}

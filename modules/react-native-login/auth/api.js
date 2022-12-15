@@ -32,7 +32,6 @@ function apiAuthUserRequest(payload) {
 function apiResetPasswordRequest(payload) {
   return authAPI.post("/rest-auth/password/reset/", payload);
 }
-
 export const api = {
   apiLoginRequest,
   apiSignupRequest,
