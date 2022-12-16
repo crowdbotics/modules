@@ -34,5 +34,5 @@ urlpatterns = [
     path('list-webhook-subscription/', ListWebhookSubscriptions.as_view()),
     path('get-webhook-subscription/', GetWebhookSubscriptions.as_view()),
     path('delete-webhook-subscription/', DeleteWebhookSubscriptions.as_view()),
-    path('webhook-url', WebhookUrl.as_view()),
+    path('webhook-url/', WebhookUrl.as_view()),
 ]

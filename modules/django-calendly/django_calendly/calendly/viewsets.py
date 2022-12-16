@@ -245,7 +245,7 @@ class DeleteWebhookSubscriptions(CalendlyAPIView):
 
 class WebhookUrl(APIView):
 
-    def get(self, request, *args, **kwargs):
-        print("User has created or cancelled the Scheduled event")
-        working = {"message": 'User has created or cancelled the Scheduled event'}
+    def post(self, request, *args, **kwargs):
+        print("User has scheduled, rescheduled or cancelled an event.")
+        working = {"message": 'User has scheduled, rescheduled or cancelled an event.'}
         return Response(working)
