@@ -4,14 +4,14 @@ from .viewsets import ListUserEventsView, UserEventView, CreateUserIdView, ListE
     UserAvailabilitySchedules, UserAvailabilitySchedule, DeleteInviteeData, ListOrganizationInvitation, InviteUserToOrganizations, RevokeUserOrganizationInvitation, \
     GetOrganizationInvitation, GetOrganizationMembership, RemoveUserFromOrganization, ListOrganizationMembership, ListScheduleEventInvitee, ListScheduleEvent, \
     GetScheduleEvent, CreateInviteeNoShow, GetInviteeNoShow, DeleteInviteeNoShow, CancelScheduleEvent, CreateWebhookSubscription, ListWebhookSubscriptions, \
-    GetWebhookSubscriptions, DeleteWebhookSubscriptions
+    GetWebhookSubscriptions, DeleteWebhookSubscriptions, WebhookUrl
 
 
 urlpatterns = [
     path('get-user-detail/', CreateUserIdView.as_view()),
     path('list-user-events/', ListUserEventsView.as_view()),
     path('get-specific-events/', UserEventView.as_view()),
-    path('get-events-available-times/', ListEventsAvailableTimesView.as_view()),
+    path('list-events-available-times/', ListEventsAvailableTimesView.as_view()),
     path('get-user-busy-times/', UserBusyTime.as_view()),
     path('get-user-available-schedules/', UserAvailabilitySchedules.as_view()),
     path('get-user-available-schedule/', UserAvailabilitySchedule.as_view()),
@@ -34,4 +34,5 @@ urlpatterns = [
     path('list-webhook-subscription/', ListWebhookSubscriptions.as_view()),
     path('get-webhook-subscription/', GetWebhookSubscriptions.as_view()),
     path('delete-webhook-subscription/', DeleteWebhookSubscriptions.as_view()),
+    path('webhook-url', WebhookUrl.as_view()),
 ]
