@@ -4307,9 +4307,9 @@ ignore@^4.0.6:
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
 ignore@^5.0.5:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.2.tgz#7e5f30224584b67aeeefe383a24a61dce4cb370d"
-  integrity sha512-m1MJSy4Z2NAcyhoYpxQeBsc1ZdNQwYjN0wGbLBlnVArdJ90Gtr8IhNSfZZcCoR0fM/0E0BJ0mf1KnLNDOCJP4w==
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.3.tgz#b0910aec0816d7c9f8c83ba0912a7ac16e125154"
+  integrity sha512-6BCmRZymdnasx6eA82MnzchMPSxA7ZwIYDLnUER0T9Xhf9XrsceU05+7nt9KPC1yjG3fDA1yk37yPlld3YX7oA==
 
 image-size@^0.6.0:
   version "0.6.3"
