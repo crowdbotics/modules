@@ -54,8 +54,7 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, "modules"),
     path.resolve(appDirectory, "screens"),
     path.resolve(appDirectory, "options"),
-    path.resolve(appDirectory, "store"),
-    path.resolve(appDirectory, "node_modules")
+    path.resolve(appDirectory, "store")
   ],
   use: {
     loader: "babel-loader",
@@ -97,6 +96,7 @@ module.exports = {
     rules: [babelLoaderConfiguration, imageLoaderConfiguration]
   },
   plugins: [HTMLWebpackPluginConfig],
+  devtool: "source-map",
   resolve: {
     alias: {
       "react-native$": "react-native-web",
