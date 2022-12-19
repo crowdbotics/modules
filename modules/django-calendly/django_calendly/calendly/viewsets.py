@@ -1,18 +1,18 @@
+import json
+import requests
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import requests
-import json
 
 CALENDLY_URL = 'https://api.calendly.com/'
 
 
 class CalendlyAPIView(APIView):
 
-    def get_post_data(self):
+    def get_payload(self):
         return {}
 
-    def get_data(self):
+    def get_params(self):
         return {}
 
     def get_url(self):
@@ -23,8 +23,8 @@ class CalendlyAPIView(APIView):
             headers = {
                 "Authorization": request.META.get('HTTP_AUTHORIZATION')
             }
-            req = requests.get(self.get_url(), params=self.get_data(), headers=headers)
-            load = json.loads(req.text)
+            response = requests.get(self.get_url(), params=self.get_params(), headers=headers)
+            load = response.json()
             return Response(load, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
@@ -34,9 +34,9 @@ class CalendlyAPIView(APIView):
             headers = {
                 "Authorization": request.META.get('HTTP_AUTHORIZATION')
             }
-            req = requests.post(self.get_url(), json=self.get_post_data(), params=self.get_data(),
-                                headers=headers)
-            load = json.loads(req.text)
+            response = requests.post(self.get_url(), json=self.get_payload(), params=self.get_params(),
+                                     headers=headers)
+            load = response.json()
             return Response(load, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
@@ -46,8 +46,9 @@ class CalendlyAPIView(APIView):
             headers = {
                 "Authorization": request.META.get('HTTP_AUTHORIZATION')
             }
-            req = requests.delete(self.get_url(), json=self.get_post_data(), params=self.get_data(), headers=headers)
-            return Response(req, status=status.HTTP_204_NO_CONTENT)
+            response = requests.delete(self.get_url(), json=self.get_payload(), params=self.get_params(),
+                                       headers=headers)
+            return Response(response, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -63,7 +64,7 @@ class ListUserEventsView(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}event_types"
 
-    def get_data(self):
+    def get_params(self):
         return self.request.data
 
 
@@ -78,7 +79,7 @@ class ListEventsAvailableTimesView(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}event_type_available_times"
 
-    def get_data(self):
+    def get_params(self):
         return self.request.data
 
 
@@ -87,7 +88,7 @@ class UserBusyTime(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}user_busy_times"
 
-    def get_data(self):
+    def get_params(self):
         return self.request.data
 
 
@@ -96,7 +97,7 @@ class UserAvailabilitySchedules(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}user_availability_schedules"
 
-    def get_data(self):
+    def get_params(self):
         return self.request.data
 
 
@@ -111,7 +112,7 @@ class DeleteInviteeData(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}data_compliance/deletion/invitees"
 
-    def get_post_data(self):
+    def get_payload(self):
         return self.request.data.get("email")
 
 
@@ -126,7 +127,7 @@ class InviteUserToOrganizations(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}organizations/{self.request.data.get('uuid')}/invitations"
 
-    def get_post_data(self):
+    def get_payload(self):
         return self.request.data
 
 
@@ -152,7 +153,7 @@ class ListOrganizationMembership(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}organization_memberships"
 
-    def get_data(self):
+    def get_params(self):
         return self.request.data
 
 
@@ -173,7 +174,7 @@ class ListScheduleEvent(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}scheduled_events"
 
-    def get_data(self):
+    def get_params(self):
         return self.request.data
 
 
@@ -188,7 +189,7 @@ class CreateInviteeNoShow(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}invitee_no_shows"
 
-    def get_post_data(self):
+    def get_payload(self):
         return self.request.data
 
 
@@ -209,7 +210,7 @@ class CancelScheduleEvent(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}scheduled_events/{self.request.data.get('uuid')}/cancellation"
 
-    def get_post_data(self):
+    def get_payload(self):
         return self.request.data
 
 
@@ -218,7 +219,7 @@ class CreateWebhookSubscription(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}webhook_subscriptions"
 
-    def get_post_data(self):
+    def get_payload(self):
         return self.request.data
 
 
@@ -227,7 +228,7 @@ class ListWebhookSubscriptions(CalendlyAPIView):
     def get_url(self):
         return f"{CALENDLY_URL}webhook_subscriptions"
 
-    def get_data(self):
+    def get_params(self):
         return self.request.data
 
 

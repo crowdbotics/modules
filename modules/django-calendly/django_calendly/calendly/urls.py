@@ -1,10 +1,9 @@
 from django.urls import path
-
-from .viewsets import ListUserEventsView, UserEventView, CreateUserIdView, ListEventsAvailableTimesView, UserBusyTime, \
-    UserAvailabilitySchedules, UserAvailabilitySchedule, DeleteInviteeData, ListOrganizationInvitation, InviteUserToOrganizations, RevokeUserOrganizationInvitation, \
-    GetOrganizationInvitation, GetOrganizationMembership, RemoveUserFromOrganization, ListOrganizationMembership, ListScheduleEventInvitee, ListScheduleEvent, \
-    GetScheduleEvent, CreateInviteeNoShow, GetInviteeNoShow, DeleteInviteeNoShow, CancelScheduleEvent, CreateWebhookSubscription, ListWebhookSubscriptions, \
-    GetWebhookSubscriptions, DeleteWebhookSubscriptions, WebhookUrl
+from .viewsets import (ListUserEventsView, UserEventView, CreateUserIdView, ListEventsAvailableTimesView, UserBusyTime,
+                       UserAvailabilitySchedules, UserAvailabilitySchedule, DeleteInviteeData, ListOrganizationInvitation, InviteUserToOrganizations, RevokeUserOrganizationInvitation,
+                       GetOrganizationInvitation, GetOrganizationMembership, RemoveUserFromOrganization, ListOrganizationMembership, ListScheduleEventInvitee, ListScheduleEvent,
+                       GetScheduleEvent, CreateInviteeNoShow, GetInviteeNoShow, DeleteInviteeNoShow, CancelScheduleEvent, CreateWebhookSubscription, ListWebhookSubscriptions,
+                       GetWebhookSubscriptions, DeleteWebhookSubscriptions, WebhookUrl)
 
 
 urlpatterns = [
