@@ -8,9 +8,9 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/token/', AuthTokenViewSet.as_view()),
-    path('create/envelope/', CreateEnvelopeViewSet.as_view()),
-    path('retrieve/envelope/', RetrieveEnvelopeViewSet.as_view()),
-    path('download/envelope/', DownloadEnvelopeDocumentViewSet.as_view()),
-    path('retrive-all/envelope/', RetrieveAllEnvelopeViewSet.as_view()),
+    path('envelope/create/', CreateEnvelopeViewSet.as_view()),
+    path('envelope/retrieve/', RetrieveEnvelopeViewSet.as_view()),
+    path('envelope/download/', DownloadEnvelopeDocumentViewSet.as_view()),
+    path('envelope/retrieve-all/', RetrieveAllEnvelopeViewSet.as_view()),
 
 ]
