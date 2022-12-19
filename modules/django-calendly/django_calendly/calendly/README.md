@@ -51,7 +51,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/calendly/create-invitee-no-shows/` | `{invitee}` | Takes object containing `invitee` The scheduled event's uri specified to the invitee (e.g `https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97-05e2fb379bfe`). Marks an Invitee as a No Show.|
 | `/modules/calendly/get-invitee-no-shows/` | `{uuid}` | Takes object containing `uuid` unique identifier) for the associated Invitee that was marked as no-show. Returns information about a specified Invitee No Show.|
 | `/modules/calendly/delete-invitee-no-shows/` |  `{uuid}` | Takes object containing `uuid` unique identifier) for the associated Invitee that was marked as no-show. Undoes marking an Invitee as a No Show.|
-| `/modules/calendly/cancel-schedule-event/` | `{uuid}` | Takes object containing `uuid` The event's unique identifier. Cancels specified event.|
+| `/modules/calendly/cancel-schedule-event/` | `{uuid, reason}` | Takes object containing `uuid` The event's unique identifier. Cancels specified event.|
 | `/modules/calendly/create-webhook-subscription/` | [subscription_object](#subscription-object) | Creates a Webhook Subscription for an Organization or User.|
 | `/modules/calendly/list-webhook-subscription/` | `{organization, scope}` | Takes object containing `organization` Indicates if the results should be filtered by organization. `scope` Filter the list by organization or user. Get a list of Webhook Subscriptions for a specified Organization or User.|
 | `/modules/calendly/get-webhook-subscription/` | `{webhook_uuid}` | Takes object containing `webhook_uuid` unique identifier for the subscribed webhook. Gets a specified Webhook Subscription.|
