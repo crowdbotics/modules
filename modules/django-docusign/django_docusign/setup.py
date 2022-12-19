@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_django_docusign",
     version="0.1",
-    packages=["articles"],
+    packages=[],
     install_requires=['docusign-esign == 3.19.0'],
     cmdclass={"build": BuildCommand},
 )
