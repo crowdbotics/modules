@@ -49,6 +49,16 @@ def get_consent_url():
     return consent_url
 
 
+def get_authorize_client(access_token):
+    """
+    Return authorized api client using access token
+    """
+    api_client = ApiClient()
+    api_client.host = settings.HOST
+    api_client.set_default_header(header_name="Authorization", header_value=access_token)
+    return api_client
+
+
 class AuthTokenViewSet(APIView):
     """
     API Return a payload that contain access token, token Expiry time, token scope and token type, to return the payload
@@ -117,10 +127,7 @@ class CreateEnvelopeViewSet(APIView):
         try:
             access_token = request.META.get('HTTP_AUTHORIZATION')
             if access_token:
-                api_client = ApiClient()
-                api_client.host = settings.HOST
-                api_client.set_default_header(header_name="Authorization", header_value=access_token)
-                envelopes_api = EnvelopesApi(api_client)
+                envelopes_api = EnvelopesApi(api_client=get_authorize_client(access_token))
                 create_envelope = envelopes_api.create_envelope(
                     account_id=settings.ACCOUNT_ID,
                     envelope_definition=request.data
@@ -153,10 +160,7 @@ class RetrieveEnvelopeViewSet(APIView):
             envelope_id = request.data.get("envelope_id")
             access_token = request.META.get('HTTP_AUTHORIZATION')
             if access_token:
-                api_client = ApiClient()
-                api_client.host = settings.HOST
-                api_client.set_default_header(header_name="Authorization", header_value=access_token)
-                envelopes_api = EnvelopesApi(api_client)
+                envelopes_api = EnvelopesApi(api_client=get_authorize_client(access_token))
                 envelope_data = envelopes_api.get_envelope(
                     account_id=settings.ACCOUNT_ID,
                     envelope_id=envelope_id
@@ -205,10 +209,7 @@ class DownloadEnvelopeDocumentViewSet(APIView):
             document_id = request.data.get("document_id")
             access_token = request.META.get('HTTP_AUTHORIZATION')
             if access_token:
-                api_client = ApiClient()
-                api_client.host = settings.HOST
-                api_client.set_default_header(header_name="Authorization", header_value=access_token)
-                envelopes_api = EnvelopesApi(api_client)
+                envelopes_api = EnvelopesApi(api_client=get_authorize_client(access_token))
                 document = envelopes_api.get_document(
                     account_id=settings.ACCOUNT_ID,
                     document_id=document_id,
@@ -238,17 +239,12 @@ class RetrieveAllEnvelopeViewSet(APIView):
         try:
             access_token = request.META.get('HTTP_AUTHORIZATION')
             folder_value = request.data.get('folder_value')
-
             if access_token:
-                api_client = ApiClient()
-                api_client.host = settings.HOST
-                api_client.set_default_header(header_name="Authorization", header_value=access_token)
-                folders_api = FoldersApi(api_client)
+                folders_api = FoldersApi(api_client=get_authorize_client(access_token))
                 folder_data = folders_api.search(
                     account_id=settings.ACCOUNT_ID,
                     search_folder_id=folder_value
                 )
-
                 envelopes_list = get_envelope_list(folder_data)
                 payload = {'envelope_list': envelopes_list}
                 return Response(data=payload, status=status.HTTP_200_OK)
