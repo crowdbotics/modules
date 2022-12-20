@@ -1,11 +1,13 @@
 import json
+from os import path
+
+from django.conf import settings
+
+from docusign_esign import ApiClient, EnvelopesApi, FoldersApi
 
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from os import path
-from django.conf import settings
-from docusign_esign import ApiClient, EnvelopesApi, FoldersApi
 
 
 def get_private_key(private_key_path):
@@ -96,7 +98,7 @@ class AuthTokenViewSet(APIView):
 
 class CreateEnvelopeViewSet(APIView):
     """
-    API will create with attachment on docusign server and sent it to the recipient, to create the envelope API will
+    API will create envelope with attachment on docusign server and sent it to the recipient, to create the envelope API will
     require Access Token from API header to authenticate and envelope definition from API body that contain
      - documentBase64
      - documentId
