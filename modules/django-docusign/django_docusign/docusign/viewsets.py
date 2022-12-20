@@ -9,6 +9,10 @@ from docusign_esign import ApiClient, EnvelopesApi, FoldersApi
 
 
 def get_private_key(private_key_path):
+    """
+     Return private key
+     :param str private_key_path: Complete path of private key (required)
+    """
     private_key_file = path.abspath(private_key_path)
     if path.isfile(private_key_file):
         with open(private_key_file) as private_key_file:
@@ -20,6 +24,10 @@ def get_private_key(private_key_path):
 
 
 def get_envelope_list(folder_data):
+    """
+    Gets the data from multiple custom classes made by docusign and return dictionary
+    :param dict folder_data: Data that is returned by docusign API (required)
+    """
     envelopes_list = []
     for row in folder_data.folder_items:
         row_data = {k: getattr(row, k) for k in row.__dict__}
@@ -29,6 +37,9 @@ def get_envelope_list(folder_data):
 
 
 def get_consent_url():
+    """
+    Return the consent url that will use further to get access token
+    """
     url_scopes = "+".join(settings.SCOPES)
     consent_url = f"https://account-d.docusign.com/oauth/auth?response_type=code&" \
                   f"scope={url_scopes}&client_id={settings.CLIENT_ID}&redirect_uri={settings.REDIRECT_URI}"
@@ -37,6 +48,16 @@ def get_consent_url():
 
 
 class AuthTokenViewSet(APIView):
+    """
+    API Return a payload that contain access token, token Expiry time, token scope and token type, to return the payload
+    the required data are as following:
+     - client id
+     - user id
+     - OAuth host name
+     - token expire time
+     - token scope.
+
+    """
 
     def get(self, request, *args, **kwargs):
         try:
@@ -74,6 +95,21 @@ class AuthTokenViewSet(APIView):
 
 
 class CreateEnvelopeViewSet(APIView):
+    """
+    API will create with attachment on docusign server and sent it to the recipient, to create the envelope API will
+    require Access Token from API header to authenticate and envelope definition from API body that contain
+     - documentBase64
+     - documentId
+     - fileExtension
+     - name
+     - emailSubject
+     - recipients
+     - signer email
+     - signer name
+     - recipientId
+     - status
+
+    """
 
     def post(self, request, *args, **kwargs):
         try:
@@ -105,6 +141,10 @@ class CreateEnvelopeViewSet(APIView):
 
 
 class RetrieveEnvelopeViewSet(APIView):
+    """
+    API will return envelope based on envelope id. To get envelope API will require Access Token from API header and
+    envelope id from API body.
+    """
 
     def get(self, request, *args, **kwargs):
         try:
@@ -153,6 +193,10 @@ class RetrieveEnvelopeViewSet(APIView):
 
 
 class DownloadEnvelopeDocumentViewSet(APIView):
+    """
+    API will return the specific document from envelope. To get document from envelope API will require Access Token
+    from API header to authenticate, envelope id and document id from API body.
+    """
     def get(self, request, *args, **kwargs):
         try:
             envelope_id = request.data.get("envelope_id")
@@ -181,6 +225,13 @@ class DownloadEnvelopeDocumentViewSet(APIView):
 
 
 class RetrieveAllEnvelopeViewSet(APIView):
+    """
+    API will retrieve all the envelopes from the folder, to get envelope from folder API will require Access Token
+    from API header to authenticate, folder value from API body. Folder value Specifies the envelope group that is
+    searched by the request. These are logical groupings, not actual folder names. Valid values are: drafts,
+    awaiting_my_signature, completed, out_for_signature.
+
+    """
     def get(self, request, *args, **kwargs):
         try:
             access_token = request.META.get('HTTP_AUTHORIZATION')
