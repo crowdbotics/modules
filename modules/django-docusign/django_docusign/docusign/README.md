@@ -1,5 +1,26 @@
 # Docusign
 
+Module to generate and retrieve eSignature docs.
+
+- Get Access Token
+- eSignature Generation
+- Retrieve eSignature doc
+- Create an envelope that include documents that will be signed electronically, sender information, recipient information
+- Status information that tracks delivery and signature progress
+
+# Environment variables
+
+```
+CLIENT_ID = ""
+USER_ID = ""
+ACCOUNT_ID = ""
+HOST = "host_url/restapi/"
+OAUTH_HOST_NAME = "account-d.docusign.com"
+PRIVATE_KEY_FILE_PATH = "./demo/private.key"
+EXPIRES_IN = 28800
+SCOPES = ["signature", "impersonation"]
+REDIRECT_URI = "https://www.crowdbotics.com/"
+```
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
