@@ -48,7 +48,7 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
 };
 
 const styles = StyleSheet.create({
-  modalContainer: { minHeight: "50%", width: "90%", alignSelf: "center", backgroundColor: "#FFF", display: "flex", justifyContent: "center", marginTop: "15%", borderRadius: 10, padding: 20, shadowColor: "gray", elevation: 15 },
+  modalContainer: { minHeight: "50%", width: "95%", alignSelf: "center", backgroundColor: "#FFF", display: "flex", justifyContent: "center", marginTop: "15%", borderRadius: 10, padding: 20, shadowColor: "gray", elevation: 15 },
   hide: { marginTop: "30%", alignSelf: "center" },
   modalText: { fontSize: 16, padding: 15, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
   attendeeContainer: { paddingVertical: 10, paddingHorizontal: 10, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000", height: "30%" },

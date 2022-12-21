@@ -11,12 +11,12 @@ const Calendar = ({ navigation }) => {
   const [open, setOpen] = useState(false);
   const [duration, setDuration] = useState("00:30:00");
   const [markedDates, setMarkedDates] = useState({
-    selectedDate: today.toDateString(),
+    selectedDate: null,
     markedDates: {
       [today.toDateString()]: { selected: true, color: "#00B0BF", textColor: "#FFFFFF" }
     }
   });
-  const [timeSlot, setTimeSlot] = useState("");
+  const [timeSlot, setTimeSlot] = useState(null);
   const [items, setItems] = useState([
     { label: "30 min", value: "00:30:00" },
     { label: "1 hour", value: "01:00:00" },
@@ -77,7 +77,7 @@ const Calendar = ({ navigation }) => {
             />
           </View>
           <View style={styles.button}>
-            <Button onPress={() => navigation.navigate("AppointmentForm", {
+            <Button disabled={!!((!timeSlot || !markedDates.selectedDate))} onPress={() => navigation.navigate("AppointmentForm", {
               duration: duration,
               timeSlot: timeSlot,
               selectedDate: markedDates.selectedDate

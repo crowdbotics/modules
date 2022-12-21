@@ -1,6 +1,6 @@
 
 import React, { Fragment, useContext, useEffect, useState } from "react";
-import { LogBox, StyleSheet, Text } from "react-native";
+import { LogBox, StyleSheet, Text, Button } from "react-native";
 import Navigator from "./Navigator";
 // @ts-ignore
 import { OptionsContext } from "@options";
@@ -24,10 +24,8 @@ const Appointment = () => {
         });
         GoogleSignin.getTokens().then(() => {
           setIsToken(true);
-        }).catch((error) => {
-          setErrors(error.message);
+        }).catch(() => {
           setIsToken(false);
-          googleSignin();
         });
       } catch (error) {
         setErrors(error.message);
@@ -40,12 +38,16 @@ const Appointment = () => {
   const googleSignin = () => {
     GoogleSignin.hasPlayServices().then((hasPlayService) => {
       if (hasPlayService) {
-        GoogleSignin.signIn().then(() => {
-          setIsToken(true);
-        }).catch((e) => {
-          setIsToken(false);
-          setErrors(e.message);
-        });
+        if (options.webClientId && options.androidClientId && options.iosClientId) {
+          GoogleSignin.signIn().then(() => {
+            setIsToken(true);
+          }).catch((e) => {
+            setIsToken(false);
+            setErrors(e.message);
+          });
+        } else {
+          setErrors("webClientId, androidClientId and iosClientId keys are missing.");
+        }
       }
     }).catch((e) => {
       setIsToken(true);
@@ -54,8 +56,8 @@ const Appointment = () => {
   };
   return (
     <Fragment>
-      { !errors && <Text style={styles.error}>{errors}</Text> }
-      { isToken && <Navigator /> }
+      { isToken ? <Navigator /> : <Button disabled={!!errors} title="Signin with google" onPress={googleSignin} />}
+      { errors && <Text style={styles.error}>{errors}</Text> }
     </Fragment>
   );
 };
