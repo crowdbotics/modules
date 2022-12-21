@@ -10,7 +10,7 @@ const Appointment = () => {
   const options = useContext(OptionsContext);
   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   const [isToken, setIsToken] = useState(false);
-  
+
   const [errors, setErrors] = useState(null);
   useEffect(() => {
     if (options.webClientId && options.androidClientId && options.iosClientId) {

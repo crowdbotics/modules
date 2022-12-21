@@ -1,6 +1,6 @@
 import moment from "moment";
 import React from "react";
-import { Modal, StyleSheet, View, Text } from "react-native";
+import { Modal, StyleSheet, View, Text, ScrollView } from "react-native";
 import Button from "../Button";
 
 const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
@@ -19,6 +19,7 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
         <Text style={styles.modalText}>End time: {("end" in modalItem) ? moment(new Date(modalItem.end.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
 
         <View style={styles.attendeeContainer}>
+          <ScrollView>
           <Text style={styles.text}>Attendees:</Text>
           {
             modalItem.attendees.map((attendee, index) =>
@@ -27,6 +28,7 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
               </View>
             )
           }
+          </ScrollView>
         </View>
 
         <View style={styles.modalActionButton}>
@@ -40,15 +42,10 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
 };
 
 const styles = StyleSheet.create({
-
-
   modalContainer: { minHeight: "50%", width: "90%", alignSelf: "center", backgroundColor: "#FFF", display: "flex", justifyContent: "center", marginTop: "15%", borderRadius: 10, padding: 20, shadowColor: "gray", elevation: 15 },
   hide: { marginTop: "30%", alignSelf: "center" },
   modalText: { fontSize: 16, padding: 15, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
-  attendeeContainer: { paddingVertical: 10, paddingHorizontal: 10, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
-  modalContainer: { minHeight: "40%", width: "90%", alignSelf: "center", backgroundColor: "#FFF", display: "flex", justifyContent: "center", marginTop: "40%", borderRadius: 10, padding: 20, shadowColor: "gray", elevation: 15 },
-  hide: { marginTop: "30%", alignSelf: "center" },
-  modalText: { fontSize: 16, padding: 15, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
+  attendeeContainer: { paddingVertical: 10, paddingHorizontal: 10, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000", height: "30%" },
   modalHeaderText: {
     fontSize: 18,
     paddingVertical: 5,
