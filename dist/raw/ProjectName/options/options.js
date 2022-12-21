@@ -1,12 +1,12 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native"
 
 export const globalOptions = {
-  name: "ProjectName",
-  url: "https://ProjectName.botics.co",
-  api: "https://ProjectName.botics.co/api/v1"
+  name: "ProjectNameIdentifier",
+  url: "https://ProjectNameIdentifier.botics.co",
+  api: "https://ProjectNameIdentifier.botics.co/api/v1"
 }
 export const modulesOptions = {
   "@modules/app-menu": {
-    "copy": "Routes available!"
+    copy: "Routes available!"
   }
 }

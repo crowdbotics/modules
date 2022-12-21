@@ -1,13 +1,16 @@
+
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { LogBox, StyleSheet, Text } from "react-native";
 import Navigator from "./Navigator";
 // @ts-ignore
 import { OptionsContext } from "@options";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+
 const Appointment = () => {
   const options = useContext(OptionsContext);
   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   const [isToken, setIsToken] = useState(false);
+  
   const [errors, setErrors] = useState(null);
   useEffect(() => {
     if (options.webClientId && options.androidClientId && options.iosClientId) {
@@ -33,6 +36,7 @@ const Appointment = () => {
       setErrors("webClientId, androidClientId and iosClientId keys are missing.");
     }
   }, []);
+
   const googleSignin = () => {
     GoogleSignin.hasPlayServices().then((hasPlayService) => {
       if (hasPlayService) {
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
     color: "red"
   }
 });
+
 export default {
   title: "Appointment",
   navigator: Appointment

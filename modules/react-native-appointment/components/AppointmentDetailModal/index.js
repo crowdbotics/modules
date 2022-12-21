@@ -17,6 +17,7 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
         <Text style={styles.modalText}>Location: {modalItem.location}</Text>
         <Text style={styles.modalText}>Start time: {("start" in modalItem) ? moment(new Date(modalItem.start.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
         <Text style={styles.modalText}>End time: {("end" in modalItem) ? moment(new Date(modalItem.end.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
+
         <View style={styles.attendeeContainer}>
           <Text style={styles.text}>Attendees:</Text>
           {
@@ -27,6 +28,7 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
             )
           }
         </View>
+
         <View style={styles.modalActionButton}>
           <Button height={40} onPress={() => setModalVisible(false)} style={styles.hide}>
             Cancel
@@ -39,10 +41,14 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
 
 const styles = StyleSheet.create({
 
+
   modalContainer: { minHeight: "50%", width: "90%", alignSelf: "center", backgroundColor: "#FFF", display: "flex", justifyContent: "center", marginTop: "15%", borderRadius: 10, padding: 20, shadowColor: "gray", elevation: 15 },
   hide: { marginTop: "30%", alignSelf: "center" },
   modalText: { fontSize: 16, padding: 15, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
   attendeeContainer: { paddingVertical: 10, paddingHorizontal: 10, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
+  modalContainer: { minHeight: "40%", width: "90%", alignSelf: "center", backgroundColor: "#FFF", display: "flex", justifyContent: "center", marginTop: "40%", borderRadius: 10, padding: 20, shadowColor: "gray", elevation: 15 },
+  hide: { marginTop: "30%", alignSelf: "center" },
+  modalText: { fontSize: 16, padding: 15, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
   modalHeaderText: {
     fontSize: 18,
     paddingVertical: 5,
