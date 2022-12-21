@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import { createAppointment } from "../api";
 import Loader from "../components/Loader";
 import moment from "moment";
+import { validateEmail } from "../utils";
 // @ts-ignore
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
@@ -18,7 +19,11 @@ const CreateAppointment = ({ route, navigation }) => {
   const [description, setDescription] = useState("");
   const [timeSlot, setTimeSlot] = useState(route.params.timeSlot);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [attendeesList, setAttendeesList] = useState([]);
+  const [attendee, setAttendee] = useState("");
+  const [validationError, setValidationError] = useState({
+    email: ""
+  });
   const selectTimeSlot = (item) => {
     setTimeSlot(item);
   };
@@ -34,7 +39,8 @@ const CreateAppointment = ({ route, navigation }) => {
       },
       end: {
         dateTime: moment(`${selectedDate} ${timeSlot}`).add(moment.duration(duration)).format()
-      }
+      },
+      attendees: attendeesList
     })
       .then(() => {
         setIsLoading(false);
@@ -42,6 +48,24 @@ const CreateAppointment = ({ route, navigation }) => {
       }).catch(e => console.log(e));
   };
 
+  const addAttendee = () => {
+    if (!validateEmail.test(attendee)) {
+      return setValidationError({
+        email: "Please enter a valid email address."
+      });
+    } else {
+      setValidationError({
+        email: ""
+      });
+    }
+    setAttendeesList(attendeesList => [...attendeesList, { email: attendee }]);
+    setAttendee("");
+  };
+
+  const handleChangeAttendee = (text) => {
+    setAttendee(text);
+    setValidationError({ email: "" });
+  };
   return (
     <SafeAreaView>
       <ScrollView>
@@ -85,6 +109,30 @@ const CreateAppointment = ({ route, navigation }) => {
               value={description}
               multiline={true} />
           </View>
+          <View style={styles.mt15}>
+            <Text style={styles.mb10}>Participants</Text>
+            <View style={styles.attendeeContainer}>
+              <Input
+                placeholder='Participant Email'
+                setValue={handleChangeAttendee}
+                value={attendee}
+                multiline={true}
+                styles={styles.attendeeInput} />
+              <TouchableOpacity style={styles.addAttendee} onPress={addAttendee}>
+                <Text style={styles.buttonText}>Add</Text>
+              </TouchableOpacity>
+            </View>
+            {validationError.email !== "" && <Text style={styles.error}>{validationError.email}</Text>}
+          </View>
+          <View style={styles.attendeesList}>
+            {
+              attendeesList.map((attendee, index) =>
+                <View style={styles.attendee} key={index}>
+                  <Text style={styles.attendeeText}>{attendee?.email}</Text>
+                </View>
+              )
+            }
+          </View>
           <Text style={{ marginVertical: 20, fontSize: 14 }}>Time Slot</Text>
           <View style={styles.list}>
             {options.timeSlots.map((item, index) => (
@@ -116,7 +164,15 @@ const styles = StyleSheet.create({
   mb10: { marginBottom: 10, fontSize: 14, marginLeft: 10 },
   items: { borderWidth: 1, borderRadius: 10, borderColor: "#D8D8D8", width: 90, height: 30, margin: 7, justifyContent: "center", alignItems: "center" },
   list: { display: "flex", flexDirection: "row", flexWrap: "wrap" },
-  button: { padding: 15 }
+  button: { padding: 15 },
+  addAttendee: { backgroundColor: "#000", paddingHorizontal: 25, height: 55, alignItems: "center", justifyContent: "center", borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 7, borderBottomRightRadius: 7 },
+  buttonText: { color: "#fff", alignSelf: "center" },
+  attendeeInput: { width: "80%", borderTopRightRadius: 0, borderBottomRightRadius: 0 },
+  attendee: { flexDirection: "row", alignItems: "center", justifyContent: "flex-start" },
+  attendeeText: { paddingVertical: 5, backgroundColor: "#F5F5F5", paddingHorizontal: 10, marginBottom: 5, marginRight: 5, borderRadius: 7 },
+  attendeeContainer: { flexDirection: "row", justifyContent: "flex-start", alignItems: "center" },
+  attendeesList: { marginTop: 10 },
+  error: { color: "#f77474", fontStyle: "italic", fontSize: 12, paddingLeft: 10, paddingTop: 5 }
 
 });
 export default CreateAppointment;

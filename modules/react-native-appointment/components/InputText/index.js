@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, TextInput } from "react-native";
 
 const Input = (props) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.styles]}>
       <TextInput
         style={styles.input}
         placeholder={props.placeholder}
