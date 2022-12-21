@@ -20,13 +20,19 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
 
         <View style={styles.attendeeContainer}>
           <ScrollView>
-          <Text style={styles.text}>Attendees:</Text>
+          <Text style={styles.text}>Organizer:</Text>
+          <View style={styles.attendee}>
+                <Text style={styles.attendeeText}>{modalItem?.creator?.email}</Text>
+          </View>
+          <Text style={[styles.text, styles.mt]}>Participants:</Text>
           {
-            modalItem.attendees.map((attendee, index) =>
+             modalItem?.attendees
+               ? modalItem?.attendees?.map((attendee, index) =>
               <View style={styles.attendee} key={index}>
-                <Text style={styles.attendeeText}>{attendee.email}  <Text style={styles.organizer}>{attendee?.organizer && "organizer"}</Text></Text>
+                {!attendee?.organizer && <Text style={styles.attendeeText}>{attendee?.organizer ? "" : attendee.email}</Text>}
               </View>
-            )
+               )
+               : <Text style={styles.noAttendee}>No Participants!</Text>
           }
           </ScrollView>
         </View>
@@ -63,7 +69,9 @@ const styles = StyleSheet.create({
   attendee: { flexDirection: "row", alignItems: "center", justifyContent: "flex-start" },
   attendeeText: { paddingVertical: 5, backgroundColor: "#F5F5F5", paddingHorizontal: 10, marginBottom: 5, marginRight: 5, borderRadius: 7 },
   organizer: { color: "#3bae61", fontSize: 12 },
-  text: { marginBottom: 5 }
+  mt: { marginTop: 5 },
+  text: { marginBottom: 5 },
+  noAttendee: { textAlign: "center", fontSize: 12, color: "#a59b9b" }
 });
 
 export default AppointmentModal;

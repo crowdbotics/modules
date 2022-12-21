@@ -11,7 +11,7 @@ export const createAppointment = async (accessToken, data) => {
       },
       body: JSON.stringify(data)
     });
-    return response;
+    return response.json();
   } catch (error) {
     throw new Error("NETWORK_ERROR").message;
   }

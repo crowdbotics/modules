@@ -9,8 +9,8 @@ const Home = (props) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: "AppointmentList", title: "Create an Appointment" },
-    { key: "Calendar", title: "Calendar" }
+    { key: "AppointmentList", title: "Calendar" },
+    { key: "Calendar", title: "Create an Appointment" }
 
   ]);
 
