@@ -21,7 +21,7 @@ and assign it to the variable the name of the variable should be "SLACK_BOT_TOKE
 ## Api Table
 List of api's endpoints with params needed for these apis.
 
-| Api Name              |                               Param                                | Description                                                                              |
-|-----------------------|:------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------|
-| `message/attachment/` | body `{"message" : "", "channel_name" : ""}` <br/>form-data `file` | Takes files, message, channel name and send the message with file to respective channel. |
-| `message/`            |            body `{"message" : "", "channel_name" : ""}`            | Takes                                                                                    |
+| Api Name              |                    Param                     | Description                                                                              |
+|-----------------------|:--------------------------------------------:|:-----------------------------------------------------------------------------------------|
+| `message/attachment/` |    form-data `file, message, channel_name`     | Takes files, message, channel name and send the message with file to respective channel. |
+| `message/`            | body `{"message" : "", "channel_name" : ""}` | Takes                                                                                    |
