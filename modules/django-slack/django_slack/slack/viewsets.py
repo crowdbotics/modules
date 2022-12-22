@@ -6,6 +6,7 @@ from rest_framework.response import Response
 
 from slack_sdk.errors import SlackApiError
 from slack_sdk import WebClient
+from .services.SlackService import SlackService
 
 from .serializers import FileSerializer, MessageSerializer
 
@@ -14,7 +15,7 @@ def get_authorized_client():
     """
      SLACK_BOT_TOKEN (BOT Token for Authentication)
     """
-    return WebClient(token=settings.SLACK_BOT_TOKEN)
+    return WebClient(token=settings.env.str("SLACK_BOT_TOKEN", ""))
 
 
 class FileViewSet(APIView):
@@ -25,15 +26,17 @@ class FileViewSet(APIView):
     - message (Text message)
     - channel_name (Channel Name)
     """
+    # TODO: Authenticate or admin only
+    
+
     def post(self, request, *args, **kwargs):
         try:
             serializer = FileSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            client = get_authorized_client()
-            response = client.files_upload(file=request.data.get('file').file,
-                                           initial_comment=serializer.data.get('message'),
-                                           channels=serializer.data.get('channel_name')
-                                           )
+            client = SlackService()
+            response = client.upload_file(file=request.data.get('file').file,
+                                          initial_comment=serializer.data.get('message'),
+                                          channels=serializer.data.get('channel_name'))
             return Response(response.data, status=response.status_code)
         except SlackApiError as e:
             return Response(e.response.data, status=status.HTTP_400_BAD_REQUEST)
@@ -47,6 +50,7 @@ class MessageViewSet(APIView):
     - message (Text message)
     - channel_name (Channel Name)
     """
+    # TODO: Authenticate or admin only
     def post(self, request, *args, **kwargs):
         try:
             serializer = MessageSerializer(data=request.data)

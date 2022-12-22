@@ -13,6 +13,6 @@ setup(
     name="cb_django_signature",
     version="0.1",
     packages=[],
-    install_requires=["slack-sdk"],
+    install_requires=["slack-sdk==3.4.2"],
     cmdclass={"build": BuildCommand},
 )
