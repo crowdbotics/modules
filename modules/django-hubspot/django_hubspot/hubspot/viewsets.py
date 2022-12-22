@@ -83,3 +83,10 @@ class SingleDealViewSet(APIView):
             return Response(load, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class WebHookViewSet(APIView):
+
+    def post(self, request, *args, **kwargs):
+        response = request.data
+        print("Event Triggered: ", response)
