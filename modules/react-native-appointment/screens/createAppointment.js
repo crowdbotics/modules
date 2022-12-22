@@ -14,7 +14,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 const CreateAppointment = ({ route, navigation }) => {
   const options = useContext(OptionsContext);
   const { duration, selectedDate } = route.params;
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(null);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
   const [timeSlot, setTimeSlot] = useState(route.params.timeSlot);
@@ -66,6 +66,13 @@ const CreateAppointment = ({ route, navigation }) => {
     setAttendee(text);
     setValidationError({ email: "" });
   };
+
+  const handleRemoveAttendee = (index) => {
+    const tmpAttendeesList = JSON.parse(JSON.stringify(attendeesList));
+    tmpAttendeesList.splice(index, 1);
+    setAttendeesList(tmpAttendeesList);
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -129,6 +136,9 @@ const CreateAppointment = ({ route, navigation }) => {
               attendeesList.map((attendee, index) =>
                 <View style={styles.attendee} key={index}>
                   <Text style={styles.attendeeText}>{attendee?.email}</Text>
+                  <TouchableOpacity onPress={() => handleRemoveAttendee(index)} style={styles.removeAttendee}>
+                    <Text style={styles.removeAttendeeText}>X</Text>
+                  </TouchableOpacity>
                 </View>
               )
             }
@@ -146,7 +156,7 @@ const CreateAppointment = ({ route, navigation }) => {
             ))}
           </View>
           <View style={styles.button}>
-            <Button onPress={pressHandler}>Create Appointment</Button>
+            <Button disabled={!!((!title || attendeesList.length === 0))} onPress={pressHandler}>Create Appointment</Button>
           </View>
 
         </View>
@@ -168,11 +178,12 @@ const styles = StyleSheet.create({
   addAttendee: { backgroundColor: "#000", paddingHorizontal: 25, height: 55, alignItems: "center", justifyContent: "center", borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 7, borderBottomRightRadius: 7 },
   buttonText: { color: "#fff", alignSelf: "center" },
   attendeeInput: { width: "80%", borderTopRightRadius: 0, borderBottomRightRadius: 0 },
-  attendee: { flexDirection: "row", alignItems: "center", justifyContent: "flex-start" },
-  attendeeText: { paddingVertical: 5, backgroundColor: "#F5F5F5", paddingHorizontal: 10, marginBottom: 5, marginRight: 5, borderRadius: 7 },
+  attendee: { flexDirection: "row", alignItems: "center", justifyContent: "flex-start", marginBottom: 5 },
+  attendeeText: { paddingVertical: 5, backgroundColor: "#F5F5F5", paddingHorizontal: 10, marginRight: 5, borderRadius: 7 },
   attendeeContainer: { flexDirection: "row", justifyContent: "flex-start", alignItems: "center" },
   attendeesList: { marginTop: 10 },
-  error: { color: "#f77474", fontStyle: "italic", fontSize: 12, paddingLeft: 10, paddingTop: 5 }
-
+  error: { color: "#f77474", fontStyle: "italic", fontSize: 12, paddingLeft: 10, paddingTop: 5 },
+  removeAttendee: { backgroundColor: "red", padding: 4, paddingHorizontal: 10, borderRadius: 4 },
+  removeAttendeeText: { color: "white", fontWeight: "bold" }
 });
 export default CreateAppointment;
