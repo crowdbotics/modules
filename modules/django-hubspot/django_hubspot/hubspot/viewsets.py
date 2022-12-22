@@ -20,8 +20,8 @@ class AccessTokenViewSet(APIView):
             response.raise_for_status()
             load = response.json()
             return Response(load, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.RequestException as e:
+            return Response(e.response, status=e.response.status_code)
 
 
 class DealsListViewSet(APIView):
@@ -35,8 +35,8 @@ class DealsListViewSet(APIView):
             response.raise_for_status()
             load = response.json()
             return Response(load, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.RequestException as e:
+            return Response(e.response, status=e.response.status_code)
 
 
 class CreateDealViewSet(APIView):
@@ -50,8 +50,8 @@ class CreateDealViewSet(APIView):
             response.raise_for_status()
             load = response.json()
             return Response(load, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.RequestException as e:
+            return Response(e.response, status=e.response.status_code)
 
 
 class RemoveDealViewSet(APIView):
@@ -65,8 +65,8 @@ class RemoveDealViewSet(APIView):
                                        headers=header)
             response.raise_for_status()
             return Response(response, status=status.HTTP_204_NO_CONTENT)
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.RequestException as e:
+            return Response(e.response, status=e.response.status_code)
 
 
 class SingleDealViewSet(APIView):
@@ -81,12 +81,13 @@ class SingleDealViewSet(APIView):
             response.raise_for_status()
             load = response.json()
             return Response(load, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except requests.exceptions.RequestException as e:
+            return Response(e.response, status=e.response.status_code)
 
 
 class WebHookViewSet(APIView):
 
     def post(self, request, *args, **kwargs):
-        response = request.data
-        print("Event Triggered: ", response)
+        print("Event Triggered: ", request.data)
+        return Response(request.data, status=status.HTTP_200_OK)
+        
