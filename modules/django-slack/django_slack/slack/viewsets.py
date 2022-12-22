@@ -7,32 +7,36 @@ from rest_framework.response import Response
 from slack_sdk.errors import SlackApiError
 from slack_sdk import WebClient
 
+from .serializers import FileSerializer, MessageSerializer
 
-def get_authorized_client(token):
-    return WebClient(token=token)
+
+def get_authorized_client():
+    """
+     SLACK_BOT_TOKEN (BOT Token for Authentication)
+    """
+    return WebClient(token=settings.SLACK_BOT_TOKEN)
 
 
 class FileViewSet(APIView):
     """
     API will send message with file/attachment to Slack channel. To send message with attachment the API will require
     the following:
-    - SLACK_BOT_TOKEN (BOT Token for Authentication)
     - file (Attachment)
     - message (Text message)
     - channel_name (Channel Name)
     """
     def post(self, request, *args, **kwargs):
         try:
-            file = request.FILES.get('file')
-            comment = request.data.get('message')
-            channel = request.data.get('channel_name')
-
-            client = get_authorized_client(settings.SLACK_BOT_TOKEN)
-            response = client.files_upload(file=file.file, initial_comment=comment,
-                                           channels=channel)
-            return Response(data=response.data, status=response.status_code)
+            serializer = FileSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            client = get_authorized_client()
+            response = client.files_upload(file=request.data.get('file').file,
+                                           initial_comment=serializer.data.get('message'),
+                                           channels=serializer.data.get('channel_name')
+                                           )
+            return Response(response.data, status=response.status_code)
         except SlackApiError as e:
-            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
+            return Response(e.response.data, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MessageViewSet(APIView):
@@ -45,11 +49,13 @@ class MessageViewSet(APIView):
     """
     def post(self, request, *args, **kwargs):
         try:
-            message = request.data.get('message')
-            channel = request.data.get('channel_name')
+            serializer = MessageSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
 
-            client = get_authorized_client(settings.SLACK_BOT_TOKEN)
-            response = client.chat_postMessage(text=message, channel=channel)
+            client = get_authorized_client()
+            response = client.chat_postMessage(text=serializer.data.get('message'),
+                                               channel=serializer.data.get('channel_name')
+                                               )
             return Response(data=response.data, status=response.status_code)
         except SlackApiError as e:
-            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
+            return Response(e.response.data, status=status.HTTP_400_BAD_REQUEST)
