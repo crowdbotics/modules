@@ -3,7 +3,7 @@ const BASE_URL = "https://www.googleapis.com/calendar/v3/calendars";
 
 export const createAppointment = async (accessToken, data) => {
   try {
-    const response = await fetch(`${BASE_URL}/primary/events`, {
+    const response = await fetch(`${BASE_URL}/primary/events?conferenceDataVersion=1`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

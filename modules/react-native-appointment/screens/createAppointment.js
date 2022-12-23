@@ -40,7 +40,15 @@ const CreateAppointment = ({ route, navigation }) => {
       end: {
         dateTime: moment(`${selectedDate} ${timeSlot}`).add(moment.duration(duration)).format()
       },
-      attendees: attendeesList
+      attendees: attendeesList,
+      conferenceData: {
+        createRequest: {
+          conferenceSolutionKey: {
+            type: "hangoutsMeet"
+          },
+          requestId: Date.now().toString()
+        }
+      }
     })
       .then(() => {
         setIsLoading(false);
