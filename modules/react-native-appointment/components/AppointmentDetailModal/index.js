@@ -1,5 +1,5 @@
 import moment from "moment";
-import React from "react";
+import React, { Fragment } from "react";
 import { Modal, StyleSheet, View, Text, ScrollView, TouchableOpacity, Linking, Alert } from "react-native";
 import Button from "../Button";
 
@@ -11,6 +11,33 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
     } else {
       Alert.alert("Alert", `Unsupported URL: ${link}`);
     }
+  };
+
+  const extractDomain = (email) => {
+    return email.split("@").pop();
+  };
+
+  const ParticipantsFromFirm = (modalItem) => {
+    const domain = extractDomain(modalItem?.organizer?.email);
+    return (
+      <Fragment>
+        <Text style={styles.text}>Firm Participants:</Text>
+        <View style={styles.attendee}>
+          <Text style={styles.attendeeText}>{modalItem?.organizer?.email} (organizer)</Text>
+        </View>
+        {modalItem?.attendees?.map((attendee, index) => (
+          (extractDomain(attendee.email) === domain && !attendee.organizer) && <View style={styles.attendee} key={index}>
+              <Text style={styles.attendeeText}>{attendee.email}</Text>
+            </View>
+        ))}
+        <Text style={[styles.text, styles.mt]}>Client Participants:</Text>
+        {modalItem?.attendees?.map((attendee, index) => (
+          extractDomain(attendee.email) !== domain && <View style={styles.attendee} key={index}>
+              <Text style={styles.attendeeText}>{attendee.email}</Text>
+            </View>
+        ))}
+      </Fragment>
+    );
   };
 
   return (
@@ -35,20 +62,7 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
           <Text style={styles.modalText}>End time: {("end" in modalItem) ? moment(new Date(modalItem.end.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
 
           <View style={styles.attendeeContainer}>
-            <Text style={styles.text}>Organizer:</Text>
-            <View style={styles.attendee}>
-              <Text style={styles.attendeeText}>{modalItem?.creator?.email}</Text>
-            </View>
-            <Text style={[styles.text, styles.mt]}>Participants:</Text>
-            {
-              modalItem?.attendees
-                ? modalItem?.attendees?.map((attendee, index) =>
-                  <View style={styles.attendee} key={index}>
-                    {!attendee?.organizer && <Text style={styles.attendeeText}>{attendee?.organizer ? "" : attendee.email}</Text>}
-                  </View>
-                )
-                : <Text style={styles.noAttendee}>No Participants!</Text>
-            }
+            { ParticipantsFromFirm(modalItem) }
           </View>
         </ScrollView>
         <View style={styles.modalActionButton}>
@@ -65,7 +79,7 @@ const styles = StyleSheet.create({
   modalContainer: { minHeight: "50%", maxHeight: "85%", width: "95%", alignSelf: "center", backgroundColor: "#FFF", display: "flex", justifyContent: "center", marginTop: "15%", borderRadius: 10, padding: 20, shadowColor: "gray", elevation: 15 },
   hide: { marginTop: "30%", alignSelf: "center" },
   modalText: { fontSize: 16, padding: 15, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
-  attendeeContainer: { paddingVertical: 10, paddingHorizontal: 10, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000", height: "30%" },
+  attendeeContainer: { paddingVertical: 10, paddingHorizontal: 10, marginVertical: 4, borderWidth: 1, borderColor: "#CCCCCC", borderRadius: 4, borderLeftWidth: 5, borderLeftColor: "#000" },
   modalHeaderText: {
     fontSize: 18,
     paddingVertical: 5,
