@@ -21,7 +21,12 @@ and assign it to the variable the name of the variable should be "SLACK_BOT_TOKE
 ## Api Table
 List of api's endpoints with params needed for these apis.
 
-| Api Name              |                    Param                     | Description                                                                              |
-|-----------------------|:--------------------------------------------:|:-----------------------------------------------------------------------------------------|
-| `message/attachment/` |   form-data `file, message, channel_name`    | Takes files, message, channel name and send the message with file to respective channel. |
-| `message/`            | body `{"message" : "", "channel_name" : ""}` | Takes message and channel name and send the message to respective channel.               |
+| Api Name                                        |                       Param                       | Description                                                                              |
+|-------------------------------------------------|:-------------------------------------------------:|:-----------------------------------------------------------------------------------------|
+| `/slack/service/send-message/`                  |      form-data `file, message, channel_name`      | Takes files, message, channel name and send the message with file to respective channel. |
+| `/slack/service/upload-file/`                   |   body `{"message" : "", "channel_name" : ""}`    | Takes message and channel name and send the message to respective channel.               |
+| `/slack/service/create-channel/`                |           body `{"channel_name" : ""}`            | Takes channel name and create new channel                                                |
+| `/slack/service/invite-user-to-channel/`        |    body `{"channel_id" : "", "user_id" : ""}`     | Takes user id and channel name and added respective user to that channel                 |
+| `/slack/service/{channel_name}/get-channel-id/` |                url `company_name`                 | Takes channel name and return channel id                                                 |
+| `/slack/service/{channel_id}/channel_history/`  | url `comapny_id` query_param `next_cursor, limit` | Takes channel id and limit and return conversation and channel history                   |
+| `/slack/service/{channel_id}/archive_channel/`  |                 url `company_id`                  | Takes channel id and archive that channel                                                |
