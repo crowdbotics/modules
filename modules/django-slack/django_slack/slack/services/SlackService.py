@@ -7,6 +7,7 @@ from slack_sdk import WebClient
 class SlackService:
 
     def __init__(self, slack_token=None):
+        self.conversation_record_limit = 100
         if not slack_token:
             slack_token = settings.env.str("SLACK_BOT_TOKEN", "")
         self.slack_token = WebClient(token=slack_token)
@@ -49,9 +50,19 @@ class SlackService:
         except SlackApiError as e:
             return e.response, None
 
-    def get_conversations_history(self, channel_id):
+    def get_channel_history(self, channel_id, limit, cursor):
         try:
-            response = self.slack_token.conversations_history(channel=channel_id)
+            payload = {"channel": channel_id, "limit": limit or self.conversation_record_limit}
+            if cursor:
+                payload["cursor"] = cursor
+            response = self.slack_token.conversations_history(**payload)
+            return response
+        except SlackApiError as e:
+            return e.response
+
+    def archive_channel(self, channel_id):
+        try:
+            response = self.slack_token.conversations_archive(channel=channel_id)
             return response
         except SlackApiError as e:
             return e.response

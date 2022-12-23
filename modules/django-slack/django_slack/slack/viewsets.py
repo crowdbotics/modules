@@ -59,7 +59,14 @@ class SlackViewSet(viewsets.GenericViewSet):
         else:
             return Response(data=response.data, status=response.status_code)
 
-    @action(detail=True, methods=['get'], url_path='conversations-history')
-    def get_conversations_history(self, request, pk):
-        response = slack_service.get_conversations_history(pk)
+    @action(detail=True, methods=['get'], url_path='channel_history')
+    def get_channel_history(self, request, pk):
+        next_cursor = request.query_params.get('next_cursor')
+        limit = request.query_params.get('limit')
+        response = slack_service.get_channel_history(pk, limit, next_cursor)
+        return Response(data=response.data, status=response.status_code)
+
+    @action(detail=True, methods=['post'], url_path='archive_channel')
+    def archive_channel(self, request, pk):
+        response = slack_service.archive_channel(pk)
         return Response(data=response.data, status=response.status_code)
