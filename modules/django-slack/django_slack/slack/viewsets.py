@@ -1,14 +1,12 @@
 from django.conf import settings
 
 from rest_framework import viewsets
-from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .services.SlackService import SlackService
 
-from .serializers import FileSerializer, MessageSerializer, ChannelSerializer, InviteUserToChannelSerializer, \
-    GetChannelIdSerializer
+from .serializers import FileSerializer, MessageSerializer, ChannelSerializer, InviteUserToChannelSerializer
 
 slack_service = SlackService(slack_token=settings.SLACK_BOT_TOKEN)
 
@@ -60,3 +58,8 @@ class SlackViewSet(viewsets.GenericViewSet):
             return Response(data={'channel_id': response}, status=status_code)
         else:
             return Response(data=response.data, status=response.status_code)
+
+    @action(detail=True, methods=['get'], url_path='conversations-history')
+    def get_conversations_history(self, request, pk):
+        response = slack_service.get_conversations_history(pk)
+        return Response(data=response.data, status=response.status_code)

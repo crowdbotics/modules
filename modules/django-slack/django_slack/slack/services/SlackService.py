@@ -48,3 +48,11 @@ class SlackService:
             return None, 404
         except SlackApiError as e:
             return e.response, None
+
+    def get_conversations_history(self, channel_id):
+        try:
+            response = self.slack_token.conversations_history(channel=channel_id)
+            return response
+        except SlackApiError as e:
+            return e.response
+
