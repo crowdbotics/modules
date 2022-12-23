@@ -19,7 +19,6 @@ class SlackViewSet(viewsets.GenericViewSet):
         "upload_file": FileSerializer,
         "create_channel": ChannelSerializer,
         "invite_user_to_channel": InviteUserToChannelSerializer,
-        "get_channel_id": GetChannelIdSerializer
     }
 
     def get_serializer_class(self):
@@ -61,4 +60,3 @@ class SlackViewSet(viewsets.GenericViewSet):
             return Response(data={'channel_id': response}, status=status_code)
         else:
             return Response(data=response.data, status=response.status_code)
-
