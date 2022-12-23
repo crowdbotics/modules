@@ -1,8 +1,13 @@
-from django.urls import path
-from .viewsets import FileViewSet, MessageViewSet
+from django.urls import path, include
+
+from rest_framework.routers import DefaultRouter
+
+from .viewsets import SlackViewSet
+
+
+router = DefaultRouter()
+router.register("service", SlackViewSet, basename="slack_service")
 
 urlpatterns = [
-    path("message/attachment/", FileViewSet.as_view()),
-    path("message/", MessageViewSet.as_view())
-
+    path("", include(router.urls)),
 ]

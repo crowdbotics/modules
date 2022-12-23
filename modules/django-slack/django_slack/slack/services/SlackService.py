@@ -44,7 +44,7 @@ class SlackService:
             response = self.slack_token.conversations_list()
             for channel in response.data['channels']:
                 if channel['name'] == channel_name:
-                    return channel['id']
-            return None
+                    return channel['id'], response.status_code
+            return None, 404
         except SlackApiError as e:
-            return e.response
+            return e.response, None

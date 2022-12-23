@@ -1,65 +1,64 @@
 from django.conf import settings
 
-from rest_framework.views import APIView
+from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from slack_sdk.errors import SlackApiError
-from slack_sdk import WebClient
 from .services.SlackService import SlackService
 
-from .serializers import FileSerializer, MessageSerializer
+from .serializers import FileSerializer, MessageSerializer, ChannelSerializer, InviteUserToChannelSerializer, \
+    GetChannelIdSerializer
+
+slack_service = SlackService(slack_token=settings.SLACK_BOT_TOKEN)
 
 
-def get_authorized_client():
-    """
-     SLACK_BOT_TOKEN (BOT Token for Authentication)
-    """
-    return WebClient(token=settings.env.str("SLACK_BOT_TOKEN", ""))
+class SlackViewSet(viewsets.GenericViewSet):
+    allowed_serializers = {
+        "send_message": MessageSerializer,
+        "upload_file": FileSerializer,
+        "create_channel": ChannelSerializer,
+        "invite_user_to_channel": InviteUserToChannelSerializer,
+        "get_channel_id": GetChannelIdSerializer
+    }
 
+    def get_serializer_class(self):
+        return self.allowed_serializers.get(self.action, MessageSerializer)
 
-class FileViewSet(APIView):
-    """
-    API will send message with file/attachment to Slack channel. To send message with attachment the API will require
-    the following:
-    - file (Attachment)
-    - message (Text message)
-    - channel_name (Channel Name)
-    """
-    # TODO: Authenticate or admin only
-    
+    @action(detail=False, methods=['post'], url_path='send-message')
+    def send_message(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = slack_service.send_message(**serializer.data)
+        return Response(response.data, status=response.status_code)
 
-    def post(self, request, *args, **kwargs):
-        try:
-            serializer = FileSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            client = SlackService()
-            response = client.upload_file(file=request.data.get('file').file,
-                                          initial_comment=serializer.data.get('message'),
-                                          channels=serializer.data.get('channel_name'))
-            return Response(response.data, status=response.status_code)
-        except SlackApiError as e:
-            return Response(e.response.data, status=status.HTTP_400_BAD_REQUEST)
+    @action(detail=False, methods=['post'], url_path='upload-file')
+    def upload_file(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = slack_service.upload_file(file=request.data.get('file').file, message=serializer.data.get('message'),
+                                             channel_names=serializer.data.get('channel_name'))
+        return Response(response.data, status=response.status_code)
 
+    @action(detail=False, methods=['post'], url_path='create-channel')
+    def create_channel(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = slack_service.create_channel(**serializer.data)
+        return Response(response.data, status=response.status_code)
 
-class MessageViewSet(APIView):
-    """
-    API will send message without file/attachment to Slack channel. To send message  the API will require
-    the following:
-    - SLACK_BOT_TOKEN (BOT Token for Authentication)
-    - message (Text message)
-    - channel_name (Channel Name)
-    """
-    # TODO: Authenticate or admin only
-    def post(self, request, *args, **kwargs):
-        try:
-            serializer = MessageSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
+    @action(detail=False, methods=['post'], url_path='invite-user-to-channel')
+    def invite_user_to_channel(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = slack_service.invite_user_to_channel(**serializer.data)
+        return Response(response.data, status=response.status_code)
 
-            client = get_authorized_client()
-            response = client.chat_postMessage(text=serializer.data.get('message'),
-                                               channel=serializer.data.get('channel_name')
-                                               )
+    @action(detail=True, methods=['get'], url_path='channel-id')
+    def get_channel_id(self, request, pk):
+        response, status_code = slack_service.get_channel_id(pk)
+        if status_code:
+            return Response(data={'channel_id': response}, status=status_code)
+        else:
             return Response(data=response.data, status=response.status_code)
-        except SlackApiError as e:
-            return Response(e.response.data, status=status.HTTP_400_BAD_REQUEST)
+
