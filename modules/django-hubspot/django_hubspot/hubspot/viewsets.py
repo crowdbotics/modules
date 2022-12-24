@@ -154,13 +154,13 @@ class SingleDealViewSet(HubspotAPIView):
 
 
 class ContactToDealsListViewSet(HubspotAPIView):
-     """
+    """
         To reterive the contact associated with deals
         :header
              access_token
         :body params
             contactId
-     """
+    """
 
     def get_url(self):
         return f"{HUBSPOT_URL}crm/v4/objects/contacts/{self.request.data.get('contactId')}/associations/deals/"
@@ -222,7 +222,7 @@ class SingleTicketViewSet(HubspotAPIView):
 
 
 class TicketListViewSet(HubspotAPIView):
-     """
+    """
         To get all the tickets
         header:
             access_token
