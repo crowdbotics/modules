@@ -30,6 +30,6 @@ List of api's endpoints with params needed for these apis.
 | `/slack/service/{channel_name}/get-channel-id/` |                url `company_name`                 | Takes channel name and return channel id                                                           |
 | `/slack/service/{channel_id}/channel_history/`  | url `comapny_id` query_param `next_cursor, limit` | Takes channel id and limit and return conversation and channel history                             |
 | `/slack/service/{channel_id}/archive_channel/`  |                 url `company_id`                  | Takes channel id and archive that channel                                                          |
-| `/slack/service/{channel_id}/get_users/`        |                       None                        | This method returns a list of all users in the workspace. This includes deleted/deactivated users. |
+| `/slack/service/get_users/`                     |                       None                        | This method returns a list of all users in the workspace. This includes deleted/deactivated users. |
 
                                                                                          |

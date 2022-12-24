@@ -107,7 +107,7 @@ class SlackViewSet(viewsets.GenericViewSet):
         response = self.slack_service.archive_channel(pk)
         return Response(data=response.data, status=response.status_code)
 
-    @action(detail=False, methods=['post'], url_path='get_users')
+    @action(detail=False, methods=['get'], url_path='get_users')
     def get_users(self, request):
         """
             This method returns a list of all users in the workspace. This includes deleted/deactivated users.
