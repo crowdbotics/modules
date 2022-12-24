@@ -67,3 +67,10 @@ class SlackService:
         except SlackApiError as e:
             return e.response
 
+    def get_users_list(self):
+        try:
+            response = self.slack_web_client.users_list()
+            return response
+        except SlackApiError as e:
+            return e.response
+

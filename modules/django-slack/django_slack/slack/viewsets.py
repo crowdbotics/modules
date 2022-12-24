@@ -19,6 +19,7 @@ class SlackViewSet(viewsets.GenericViewSet):
      - get_channel_id :  Returns channel id by passing channel name
      - get_channel_history : Returns all the conversations done in specific channel
      - archive_channel : Archive the specific channel
+     - get_users : This method returns a list of all users in the workspace.
     """
 
     allowed_serializers = {
@@ -71,7 +72,7 @@ class SlackViewSet(viewsets.GenericViewSet):
         response = self.slack_service.invite_user_to_channel(**serializer.data)
         return Response(response.data, status=response.status_code)
 
-    @action(detail=True, methods=['get'], url_path='channel-id')
+    @action(detail=True, methods=['get'], url_path='get-channel-id')
     def get_channel_id(self, request, pk):
         """
         Returns channel id by passing channel name
@@ -104,4 +105,12 @@ class SlackViewSet(viewsets.GenericViewSet):
         """
 
         response = self.slack_service.archive_channel(pk)
+        return Response(data=response.data, status=response.status_code)
+
+    @action(detail=False, methods=['post'], url_path='get_users')
+    def get_users(self, request):
+        """
+            This method returns a list of all users in the workspace. This includes deleted/deactivated users.
+        """
+        response = self.slack_service.get_users_list()
         return Response(data=response.data, status=response.status_code)
