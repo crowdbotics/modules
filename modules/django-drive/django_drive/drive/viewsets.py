@@ -1,77 +1,71 @@
-import requests
+from googleapiclient import discovery
+from google.oauth2.credentials import Credentials
+import apiclient
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-DRIVE_URL = 'https://www.googleapis.com/drive/v3/'
-UPLOAD_URL = 'https://www.googleapis.com/upload/drive/v3/files'
+
+def init_service(token):
+    creds = Credentials(token=token)
+    return discovery.build('drive', 'v3', credentials=creds)
 
 
-class DriveAPIView(APIView):
-
-    def get_payload(self):
-        return {}
-
-    def get_params(self):
-        return {}
-
-    def get_url(self):
-        return ""
+class GetDriveFilesViewSet(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            headers = {
-                "Authorization": request.META.get('HTTP_AUTHORIZATION')
-            }
-            response = requests.get(self.get_url(), params=self.get_params(), headers=headers)
-            response.raise_for_status()
-            load = response.json()
-            return Response(load, status=status.HTTP_200_OK)
+            drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
+            files = drive_service.files().list().execute()
+            return Response(files, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
 
+
+class UploadDriveFileViewSet(APIView):
+    """
+    header:
+        Authorization: send access token in header without keyword 'Bearer'
+    form-data:
+        file
+    """
     def post(self, request, *args, **kwargs):
         try:
-            headers = {
-                "Authorization": request.META.get('HTTP_AUTHORIZATION')
+            drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
+            uploaded_file = request.FILES['file']
+            file_metadata = {
+                "name": uploaded_file.name,
+                "parents": ["1iivW-XJSqDbe37qt34sUeIEg9bgwtWa5"]
             }
-            response = requests.post(self.get_url(), json=self.get_payload(), params=self.get_params(),
-                                     headers=headers)
-            response.raise_for_status()
-            load = response.json()
-            return Response(load, status=status.HTTP_200_OK)
+            media = apiclient.http.MediaInMemoryUpload(
+                body=uploaded_file.read(),
+                mimetype=uploaded_file.content_type)
+            file = drive_service.files().create(
+                body=file_metadata,
+                media_body=media,
+                fields='id').execute()
+            return Response(file, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
 
 
-class GetDriveFilesViewSet(DriveAPIView):
-
-    def get_url(self):
-        return f"{DRIVE_URL}files"
-
-    def get_params(self):
-        return self.request.data
-
-
-class UploadDriveFileViewSet(DriveAPIView):
-
-    def get_url(self):
-        return f"{UPLOAD_URL}"
-
-    def get_payload(self):
-        return self.request.data
-
-    def get_params(self):
-        return {"uploadType": 'multipart'}
-
-
-class CreateDriveFolderViewSet(DriveAPIView):
-
-    def get_url(self):
-        return f"{DRIVE_URL}files"
-
-    def get_payload(self):
-        return self.request.data
-
-    def get_params(self):
-        return {"uploadType": 'multipart'}
+class CreateDriveFolderViewSet(APIView):
+    """
+        body:
+            folder_name
+    """
+    def post(self, request, *args, **kwargs):
+        try:
+            drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
+            file_metadata = {
+                "name": request.data.get("folder_name"),
+                "mimeType": 'application/vnd.google-apps.folder'
+            }
+            file = drive_service.files().create(
+                body=file_metadata,
+                fields='id'
+            ).execute()
+            return Response(file, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
