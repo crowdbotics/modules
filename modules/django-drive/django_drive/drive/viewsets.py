@@ -21,24 +21,23 @@ def init_service(token):
 class GetDriveFilesViewSet(APIView):
     """
     This class without any parameters return all the files and folders from the Google Drive. 
+    Filters results according to the provided queries.
     """
 
     def get(self, request, *args, **kwargs):
         """
         :header:
             Authorization: send access token in header without keyword 'Bearer'
-        :param str file_name: Name of the file with file extension
+        :query_param str query: To search for a specific set of files or folders, use the query. 
         :param num pageSize: The maximum number of files to return per page
         :param str pageToken: The token for continuing a previous list request on the next page. This should be set to the value of 'nextPageToken' from the previous response.
+        :param str mimeType: Specifies if the user wants to get files or folders supported values are `application/vnd.google-apps.file` and `application/vnd.google-apps.folder`
         :return: Returns list of the files and folder from user's Google Drive.
         """
         try:
             drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
-            file_name = None
-            if request.data.get('file_name'):
-                file_name = f"name = '{request.data.get('file_name')}'"
             files = drive_service.files().list(
-                q=file_name,
+                q=request.query_params.get('query'),
                 pageToken=request.data.get('pageToken'),
                 pageSize=request.data.get('pageSize')
                 ).execute()
