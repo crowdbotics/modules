@@ -46,6 +46,6 @@ Here is the payload needed to share a file or folder with some specific user
    file_id: "File id going to be shared with user",
    role: "writer",                               // role can be: reader(only reade permisions) or writer(reade and write permisions)
    user_type: "user",                            // type of the user: user, anyone
-   emailAddress: "demomodule.123@gmail.com"      // email address of the user sharing file with only if the "user_type=user"
+   emailAddress: ["john123@gmail.com", "john.snow@gmail.com"]      // email address of the users sharing file with only if the "user_type=user"
 }
 ```
