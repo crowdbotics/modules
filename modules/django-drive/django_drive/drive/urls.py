@@ -3,7 +3,7 @@ from .viewsets import (GetDriveFilesViewSet, UploadDriveFileViewSet, CreateDrive
 
 urlpatterns = [
     path('files/', GetDriveFilesViewSet.as_view()),
-    path('upload/file/', UploadDriveFileViewSet.as_view()),
-    path('create/folder/', CreateDriveFolderViewSet.as_view()),
-    path('share/file/', ShareFileViewSet.as_view()),
+    path('file/upload/', UploadDriveFileViewSet.as_view()),
+    path('file/share/', ShareFileViewSet.as_view()),
+    path('folder/create/', CreateDriveFolderViewSet.as_view()),
 ]
