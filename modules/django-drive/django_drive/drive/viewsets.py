@@ -1,11 +1,10 @@
 import apiclient
-
 from demo import settings
-from googleapiclient import discovery
-from google.oauth2.credentials import Credentials
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from googleapiclient import discovery
+from google.oauth2.credentials import Credentials
 
 from .serializers import (ShareFileSerializer, CreateFolderSerializer, UploadFileSerializer)
 
@@ -21,15 +20,18 @@ def init_service(token):
 
 class GetDriveFilesViewSet(APIView):
     """
-    :header:
-        Authorization: send access token in header without keyword 'Bearer'
-    :param str file_name: Name of the file with file extension
-    :param num pageSize: The maximum number of files to return per page
-    :param str pageToken: The token for continuing a previous list request on the next page. This should be set to the value of 'nextPageToken' from the previous response.
-    :return: Returns list of the files and folder from user's Google Drive.
+    This class without any parameters return all the files and folders from the Google Drive. 
     """
 
     def get(self, request, *args, **kwargs):
+        """
+        :header:
+            Authorization: send access token in header without keyword 'Bearer'
+        :param str file_name: Name of the file with file extension
+        :param num pageSize: The maximum number of files to return per page
+        :param str pageToken: The token for continuing a previous list request on the next page. This should be set to the value of 'nextPageToken' from the previous response.
+        :return: Returns list of the files and folder from user's Google Drive.
+        """
         try:
             drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
             file_name = None
@@ -38,7 +40,8 @@ class GetDriveFilesViewSet(APIView):
             files = drive_service.files().list(
                 q=file_name,
                 pageToken=request.data.get('pageToken'),
-                pageSize=request.data.get('pageSize')).execute()
+                pageSize=request.data.get('pageSize')
+                ).execute()
             return Response(files, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
@@ -46,13 +49,16 @@ class GetDriveFilesViewSet(APIView):
 
 class UploadDriveFileViewSet(APIView):
     """
-    :header:
-        Authorization: send access token in header without keyword 'Bearer'
-    :param file: The file sent needs to be uploaded on the Google Drive. File must be sent as multipart/form-data
-    :return: Uploads the file to the specified folder and returns file id.
+    This class uploads file data on the Google Drive by making  multipart upload request.
     """
 
     def post(self, request, *args, **kwargs):
+        """
+        :header:
+            Authorization: send access token in header without keyword 'Bearer'
+        :param file: The file sent needs to be uploaded on the Google Drive. File must be sent as multipart/form-data
+        :return: Uploads the file to the specified folder and returns file id.
+        """
         try:
             drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = UploadFileSerializer(data=request.FILES)
@@ -77,13 +83,16 @@ class UploadDriveFileViewSet(APIView):
 
 class CreateDriveFolderViewSet(APIView):
     """
-    :header:
-        Authorization: send access token in header without keyword 'Bearer'
-    :param folder_name: Folder will be created with this name in Google Drive
-    :return: Creates the folder and returns folder id.
+    This class creates a folder on Google Drive with the MIME type `application/vnd.google-apps.folder` with no extension.
     """
 
     def post(self, request, *args, **kwargs):
+        """
+        :header:
+            Authorization: send access token in header without keyword 'Bearer'
+        :param folder_name: Folder will be created with this name in Google Drive
+        :return: Creates the folder and returns folder id.
+        """
         try:
             drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = CreateFolderSerializer(data=request.data)
@@ -104,14 +113,18 @@ class CreateDriveFolderViewSet(APIView):
 
 class ShareFileViewSet(APIView):
     """
-    :header:
-        Authorization: send access token in header without keyword 'Bearer'
-    :param str file_id: ID of the file/folder that will be shared with the user
-    :param str role: Object containing the `role`, `type` and `email` of the user sharing file with
-    :return: Shares file/folder with the user and returns the shared file/folder detail object
+    Shares a Google Drive file, folder with multiple users with associated permissions resources.
+    Creates permission for a specific type (user, group, domain, anyone) and role, such as "commenter" or "reader." 
     """
 
     def post(self, request, *args, **kwargs):
+        """
+        :header:
+            Authorization: send access token in header without keyword 'Bearer'
+        :param str file_id: ID of the file/folder that will be shared with the user
+        :param str role: Object containing the `role`, `type` and `email` of the user sharing file with
+        :return: Shares file/folder with the user and returns the shared file/folder detail object
+        """
         try:
             drive_service = init_service(token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = ShareFileSerializer(data=request.data)
