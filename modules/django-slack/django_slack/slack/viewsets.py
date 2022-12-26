@@ -29,7 +29,7 @@ class SlackViewSet(viewsets.GenericViewSet):
         "invite_user_to_channel": InviteUserToChannelSerializer,
     }
 
-    slack_service = SlackService(slack_token=os.getenv("SLACK_BOT_TOKEN", ""))
+    slack_service = SlackService()
 
     def get_serializer_class(self):
         return self.allowed_serializers.get(self.action, MessageSerializer)
@@ -60,7 +60,7 @@ class SlackViewSet(viewsets.GenericViewSet):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.slack_service.create_channel(**serializer.data)
+        response = self.slack_service.create_channel_with_users(**serializer.data)
         return Response(response.data, status=response.status_code)
 
     @action(detail=False, methods=['post'], url_path='invite-user-to-channel')
