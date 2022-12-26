@@ -14,6 +14,9 @@ class SlackService:
             slack_admin_token = os.getenv("SLACK_ADMIN_TOKEN", "")
         self.slack_bot_client = WebClient(token=slack_bot_token)
         self.slack_admin_client = WebClient(token=slack_admin_token)
+        self.invite_limit = os.getenv("INVITE_LIMIT", 1)
+        self.iterative_invites = os.getenv("ITERATIVE_INVITES", False)
+
         
     def send_message(self, message, channel_name):
         try:
@@ -44,10 +47,11 @@ class SlackService:
                 name=channel_name_slug
             )
             if conv_response.status_code == 200:
-                for email in emails.split(','):
-                    response = self.slack_bot_client.conversations_inviteShared(
-                        channel=conv_response.data['channel']['id'], 
-                        external_limited=False, emails=email
+                channel_id = conv_response.data.get('channel', {}).get('id', None)
+                if channel_id:
+                    response = self.invite_user_to_channel(
+                        channel_id=channel_id, 
+                        emails=emails.split(',')
                     )
             return response
         except SlackApiError as e:
@@ -60,7 +64,11 @@ class SlackService:
                 channel_id, status_code = self.get_channel_id(channel_name)
                 if status_code == 404:
                     return channel_id
-            response = self.slack_bot_client.conversations_inviteShared(channel=channel_id, emails=emails)
+            if self.iterative_invites:
+                for email in emails:
+                    response = self.slack_bot_client.conversations_inviteShared(channel=channel_id, emails=email)
+            else:
+                response = self.slack_bot_client.conversations_inviteShared(channel=channel_id, emails=emails[:self.invite_limit])
             return response
         except SlackApiError as e:
             return e.response
