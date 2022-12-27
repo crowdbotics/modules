@@ -3,12 +3,6 @@
 This module contains all needed resources to get the Google Drive component for React
 Native mobile client.
 
-### Settings
-In your settings.py add the parent folder id where your files will be uploaded.
-
-```
-PARENT_FOLDER : ""
-```
 ### Installation
 Install the Google client library for Python:
 
@@ -31,8 +25,8 @@ List of api's endpoints with params needed for these apis.
 
 | Api Name                             |                         Params                         | Description     |
 | -------------------------------------|:------------------------------------------------------:|-----------------|
-| `/modules/drive/files/` |    `{pageToken, PageSize(int)}` `query(query_param)` optional   | Takes an object containing the `pageSize` which means the url will return the results according to pageSize and `pageToken` is the next page token. Pass the query param `query` as `mimeType!='application/vnd.google-apps.folder'`f you want to get only files.  Pass the query param `query` as `mimeType='application/vnd.google-apps.folder'` if you want to get only folders. To get a specific file or folder pass the query param `query` as `name='file_name_with_extension'`.|
-| `/modules/drive/file/upload/` | `file, parents`  | Takes a file with `content-type: multipart/form-data`,and folder_id as `parents` where file will be uploaded. |
+| `/modules/drive/files/` | query_params `{page_token, page_size(int), query}`| `page_size` refers to the maximum number of files to return per page and `page_token` for continuing a previous list request on the next page. This should be set to the value of 'nextPageToken' from the previous response. Pass the query param `query` as `mimeType!='application/vnd.google-apps.folder'` if you want to get only files.  Pass the query param `query` as `mimeType='application/vnd.google-apps.folder'` if you want to get only folders. To get a specific file or folder pass the query param `query` as `name='file_name_with_extension'`.|
+| `/modules/drive/file/upload/` | `file, parent_folder_id`  | Takes a file with `content-type: multipart/form-data`,and folder_id as `parent_folder_id` where file will be uploaded. |
 | `/modules/drive/folder/create/` | `{folder_name}` | Takes object containing the `folder_name` who is going to be created. |
 | `/modules/drive/file/share/` | `{file_id, role, user_type, emails}` | Takes an object containing `file_id` for the file beign shared with users, `role` The role granted for the permissions. Supported values for role are `[writer, commenter, reader]`.  `user_type` The type of the grantee. Valid values are: `[user, group, domain, anyone]`. `emails` The email addresses of the user or group to with file is being shared.|
 
