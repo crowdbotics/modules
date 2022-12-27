@@ -52,22 +52,21 @@ class DriveService:
         except Exception:
             raise
 
-    def upload_drive_file(self, uploaded_file, parent_folder_id=None):
+    def upload_drive_file(self, file, parent_folder_id=None):
         """
-            :param uploaded_file: The file sent needs to be uploaded on the Google Drive. File must be sent as
+            :param file: The file sent needs to be uploaded on the Google Drive. File must be sent as
             multipart/form-data
             :param parent_folder_id: Use if user wants to add file inside the specific folder
             :return: Uploads the file to the specified folder and returns file id.
         """
         try:
-            uploaded_file = uploaded_file
             file_metadata = {
-                "name": uploaded_file.name,
+                "name": file.name,
                 "parents": [parent_folder_id]
             }
             media = apiclient.http.MediaInMemoryUpload(
-                body=uploaded_file.read(),
-                mimetype=uploaded_file.content_type)
+                body=file.read(),
+                mimetype=file.content_type)
             file = self.drive_service.files().create(
                 body=file_metadata,
                 media_body=media,

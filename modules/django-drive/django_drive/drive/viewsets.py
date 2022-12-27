@@ -67,7 +67,10 @@ class DriveViewSet(viewsets.GenericViewSet):
             drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            response = drive_service.upload_drive_file(**serializer.data)
+            response = drive_service.upload_drive_file(
+                file=request.FILES.get("file"),
+                parent_folder_id=request.data.get("parent_folder_id")
+            )
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
