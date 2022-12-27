@@ -1,0 +1,5 @@
+{
+  "title": "Paypal (Django)",
+  "description": "Backend for the Paypal module.",
+  "root": "/backend/modules"
+}
