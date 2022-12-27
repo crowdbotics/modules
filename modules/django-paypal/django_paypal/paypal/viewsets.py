@@ -18,8 +18,7 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_order(self, request):
         data = request.data
         response = self.paypal_service.create_order(order_details=data)
-        return Response(data=response, status=response.status_code)\
-
+        return Response(data=response, status=response.status_code)
 
     @action(detail=False, methods=['get'], url_path='get-captured-payment')
     def get_captured_payment(self, request):
