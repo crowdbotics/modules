@@ -32,7 +32,7 @@ class DriveViewSet(viewsets.GenericViewSet):
     def file_list(self, request):
         try:
             drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
-            serializer = self.get_serializer(data=request.data)
+            serializer = self.get_serializer(data=request.query_params)
             serializer.is_valid(raise_exception=True)
             response = drive_service.get_drive_files(**serializer.data)
             return Response(response, status=status.HTTP_200_OK)
