@@ -1,9 +1,13 @@
-from django.urls import path
-from .viewsets import (GetDriveFilesViewSet, UploadDriveFileViewSet, CreateDriveFolderViewSet, ShareFileViewSet)
+from django.urls import path, include
+
+from rest_framework.routers import DefaultRouter
+
+from .viewsets import DriveViewSet
+
+
+router = DefaultRouter()
+router.register("service", DriveViewSet, basename="drive_service")
 
 urlpatterns = [
-    path('files/', GetDriveFilesViewSet.as_view()),
-    path('file/upload/', UploadDriveFileViewSet.as_view()),
-    path('file/share/', ShareFileViewSet.as_view()),
-    path('folder/create/', CreateDriveFolderViewSet.as_view()),
+    path("", include(router.urls)),
 ]
