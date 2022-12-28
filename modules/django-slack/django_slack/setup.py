@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_signature",
+    name="cb_django_slack",
     version="0.1",
-    packages=[],
-    install_requires=["slack-sdk==3.4.2"],
+    packages=["slack"],
+    install_requires=["slack-sdk==3.19.5"],
     cmdclass={"build": BuildCommand},
 )
