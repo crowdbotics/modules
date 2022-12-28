@@ -35,7 +35,7 @@ class PaypalBase:
                 return response.json()
             return None
         except Exception as e:
-            return e.body.decode('utf8')
+            return e.args
 
     def get_header(self, request_type=None, request_id=None):
         headers = {
@@ -59,7 +59,10 @@ class PaypalBase:
                 headers.update({"Authorization": f"{auth.get('token_type')} {auth.get('access_token')}"})
         response = requests.request(request_type, url, headers=headers, data=payload)
         if 200 <= response.status_code <= 300:
+            if response.status_code == 204:
+                return {"data": response, "status_code": response.status_code, "success": True}
             return {"data": response.json(), "status_code": response.status_code, "success": True}
+
         return {"data": response.content, "status_code": response.status_code, "success": False}
 
 
@@ -74,7 +77,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def show_order_details(self, order_id):
         try:
@@ -82,7 +85,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def authorize_payment_for_order(self, order_id):
         try:
@@ -90,7 +93,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def capture_payment_for_order(self, order_id):
         try:
@@ -98,7 +101,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def show_authorized_payment(self, authorization_id):
         try:
@@ -106,7 +109,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def capture_authorized_payment(self, authorization_id, order_detail):
         try:
@@ -117,7 +120,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def show_captured_payment(self, capture_id):
         try:
@@ -125,7 +128,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def refund_capture_payment(self, capture_id, order_detail):
         try:
@@ -136,7 +139,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def show_refund_details(self, refund_id):
         try:
@@ -144,7 +147,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def create_product(self, product_detail):
         try:
@@ -156,7 +159,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def show_product_details(self, product_id):
         try:
@@ -164,7 +167,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def create_plan(self, plan_detail):
         try:
@@ -176,7 +179,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def show_plans_details(self, plan_id):
         try:
@@ -184,7 +187,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def deactivate_plan(self, plan_id):
         try:
@@ -194,7 +197,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def activate_plan(self, plan_id):
         try:
@@ -204,7 +207,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def create_subscription(self, subscription_details):
         try:
@@ -216,7 +219,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def show_subscription_details(self, subscription_id):
         try:
@@ -224,7 +227,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def suspend_subscription(self, subscription_id):
         try:
@@ -232,7 +235,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def activate_subscription(self, subscription_id):
         try:
@@ -240,7 +243,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def cancel_subscription(self, subscription_id, reason):
         try:
@@ -249,7 +252,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
+            return {'success': False, 'Message': e.args}
 
     def capture_authorized_payment_on_subscription(self, subscription_id, details):
         try:
@@ -258,5 +261,4 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.body.decode('utf8')}
-        
+            return {'success': False, 'Message': e.args}

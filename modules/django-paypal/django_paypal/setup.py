@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_django_paypal",
     version="0.1",
-    packages=[],
+    packages=['paypal'],
     install_requires=[],
     cmdclass={"build": BuildCommand},
 )
