@@ -29,7 +29,7 @@ HubSpot will send a JSON payload to this URL with details about events when they
 
 
 ## Installation
-1. In `settings.py` add the following things:
+1. In `.env` file add the following things:
 
 ```py
 HUBSPOT_URL = 'https://api.hubapi.com/'
@@ -51,17 +51,17 @@ List of api's endpoints with params needed for these apis.
 
 | Api Name                             | Params |Description                 |
 | -------------------------------------|:------------:|-------------------|
-| `/modules/hubspot/access/token/` | `token_payload` | This will return an object containing the `refresh_token` and `access_token`. All api calls will be made using this `access_token`.|
-| `/modules/hubspot/deals/list/` | - | The deals endpoint retrieves all deal data from HubSpot.|
-| `/modules/hubspot/deals/create/` | `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage}` | Create a deal with the given properties and return a copy of the object, including the ID|
-| `/modules/hubspot/deals/remove/` | `{id}` | Takes object containing `id` of the deal going to be deleted. Moves an Object identified by `id` to the recycling bin.|
-| `/modules/hubspot/deals/single/` | `{id}` | Takes object containing `id` of the deal going to be retrieved.|
-| `/modules/hubspot/ticket/create/` | `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage}` | Create a ticket with the given properties and return a copy of the object, including the ID|
-| `/modules/hubspot/ticket/list/` | - | The tickets endpoint retrieves all tickets data from HubSpot.|
-| `/modules/hubspot/ticket/single/` | `{id}` | Takes object containing `id` of the ticket going to be retrieved.|
-| `/modules/hubspot/ticket/remove/` | `{id}` | Takes object containing `id` of the ticket going to be deleted. Moves an Object identified by `id` to the recycling bin.|
-| `/modules/hubspot/ticket/association/create/` | `{ticketId, toObjectType, toObjectId,param[{associationCategory, associationTypeId}]}` | Associate a ticket with others CRM objects.|
-| `/modules/hubspot/ticket/association/list/` | `{ticketId, toObjectType}` | Reterive a ticket associated with other CRM objects.|
-| `/modules/hubspot/contact/deals/list/` | `{contactId}` | Reterive a contact associated with deals.|
-| `/modules/hubspot/meeting/contacts/list/` | `{meetingId}` | Reterive a meeting associated with contacts.|
-| `/modules/hubspot/webhook/` | - | This url will be used wile creating the webhook for the app. see [Webhook Subscription](#creating-webhook-subscription) details above.|
+| `/modules/hubspot/service/access/token/` | `token_payload` | This will return an object containing the `refresh_token` and `access_token`. All api calls will be made using this `access_token`.|
+| `/modules/hubspot/service/deals/list/` | - | The deals endpoint retrieves all deal data from HubSpot.|
+| `/modules/hubspot/service/deals/create/` | `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage}` | Create a deal with the given properties and return a copy of the object, including the ID|
+| `/modules/hubspot/service/deals/remove/` | `{id}` | Takes object containing `id` of the deal going to be deleted. Moves an Object identified by `id` to the recycling bin.|
+| `/modules/hubspot/service/deals/single/` | `{id}` | Takes object containing `id` of the deal going to be retrieved.|
+| `/modules/hubspot/service/tickets/create/` | `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage}` | Create a ticket with the given properties and return a copy of the object, including the ID|
+| `/modules/hubspot/service/tickets/list/` | - | The tickets endpoint retrieves all tickets data from HubSpot.|
+| `/modules/hubspot/service/tickets/single/` | `{id}` | Takes object containing `id` of the ticket going to be retrieved.|
+| `/modules/hubspot/service/tickets/remove/` | `{id}` | Takes object containing `id` of the ticket going to be deleted. Moves an Object identified by `id` to the recycling bin.|
+| `/modules/hubspot/service/ticket/associations/create/` | `{ticketId, toObjectType, toObjectId,param[{associationCategory, associationTypeId}]}` | Associate a ticket with others CRM objects.|
+| `/modules/hubspot/service/ticket/associations/list/` | `{ticketId, toObjectType}` | Reterive a ticket associated with other CRM objects.|
+| `/modules/hubspot/service/contact/deals/list/` | `{contactId}` | Reterive a contact associated with deals.|
+| `/modules/hubspot/service/meeting/contacts/list/` | `{meetingId}` | Reterive a meeting associated with contacts.|
+| `/modules/hubspot/service/webhook/` | - | This url will be used wile creating the webhook for the app. see [Webhook Subscription](#creating-webhook-subscription) details above.|
