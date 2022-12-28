@@ -120,7 +120,7 @@ class HubspotService(HubspotBase):
         try:
             url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{payload['ticketId']}/associations/" \
                   f"{payload['toObjectType']}/{payload['toObjectId']}/"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(),
+            response = self._api_call(request_type="PUT", url=url, headers=self.get_header(),
                                       payload=payload['param'])
             return response
         except Exception as e:

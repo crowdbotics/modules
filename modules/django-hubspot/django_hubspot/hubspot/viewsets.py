@@ -97,7 +97,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str ticketId:  HubSpot ticket id to delete the ticket.
         :return: Removes the ticket from hubspot and returns no content.      
         """
-        response = self.hubspot_service.remove_ticket(request.data)
+        response = self.hubspot_service.remove_ticket(request.data.get('ticketId'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='tickets/single')
@@ -107,10 +107,10 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str ticketId:  HubSpot ticket id to retrieve the ticket.
         :return: Returns a ticket object containing ticket detail.       
         """
-        response = self.hubspot_service.single_ticket(request.data)
+        response = self.hubspot_service.single_ticket(request.data.get('ticketId'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='ticket/associations/create')
+    @action(detail=False, methods=['put'], url_path='ticket/associations/create')
     def create_ticket_association(self, request):
         """
         To associate the ticket with other CRM objects
