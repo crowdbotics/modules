@@ -51,19 +51,20 @@ class PaypalBase:
         return headers
 
     def _api_call(self, request_type, url, headers=None, payload=None):
-
-        if not self.auth:
-            auth = self.get_auth_token()
-            if auth:
-                self.auth = auth
-                headers.update({"Authorization": f"{auth.get('token_type')} {auth.get('access_token')}"})
-        response = requests.request(request_type, url, headers=headers, data=payload)
-        if 200 <= response.status_code <= 300:
+        try:
+            if not self.auth:
+                auth = self.get_auth_token()
+                if auth:
+                    self.auth = auth
+                    headers.update({"Authorization": f"{auth.get('token_type')} {auth.get('access_token')}"})
+            response = requests.request(request_type, url, headers=headers, data=payload)
+            response.raise_for_status()
             if response.status_code == 204:
                 return {"data": response, "status_code": response.status_code, "success": True}
             return {"data": response.json(), "status_code": response.status_code, "success": True}
 
-        return {"data": response.content, "status_code": response.status_code, "success": False}
+        except requests.exceptions.RequestException as e:
+            return {"data": e.response.json(), "status_code": e.response.status_code}
 
 
 class PaypalService(PaypalBase):
@@ -77,7 +78,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def show_order_details(self, order_id):
         try:
@@ -85,7 +86,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def authorize_payment_for_order(self, order_id):
         try:
@@ -93,7 +94,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def capture_payment_for_order(self, order_id):
         try:
@@ -101,7 +102,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def show_authorized_payment(self, authorization_id):
         try:
@@ -109,7 +110,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def capture_authorized_payment(self, authorization_id, order_detail):
         try:
@@ -120,7 +121,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def show_captured_payment(self, capture_id):
         try:
@@ -128,7 +129,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def refund_capture_payment(self, capture_id, order_detail):
         try:
@@ -139,7 +140,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def show_refund_details(self, refund_id):
         try:
@@ -147,7 +148,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def create_product(self, product_detail):
         try:
@@ -159,7 +160,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def show_product_details(self, product_id):
         try:
@@ -167,7 +168,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def create_plan(self, plan_detail):
         try:
@@ -179,7 +180,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def show_plans_details(self, plan_id):
         try:
@@ -187,7 +188,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def deactivate_plan(self, plan_id):
         try:
@@ -197,7 +198,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def activate_plan(self, plan_id):
         try:
@@ -207,7 +208,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def create_subscription(self, subscription_details):
         try:
@@ -219,7 +220,7 @@ class PaypalService(PaypalBase):
                                       )
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e@action(detail=True, methods=['post'], url_path='cancel-subscription')
 
     def show_subscription_details(self, subscription_id):
         try:
@@ -227,7 +228,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def suspend_subscription(self, subscription_id):
         try:
@@ -235,7 +236,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def activate_subscription(self, subscription_id):
         try:
@@ -243,7 +244,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def cancel_subscription(self, subscription_id, reason):
         try:
@@ -252,7 +253,7 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
 
     def capture_authorized_payment_on_subscription(self, subscription_id, details):
         try:
@@ -261,4 +262,79 @@ class PaypalService(PaypalBase):
             response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
-            return {'success': False, 'Message': e.args}
+            return e
+
+    def generate_invoice_number(self):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v2/invoicing/generate-next-invoice-number'
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header())
+            return response
+        except Exception as e:
+            return e
+
+    def create_draft_invoice(self, invoice_details):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v2/invoicing/invoices'
+            payload = json.dumps(invoice_details)
+            response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
+            return response
+        except Exception as e:
+            return e
+
+    def show_invoice_details(self, invoice_id):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v2/invoicing/invoices/{invoice_id}'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
+            return response
+        except Exception as e:
+            return e
+
+    def send_invoice(self, invoice_id, message_body):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v2/invoicing/invoices/{invoice_id}/send'
+            payload = json.dumps(message_body)
+            response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
+            return response
+        except Exception as e:
+            return e
+
+    def list_disputes(self):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v1/customer/disputes'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
+            return response
+        except Exception as e:
+            return e
+
+    def show_dispute_details(self, dispute_id):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v1/customer/disputes/{dispute_id}'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(request_type="GET"))
+            return response
+        except Exception as e:
+            return e
+
+    def accept_claim(self, dispute_id, message):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v1/customer/disputes/{dispute_id}/accept-claim'
+            payload = json.dumps(message)
+            response = self._api_call(request_type="POST", url=url,
+                                      payload=payload,
+                                      headers=self.get_header()
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def create_web_hook(self, body):
+        try:
+            url = f'{self.PAYPAL_BASE_URL}/v1/notifications/webhooks'
+            payload = json.dumps(body)
+            response = self._api_call(request_type="POST", url=url,
+                                      payload=payload,
+                                      headers=self.get_header()
+                                      )
+            return response
+        except Exception as e:
+            return e
+

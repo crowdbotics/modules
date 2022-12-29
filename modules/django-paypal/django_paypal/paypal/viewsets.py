@@ -128,3 +128,47 @@ class PaypalViewSet(viewsets.GenericViewSet):
         response = self.paypal_service. \
             capture_authorized_payment_on_subscription(subscription_id=pk, details=data)
         return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='generate-invoice-number')
+    def generate_invoice_number(self, request):
+        response = self.paypal_service.generate_invoice_number()
+        return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='create-draft-invoice')
+    def create_draft_invoice(self, request):
+        body = request.data
+        response = self.paypal_service.create_draft_invoice(invoice_details=body)
+        return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=True, methods=['get'], url_path='get-invoice-details')
+    def get_invoice_details(self, request, pk):
+        response = self.paypal_service.show_invoice_details(invoice_id=pk)
+        return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=True, methods=['post'], url_path='send-invoice')
+    def send_invoice(self, request, pk):
+        body = request.data
+        response = self.paypal_service.send_invoice(message_body=body, invoice_id=pk)
+        return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='list-disputes')
+    def list_disputes(self, request):
+        response = self.paypal_service.list_disputes()
+        return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=True, methods=['get'], url_path='get-dispute-details')
+    def get_dispute_details(self, request, pk):
+        response = self.paypal_service.show_dispute_details(dispute_id=pk)
+        return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=True, methods=['post'], url_path='accept-claim')
+    def accept_clam(self, request, pk):
+        message = request.data
+        response = self.paypal_service.accept_claim(dispute_id=pk, message=message)
+        return Response(data=response, status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='create-web-hook')
+    def create_web_hook(self, request):
+        message = request.data
+        response = self.paypal_service.create_web_hook(body=message)
+        return Response(data=response, status=response.get("status_code"))
