@@ -63,7 +63,9 @@ class HubspotService(HubspotBase):
         try:
             url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/'
             response = self._api_call(request_type="POST", url=url, headers=self.get_header(),
-                                      payload=payload)
+                                      payload={
+                                        "properties": payload
+                                      })
             return response
         except Exception as e:
             return e
@@ -164,5 +166,82 @@ class HubspotService(HubspotBase):
     def webhook(self, data):
         try:
             return data
+        except Exception as e:
+            return e
+
+    def get_contact_by_email(self, email):
+        try:
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v3/objects/contacts/search/"
+            data = {
+                    "filterGroups": [
+                        {
+                        "filters": [
+                            {
+                            "value": email,
+                            "propertyName": "email",
+                            "operator": "EQ"
+                            }
+                        ]
+                        }
+                    ]
+            }
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=data)
+            return response
+        except Exception as e:
+            return e
+
+    def create_contact(self, email):
+        try:
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v3/objects/contacts/"
+            payload = {
+                "properties": {
+                    "email": email,
+                }
+            }
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def get_or_create_contact_by_email(self, email):
+        try:
+            contact = self.get_contact_by_email(email)
+            status = contact.get('status_code')
+            if not status or status == 404:
+                contact = self.create_contact(email)
+                return contact.get('data')
+            else:
+                return contact.get('data').get('results')[0]
+        except Exception as e:
+            return e
+
+    def create_deal_contact_association(self, emails, dealId):
+        try:
+            for email in emails:
+                contact = self.get_or_create_contact_by_email(email)
+                if contact:
+                    payload = {
+                        "dealId": dealId,
+                        "toObjectType": "contacts",
+                        "toObjectId": contact.get('id')
+                    }
+                    self.create_deal_association(payload)
+            return True
+        except Exception as e:
+            return False
+
+    def create_deal_association(self, payload):
+        try:
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{payload['dealId']}/associations/" \
+                  f"{payload['toObjectType']}/{payload['toObjectId']}/"
+            response = self._api_call(
+                request_type="PUT", url=url, headers=self.get_header(), payload=[
+                    {
+                        "associationCategory": "USER_DEFINED",
+                        "associationTypeId": 1
+                    }
+                ])
+            return response
         except Exception as e:
             return e

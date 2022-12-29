@@ -32,11 +32,11 @@ HubSpot will send a JSON payload to this URL with details about events when they
 1. In `.env` file add the following things:
 
 ```py
-HUBSPOT_URL = 'https://api.hubapi.com/'
-GRANT_TYPE = "authorization_code",
-REDIRECT_URL = 'your_redirect_url', 
-CLIENT_ID = 'your_app_client_id',
-CLIENT_SECRET = 'your_app_client_secret',
+HUBSPOT_BASE_URL = 'https://api.hubapi.com/'
+HUBSPOT_GRANT_TYPE = "authorization_code",
+HUBSPOT_REDIRECT_URL = 'your_redirect_url', 
+HUBSPOT_CLIENT_ID = 'your_app_client_id',
+HUBSPOT_CLIENT_SECRET = 'your_app_client_secret',
 ```
 
 2. Run the following commands to get started:

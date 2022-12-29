@@ -9,8 +9,8 @@ from .services.HubspotService import HubspotService
 
 class HubspotViewSet(viewsets.GenericViewSet):
     hubspot_service = HubspotService(
-        base_url=os.getenv('HUBSPOT_BASE_URL', ""),
-        grant_type=os.getenv('HUBSPOT_GRANT_TYPE', ""),
+        base_url=os.getenv('HUBSPOT_BASE_URL', "https://api.hubapi.com"),
+        grant_type=os.getenv('HUBSPOT_GRANT_TYPE', "authorization_code"),
         redirect_url=os.getenv('HUBSPOT_REDIRECT_URL', ""),
         client_id=os.getenv('HUBSPOT_CLIENT_ID', ""),
         client_secret=os.getenv('HUBSPOT_CLIENT_SECRET', ""),
@@ -52,7 +52,11 @@ class HubspotViewSet(viewsets.GenericViewSet):
             pipeline
         :return: Returns a newly created deal.
         """
-        response = self.hubspot_service.create_deal(request.data)
+        response = self.hubspot_service.create_deal(request.data.get("deal"))
+        if "associations" in request.data:
+            emails = request.data.get('associations', {}).get("emails")
+            deal_id = response.get("data").get("id")
+            self.hubspot_service.create_deal_contact_association(emails, deal_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['delete'], url_path='deals/remove')
@@ -74,6 +78,25 @@ class HubspotViewSet(viewsets.GenericViewSet):
         """
         response = self.hubspot_service.single_deal(request.data.get('dealId'))
         return Response(data=response.get("data"), status=response.get("status_code"))
+
+    # deal associations
+    @action(detail=False, methods=['post'], url_path='deals/associations/create')
+    def create_deal_association(self, request):
+        """
+        To create a deal association
+        :params
+        dealId
+        associationId
+        associationType
+        :return: Returns a newly created deal association.
+        """
+        deal_id = request.data.get('dealId')
+        emails = request.data.get('emails')
+        response = self.hubspot_service.create_deal_contact_association(emails, deal_id)
+        resp = {
+            "result": "success" if response else "failure"
+        }
+        return Response(data=resp, status=200)
 
     @action(detail=False, methods=['get'], url_path='tickets/list')
     def ticket_list(self, request):
