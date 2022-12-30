@@ -27,9 +27,6 @@ class DriveViewSet(viewsets.GenericViewSet):
         "upload_file": UploadFileSerializer,
     }
 
-    drive_service = DriveService(
-        credential_file_path=os.getenv('CREDENTIAL_FILE_PATH', "")
-    )
 
     def get_serializer_class(self):
         return self.allowed_serializers.get(self.action, FileListSerializer)
@@ -37,9 +34,10 @@ class DriveViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['get'], url_path='file/list')
     def file_list(self, request):
         try:
+            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.query_params)
             serializer.is_valid(raise_exception=True)
-            response = self.drive_service.get_drive_files(**serializer.data)
+            response = drive_service.get_drive_files(**serializer.data)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
@@ -47,9 +45,10 @@ class DriveViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='create/folder')
     def create_folder(self, request):
         try:
+            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            response = self.drive_service.create_drive_folder(**serializer.data)
+            response = drive_service.create_drive_folder(**serializer.data)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
@@ -57,9 +56,10 @@ class DriveViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='share/file')
     def share_file(self, request):
         try:
+            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            response = self.drive_service.share_drive_file(**serializer.data)
+            response = drive_service.share_drive_file(**serializer.data)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
@@ -67,9 +67,10 @@ class DriveViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='upload/file')
     def upload_file(self, request):
         try:
+            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            response = self.drive_service.upload_drive_file(
+            response = drive_service.upload_drive_file(
                 file=request.FILES.get("file"),
                 parent_folder_id=request.data.get("parent_folder_id")
             )
