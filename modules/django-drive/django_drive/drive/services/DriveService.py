@@ -1,18 +1,19 @@
-from googleapiclient import discovery
-from google.oauth2.credentials import Credentials
-import apiclient
+import os
 
+from google.oauth2 import service_account
+from googleapiclient import discovery
+import apiclient
 
 class DriveService:
 
-    def __init__(self, access_token):
+    def __init__(self, credential_file_path):
         """
         The method authorizes a user and creates an access point to interact with Google Drive.
         Gives access to the user to access the files and folders of the drive
         """
         try:
-            creds = Credentials(token=access_token)
-            self.drive_service = discovery.build('drive', 'v3', credentials=creds)
+            credentials = service_account.Credentials.from_service_account_file(credential_file_path)
+            self.drive_service = discovery.build('drive', 'v3', credentials=credentials)
         except Exception:
             raise
 
