@@ -3,6 +3,18 @@
 This module contains all needed resources to get the Google Drive component for React
 Native mobile client.
 
+
+### How to get Credentional file 
+In https://console.cloud.google.com/ choose your project or start new one.
+
+In the navigation menu choose "APIs & Services" enable new APIs and then look up "calendar API", enable the API
+
+Under "APIs & Services">"Credentials", select "Create Credentials" and click on "service account", fill in the desired name, and continue. Set role as owner(or other desired)(owner gives full access you you might want to switch to something less powerful). Click "Done"
+
+This will redirect you to the credentials page. Under the "Service accounts" click on the desired account(this will redirect you to the IAM & Admin panel) Under the tab "Keys" click "ADD KEY" and select json, this will download a json file to your computer.
+
+Add that file into project directory and set the file path to "CREDENTIAL_FILE_PATH" variable in .env
+
 ### Installation
 Install the Google client library for Python:
 
