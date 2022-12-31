@@ -16,7 +16,7 @@ class DriveViewSet(viewsets.GenericViewSet):
         making  multipart upload request.
         - create_folder: This class creates a folder on Google Drive with the MIME type
         `application/vnd.google-apps.folder` with no extension.
-        - upload_file: Shares a Google Drive file, folder with multiple users with associated permissions resources.
+        - share_file: Shares a Google Drive file, folder with multiple users with associated permissions resources.
         Creates permission for a specific type (user, group, domain, anyone) and role, such as "commenter" or "reader."
     """
 
