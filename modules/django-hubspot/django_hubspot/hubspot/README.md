@@ -9,7 +9,7 @@ In order to configure the module, the first thing you should do is to create an 
 
 1. SignIn to the [HubSpot](https://www.hubspot.com/).
 2. Create a [developer account](https://developers.hubspot.com/) on HubSpot.
-3. You will be ask to complete the few steps by entering your details.
+3. You will be asked to complete a few steps by entering your details.
 4. Once the account is created user will be move to create app page.
 5. Add the App Name and Description and click the `Auth` tab.
 6. Copy the `Client ID` and `Client Secret` and `Install URL (OAuth)`, save them for later use.
