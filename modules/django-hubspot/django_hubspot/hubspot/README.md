@@ -5,8 +5,7 @@ Native mobile client.
 
 
 ## HubSpot Setup
-First thing to make this module work, is create an app on the HubSpot.
-Here is the process to create an app on hubspot.
+In order to configure the module, the first thing you should do is to create an app on Hubspot. Here's the steps detailing that process:
 
 1. SignIn to the [HubSpot](https://www.hubspot.com/).
 2. Create a [developer account](https://developers.hubspot.com/) on HubSpot.
