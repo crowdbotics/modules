@@ -4,7 +4,7 @@ This module contains all needed resources to get the Google Drive component for 
 Native mobile client.
 
 
-### How to get Credentional file 
+### How to obtain the credential file 
 In https://console.cloud.google.com/ choose your project or start new one.
 
 In the navigation menu choose "APIs & Services" enable new APIs and then look up "calendar API", enable the API
