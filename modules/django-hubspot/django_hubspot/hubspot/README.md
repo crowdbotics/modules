@@ -32,11 +32,11 @@ HubSpot will send a JSON payload to this URL with details about events when they
 1. In `.env` file add the following things:
 
 ```py
-HUBSPOT_BASE_URL = 'https://api.hubapi.com/'
-HUBSPOT_GRANT_TYPE = "authorization_code",
-HUBSPOT_REDIRECT_URL = 'your_redirect_url', 
-HUBSPOT_CLIENT_ID = 'your_app_client_id',
-HUBSPOT_CLIENT_SECRET = 'your_app_client_secret',
+HUBSPOT_BASE_URL='https://api.hubapi.com/'
+HUBSPOT_GRANT_TYPE="authorization_code",
+HUBSPOT_REDIRECT_URL= 'your_redirect_url', 
+HUBSPOT_CLIENT_ID='your_app_client_id',
+HUBSPOT_CLIENT_SECRET='your_app_client_secret',
 ```
 
 2. Run the following commands to get started:
@@ -53,7 +53,7 @@ List of api's endpoints with params needed for these apis.
 | -------------------------------------|:------------:|-------------------|
 | `/modules/hubspot/service/access/token/` | `token_payload` | This will return an object containing the `refresh_token` and `access_token`. All api calls will be made using this `access_token`.|
 | `/modules/hubspot/service/deals/list/` | - | The deals endpoint retrieves all deal data from HubSpot.|
-| `/modules/hubspot/service/deals/create/` | `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage}` | Create a deal with the given properties and return a copy of the object, including the ID|
+| `/modules/hubspot/service/deals/create/` | `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage, content}` | Create a deal with the given properties and return a copy of the object, including the ID|
 | `/modules/hubspot/service/deals/remove/` | `{id}` | Takes object containing `id` of the deal going to be deleted. Moves an Object identified by `id` to the recycling bin.|
 | `/modules/hubspot/service/deals/single/` | `{id}` | Takes object containing `id` of the deal going to be retrieved.|
 | `/modules/hubspot/service/tickets/create/` | `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage}` | Create a ticket with the given properties and return a copy of the object, including the ID|
