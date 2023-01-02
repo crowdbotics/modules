@@ -1,3 +1,5 @@
+import json
+
 import requests
 
 
@@ -11,6 +13,29 @@ class HubspotBase:
         self.access_token = access_token
 
 
+    def get_header(self):
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.access_token}',
+        }
+        return headers
+
+    def _api_call(self, request_type, url, headers=None, payload=None, data=None):
+
+        try:
+            response = requests.request(request_type, url, headers=headers, json=payload, data=data)
+            response.raise_for_status()
+            if response.status_code == 204:
+                return {"data": {"message": "Item deleted successfully."}, "status_code": response.status_code}
+            return {"data": response.json(), "status_code": response.status_code}
+        except requests.exceptions.RequestException as e:
+            if e.response.status_code == 404:
+                return {"data": {"message": "Resource not found"}, "status_code": e.response.status_code}
+            return {"data": e.response.json(), "status_code": e.response.status_code}
+
+
+class HubspotService(HubspotBase):
+
     def auth_token(self, code):
         try:
             url = f'{self.HUBSPOT_BASE_URL}/oauth/v1/token'
@@ -21,34 +46,10 @@ class HubspotBase:
                 "client_secret": self.HUBSPOT_CLIENT_SECRET,
                 "code": code
             }
-
-            response = requests.post(url, data=payload)
-            if response.status_code == 200:
-                return response.json()
-            return None
+            response = self._api_call(request_type="POST", url=url, data=payload)
+            return response
         except Exception as e:
-            return e.body.decode('utf8')
-
-    def get_header(self):
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-        }
-        return headers
-
-    def _api_call(self, request_type, url, headers=None, payload=None):
-
-        try:
-            response = requests.request(request_type, url, headers=headers, json=payload)
-            response.raise_for_status()
-            if response.status_code == 204:
-                return {"data": {"message": "Item deleted successfully."}, "status_code": response.status_code}
-            return {"data": response.json(), "status_code": response.status_code}
-        except requests.exceptions.RequestException as e:
-            return {"data": e.response.json(), "status_code": e.response.status_code}
-
-
-class HubspotService(HubspotBase):
+            return e
 
     def deals_list(self):
         try:
@@ -78,7 +79,7 @@ class HubspotService(HubspotBase):
     def single_deal(self, dealId):
         try:
             url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{dealId}'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), payload=dealId)
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e

@@ -17,6 +17,18 @@ class HubspotViewSet(viewsets.GenericViewSet):
         access_token=os.getenv('HUBSPOT_ACCESS_TOKEN', ""),
     )
 
+    @action(detail=False, methods=['post'], url_path='access/token')
+    def get_token(self, request):
+        """
+        To get the access token
+        :return: Returns access_token, refresh_token and expires_in.
+        """
+        response = self.hubspot_service.auth_token(request.data.get('code'))
+        data = response.get("data")
+        if 'access_token' in data:
+            self.hubspot_service.access_token = data['access_token']
+        return Response(data=data, status=response.get("status_code"))
+        
     @action(detail=False, methods=['get'], url_path='deals/list')
     def deals_list(self, request):
         """
