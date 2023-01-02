@@ -13,14 +13,21 @@ This will redirect you to the credentials page. Under the "Service accounts" cli
 
 Add that file into project directory and set the file path to "CREDENTIAL_FILE_PATH" variable in .env 
 
+
 ### Installation
-1. Install the Google client libraries for Python:
+1. In `.env` file add the credentials file:
+
+```py
+CREDENTIALS_FILE_PATH = 'path to your credentials file'
+```
+
+2. Install the Google client libraries for Python:
 
 ```py
 pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
 
-2. Run the following commands to get started:
+3. Run the following commands to get started:
 ```
 python manage.py migrate
 python manage.py runserver
@@ -30,7 +37,7 @@ python manage.py runserver
 List of api's endpoints with params needed for these apis.
 | Api Name                             |                         Params                         | Description     |
 | -------------------------------------|:------------------------------------------------------:|-----------------|
-| `/modules/appointment/service/appointment/list/` | query_params(optional) `{max_results, order_by, time_max, time_min, page_token}` | Returns a list of the events created of the calendar according to the specified queries if are provided. |
+| `/modules/appointment/service/appointment/list/` | query_params(optional) `{max_results, order_by, time_max, time_min, page_token, single_events, show_deleted}` | Returns a list of the events created of the calendar according to the specified queries if are provided. |
 | `/modules/appointment/service/appointment/create/` | [Create Event Object](#create-event-object) | Creates a new appointment on the calendar and returns an object containing the created event detail.|
 | `/modules/appointment/service/{event_id}/appointment/single/` | - | Retrieves a single event from the calendar.|
 | `/modules/appointment/service/{event_id}/appointment/remove/` | - | Deletes a single event form the calendar.|
