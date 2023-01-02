@@ -29,10 +29,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         try:
             serializer = self.get_serializer(data=request.query_params)
             serializer.is_valid(raise_exception=True)
-            google_appointment_service = GoogleAppointmentService(
-                access_token=request.META.get('HTTP_AUTHORIZATION'),
-                credential_file_path=os.getenv('CREDENTIAL_FILE_PATH', "")
-            )
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             response = google_appointment_service.appointment_list(**serializer.data)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
@@ -41,10 +38,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=['get'], url_path='appointment/single')
     def single_appointment(self, request, eventId):
         try:
-            google_appointment_service = GoogleAppointmentService(
-                access_token=request.META.get('HTTP_AUTHORIZATION'),
-                credential_file_path=os.getenv('CREDENTIAL_FILE_PATH', "")
-            )
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             response = google_appointment_service.single_appointment(eventId=eventId)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
@@ -53,10 +47,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='appointment/create')
     def create_appointment(self, request):
         try:
-            google_appointment_service = GoogleAppointmentService(
-                access_token=request.META.get('HTTP_AUTHORIZATION'),
-                credential_file_path=os.getenv('CREDENTIAL_FILE_PATH', "")
-            )            
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))            
             response = google_appointment_service.create_appointment(request.data)
             return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:
@@ -65,10 +56,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=['delete'], url_path='appointment/remove')
     def delete_appointment(self, request, eventId):
         try:
-            google_appointment_service = GoogleAppointmentService(
-                access_token=request.META.get('HTTP_AUTHORIZATION'),
-                credential_file_path=os.getenv('CREDENTIAL_FILE_PATH', "")
-            )  
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))  
             response = google_appointment_service.delete_appointment(eventId=eventId)
             return Response(response, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
