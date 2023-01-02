@@ -10,7 +10,7 @@ class HubspotBase:
         self.HUBSPOT_REDIRECT_URL = redirect_url
         self.HUBSPOT_CLIENT_ID = client_id
         self.HUBSPOT_CLIENT_SECRET = client_secret
-        self.access_token = access_token
+        self.ACCESS_TOKEN = access_token
 
 
     def get_header(self):
