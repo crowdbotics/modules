@@ -62,5 +62,5 @@ List of api's endpoints with params needed for these apis.
 | `/modules/hubspot/service/ticket/associations/create/` | `{ticketId, toObjectType, toObjectId,param[{associationCategory, associationTypeId}]}` | Associate a ticket with others CRM objects.|
 | `/modules/hubspot/service/ticket/associations/list/` | `{ticketId, toObjectType}` | Reterive a ticket associated with other CRM objects.|
 | `/modules/hubspot/service/contact/deals/list/` | `{contactId}` | Retrieve a contact associated with deals.|
-| `/modules/hubspot/service/meeting/contacts/list/` | `{meetingId}` | Reterive a meeting associated with contacts.|
+| `/modules/hubspot/service/meeting/contacts/list/` | `{meetingId}` | Retrieve a meeting associated with contacts.|
 | `/modules/hubspot/service/webhook/` | - | This url will be used wile creating the webhook for the app. see [Webhook Subscription](#creating-webhook-subscription) details above.|
