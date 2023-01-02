@@ -1,5 +1,3 @@
-import os
-
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,7 +14,7 @@ class DriveViewSet(viewsets.GenericViewSet):
         making  multipart upload request.
         - create_folder: This class creates a folder on Google Drive with the MIME type
         `application/vnd.google-apps.folder` with no extension.
-        - share_file: Shares a Google Drive file, folder with multiple users with associated permissions resources.
+        - upload_file: Shares a Google Drive file, folder with multiple users with associated permissions resources.
         Creates permission for a specific type (user, group, domain, anyone) and role, such as "commenter" or "reader."
     """
 
@@ -26,7 +24,6 @@ class DriveViewSet(viewsets.GenericViewSet):
         "share_file": ShareFileSerializer,
         "upload_file": UploadFileSerializer,
     }
-
 
     def get_serializer_class(self):
         return self.allowed_serializers.get(self.action, FileListSerializer)

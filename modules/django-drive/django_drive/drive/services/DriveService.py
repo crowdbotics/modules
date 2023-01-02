@@ -5,6 +5,7 @@ from googleapiclient import discovery
 from google.oauth2.credentials import Credentials
 import apiclient
 
+
 class DriveService:
 
     def __init__(self, access_token=None, credential_file_path=None):
@@ -38,7 +39,7 @@ class DriveService:
         except Exception:
             raise
 
-    def create_drive_folder(self, folder_name):
+    def create_drive_folder(self, folder_name, share_with=None):
         """
             :param folder_name: Folder will be created with this name in Google Drive
             :return: Creates the folder and returns folder id.
@@ -50,8 +51,12 @@ class DriveService:
             }
             file = self.drive_service.files().create(
                  body=file_metadata,
-                 fields='id',
+                 fields='id,name,mimeType,webViewLink',
             ).execute()
+            
+            if share_with:
+                self.share_drive_file(file.get('id'), share_with, 'writer', 'user')
+            
             return file
         except Exception:
             raise
