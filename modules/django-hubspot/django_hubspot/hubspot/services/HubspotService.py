@@ -16,7 +16,7 @@ class HubspotBase:
     def get_header(self):
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
+            'Authorization': f'Bearer {self.ACCESS_TOKEN}',
         }
         return headers
 
