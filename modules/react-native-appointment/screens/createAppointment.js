@@ -31,7 +31,7 @@ const CreateAppointment = ({
   const [validationError, setValidationError] = useState({
     email: ""
   });
-  const adminCreds = options.adminCreds;
+  const slackAdminCreds = options.slackAdminCreds;
 
   const selectTimeSlot = item => {
     setTimeSlot(item);
@@ -103,7 +103,7 @@ const CreateAppointment = ({
     console.log("calendarInvite", calendarInvite);
     await createAppointment(tokens.accessToken, calendarInvite).then(async () => {
       if (shouldCreateSlackChannel) {
-        await createSlackChannel(gOptions.url, adminCreds, {
+        await createSlackChannel(gOptions.url, slackAdminCreds, {
           channel_name: "Deal " + title,
           emails: attendeesList.map(item => item.email).toString()
         });
