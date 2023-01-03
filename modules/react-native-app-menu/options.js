@@ -1,10 +1,9 @@
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 13,
-    paddingTop: StatusBar.currentHeight
+    padding: 13
   },
   hr: {
     marginTop: 20,
