@@ -5,7 +5,9 @@ import { OptionsContext } from "@options";
 import DropDownPicker from "react-native-dropdown-picker";
 import Button from "../components/Button";
 
-const Calendar = ({ navigation }) => {
+const Calendar = ({
+  navigation
+}) => {
   const options = useContext(OptionsContext);
   const today = new Date();
   const [open, setOpen] = useState(false);
@@ -13,71 +15,70 @@ const Calendar = ({ navigation }) => {
   const [markedDates, setMarkedDates] = useState({
     selectedDate: null,
     markedDates: {
-      [today.toDateString()]: { selected: true, color: "#00B0BF", textColor: "#FFFFFF" }
+      [today.toDateString()]: {
+        selected: true,
+        color: "#00B0BF",
+        textColor: "#FFFFFF"
+      }
     }
   });
   const [timeSlot, setTimeSlot] = useState(null);
-  const [items, setItems] = useState([
-    { label: "30 min", value: "00:30:00" },
-    { label: "1 hour", value: "01:00:00" },
-    { label: "1 hour 30 min", value: "01:30:00" },
-    { label: "2 hour", value: "02:00:00" },
-    { label: "2 hour 30 min", value: "02.30:00" },
-    { label: "3 hour", value: "03:00:00" }
-  ]);
+  const [items, setItems] = useState([{
+    label: "30 min",
+    value: "00:30:00"
+  }, {
+    label: "1 hour",
+    value: "01:00:00"
+  }, {
+    label: "1 hour 30 min",
+    value: "01:30:00"
+  }, {
+    label: "2 hour",
+    value: "02:00:00"
+  }, {
+    label: "2 hour 30 min",
+    value: "02.30:00"
+  }, {
+    label: "3 hour",
+    value: "03:00:00"
+  }]);
 
-  const daySelector = (day) => {
+  const daySelector = day => {
     const markedDates = {};
-    markedDates[day.dateString] = { selected: true, selectedColor: "#000" };
+    markedDates[day.dateString] = {
+      selected: true,
+      selectedColor: "#000"
+    };
     setMarkedDates({
       selectedDate: day.dateString,
       markedDates: markedDates
     });
   };
 
-  const selectTimeSlot = (item) => {
+  const selectTimeSlot = item => {
     setTimeSlot(item);
   };
 
-  return (
-    <SafeAreaView>
+  return <SafeAreaView>
       <ScrollView>
         <View style={styles.ph10}>
-          <CalendarList
-            minDate={today.toDateString()}
-            horizontal={true}
-            pagingEnabled={true}
-            calendarWidth={370}
-            onDayPress={daySelector}
-            markedDates={markedDates.markedDates}
-
-          />
+          <CalendarList minDate={today.toDateString()} horizontal={true} pagingEnabled={true} calendarWidth={370} onDayPress={daySelector} markedDates={markedDates.markedDates} />
           <Text style={styles.timeSlot}>Time Slot</Text>
           <View style={styles.list}>
-            { options.timeSlots.map((item, index) => (
-              <TouchableOpacity style={[styles.items, {
-                backgroundColor: (timeSlot === item ? "#000" : "#FFF")
-              }]} onPress={() => selectTimeSlot(item)} key={index}>
+            {options.timeSlots.map((item, index) => <TouchableOpacity style={[styles.items, {
+              backgroundColor: timeSlot === item ? "#000" : "#FFF"
+            }]} onPress={() => selectTimeSlot(item)} key={index}>
                 <Text style={{
-                  color: (timeSlot === item ? "#FFF" : "#000")
+                  color: timeSlot === item ? "#FFF" : "#000"
                 }}>{item}</Text>
-              </TouchableOpacity>
-            ))}
+              </TouchableOpacity>)}
           </View>
           <View style={styles.mt15}>
             <Text style={styles.mb10}>Duration</Text>
-            <DropDownPicker
-              open={open}
-              value={duration}
-              items={items}
-              setOpen={setOpen}
-              setValue={setDuration}
-              setItems={setItems}
-              style={styles.dropdown}
-            />
+            <DropDownPicker open={open} value={duration} items={items} setOpen={setOpen} setValue={setDuration} setItems={setItems} style={styles.dropdown} />
           </View>
           <View style={styles.button}>
-            <Button disabled={!!((!timeSlot || !markedDates.selectedDate))} onPress={() => navigation.navigate("AppointmentForm", {
+            <Button disabled={!!(!timeSlot || !markedDates.selectedDate)} onPress={() => navigation.navigate("AppointmentForm", {
               duration: duration,
               timeSlot: timeSlot,
               selectedDate: markedDates.selectedDate
@@ -85,9 +86,9 @@ const Calendar = ({ navigation }) => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
-  );
+    </SafeAreaView>;
 };
+
 const styles = StyleSheet.create({
   items: {
     borderWidth: 1,

@@ -1,17 +1,17 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 
-const Button = (props) => {
-  return (
-    <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
+const Button = props => {
+  return <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
       <View style={[styles.button, {
         backgroundColor: props.backgroundColor ? props.disabled ? "#cccccc" : props.backgroundColor : props.disabled ? "#cccccc" : "#000000",
         height: props.height ? props.height : 49
       }]}>
-        <Text style={[styles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+        <Text style={[styles.text, {
+          color: props.color ? props.color : "#ffffff"
+        }]}>{props.children}</Text>
       </View>
-    </TouchableHighlight>
-  );
+    </TouchableHighlight>;
 };
 
 const styles = StyleSheet.create({

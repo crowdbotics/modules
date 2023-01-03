@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from "react-native";
-// @ts-ignore
+import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from "react-native"; // @ts-ignore
+
 import deleteIcon from "../deleteIcon.png";
 import { deleteAppointment, getAllAppointments } from "../api";
 import Input from "../components/InputText";
 import Loader from "../components/Loader";
-import AppointmentModal from "../components/AppointmentDetailModal";
-// @ts-ignore
+import AppointmentModal from "../components/AppointmentDetailModal"; // @ts-ignore
+
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import moment from "moment";
 
@@ -17,11 +17,9 @@ const Appointments = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalItem, setModalItem] = useState("");
-
   useEffect(() => {
     getAllAppointment();
   }, []);
-
   useEffect(() => {
     if (appointmentList.length) {
       if (search) {
@@ -46,7 +44,7 @@ const Appointments = () => {
     });
   };
 
-  const deleteHandler = async (item) => {
+  const deleteHandler = async item => {
     setIsLoading(true);
     const tokens = await GoogleSignin.getTokens();
     await deleteAppointment(tokens.accessToken, item.id).then(() => {
@@ -63,58 +61,48 @@ const Appointments = () => {
       setIsLoading(false);
     });
   };
-  const modalHandler = (item) => {
+
+  const modalHandler = item => {
     setModalItem(item);
     setModalVisible(true);
   };
 
-  const renderItem = ({ item }) => {
-    return (<TouchableOpacity onPress={() => modalHandler(item)} style={styles.item} key={item.id}>
+  const renderItem = ({
+    item
+  }) => {
+    return <TouchableOpacity onPress={() => modalHandler(item)} style={styles.item} key={item.id}>
       <Fragment>
         <View style={styles.box}></View>
         <View style={styles.details}>
           <Text numberOfLines={1} style={styles.title}>{item.summary}</Text>
-          <Text style={styles.date}>{("start" in item) ? moment(new Date(item.start.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
+          <Text style={styles.date}>{"start" in item ? moment(new Date(item.start.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
         </View>
         <View style={styles.delete}>
           <TouchableOpacity onPress={() => deleteHandler(item)}>
             <View style={styles.deleteButton}>
-              <Image
-                source={deleteIcon}
-                style={styles.deleteIcon}
-              />
+              <Image source={deleteIcon} style={styles.deleteIcon} />
             </View>
           </TouchableOpacity>
         </View>
       </Fragment>
-    </TouchableOpacity>
-
-    );
+    </TouchableOpacity>;
   };
 
-  return (
-    <Fragment>
+  return <Fragment>
       <View style={styles.container}>
         {isLoading && <Loader />}
         <View style={styles.mv10}>
           <Text style={styles.mb10}>Search</Text>
-          <Input
-            placeholder='Search'
-            setValue={setSearch}
-            value={search}
-          />
+          <Input placeholder='Search' setValue={setSearch} value={search} />
         </View>
-        <FlatList
-          data={filterAppointmentList}
-          renderItem={renderItem}
-        />
+        <FlatList data={filterAppointmentList} renderItem={renderItem} />
       </View>
       <View>
         {modalVisible && <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible} />}
       </View>
-    </Fragment>
-  );
+    </Fragment>;
 };
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#F1F1F1",

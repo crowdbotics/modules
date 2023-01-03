@@ -1,17 +1,8 @@
 # Appointment
 Appointment is a React Native based module. This module will enable new appointments to be created and synced with Google calendar. 
 
-## Get Project Credentials
-To run this project , you need the following prerequisites:
-1. Create A [Google Cloud project](https://developers.google.com/workspace/guides/create-project).
-2. In the Google Cloud console, enable the Google Calendar API.
-3. Get [OAuth client ID for Android](https://developers.google.com/workspace/guides/create-credentials#android).
-4. Get [OAuth client ID for Web](https://developers.google.com/workspace/guides/create-credentials#web-application).
-5. Get [OAuth client ID for IOS](https://developers.google.com/workspace/guides/create-credentials#ios).
-
-
 ## Update webClientId and androidClientId.
-Replace the webClientId, iosClientId and androidClientId keys In the options file with the that you have generated ith e previous steps.
+Replace the webClientId, iosClientId and androidClientId keys In the options file.
 
 ```javascript
 
