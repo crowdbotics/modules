@@ -4,7 +4,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .serializers import EventsListSerializer
+from .serializers import EventsListSerializer, MeetingSerializer
 from .services.GoogleAppointmentServices import GoogleAppointmentService
 
 
@@ -18,7 +18,8 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     """
 
     allowed_serializers = {
-        "appointment_list": EventsListSerializer
+        "appointment_list": EventsListSerializer,
+        "sync_appointment": MeetingSerializer
     }
 
     def get_serializer_class(self):
@@ -27,7 +28,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['get'], url_path='appointment/list')
     def appointment_list(self, request):
         try:
-            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'), credential_file_path=os.getenv('CREDENTIALS_FILE_PATH', ""))
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.query_params)
             serializer.is_valid(raise_exception=True)
             response = google_appointment_service.appointment_list(**serializer.data)
@@ -36,10 +37,10 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['get'], url_path='appointment/single')
-    def single_appointment(self, request, eventId):
+    def single_appointment(self, request, pk):
         try:
-            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'), credential_file_path=os.getenv('CREDENTIALS_FILE_PATH', ""))
-            response = google_appointment_service.single_appointment(eventId=eventId)
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
+            response = google_appointment_service.single_appointment(eventId=pk)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
@@ -47,17 +48,33 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='appointment/create')
     def create_appointment(self, request):
         try:
-            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'), credential_file_path=os.getenv('CREDENTIALS_FILE_PATH', ""))
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             response = google_appointment_service.create_appointment(request.data)
             return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['delete'], url_path='appointment/remove')
-    def delete_appointment(self, request, eventId):
+    def delete_appointment(self, request, pk):
         try:
-            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'), credential_file_path=os.getenv('CREDENTIALS_FILE_PATH', ""))
-            response = google_appointment_service.delete_appointment(eventId=eventId)
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
+            response = google_appointment_service.delete_appointment(eventId=pk)
             return Response(response, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='appointment/sync')
+    def sync_appointment(self, request):
+        try:
+            google_appointment_service = GoogleAppointmentService(credential_file_path=os.env.get("CREDENTIAL_FILE_PATH", ""))
+            response = google_appointment_service.appointment_list(**request.query_params)
+
+            serializer = self.get_serializer(data=response['items'], many=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.create(validated_data=response['items'])
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except Exception as e:
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
+
+
