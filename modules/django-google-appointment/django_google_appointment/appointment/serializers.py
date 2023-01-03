@@ -61,4 +61,13 @@ class MeetingSerializer(serializers.ModelSerializer):
             attendee["response_status"] = attendee.pop("responseStatus", "")
             MeetingAttendees.objects.update_or_create(meeting=instance, email=attendee.get("email"), defaults=attendee)
         return instance
+
+
+class MeetingListSerializer(serializers.ModelSerializer):
+    attendees = MeetingAttendeesSerializer(many=True, source='meeting_to_attends')
+
+    class Meta:
+        model = Meetings
+        fields = '__all__'
+        read_only_fields = ['id']
         

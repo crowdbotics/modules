@@ -41,6 +41,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/appointment/service/appointment/create/` | [Create Event Object](#create-event-object) | Creates a new appointment on the calendar and returns an object containing the created event detail.|
 | `/modules/appointment/service/{event_id}/appointment/single/` | - | Retrieves a single event from the calendar.|
 | `/modules/appointment/service/{event_id}/appointment/remove/` | - | Deletes a single event form the calendar.|
+| `/modules/appointment/service/appointment/sync/` | - | Sync event form the calendar.|
 
 
 ### Create Event Object

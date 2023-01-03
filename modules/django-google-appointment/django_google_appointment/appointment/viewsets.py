@@ -4,8 +4,9 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .serializers import EventsListSerializer, MeetingSerializer
+from .serializers import EventsListSerializer, MeetingSerializer, MeetingListSerializer
 from .services.GoogleAppointmentServices import GoogleAppointmentService
+from .models import Meetings
 
 
 class GoogleAppointmentViewSet(viewsets.GenericViewSet):
@@ -15,6 +16,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         - single_appointment: The class method gets a single event from the calendar.
         - create_appointment: This class creates a new events with its attendees on Google Calendar
         - delete_appointment: The method deletes a single event from the calendar
+        - sync_appointment: The method to sync event from the calendar
     """
 
     allowed_serializers = {
@@ -75,6 +77,14 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response({"message": "Synced successfully"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='appointment/synced/list')
+    def synced_appointment_list(self, request):
+        try:
+            serializer = MeetingListSerializer(Meetings.objects.all(), many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
