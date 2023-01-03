@@ -30,7 +30,7 @@ class WordpressBase:
 
     def _api_call(self, request_type, url, access_token=None, payload=None, params=None):
         try:
-            headers = {"Authorization": f"Bearer {access_token}"}
+            headers = {"Authorization": f"{access_token}"}
             response = requests.request(request_type, url, headers=headers, data=payload, params=params)
             response.raise_for_status()
             if response.status_code == 204:
@@ -107,12 +107,11 @@ class WordpressService(WordpressBase):
         except Exception as e:
             return e
 
-    def restore_post(self, access_token, post_id, request_body=None):
+    def restore_post(self, access_token, post_id):
         try:
             url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/posts/{post_id}/restore"
             response = self._api_call(request_type='POST', url=url,
                                       access_token=access_token,
-                                      payload=request_body
                                       )
             return response
         except Exception as e:
@@ -190,11 +189,12 @@ class WordpressService(WordpressBase):
         except Exception as e:
             return e
 
-    def get_rendered_shortcode_for_site(self, access_token):
+    def get_rendered_shortcode_for_site(self, access_token, params):
         try:
-            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/users"
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/shortcodes/render"
             response = self._api_call(request_type='GET', url=url,
                                       access_token=access_token,
+                                      params=params
                                       )
             return response
         except Exception as e:
@@ -241,12 +241,12 @@ class WordpressService(WordpressBase):
         except Exception as e:
             return e
 
-    def edit_comment(self, access_token, comment_id, request_data):
+    def edit_comment(self, access_token, comment_id, request_body):
         try:
             url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/comments/{comment_id}"
             response = self._api_call(request_type='POST', url=url,
                                       access_token=access_token,
-                                      params=request_data
+                                      params=request_body
                                       )
             return response
         except Exception as e:
@@ -262,12 +262,12 @@ class WordpressService(WordpressBase):
         except Exception as e:
             return e
 
-    def create_comment_on_post(self, access_token, request_data, post_id):
+    def create_comment_on_post(self, access_token, request_body, post_id):
         try:
             url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/posts/{post_id}/replies/new"
             response = self._api_call(request_type='POST', url=url,
                                       access_token=access_token,
-                                      payload=request_data
+                                      payload=request_body
                                       )
             return response
         except Exception as e:
@@ -294,3 +294,99 @@ class WordpressService(WordpressBase):
         except Exception as e:
             return e
 
+    def get_list_of_site_categories(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/categories"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def create_category(self, access_token, request_body):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/categories/new"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      payload=request_body
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def edit_category(self, access_token, category_slug, request_body):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/categories/slug:{category_slug}"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      payload=request_body
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def delete_category(self, access_token, category_slug):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}" \
+                  f"/categories/slug:{category_slug}/delete"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_list_of_site_tags(self, access_token, params=None):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/tags"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      params=params
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def create_tag(self, access_token, request_body):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/tags/new"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      payload=request_body
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def edit_tag(self, access_token, tag_slug, request_body):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/tags/slug:{tag_slug}"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      payload=request_body
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def delete_tag(self, access_token, tag_slug):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}" \
+                  f"/tags/slug:{tag_slug}/delete"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def follow_blog(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/follows/new"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e

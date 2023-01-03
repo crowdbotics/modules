@@ -97,7 +97,6 @@ class WordpressViewSet(GenericViewSet):
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
             response = self.wordpress_service.restore_post(access_token=access_token, post_id=pk,
-                                                           request_body=request.data
                                                            )
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -195,11 +194,12 @@ class WordpressViewSet(GenericViewSet):
                 "message": "Access token not found"
             }, status=status.HTTP_404_BAD_REQUEST)
 
-    @action(detail=False, methods=['get'], url_path='delete-user')
+    @action(detail=False, methods=['get'], url_path='get-rendered-shortcode-for-site')
     def get_rendered_shortcode_for_site(self, request):
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
-            response = self.wordpress_service.get_rendered_shortcode_for_site(access_token=access_token)
+            params = request.query_params.dict()
+            response = self.wordpress_service.get_rendered_shortcode_for_site(access_token=access_token, params=params)
             return Response(data=response, status=response.get("status_code"))
         else:
             return Response({
@@ -261,7 +261,7 @@ class WordpressViewSet(GenericViewSet):
         if access_token:
             response = self.wordpress_service.edit_comment(access_token=access_token,
                                                            comment_id=pk,
-                                                           request_data=request.data
+                                                           request_body=request.data
                                                            )
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -289,7 +289,7 @@ class WordpressViewSet(GenericViewSet):
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
             response = self.wordpress_service.create_comment_on_post(access_token=access_token,
-                                                                     request_data=request.data,
+                                                                     request_body=request.data,
                                                                      post_id=pk,
                                                                      )
             return Response(data=response, status=response.get("status_code"))
@@ -326,3 +326,114 @@ class WordpressViewSet(GenericViewSet):
                 "errorCode": "ACCESS_TOKEN_NOT_FOUND",
                 "message": "Access token not found"
             }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='get-list-of-site-categories')
+    def get_list_of_site_categories(self, request):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.get_list_of_site_categories(access_token=access_token)
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='create-category')
+    def create_category(self, request):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.create_category(access_token=access_token,
+                                                              request_body=request.data
+                                                              )
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'], url_path='edit-category')
+    def edit_category(self, request, pk):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.edit_category(access_token=access_token,
+                                                            request_body=request.data,
+                                                            category_slug=pk
+                                                            )
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'], url_path='delete-category')
+    def delete_category(self, request, pk):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.delete_category(access_token=access_token,
+                                                              category_slug=pk
+                                                              )
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'], url_path='get-list-of-site-tags')
+    def get_list_of_site_tags(self, request):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.get_list_of_site_tags(access_token=access_token)
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=False, methods=['post'], url_path='create-tag')
+    def create_tag(self, request):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.create_tag(access_token=access_token,
+                                                         request_body=request.data
+                                                         )
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'], url_path='edit-tag')
+    def edit_tag(self, request, pk):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.edit_tag(access_token=access_token,
+                                                       request_body=request.data,
+                                                       tag_slug=pk
+                                                       )
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
+    @action(detail=True, methods=['post'], url_path='delete-tag')
+    def delete_tag(self, request, pk):
+        access_token = request.META.get('HTTP_AUTHORIZATION')
+        if access_token:
+            response = self.wordpress_service.delete_tag(access_token=access_token,
+                                                         tag_slug=pk
+                                                         )
+            return Response(data=response, status=response.get("status_code"))
+        else:
+            return Response({
+                "errorCode": "ACCESS_TOKEN_NOT_FOUND",
+                "message": "Access token not found"
+            }, status=status.HTTP_404_BAD_REQUEST)
+
