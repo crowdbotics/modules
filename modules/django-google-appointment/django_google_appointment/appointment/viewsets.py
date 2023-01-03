@@ -66,14 +66,15 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='appointment/sync')
     def sync_appointment(self, request):
         try:
-            google_appointment_service = GoogleAppointmentService(credential_file_path=os.env.get("CREDENTIAL_FILE_PATH", ""))
-            response = google_appointment_service.appointment_list(**request.query_params)
-
+            query = {
+                "show_deleted": True
+            }
+            google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
+            response = google_appointment_service.appointment_list(**query)
             serializer = self.get_serializer(data=response['items'], many=True)
             serializer.is_valid(raise_exception=True)
-            serializer.create(validated_data=response['items'])
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            serializer.save()
+            return Response({"message": "Synced successfully"}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
