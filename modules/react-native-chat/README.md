@@ -78,6 +78,7 @@ Search functionality is available to find the desired channel from the list of a
 Last time active status of every contact member in conversation list is available below his/her name.
 
 
+## Manual Setup
 
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
