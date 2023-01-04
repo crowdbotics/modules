@@ -106,10 +106,17 @@ class S3ViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['delete'], url_path='file/remove')
     def delete_file(self, request):
         try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            response = self.s3_service.delete_s3_file(**serializer.data)
-            return Response(response, status=status.HTTP_200_OK)
+
+            response = self.s3_service.delete_s3_file(
+                bucket=request.data.get('bucket'),
+                file_name=request.data.get('file_name')
+            )
+            user_id = request.data.get("user_id")
+            delete_albums = UploadFile.objects.filter(user_id=user_id)
+            delete_albums.delete()
+            serializer = self.get_serializer(data=delete_albums, many=True)
+            serializer.is_valid()
+            return Response(response, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
