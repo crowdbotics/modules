@@ -78,11 +78,11 @@ class S3ViewSet(viewsets.GenericViewSet):
                 bucket=request.data.get('bucket'),
                 file_name=file.name
             )
-            temp_dict = {"bucket": request.data.get('bucket'), "file_name": file.name, "user_id": request.data.get("user_id")}
-            serializer = self.get_serializer(data=temp_dict)
+            payload = {"bucket": request.data.get('bucket'), "file_name": file.name, "user_id": request.data.get("user_id")}
+            serializer = self.get_serializer(data=payload)
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response(response, status=status.HTTP_201_CREATED)
+            return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
@@ -114,9 +114,9 @@ class S3ViewSet(viewsets.GenericViewSet):
             user_id = request.data.get("user_id")
             bucket = request.data.get("bucket")
             file_name = request.data.get("file_name")
-            delete_albums = UploadFile.objects.filter(user_id=user_id, bucket=bucket, file_name=file_name)
-            delete_albums.delete()
-            serializer = self.get_serializer(data=delete_albums, many=True)
+            delete_file = UploadFile.objects.filter(user_id=user_id, bucket=bucket, file_name=file_name)
+            delete_file.delete()
+            serializer = self.get_serializer(data=delete_file)
             serializer.is_valid()
             return Response(response, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
