@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from .models import UploadFile
 
 class CreateBucketSerializer(serializers.Serializer):
     bucket = serializers.CharField(required=True)
@@ -10,9 +10,11 @@ class DeleteBucketSerializer(serializers.Serializer):
     owner_id = serializers.CharField(required=True)
 
 
-class UploadFileSerializer(serializers.Serializer):
-    file = serializers.FileField(required=True)
-    bucket = serializers.CharField(required=True)
+class UploadFileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UploadFile
+        fields = '__all__'
 
 
 class DownloadFileSerializer(serializers.Serializer):
