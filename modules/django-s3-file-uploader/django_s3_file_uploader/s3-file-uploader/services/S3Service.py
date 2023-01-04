@@ -6,7 +6,7 @@ class S3Service:
 
     def __init__(self, region, access_key, access_secret):
         """
-        Before using Boto3, you need to set up authentication credentials for AWS account using AWS_ACCESS_KEY, and AWS_ACCESS_SECRET for user.
+        Before using Boto3, you need to set up authentication credentials for AWS account using S3_ACCESS_KEY, and S3_ACCESS_SECRET for user.
         You can either choose an existing user or create a new one.
         """
         try:
@@ -87,8 +87,8 @@ class S3Service:
     def delete_s3_file(self, bucket, file_name):
         """
         Deletes a file from an S3 bucket
-        :query_param bucket:  Bucket where file exists
-        :query_param file_name: File to be deleted
+        :param bucket:  Bucket where file exists
+        :param file_name: File to be deleted
         :return: Deletes a file from an S3 bucket returns no content
         """
         try:
