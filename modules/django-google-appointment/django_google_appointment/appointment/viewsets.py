@@ -17,6 +17,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         - create_appointment: This class creates a new events with its attendees on Google Calendar
         - delete_appointment: The method deletes a single event from the calendar
         - sync_appointment: The method to sync event from the calendar
+        - synced_appointment_list: The method to get synced appointment list of calendar events
     """
 
     allowed_serializers = {
