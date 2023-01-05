@@ -21,14 +21,11 @@ class CommentViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = self.queryset
         parent = self.request.query_params.get("parent", None)
-        item = self.request.query_params.get("item", None)
-
-        if parent:
-            queryset = queryset.filter(parent_comment_id=parent)
-        elif item:
-            queryset = queryset.filter(item_uuid=item)
-        else:
-            queryset = queryset.filter(parent_comment__isnull=True).prefetch_related("replies_comments")
+        item_uuid = self.request.query_params.get("item_uuid", None)
+        if item_uuid and parent:
+            queryset = queryset.filter(item_uuid=item_uuid, parent_comment_id=parent)
+        elif item_uuid:
+            queryset = queryset.filter(item_uuid=item_uuid, parent_comment__isnull=True)
         return queryset
 
 
