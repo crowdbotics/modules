@@ -9,25 +9,25 @@ const LinkedBankAccountsDetails = () => {
     setBankAccounts([
       {
         name: "Account name",
-        balane: "$12,215.25"
+        balance: "$12,215.25"
       },
       {
         name: "Account name",
-        balane: "$12,215.25"
+        balance: "$12,215.25"
       },
       {
         name: "Account name",
-        balane: "$12,215.25"
+        balance: "$12,215.25"
       },
       {
         name: "Account name",
-        balane: "$12,215.25"
+        balance: "$12,215.25"
       }
     ]);
   }, []);
-  const handleSelect = item => {
+  const handleSelect = (item) => {
     if (selectedBankAccounts.includes(item)) {
-      setSelectedBankAccounts(selectedBankAccounts.filter(i => i !== item));
+      setSelectedBankAccounts(selectedBankAccounts.filter((i) => i !== item));
     } else {
       setSelectedBankAccounts([...selectedBankAccounts, item]);
     }
@@ -53,8 +53,8 @@ const LinkedBankAccountsDetails = () => {
             />
           </View>
           <View style={styles.balanceContainer}>
-            <Text>Ammount</Text>
-            <Text style={styles.balance}>{account.balane}</Text>
+            <Text>Amount</Text>
+            <Text style={styles.balance}>{account.balance}</Text>
           </View>
         </View>
       ))}
@@ -130,7 +130,8 @@ const TabView = ({
   const propStyle = style || {};
   return (
     <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
+      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
+    >
       {tabTitles.map((title, index) => (
         <Pressable
           onPress={() => (onPress ? onPress(index) : null)}
@@ -143,7 +144,8 @@ const TabView = ({
                   tabViewStyles.tabItem
                 ]
           }
-          key={index}>
+          key={index}
+        >
           {icons
             ? (
             <Image
@@ -203,13 +205,14 @@ const tabViewStyles = StyleSheet.create({
   }
 });
 
-const Checkbox = props => {
+const Checkbox = (props) => {
   return (
     <Pressable
       onPress={() => {
         props.setValue(!props.value);
       }}
-      style={[checkboxStyles.container, props.style]}>
+      style={[checkboxStyles.container, props.style]}
+    >
       <Image
         source={
           props.value
@@ -233,7 +236,7 @@ const checkboxStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -249,7 +252,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
