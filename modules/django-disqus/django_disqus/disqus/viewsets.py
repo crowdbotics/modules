@@ -7,6 +7,13 @@ from rest_framework.response import Response
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    """
+        - comment_list: This class without any parameters return all comment. Filter
+        results according to the provided parent_comment.
+        - single_comment: The class method gets a comment.
+        - create_comment: This class creates a new comment with its attributes
+        - update_comment: This class update an existing comment with new attributes
+    """
     serializer_class = CommentSerializer
     queryset = Comment.objects.all()
     authentication_classes = (SessionAuthentication, TokenAuthentication)
@@ -23,6 +30,10 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class LikeOnCommentViewSet(viewsets.ModelViewSet):
+    """
+        - like_on_comment: This class will create a like or remove a like on given comment from a user.And return total
+         likes on that comment.
+    """
     serializer_class = LikeOnCommentSerializer
     queryset = LikeOnComment.objects.all()
     authentication_classes = (SessionAuthentication, TokenAuthentication)
