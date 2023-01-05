@@ -9,9 +9,9 @@ Native mobile client.
 1. Add in `.env` file:
 
 ```py
-S3_REGION= 'region specified for the user'
-S3_ACCESS_KEY= 'Access key for the user'
-S3_ACCESS_SECRET= 'Secret key for the user'
+AWS_STORAGE_REGION= 'region specified for the user'
+AWS_ACCESS_KEY_ID= 'Access key for the user'
+AWS_SECRET_ACCESS_KEY= 'Secret key for the user'
 PATH_TO_SAVE_FILE= 'path of the directory/folder where file will be downloaded'
 ```
 2. Install the boto3 AWS SDK for Python:
