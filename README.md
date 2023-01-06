@@ -9,9 +9,9 @@ for tracking purposes and to ease the creation of new ones. There's a complete R
 
 ### Node.js
 
-Node.js `v14.17.1` (LTS) is required, we depend on relatively new `fs` calls.
+Node.js version `v18.12.0` (LTS) is recommended.
 
-Our template is on the latest React Native and React versions.
+Our template is on the following React Native and React versions:
 [scaffold/template/package.json](/scaffold/template/package.json)
 
 ```json
