@@ -53,8 +53,8 @@ const LoadFunds = () => {
       source: require("./assets/poundIcon.png")
     }
   ];
-  const getIcon = key => {
-    const image = icons.find(x => x.key === key).source;
+  const getIcon = (key) => {
+    const image = icons.find((x) => x.key === key).source;
     if (image) {
       return image;
     } else {
@@ -66,10 +66,10 @@ const LoadFunds = () => {
       <ScrollView>
         <View style={styles.header}>
           <Text style={styles.heading}>Enter your amount</Text>
-          <Text style={styles.subHeading}>Specify the ammount</Text>
+          <Text style={styles.subHeading}>Specify the amount</Text>
           <InputToken
             value={tokenValue}
-            onChange={x => setTokenValue(x)}
+            onChange={(x) => setTokenValue(x)}
             step={1}
           />
         </View>
@@ -143,12 +143,12 @@ const styles = StyleSheet.create({
 
 export default LoadFunds;
 
-const InputToken = props => {
+const InputToken = (props) => {
   const step = props.step;
-  const decrement = value => {
+  const decrement = (value) => {
     return (value -= step);
   };
-  const increment = value => {
+  const increment = (value) => {
     return (value += step);
   };
   return (
