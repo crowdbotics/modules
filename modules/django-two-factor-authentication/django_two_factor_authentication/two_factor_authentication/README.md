@@ -1,20 +1,27 @@
 # Two Factor Authentication
+Module will implement a two-factor authentication flow.
 
-Before starting the server run:
+## Installations
 
-```sh
+1. To send SMS and Email install python packages specified in `setup.py`. Move into `modules/django_two_factor_authentication` and run following command: 
+
+```py
+python -m pip install .
+```
+
+2. Make migrations
+```
+python manage.py makemigrations
+```
+
+3. Run migrations
+```
 python manage.py migrate
 ```
 
-## Requirements
-
-To send SMS you will need to set twilio 'ACCOUNT_SID', 'AUTH_TOKEN' and 'from_' in settings.py
+4. Run the server
 ```
-pip install twilio
-```
-To send Email you will need to set sendgrid 'SENDGRID_API_KEY', 'EMAIL_HOST', 'EMAIL_HOST_USER' and 'from_email' in settings.py
-```
-pip install sendgrid
+python manage.py runserver
 ```
 
 ## Configurations Keys
@@ -41,8 +48,8 @@ List of api's endpoints with params needed for these apis.
 
 | Api Name                           | Param        | Description                                                    |
 | ------------------------------------------------------------|:------------:|-----------------------------------|
-| `/two-factor-authentication/send-otp/` <br /> method: `POST`| object <br />`{ "method": "email" }`  | Takes an object containing method email, phone_number or google_authenticator|
-| `/two-factor-authentication/verify-otp/` <br /> method: `POST`|  object <br /> `{ "method": "email", "code": ""}`  |Takes object containing method and code|
+| `/modules/two-factor-authentication/send/otp` <br /> method: `POST`| object <br />`{ "method": "email" }`  | Takes an object containing method email, phone_number or google_authenticator|
+| `/modules/two-factor-authentication/verify/otp` <br /> method: `POST`|  object <br /> `{ "method": "email", "code": ""}`  |Takes object containing method and code|
 
 
 
