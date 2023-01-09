@@ -49,7 +49,8 @@ List of api's endpoints with params needed for these apis.
 | Api Name                           | Param        | Description                                                    |
 | ------------------------------------------------------------|:------------:|-----------------------------------|
 | `/modules/two-factor-authentication/send/otp` <br /> method: `POST`| object <br />`{ "method": "email" }`  | Takes an object containing method email, phone_number or google_authenticator|
-| `/modules/two-factor-authentication/verify/otp` <br /> method: `POST`|  object <br /> `{ "method": "email", "code": ""}`  |Takes object containing method and code|
+| `/modules/two-factor-authentication/verify/otp` <br /> method: `POST`|  object <br /> `{ "method": "email", "code": ""}`  | Takes object containing method and code|
+| `/modules/two-factor-authentication/google/authenticator/qr` <br /> method: `GET`| - | Google Authenticator will return the QR code link which you can use to register on Google Authenticator App.|
 
 
 

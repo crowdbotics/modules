@@ -86,7 +86,7 @@ class GoogleAuthenticatorViewSet(APIView):
 
     def get(self, request, *args, **kwargs):
         """
-        Google Authenticator will return the QR code link which you can you to register on Google Authenticator App.
+        Google Authenticator will return the QR code link which you can use to register on Google Authenticator App.
         """
         try:
             user = request.user
