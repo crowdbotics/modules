@@ -65,10 +65,11 @@ class TwoFactorAuthViewSet(APIView):
                 elif validate_data["method"] == "phone_number":
                     account_sid = settings.ACCOUNT_SID
                     auth_token = settings.AUTH_TOKEN
+                    auth_serializer.save()
                     client = Client(account_sid, auth_token)
                     client.messages.create(
                         from_=settings.PHONE,
-                        to=user.phone_number,
+                        to=str(user.phone_number),
                         body="Your OTP code is {}. Don't share with anyone.".format(validate_data["code"])
                     )
                     return Response({"message": "Verification code has been sent to your Phone number"},

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 });
 
 // User token
-const token = ""
+const token = "";
 
 export default {
   styles: styles,
