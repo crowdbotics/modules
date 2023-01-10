@@ -40,12 +40,9 @@ class TwoFactorAuthViewSet(APIView):
                 "code": otp_code,
                 "method": data.get("method")
             }
-            try:
-                tmp_user = TwoFactorAuth.objects.filter(user=validate_data["user"])
-                if tmp_user.exists():
-                    tmp_user.delete()
-            except Exception as e:
-                return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+            tmp_user = TwoFactorAuth.objects.filter(user=validate_data["user"])
+            if tmp_user.exists():
+                tmp_user.delete()
 
             auth_serializer = TwoFactorAuthSerializer(data=validate_data)
             if auth_serializer.is_valid():
