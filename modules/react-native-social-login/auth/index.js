@@ -107,7 +107,7 @@ export const slice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    [loginRequest.pending]: state => {
+    [loginRequest.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
@@ -127,7 +127,7 @@ export const slice = createSlice({
       }
     },
 
-    [signupRequest.pending]: state => {
+    [signupRequest.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
@@ -147,7 +147,7 @@ export const slice = createSlice({
       }
     },
 
-    [logoutRequest.pending]: state => {
+    [logoutRequest.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
@@ -165,7 +165,7 @@ export const slice = createSlice({
         state.api.loading = "idle";
       }
     },
-    [getAuthUser.pending]: state => {
+    [getAuthUser.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
@@ -185,7 +185,7 @@ export const slice = createSlice({
       }
     },
 
-    [resetPassword.pending]: state => {
+    [resetPassword.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
@@ -204,7 +204,7 @@ export const slice = createSlice({
         state.api.loading = "idle";
       }
     },
-    [facebookLogin.pending]: state => {
+    [facebookLogin.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
@@ -224,7 +224,7 @@ export const slice = createSlice({
         state.api.loading = "idle";
       }
     },
-    [googleLogin.pending]: state => {
+    [googleLogin.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
@@ -244,7 +244,7 @@ export const slice = createSlice({
         state.api.loading = "idle";
       }
     },
-    [appleLogin.pending]: state => {
+    [appleLogin.pending]: (state) => {
       if (state.api.loading === "idle") {
         state.api.loading = "pending";
         state.api.error = null;
