@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .services.WordpressService import WordpressService
+from .serializers import ActivateWidgetsSerializer, CreatePostSerializer, CategoriesSerializer, CommentOnPostSerializer,\
+    EditCommentSerializer, TagSerializer, DeleteMultiplePostSerializer, UpdateUserDetailsSerializer, MenuSerializer
 
 wordpress_service = WordpressService(base_url=os.getenv('WORDPRESS_BASE_URL', ""),
                                      client_id=os.getenv('WORDPRESS_CLIENT_ID', ""),
@@ -55,6 +57,14 @@ class WordpressPostsViewSet(GenericViewSet):
     - like_post : Like a post.
     - Unlike_post : Unlike a post.
     """
+    allowed_serializers = {
+        "create_post": CreatePostSerializer,
+        "edit_post": CreatePostSerializer,
+        "delete_multiple_post": DeleteMultiplePostSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.allowed_serializers.get(self.action)
 
     @action(detail=False, methods=['post'], url_path='create-post')
     def create_post(self, request):
@@ -66,7 +76,9 @@ class WordpressPostsViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
-            response = wordpress_service.create_post(access_token=access_token, request_body=request.data)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            response = wordpress_service.create_post(access_token=access_token, request_body=serializer.data)
             return Response(data=response, status=response.get("status_code"))
         else:
             return Response({
@@ -84,7 +96,9 @@ class WordpressPostsViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
-            response = wordpress_service.edit_post(access_token=access_token, request_body=request.data,
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            response = wordpress_service.edit_post(access_token=access_token, request_body=serializer.data,
                                                    post_id=pk)
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -141,7 +155,9 @@ class WordpressPostsViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
-            response = wordpress_service.delete_multiple_post(access_token=access_token, request_body=request.data)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            response = wordpress_service.delete_multiple_post(access_token=access_token, request_body=serializer.data)
             return Response(data=response, status=response.get("status_code"))
         else:
             return Response({
@@ -244,6 +260,12 @@ class WordpressUsersViewSet(GenericViewSet):
     - update_user_details : Update details of a user of a site.
     - delete_user : Deletes or removes a user of a site.
     """
+    allowed_serializers = {
+        "update_user_details": UpdateUserDetailsSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.allowed_serializers.get(self.action)
 
     @action(detail=False, methods=['get'], url_path='get-multiple-users')
     def get_multiple_users(self, request):
@@ -269,13 +291,17 @@ class WordpressUsersViewSet(GenericViewSet):
         """
         Update details of a user of a site.
         :param str pk: User ID (required)
+        Required the request body. For details about request body visit the given link below
+        https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/users/%24user_id/
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.update_user_details(access_token=access_token,
                                                              user_id=pk,
-                                                             request_body=request.data)
+                                                             request_body=serializer.data)
 
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -312,6 +338,12 @@ class WordpressSitesViewSet(GenericViewSet):
     - activate_widget : Activate a widget on a site.
     - deactivate_widget: Deactivate a widget on a site.
     """
+    allowed_serializers = {
+        "activate_widget": ActivateWidgetsSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.allowed_serializers.get(self.action)
 
     @action(detail=False, methods=['get'], url_path='get-rendered-shortcode-for-site')
     def get_rendered_shortcode_for_site(self, request):
@@ -358,7 +390,9 @@ class WordpressSitesViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
-            response = wordpress_service.activate_widget(access_token=access_token, request_body=request.data)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            response = wordpress_service.activate_widget(access_token=access_token, request_body=serializer.data)
             return Response(data=response, status=response.get("status_code"))
         else:
             return Response({
@@ -395,6 +429,13 @@ class WordpressCommentsViewSet(GenericViewSet):
     - like_comment : Like a comment.
     - unlike_comment : Unlike a comment.
     """
+    allowed_serializers = {
+        "edit_comment": EditCommentSerializer,
+        "create_comment_on_post": CommentOnPostSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.allowed_serializers.get(self.action)
 
     @action(detail=True, methods=['get'], url_path='get_single_comment')
     def get_single_comment(self, request, pk):
@@ -424,9 +465,11 @@ class WordpressCommentsViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.edit_comment(access_token=access_token,
                                                       comment_id=pk,
-                                                      request_body=request.data
+                                                      request_body=serializer.data
                                                       )
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -465,8 +508,10 @@ class WordpressCommentsViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.create_comment_on_post(access_token=access_token,
-                                                                request_body=request.data,
+                                                                request_body=serializer.data,
                                                                 post_id=pk,
                                                                 )
             return Response(data=response, status=response.get("status_code"))
@@ -528,6 +573,15 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     - edit_tag : Edit a tag.
     - delete_tag : Delete a tag.
     """
+    allowed_serializers = {
+        "create_category": CategoriesSerializer,
+        "edit_category": CategoriesSerializer,
+        "create_tag": TagSerializer,
+        "edit_tag": TagSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.allowed_serializers.get(self.action)
 
     @action(detail=False, methods=['get'], url_path='get-list-of-site-categories')
     def get_list_of_site_categories(self, request):
@@ -555,8 +609,10 @@ class WordpressTaxonomyViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.create_category(access_token=access_token,
-                                                         request_body=request.data
+                                                         request_body=serializer.data
                                                          )
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -576,8 +632,10 @@ class WordpressTaxonomyViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.edit_category(access_token=access_token,
-                                                       request_body=request.data,
+                                                       request_body=serializer.data,
                                                        category_slug=pk
                                                        )
             return Response(data=response, status=response.get("status_code"))
@@ -632,8 +690,10 @@ class WordpressTaxonomyViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.create_tag(access_token=access_token,
-                                                    request_body=request.data
+                                                    request_body=serializer.data
                                                     )
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -653,8 +713,10 @@ class WordpressTaxonomyViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.edit_tag(access_token=access_token,
-                                                  request_body=request.data,
+                                                  request_body=serializer.data,
                                                   tag_slug=pk
                                                   )
             return Response(data=response, status=response.get("status_code"))
@@ -978,6 +1040,13 @@ class WordpressMenuViewSet(GenericViewSet):
     - get_all_navigation_menu : Get a list of all navigation menus.
     - delete_navigation_menu : Delete a navigation menu
     """
+    allowed_serializers = {
+        "create_navigation_menu": MenuSerializer,
+        "update_navigation_menu": MenuSerializer,
+    }
+
+    def get_serializer_class(self):
+        return self.allowed_serializers.get(self.action)
 
     @action(detail=False, methods=['post'], url_path='create-navigation-menu')
     def create_navigation_menu(self, request):
@@ -989,8 +1058,10 @@ class WordpressMenuViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.create_navigation_menu(access_token=access_token,
-                                                                request_body=request.data
+                                                                request_body=serializer.data
                                                                 )
             return Response(data=response, status=response.get("status_code"))
         else:
@@ -1010,8 +1081,10 @@ class WordpressMenuViewSet(GenericViewSet):
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             response = wordpress_service.update_navigation_menu(access_token=access_token,
-                                                                request_body=request.data,
+                                                                request_body=serializer.data,
                                                                 menu_id=pk
                                                                 )
             return Response(data=response, status=response.get("status_code"))
