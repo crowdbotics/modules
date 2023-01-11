@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   View,
   ImageBackground,
   Image,
   Text,
   TouchableOpacity,
-  ScrollView,
-  LogBox
+  ScrollView
 } from "react-native";
 import {
   NavigationHelpersContext,
@@ -136,9 +135,6 @@ const LoginScreen = () => {
 const Stack = createStackNavigator();
 
 const LoginSignup = () => {
-  useEffect(() => {
-    LogBox.ignoreAllLogs();
-  }, []);
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
