@@ -110,6 +110,7 @@ const SocialButtonsView = (props) => (
 );
 
 const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
+  LoginManager.setLoginBehavior("web_only");
   try {
     const fbResult = await LoginManager.logInWithPermissions([
       "public_profile",
@@ -126,10 +127,18 @@ const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
               "You are Logged In Successfully with Facebook Account.");
             navigation.navigate(HOME_SCREEN_NAME);
           }
+        })
+        .catch(err => {
+          setErrorResponse(errorResponse => [...errorResponse, err]);
         });
     }
   } catch (err) {
-    setErrorResponse(errorResponse => [...errorResponse, err]);
+    if (err.code === statusCodes.SIGN_IN_CANCELLED) {
+      setErrorResponse(errorResponse => [
+        ...errorResponse,
+        { error: "The user canceled the signin request." }
+      ]);
+    }
   }
 };
 
@@ -150,7 +159,7 @@ const onGoogleConnect = async (
     const tokens = await GoogleSignin.getTokens();
     dispatch(googleLogin({ access_token: tokens.accessToken }))
       .then(unwrapResult)
-      .then((res) => {
+      .then(async res => {
         if (res.key) {
           Alert.alert(
             "SignIn Success",
@@ -189,7 +198,7 @@ const onAppleConnect = async (
       })
     )
       .then(unwrapResult)
-      .then((res) => {
+      .then(async res => {
         if (res.key) {
           Alert.alert(
             "SignIn Success",
@@ -209,9 +218,9 @@ const onAppleConnect = async (
 export const SignupTab = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorResponse, setErrorResponse] = useState([]);
   const [apiError, setApiError] = useState([]);
+  const [errorResponse, setErrorResponse] = useState([]);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
     password: ""
@@ -222,6 +231,7 @@ export const SignupTab = ({ navigation }) => {
 
   const onSignupPress = async () => {
     setApiError([]);
+    setErrorResponse([]);
     setValidationError({ email: "", password: "" });
     if (!validateEmail.test(email)) {
       return setValidationError({
@@ -299,41 +309,40 @@ export const SignupTab = ({ navigation }) => {
           value={confirmPassword}
         />
       </View>
+      {
+            apiError.map((value, index) =>
+              <View key={index}>
+                <Text style={[styles.error, { paddingHorizontal: 0 }]}>{value[Object.keys(value)[index]].toString()}</Text>
+              </View>
+            )
+      }
       <Button
         title="Sign Up"
         loading={api.loading === "pending"}
         onPress={onSignupPress}
       />
-        {apiError.map((value, index) =>
-        <View key={index}>
-          <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
-        </View>
-        )}
+        {
+            errorResponse.map((value, index) =>
+              <View key={index}>
+                <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+              </View>
+            )
+        }
       <SocialButtonsView
         loading={api.loading === "pending"}
         onFacebookConnect={() => {
           setErrorResponse([]);
           onFacebookConnect(dispatch, navigation, setErrorResponse);
-        }
-        }
+        }}
         onGoogleConnect={() => {
           setErrorResponse([]);
           onGoogleConnect(dispatch, navigation, setErrorResponse);
-        }
-        }
+        }}
         onAppleConnect={() => {
           setErrorResponse([]);
           onAppleConnect(dispatch, navigation, setErrorResponse);
-        }
-        }
+        }}
       />
-      {
-        errorResponse.map((value, index) =>
-          <View key={index}>
-            <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
-          </View>
-        )
-      }
     </KeyboardAvoidingView>
   );
 };
@@ -353,6 +362,7 @@ export const SignInTab = ({ navigation }) => {
 
   const onSigninPress = async () => {
     setApiError([]);
+    setErrorResponse([]);
     if (!validateEmail.test(email)) {
       return setValidationError({
         email: "Please enter a valid email address.",
@@ -393,6 +403,7 @@ export const SignInTab = ({ navigation }) => {
     setPassword(value);
     setValidationError({ ...validationError, password: "" });
   };
+
   return (
     <KeyboardAvoidingView>
       <View style={{ marginVertical: 10, marginHorizontal: 15 }}>
@@ -413,17 +424,18 @@ export const SignInTab = ({ navigation }) => {
           error={validationError.password}
         />
       </View>
-
+      {
+            apiError.map((value, index) =>
+              <View key={index}>
+                <Text style={[styles.error, { paddingHorizontal: 0 }]}>{value[Object.keys(value)[index]].toString()}</Text>
+              </View>
+            )
+          }
       <Button
         title="Login"
         loading={api.loading === "pending"}
         onPress={onSigninPress}
       />
-      {apiError.map((value, index) =>
-        <View key={index}>
-          <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
-        </View>
-      )}
       <View
         style={{
           justifyContent: "center",
@@ -440,6 +452,13 @@ export const SignInTab = ({ navigation }) => {
           <Text>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
+      {
+            errorResponse.map((value, index) =>
+              <View key={index}>
+                <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+              </View>
+            )
+          }
       <SocialButtonsView
         loading={api.loading === "pending"}
         onFacebookConnect={() => {
@@ -458,13 +477,6 @@ export const SignInTab = ({ navigation }) => {
         }
         }
       />
-      {
-        errorResponse.map((value, index) =>
-          <View key={index}>
-            <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
-          </View>
-        )
-      }
     </KeyboardAvoidingView>
   );
 };

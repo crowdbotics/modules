@@ -153,6 +153,12 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     paddingTop: 10,
     alignSelf: "center"
+  },
+  error: {
+    color: "#f77474",
+    fontStyle: "italic",
+    fontSize: 12,
+    paddingLeft: 50
   }
 });
 

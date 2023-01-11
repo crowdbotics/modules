@@ -25,10 +25,17 @@ apply plugin: 'com.google.gms.google-services'
 
 ```
 
+Add the following to the `dependencies` section in `android/app/build.gradle`:
+
+```
+implementation 'com.facebook.android:facebook-android-sdk:latest.release'
+```
+
 Add the tag on `android/app/src/main/AndroidManifest.xml`:
 
 ```
     <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
 ```
 
 On the `android/build.gradle` file:
@@ -45,10 +52,18 @@ Add the following to the `dependencies` section:
         classpath ('com.google.gms:google-services:4.1.0')
 ```
 
+Add the following to the `buildscript > repositories` section:
+
+```
+        mavenCentral()
+```
+
 Update the file `android/app/src/main/res/values/strings.xml` with the follow string (the value might need to be replaced later): 
 
 ```
 <string name="facebook_app_id">Your_facebook_id_here</string>
+<string name="facebook_client_token">56789</string>
+
 ```
 
 #### Update api url
