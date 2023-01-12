@@ -10,7 +10,6 @@ This Module is related to WordPress.com not WordPress.org The main difference be
 ```
 WORDPRESS_BASE_URL = ""
 WORDPRESS_CLIENT_ID = ""
-PAYPAL_CLIENT_SECRETS = ""
 WORDPRESS_REDIRECT_URL = ""
 WORDPRESS DOMAIN = ""
 ```
