@@ -380,7 +380,7 @@ class WordpressSitesViewSet(GenericViewSet):
                 "message": "Access token not found"
             }, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['post'], url_path='activate_widget')
+    @action(detail=False, methods=['post'], url_path='activate-widget')
     def activate_widget(self, request):
         """
         Activate a widget on a site.
@@ -400,7 +400,7 @@ class WordpressSitesViewSet(GenericViewSet):
                 "message": "Access token not found"
             }, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=True, methods=['post'], url_path='deactivate_widget')
+    @action(detail=True, methods=['post'], url_path='deactivate-widget')
     def deactivate_widget(self, request, pk):
         """
         Deactivate a widget on a site.
@@ -437,7 +437,7 @@ class WordpressCommentsViewSet(GenericViewSet):
     def get_serializer_class(self):
         return self.allowed_serializers.get(self.action)
 
-    @action(detail=True, methods=['get'], url_path='get_single_comment')
+    @action(detail=True, methods=['get'], url_path='get-single-comment')
     def get_single_comment(self, request, pk):
         """
         Get a single comment.
@@ -454,7 +454,7 @@ class WordpressCommentsViewSet(GenericViewSet):
                 "message": "Access token not found"
             }, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=True, methods=['post'], url_path='edit_comment')
+    @action(detail=True, methods=['post'], url_path='edit-comment')
     def edit_comment(self, request, pk):
         """
         Edit a comment
@@ -478,7 +478,7 @@ class WordpressCommentsViewSet(GenericViewSet):
                 "message": "Access token not found"
             }, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=True, methods=['post'], url_path='delete_comment')
+    @action(detail=True, methods=['post'], url_path='delete-comment')
     def delete_comment(self, request, pk):
         """
         Delete a comment
@@ -754,7 +754,7 @@ class WordpressFollowViewSet(GenericViewSet):
     - unfollow_blog : Unfollow a blog.
     """
 
-    @action(detail=False, methods=['post'], url_path='follow_blog')
+    @action(detail=False, methods=['post'], url_path='follow-blog')
     def follow_blog(self, request):
         """
         Follow a blog.
@@ -770,7 +770,7 @@ class WordpressFollowViewSet(GenericViewSet):
                 "message": "Access token not found"
             }, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['post'], url_path='unfollow_blog')
+    @action(detail=False, methods=['post'], url_path='unfollow-blog')
     def unfollow_blog(self, request):
         """
         Unfollow a blog.
@@ -886,7 +886,7 @@ class WordpressReaderViewSet(GenericViewSet):
                 "message": "Access token not found"
             }, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=True, methods=['get'], url_path='get_feed_details')
+    @action(detail=True, methods=['get'], url_path='get-feed-details')
     def get_feed_details(self, request, pk):
         """
         Get details about a feed.
