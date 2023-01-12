@@ -223,7 +223,7 @@ class WordpressService(WordpressBase):
 
     def deactivate_widget(self, access_token, widget_id):
         try:
-            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/widgets/{widget_id}/delete"
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/widgets/widget:{widget_id}/delete"
             response = self._api_call(request_type='POST', url=url,
                                       access_token=access_token,
                                       )
