@@ -390,3 +390,198 @@ class WordpressService(WordpressBase):
             return response
         except Exception as e:
             return e
+
+    def unfollow_blog(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/follows/mine/delete"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_freshly_pressed_posts(self, access_token, params=None):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/freshly-pressed/"
+            response = self._api_call(access_token=access_token, request_type='GET',
+                                      url=url,
+                                      params=params
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_list_of_insights(self, access_token, params=None):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/insights"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      params=params
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_raw_data_graph(self, access_token, graph_slug):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/insights/slug:{graph_slug}"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_default_reader_menu(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/read/menu/"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_feed_details(self, access_token, feed_url_or_id):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/read/feed/{feed_url_or_id}"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_single_post_in_reader(self, access_token, post_id):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.2/read/sites/{self.WORDPRESS_DOMAIN}/posts/{post_id}"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_list_of_post_from_tag(self, access_token, tag):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/read/tags/{tag}/posts"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def subscribe_new_tag(self, access_token, tag):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/read/tags/{tag}/mine/new"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def unsubscribe_tag(self, access_token, tag):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/read/tags/{tag}/mine/delete"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_site_stats(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/stats"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_site_stats_summary(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/stats/summary"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_post_views(self, access_token, post_id):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/stats/post/{post_id}"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_site_followers(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/stats/followers"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def create_navigation_menu(self, access_token, request_body):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/menus/new"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      payload=request_body
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def update_navigation_menu(self, access_token, request_body, menu_id):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/menus/{menu_id}"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      payload=request_body
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_single_navigation_menu(self, access_token, menu_id):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/menus/{menu_id}"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def get_all_navigation_menu(self, access_token):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/menus"
+            response = self._api_call(request_type='GET', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
+    def delete_navigation_menu(self, access_token, menu_id):
+        try:
+            url = f"{self.WORDPRESS_BASE_URL}/rest/v1.1/sites/{self.WORDPRESS_DOMAIN}/menus/{menu_id}/delete"
+            response = self._api_call(request_type='POST', url=url,
+                                      access_token=access_token,
+                                      )
+            return response
+        except Exception as e:
+            return e
+
