@@ -507,7 +507,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
         response = mailchimp_service.send_campaign(campaign_id=pk)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='send-campaign')
+    @action(detail=True, methods=['post'], url_path='schedule-campaign')
     def schedule_campaign(self, request, pk):
         """
         Schedule a campaign for delivery. If you're using Multivariate Campaigns to test send times or sending RSS Campaigns, use the send action instead.

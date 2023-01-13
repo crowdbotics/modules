@@ -179,7 +179,7 @@ class AddTagSerializer(serializers.Serializer):
 class AddSegmentSerializer(serializers.Serializer):
     name = serializers.CharField(required=True, allow_null=False, allow_blank=False)
     static_segment = serializers.ListField(required=False, allow_null=False, allow_empty=True)
-    options = SegmentOptionsSerializer(many=False)
+    options = SegmentOptionsSerializer(many=False, required=False)
 
 
 class AddTemplateSerializer(serializers.Serializer):
@@ -194,25 +194,25 @@ class AddFolderSerializer(serializers.Serializer):
 
 class AddCampaignSerializer(serializers.Serializer):
     type = serializers.CharField(required=True, allow_null=False, allow_blank=False)
-    rss_opts = RssOptsSerializer(many=False)
-    recipients = RecipientsSerializer(many=False)
-    variate_settings = VariateSettingsSerializer(many=False)
-    settings = SegmentSettingsSerializer(many=False)
-    tracking = SegmentTrackingSerializer(many=False)
-    social_card = SocialCardSerializer(many=False)
+    rss_opts = RssOptsSerializer(many=False, required=False)
+    recipients = RecipientsSerializer(many=False, required=False)
+    variate_settings = VariateSettingsSerializer(many=False, required=False)
+    settings = SegmentSettingsSerializer(many=False, required=False)
+    tracking = SegmentTrackingSerializer(many=False, required=False)
+    social_card = SocialCardSerializer(many=False, required=False)
     content_type = serializers.CharField(required=False, allow_null=False, allow_blank=True)
 
 
 class UpdateCampaignSettingsSerializer(serializers.Serializer):
-    recipients = RecipientsSerializer(many=False)
+    recipients = RecipientsSerializer(many=False, required=False)
     settings = SegmentSettingsSerializer(many=False, required=True)
-    rss_opts = RssOptsSerializer(many=False)
-    variate_settings = VariateSettingsSerializer(many=False)
-    tracking = SegmentTrackingSerializer(many=False)
-    social_card = SocialCardSerializer(many=False)
+    rss_opts = RssOptsSerializer(many=False, required=False)
+    variate_settings = VariateSettingsSerializer(many=False, required=False)
+    tracking = SegmentTrackingSerializer(many=False, required=False)
+    social_card = SocialCardSerializer(many=False, required=False)
 
 
 class ScheduleCampaignSerializer(serializers.Serializer):
     schedule_time = serializers.DateTimeField(required=True, allow_null=False)
-    batch_delivery = BatchDeliverySerializer(many=False)
+    batch_delivery = BatchDeliverySerializer(many=False, required=False)
     timewarp = serializers.BooleanField(required=False, allow_null=False)
