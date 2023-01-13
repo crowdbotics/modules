@@ -315,7 +315,7 @@ class MailchimpTemplatesViewSet(GenericViewSet):
         response = mailchimp_service.add_template(body=serializer.data)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['get'], url_path='get_template_info')
+    @action(detail=True, methods=['get'], url_path='get-template-info')
     def get_template_info(self, request, pk):
         """
         Get information about a specific template.
@@ -539,7 +539,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
         Get all folders used to organize campaigns.
         """
 
-        response = mailchimp_service.list_template_folder()
+        response = mailchimp_service.list_campaign_folder()
         return Response(response.get('text'), status=response.get('status_code'))
 
     @action(detail=False, methods=['post'], url_path='add-campaign-folder')
