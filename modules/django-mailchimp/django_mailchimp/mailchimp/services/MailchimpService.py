@@ -17,9 +17,9 @@ class MailchimpService:
         self.mailchimp_client = MailchimpMarketing.Client()
         self.mailchimp_client.set_config(config)
     
-    def get_audience_lists(self, **kwargs):
+    def get_audience_lists(self):
         try:
-            response = self.mailchimp_client.lists.get_all_lists(**kwargs)
+            response = self.mailchimp_client.lists.get_all_lists()
             return {'text': response, 'status_code': 200}
         except ApiClientError as error:
             return {'text': error.text, 'status_code': error.status_code}

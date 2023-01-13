@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from .services.MailchimpService import MailchimpService
 from .serializers import AddAudienceListSerializer, BatchSerializer, AddMemberSerializer, AddTagSerializer, \
     AddSegmentSerializer, AddTemplateSerializer, AddFolderSerializer, AddCampaignSerializer, \
-    ScheduleCampaignSerializer
+    ScheduleCampaignSerializer, UpdateCampaignSettingsSerializer
 
 mailchimp_service = MailchimpService(config={
     "api_key": os.getenv("MAILCHIMP_API_KEY", ""),
@@ -58,12 +58,9 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def get_audience_lists(self, request):
         """
         Provide information about all lists in the account.
-        User can use optional query Parameters. For details about query Parameters visit the given link below
-        https://mailchimp.com/developer/marketing/api/lists/get-lists-info/
         """
 
-        params = request.query_params.dict()
-        response = mailchimp_service.get_audience_lists(**params)
+        response = mailchimp_service.get_audience_lists()
         return Response(response.get('text'), status=response.get('status_code'))
 
     @action(detail=False, methods=['post'], url_path='add-audience-list')
@@ -73,6 +70,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
         Required the request body. For details about request body visit the given link below
         https://mailchimp.com/developer/marketing/api/lists/add-list/
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.add_audience_list(body=serializer.data)
@@ -143,6 +141,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
         https://mailchimp.com/developer/marketing/api/lists/add-list/
         :param str pk: List ID (required)
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.add_list_member(list_id=pk, body=serializer.data)
@@ -150,11 +149,24 @@ class MailchimpAudienceViewSet(GenericViewSet):
 
     @action(detail=True, methods=['get'], url_path='get-member-info/(?P<subscriber_hash>[A-Za-z0-9]*)')
     def get_member_info(self, request, pk, subscriber_hash):
+        """
+        Get information about a specific list member, including a currently subscribed, unsubscribed, or bounced member.
+        :param str pk: List ID (required)
+        :param str subscriber_hash: Subscriber Hash (required)
+        """
+
         response = mailchimp_service.get_member_info(list_id=pk, subscriber_hash=subscriber_hash)
         return Response(response.get('text'), status=response.get('status_code'))
 
     @action(detail=True, methods=['post'], url_path='update-list-member/(?P<subscriber_hash>[A-Za-z0-9]*)')
     def update_list_member(self, request, pk, subscriber_hash):
+        """
+        Update information for a specific list member.
+        https://mailchimp.com/developer/marketing/api/list-members/update-list-member/
+        :param str pk: List ID (required)
+        :param str subscriber_hash: Subscriber Hash (required)
+        """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.update_list_member(list_id=pk, subscriber_hash=subscriber_hash,
@@ -163,6 +175,13 @@ class MailchimpAudienceViewSet(GenericViewSet):
 
     @action(detail=True, methods=['post'], url_path='delete-list-member/(?P<subscriber_hash>[A-Za-z0-9]*)')
     def delete_list_member(self, request, pk, subscriber_hash):
+        """
+        Delete all personally identifiable information related to a list member, and remove them from a list.
+        This will make it impossible to re-import the list member.
+        :param str pk: List ID (required)
+        :param str subscriber_hash: Subscriber Hash (required)
+        """
+
         response = mailchimp_service.delete_list_member(list_id=pk, subscriber_hash=subscriber_hash)
         return Response(response.get('text'), status=response.get('status_code'))
 
