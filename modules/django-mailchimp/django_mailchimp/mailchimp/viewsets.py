@@ -209,7 +209,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
                                                               body=serializer.data)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='list-segment')
+    @action(detail=True, methods=['get'], url_path='list-segment')
     def list_segment(self, request, pk):
         """
         Provide information about all available segments for a specific list.
@@ -369,7 +369,7 @@ class MailchimpTemplatesViewSet(GenericViewSet):
         response = mailchimp_service.add_template_folder(body=serializer.data)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=False, methods=['get'], url_path='get-template-folder')
+    @action(detail=True, methods=['get'], url_path='get-template-folder')
     def get_template_folder(self, request, pk):
         """
         Get information about a specific template.
@@ -451,7 +451,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = mailchimp_service.add_template(body=serializer.data)
+        response = mailchimp_service.add_campaigns(body=serializer.data)
         return Response(response.get('text'), status=response.get('status_code'))
 
     @action(detail=True, methods=['get'], url_path='get-campaign-info')
