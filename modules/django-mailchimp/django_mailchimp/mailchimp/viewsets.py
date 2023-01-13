@@ -138,7 +138,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
         """
         Add a new member to the list.
         Required the request body. For details about request body visit the given link below
-        https://mailchimp.com/developer/marketing/api/lists/add-list/
+        https://mailchimp.com/developer/marketing/api/list-members/add-member-to-list/
         :param str pk: List ID (required)
         """
 
