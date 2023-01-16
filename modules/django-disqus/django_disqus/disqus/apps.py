@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class DiscusConfig(AppConfig):
-    name = "modules.django_disqus.discus"
-    verbose_name = "Discus"
+class DisqusConfig(AppConfig):
+    name = "modules.django_disqus.disqus"
+    verbose_name = "Disqus"
