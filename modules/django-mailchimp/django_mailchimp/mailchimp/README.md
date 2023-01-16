@@ -11,8 +11,13 @@ MAILCHIMP_API_KEY=""
 MAILCHIMP_SERVER_REGION=""
 
 ```
-To get MailChimp API Key hit the following url: <br/>
-`https://us21.admin.mailchimp.com/account/api/`
+Steps to get MailChimp API Key: <br/>
+
+> - Create  MailChimp Developer account. <br/>
+> - Activate Mailchimp Account from the mail sent to user's provided email. <br/>
+> - Once the developer account is successfully created open the MailChimp Dashboard > On Lower Left corner of Side Bar Click on 'User Profile' Logo. <br/>
+> -  Click 'Profile'. <br/>
+> - Click 'Extras' > Click 'API keys'. > Scroll the page down > Click 'Create A Key'. <br/>
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
