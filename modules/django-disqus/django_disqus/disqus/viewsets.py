@@ -1,5 +1,4 @@
 from rest_framework import viewsets, status
-from rest_framework.permissions import IsAuthenticated
 from .models import Comment, LikeOnComment
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from .serializers import CommentSerializer, LikeOnCommentSerializer
@@ -40,7 +39,6 @@ class LikeOnCommentViewSet(viewsets.ModelViewSet):
     serializer_class = LikeOnCommentSerializer
     queryset = LikeOnComment.objects.all()
     authentication_classes = (SessionAuthentication, TokenAuthentication)
-    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         data = {

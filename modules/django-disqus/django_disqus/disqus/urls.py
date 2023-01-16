@@ -4,8 +4,8 @@ from .viewsets import CommentViewSet, LikeOnCommentViewSet
 
 router = DefaultRouter()
 router.register("comment", CommentViewSet, basename="comments")
+router.register("comment-like", LikeOnCommentViewSet, basename="comments-like")
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("comment/like/", LikeOnCommentViewSet.as_view({'post': 'create'}), name="like")
 ]
