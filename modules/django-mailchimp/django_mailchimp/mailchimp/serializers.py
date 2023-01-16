@@ -14,7 +14,7 @@ class ContactSerializer(serializers.Serializer):
 
 class CampaignDefaultSerializer(serializers.Serializer):
     from_name = serializers.CharField(required=True, allow_null=False, allow_blank=False)
-    from_email = serializers.CharField(required=True, allow_null=False, allow_blank=False)
+    from_email = serializers.EmailField(required=True, allow_null=False, allow_blank=False)
     subject = serializers.CharField(required=True, allow_null=False, allow_blank=False)
     language = serializers.CharField(required=True, allow_null=False, allow_blank=False)
 
@@ -35,7 +35,7 @@ class MarketingPermissionSerializer(serializers.Serializer):
 
 
 class MemberSerializer(serializers.Serializer):
-    email_address = serializers.CharField(required=True, allow_null=False, allow_blank=False)
+    email_address = serializers.EmailField(required=True, allow_null=False, allow_blank=False)
     status = serializers.CharField(required=False, allow_null=False, allow_blank=True)
     email_type = serializers.CharField(required=False, allow_null=False, allow_blank=True)
     merge_fields = serializers.JSONField(required=False)
@@ -151,11 +151,11 @@ class AddAudienceListSerializer(serializers.Serializer):
 
 
 class BatchSerializer(serializers.Serializer):
-    members = MemberSerializer(many=True)
+    members = MemberSerializer(many=True, required=False)
 
 
 class AddMemberSerializer(serializers.Serializer):
-    email_address = serializers.CharField(required=True, allow_null=False, allow_blank=False)
+    email_address = serializers.EmailField(required=True, allow_null=False, allow_blank=False)
     status = serializers.CharField(required=False, allow_null=False, allow_blank=True)
     email_type = serializers.CharField(required=False, allow_null=False, allow_blank=True)
     merge_fields = serializers.JSONField(required=False)
