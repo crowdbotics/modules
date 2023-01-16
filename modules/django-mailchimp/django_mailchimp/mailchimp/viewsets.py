@@ -99,7 +99,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
         response = mailchimp_service.update_audience_list(body=serializer.data, list_id=pk)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='delete-audience-list')
+    @action(detail=True, methods=['delete'], url_path='delete-audience-list')
     def delete_audience_list(self, request, pk):
         """
         Delete a list from Mailchimp account.
@@ -173,7 +173,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
                                                         body=serializer.data)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='delete-list-member/(?P<subscriber_hash>[A-Za-z0-9]*)')
+    @action(detail=True, methods=['delete'], url_path='delete-list-member/(?P<subscriber_hash>[A-Za-z0-9]*)')
     def delete_list_member(self, request, pk, subscriber_hash):
         """
         Delete all personally identifiable information related to a list member, and remove them from a list.
@@ -242,7 +242,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
         response = mailchimp_service.get_segment_info(list_id=pk, segment_id=segment_id)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='delete-segment/(?P<segment_id>[A-Za-z0-9]*)')
+    @action(detail=True, methods=['delete'], url_path='delete-segment/(?P<segment_id>[A-Za-z0-9]*)')
     def delete_segment(self, request, pk, segment_id):
         """
         Delete a specific segment in a list.
@@ -325,7 +325,8 @@ class MailchimpTemplatesViewSet(GenericViewSet):
         response = mailchimp_service.get_template_info(template_id=pk)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='delete-template')
+    # change this to delete method instead of post
+    @action(detail=True, methods=['delete'], url_path='delete-template')
     def delete_template(self, request, pk):
         """
         Delete a specific template.
@@ -379,7 +380,7 @@ class MailchimpTemplatesViewSet(GenericViewSet):
         response = mailchimp_service.get_template_folder(folder_id=pk)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='delete-template-folder')
+    @action(detail=True, methods=['delete'], url_path='delete-template-folder')
     def delete_template_folder(self, request, pk):
         """
         Delete a specific template folder, and mark all the templates in the folder as 'unfilled'.
@@ -464,7 +465,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
         response = mailchimp_service.get_campaign_info(campaign_id=pk)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='delete-campaign')
+    @action(detail=True, methods=['delete'], url_path='delete-campaign')
     def delete_campaign(self, request, pk):
         """
         Remove a campaign from your Mailchimp account.
@@ -566,7 +567,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
         response = mailchimp_service.get_campaign_folder(folder_id=pk)
         return Response(response.get('text'), status=response.get('status_code'))
 
-    @action(detail=True, methods=['post'], url_path='delete_campaign_folder')
+    @action(detail=True, methods=['delete'], url_path='delete_campaign_folder')
     def delete_campaign_folder(self, request, pk):
         """
         Delete a specific campaign folder, and mark all the campaigns in the folder as 'unfiled'.
