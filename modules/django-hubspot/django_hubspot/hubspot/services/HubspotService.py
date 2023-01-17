@@ -129,10 +129,10 @@ class HubspotService(HubspotBase):
         except Exception as e:
             return e
 
-    def ticket_association_list(self, params):
+    def ticket_association_list(self, ticketId, toObjectType):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{params['ticketId']}/associations/" \
-                  f"{params['toObjectType']}/"
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{ticketId}/associations/" \
+                  f"{toObjectType}/"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
@@ -146,9 +146,9 @@ class HubspotService(HubspotBase):
         except Exception as e:
             return e
 
-    def meeting_contact_association_list(self, params):
+    def meeting_contact_association_list(self, meetingId):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/meetings/{params['meetingId']}/associations/contacts/"
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/meetings/{meetingId}/associations/contacts/"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
