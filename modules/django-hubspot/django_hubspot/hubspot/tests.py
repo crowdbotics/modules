@@ -74,11 +74,12 @@ class HubspotViewSetTest(APITestCase):
         contact_deals_association_list_mock.return_value = response
 
         data = {
-            "contactId": 51
+            "contactId": '51'
         }
-        Response = self.client.get(reverse('hubspot_service-contact-deals-association-list'), data=data)
+        Response = self.client.get(reverse('hubspot_service-contact-deals-association-list'), data)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         contact_deals_association_list_mock.assert_called_once()
+        contact_deals_association_list_mock.assert_called_once_with(data['contactId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.contact_deals_association_list')
     def test_service_contact_list_retrieve_with_wrong_id(self, contact_deals_association_list_mock):
@@ -99,6 +100,7 @@ class HubspotViewSetTest(APITestCase):
         Response = self.client.get(reverse('hubspot_service-contact-deals-association-list'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         contact_deals_association_list_mock.assert_called_once()
+        contact_deals_association_list_mock.assert_called_once_with(data['contactId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.contact_deals_association_list')
     def test_service_contact_list_retrieve_without_id(self, contact_deals_association_list_mock):
@@ -119,6 +121,7 @@ class HubspotViewSetTest(APITestCase):
         Response = self.client.get(reverse('hubspot_service-contact-deals-association-list'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         contact_deals_association_list_mock.assert_called_once()
+        contact_deals_association_list_mock.assert_called_once_with(data['contactId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_deal_contact_association')
     def test_service_deal_associations_create(self, create_deal_contact_association_mock):
@@ -317,9 +320,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "dealId": "11634132761"
         }
-        Response = self.client.delete(reverse('hubspot_service-remove-deal'), data=data, format='json')
+        Response = self.client.delete(reverse('hubspot_service-remove-deal'), data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
         remove_deal_mock.assert_called_once()
+        remove_deal_mock.assert_called_once_with(data['dealId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.remove_deal')
     def test_service_deal_remove_with_wrong_id(self, remove_deal_mock):
@@ -337,9 +341,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "dealId": "11"
         }
-        Response = self.client.delete(reverse('hubspot_service-remove-deal'), data=data, format='json')
+        Response = self.client.delete(reverse('hubspot_service-remove-deal'), data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
         remove_deal_mock.assert_called_once()
+        remove_deal_mock.assert_called_once_with(data['dealId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_deal')
     def test_service_deals_single_retrieve(self, single_deal_mock):
@@ -369,9 +374,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "dealId": "11634568517"
         }
-        Response = self.client.get(reverse('hubspot_service-single-deal'), data=data, format='json')
+        Response = self.client.get(reverse('hubspot_service-single-deal'), data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         single_deal_mock.assert_called_once()
+        single_deal_mock.assert_called_once_with(data['dealId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_deal')
     def test_service_deals_single_retrieve_with_wrong_id(self, single_deal_mock):
@@ -389,11 +395,13 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "dealId": "11634568517"
         }
-        Response = self.client.get(reverse('hubspot_service-single-deal'), data=data, format='json')
+        Response = self.client.get(reverse('hubspot_service-single-deal'), data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         single_deal_mock.assert_called_once()
+        single_deal_mock.assert_called_once_with(data['dealId'])
 
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
+    @mock.patch(
+        'modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
     def test_service_meeting_contact_list(self, meeting_contact_association_list_mock):
         """
         Test service meeting contact lis with valid data
@@ -409,12 +417,13 @@ class HubspotViewSetTest(APITestCase):
             "meetingId": "29123684621",
             "toObjectType": "contacts"
         }
-        Response = self.client.get(reverse('hubspot_service-meeting-contacts-association-list'), data=data,
-                                   format='json')
+        Response = self.client.get(reverse('hubspot_service-meeting-contacts-association-list'), data)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         meeting_contact_association_list_mock.assert_called_once()
+        meeting_contact_association_list_mock.assert_called_once_with(data['meetingId'])
 
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
+    @mock.patch(
+        'modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
     def test_service_meeting_contact_list_with_wrong_meeting_id(self, meeting_contact_association_list_mock):
         """
         Test service meeting contact lis with invalid meetingId
@@ -434,8 +443,10 @@ class HubspotViewSetTest(APITestCase):
                                    format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         meeting_contact_association_list_mock.assert_called_once()
+        meeting_contact_association_list_mock.assert_called_once_with(data['meetingId'])
 
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
+    @mock.patch(
+        'modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
     def test_service_meeting_contact_list_without_meeting_id(self, meeting_contact_association_list_mock):
         """
         Test service meeting contact lis without meetingId
@@ -455,6 +466,7 @@ class HubspotViewSetTest(APITestCase):
                                    format='json')
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         meeting_contact_association_list_mock.assert_called_once()
+        meeting_contact_association_list_mock.assert_called_once_with(data['meetingId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_ticket_association')
     def test_service_association_ticket_create(self, create_ticket_association):
@@ -521,10 +533,12 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "ticketId": "29574639194",
             "toObjectType": "deal"
+
         }
-        Response = self.client.get(reverse('hubspot_service-ticket-association-list'), data=data, format='json')
+        Response = self.client.get(reverse('hubspot_service-ticket-association-list'), data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         ticket_association_list_mock.assert_called_once()
+        ticket_association_list_mock.assert_called_once_with(data['ticketId'], data['toObjectType'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.ticket_association_list')
     def test_ticket_association_list_with_wrong_ticketId(self, ticket_association_list_mock):
@@ -545,6 +559,7 @@ class HubspotViewSetTest(APITestCase):
         Response = self.client.get(reverse('hubspot_service-ticket-association-list'), data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         ticket_association_list_mock.assert_called_once()
+        ticket_association_list_mock.assert_called_once_with(data['ticketId'], data['toObjectType'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.ticket_association_list')
     def test_ticket_association_list_without_ticketId(self, ticket_association_list_mock):
@@ -560,6 +575,7 @@ class HubspotViewSetTest(APITestCase):
         Response = self.client.get(reverse('hubspot_service-ticket-association-list'), data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         ticket_association_list_mock.assert_called_once()
+        ticket_association_list_mock.assert_called_once_with(data['ticketId'], data['toObjectType'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_ticket')
     def test_ticket_create(self, create_ticket_mock):
@@ -736,9 +752,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "ticketId": "1355771473"
         }
-        Response = self.client.delete(reverse('hubspot_service-remove-ticket'), data=data, fromat='json')
+        Response = self.client.delete(reverse('hubspot_service-remove-ticket'), data, fromat='json')
         self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
         remove_ticket_mock.assert_called_once()
+        remove_ticket_mock.assert_called_once_with(data['ticketId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.remove_ticket')
     def test_tickets_remove_with_wrong_ticketId(self, remove_ticket_mock):
@@ -750,9 +767,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "ticketId": "1355778947841473"
         }
-        Response = self.client.delete(reverse('hubspot_service-remove-ticket'), data=data, fromat='json')
+        Response = self.client.delete(reverse('hubspot_service-remove-ticket'), data, fromat='json')
         self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
         remove_ticket_mock.assert_called_once()
+        remove_ticket_mock.assert_called_once_with(data['ticketId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_ticket')
     def test_tickets_single_retrieve(self, single_ticket_mock):
@@ -770,9 +788,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "ticketId": "1355783574"
         }
-        Response = self.client.get(reverse('hubspot_service-single-ticket'), data=data, fromat='json')
+        Response = self.client.get(reverse('hubspot_service-single-ticket'), data, fromat='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         single_ticket_mock.assert_called_once()
+        single_ticket_mock.assert_called_once_with(data['ticketId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_ticket')
     def test_tickets_single_retrieve_with_wrong_ticketId(self, single_ticket_mock):
@@ -784,9 +803,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "ticketId": "1355798439483574"
         }
-        Response = self.client.get(reverse('hubspot_service-single-ticket'), data=data, fromat='json')
+        Response = self.client.get(reverse('hubspot_service-single-ticket'), data, fromat='json')
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         single_ticket_mock.assert_called_once()
+        single_ticket_mock.assert_called_once_with(data['ticketId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_ticket')
     def test_tickets_single_retrieve_without_ticketId(self, single_ticket_mock):
@@ -908,9 +928,10 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "ticketId": ""
         }
-        Response = self.client.get(reverse('hubspot_service-single-ticket'), data=data, fromat='json')
+        Response = self.client.get(reverse('hubspot_service-single-ticket'), data, fromat='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         single_ticket_mock.assert_called_once()
+        single_ticket_mock.assert_called_once_with(data['ticketId'])
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.webhook')
     def test_service_webhook(self, webhook_mock):

@@ -76,7 +76,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str dealId:  HubSpot deal id to retrieve the deal.
         :return: Returns a deal object with properties.       
         """
-        response = self.hubspot_service.single_deal(request.data.get('dealId'))
+        response = self.hubspot_service.single_deal(request.query_params.get('dealId'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     # deal associations
@@ -142,7 +142,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str ticketId:  HubSpot ticket id to retrieve the ticket.
         :return: Returns a ticket object containing ticket detail.       
         """
-        response = self.hubspot_service.single_ticket(request.data.get('ticketId'))
+        response = self.hubspot_service.single_ticket(request.query_params.get('ticketId'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['put'], url_path='ticket/associations/create')
@@ -173,7 +173,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str toObjectType: Type of the CRM object to with ticket is being associated
         :return: Returns a ticket associated with other HubSpot objects.
         """
-        response = self.hubspot_service.ticket_association_list(request.data)
+        response = self.hubspot_service.ticket_association_list(request.query_params.get('ticketId'), request.query_params.get('toObjectType'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='contact/deals/list')
@@ -183,7 +183,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str contactId: HubSpot contact id associated with a CRM deals object
         :return: Returns a contact associated with other HubSpot deals.
         """
-        response = self.hubspot_service.contact_deals_association_list(request.data)
+        response = self.hubspot_service.contact_deals_association_list(request.query_params.get('contactId'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='meeting/contacts/list')
@@ -193,7 +193,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str meetingId: HubSpot meeting id associated with a CRM contact object
         :return: Returns a meeting associated with other HubSpot contacts.
         """
-        response = self.hubspot_service.meeting_contact_association_list(request.data)
+        response = self.hubspot_service.meeting_contact_association_list(request.query_params.get('meetingId'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='events/create')
