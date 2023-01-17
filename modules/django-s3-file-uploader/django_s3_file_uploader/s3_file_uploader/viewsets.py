@@ -1,12 +1,11 @@
 import os
-
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import UploadedFile
-from .serializers import (CreateBucketSerializer, DeleteBucketSerializer, UploadFileSerializer, DownloadFileSerializer, DeleteFileSerializer, PresignedUrlFileSerializer)
+from .serializers import (CreateBucketSerializer, DeleteBucketSerializer, UploadFileSerializer, DownloadFileSerializer,
+                          DeleteFileSerializer, PresignedUrlFileSerializer)
 from .services.S3Service import S3Service
-
 
 
 class S3ViewSet(viewsets.GenericViewSet):
@@ -43,8 +42,7 @@ class S3ViewSet(viewsets.GenericViewSet):
             response = self.s3_service.list_s3_buckets()
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
+            return Response(e.args, e.__getattribute__("response").get("ResponseMetadata", {}).get("HTTPStatusCode"))
 
     @action(detail=False, methods=['post'], url_path='bucket/create')
     def create_bucket(self, request):
@@ -54,8 +52,7 @@ class S3ViewSet(viewsets.GenericViewSet):
             response = self.s3_service.create_s3_bucket(**serializer.data)
             return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
+            return Response(e.args, e.__getattribute__("response").get("ResponseMetadata", {}).get("HTTPStatusCode"))
 
     @action(detail=False, methods=['delete'], url_path='bucket/remove')
     def delete_bucket(self, request):
@@ -65,8 +62,7 @@ class S3ViewSet(viewsets.GenericViewSet):
             response = self.s3_service.delete_s3_bucket(**serializer.data)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
+            return Response(e.args, e.__getattribute__("response").get("ResponseMetadata", {}).get("HTTPStatusCode"))
 
     @action(detail=False, methods=['post'], url_path='file/upload')
     def upload_file(self, request):
@@ -78,15 +74,14 @@ class S3ViewSet(viewsets.GenericViewSet):
                 bucket=request.data.get('bucket'),
                 file_name=file.name
             )
-            payload = {"bucket": request.data.get('bucket'), "file_name": file.name, "user_id": request.data.get("user_id")}
+            payload = {"bucket": request.data.get('bucket'), "file_name": file.name,
+                       "user_id": request.data.get("user_id")}
             serializer = self.get_serializer(data=payload)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
-
+            return Response(e.args, e.__getattribute__("response").get("ResponseMetadata", {}).get("HTTPStatusCode"))
 
     @action(detail=False, methods=['get'], url_path='file/download')
     def download_file(self, request):
@@ -100,8 +95,7 @@ class S3ViewSet(viewsets.GenericViewSet):
             )
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
+            return Response(e.args, e.__getattribute__("response").get("ResponseMetadata", {}).get("HTTPStatusCode"))
 
     @action(detail=False, methods=['delete'], url_path='file/remove')
     def delete_file(self, request):
@@ -120,8 +114,7 @@ class S3ViewSet(viewsets.GenericViewSet):
             serializer.is_valid()
             return Response(response, status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
+            return Response(e.args, e.__getattribute__("response").get("ResponseMetadata", {}).get("HTTPStatusCode"))
 
     @action(detail=False, methods=['get'], url_path='file/presigned/url')
     def create_presigned_url(self, request):
@@ -131,4 +124,4 @@ class S3ViewSet(viewsets.GenericViewSet):
             response = self.s3_service.create_presigned_s3_url(**serializer.data)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
+            return Response(e.args, e.__getattribute__("response").get("ResponseMetadata", {}).get("HTTPStatusCode"))
