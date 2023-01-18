@@ -15,7 +15,7 @@ import os
 class BookingView(ModelViewSet):
     serializer_class = BookingSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = Booking.objects.all()
 
 
@@ -32,19 +32,19 @@ class BookingPenaltyView(ModelViewSet):
 class BookingDetailView(ModelViewSet):
     serializer_class = BookingDetailSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = BookingDetail.objects.all()
 
 
 class CreateBookingView(ModelViewSet):
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     serializer_class = BookingCreateSerializer
     queryset = BookingDetail.objects.all()
 
 
 class CreateCartView(APIView):
-    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = ShopifyBooking.objects.all()
 
