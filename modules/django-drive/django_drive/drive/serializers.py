@@ -9,6 +9,9 @@ class FileListSerializer(serializers.Serializer):
 
 class CreateFolderSerializer(serializers.Serializer):
     folder_name = serializers.CharField(required=True)
+    share_with = serializers.ListField(
+        child=serializers.EmailField()
+    )
 
 
 class UploadFileSerializer(serializers.Serializer):
