@@ -1,0 +1,210 @@
+from unittest import mock
+from six import BytesIO
+from PIL import Image
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+from rest_framework.exceptions import ErrorDetail
+from rest_framework.test import APITestCase
+from rest_framework import status
+
+
+class DriveViewSet(APITestCase):
+
+    def setUp(self):
+        self.service_patch = mock.patch("modules.django_drive.drive.services.DriveService.service_account")
+        self.service_patch.start()
+
+    def tearDown(self):
+        self.service_patch.stop()
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.get_drive_files')
+    def test_file_list(self, get_drive_files_mock):
+        response = {
+            'nextPageToken': '~!!~AI9FV7QcFlFenPMVuUpioIZ47Q51oo3DuA8SODOW1qPzbonpwrbrsqRDHWms_JGU2blmD_1b6_5-R-rWMfBZ3iLmbS2OqhO_YNkE9R3-O78azeoGxVMPVENmrCjKjicPrvT4h30JkCwMwo1VXPRyhuNm7dD0QDEjlwZ_LGwCq2nH3rQQWyTYm3jHwjYT5XzyyhiRHQSFPfmPaRsdPljKgJXccJosJJ4HCfaqtwH2imga-6niPIeulG-fKoAa_2a9E-6CKcnjPKf8YbwmCbziPSDMwbK5ykg0ecGHZUSjKUfq67eDObVMnYFQp4OgVzCinnhvDG4tdtCg',
+            'kind': 'drive#fileList', 'incompleteSearch': False, 'files': [
+                {
+                    'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder',
+                    'id': '11DbTJ0MwSVBm5E58QvKDpdwfvHyLaUV3',
+                    'name': 'new demo folder'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'application/vnd.google-apps.folder',
+                    'id': '1GWtdRC1HKTi1DI_UxcC9FGQWr6Prsleb',
+                    'name': 'Django s3 file uploader'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'text/x-python',
+                    'id': '18Rkq9Rcl-73pmZHl72I2uEmjqOs8MFLj',
+                    'name': 'tests.py'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'application/vnd.google-apps.folder',
+                    'id': '1i4byEyvW3L_H6T4DciveU0hpZWhyrx1W',
+                    'name': ' Boys Solo'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'image/jpeg',
+                    'id': '1gkW4Oo6XXs07YNksgIwXVHupPulemoyP',
+                    'name': 'IMG_9634.JPG'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'image/jpeg',
+                    'id': '1DKqW0OGU3jirSlAuJ66p0_bopUxehwJp',
+                    'name': 'IMG_9513.JPG'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'image/jpeg',
+                    'id': '1D8_Vwcseg-GcMd3PZdm5AD1q_Q6OktHe',
+                    'name': 'LN1A9245.JPG'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'image/jpeg',
+                    'id': '13hfkpXKK9WVRXr5ADIbTEWdqvd-E3JOJ',
+                    'name': 'LN1A9241.JPG'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'image/jpeg',
+                    'id': '1hjzoGzJpEKAOTv-WKgGxFf67LX9RKtoO',
+                    'name': 'LN1A8466.JPG'
+                },
+                {
+                    'kind': 'drive#file',
+                    'mimeType': 'text/x-python',
+                    'id': '1w6WLZjAqatERR4ehoO797z272YLMAH1y',
+                    'name': 'tests.py'
+                }
+            ]
+        }
+        get_drive_files_mock.return_value = response
+        Response = self.client.get(reverse('drive_service-file-list'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data['nextPageToken'], response['nextPageToken'])
+        self.assertEqual(Response.data['files'][3], response['files'][3])
+        self.assertEqual(Response.data, response)
+        get_drive_files_mock.assert_called_once()
+        get_drive_files_mock.assert_called_once_with()
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.get_drive_files')
+    def test_file_list_with_params(self, get_drive_files_mock):
+        response = {'nextPageToken': '~!!~AI9FV7SzTN2opq6UazNdbWMzlab5cjjEYTHke6sNAcve8aCeO3ptJUCUZA-QmhNMCIkkgScqG-xKG-JYLQ8-CO65hNk9TMEdQBBhZzBe8SG9wTZC0AjAXttdp4mkgPs_RQwof3EU10vgVk5Z4Oxv6WLALN-TINJ8ee8AtHPjWUGak_Vr95AzyMTEl4ELICKeCy3VOLSH8HYoF3560DjXtsArqAZm6qNem1-Ew0wktYwsBXr14pzvXH_SoePTg-9VzxTOslOT1ALoDh5aM15VovONt9qDTwqP_DGb7AgdLmcXalBTtsifrGtbuxpU5S8ywbHh7M-0VKNd', 'kind': 'drive#fileList', 'incompleteSearch': False, 'files': [{'kind': 'drive#file', 'mimeType': 'image/png', 'id': '1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU', 'name': 'Screenshot from 2023-01-16 17-23-53.png'}, {'kind': 'drive#file', 'mimeType': 'image/png', 'id': '1CYAgNsNV82XE4cXdg6ufmuyK3-aG5QyR', 'name': 'Screenshot from 2023-01-11 21-52-16.png'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1W2dosIademgF4PSIQQ0UmvGaMMkSRFwa', 'name': 'demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1wpEhAIoBpi00GHSDG-M_HU0Xr7ATW6xK', 'name': 'demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '10hBRZ5NPnzQRIEyJD5rRW5sW5FHYBdoj', 'name': 'demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '11DbTJ0MwSVBm5E58QvKDpdwfvHyLaUV3', 'name': 'new demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1GWtdRC1HKTi1DI_UxcC9FGQWr6Prsleb', 'name': 'Django s3 file uploader'}, {'kind': 'drive#file', 'mimeType': 'text/x-python', 'id': '18Rkq9Rcl-73pmZHl72I2uEmjqOs8MFLj', 'name': 'tests.py'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1i4byEyvW3L_H6T4DciveU0hpZWhyrx1W', 'name': ' Boys Solo'}, {'kind': 'drive#file', 'mimeType': 'image/jpeg', 'id': '1gkW4Oo6XXs07YNksgIwXVHupPulemoyP', 'name': 'IMG_9634.JPG'}]}
+        get_drive_files_mock.return_value = response
+        params = {'page_size': 10}
+        Response = self.client.get(reverse('drive_service-file-list'), params, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data['nextPageToken'], response['nextPageToken'])
+        self.assertEqual(Response.data['files'][3], response['files'][3])
+        self.assertEqual(Response.data, response)
+        get_drive_files_mock.assert_called_once()
+        get_drive_files_mock.assert_called_once_with(page_size='10')
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.get_drive_files')
+    def test_file_list_with_exception(self, get_drive_files_mock):
+        get_drive_files_mock.side_effect = Exception()
+        Response = self.client.get(reverse('drive_service-file-list'))
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        get_drive_files_mock.assert_called_once()
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.share_drive_file')
+    def test_share_file(self, share_drive_file_mock):
+        response = {
+            'id': '1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU',
+            'name': 'Screenshot from 2023-01-16 17-23-53.png',
+            'webViewLink': 'https://drive.google.com/file/d/1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU/view?usp=drivesdk'
+        }
+        share_drive_file_mock.return_value = response
+        data = {
+            "file_id": "1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU",
+            "role": "reader",
+            "user_type": "user",
+            "emails": ["demomodule.123@gmail.com"]
+        }
+        Response = self.client.post(reverse('drive_service-share-file'), data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data['id'], data['file_id'])
+        self.assertEqual(Response.data['name'], response['name'])
+        share_drive_file_mock.assert_called_once()
+        share_drive_file_mock.assert_called_once_with(file_id='1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU', role='reader', user_type='user', emails=['demomodule.123@gmail.com'])
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.share_drive_file')
+    def test_share_file_without_file_id(self, share_drive_file_mock):
+        response = {'file_id': [ErrorDetail(string='This field is required.', code='required')]}
+        share_drive_file_mock.return_value = response
+        data = {
+            "role": "reader",
+            "user_type": "user",
+            "emails": ["demomodule.123@gmail.com"]
+        }
+        Response = self.client.post(reverse('drive_service-share-file'), data)
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.create_drive_folder')
+    def test_create_folder(self, create_drive_folder_mock):
+        response = {'id': '1wpEhAIoBpi00GHSDG-M_HU0Xr7ATW6xK',
+                    'name': 'demo folder',
+                    'mimeType': 'application/vnd.google-apps.folder',
+                    'webViewLink': 'https://drive.google.com/drive/folders/1wpEhAIoBpi00GHSDG-M_HU0Xr7ATW6xK'
+                    }
+        create_drive_folder_mock.return_value = response
+        data = {
+            "folder_name": "demo folder"
+        }
+        Response = self.client.post(reverse('drive_service-create-folder'), data=data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        create_drive_folder_mock.assert_called_once()
+        create_drive_folder_mock.assert_called_once_with(folder_name='demo folder')
+
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.create_drive_folder')
+    def test_create_drive_folder_without_folder_name(self, create_drive_folder_mock):
+        response = {'folder_name': [ErrorDetail(string='This field is required.', code='required')]}
+        create_drive_folder_mock.return_value = response
+        data = {
+        }
+        Response = self.client.post(reverse('drive_service-create-folder'), data=data)
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.upload_drive_file')
+    def test_upload_file(self, upload_drive_file_mock):
+        response = {
+            'id': '1CYAgNsNV82XE4cXdg6ufmuyK3-aG5QyR'
+        }
+        upload_drive_file_mock.return_value = response
+        image = BytesIO()
+        Image.new('RGB', (100, 100)).save(image, 'JPEG')
+        image.seek(0)
+        image_1 = SimpleUploadedFile('image.JPG', image.getvalue())
+        data = {
+            "file": image_1,
+            "parent_folder_id": "1DSzRQXubwWXtcUddzdIgwnLetWQzcbpf"
+
+        }
+        Response = self.client.post(reverse('drive_service-upload-file'), data=data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data['id'], response['id'])
+        upload_drive_file_mock.assert_called_once()
+
+    @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.upload_drive_file')
+    def test_upload_file_without_file(self, upload_drive_file_mock):
+        response = {
+            'file': [
+                ErrorDetail(string='No file was submitted.',
+                            code='required')
+            ]
+        }
+        upload_drive_file_mock.return_value = response
+        image = BytesIO()
+        Image.new('RGB', (100, 100)).save(image, 'JPEG')
+        image.seek(0)
+        data = {
+            "parent_folder_id": "1DSzRQXubwWXtcUddzdIgwnLetWQzcbpf"
+        }
+        Response = self.client.post(reverse('drive_service-upload-file'), data=data)
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
