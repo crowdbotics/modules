@@ -64,7 +64,7 @@ const AddCardDetailsScreen = (params) => {
               style={styles.input}
               onChangeText={(text) => setAddress1(text)}
               value={address1}
-              placeholder="Enter your Adress"
+              placeholder="Enter your Address"
               placeholderTextColor="#9B9B9B"
               autoCapitalize="none"
               autoCorrect={false}
