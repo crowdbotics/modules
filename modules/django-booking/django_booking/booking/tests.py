@@ -1,18 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
-from rest_framework.utils import json
-
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
 
 User = get_user_model()
 
 
 class BookingTestCase(APITestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
@@ -83,7 +79,6 @@ class BookingTestCase(APITestCase):
 
 
 class BookingPlanTestCase(APITestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
@@ -152,7 +147,6 @@ class BookingPlanTestCase(APITestCase):
 
 
 class BookingPenaltyTestCase(APITestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
@@ -221,7 +215,6 @@ class BookingPenaltyTestCase(APITestCase):
 
 
 class BookingDetailTestCase(APITestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
@@ -317,7 +310,6 @@ class BookingDetailTestCase(APITestCase):
 
 
 class CreateBookingTestCase(APITestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
@@ -403,7 +395,6 @@ class CreateBookingTestCase(APITestCase):
 
 
 class CreateCartTestCase(APITestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
@@ -413,17 +404,40 @@ class CreateCartTestCase(APITestCase):
         self.shopify_booking = ShopifyBooking.objects.create(user=self.user,
                                                              shopify_cart_id="cart")
 
-    # def test_create_cart(self):
-    #     data = {
-    #         "user": self.user.id,
-    #         "shopify_cart_id": self.load["data"]["cartCreate"]["cart"]["id"]
-    #     }
-    #     response = self.client.post('/modules/booking/shopify/booking/', data)
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    #
-    # def test_get_cart(self):
-    #     response = self.client.get('/modules/booking/shopify/booking/')
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+    def test_create_cart(self):
+        data = {
+            "lines": [
+                {
+                    "quantity": 1,
+                    "merchandiseId": "gid://shopify/ProductVariant/44073461448998",
+                    "attributes": {"key": "address", "value": "Bahawalpur, punjab, pakistan"}
+                },
+                {
+                    "quantity": 1,
+                    "merchandiseId": "gid://shopify/ProductVariant/44078117323046",
+                    "attributes": {"key": "address", "value": "Rahimyar khan, punjab, pakistan"}
+                }
+
+            ],
+            "attributes": {"key": "address", "value": "Bahawalpur, punjab, pakistan"}
+        }
+        response = self.client.post('/modules/booking/shopify/booking/', data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_cart_without_data(self):
+        response = self.client.post('/modules/booking/shopify/booking/')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_cart(self):
+        params = {
+            "cartId": "gid://shopify/Cart/1f049996d99edb9cab92d43e725d28ec"
+        }
+        response = self.client.get('/modules/booking/shopify/booking/', params)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_cart_without_params(self):
+        response = self.client.get('/modules/booking/shopify/booking/')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_str_is_equal_to_shopify_cart_id(self):
         """

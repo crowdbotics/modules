@@ -7,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer, BookingCreateSerializer
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
-from demo import settings
 import requests
 import os
 
@@ -21,11 +20,15 @@ class BookingView(ModelViewSet):
 
 class BookingPlanView(ModelViewSet):
     serializer_class = BookingPlanSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = BookingPlan.objects.all()
 
 
 class BookingPenaltyView(ModelViewSet):
     serializer_class = BookingPenaltySerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = BookingPenalty.objects.all()
 
 
@@ -90,7 +93,7 @@ class CreateCartView(APIView):
                     "lines": request.data["lines"]
                 }
             }
-            req = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + 'api/2022-10/graphql.json/', json=payload,
+            req = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
                                 headers={"X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
                                          "Content-Type": "application/json"})
             load = json.loads(req.text)
@@ -104,7 +107,8 @@ class CreateCartView(APIView):
         """
         Using the cart query to retrieve a cart stored on Shopify.
         In the query, supplying the cart ID as input."""
-        try:
+        cartId = self.request.query_params.get('cartId', None)
+        if cartId is not None:
             query = """query cart($cartId: ID!){
               cart(
                 id: $cartId
@@ -134,12 +138,11 @@ class CreateCartView(APIView):
             payload = {
                 "query": query,
                 "variables": {
-                    "cartId": request.data["cartId"]
+                    "cartId": cartId
                 }
             }
             r = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
                               headers={"X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
                                        "Content-Type": "application/json"})
             return Response(json.loads(r.text), status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "cartId is not null"}, status=status.HTTP_400_BAD_REQUEST)
