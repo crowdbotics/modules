@@ -201,7 +201,7 @@ const MeetingsList = () => {
       <Input
         text="Search"
         placeholder="Search"
-        value={seacrhText}
+        value={searchText}
         onChange={setSearchText}
         icon={require("./assets/searchIcon.png")}
         containerStyle={styles.input}
