@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 const MeetingsList = () => {
-  const [seacrhText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [meetings, setMeetings] = useState([]);
   useEffect(() => {
     setMeetings([
