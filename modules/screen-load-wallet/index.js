@@ -328,7 +328,7 @@ const buttonStyles = StyleSheet.create({
 });
 
 const format = (value, currency, precision) => {
-  const parts = value && value.toFixed(precesion).toString().split(".");
+  const parts = value && value.toFixed(precision).toString().split(".");
   if (parts) {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     switch (currency) {
