@@ -4,6 +4,9 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from .serializers import TokenSerializer, DealSerializer, DealAssociationSerializer, TicketSerializer, EventSerializer, \
+    TicketAssociationSerializer
 from .services.HubspotService import HubspotService
 
 
@@ -17,18 +20,30 @@ class HubspotViewSet(viewsets.GenericViewSet):
         access_token=os.getenv('HUBSPOT_ACCESS_TOKEN', ""),
     )
 
+    allowed_serializer = {"get_token": TokenSerializer,
+                          "create_deal": DealSerializer,
+                          "create_deal_association": DealAssociationSerializer,
+                          "create_ticket": TicketSerializer,
+                          "create_ticket_association": TicketAssociationSerializer,
+                          "create_event": EventSerializer}
+
+    def get_serializer_class(self):
+        return self.allowed_serializer.get(self.action)
+
     @action(detail=False, methods=['post'], url_path='access/token')
     def get_token(self, request):
         """
         To get the access token
         :return: Returns access_token, refresh_token and expires_in.
         """
-        response = self.hubspot_service.auth_token(request.data.get('code'))
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.hubspot_service.auth_token(serializer.data)
         data = response.get("data")
         if 'access_token' in data:
             self.hubspot_service.access_token = data['access_token']
         return Response(data=data, status=response.get("status_code"))
-        
+
     @action(detail=False, methods=['get'], url_path='deals/list')
     def deals_list(self, request):
         """
@@ -52,44 +67,46 @@ class HubspotViewSet(viewsets.GenericViewSet):
             pipeline
         :return: Returns a newly created deal.
         """
-        response = self.hubspot_service.create_deal(request.data.get("deal"))
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.hubspot_service.create_deal(serializer.data)
         if "associations" in request.data:
-            emails = request.data.get('associations', {}).get("emails")
+            emails = request.data.get('associations', {}).get("emails", [])
             deal_id = response.get("data").get("id")
             self.hubspot_service.create_deal_contact_association(emails, deal_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['delete'], url_path='deals/remove')
-    def remove_deal(self, request):
+    @action(detail=True, methods=['delete'], url_path='deals/remove')
+    def remove_deal(self, request, pk):
         """
         To delete a deal
         :param str dealId:  HubSpot deal id to delete the deal.
         :return: Removes the deal from hubspot and returns no content.      
         """
-        response = self.hubspot_service.remove_deal(request.data.get('dealId'))
+        response = self.hubspot_service.remove_deal(dealId=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='deals/single')
-    def single_deal(self, request):
+    @action(detail=True, methods=['get'], url_path='deals/single')
+    def single_deal(self, request, pk):
         """
         To retrieve a deal
         :param str dealId:  HubSpot deal id to retrieve the deal.
         :return: Returns a deal object with properties.       
         """
-        response = self.hubspot_service.single_deal(request.query_params.get('dealId'))
+        response = self.hubspot_service.single_deal(dealId=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    # deal associations
     @action(detail=False, methods=['post'], url_path='deals/associations/create')
     def create_deal_association(self, request):
         """
         To create a deal association
         :params
         dealId
-        associationId
-        associationType
+        contacts emails list
         :return: Returns a newly created deal association.
         """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         deal_id = request.data.get('dealId')
         emails = request.data.get('emails')
         response = self.hubspot_service.create_deal_contact_association(emails, deal_id)
@@ -104,7 +121,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         To get all the tickets'
         :return: Returns a list of HobSpot tickets.
         """
-     
+
         response = self.hubspot_service.ticket_list()
         return Response(data=response.get("data"), status=response.get("status_code"))
 
@@ -122,27 +139,29 @@ class HubspotViewSet(viewsets.GenericViewSet):
             content
         :return: Returns a newly created ticket object.
         """
-        response = self.hubspot_service.create_ticket(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.hubspot_service.create_ticket(serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['delete'], url_path='tickets/remove')
-    def remove_ticket(self, request):
+    @action(detail=True, methods=['delete'], url_path='tickets/remove')
+    def remove_ticket(self, request, pk):
         """
         To delete a ticket
         :param str ticketId:  HubSpot ticket id to delete the ticket.
         :return: Removes the ticket from hubspot and returns no content.      
         """
-        response = self.hubspot_service.remove_ticket(request.data.get('ticketId'))
+        response = self.hubspot_service.remove_ticket(ticketId=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='tickets/single')
-    def single_ticket(self, request):
+    @action(detail=True, methods=['get'], url_path='tickets/single')
+    def single_ticket(self, request, pk):
         """
         To retrieve a ticket
         :param str ticketId:  HubSpot ticket id to retrieve the ticket.
         :return: Returns a ticket object containing ticket detail.       
         """
-        response = self.hubspot_service.single_ticket(request.query_params.get('ticketId'))
+        response = self.hubspot_service.single_ticket(ticketId=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['put'], url_path='ticket/associations/create')
@@ -162,7 +181,9 @@ class HubspotViewSet(viewsets.GenericViewSet):
         }
         :return: Returns a ticket associated with other HubSpot objects.
         """
-        response = self.hubspot_service.create_ticket_association(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.hubspot_service.create_ticket_association(serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='ticket/associations/list')
@@ -173,27 +194,27 @@ class HubspotViewSet(viewsets.GenericViewSet):
         :param str toObjectType: Type of the CRM object to with ticket is being associated
         :return: Returns a ticket associated with other HubSpot objects.
         """
-        response = self.hubspot_service.ticket_association_list(request.query_params.get('ticketId'), request.query_params.get('toObjectType'))
+        response = self.hubspot_service.ticket_association_list(request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='contact/deals/list')
-    def contact_deals_association_list(self, request):
+    @action(detail=True, methods=['get'], url_path='contact/deals/list')
+    def contact_deals_association_list(self, request, pk):
         """
         To get a contact associated with other HubSpot deals
         :param str contactId: HubSpot contact id associated with a CRM deals object
         :return: Returns a contact associated with other HubSpot deals.
         """
-        response = self.hubspot_service.contact_deals_association_list(request.query_params.get('contactId'))
+        response = self.hubspot_service.contact_deals_association_list(contactId=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='meeting/contacts/list')
-    def meeting_contacts_association_list(self, request):
+    @action(detail=True, methods=['get'], url_path='meeting/contacts/list')
+    def meeting_contacts_association_list(self, request, pk):
         """
         To get a meeting associated with other HubSpot contacts.
         :param str meetingId: HubSpot meeting id associated with a CRM contact object
         :return: Returns a meeting associated with other HubSpot contacts.
         """
-        response = self.hubspot_service.meeting_contact_association_list(request.query_params.get('meetingId'))
+        response = self.hubspot_service.meeting_contact_association_list(meetingId=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='events/create')
@@ -214,7 +235,9 @@ class HubspotViewSet(viewsets.GenericViewSet):
                 externalEventId
         :return: Returns a newly created event.
         """
-        response = self.hubspot_service.create_event(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.hubspot_service.create_event(serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='webhook')
@@ -225,3 +248,4 @@ class HubspotViewSet(viewsets.GenericViewSet):
         """
         response = self.hubspot_service.webhook(request.data)
         return Response(data=response, status=status.HTTP_200_OK)
+
