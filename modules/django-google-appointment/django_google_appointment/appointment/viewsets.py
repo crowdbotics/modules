@@ -1,7 +1,6 @@
-import os
-
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .serializers import EventsListSerializer, MeetingSerializer, MeetingListSerializer
@@ -28,7 +27,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     def get_serializer_class(self):
         return self.allowed_serializers.get(self.action, EventsListSerializer)
 
-    @action(detail=False, methods=['get'], url_path='appointment/list')
+    @action(detail=False, methods=['get'], url_path='appointment-list')
     def appointment_list(self, request):
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
@@ -39,7 +38,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['get'], url_path='appointment/single')
+    @action(detail=True, methods=['get'], url_path='appointment-single')
     def single_appointment(self, request, pk):
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
@@ -48,7 +47,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'], url_path='appointment/create')
+    @action(detail=False, methods=['post'], url_path='appointment-create')
     def create_appointment(self, request):
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
@@ -57,7 +56,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['delete'], url_path='appointment/remove')
+    @action(detail=True, methods=['delete'], url_path='appointment-remove')
     def delete_appointment(self, request, pk):
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
@@ -66,7 +65,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'], url_path='appointment/sync')
+    @action(detail=False, methods=['post'], url_path='appointment-sync')
     def sync_appointment(self, request):
         try:
             query = {
@@ -81,12 +80,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['get'], url_path='appointment/synced/list')
+    @action(detail=False, methods=['get'], url_path='appointment-synced-list', permission_classes=[IsAuthenticated])
     def synced_appointment_list(self, request):
-        try:
-            serializer = MeetingListSerializer(Meetings.objects.all(), many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
-
+        serializer = MeetingListSerializer(Meetings.objects.all(), many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
