@@ -175,10 +175,10 @@ class CalendlyService(CalendlyBase):
         except Exception as e:
             return e
 
-    def cancel_schedule_event(self, uuid):
+    def cancel_schedule_event(self, uuid, data):
         try:
             url = f"{self.CALENDLY_BASE_URL}/scheduled_events/{uuid}/cancellation"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header())
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=data)
             return response
         except Exception as e:
             return e
