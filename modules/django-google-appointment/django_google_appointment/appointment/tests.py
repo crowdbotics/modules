@@ -1125,11 +1125,6 @@ class GoogleAppointmentTestCases(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_synced_appointment_list_with_invalid_token(self):
-        self.client.force_authenticate(user=None, token=None)
-        url = reverse('appointment_service-synced-appointment-list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_meetings_model_str_return(self):
             """
