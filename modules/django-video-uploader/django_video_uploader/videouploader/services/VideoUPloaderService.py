@@ -54,10 +54,10 @@ class VideoUploaderService(VideoUploaderBase):
         except Exception as e:
             return e
 
-    def channel_list(self):
+    def channel_list(self, query_params):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            response = self._api_call(request_type="GET", url=url, data=query_params, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -102,18 +102,18 @@ class VideoUploaderService(VideoUploaderBase):
         except Exception as e:
             return e
 
-    def add_user_to_group(self, group_id, user_id, payload):
+    def add_user_to_group(self, group_id, user_id):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/groups/{group_id}'
-            response = self._api_call(request_type="PUT", url=url, payload=payload, headers=self.get_header())
+            response = self._api_call(request_type="PUT", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e
 
-    def add_video_to_group(self, group_id, video_id, payload):
+    def add_video_to_group(self, group_id, video_id):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/groups/{group_id}/videos/{video_id}'
-            response = self._api_call(request_type="PUT", url=url, payload=payload, headers=self.get_header())
+            response = self._api_call(request_type="PUT", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -142,10 +142,10 @@ class VideoUploaderService(VideoUploaderBase):
         except Exception as e:
             return e
 
-    def showcase_list(self, user_id):
+    def showcase_list(self, user_id, query_params):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/albums'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            response = self._api_call(request_type="GET", url=url, data=query_params,  headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -191,10 +191,10 @@ class VideoUploaderService(VideoUploaderBase):
         except Exception as e:
             return e
 
-    def folder_list(self, user_id):
+    def folder_list(self, user_id, query_params):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/projects'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            response = self._api_call(request_type="GET", url=url, data=query_params, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -232,10 +232,42 @@ class VideoUploaderService(VideoUploaderBase):
         except Exception as e:
             return e
 
+    def create_video(self, payload):
+        try:
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/me/videos'
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def update_video(self, video_id, payload):
+        try:
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/videos/{video_id}'
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(), payload=payload)
+            return response
+        except Exception as e:
+            return e
+
     def user_video_list(self, user_id):
         try:
-            url = f'{self.VIDEO_UPLOADER_BASE_URL}users/{user_id}/videos'
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/videos'
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            return response
+        except Exception as e:
+            return e
+
+    def like_video(self, user_id, video_id):
+        try:
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/likes/{video_id}'
+            response = self._api_call(request_type="PUT", url=url, headers=self.get_header())
+            return response
+        except Exception as e:
+            return e
+
+    def unlike_video(self, user_id, video_id):
+        try:
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/likes/{video_id}'
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e
