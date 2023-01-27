@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_django_ocr",
     version="0.1",
-    packages=['boto3', 'tesserocr', 'google-cloud-vision'],
-    install_requires=[],
+    packages=[],
+    install_requires=['boto3', 'tesserocr', 'google-cloud-vision'],
     cmdclass={"build": BuildCommand},
 )

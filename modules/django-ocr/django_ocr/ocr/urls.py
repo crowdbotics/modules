@@ -6,9 +6,9 @@ from .viewsets import TextractOCRViewSet, TesserOCRViewSet, GoogleOCRViewSet
 
 
 router = DefaultRouter()
-router.register("textract-ocr", TextractOCRViewSet, basename="text_ocr")
-router.register("tesser-ocr", TesserOCRViewSet, basename="tesser_ocr")
-router.register("google-ocr", GoogleOCRViewSet, basename="google_ocr")
+router.register("aws", TextractOCRViewSet, basename="aws_textract_ocr")
+router.register("tesser", TesserOCRViewSet, basename="tesser_ocr")
+router.register("google", GoogleOCRViewSet, basename="google_ocr")
 
 urlpatterns = [
     path("", include(router.urls)),

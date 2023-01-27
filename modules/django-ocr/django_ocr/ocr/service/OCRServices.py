@@ -1,5 +1,4 @@
 import boto3
-import io
 
 from google.oauth2.service_account import Credentials
 from google.cloud import vision
@@ -25,7 +24,7 @@ class GoogleVisionOCR:
             return {"data": e.args, "status_code": 400}
 
 
-class TextractOCR:
+class AWSTextractOCR:
     def __init__(self, aws_access_key_id, aws_secret_access_key, service_name, region_name):
         self.AWS_ACCESS_KEY_ID = aws_access_key_id
         self.AWS_SECRET_ACCESS_KEY = aws_secret_access_key

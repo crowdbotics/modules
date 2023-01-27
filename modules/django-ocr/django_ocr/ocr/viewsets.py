@@ -6,8 +6,8 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
 from .serializers import OCRSerializer
-from .service import OCRServices
 
+from .service.OCRServices import TesserOCR, AWSTextractOCR, GoogleVisionOCR
 
 class TextractOCRViewSet(GenericViewSet):
     """
@@ -18,12 +18,12 @@ class TextractOCRViewSet(GenericViewSet):
     """
 
     serializer_class = OCRSerializer
-    textract = OCRServices.TextractOCR(aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID', ''),
+    textract = AWSTextractOCR(aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID', ''),
                                        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY', ''),
                                        service_name=os.getenv('SERVICE_NAME', ''),
                                        region_name=os.getenv('REGION_NAME', ''))
 
-    @action(detail=False, methods=['post'], url_path='get-text')
+    @action(detail=False, methods=['post'], url_path='text')
     def get_text(self, request):
         """
         Extract text from images and return string
@@ -35,7 +35,7 @@ class TextractOCRViewSet(GenericViewSet):
         response = self.textract.textract_text_ocr(file_bytes=file_in_bytes)
         return Response(data=response, status=response.get('status_code'))
 
-    @action(detail=False, methods=['post'], url_path='get-key-values')
+    @action(detail=False, methods=['post'], url_path='json')
     def get_key_value(self, request):
         """
         Extract text from image that contains tables and forms and return key value pairs
@@ -55,10 +55,9 @@ class GoogleOCRViewSet(GenericViewSet):
     """
 
     serializer_class = OCRSerializer
-    google_ocr = OCRServices.\
-        GoogleVisionOCR(credentials_path=os.getenv('GOOGLE_VISION_CREDENTIALS_PATH', ''))
+    google_ocr = GoogleVisionOCR(credentials_path=os.getenv('GOOGLE_VISION_CREDENTIALS_PATH', ''))
 
-    @action(detail=False, methods=['post'], url_path='get-text-from-image')
+    @action(detail=False, methods=['post'], url_path='text')
     def get_text(self, request):
         """
         Extract text from images and return string
@@ -77,9 +76,9 @@ class TesserOCRViewSet(GenericViewSet):
     - get_text :  Extract text from image with good quality
     """
     serializer_class = OCRSerializer
-    tesser_ocr = OCRServices.TesserOCR()
+    tesser_ocr = TesserOCR()
 
-    @action(detail=False, methods=['post'], url_path='get-text')
+    @action(detail=False, methods=['post'], url_path='text')
     def get_text(self, request):
         """
             Extract text from image with good quality. Unable to provide consistent result.
