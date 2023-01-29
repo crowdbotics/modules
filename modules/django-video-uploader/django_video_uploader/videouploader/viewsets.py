@@ -5,8 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import (ChannelSerializer, GroupSerializer, ShowcaseSerializer,
-                          UpdateShowcaseSerializer, FolderSerializer, CreateVideoSerializer, EditVideoSerializer)
+                          UpdateShowcaseSerializer, FolderSerializer, CreateVideoSerializer, EditVideoSerializer,
+                          TokenSerializer)
 from .services.VideoUPloaderService import VideoUploaderService
+import base64
 
 
 class VideoUploaderViewSet(viewsets.GenericViewSet):
@@ -24,16 +26,42 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         "create_folder": FolderSerializer,
         "update_folder": FolderSerializer,
         "create_video": CreateVideoSerializer,
-        "update_video": EditVideoSerializer
+        "update_video": EditVideoSerializer,
+        "create_access_token": TokenSerializer,
     }
 
     def get_serializer_class(self):
         return self.allowed_serializer.get(self.action)
 
+    @staticmethod
+    def convert_into_base64():
+        client_id = os.getenv('VIDEO_UPLOADER_CLIENT_ID', "")
+        client_secret = os.getenv('VIDEO_UPLOADER_CLIENT_SECRET', "")
+        token = client_id+':'+client_secret
+        byte_token = base64.b64encode(bytes(token, 'utf-8'))
+        return byte_token.decode('utf-8')
+
+
+    @action(detail=False, methods=['post'], url_path='access-token')
+    def create_access_token(self, request):
+        """
+        To get the access token
+        :return: Returns access_token.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.video_uploader_service.create_access_token(payload=serializer.data, token=self.convert_into_base64())
+        data = response.get("data")
+        if 'access_token' in data:
+            self.video_uploader_service.access_token = data['access_token']
+        return Response(data=data, status=response.get("status_code"))
+
+
     @action(detail=False, methods=['post'], url_path='channel/create')
     def create_channel(self, request):
         """
         To create a channel
+
         :body_params str name: Name of the channel
         :body_params str description: Description of the channel
         :body_params str(uri) link: The link to access the channel
@@ -62,7 +90,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int channel_id: ID of the channel to be updated
         :body_params str name:Name of the Chanel
         :body_params str description: Description of the channel
-       :body_params str(uri) link: The link to access the channel
+        :body_params str(uri) link: The link to access the channel
         :body_params str privacy: The privacy level of the channel. Allowed values are (anybody, moderators, user)
         :return: Returns updated channel.
         """
@@ -101,6 +129,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def create_group(self, request):
         """
         To create a group
+
         :body_params str name: Name of the group
         :body_params str description: Description for the group
         :return: Returns newly created group.
@@ -114,6 +143,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def delete_group(self, request, pk):
         """
         To delete an existing group
+
         :path_params int group_id: ID specified to the group
         :return: Returns no content.
         """
@@ -124,6 +154,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def group_list(self, request):
         """
         To get all the groups
+
         :query_params str direction: Direction can be (asc/desc)
         :query_params str filter: Any feature of the channel can be used as filter
         :query_params int page: page number to get the specific groups from a page
@@ -140,6 +171,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def specific_group(self, request, pk):
         """
         To get a specific group
+
         :path_params int group_id: ID specified to the group
         :return: Returns a specific group.
         """
@@ -150,6 +182,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def add_user_to_group(self, request, pk, user_id):
         """
         To add a user to a group
+
         :path_params int group_id: ID specified to the group
         :path_params int user_id: ID specified to the user
         :return:  joined the group. Returns no content
@@ -161,6 +194,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def add_video_to_group(self, request, pk, video_id):
         """
         To add a video to a group
+
         :path_params int group_id: ID specified to the group
         :path_params int video_id: ID specified to the video
         :return:  was added. Returns OK
@@ -172,6 +206,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def create_showcase(self, request, pk):
         """
         To create a showcase
+
         :path_params int user_id: ID specified to the user
         :body_params str brand_color: The hexadecimal code for the color of the player buttons and showcase controls
         :body_params str description: The description of the showcase
@@ -195,6 +230,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def delete_showcase(self, request, pk, album_id):
         """
         To delete an existing showcase
+
         :path_params int user_id: ID specified to the user
         :path_params int album_id: ID specified to the album
         :return: Returns no content.
@@ -206,6 +242,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def update_showcase(self, request, pk, album_id):
         """
         To update/edit an existing showcase
+
         :path_params int user_id: ID specified to the user
         :path_params int album_id: ID specified to the album
         :body_params str brand_color: The hexadecimal code for the color of the player buttons and showcase controls
@@ -232,6 +269,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def showcase_list(self, request, pk):
         """
         To get all the showcase
+
         :path_params int user_id: ID specified to the user
         :query_params str direction: Direction can be (asc/desc)
         :query_params int page: page number to get the specific showcases from a page
@@ -241,7 +279,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
          relevant, videos`
         :return: Returns all showcase list.
         """
-        response = self.video_uploader_service.showcase_list(user_id=pk)
+        response = self.video_uploader_service.showcase_list(user_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['get'], url_path='user/showcase/specific/(?P<album_id>[A-Za-z0-9]*)')
@@ -260,6 +298,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def add_video_to_showcase(self, request, pk, album_id, video_id):
         """
         To add a video to a showcase
+
         :path_params int user_id: ID specified to the user
         :path_params int album_id: ID specified to the album
         :path_params int video_id: ID specified to the video
@@ -287,6 +326,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def delete_folder(self, request, pk, folder_id):
         """
         To delete an existing folder
+
         :path_params int user_id: ID specified to the user
         :path_params int folder_id: ID specified to the folder
         :return: Returns no content.
@@ -298,6 +338,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def update_folder(self, request, pk, folder_id):
         """
         To update/edit an existing folder
+
         :path_params int user_id: ID specified to the user
         :path_params int folder_id: ID specified to the folder
         :body_params str name: Name for the folder
@@ -313,6 +354,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def folder_list(self, request, pk):
         """
         To get all the folder list
+
         :path_params int user_id: ID specified to the user
         :query_params str direction: Direction can be (asc/desc)
         :query_params int page: page number to get the specific folders from a page
@@ -329,6 +371,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def specific_folder(self, request, pk, folder_id):
         """
         To get a specific folder
+
         :path_params int user_id: ID specified to the user
         :path_params int folder_id: ID specified to the folder
         :return: Returns a specific folder.
@@ -341,6 +384,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def add_video_to_folder(self, request, pk, folder_id, video_id):
         """
         To add a video to a folder
+
         :path_params int user_id: ID specified to the user
         :path_params int folder_id: ID specified to the folder
         :path_params int video_id: ID specified to the video
@@ -353,6 +397,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def delete_video(self, request, pk):
         """
         To delete an existing video
+
         :path_params int video_id: ID specified to the video
         :return: Returns no content.
         """
@@ -373,6 +418,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def specific_video(self, request, pk):
         """
         To get a specific video
+
         :path_params int video_id: ID specified to the video
         :return: Returns a specific video.
         """
@@ -383,6 +429,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def create_video(self, request):
         """
         To create a video
+
         :body_params str name: Name of the video
         :body_params str description: Description of the video
         :body_params str approach: The approach by which to upload the version. Allowed approaches are (post/pull)
@@ -399,6 +446,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def update_video(self, request, pk):
         """
         To update a video
+
         :path_params int video_id: ID specified to the video
         :body_params str approach: The approach by which to upload the version. Allowed approaches are (post/pull)
         :body_params str size: The upload size of the video
@@ -415,6 +463,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def like_video(self, request, pk, video_id):
         """
         To like a video
+
         :path_params int user_id: ID specified to the user
         :path_params int video_id: ID specified to the video
         :return: Returns no content. The video was liked
@@ -427,6 +476,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def unlike_video(self, request, pk, video_id):
         """
         To unlike a video
+        
         :path_params int user_id: ID specified to the user
         :path_params int video_id: ID specified to the video
         :return: Returns no content.

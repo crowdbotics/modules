@@ -1,4 +1,5 @@
 import requests
+from rest_framework import status
 
 
 class VideoUploaderBase:
@@ -6,11 +7,11 @@ class VideoUploaderBase:
         self.VIDEO_UPLOADER_BASE_URL = base_url
         self.ACCESS_TOKEN = access_token
 
-
     def get_header(self):
         headers = {
             'Content-Type': 'application/json',
             'Authorization': f'Bearer {self.ACCESS_TOKEN}',
+            "Accept": "application/vnd.vimeo.*+json;version=3.4",
         }
         return headers
 
@@ -30,17 +31,30 @@ class VideoUploaderBase:
 
 class VideoUploaderService(VideoUploaderBase):
 
+    def create_access_token(self, token, payload):
+        try:
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/oauth/authorize/client'
+            header = {
+                "Authorization": f'basic {token}',
+                'Content-Type': 'application/json',
+                "Accept": "application/vnd.vimeo.*+json;version=3.4",
+            }
+            response = self._api_call(request_type="POST", url=url, headers=header, payload=payload)
+            return response
+        except Exception as e:
+            return e
+
     def create_channel(self, payload):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels'
-            response = self._api_call(request_type="POST", url=url, data=payload, headers=self.get_header())
+            response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
             return e
 
     def delete_channel(self, channel_id):
         try:
-            url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels{channel_id}'
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels/{channel_id}'
             response = self._api_call(request_type="DELETE", url=url, headers=self.get_header())
             return response
         except Exception as e:
@@ -48,7 +62,7 @@ class VideoUploaderService(VideoUploaderBase):
 
     def update_channel(self, channel_id, payload):
         try:
-            url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels{channel_id}'
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels/{channel_id}'
             response = self._api_call(request_type="PATCH", url=url, data=payload, headers=self.get_header())
             return response
         except Exception as e:
@@ -64,7 +78,7 @@ class VideoUploaderService(VideoUploaderBase):
 
     def specific_channel(self, channel_id):
         try:
-            url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels{channel_id}'
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/channels/{channel_id}'
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
@@ -73,7 +87,7 @@ class VideoUploaderService(VideoUploaderBase):
     def create_group(self, payload):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/groups'
-            response = self._api_call(request_type="POST", url=url, data=payload, headers=self.get_header())
+            response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -105,8 +119,11 @@ class VideoUploaderService(VideoUploaderBase):
     def add_user_to_group(self, group_id, user_id):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/groups/{group_id}'
-            response = self._api_call(request_type="PUT", url=url, headers=self.get_header())
-            return response
+            response = requests.request(request_type="PUT", url=url, headers=self.get_header())
+            response.raise_for_status()
+            if response.status_code == 204:
+                return {"data": {"message": "The user ws added to group."}, "status_code": status.HTTP_200_OK}
+            return {"data": response.json(), "status_code": response.status_code}
         except Exception as e:
             return e
 
@@ -121,7 +138,7 @@ class VideoUploaderService(VideoUploaderBase):
     def create_showcase(self, user_id, payload):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/albums'
-            response = self._api_call(request_type="POST", url=url, data=payload, headers=self.get_header())
+            response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -137,7 +154,7 @@ class VideoUploaderService(VideoUploaderBase):
     def update_showcase(self, user_id, album_id, payload):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/albums/{album_id}'
-            response = self._api_call(request_type="PATCH", url=url, data=payload, headers=self.get_header())
+            response = self._api_call(request_type="PATCH", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -145,7 +162,7 @@ class VideoUploaderService(VideoUploaderBase):
     def showcase_list(self, user_id, query_params):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/albums'
-            response = self._api_call(request_type="GET", url=url, data=query_params,  headers=self.get_header())
+            response = self._api_call(request_type="GET", url=url, data=query_params, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -166,11 +183,10 @@ class VideoUploaderService(VideoUploaderBase):
         except Exception as e:
             return e
 
-
     def create_folder(self, user_id, payload):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/projects'
-            response = self._api_call(request_type="POST", url=url, data=payload, headers=self.get_header())
+            response = self._api_call(request_type="POST", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -186,7 +202,7 @@ class VideoUploaderService(VideoUploaderBase):
     def update_folder(self, user_id, project_id, payload):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/projects/{project_id}'
-            response = self._api_call(request_type="PATCH", url=url, data=payload, headers=self.get_header())
+            response = self._api_call(request_type="PATCH", url=url, payload=payload, headers=self.get_header())
             return response
         except Exception as e:
             return e
@@ -201,7 +217,7 @@ class VideoUploaderService(VideoUploaderBase):
 
     def specific_folder(self, user_id, project_id):
         try:
-            url = f'{self.VIDEO_UPLOADER_BASE_URL}users/{user_id}/projects/{project_id}'
+            url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/projects/{project_id}'
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
@@ -222,7 +238,6 @@ class VideoUploaderService(VideoUploaderBase):
             return response
         except Exception as e:
             return e
-
 
     def specific_video(self, video_id):
         try:
