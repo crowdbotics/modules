@@ -29,7 +29,7 @@
     "react-native-responsive-screen": "^1.4.2",
     "react-native-elements": "^3.3.1",
     "react-native-vector-icons": "^8.1.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^17.0.0",
     "react-native-radio-buttons-group": "^2.2.11",
     "react-native-web": "^0.18.2"
   },
@@ -48,7 +48,8 @@
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.9.3",
-    "babel-plugin-react-native-web": "^0.18.2"
+    "babel-plugin-react-native-web": "^0.18.2",
+    "html-webpack-plugin": "^5.5.0"
   },
   "jest": {
     "preset": "react-native"
