@@ -1,0 +1,12 @@
+{
+  "name": "@modules/mapbox-maps",
+  "version": "1.0.0",
+  "description": "Add interactive high customized maps to your mobile app to make it easier for users to find your locations.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "@rnmapbox/maps": "rnmapbox/maps#main"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC"
+}

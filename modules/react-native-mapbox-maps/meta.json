@@ -1,0 +1,5 @@
+{
+  "title": "MapBox Maps",
+  "description": "Add interactive high customized maps to your mobile app to make it easier for users to find your locations.",
+  "root": "/modules/mapbox-maps"
+}
