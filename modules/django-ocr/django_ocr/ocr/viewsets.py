@@ -9,6 +9,7 @@ from .serializers import OCRSerializer
 
 from .service.OCRServices import TesserOCR, AWSTextractOCR, GoogleVisionOCR
 
+
 class TextractOCRViewSet(GenericViewSet):
     """
     Textract is a machine learning (ML) service by Amazon that automatically extracts text, handwriting, and data
@@ -19,9 +20,9 @@ class TextractOCRViewSet(GenericViewSet):
 
     serializer_class = OCRSerializer
     textract = AWSTextractOCR(aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID', ''),
-                                       aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY', ''),
-                                       service_name=os.getenv('SERVICE_NAME', ''),
-                                       region_name=os.getenv('REGION_NAME', ''))
+                              aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY', ''),
+                              service_name=os.getenv('SERVICE_NAME', ''),
+                              region_name=os.getenv('REGION_NAME', ''))
 
     @action(detail=False, methods=['post'], url_path='text')
     def get_text(self, request):
@@ -31,7 +32,7 @@ class TextractOCRViewSet(GenericViewSet):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        file_in_bytes = request.FILES['file'].file.getbuffer().tobytes()
+        file_in_bytes = serializer.validated_data.get('file').read()
         response = self.textract.textract_text_ocr(file_bytes=file_in_bytes)
         return Response(data=response, status=response.get('status_code'))
 
@@ -43,7 +44,7 @@ class TextractOCRViewSet(GenericViewSet):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        file_in_bytes = request.FILES['file'].file.getbuffer().tobytes()
+        file_in_bytes = serializer.validated_data.get('file').read()
         response = self.textract.textract_ocr_kv(file_bytes=file_in_bytes)
         return Response(data=response, status=response.get('status_code'))
 
@@ -65,7 +66,7 @@ class GoogleOCRViewSet(GenericViewSet):
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        image = request.FILES['file'].file.read()
+        image = serializer.validated_data.get('file').read()
         response = self.google_ocr.get_text_from_image(image_file=image)
         return Response(data=response, status=response.get('status_code'))
 
@@ -87,8 +88,9 @@ class TesserOCRViewSet(GenericViewSet):
             - Enhance Text outline in image
 
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        image = Image.open(request.FILES['file'])
+        image = Image.open(serializer.validated_data.get('file'))
         response = self.tesser_ocr.get_text(file=image)
         return Response(data=response, status=response.get('status_code'))

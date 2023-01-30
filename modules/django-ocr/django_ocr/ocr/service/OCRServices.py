@@ -1,8 +1,9 @@
 import boto3
 
+from collections import defaultdict
 from google.oauth2.service_account import Credentials
 from google.cloud import vision
-from collections import defaultdict
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
 from tesserocr import PyTessBaseAPI
 
 
@@ -19,9 +20,9 @@ class GoogleVisionOCR:
 
             response = client.text_detection(image=image)
             texts = response.text_annotations[0].description
-            return {"data": texts, "status_code": 200}
+            return {"data": texts, "status_code": HTTP_200_OK}
         except Exception as e:
-            return {"data": e.args, "status_code": 400}
+            return {"data": e.args, "status_code": HTTP_400_BAD_REQUEST}
 
 
 class AWSTextractOCR:
@@ -94,7 +95,7 @@ class AWSTextractOCR:
                     text += " " + item["Text"]
             return {"data": text.strip(), "status_code": response['ResponseMetadata']['HTTPStatusCode']}
         except Exception as e:
-            return {"data": e.args, "status_code": 400}
+            return {"data": e.args, "status_code": HTTP_400_BAD_REQUEST}
 
     def textract_ocr_kv(self, file_bytes):
         try:
@@ -109,7 +110,7 @@ class AWSTextractOCR:
             kv_relationship = self.get_kv_relationship(key_map=key_map, value_map=value_map, block_map=block_map)
             return {"data": kv_relationship, "status_code": response['ResponseMetadata']['HTTPStatusCode']}
         except Exception as e:
-            return {"data": e.args, "status_code": 400}
+            return {"data": e.args, "status_code": HTTP_400_BAD_REQUEST}
 
 
 class TesserOCR:
@@ -119,7 +120,7 @@ class TesserOCR:
             with PyTessBaseAPI() as api:
                 api.SetImage(file)
                 utf8_text = api.GetUTF8Text()
-            return {'data': utf8_text, "status_code": 200}
+            return {'data': utf8_text, "status_code": HTTP_200_OK}
         except Exception as e:
-            return {"data": e.args, "status_code": 400}
+            return {"data": e.args, "status_code": HTTP_400_BAD_REQUEST}
 
