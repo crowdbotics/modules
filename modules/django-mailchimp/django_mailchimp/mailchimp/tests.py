@@ -214,7 +214,7 @@ class MailchimpAudienceTestCase(APITestCase):
         responses = {'text': [204], 'status_code': 204}
         delete_audience_list_mock.return_value = responses
         url = reverse('mailchimp_audience-delete-audience-list', kwargs={"pk": '806e0c7ae3'})
-        response = self.client.post(url, format='json')
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_audience_list_mock.assert_called_once()
 
@@ -406,7 +406,7 @@ class MailchimpAudienceTestCase(APITestCase):
         data = {
             "members": [
                 {
-                    "email_address": "string",
+                    "email_address": "demomodules123@gmail.com",
                     "status": "string",
                     "email_type": "string",
                     "merge_fields": {
@@ -439,7 +439,194 @@ class MailchimpAudienceTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.list_member_info')
     def test_list_member_info(self, list_member_info_mock):
-        responses = {'text': {'members': [{'id': 'f55ac635ca0dd9066e9ab4c91e3d00b2', 'email_address': 'Addie71@hotmail.com', 'unique_email_id': 'd95c38710b', 'contact_id': 'b3b16bd1ed79162467935b9236a502b2', 'full_name': '', 'web_id': 5150798, 'email_type': 'html', 'status': 'unsubscribed', 'unsubscribe_reason': 'N/A (Unsubscribed by admin)', 'consents_to_one_to_one_messaging': True, 'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''}, 'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '', 'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T13:58:01+00:00', 'member_rating': 2, 'last_changed': '2023-01-13T13:58:01+00:00', 'language': '', 'vip': False, 'email_client': '', 'location': {'latitude': 28.42, 'longitude': 70.3, 'gmtoff': 5, 'dstoff': 5, 'country_code': 'PK', 'timezone': 'Asia/Karachi', 'region': 'PB'}, 'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}], 'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932', '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'}, {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'}, {'rel': 'upsert', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2', 'method': 'PUT', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2', 'method': 'DELETE'}, {'rel': 'activity', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/activity', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'}, {'rel': 'goals', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/goals', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'}, {'rel': 'notes', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/notes', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'}, {'rel': 'events', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/events', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'}, {'rel': 'delete_permanent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/actions/delete-permanent', 'method': 'POST'}]}, {'id': '22fd7da2126eb3d8278afa09438a45bf', 'email_address': 'Addsie71@hotmail.com', 'unique_email_id': 'a2ff82a0be', 'contact_id': 'f54b52044f18c00817731f3672d6d865', 'full_name': '', 'web_id': 5150893, 'email_type': 'html', 'status': 'unsubscribed', 'unsubscribe_reason': 'N/A (Unsubscribed by admin)', 'consents_to_one_to_one_messaging': True, 'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''}, 'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '', 'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T14:01:56+00:00', 'member_rating': 2, 'last_changed': '2023-01-13T14:01:56+00:00', 'language': '', 'vip': False, 'email_client': '', 'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '', 'timezone': '', 'region': ''}, 'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}], 'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932', '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'}, {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'}, {'rel': 'upsert', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'PUT', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'DELETE'}, {'rel': 'activity', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/activity', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'}, {'rel': 'goals', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/goals', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'}, {'rel': 'notes', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/notes', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'}, {'rel': 'events', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/events', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'}, {'rel': 'delete_permanent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/actions/delete-permanent', 'method': 'POST'}]}, {'id': '6f908289d0e807cca4c4f5ab99566fce', 'email_address': 'Add71@hotmail.com', 'unique_email_id': 'f33e96c527', 'contact_id': '69885c026dc45370fa08cfb18c4986c8', 'full_name': '', 'web_id': 5150958, 'email_type': 'html', 'status': 'subscribed', 'consents_to_one_to_one_messaging': True, 'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''}, 'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '', 'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T14:41:46+00:00', 'member_rating': 2, 'last_changed': '2023-01-13T14:41:46+00:00', 'language': '', 'vip': False, 'email_client': '', 'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '', 'timezone': '', 'region': ''}, 'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}], 'source': 'API - Generic', 'tags_count': 1, 'tags': [{'id': 234383, 'name': 'string'}], 'list_id': 'c59fae1932', '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'}, {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'}, {'rel': 'upsert', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce', 'method': 'PUT', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce', 'method': 'DELETE'}, {'rel': 'activity', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/activity', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'}, {'rel': 'goals', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/goals', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'}, {'rel': 'notes', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/notes', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'}, {'rel': 'events', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/events', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'}, {'rel': 'delete_permanent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/actions/delete-permanent', 'method': 'POST'}]}], 'list_id': 'c59fae1932', 'total_items': 3, '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'}, {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'}, {'rel': 'create', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/POST.json'}]}, 'status_code': 200}
+        responses = {'text': {'members': [
+            {'id': 'f55ac635ca0dd9066e9ab4c91e3d00b2', 'email_address': 'Addie71@hotmail.com',
+             'unique_email_id': 'd95c38710b', 'contact_id': 'b3b16bd1ed79162467935b9236a502b2', 'full_name': '',
+             'web_id': 5150798, 'email_type': 'html', 'status': 'unsubscribed',
+             'unsubscribe_reason': 'N/A (Unsubscribed by admin)', 'consents_to_one_to_one_messaging': True,
+             'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''},
+             'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '',
+             'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T13:58:01+00:00', 'member_rating': 2,
+             'last_changed': '2023-01-13T13:58:01+00:00', 'language': '', 'vip': False, 'email_client': '',
+             'location': {'latitude': 28.42, 'longitude': 70.3, 'gmtoff': 5, 'dstoff': 5, 'country_code': 'PK',
+                          'timezone': 'Asia/Karachi', 'region': 'PB'},
+             'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}],
+             'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932', '_links': [{'rel': 'self',
+                                                                                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2',
+                                                                                                          'method': 'GET',
+                                                                                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'},
+                                                                                                         {
+                                                                                                             'rel': 'parent',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json',
+                                                                                                             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'},
+                                                                                                         {
+                                                                                                             'rel': 'update',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2',
+                                                                                                             'method': 'PATCH',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                                                                                             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'},
+                                                                                                         {
+                                                                                                             'rel': 'upsert',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2',
+                                                                                                             'method': 'PUT',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                                                                                             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'},
+                                                                                                         {
+                                                                                                             'rel': 'delete',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2',
+                                                                                                             'method': 'DELETE'},
+                                                                                                         {
+                                                                                                             'rel': 'activity',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/activity',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'},
+                                                                                                         {
+                                                                                                             'rel': 'goals',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/goals',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'},
+                                                                                                         {
+                                                                                                             'rel': 'notes',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/notes',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'},
+                                                                                                         {
+                                                                                                             'rel': 'events',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/events',
+                                                                                                             'method': 'POST',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'},
+                                                                                                         {
+                                                                                                             'rel': 'delete_permanent',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/f55ac635ca0dd9066e9ab4c91e3d00b2/actions/delete-permanent',
+                                                                                                             'method': 'POST'}]},
+            {'id': '22fd7da2126eb3d8278afa09438a45bf', 'email_address': 'Addsie71@hotmail.com',
+             'unique_email_id': 'a2ff82a0be', 'contact_id': 'f54b52044f18c00817731f3672d6d865', 'full_name': '',
+             'web_id': 5150893, 'email_type': 'html', 'status': 'unsubscribed',
+             'unsubscribe_reason': 'N/A (Unsubscribed by admin)', 'consents_to_one_to_one_messaging': True,
+             'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''},
+             'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '',
+             'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T14:01:56+00:00', 'member_rating': 2,
+             'last_changed': '2023-01-13T14:01:56+00:00', 'language': '', 'vip': False, 'email_client': '',
+             'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '', 'timezone': '',
+                          'region': ''},
+             'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}],
+             'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932', '_links': [{'rel': 'self',
+                                                                                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                                                                                          'method': 'GET',
+                                                                                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'},
+                                                                                                         {
+                                                                                                             'rel': 'parent',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json',
+                                                                                                             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'},
+                                                                                                         {
+                                                                                                             'rel': 'update',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                                                                                             'method': 'PATCH',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                                                                                             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'},
+                                                                                                         {
+                                                                                                             'rel': 'upsert',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                                                                                             'method': 'PUT',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                                                                                             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'},
+                                                                                                         {
+                                                                                                             'rel': 'delete',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                                                                                             'method': 'DELETE'},
+                                                                                                         {
+                                                                                                             'rel': 'activity',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/activity',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'},
+                                                                                                         {
+                                                                                                             'rel': 'goals',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/goals',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'},
+                                                                                                         {
+                                                                                                             'rel': 'notes',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/notes',
+                                                                                                             'method': 'GET',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'},
+                                                                                                         {
+                                                                                                             'rel': 'events',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/events',
+                                                                                                             'method': 'POST',
+                                                                                                             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'},
+                                                                                                         {
+                                                                                                             'rel': 'delete_permanent',
+                                                                                                             'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/actions/delete-permanent',
+                                                                                                             'method': 'POST'}]},
+            {'id': '6f908289d0e807cca4c4f5ab99566fce', 'email_address': 'Add71@hotmail.com',
+             'unique_email_id': 'f33e96c527', 'contact_id': '69885c026dc45370fa08cfb18c4986c8', 'full_name': '',
+             'web_id': 5150958, 'email_type': 'html', 'status': 'subscribed', 'consents_to_one_to_one_messaging': True,
+             'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''},
+             'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '',
+             'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T14:41:46+00:00', 'member_rating': 2,
+             'last_changed': '2023-01-13T14:41:46+00:00', 'language': '', 'vip': False, 'email_client': '',
+             'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '', 'timezone': '',
+                          'region': ''},
+             'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}],
+             'source': 'API - Generic', 'tags_count': 1, 'tags': [{'id': 234383, 'name': 'string'}],
+             'list_id': 'c59fae1932', '_links': [{'rel': 'self',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce',
+                                                  'method': 'GET',
+                                                  'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'},
+                                                 {'rel': 'parent',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members',
+                                                  'method': 'GET',
+                                                  'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json',
+                                                  'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'},
+                                                 {'rel': 'update',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce',
+                                                  'method': 'PATCH',
+                                                  'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                                  'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'},
+                                                 {'rel': 'upsert',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce',
+                                                  'method': 'PUT',
+                                                  'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                                  'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'},
+                                                 {'rel': 'delete',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce',
+                                                  'method': 'DELETE'}, {'rel': 'activity',
+                                                                        'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/activity',
+                                                                        'method': 'GET',
+                                                                        'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'},
+                                                 {'rel': 'goals',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/goals',
+                                                  'method': 'GET',
+                                                  'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'},
+                                                 {'rel': 'notes',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/notes',
+                                                  'method': 'GET',
+                                                  'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'},
+                                                 {'rel': 'events',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/events',
+                                                  'method': 'POST',
+                                                  'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'},
+                                                 {'rel': 'delete_permanent',
+                                                  'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/6f908289d0e807cca4c4f5ab99566fce/actions/delete-permanent',
+                                                  'method': 'POST'}]}], 'list_id': 'c59fae1932', 'total_items': 3,
+                              '_links': [
+                                  {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members',
+                                   'method': 'GET',
+                                   'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json',
+                                   'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'},
+                                  {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932',
+                                   'method': 'GET',
+                                   'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'},
+                                  {'rel': 'create',
+                                   'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members',
+                                   'method': 'POST',
+                                   'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                   'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/POST.json'}]},
+                     'status_code': 200}
         list_member_info_mock.return_value = responses
         url = reverse('mailchimp_audience-list-member-info', kwargs={"pk": "c4559ffd73"})
         response = self.client.get(url, format='json')
@@ -448,11 +635,65 @@ class MailchimpAudienceTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.add_list_member')
     def test_add_list_member(self, add_list_member_mock):
-        responses = {'text': {'id': '7dd4636f8b1e04c60488e1bae443a6b6', 'email_address': 'Addsie711@hotmail.com', 'unique_email_id': 'bd8312eac8', 'contact_id': 'dcb2d353aec25bfcef54deaec4a7db9d', 'full_name': '', 'web_id': 5151589, 'email_type': 'html', 'status': 'unsubscribed', 'unsubscribe_reason': 'N/A (Unsubscribed by admin)', 'consents_to_one_to_one_messaging': True, 'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''}, 'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '', 'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T17:21:45+00:00', 'member_rating': 2, 'last_changed': '2023-01-13T17:21:45+00:00', 'language': '', 'vip': False, 'email_client': '', 'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '', 'timezone': '', 'region': ''}, 'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}], 'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932', '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'}, {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'}, {'rel': 'upsert', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6', 'method': 'PUT', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6', 'method': 'DELETE'}, {'rel': 'activity', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/activity', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'}, {'rel': 'goals', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/goals', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'}, {'rel': 'notes', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/notes', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'}, {'rel': 'events', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/events', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'}, {'rel': 'delete_permanent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/actions/delete-permanent', 'method': 'POST'}]}, 'status_code': 201}
+        responses = {'text': {'id': '7dd4636f8b1e04c60488e1bae443a6b6', 'email_address': 'Addsie711@hotmail.com',
+                              'unique_email_id': 'bd8312eac8', 'contact_id': 'dcb2d353aec25bfcef54deaec4a7db9d',
+                              'full_name': '', 'web_id': 5151589, 'email_type': 'html', 'status': 'unsubscribed',
+                              'unsubscribe_reason': 'N/A (Unsubscribed by admin)',
+                              'consents_to_one_to_one_messaging': True,
+                              'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''},
+                              'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '',
+                              'timestamp_signup': '', 'ip_opt': '39.53.158.108',
+                              'timestamp_opt': '2023-01-13T17:21:45+00:00', 'member_rating': 2,
+                              'last_changed': '2023-01-13T17:21:45+00:00', 'language': '', 'vip': False,
+                              'email_client': '',
+                              'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '',
+                                           'timezone': '', 'region': ''}, 'marketing_permissions': [
+                {'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}],
+                              'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932',
+                              '_links': [{'rel': 'self',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'},
+                                         {'rel': 'parent',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json',
+                                          'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'},
+                                         {'rel': 'update',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6',
+                                          'method': 'PATCH',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                          'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'},
+                                         {'rel': 'upsert',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6',
+                                          'method': 'PUT',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                          'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'},
+                                         {'rel': 'delete',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6',
+                                          'method': 'DELETE'}, {'rel': 'activity',
+                                                                'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/activity',
+                                                                'method': 'GET',
+                                                                'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'},
+                                         {'rel': 'goals',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/goals',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'},
+                                         {'rel': 'notes',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/notes',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'},
+                                         {'rel': 'events',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/events',
+                                          'method': 'POST',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'},
+                                         {'rel': 'delete_permanent',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/7dd4636f8b1e04c60488e1bae443a6b6/actions/delete-permanent',
+                                          'method': 'POST'}]}, 'status_code': 201}
         add_list_member_mock.return_value = responses
         url = reverse('mailchimp_audience-add-list-member', kwargs={"pk": "c4559ffd73"})
         data = {
-            "email_address": "string",
+            "email_address": "demomodules123@gmail.com",
             "status": "string",
             "email_type": "string",
             "merge_fields": {
@@ -491,7 +732,61 @@ class MailchimpAudienceTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.get_member_info')
     def test_get_member_info(self, get_member_info_mock):
-        responses = {'text': {'id': '22fd7da2126eb3d8278afa09438a45bf', 'email_address': 'Addsie71@hotmail.com', 'unique_email_id': 'a2ff82a0be', 'contact_id': 'f54b52044f18c00817731f3672d6d865', 'full_name': '', 'web_id': 5150893, 'email_type': 'html', 'status': 'unsubscribed', 'unsubscribe_reason': 'N/A (Unsubscribed by admin)', 'consents_to_one_to_one_messaging': True, 'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''}, 'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '', 'timestamp_signup': '', 'ip_opt': '39.53.158.108', 'timestamp_opt': '2023-01-13T14:01:56+00:00', 'member_rating': 2, 'last_changed': '2023-01-13T14:01:56+00:00', 'language': '', 'vip': False, 'email_client': '', 'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '', 'timezone': '', 'region': ''}, 'marketing_permissions': [{'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}], 'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932', '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'}, {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'}, {'rel': 'upsert', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'PUT', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf', 'method': 'DELETE'}, {'rel': 'activity', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/activity', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'}, {'rel': 'goals', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/goals', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'}, {'rel': 'notes', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/notes', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'}, {'rel': 'events', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/events', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'}, {'rel': 'delete_permanent', 'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/actions/delete-permanent', 'method': 'POST'}]}, 'status_code': 200}
+        responses = {'text': {'id': '22fd7da2126eb3d8278afa09438a45bf', 'email_address': 'Addsie71@hotmail.com',
+                              'unique_email_id': 'a2ff82a0be', 'contact_id': 'f54b52044f18c00817731f3672d6d865',
+                              'full_name': '', 'web_id': 5150893, 'email_type': 'html', 'status': 'unsubscribed',
+                              'unsubscribe_reason': 'N/A (Unsubscribed by admin)',
+                              'consents_to_one_to_one_messaging': True,
+                              'merge_fields': {'FNAME': '', 'LNAME': '', 'ADDRESS': '', 'PHONE': ''},
+                              'stats': {'avg_open_rate': 0, 'avg_click_rate': 0}, 'ip_signup': '',
+                              'timestamp_signup': '', 'ip_opt': '39.53.158.108',
+                              'timestamp_opt': '2023-01-13T14:01:56+00:00', 'member_rating': 2,
+                              'last_changed': '2023-01-13T14:01:56+00:00', 'language': '', 'vip': False,
+                              'email_client': '',
+                              'location': {'latitude': 0, 'longitude': 0, 'gmtoff': 0, 'dstoff': 0, 'country_code': '',
+                                           'timezone': '', 'region': ''}, 'marketing_permissions': [
+                {'marketing_permission_id': 'b6258fdba9', 'text': 'Email', 'enabled': False}],
+                              'source': 'API - Generic', 'tags_count': 0, 'tags': [], 'list_id': 'c59fae1932',
+                              '_links': [{'rel': 'self',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json'},
+                                         {'rel': 'parent',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/CollectionResponse.json',
+                                          'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Lists/Members/Collection.json'},
+                                         {'rel': 'update',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                          'method': 'PATCH',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                          'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PATCH.json'},
+                                         {'rel': 'upsert',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                          'method': 'PUT',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Response.json',
+                                          'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/PUT.json'},
+                                         {'rel': 'delete',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf',
+                                          'method': 'DELETE'}, {'rel': 'activity',
+                                                                'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/activity',
+                                                                'method': 'GET',
+                                                                'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Activity/Response.json'},
+                                         {'rel': 'goals',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/goals',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Goals/Response.json'},
+                                         {'rel': 'notes',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/notes',
+                                          'method': 'GET',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Notes/CollectionResponse.json'},
+                                         {'rel': 'events',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/events',
+                                          'method': 'POST',
+                                          'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Lists/Members/Events/POST.json'},
+                                         {'rel': 'delete_permanent',
+                                          'href': 'https://us21.api.mailchimp.com/3.0/lists/c59fae1932/members/22fd7da2126eb3d8278afa09438a45bf/actions/delete-permanent',
+                                          'method': 'POST'}]}, 'status_code': 200}
         get_member_info_mock.return_value = responses
 
         url = reverse('mailchimp_audience-get-member-info', kwargs={"pk": "c4559ffd73", "subscriber_hash": "string"})
@@ -514,7 +809,7 @@ class MailchimpAudienceTestCase(APITestCase):
         update_list_member_mock.return_value = responses
         url = reverse('mailchimp_audience-update-list-member', kwargs={"pk": "c4559ffd73", "subscriber_hash": "string"})
         data = {
-            "email_address": "string",
+            "email_address": "demomodules123@gmail.com",
             "status": "string",
             "email_type": "string",
             "merge_fields": {
@@ -556,7 +851,7 @@ class MailchimpAudienceTestCase(APITestCase):
         responses = {"status_code": 204}
         delete_list_member_mock.return_value = responses
         url = reverse('mailchimp_audience-delete-list-member', kwargs={"pk": "c4559ffd73", "subscriber_hash": "string"})
-        response = self.client.post(url, format='json')
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_list_member_mock.assert_called_once()
 
@@ -679,7 +974,7 @@ class MailchimpAudienceTestCase(APITestCase):
         responses = {"status_code": 204}
         delete_segment_mock.return_value = responses
         url = reverse('mailchimp_audience-delete-segment', kwargs={"pk": "c4559ffd73", 'segment_id': "56899y2"})
-        response = self.client.post(url, format='json')
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_segment_mock.assert_called_once()
 
@@ -780,7 +1075,7 @@ class MailchimpTemplatesTestCase(APITestCase):
         responses = {'status_code': 204}
         delete_template_mock.return_value = responses
         url = reverse('mailchimp_templates-delete-template', kwargs={"pk": "4"})
-        response = self.client.post(url, format='json')
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_template_mock.assert_called_once()
 
@@ -869,7 +1164,7 @@ class MailchimpTemplatesTestCase(APITestCase):
         responses = {'status_code': 204}
         delete_template_folder_mock.return_value = responses
         url = reverse('mailchimp_templates-delete-template-folder', kwargs={"pk": "c4559ffd73"})
-        response = self.client.post(url, format='json')
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_template_folder_mock.assert_called_once()
 
@@ -899,7 +1194,96 @@ class MailchimpCampaignTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.list_campaigns')
     def test_list_campaigns(self, list_campaigns_mock):
-        responses = {'text': {'campaigns': [{'id': '2d14a7a055', 'web_id': 238700, 'type': 'regular', 'create_time': '2023-01-13T17:29:02+00:00', 'archive_url': 'http://eepurl.com/iihz81', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=2d14a7a055', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/create-resend', 'method': 'POST'}]}, {'id': '6d9d221fb7', 'web_id': 238691, 'type': 'regular', 'create_time': '2023-01-13T16:58:43+00:00', 'archive_url': 'http://eepurl.com/iihoRP', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=6d9d221fb7', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/create-resend', 'method': 'POST'}]}], 'total_items': 2, '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'create', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/POST.json'}]}, 'status_code': 200}
+        responses = {'text': {'campaigns': [
+            {'id': '2d14a7a055', 'web_id': 238700, 'type': 'regular', 'create_time': '2023-01-13T17:29:02+00:00',
+             'archive_url': 'http://eepurl.com/iihz81',
+             'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=2d14a7a055',
+             'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+             'needs_block_refresh': False, 'resendable': False,
+             'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '',
+                            'recipient_count': 0},
+             'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True,
+                          'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True,
+                          'timewarp': False, 'template_id': 0, 'drag_and_drop': False},
+             'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False,
+                          'ecomm360': False, 'google_analytics': '', 'clicktale': ''},
+             'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/create-resend',
+                                                         'method': 'POST'}]},
+            {'id': '6d9d221fb7', 'web_id': 238691, 'type': 'regular', 'create_time': '2023-01-13T16:58:43+00:00',
+             'archive_url': 'http://eepurl.com/iihoRP',
+             'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=6d9d221fb7',
+             'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+             'needs_block_refresh': False, 'resendable': False,
+             'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '',
+                            'recipient_count': 0},
+             'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True,
+                          'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True,
+                          'timewarp': False, 'template_id': 0, 'drag_and_drop': False},
+             'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False,
+                          'ecomm360': False, 'google_analytics': '', 'clicktale': ''},
+             'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/6d9d221fb7/actions/create-resend',
+                                                         'method': 'POST'}]}], 'total_items': 2, '_links': [
+            {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+            {'rel': 'create', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'POST',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/POST.json'}]},
+                     'status_code': 200}
         list_campaigns_mock.return_value = responses
         url = reverse('mailchimp_campaigns-list-campaigns')
         response = self.client.get(url, format='json')
@@ -908,7 +1292,48 @@ class MailchimpCampaignTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.add_campaigns')
     def test_add_campaigns(self, add_campaigns_mock):
-        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular', 'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend', 'method': 'POST'}]}, 'status_code': 201}
+        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular',
+                              'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr',
+                              'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739',
+                              'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+                              'needs_block_refresh': False, 'resendable': False,
+                              'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '',
+                                             'segment_text': '', 'recipient_count': 0},
+                              'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '',
+                                           'authenticate': True, 'auto_footer': False, 'inline_css': False,
+                                           'auto_tweet': False, 'fb_comments': True, 'timewarp': False,
+                                           'template_id': 0, 'drag_and_drop': False},
+                              'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False,
+                                           'goal_tracking': False, 'ecomm360': False, 'google_analytics': '',
+                                           'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend',
+                                                         'method': 'POST'}]}, 'status_code': 201}
         add_campaigns_mock.return_value = responses
         url = reverse('mailchimp_campaigns-add-campaigns')
         data = {
@@ -1003,7 +1428,48 @@ class MailchimpCampaignTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.get_campaign_info')
     def test_get_campaign_info(self, get_campaign_info_mock):
-        responses = {'text': {'id': '2d14a7a055', 'web_id': 238700, 'type': 'regular', 'create_time': '2023-01-13T17:29:02+00:00', 'archive_url': 'http://eepurl.com/iihz81', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=2d14a7a055', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/create-resend', 'method': 'POST'}]}, 'status_code': 200}
+        responses = {'text': {'id': '2d14a7a055', 'web_id': 238700, 'type': 'regular',
+                              'create_time': '2023-01-13T17:29:02+00:00', 'archive_url': 'http://eepurl.com/iihz81',
+                              'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=2d14a7a055',
+                              'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+                              'needs_block_refresh': False, 'resendable': False,
+                              'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '',
+                                             'segment_text': '', 'recipient_count': 0},
+                              'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '',
+                                           'authenticate': True, 'auto_footer': False, 'inline_css': False,
+                                           'auto_tweet': False, 'fb_comments': True, 'timewarp': False,
+                                           'template_id': 0, 'drag_and_drop': False},
+                              'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False,
+                                           'goal_tracking': False, 'ecomm360': False, 'google_analytics': '',
+                                           'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/2d14a7a055/actions/create-resend',
+                                                         'method': 'POST'}]}, 'status_code': 200}
         get_campaign_info_mock.return_value = responses
         url = reverse('mailchimp_campaigns-get-campaign-info', kwargs={"pk": "c4559ffd73"})
         response = self.client.get(url, format='json')
@@ -1015,14 +1481,55 @@ class MailchimpCampaignTestCase(APITestCase):
         responses = {"status_code": 204}
         delete_campaign_mock.return_value = responses
         url = reverse('mailchimp_campaigns-delete-campaign', kwargs={"pk": "c4559ffd73"})
-        response = self.client.post(url, format='json')
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_campaign_mock.assert_called_once()
 
     @mock.patch(
         'modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.update_campaign_settings')
     def test_update_campaign_settings(self, update_campaign_settings_mock):
-        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular', 'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend', 'method': 'POST'}]}, 'status_code': 201}
+        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular',
+                              'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr',
+                              'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739',
+                              'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+                              'needs_block_refresh': False, 'resendable': False,
+                              'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '',
+                                             'segment_text': '', 'recipient_count': 0},
+                              'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '',
+                                           'authenticate': True, 'auto_footer': False, 'inline_css': False,
+                                           'auto_tweet': False, 'fb_comments': True, 'timewarp': False,
+                                           'template_id': 0, 'drag_and_drop': False},
+                              'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False,
+                                           'goal_tracking': False, 'ecomm360': False, 'google_analytics': '',
+                                           'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend',
+                                                         'method': 'POST'}]}, 'status_code': 201}
 
         update_campaign_settings_mock.return_value = responses
         url = reverse('mailchimp_campaigns-update-campaign-settings', kwargs={"pk": "c4559ffd73"})
@@ -1111,22 +1618,104 @@ class MailchimpCampaignTestCase(APITestCase):
         }
 
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         update_campaign_settings_mock.assert_called_once()
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.cancel_campaign')
     def test_cancel_campaign(self, cancel_campaign_mock):
-        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular', 'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend', 'method': 'POST'}]}, 'status_code': 201}
+        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular',
+                              'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr',
+                              'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739',
+                              'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+                              'needs_block_refresh': False, 'resendable': False,
+                              'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '',
+                                             'segment_text': '', 'recipient_count': 0},
+                              'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '',
+                                           'authenticate': True, 'auto_footer': False, 'inline_css': False,
+                                           'auto_tweet': False, 'fb_comments': True, 'timewarp': False,
+                                           'template_id': 0, 'drag_and_drop': False},
+                              'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False,
+                                           'goal_tracking': False, 'ecomm360': False, 'google_analytics': '',
+                                           'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend',
+                                                         'method': 'POST'}]}, 'status_code': 201}
 
         cancel_campaign_mock.return_value = responses
         url = reverse('mailchimp_campaigns-cancel-campaign', kwargs={"pk": "c4559ffd73"})
         response = self.client.post(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         cancel_campaign_mock.assert_called_once()
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.send_campaign')
     def test_send_campaign(self, send_campaign_mock):
-        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular', 'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend', 'method': 'POST'}]}, 'status_code': 201}
+        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular',
+                              'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr',
+                              'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739',
+                              'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+                              'needs_block_refresh': False, 'resendable': False,
+                              'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '',
+                                             'segment_text': '', 'recipient_count': 0},
+                              'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '',
+                                           'authenticate': True, 'auto_footer': False, 'inline_css': False,
+                                           'auto_tweet': False, 'fb_comments': True, 'timewarp': False,
+                                           'template_id': 0, 'drag_and_drop': False},
+                              'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False,
+                                           'goal_tracking': False, 'ecomm360': False, 'google_analytics': '',
+                                           'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend',
+                                                         'method': 'POST'}]}, 'status_code': 201}
 
         send_campaign_mock.return_value = responses
         url = reverse('mailchimp_campaigns-send-campaign', kwargs={"pk": "c4559ffd73"})
@@ -1139,7 +1728,7 @@ class MailchimpCampaignTestCase(APITestCase):
             "timewarp": 'true'
         }
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         send_campaign_mock.assert_called_once()
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.schedule_campaign')
@@ -1198,22 +1787,106 @@ class MailchimpCampaignTestCase(APITestCase):
             "timewarp": 'true'
         }
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         schedule_campaign_mock.assert_called_once()
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.unschedule_campaign')
     def test_unschedule_campaign(self, unschedule_campaign_mock):
-        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular', 'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr', 'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739', 'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template', 'needs_block_refresh': False, 'resendable': False, 'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '', 'segment_text': '', 'recipient_count': 0}, 'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '', 'authenticate': True, 'auto_footer': False, 'inline_css': False, 'auto_tweet': False, 'fb_comments': True, 'timewarp': False, 'template_id': 0, 'drag_and_drop': False}, 'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False, 'goal_tracking': False, 'ecomm360': False, 'google_analytics': '', 'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'DELETE'}, {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send', 'method': 'POST'}, {'rel': 'cancel_send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send', 'method': 'POST'}, {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'}, {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'}, {'rel': 'send_checklist', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'}, {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause', 'method': 'POST'}, {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume', 'method': 'POST'}, {'rel': 'replicate', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate', 'method': 'POST'}, {'rel': 'create_resend', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend', 'method': 'POST'}]}, 'status_code': 201}
+        responses = {'text': {'id': 'ecdd32d739', 'web_id': 238702, 'type': 'regular',
+                              'create_time': '2023-01-13T17:40:42+00:00', 'archive_url': 'http://eepurl.com/iihEhr',
+                              'long_archive_url': 'https://us21.campaign-archive.com/?u=1bce3f41b7ce6d507ec899ef2&id=ecdd32d739',
+                              'status': 'save', 'emails_sent': 0, 'send_time': '', 'content_type': 'template',
+                              'needs_block_refresh': False, 'resendable': False,
+                              'recipients': {'list_id': '', 'list_is_active': False, 'list_name': '',
+                                             'segment_text': '', 'recipient_count': 0},
+                              'settings': {'title': '', 'use_conversation': False, 'to_name': '', 'folder_id': '',
+                                           'authenticate': True, 'auto_footer': False, 'inline_css': False,
+                                           'auto_tweet': False, 'fb_comments': True, 'timewarp': False,
+                                           'template_id': 0, 'drag_and_drop': False},
+                              'tracking': {'opens': True, 'html_clicks': True, 'text_clicks': False,
+                                           'goal_tracking': False, 'ecomm360': False, 'google_analytics': '',
+                                           'clicktale': ''}, 'delivery_status': {'enabled': False}, '_links': [
+                {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/Campaigns/Collection.json'},
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Response.json'},
+                {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739',
+                 'method': 'DELETE'},
+                {'rel': 'send', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/send',
+                 'method': 'POST'}, {'rel': 'cancel_send',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/cancel-send',
+                                     'method': 'POST'},
+                {'rel': 'feedback', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/feedback',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Feedback/CollectionResponse.json'},
+                {'rel': 'content', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/content',
+                 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Content/Response.json'},
+                {'rel': 'send_checklist',
+                 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/send-checklist', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/Campaigns/Checklist/Response.json'},
+                {'rel': 'pause', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/pause',
+                 'method': 'POST'},
+                {'rel': 'resume', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/resume',
+                 'method': 'POST'}, {'rel': 'replicate',
+                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/replicate',
+                                     'method': 'POST'}, {'rel': 'create_resend',
+                                                         'href': 'https://us21.api.mailchimp.com/3.0/campaigns/ecdd32d739/actions/create-resend',
+                                                         'method': 'POST'}]}, 'status_code': 201}
 
         unschedule_campaign_mock.return_value = responses
         url = reverse('mailchimp_campaigns-unschedule-campaign', kwargs={"pk": "c4559ffd73"})
         response = self.client.post(url, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         unschedule_campaign_mock.assert_called_once()
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.list_campaign_folder')
     def test_list_campaign_folder(self, list_campaign_folder_mock):
-        responses = {'text': {'folders': [{'name': 'string', 'id': '7ced903626', 'count': 0, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/7ced903626', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/7ced903626', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/7ced903626', 'method': 'DELETE'}, {'rel': 'campaigns', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=7ced903626', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]}, {'name': 'string', 'id': '2af08ea984', 'count': 0, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/2af08ea984', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/2af08ea984', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/2af08ea984', 'method': 'DELETE'}, {'rel': 'campaigns', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=2af08ea984', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]}], 'total_items': 2, '_links': [{'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'}, {'rel': 'create', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'POST', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/POST.json'}]}, 'status_code': 200}
+        responses = {'text': {'folders': [{'name': 'string', 'id': '7ced903626', 'count': 0, '_links': [
+            {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'},
+            {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/7ced903626', 'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'},
+            {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/7ced903626',
+             'method': 'PATCH',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'},
+            {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/7ced903626',
+             'method': 'DELETE'},
+            {'rel': 'campaigns', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=7ced903626',
+             'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]},
+                                          {'name': 'string', 'id': '2af08ea984', 'count': 0, '_links': [
+                                              {'rel': 'parent',
+                                               'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders',
+                                               'method': 'GET',
+                                               'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json',
+                                               'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'},
+                                              {'rel': 'self',
+                                               'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/2af08ea984',
+                                               'method': 'GET',
+                                               'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'},
+                                              {'rel': 'update',
+                                               'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/2af08ea984',
+                                               'method': 'PATCH',
+                                               'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json',
+                                               'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'},
+                                              {'rel': 'delete',
+                                               'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/2af08ea984',
+                                               'method': 'DELETE'}, {'rel': 'campaigns',
+                                                                     'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=2af08ea984',
+                                                                     'method': 'GET',
+                                                                     'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]}],
+                              'total_items': 2, '_links': [
+                {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'},
+                {'rel': 'create', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'POST',
+                 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json',
+                 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/POST.json'}]},
+                     'status_code': 200}
         list_campaign_folder_mock.return_value = responses
         url = reverse('mailchimp_campaigns-list-campaign-folder')
         response = self.client.get(url, format='json')
@@ -1222,7 +1895,22 @@ class MailchimpCampaignTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.add_campaign_folder')
     def test_add_campaign_folder(self, add_campaign_folder_mock):
-        responses = {'text': {'name': 'stringd', 'id': '3303e39ff1', 'count': 0, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'DELETE'}, {'rel': 'campaigns', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=3303e39ff1', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]}, 'status_code': 201}
+        responses = {'text': {'name': 'stringd', 'id': '3303e39ff1', 'count': 0, '_links': [
+            {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'},
+            {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'},
+            {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1',
+             'method': 'PATCH',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'},
+            {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1',
+             'method': 'DELETE'},
+            {'rel': 'campaigns', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=3303e39ff1',
+             'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]},
+                     'status_code': 201}
         add_campaign_folder_mock.return_value = responses
         url = reverse('mailchimp_campaigns-add-campaign-folder')
         data = {
@@ -1234,7 +1922,22 @@ class MailchimpCampaignTestCase(APITestCase):
 
     @mock.patch('modules.django_mailchimp.mailchimp.services.MailchimpService.MailchimpService.get_campaign_folder')
     def test_get_campaign_folder(self, get_campaign_folder_mock):
-        responses = {'text': {'name': 'stringd', 'id': '3303e39ff1', 'count': 0, '_links': [{'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'}, {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}, {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'PATCH', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json', 'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'}, {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'DELETE'}, {'rel': 'campaigns', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=3303e39ff1', 'method': 'GET', 'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]}, 'status_code': 200}
+        responses = {'text': {'name': 'stringd', 'id': '3303e39ff1', 'count': 0, '_links': [
+            {'rel': 'parent', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders', 'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/CollectionResponse.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Paths/CampaignFolders/Collection.json'},
+            {'rel': 'self', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1', 'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'},
+            {'rel': 'update', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1',
+             'method': 'PATCH',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json',
+             'schema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/PATCH.json'},
+            {'rel': 'delete', 'href': 'https://us21.api.mailchimp.com/3.0/campaign-folders/3303e39ff1',
+             'method': 'DELETE'},
+            {'rel': 'campaigns', 'href': 'https://us21.api.mailchimp.com/3.0/campaigns?folder_id=3303e39ff1',
+             'method': 'GET',
+             'targetSchema': 'https://us21.api.mailchimp.com/schema/3.0/Definitions/CampaignFolders/Response.json'}]},
+                     'status_code': 200}
         get_campaign_folder_mock.return_value = responses
         url = reverse('mailchimp_campaigns-get-campaign-folder', kwargs={"pk": "c4559ffd73"})
         response = self.client.get(url, format='json')
@@ -1246,7 +1949,7 @@ class MailchimpCampaignTestCase(APITestCase):
         responses = {'status_code': 204}
         delete_campaign_folder_mock.return_value = responses
         url = reverse('mailchimp_campaigns-delete-campaign-folder', kwargs={"pk": "c4559ffd73"})
-        response = self.client.post(url, format='json')
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_campaign_folder_mock.assert_called_once()
 
