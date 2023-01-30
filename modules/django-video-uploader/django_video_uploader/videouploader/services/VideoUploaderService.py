@@ -20,7 +20,11 @@ class VideoUploaderBase:
         try:
             response = requests.request(request_type, url, headers=headers, json=payload, data=data)
             response.raise_for_status()
-            if response.status_code == 204:
+
+            if request_type == 'PUT' and response.status_code == 204:
+                return {"data": {"message": "Item updated successfully."}, "status_code": response.status_code}
+
+            if request_type == 'DELETE' and response.status_code == 204:
                 return {"data": {"message": "Item deleted successfully."}, "status_code": response.status_code}
             return {"data": response.json(), "status_code": response.status_code}
         except requests.exceptions.RequestException as e:
@@ -119,11 +123,8 @@ class VideoUploaderService(VideoUploaderBase):
     def add_user_to_group(self, group_id, user_id):
         try:
             url = f'{self.VIDEO_UPLOADER_BASE_URL}/users/{user_id}/groups/{group_id}'
-            response = requests.request(request_type="PUT", url=url, headers=self.get_header())
-            response.raise_for_status()
-            if response.status_code == 204:
-                return {"data": {"message": "The user ws added to group."}, "status_code": status.HTTP_200_OK}
-            return {"data": response.json(), "status_code": response.status_code}
+            response = self._api_call(request_type="PUT", url=url, headers=self.get_header())
+            return response
         except Exception as e:
             return e
 

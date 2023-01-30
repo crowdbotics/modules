@@ -46,6 +46,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def create_access_token(self, request):
         """
         To get the access token
+
         :return: Returns access_token.
         """
         serializer = self.get_serializer(data=request.data)
@@ -62,10 +63,10 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To create a channel
 
-        :body_params str name: Name of the channel
-        :body_params str description: Description of the channel
-        :body_params str(uri) link: The link to access the channel
-        :body_params str privacy: The privacy level of the channel. Allowed values are (anybody, moderators, user)
+        :body_params str name: Name of the channel \n
+        :body_params str description: Description of the channel \n
+        :body_params str(uri) link: The link to access the channel \n
+        :body_params str privacy: The privacy level of the channel. Allowed values are (anybody, moderators, user) \n
         :return: Returns newly created channel.
         """
         serializer = self.get_serializer(data=request.data)
@@ -77,7 +78,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def delete_channel(self, request, pk):
         """
         To delete an existing channel
-        :path_params int channel_id: ID of the channel to be deleted
+
+        :path_params int channel_id: ID of the channel to be deleted \n
         :return: Returns no content.
         """
         response = self.video_uploader_service.delete_channel(channel_id=pk)
@@ -87,11 +89,12 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def update_channel(self, request, pk):
         """
         To update/edit an existing channel
-        :path_params int channel_id: ID of the channel to be updated
-        :body_params str name:Name of the Chanel
-        :body_params str description: Description of the channel
-        :body_params str(uri) link: The link to access the channel
-        :body_params str privacy: The privacy level of the channel. Allowed values are (anybody, moderators, user)
+
+        :path_params int channel_id: ID of the channel to be updated \n
+        :body_params str name:Name of the Chanel \n
+        :body_params str description: Description of the channel \n
+        :body_params str(uri) link: The link to access the channel \n
+        :body_params str privacy: The privacy level of the channel. Allowed values are (anybody, moderators, user) \n
         :return: Returns updated channel.
         """
         serializer = self.get_serializer(data=request.data)
@@ -103,13 +106,14 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def channel_list(self, request):
         """
         To get all the channels
-        :query_params str direction: Direction can be (asc/desc)
-        :query_params str filter: Any feature of the channel can be used as filter
-        :query_params int page: page number to get the specific channels from a page
-        :query_params int per_page:Number of results to be returned per page
-        :query_params str query: The search query to use to filter the results
+
+        :query_params str direction: Direction can be (asc/desc) \n
+        :query_params str filter: Any feature of the channel can be used as filter  \n
+        :query_params int page: page number to get the specific channels from a page \n
+        :query_params int per_page:Number of results to be returned per page \n
+        :query_params str query: The search query to use to filter the results \n
         :query_params str sort: The way to sort the results. Allowed values are `alphabetical, data, default, followers,
-         relevant, videos`
+         relevant, videos` \n
         :return: Returns all channels list
         """
         response = self.video_uploader_service.channel_list(query_params=request.query_params)
@@ -119,8 +123,9 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def specific_channel(self, request, pk):
         """
         To get a specific channel
-        :path_params int channel_id: ID of the channel to be returned
-        :return: Returns a specific channel.
+
+        :path_params int channel_id: ID of the channel to be returned \n
+        :return: Returns a specific channel. \n
         """
         response = self.video_uploader_service.specific_channel(channel_id=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
@@ -130,8 +135,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To create a group
 
-        :body_params str name: Name of the group
-        :body_params str description: Description for the group
+        :body_params str name: Name of the group \n
+        :body_params str description: Description for the group \n
         :return: Returns newly created group.
         """
         serializer = self.get_serializer(data=request.data)
@@ -144,7 +149,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To delete an existing group
 
-        :path_params int group_id: ID specified to the group
+        :path_params int group_id: ID specified to the group \n
         :return: Returns no content.
         """
         response = self.video_uploader_service.delete_group(group_id=pk)
@@ -155,13 +160,13 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To get all the groups
 
-        :query_params str direction: Direction can be (asc/desc)
-        :query_params str filter: Any feature of the channel can be used as filter
-        :query_params int page: page number to get the specific groups from a page
-        :query_params int per_page:Number of results to be returned per page
-        :query_params str query: The search query to use to filter the results
+        :query_params str direction: Direction can be (asc/desc) \n
+        :query_params str filter: Any feature of the channel can be used as filter \n
+        :query_params int page: page number to get the specific groups from a page \n
+        :query_params int per_page:Number of results to be returned per page \n
+        :query_params str query: The search query to use to filter the results \n
         :query_params str sort: The way to sort the results. Allowed values are `alphabetical, data, default, followers,
-         relevant, videos`
+         relevant, videos` \n
         :return: Returns all groups list.
         """
         response = self.video_uploader_service.groups_list(query_params=request.query_params)
@@ -172,7 +177,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To get a specific group
 
-        :path_params int group_id: ID specified to the group
+        :path_params int group_id: ID specified to the group \n
         :return: Returns a specific group.
         """
         response = self.video_uploader_service.specific_group(group_id=pk)
@@ -183,8 +188,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To add a user to a group
 
-        :path_params int group_id: ID specified to the group
-        :path_params int user_id: ID specified to the user
+        :path_params int group_id: ID specified to the group \n
+        :path_params int user_id: ID specified to the user \n
         :return:  joined the group. Returns no content
         """
         response = self.video_uploader_service.add_user_to_group(user_id=user_id, group_id=pk)
@@ -195,8 +200,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To add a video to a group
 
-        :path_params int group_id: ID specified to the group
-        :path_params int video_id: ID specified to the video
+        :path_params int group_id: ID specified to the group \n
+        :path_params int video_id: ID specified to the video \n
         :return:  was added. Returns OK
         """
         response = self.video_uploader_service.add_video_to_group(video_id=video_id, group_id=pk)
@@ -207,18 +212,18 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To create a showcase
 
-        :path_params int user_id: ID specified to the user
-        :body_params str brand_color: The hexadecimal code for the color of the player buttons and showcase controls
-        :body_params str description: The description of the showcase
-        :body_params bool hide_nav: Whether to hide Vimeo navigation when displaying the showcase
-        :body_params bool hide_upcoming: Whether to include the upcoming live event in the showcase
-        :body_params str layout: The type of layout for presenting the showcase. Allowed values are (grid/player)
-        :body_params str name: The name of the showcase
-        :body_params str password: The showcase's password. This field is required only when privacy is password
-        :body_params str privacy : The privacy level of the showcase. Allowed values are (anybody/nobody/team/embed_only/password)
-        :body_params bool review_mode: Whether showcase videos use the review mode URL
-        :body_params str sort: The default sort order of the videos as they appear in the showcase. Allowed values are (added_first/added_last/alphabetical/arranged/likes/newest/oldest/plays)
-        :body_params str theme: The color theme of the showcase. Allowed values are (dark/standard)
+        :path_params int user_id: ID specified to the user \n
+        :body_params str brand_color: The hexadecimal code for the color of the player buttons and showcase controls \n
+        :body_params str description: The description of the showcase \n
+        :body_params bool hide_nav: Whether to hide Vimeo navigation when displaying the showcase \n
+        :body_params bool hide_upcoming: Whether to include the upcoming live event in the showcase \n
+        :body_params str layout: The type of layout for presenting the showcase. Allowed values are (grid/player) \n
+        :body_params str name: The name of the showcase \n
+        :body_params str password: The showcase's password. This field is required only when privacy is password \n
+        :body_params str privacy : The privacy level of the showcase. Allowed values are (anybody/nobody/team/embed_only/password) \n
+        :body_params bool review_mode: Whether showcase videos use the review mode URL \n
+        :body_params str sort: The default sort order of the videos as they appear in the showcase. Allowed values are (added_first/added_last/alphabetical/arranged/likes/newest/oldest/plays) \n
+        :body_params str theme: The color theme of the showcase. Allowed values are (dark/standard) \n
         :return: Returns newly created showcase.
         """
         serializer = self.get_serializer(data=request.data)
@@ -231,8 +236,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To delete an existing showcase
 
-        :path_params int user_id: ID specified to the user
-        :path_params int album_id: ID specified to the album
+        :path_params int user_id: ID specified to the user \n
+        :path_params int album_id: ID specified to the album \n
         :return: Returns no content.
         """
         response = self.video_uploader_service.delete_showcase(user_id=pk, album_id=album_id)
@@ -243,21 +248,21 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To update/edit an existing showcase
 
-        :path_params int user_id: ID specified to the user
-        :path_params int album_id: ID specified to the album
-        :body_params str brand_color: The hexadecimal code for the color of the player buttons and showcase controls
-        :body_params str description: The description of the showcase
-        :body_params bool hide_nav: Whether to hide Vimeo navigation when displaying the showcase
-        :body_params bool hide_upcoming: Whether to include the upcoming live event in the showcase
-        :body_params str layout: The type of layout for presenting the showcase. Allowed values are (grid/player)
-        :body_params str name: The name of the showcase
-        :body_params str password: The showcase's password. This field is required only when privacy is password
-        :body_params str privacy : The privacy level of the showcase. Allowed values are (anybody/nobody/team/embed_only/password)
-        :body_params bool review_mode: Whether showcase videos use the review mode URL
-        :body_params str sort: The default sort order of the videos as they appear in the showcase. Allowed values are (added_first/added_last/alphabetical/arranged/likes/newest/oldest/plays)
-        :body_params str theme: The color theme of the showcase. Allowed values are (dark/standard)
-        :body_params str url: The custom Vimeo URL of the showcase
-        :body_params bool use_custom_domain: Whether the user has opted for a custom domain for their showcase
+        :path_params int user_id: ID specified to the user \n
+        :path_params int album_id: ID specified to the album \n
+        :body_params str brand_color: The hexadecimal code for the color of the player buttons and showcase controls \n
+        :body_params str description: The description of the showcase \n
+        :body_params bool hide_nav: Whether to hide Vimeo navigation when displaying the showcase \n
+        :body_params bool hide_upcoming: Whether to include the upcoming live event in the showcase \n
+        :body_params str layout: The type of layout for presenting the showcase. Allowed values are (grid/player) \n
+        :body_params str name: The name of the showcase \n
+        :body_params str password: The showcase's password. This field is required only when privacy is password \n
+        :body_params str privacy : The privacy level of the showcase. Allowed values are (anybody/nobody/team/embed_only/password) \n
+        :body_params bool review_mode: Whether showcase videos use the review mode URL \n
+        :body_params str sort: The default sort order of the videos as they appear in the showcase. Allowed values are (added_first/added_last/alphabetical/arranged/likes/newest/oldest/plays) \n
+        :body_params str theme: The color theme of the showcase. Allowed values are (dark/standard) \n
+        :body_params str url: The custom Vimeo URL of the showcase \n
+        :body_params bool use_custom_domain: Whether the user has opted for a custom domain for their showcase \n
         :return: Returns updated showcase.
         """
         serializer = self.get_serializer(data=request.data)
@@ -270,13 +275,13 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To get all the showcase
 
-        :path_params int user_id: ID specified to the user
-        :query_params str direction: Direction can be (asc/desc)
-        :query_params int page: page number to get the specific showcases from a page
-        :query_params int per_page:Number of results to be returned per page
-        :query_params str query: The search query to use to filter the results
-        :query_params str sort: The way to sort the results. Allowed values are `alphabetical, data, default, followers,
-         relevant, videos`
+        :path_params int user_id: ID specified to the user \n
+        :query_params str direction: Direction can be (asc/desc) \n
+        :query_params int page: page number to get the specific showcases from a page \n
+        :query_params int per_page:Number of results to be returned per page \n
+        :query_params str query: The search query to use to filter the results \n
+        :query_params str sort: The way to sort the results. Allowed values are `alphabetical, data, default, followers, \n
+         relevant, videos` \n
         :return: Returns all showcase list.
         """
         response = self.video_uploader_service.showcase_list(user_id=pk, query_params=request.query_params)
@@ -286,9 +291,10 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def specific_showcase(self, request, pk, album_id):
         """
         To get a specific showcase
-        :path_params int user_id: ID specified to the user
-        :path_params int album_id: ID specified to the album
-        :return: Returns a specific showcase
+
+        :path_params int user_id: ID specified to the user \n
+        :path_params int album_id: ID specified to the album \n
+        :return: Returns a specific showcase \n
         """
         response = self.video_uploader_service.specific_showcase(user_id=pk, album_id=album_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
@@ -299,10 +305,10 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To add a video to a showcase
 
-        :path_params int user_id: ID specified to the user
-        :path_params int album_id: ID specified to the album
-        :path_params int video_id: ID specified to the video
-        :return: Returns no content
+        :path_params int user_id: ID specified to the user \n
+        :path_params int album_id: ID specified to the album \n
+        :path_params int video_id: ID specified to the video \n
+        :return: Returns no content \n
         The video was added
         """
         response = self.video_uploader_service.add_video_to_showcase(video_id=video_id, user_id=pk, album_id=album_id)
@@ -312,10 +318,11 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def create_folder(self, request, pk):
         """
         To create a folder
-        :path_params int user_id: ID specified to the user
-        :body_params str name: Name for the folder
-        :body_params str(uri) parent_folder_uri: The URI of the parent folder
-        :return: Returns newly created folder.
+
+        :path_params int user_id: ID specified to the user \n
+        :body_params str name: Name for the folder \n
+        :body_params str(uri) parent_folder_uri: The URI of the parent folder \n
+        :return: Returns newly created folder. \n
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -327,8 +334,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To delete an existing folder
 
-        :path_params int user_id: ID specified to the user
-        :path_params int folder_id: ID specified to the folder
+        :path_params int user_id: ID specified to the user \n
+        :path_params int folder_id: ID specified to the folder \n
         :return: Returns no content.
         """
         response = self.video_uploader_service.delete_folder(user_id=pk, project_id=folder_id)
@@ -339,10 +346,10 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To update/edit an existing folder
 
-        :path_params int user_id: ID specified to the user
-        :path_params int folder_id: ID specified to the folder
-        :body_params str name: Name for the folder
-        :body_params str(uri) parent_folder_uri: The URI of the parent folder
+        :path_params int user_id: ID specified to the user \n
+        :path_params int folder_id: ID specified to the folder \n
+        :body_params str name: Name for the folder \n
+        :body_params str(uri) parent_folder_uri: The URI of the parent folder \n
         :return: Returns updated folder
         """
         serializer = self.get_serializer(data=request.data)
@@ -355,13 +362,13 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To get all the folder list
 
-        :path_params int user_id: ID specified to the user
-        :query_params str direction: Direction can be (asc/desc)
-        :query_params int page: page number to get the specific folders from a page
-        :query_params int per_page:Number of results to be returned per page
-        :query_params str query: The search query to use to filter the results
+        :path_params int user_id: ID specified to the user \n
+        :query_params str direction: Direction can be (asc/desc) \n
+        :query_params int page: page number to get the specific folders from a page \n
+        :query_params int per_page:Number of results to be returned per page \n
+        :query_params str query: The search query to use to filter the results \n
         :query_params str sort: The way to sort the results. Allowed values are `alphabetical, data, default, followers,
-         relevant, videos`
+         relevant, videos` \n
         :return: Returns all folder list.
         """
         response = self.video_uploader_service.folder_list(user_id=pk, query_params=request.query_params)
@@ -372,8 +379,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To get a specific folder
 
-        :path_params int user_id: ID specified to the user
-        :path_params int folder_id: ID specified to the folder
+        :path_params int user_id: ID specified to the user \n
+        :path_params int folder_id: ID specified to the folder \n
         :return: Returns a specific folder.
         """
         response = self.video_uploader_service.specific_folder(user_id=pk, project_id=folder_id)
@@ -385,9 +392,9 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To add a video to a folder
 
-        :path_params int user_id: ID specified to the user
-        :path_params int folder_id: ID specified to the folder
-        :path_params int video_id: ID specified to the video
+        :path_params int user_id: ID specified to the user \n
+        :path_params int folder_id: ID specified to the folder \n
+        :path_params int video_id: ID specified to the video \n
         :return:  was added. Returns no content
         """
         response = self.video_uploader_service.add_video_to_folder(video_id=video_id, user_id=pk, project_id=folder_id)
@@ -398,7 +405,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To delete an existing video
 
-        :path_params int video_id: ID specified to the video
+        :path_params int video_id: ID specified to the video \n
         :return: Returns no content.
         """
         response = self.video_uploader_service.delete_video(video_id=pk)
@@ -408,8 +415,9 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def user_video_list(self, request, pk):
         """
         To get all the videos list
-        :path_params int user_id: ID specified to the user
-        :return: Returns all videos list.
+
+        :path_params int user_id: ID specified to the user \n
+        :return: Returns all videos list. \n
         """
         response = self.video_uploader_service.user_video_list(user_id=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
@@ -419,7 +427,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To get a specific video
 
-        :path_params int video_id: ID specified to the video
+        :path_params int video_id: ID specified to the video \n
         :return: Returns a specific video.
         """
         response = self.video_uploader_service.specific_video(video_id=pk)
@@ -430,11 +438,11 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To create a video
 
-        :body_params str name: Name of the video
-        :body_params str description: Description of the video
-        :body_params str approach: The approach by which to upload the version. Allowed approaches are (post/pull)
-        :body_params str size: The upload size of the video
-        :body_params str redirect_url: The app's redirect URL when `approach` is post
+        :body_params str name: Name of the video \n
+        :body_params str description: Description of the video \n
+        :body_params str approach: The approach by which to upload the version. Allowed approaches are (post/pull) \n
+        :body_params str size: The upload size of the video \n
+        :body_params str redirect_url: The app's redirect URL when `approach` is post \n
         :return: Returns newly created video
         """
         serializer = self.get_serializer(data=request.data)
@@ -447,10 +455,10 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To update a video
 
-        :path_params int video_id: ID specified to the video
-        :body_params str approach: The approach by which to upload the version. Allowed approaches are (post/pull)
-        :body_params str size: The upload size of the video
-        :body_params str redirect_url: The app's redirect URL when `approach` is post
+        :path_params int video_id: ID specified to the video \n
+        :body_params str approach: The approach by which to upload the version. Allowed approaches are (post/pull) \n
+        :body_params str size: The upload size of the video \n
+        :body_params str redirect_url: The app's redirect URL when `approach` is post \n
         :return: Returns updated video
         """
         serializer = self.get_serializer(data=request.data)
@@ -464,8 +472,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To like a video
 
-        :path_params int user_id: ID specified to the user
-        :path_params int video_id: ID specified to the video
+        :path_params int user_id: ID specified to the user \n
+        :path_params int video_id: ID specified to the video \n
         :return: Returns no content. The video was liked
         """
         response = self.video_uploader_service.like_video(video_id=video_id, user_id=pk)
@@ -477,8 +485,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         To unlike a video
         
-        :path_params int user_id: ID specified to the user
-        :path_params int video_id: ID specified to the video
+        :path_params int user_id: ID specified to the user /n \n
+        :path_params int video_id: ID specified to the video \n
         :return: Returns no content.
         The video was unliked
         """
