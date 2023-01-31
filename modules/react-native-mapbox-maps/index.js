@@ -3,7 +3,7 @@ import { ActivityIndicator, Image, View } from "react-native";
 import MapboxGL from "@rnmapbox/maps";
 import options from "./options";
 import { renderDestinationAnnotations, renderPolygon } from "./utils";
-const { styles, mapStyleURL, MAPBOX_TOKEN, ORIGIN, DESTINATION, POLYGON, ROUTE } = options;
+const { styles, mapStyleURL, MAPBOX_TOKEN, ORIGIN, DESTINATION, POLYGON, ROUTE, MAP_SETTINGS } = options;
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
@@ -38,21 +38,21 @@ const Maps = () => {
         loading && <ActivityIndicator color={"#000"} />
       }
       <MapboxGL.MapView
-        logoEnabled={false}
-        zoomEnabled={true}
+        logoEnabled={MAP_SETTINGS.logoEnabled}
+        zoomEnabled={MAP_SETTINGS.zoomEnabled}
         onDidFinishRenderingMapFully={() => setLoading(false)}
-        zoomLevel={14}
-        compassEnabled={true}
+        zoomLevel={MAP_SETTINGS.zoomLevel}
+        compassEnabled={MAP_SETTINGS.compassEnabled}
         style={styles.map}
         styleURL={mapStyleURL}
-        localizeLabels={true}
+        localizeLabels={MAP_SETTINGS.localizeLabels}
         onPress={(coords) => {
           updateRoute(coords?.geometry?.coordinates, true);
           setDefaultOrigin(coords?.geometry?.coordinates);
         }}
         compassPosition={styles.compassStyle}
       >
-        <MapboxGL.Camera zoomLevel={5}
+        <MapboxGL.Camera zoomLevel={MAP_SETTINGS.zoomLevel}
           centerCoordinate={defaultOrigin} />
         <MapboxGL.MarkerView id={"marker"} coordinate={defaultOrigin} draggable={true}>
           <View>

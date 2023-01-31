@@ -19,6 +19,13 @@ const POLYGON = {
   }
 };
 
+const MAP_SETTINGS = {
+  logoEnabled: false,
+  zoomLevel: 6,
+  compassEnabled: true,
+  localizeLabels: true,
+  zoomEnabled: true
+};
 const ROUTE = {
   type: "FeatureCollection",
   features: [
@@ -87,5 +94,6 @@ export default {
   ORIGIN,
   DESTINATION,
   POLYGON,
-  ROUTE
+  ROUTE,
+  MAP_SETTINGS
 };
