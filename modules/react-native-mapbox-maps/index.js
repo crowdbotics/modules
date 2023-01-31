@@ -1,123 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Image, Text, View } from "react-native";
 import MapboxGL from "@rnmapbox/maps";
-import { styles, MAPBOX_TOKEN } from "./options";
+import options from "./options"
+import { renderDestinationAnnotations, renderPolygon, updateRoute, getAddress } from "./utils";
+const { styles, mapStyleURL, MAPBOX_TOKEN, ORIGIN, DESTINATION, POLYGON, ROUTE, ORIGIN_TITLE, DESTINATION_TITLE } = options
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 const Maps = () => {
-  const [defaultOrigin, setDefaultOrigin] = useState([78.9629, 20.5937]);
-  const [destination, setDestination] = useState([74, 27]);
-  const [polygon] = useState({ type: "Feature",
-  geometry: {
-    type: "Polygon",
-    coordinates: [
-      [
-        [72.685547, 20.055931],
-        [76.640625, 21.207458],
-        [76.904297, 17.978733],
-        [72.685547, 20.055931]
-      ]
-    ]
-  }});
-  const [route, setRoute] = useState( {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            defaultOrigin,
-            destination
-          ]
-        }
-      }
-    ]
-  });
-
-const updateRoute = (coords, origin) => {
-if(origin){
-  setDefaultOrigin(coords)
-  setRoute({
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            coords,
-            destination
-          ]
-        }
-      }
-    ]
-  })
-} else{
-  setDestination(coords)
-  setRoute({
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            defaultOrigin,
-            coords
-          ]
-        }
-      }
-    ]
-  })
-}
-}
+  const [defaultOrigin, setDefaultOrigin] = useState(ORIGIN);
+  const [destination, setDestination] = useState(DESTINATION);
+  const [originTitle, setOriginTitle] = useState(ORIGIN_TITLE);
+  const [destinationTitle, setDestinationTitle] = useState(DESTINATION_TITLE);
+  const [route, setRoute] = useState(ROUTE);
 
 
-  const renderDestinationAnnotations = () => {
-    return (
-      <MapboxGL.PointAnnotation
-        key="pointAnnotation"
-        id="pointAnnotation"
-        coordinate={destination}
-        draggable={true}
-        onDragEnd= {(coords) => {updateRoute(coords?.geometry?.coordinates)}}
-      >
-        <View
-          style={{
-            height: 30,
-            width: 30,
-            backgroundColor: "red",
-            borderRadius: 50,
-            borderColor: "#fff",
-            borderWidth: 3,
-          }}
-        />
-      </MapboxGL.PointAnnotation>
-    );
-  };
+
+  const handleGetDestination = async (coords) =>{
+    await updateRoute(
+      coords,
+      defaultOrigin,
+      destination,
+      false,
+      setRoute,
+      setDefaultOrigin,
+      setDestination)
+
+    await getAddress(coords, )
+  }
 
 
   return (
     <View style={styles.view}>
       <MapboxGL.MapView
+        logoEnabled={false}
+        zoomEnabled={true}
+        onDidFinishRenderingMapFully={() => setLoading(false)}
+        zoomLevel={14}
         compassEnabled={true}
         style={styles.map}
-        styleURL="mapbox://styles/fsouda/cldejl0dv007r01r04lobz2ll"
+        styleURL={mapStyleURL}
         localizeLabels={true}
-        onPress={(coords) =>updateRoute(coords?.geometry?.coordinates, true)}
+        onPress={(coords) => updateRoute(
+          coords?.geometry?.coordinates,
+          defaultOrigin,
+          destination,
+          true,
+          setRoute,
+          setDefaultOrigin,
+          setDestination)}
         compassPosition={styles.compassStyle}
       >
-        <MapboxGL.Camera zoomLevel={4}
+        <MapboxGL.Camera zoomLevel={5}
           centerCoordinate={defaultOrigin} />
-        <MapboxGL.MarkerView id={"marker"} coordinate={defaultOrigin}>
+        <MapboxGL.MarkerView id={"marker"} coordinate={defaultOrigin} draggable={true}>
           <View>
             <View style={styles.markerContainer}>
-              <Text style={styles.text}></Text>
+              <Text style={styles.text}>{}</Text>
               <Image
                 source={require("./pin.png")}
                 style={styles.markerImg}
@@ -126,22 +65,15 @@ if(origin){
           </View>
         </MapboxGL.MarkerView>
 
-        <MapboxGL.ShapeSource id="source" shape={polygon}>
-          <MapboxGL.FillLayer id="fill" style={{ fillColor: "blue" }} />
-          <MapboxGL.LineLayer
-            id="line"
-            style={{ lineColor: "red", lineWidth: 2 }}
-          />
-        </MapboxGL.ShapeSource>
-
         <MapboxGL.ShapeSource id="line1" shape={route}>
           <MapboxGL.LineLayer
             id="linelayer1"
-            style={{ lineColor: "red", lineWidth: 5 }}
+            style={{ lineColor: "#E695B5", lineWidth: 5 }}
           />
         </MapboxGL.ShapeSource>
 
-        <View>{renderDestinationAnnotations()}</View>
+        <View>{renderPolygon(POLYGON)}</View>
+        <View>{renderDestinationAnnotations(destination,handleGetDestination)}</View>
       </MapboxGL.MapView>
 
     </View>

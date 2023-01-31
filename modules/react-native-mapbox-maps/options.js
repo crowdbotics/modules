@@ -1,7 +1,45 @@
 import { StyleSheet } from "react-native";
 
-export const MAPBOX_TOKEN = "sk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGlwNWdwcTFqdWozcnFwa3Nwc3RwdGoifQ.UnMCRmYGEZBjTHY3hBOhCA";
-export const styles = StyleSheet.create({
+const MAPBOX_TOKEN = "sk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGlwNWdwcTFqdWozcnFwa3Nwc3RwdGoifQ.UnMCRmYGEZBjTHY3hBOhCA";
+const mapStyleURL = "mapbox://styles/fsouda/cldejl0dv007r01r04lobz2ll"
+const ORIGIN = [69.28104374759553, 27.69129424991459]
+const DESTINATION = [73.12076538972593, 30.71524733596121]
+const ORIGIN_TITLE = 'Karachi'
+const DESTINATION_TITLE = 'Quieta'
+
+const POLYGON = {
+  type: "Feature",
+  geometry: {
+      type: "Polygon",
+      coordinates: [
+          [
+            [67.06168864057639, 30.19125014188451],
+            [69.23506795385327, 30.446385920247238],
+            [66.5344736417654, 27.801480997434084],
+            [67.06168864057639, 30.19125014188451]
+          ]
+      ]
+  }
+}
+
+const ROUTE = {
+  type: "FeatureCollection",
+  features: [
+    {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "LineString",
+        coordinates: [
+          ORIGIN,
+          DESTINATION
+        ]
+      }
+    }
+  ]
+}
+
+const styles = StyleSheet.create({
   view: {
     height: "100%"
   },
@@ -44,3 +82,15 @@ export const styles = StyleSheet.create({
   },
   compassStyle:{ top: 30, right: 30 }
 });
+
+export default {
+  MAPBOX_TOKEN,
+  mapStyleURL,
+  styles,
+  ORIGIN,
+  DESTINATION,
+  POLYGON,
+  ROUTE,
+  ORIGIN_TITLE,
+  DESTINATION_TITLE
+}
