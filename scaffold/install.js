@@ -39,6 +39,10 @@ fs.copyFileSync(
   path.join(cwd, "heroku.yml")
 );
 fs.copyFileSync(
+  path.join(customFiles, "Dockerfile"),
+  path.join(cwd, "Dockerfile")
+);
+fs.copyFileSync(
   path.join(customFiles, "metro.config.js"),
   path.join(cwd, "metro.config.js")
 );
