@@ -95,7 +95,6 @@ module.exports = {
   output: {
     filename: "bundle.[hash].js",
     path: path.resolve(appDirectory, "backend", "web_build"),
-    publicPath: "/",
     clean: true
   },
 
