@@ -111,6 +111,10 @@ Update the following options in `mapbox-map/options.js`.
 ```
 const MAPBOX_TOKEN = MapBox Secret Token generated above in MapBox Credentials section.
 const mapStyleURL = Map `styleURL`
+const ORIGIN = Initial location for the map
+const DESTINATION = location
+const POLYGON = Update the polygon object to draw shape on the map 
+const ROUTE = Update route object to draw line between two points 
 ```
 
 

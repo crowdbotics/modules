@@ -1,26 +1,23 @@
 import { StyleSheet } from "react-native";
 
 const MAPBOX_TOKEN = "sk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGlwNWdwcTFqdWozcnFwa3Nwc3RwdGoifQ.UnMCRmYGEZBjTHY3hBOhCA";
-const mapStyleURL = "mapbox://styles/fsouda/cldejl0dv007r01r04lobz2ll"
-const ORIGIN = [69.28104374759553, 27.69129424991459]
-const DESTINATION = [73.12076538972593, 30.71524733596121]
-const ORIGIN_TITLE = 'Karachi'
-const DESTINATION_TITLE = 'Quieta'
-
+const mapStyleURL = "mapbox://styles/fsouda/cldejl0dv007r01r04lobz2ll";
+const ORIGIN = [69.28104374759553, 27.69129424991459];
+const DESTINATION = [73.12076538972593, 30.71524733596121];
 const POLYGON = {
   type: "Feature",
   geometry: {
-      type: "Polygon",
-      coordinates: [
-          [
-            [67.06168864057639, 30.19125014188451],
-            [69.23506795385327, 30.446385920247238],
-            [66.5344736417654, 27.801480997434084],
-            [67.06168864057639, 30.19125014188451]
-          ]
+    type: "Polygon",
+    coordinates: [
+      [
+        [67.06168864057639, 30.19125014188451],
+        [69.23506795385327, 30.446385920247238],
+        [66.5344736417654, 27.801480997434084],
+        [67.06168864057639, 30.19125014188451]
       ]
+    ]
   }
-}
+};
 
 const ROUTE = {
   type: "FeatureCollection",
@@ -37,7 +34,7 @@ const ROUTE = {
       }
     }
   ]
-}
+};
 
 const styles = StyleSheet.create({
   view: {
@@ -80,7 +77,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     flex: 1
   },
-  compassStyle:{ top: 30, right: 30 }
+  compassStyle: { top: 30, right: 30 }
 });
 
 export default {
@@ -90,7 +87,5 @@ export default {
   ORIGIN,
   DESTINATION,
   POLYGON,
-  ROUTE,
-  ORIGIN_TITLE,
-  DESTINATION_TITLE
-}
+  ROUTE
+};
