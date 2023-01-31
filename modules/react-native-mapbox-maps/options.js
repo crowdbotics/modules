@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-const MAPBOX_TOKEN = "sk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGlwNWdwcTFqdWozcnFwa3Nwc3RwdGoifQ.UnMCRmYGEZBjTHY3hBOhCA";
-const mapStyleURL = "mapbox://styles/fsouda/cldejl0dv007r01r04lobz2ll";
+const MAPBOX_TOKEN = "Your Secret Token";
+const mapStyleURL = "Maps custom style url";
 const ORIGIN = [69.28104374759553, 27.69129424991459];
 const DESTINATION = [73.12076538972593, 30.71524733596121];
 const POLYGON = {
