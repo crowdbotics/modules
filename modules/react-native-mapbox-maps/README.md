@@ -17,8 +17,25 @@ MapBox Maps module is a react-native based module. Helps user to search and navi
 5. Your map will be displayed on the Style page.
 6. click `:` button and copy the `styleURL` which will look something like this `mapbox://styles/{your_account}/xxxxxxxxxxxx`. 
 
+## Configure your secret token
+To avoid exposing your secret token, add it as an environment variable:
+
+1. Find or create a gradle.properties file in your Gradle user home folder.
+2. The folder can be found at `USER_HOME >> .gradle`. 
+3. Once you have found or created the file, its path should be `USER_HOME >> .gradle >> gradle.properties`. 
+4. Add your secret token your `gradle.properties` file:
+    ```
+    MAPBOX_DOWNLOADS_TOKEN=YOUR_SECRET_MAPBOX_ACCESS_TOKEN
+    ```
+
 
 ## Android Installation
+
+1. In `android/app/src/main/res/values/strings.xml` file and add the following string resource,
+
+```xml
+<string name="mapbox_access_token">YOUR_MAPBOX_ACCESS_TOKEN</string>
+```
 
 2. Overwrite mapbox dependencies within your `android/build.gradle > buildscript > ext` section
 
@@ -32,7 +49,7 @@ buildscript {
 }
 ```
 
-2. Then under section allprojects/repositories add your data:
+3. Then under section allprojects/repositories add your data:
 ```
 // android/build.gradle
 
