@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from .serializers import (ChannelSerializer, GroupSerializer, ShowcaseSerializer,
                           UpdateShowcaseSerializer, FolderSerializer, CreateVideoSerializer, EditVideoSerializer,
                           TokenSerializer)
-from .services.VideoUPloaderService import VideoUploaderService
+from .services.VideoUploaderService import VideoUploaderService
 import base64
 
 
@@ -37,10 +37,9 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
     def convert_into_base64():
         client_id = os.getenv('VIDEO_UPLOADER_CLIENT_ID', "")
         client_secret = os.getenv('VIDEO_UPLOADER_CLIENT_SECRET', "")
-        token = client_id+':'+client_secret
+        token = client_id + ':' + client_secret
         byte_token = base64.b64encode(bytes(token, 'utf-8'))
         return byte_token.decode('utf-8')
-
 
     @action(detail=False, methods=['post'], url_path='access-token')
     def create_access_token(self, request):
@@ -51,12 +50,12 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.create_access_token(payload=serializer.data, token=self.convert_into_base64())
+        response = self.video_uploader_service.create_access_token(payload=serializer.data,
+                                                                   token=self.convert_into_base64())
         data = response.get("data")
         if 'access_token' in data:
             self.video_uploader_service.access_token = data['access_token']
         return Response(data=data, status=response.get("status_code"))
-
 
     @action(detail=False, methods=['post'], url_path='channel/create')
     def create_channel(self, request):

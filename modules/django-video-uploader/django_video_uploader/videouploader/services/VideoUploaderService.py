@@ -1,5 +1,4 @@
 import requests
-from rest_framework import status
 
 
 class VideoUploaderBase:
@@ -18,7 +17,7 @@ class VideoUploaderBase:
     def _api_call(self, request_type, url, headers=None, payload=None, data=None):
 
         try:
-            response = requests.request(request_type, url, headers=headers, json=payload, data=data)
+            response = requests.request(request_type, url, headers=headers, json=payload, params=data)
             response.raise_for_status()
 
             if request_type == 'PUT' and response.status_code == 204:

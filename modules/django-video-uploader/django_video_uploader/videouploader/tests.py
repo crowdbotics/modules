@@ -7,7 +7,8 @@ from unittest import mock
 class VideoUploaderViewSetTests(APITestCase):
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_access_token')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.create_access_token')
     def test_create_access_token(self, create_access_token_mock):
         response = {
             'data': {'access_token': 'c2ea12984d0781de44b990f610ed4647', 'token_type': 'bearer', 'scope': 'public',
@@ -21,20 +22,28 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         create_access_token_mock.assert_called_once()
 
+
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_access_token')
-    def test_create_access_token_with_wrong_client_id(self, create_access_token_mock):
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.create_access_token')
+    @mock.patch(
+        'modules.django_video_uploader.videouploader.viewsets.VideoUploaderViewSet.convert_into_base64')
+    def test_create_access_token_with_wrong_client_id(self, convert_into_base64_mock, create_access_token_mock):
         response = {'data': {'error': 'Something strange occurred. Please contact the app owners.', 'link': None,
                              'developer_message': 'No user credentials were provided.', 'error_code': 8003},
                     'status_code': 401}
         create_access_token_mock.return_value = response
         data = {
             "grant_type": "client_credentials",
-            "scope": ["public"]
+            "scope": ["public"],
         }
+        token = {'data': 'invalid client_id'}
+        convert_into_base64_mock.return_value = token
         response = self.client.post(reverse('video_uploader_service-create-access-token'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         create_access_token_mock.assert_called_once()
+        convert_into_base64_mock.assert_called_once()
+        create_access_token_mock.assert_called_once_with(payload=data, token=token)
 
     def test_create_access_token_without_data(self):
         data = {}
@@ -42,7 +51,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_channel')
     def test_create_channel(self, create_channel_mock):
         response = {"data": {
             "uri": "/channels/1829885",
@@ -63,12 +72,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
                     "uri": "/users/193193374/pictures/82481466",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
@@ -230,15 +239,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -250,9 +259,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -293,7 +302,7 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "tags": [],
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -342,10 +351,10 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "header": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/channel/default",
@@ -357,7 +366,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
-                "default_picture": "true"
+                "default_picture": True
             },
             "privacy": {"view": "users"},
             "categories": [],
@@ -390,8 +399,8 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "follow": {
                         "added": "false",
-                        "added_time": "null",
-                        "type": "null",
+                        "added_time": None,
+                        "type": None,
                         "uri": "/users/193193374/channels/1829885"
                     },
                     "moderate_videos": {
@@ -417,9 +426,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.post(reverse('video_uploader_service-create-channel'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_channel_mock.assert_called_once()
+        create_channel_mock.assert_called_once_with(data)
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_channel')
     def test_create_channel_with_no_create_scope(self, create_channel_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_channel_mock.return_value = response
@@ -432,6 +443,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.post(reverse('video_uploader_service-create-channel'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_channel_mock.assert_called_once()
+        create_channel_mock.assert_called_once_with(data)
 
     def test_create_channel_without_data(self):
         data = {}
@@ -439,7 +451,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
     def test_delete_channel(self, delete_channel_mock):
         response = {"data": {"message": "Item deleted successfully."}, "status_code": 204}
         delete_channel_mock.return_value = response
@@ -447,9 +459,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_channel_mock.assert_called_once()
+        delete_channel_mock.assert_called_once_with(channel_id='1829885')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
     def test_delete_channel_with_wrong_id(self, delete_channel_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         delete_channel_mock.return_value = response
@@ -457,9 +471,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_channel_mock.called_once()
+        delete_channel_mock.called_once_with(channel_id='1829885')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
     def test_delete_channel_with_no_delete_scope(self, delete_channel_mock):
         response = {"data": {"error": "The user isn't allowed to perform that action."}, "status_code": 403}
         delete_channel_mock.return_value = response
@@ -467,9 +483,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_channel_mock.called_once()
+        delete_channel_mock.called_once_with(channel_id='1829885')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_channel')
     def test_update_channel_with_invalid_id(self, update_channel_mock):
         response = {"data": {"message": "Resource not found"},
                     "status_code": 404}
@@ -485,9 +502,11 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_channel_mock.called_once()
+        update_channel_mock.called_once_with(channel_id='1829885', payload=data)
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_channel')
     def test_update_channel(self, update_channel_mock):
         response = {"data": {
             "uri": "/channels/1829885",
@@ -508,12 +527,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
                     "uri": "/users/193193374/pictures/82481466",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
@@ -675,15 +694,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -695,9 +714,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -738,7 +757,7 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "tags": [],
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -787,10 +806,10 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "header": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/channel/default",
@@ -802,7 +821,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
-                "default_picture": "true"
+                "default_picture": True
             },
             "privacy": {"view": "users"},
             "categories": [],
@@ -835,8 +854,8 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "follow": {
                         "added": "false",
-                        "added_time": "null",
-                        "type": "null",
+                        "added_time": None,
+                        "type": None,
                         "uri": "/users/193193374/channels/1829885"
                     },
                     "moderate_videos": {
@@ -864,6 +883,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_channel_mock.called_once()
+        update_channel_mock.called_once_with(channel_id='1829885', payload=data)
 
     def test_update_channel_with_empty_data(self):
         channel_id = 1829885
@@ -873,7 +893,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.channel_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.channel_list')
     def test_channel_list(self, channel_list_mock):
         response = {"data": {
             "total": 1474702,
@@ -881,7 +901,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "per_page": 1,
             "paging": {
                 "next": "/channels?page=2&per_page=1",
-                "previous": "null",
+                "previous": None,
                 "first": "/channels?page=1&per_page=1",
                 "last": "/channels?page=1474702&per_page=1"
             },
@@ -903,12 +923,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
                     "uri": "/users/193193374/pictures/82481466",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
@@ -1070,15 +1090,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -1090,9 +1110,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -1133,7 +1153,7 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "tags": [],
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -1182,10 +1202,10 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "header": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/channel/default",
@@ -1197,7 +1217,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
-                "default_picture": "true"
+                "default_picture": True
             },
             "privacy": {"view": "users"},
             "categories": [],
@@ -1230,8 +1250,8 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "follow": {
                         "added": "false",
-                        "added_time": "null",
-                        "type": "null",
+                        "added_time": None,
+                        "type": None,
                         "uri": "/users/193193374/channels/1829885"
                     },
                     "moderate_videos": {
@@ -1253,7 +1273,7 @@ class VideoUploaderViewSetTests(APITestCase):
         channel_list_mock.called_once()
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_channel')
     def test_specific_channel(self, specific_channel_mock):
         response = {"data": {
             "uri": "/channels/1829885",
@@ -1274,12 +1294,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
                     "uri": "/users/193193374/pictures/82481466",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
@@ -1441,15 +1461,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -1461,9 +1481,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -1504,7 +1524,7 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "tags": [],
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -1553,10 +1573,10 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "header": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/channel/default",
@@ -1568,7 +1588,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
-                "default_picture": "true"
+                "default_picture": True
             },
             "privacy": {"view": "users"},
             "categories": [],
@@ -1601,8 +1621,8 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "follow": {
                         "added": "false",
-                        "added_time": "null",
-                        "type": "null",
+                        "added_time": None,
+                        "type": None,
                         "uri": "/users/193193374/channels/1829885"
                     },
                     "moderate_videos": {
@@ -1623,9 +1643,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_channel_mock.called_once()
+        specific_channel_mock.called_once_with(channel_id='1829885')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
     def test_specific_channel_with_wrong_id(self, specific_channel_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         specific_channel_mock.return_value = response
@@ -1633,9 +1655,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_channel_mock.called_once()
+        specific_channel_mock.called_once_with(channel_id='1829885')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_group')
     def test_create_group_with_no_create_scope(self, create_group_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_group_mock.return_value = response
@@ -1646,9 +1669,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.post(reverse('video_uploader_service-create-group'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_group_mock.assert_called_once()
+        create_group_mock.called_once_with(payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_group')
     def test_create_group(self, create_group_mock):
         response = {"data": {
             "uri": "/groups/808729",
@@ -1665,7 +1689,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "invite": "members"
             },
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -1714,10 +1738,10 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "header": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/group/default",
@@ -1729,7 +1753,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "3acb62457d24b09d74a79177929d9638af7afcf2",
-                "default_picture": "true"
+                "default_picture": True
             },
             "metadata": {
                 "connections": {
@@ -1746,10 +1770,10 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "join": {
-                        "added": "true",
+                        "added": True,
                         "added_time": "2023-01-27T15:18:33+00:00",
                         "type": "moderator",
-                        "title": "null",
+                        "title": None,
                         "uri": "/users/193193374/groups/808729"
                     }
                 }
@@ -1766,12 +1790,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
                     "uri": "/users/193193374/pictures/82481466",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
@@ -1933,15 +1957,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -1953,9 +1977,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -2004,6 +2028,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.post(reverse('video_uploader_service-create-group'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         create_group_mock.called_once()
+        create_group_mock.called_once_with(payload=data)
 
     def test_create_group_with_empty_data(self):
         data = {}
@@ -2011,7 +2036,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.groups_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.groups_list')
     def test_group_list(self, group_list_mock):
         response = {'data': {
             "total": 600464,
@@ -2019,7 +2044,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "per_page": 1,
             "paging": {
                 "next": "/groups?page=2&per_page=1",
-                "previous": "null",
+                "previous": None,
                 "first": "/groups?page=1&per_page=1",
                 "last": "/groups?page=600464&per_page=1"
             },
@@ -2027,7 +2052,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 {
                     "uri": "/groups/808731",
                     "name": "Photography",
-                    "description": "null",
+                    "description": None,
                     "link": "https://vimeo.com/groups/808731",
                     "created_time": "2023-01-27T15:38:54+00:00",
                     "modified_time": "2023-01-27T15:38:54+00:00",
@@ -2040,7 +2065,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "pictures": {
                         "uri": "/videos/149779134/pictures/567891435",
-                        "active": "true",
+                        "active": True,
                         "type": "custom",
                         "base_link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d",
                         "sizes": [
@@ -2091,7 +2116,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "default_picture": "false"
                     },
                     "header": {
-                        "uri": "null",
+                        "uri": None,
                         "active": "false",
                         "type": "default",
                         "base_link": "https://i.vimeocdn.com/group/default",
@@ -2103,7 +2128,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             }
                         ],
                         "resource_key": "3acb62457d24b09d74a79177929d9638af7afcf2",
-                        "default_picture": "true"
+                        "default_picture": True
                     },
                     "metadata": {
                         "connections": {
@@ -2121,9 +2146,9 @@ class VideoUploaderViewSetTests(APITestCase):
                         "interactions": {
                             "join": {
                                 "added": "false",
-                                "added_time": "null",
-                                "type": "null",
-                                "title": "null",
+                                "added_time": None,
+                                "type": None,
+                                "title": None,
                                 "uri": "/users/193125162/groups/808731"
                             }
                         }
@@ -2140,12 +2165,12 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location": "",
                         "gender": "",
-                        "bio": "null",
-                        "short_bio": "null",
+                        "bio": None,
+                        "short_bio": None,
                         "created_time": "2022-02-01T18:58:49+00:00",
                         "pictures": {
                             "uri": "/users/165394170/pictures/66548956",
-                            "active": "true",
+                            "active": True,
                             "type": "custom",
                             "base_link": "https://i.vimeocdn.com/portrait/66548956",
                             "sizes": [
@@ -2285,7 +2310,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "interactions": {
                                 "follow": {
                                     "added": "false",
-                                    "added_time": "null",
+                                    "added_time": None,
                                     "uri": "/users/193125162/following/165394170",
                                     "options": [
                                         "GET",
@@ -2300,7 +2325,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                         "DELETE"
                                     ],
                                     "added": "false",
-                                    "added_time": "null"
+                                    "added_time": None
                                 },
                                 "report": {
                                     "uri": "/users/165394170/report",
@@ -2319,15 +2344,15 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location_details": {
                             "formatted_address": "",
-                            "latitude": "null",
-                            "longitude": "null",
-                            "city": "null",
-                            "state": "null",
-                            "neighborhood": "null",
-                            "sub_locality": "null",
-                            "state_iso_code": "null",
-                            "country": "null",
-                            "country_iso_code": "null"
+                            "latitude": None,
+                            "longitude": None,
+                            "city": None,
+                            "state": None,
+                            "neighborhood": None,
+                            "sub_locality": None,
+                            "state_iso_code": None,
+                            "country": None,
+                            "country_iso_code": None
                         },
                         "skills": [],
                         "available_for_hire": "false",
@@ -2345,7 +2370,7 @@ class VideoUploaderViewSetTests(APITestCase):
         group_list_mock.assert_called_once()
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
     def test_delete_group(self, delete_group_mock):
         response = {'data': {"message": "Item deleted successfully."}, 'status_code': 204}
         delete_group_mock.return_value = response
@@ -2353,9 +2378,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_group_mock.assert_called_once()
+        delete_group_mock.assert_called_once_with(group_id='808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
     def test_delete_group_with_invalid_id(self, delete_group_mock):
         response = {'data': {"message": "Resource not found"}, 'status_code': 404}
         delete_group_mock.return_value = response
@@ -2363,19 +2390,22 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_group_mock.assert_called_once()
+        delete_group_mock.assert_called_once_with(group_id='808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
     def test_delete_group_with_no_delete_scope(self, delete_group_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "delete" scope'}, 'status_code': 403}
         delete_group_mock.return_value = response
         group_id = 808731
         response = self.client.delete(reverse('video_uploader_service-delete-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_group_mock.assert_called_once()
+        delete_group_mock.assert_called_once_with(group_id='808731')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_group')
     def test_specific_group_with_invalid_id(self, specific_group_mock):
         response = {'data': {"message": "Resource not found"}, 'status_code': 404}
         specific_group_mock.return_value = response
@@ -2383,9 +2413,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_group_mock.assert_called_once()
+        specific_group_mock.assert_called_once_with(group_id='808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_group')
     def test_specific_group(self, specific_group_mock):
         response = {'data': {
             "uri": "/groups/808729",
@@ -2402,7 +2434,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "invite": "members"
             },
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -2451,10 +2483,10 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "header": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/group/default",
@@ -2466,7 +2498,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "3acb62457d24b09d74a79177929d9638af7afcf2",
-                "default_picture": "true"
+                "default_picture": True
             },
             "metadata": {
                 "connections": {
@@ -2483,10 +2515,10 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "join": {
-                        "added": "true",
+                        "added": True,
                         "added_time": "2023-01-27T15:18:33+00:00",
                         "type": "moderator",
-                        "title": "null",
+                        "title": None,
                         "uri": "/users/193193374/groups/808729"
                     }
                 }
@@ -2503,12 +2535,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
                     "uri": "/users/193193374/pictures/82481466",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
@@ -2670,15 +2702,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -2690,9 +2722,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -2738,9 +2770,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_group_mock.assert_called_once()
+        specific_group_mock.assert_called_once_with(group_id='808731')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group(self, add_user_to_group_mock):
         response = {'status_code': 200}
         add_user_to_group_mock.return_value = response
@@ -2749,9 +2782,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         add_user_to_group_mock.assert_called_once()
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group_with_invalid_user_id(self, add_user_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_user_to_group_mock.return_value = response
@@ -2760,9 +2795,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_user_to_group_mock.assert_called_once()
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group_with_invalid_group_id(self, add_user_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_user_to_group_mock.return_value = response
@@ -2771,20 +2808,23 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_user_to_group_mock.assert_called_once()
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group_with_no_add_scope(self, add_user_to_group_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_user_to_group_mock.return_value = response
         group_id = 808731
         user_id = 19808731
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_user_to_group_mock.assert_called_once()
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group(self, add_video_to_group_mock):
         response = {'status_code': 200}
         add_video_to_group_mock.return_value = response
@@ -2793,9 +2833,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         add_video_to_group_mock.assert_called_once()
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group_with_invalid_group_id(self, add_video_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_group_mock.return_value = response
@@ -2804,9 +2845,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_group_mock.assert_called_once()
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group_with_invalid_video_id(self, add_video_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_group_mock.return_value = response
@@ -2815,33 +2858,36 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_group_mock.assert_called_once()
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group_with_no_add_scope(self, add_video_to_group_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_group_mock.return_value = response
         group_id = 808731
         video_id = 19808731
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_group_mock.assert_called_once()
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_showcase')
     def test_create_showcase_with_no_create_scope(self, create_showcase_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_showcase_mock.return_value = response
         data = {
             "brand_color": "blue",
             "description": "this is description",
-            "hide_nav": "true",
-            "hide_upcoming": "true",
+            "hide_nav": True,
+            "hide_upcoming": True,
             "layout": "grid",
             "name": "string",
             "password": "password",
             "privacy": "anybody",
-            "review_mode": "true",
+            "review_mode": True,
             "sort": "added_first",
             "theme": "dark"
         }
@@ -2850,14 +2896,15 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_showcase_mock.assert_called_once()
+        create_showcase_mock.assert_called_once_with(user_id='44367021', payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_showcase')
     def test_create_showcase(self, create_showcase_mock):
         response = {"data": {
             "uri": "/users/193125162/albums/10146228",
             "name": "Google",
-            "description": "null",
+            "description": None,
             "link": "https://vimeo.com/showcase/10146228",
             "duration": 0,
             "created_time": "2023-01-27T16:43:06+00:00",
@@ -2874,12 +2921,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -3041,15 +3088,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -3061,9 +3108,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -3104,7 +3151,7 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "privacy": {"view": "anybody"},
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -3153,19 +3200,19 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "sort": "arranged",
             "layout": "grid",
             "theme": "standard",
-            "brand_color": "null",
-            "custom_logo": "null",
+            "brand_color": None,
+            "custom_logo": None,
             "review_mode": "false",
             "web_custom_logo": "false",
             "web_brand_color": "false",
             "allow_downloads": "false",
-            "allow_continuous_play": "true",
-            "allow_share": "true",
+            "allow_continuous_play": True,
+            "allow_share": True,
             "hide_nav": "false",
             "metadata": {
                 "connections": {
@@ -3196,38 +3243,38 @@ class VideoUploaderViewSetTests(APITestCase):
                 }
             },
             "use_custom_domain": "false",
-            "domain": "null",
-            "domain_certificate_state": "null",
-            "url": "null",
-            "hide_vimeo_logo": "null",
-            "embed_custom_logo": "null",
-            "embed_brand_color": "null",
+            "domain": None,
+            "domain_certificate_state": None,
+            "url": None,
+            "hide_vimeo_logo": None,
+            "embed_custom_logo": None,
+            "embed_brand_color": None,
             "autoplay": "false",
             "loop": "false",
-            "roku_provider_name": "null",
-            "roku_language": "null",
+            "roku_provider_name": None,
+            "roku_language": None,
             "roku_genres": [""],
             "share_link": "https://vimeo.com/showcase/10146228",
             "hide_upcoming": "false",
-            "seo_title": "null",
-            "seo_description": "null",
+            "seo_title": None,
+            "seo_description": None,
             "seo_allow_indexed": "false",
             "seo_keywords": [],
             "hide_from_vimeo": "false",
-            "embed": {"html": "null"},
+            "embed": {"html": None},
             "resource_key": "20075f92bbd20f7125b0f699f8287e43ae17b0f2"
         }, 'status_code': 201}
         create_showcase_mock.return_value = response
         data = {
             "brand_color": "blue",
             "description": "this is description",
-            "hide_nav": "true",
-            "hide_upcoming": "true",
+            "hide_nav": True,
+            "hide_upcoming": True,
             "layout": "grid",
             "name": "string",
             "password": "password",
             "privacy": "anybody",
-            "review_mode": "true",
+            "review_mode": True,
             "sort": "added_first",
             "theme": "dark"
         }
@@ -3236,17 +3283,18 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_showcase_mock.assert_called_once()
+        create_showcase_mock.assert_called_once_with(user_id='44367021', payload=data)
 
     def test_create_showcase_with_invalid_data(self):
         data = {
             "brand_color": "blue",
             "description": "this is description",
-            "hide_nav": "true",
-            "hide_upcoming": "true",
+            "hide_nav": True,
+            "hide_upcoming": True,
             "layout": "grid",
             "password": "password",
             "privacy": "anybody",
-            "review_mode": "true",
+            "review_mode": True,
             "sort": "added_first",
             "theme": "dark"
         }
@@ -3256,7 +3304,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
     def test_delete_showcase(self, delete_showcase_mock):
         response = {"data": {"message": "Item deleted successfully."}, 'status_code': 204}
         delete_showcase_mock.return_value = response
@@ -3265,9 +3313,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_showcase_mock.assert_called_once()
+        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
     def test_delete_showcase_with_invalid_id(self, delete_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         delete_showcase_mock.return_value = response
@@ -3276,37 +3326,40 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_showcase_mock.assert_called_once()
+        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
     def test_delete_showcase_with_no_delete_scope(self, delete_showcase_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "delete" scope'}, 'status_code': 403}
         delete_showcase_mock.return_value = response
         user_id = 44367021
         album_id = 47612
         response = self.client.delete(reverse('video_uploader_service-delete-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_showcase_mock.assert_called_once()
+        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
     def test_update_showcase_with_no_edit_scope(self, update_showcase_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "edit" scope'}, 'status_code': 403}
         update_showcase_mock.return_value = response
         data = {
             "brand_color": "blue",
             "description": "this is description",
-            "hide_nav": "true",
-            "hide_upcoming": "true",
+            "hide_nav": True,
+            "hide_upcoming": True,
             "layout": "grid",
             "name": "string",
             "password": "password",
             "privacy": "anybody",
-            "review_mode": "true",
+            "review_mode": True,
             "sort": "added_first",
             "theme": "dark",
             "url": "https://api.com",
-            "use_custom_domain": "true"
+            "use_custom_domain": True
         }
         user_id = 193125162
         album_id = 10146228
@@ -3314,14 +3367,15 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_showcase_mock.assert_called_once()
+        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
     def test_update_showcase(self, update_showcase_mock):
         response = {"data": {
             "uri": "/users/193125162/albums/10146228",
             "name": "Google",
-            "description": "null",
+            "description": None,
             "link": "https://vimeo.com/showcase/10146228",
             "duration": 0,
             "created_time": "2023-01-27T16:43:06+00:00",
@@ -3338,12 +3392,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -3505,15 +3559,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -3525,9 +3579,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -3568,7 +3622,7 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "privacy": {"view": "anybody"},
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -3617,19 +3671,19 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "sort": "arranged",
             "layout": "grid",
             "theme": "standard",
-            "brand_color": "null",
-            "custom_logo": "null",
+            "brand_color": None,
+            "custom_logo": None,
             "review_mode": "false",
             "web_custom_logo": "false",
             "web_brand_color": "false",
             "allow_downloads": "false",
-            "allow_continuous_play": "true",
-            "allow_share": "true",
+            "allow_continuous_play": True,
+            "allow_share": True,
             "hide_nav": "false",
             "metadata": {
                 "connections": {
@@ -3660,42 +3714,42 @@ class VideoUploaderViewSetTests(APITestCase):
                 }
             },
             "use_custom_domain": "false",
-            "domain": "null",
-            "domain_certificate_state": "null",
-            "url": "null",
-            "hide_vimeo_logo": "null",
-            "embed_custom_logo": "null",
-            "embed_brand_color": "null",
+            "domain": None,
+            "domain_certificate_state": None,
+            "url": None,
+            "hide_vimeo_logo": None,
+            "embed_custom_logo": None,
+            "embed_brand_color": None,
             "autoplay": "false",
             "loop": "false",
-            "roku_provider_name": "null",
-            "roku_language": "null",
+            "roku_provider_name": None,
+            "roku_language": None,
             "roku_genres": [""],
             "share_link": "https://vimeo.com/showcase/10146228",
             "hide_upcoming": "false",
-            "seo_title": "null",
-            "seo_description": "null",
+            "seo_title": None,
+            "seo_description": None,
             "seo_allow_indexed": "false",
             "seo_keywords": [],
             "hide_from_vimeo": "false",
-            "embed": {"html": "null"},
+            "embed": {"html": None},
             "resource_key": "20075f92bbd20f7125b0f699f8287e43ae17b0f2"
         }, 'status_code': 200}
         update_showcase_mock.return_value = response
         data = {
             "brand_color": "blue",
             "description": "this is description",
-            "hide_nav": "true",
-            "hide_upcoming": "true",
+            "hide_nav": True,
+            "hide_upcoming": True,
             "layout": "grid",
             "name": "string",
             "password": "password",
             "privacy": "anybody",
-            "review_mode": "true",
+            "review_mode": True,
             "sort": "added_first",
             "theme": "dark",
             "url": "https://api.com",
-            "use_custom_domain": "true"
+            "use_custom_domain": True
         }
         user_id = 193125162
         album_id = 10146228
@@ -3703,9 +3757,10 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_showcase_mock.assert_called_once()
+        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
     def test_update_showcase_with_invalid_id(self, update_showcase_mock):
         response = {"data": {"message": "Resource not found"},
                     'status_code': 404}
@@ -3713,17 +3768,17 @@ class VideoUploaderViewSetTests(APITestCase):
         data = {
             "brand_color": "blue",
             "description": "this is description",
-            "hide_nav": "true",
-            "hide_upcoming": "true",
+            "hide_nav": True,
+            "hide_upcoming": True,
             "layout": "grid",
             "name": "string",
             "password": "password",
             "privacy": "anybody",
-            "review_mode": "true",
+            "review_mode": True,
             "sort": "added_first",
             "theme": "dark",
             "url": "https://api.com",
-            "use_custom_domain": "true"
+            "use_custom_domain":True
         }
         user_id = 193125162
         album_id = 10146228
@@ -3731,22 +3786,23 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_showcase_mock.assert_called_once()
+        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data)
 
     def test_update_showcase_with_invalid_data(self):
         data = {
             "brand_color": "blue",
             "description": "this is description",
-            "hide_nav": "true",
-            "hide_upcoming": "true",
+            "hide_nav": True,
+            "hide_upcoming": True,
             "layout": "grid",
             "name": "string",
             "password": "password",
             "privacy": "anybody",
-            "review_mode": "true",
+            "review_mode": True,
             "sort": "added_first",
             "theme": "dark",
             "url": "https:/api.com",
-            "use_custom_domain": "true"
+            "use_custom_domain": True
         }
         user_id = 193125162
         album_id = 10146228
@@ -3755,7 +3811,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.showcase_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.showcase_list')
     def test_showcase_list(self, showcase_list_mock):
         response = {"data": {
             "total": 2,
@@ -3763,7 +3819,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "per_page": 1,
             "paging": {
                 "next": "/users/193125162/albums?page=2&per_page=1",
-                "previous": "null",
+                "previous": None,
                 "first": "/users/193125162/albums?page=1&per_page=1",
                 "last": "/users/193125162/albums?page=2&per_page=1"
             },
@@ -3771,7 +3827,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 {
                     "uri": "/users/193125162/albums/10146228",
                     "name": "Google",
-                    "description": "null",
+                    "description": None,
                     "link": "https://vimeo.com/showcase/10146228",
                     "duration": 0,
                     "created_time": "2023-01-27T16:43:06+00:00",
@@ -3788,12 +3844,12 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location": "",
                         "gender": "",
-                        "bio": "null",
-                        "short_bio": "null",
+                        "bio": None,
+                        "short_bio": None,
                         "created_time": "2023-01-24T06:34:04+00:00",
                         "pictures": {
                             "uri": "/users/193125162/pictures/82436258",
-                            "active": "true",
+                            "active": True,
                             "type": "custom",
                             "base_link": "https://i.vimeocdn.com/portrait/82436258",
                             "sizes": [
@@ -3961,15 +4017,15 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location_details": {
                             "formatted_address": "",
-                            "latitude": "null",
-                            "longitude": "null",
-                            "city": "null",
-                            "state": "null",
-                            "neighborhood": "null",
-                            "sub_locality": "null",
-                            "state_iso_code": "null",
-                            "country": "null",
-                            "country_iso_code": "null"
+                            "latitude": None,
+                            "longitude": None,
+                            "city": None,
+                            "state": None,
+                            "neighborhood": None,
+                            "sub_locality": None,
+                            "state_iso_code": None,
+                            "country": None,
+                            "country_iso_code": None
                         },
                         "skills": [],
                         "available_for_hire": "false",
@@ -3981,9 +4037,9 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "view": "anybody",
                                     "comments": "anybody",
                                     "embed": "public",
-                                    "download": "true",
-                                    "add": "true",
-                                    "allow_share_link": "true"
+                                    "download": True,
+                                    "add": True,
+                                    "allow_share_link": True
                                 }
                             },
                             "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -4024,7 +4080,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "privacy": {"view": "anybody"},
                     "pictures": {
-                        "uri": "null",
+                        "uri": None,
                         "active": "false",
                         "type": "default",
                         "base_link": "https://i.vimeocdn.com/video/default",
@@ -4073,19 +4129,19 @@ class VideoUploaderViewSetTests(APITestCase):
                             }
                         ],
                         "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                        "default_picture": "true"
+                        "default_picture": True
                     },
                     "sort": "arranged",
                     "layout": "grid",
                     "theme": "standard",
-                    "brand_color": "null",
-                    "custom_logo": "null",
+                    "brand_color": None,
+                    "custom_logo": None,
                     "review_mode": "false",
                     "web_custom_logo": "false",
                     "web_brand_color": "false",
                     "allow_downloads": "false",
-                    "allow_continuous_play": "true",
-                    "allow_share": "true",
+                    "allow_continuous_play": True,
+                    "allow_share": True,
                     "hide_nav": "false",
                     "metadata": {
                         "connections": {
@@ -4116,25 +4172,25 @@ class VideoUploaderViewSetTests(APITestCase):
                         }
                     },
                     "use_custom_domain": "false",
-                    "domain": "null",
-                    "domain_certificate_state": "null",
-                    "url": "null",
-                    "hide_vimeo_logo": "null",
-                    "embed_custom_logo": "null",
-                    "embed_brand_color": "null",
+                    "domain": None,
+                    "domain_certificate_state": None,
+                    "url": None,
+                    "hide_vimeo_logo": None,
+                    "embed_custom_logo": None,
+                    "embed_brand_color": None,
                     "autoplay": "false",
                     "loop": "false",
-                    "roku_provider_name": "null",
-                    "roku_language": "null",
+                    "roku_provider_name": None,
+                    "roku_language": None,
                     "roku_genres": [""],
                     "share_link": "https://vimeo.com/showcase/10146228",
                     "hide_upcoming": "false",
-                    "seo_title": "null",
-                    "seo_description": "null",
+                    "seo_title": None,
+                    "seo_description": None,
                     "seo_allow_indexed": "false",
                     "seo_keywords": [],
                     "hide_from_vimeo": "false",
-                    "embed": {"html": "null"},
+                    "embed": {"html": None},
                     "resource_key": "20075f92bbd20f7125b0f699f8287e43ae17b0f2"
                 }
             ]
@@ -4144,19 +4200,23 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-showcase-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         showcase_list_mock.assert_called_once()
+        showcase_list_mock.assert_called_once_with(user_id='193125162', query_params={})
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.showcase_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.showcase_list')
     def test_showcase_list_with_invalid_user_id(self, showcase_list_mock):
-        response = {"data": {"message": "Resource not found"}, 'status_code': 404}
+        response = {"data": {"message": "Resource not found"}, "status_code": 404}
         showcase_list_mock.return_value = response
         user_id = 193125162
         response = self.client.get(reverse('video_uploader_service-showcase-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         showcase_list_mock.assert_called_once()
+        showcase_list_mock.assert_called_once_with(user_id='193125162', query_params={})
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_showcase')
     def test_specific_showcase_with_invalid_user_id(self, specific_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         specific_showcase_mock.return_value = response
@@ -4165,14 +4225,16 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_showcase_mock.assert_called_once()
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_showcase')
     def test_specific_showcase(self, specific_showcase_mock):
         response = {"data": {
             "uri": "/users/193125162/albums/10146228",
             "name": "Google",
-            "description": "null",
+            "description": None,
             "link": "https://vimeo.com/showcase/10146228",
             "duration": 0,
             "created_time": "2023-01-27T16:43:06+00:00",
@@ -4189,12 +4251,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -4356,15 +4418,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -4376,9 +4438,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -4419,7 +4481,7 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "privacy": {"view": "anybody"},
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -4468,19 +4530,19 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
-                "default_picture": "true"
+                "default_picture": True
             },
             "sort": "arranged",
             "layout": "grid",
             "theme": "standard",
-            "brand_color": "null",
-            "custom_logo": "null",
+            "brand_color": None,
+            "custom_logo": None,
             "review_mode": "false",
             "web_custom_logo": "false",
             "web_brand_color": "false",
             "allow_downloads": "false",
-            "allow_continuous_play": "true",
-            "allow_share": "true",
+            "allow_continuous_play": True,
+            "allow_share": True,
             "hide_nav": "false",
             "metadata": {
                 "connections": {
@@ -4511,25 +4573,25 @@ class VideoUploaderViewSetTests(APITestCase):
                 }
             },
             "use_custom_domain": "false",
-            "domain": "null",
-            "domain_certificate_state": "null",
-            "url": "null",
-            "hide_vimeo_logo": "null",
-            "embed_custom_logo": "null",
-            "embed_brand_color": "null",
+            "domain": None,
+            "domain_certificate_state": None,
+            "url": None,
+            "hide_vimeo_logo": None,
+            "embed_custom_logo": None,
+            "embed_brand_color": None,
             "autoplay": "false",
             "loop": "false",
-            "roku_provider_name": "null",
-            "roku_language": "null",
+            "roku_provider_name": None,
+            "roku_language": None,
             "roku_genres": [""],
             "share_link": "https://vimeo.com/showcase/10146228",
             "hide_upcoming": "false",
-            "seo_title": "null",
-            "seo_description": "null",
+            "seo_title": None,
+            "seo_description": None,
             "seo_allow_indexed": "false",
             "seo_keywords": [],
             "hide_from_vimeo": "false",
-            "embed": {"html": "null"},
+            "embed": {"html": None},
             "resource_key": "20075f92bbd20f7125b0f699f8287e43ae17b0f2"
         }, 'status_code': 200}
         specific_showcase_mock.return_value = response
@@ -4538,9 +4600,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_showcase_mock.assert_called_once()
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_showcase')
     def test_specific_showcase_with_invalid_id(self, specific_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         specific_showcase_mock.return_value = response
@@ -4549,9 +4613,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_showcase_mock.assert_called_once()
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_video_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
@@ -4562,9 +4627,11 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
+        add_video_to_showcase_mock.assert_called_once_with(video_id='79345428', user_id='93125162', album_id='10146228')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_user_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
@@ -4575,9 +4642,11 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
+        add_video_to_showcase_mock.assert_called_once_with(video_id='793454282', user_id='9312516', album_id='10146228')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_album_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
@@ -4588,9 +4657,11 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase(self, add_video_to_showcase_mock):
         response = {"data": {"message": "The video was added."}, 'status_code': 204}
         add_video_to_showcase_mock.return_value = response
@@ -4601,11 +4672,13 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         add_video_to_showcase_mock.assert_called_once()
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_no_add_scope(self, add_video_to_showcase_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_showcase_mock.return_value = response
         user_id = 93125162
         album_id = 1014622
@@ -4614,20 +4687,21 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_showcase_mock.assert_called_once()
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_video')
     def test_create_video(self, create_video_mock):
         response = {"data": {
             "uri": "/videos/793454282",
             "name": "Untitled",
-            "description": "null",
+            "description": None,
             "type": "video",
             "link": "https://vimeo.com/793454282",
             "player_embed_url": "https://player.vimeo.com/video/793454282?h=ed6ba73968",
             "duration": 0,
             "width": 400,
-            "language": "null",
+            "language": None,
             "height": 300,
             "embed": {
                 "html": "<iframe src=\"https://player.vimeo.com/video/793454282?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
@@ -4647,20 +4721,20 @@ class VideoUploaderViewSetTests(APITestCase):
                     "weekend_challenge": "false"
                 },
                 "buttons": {
-                    "watchlater": "true",
-                    "share": "true",
-                    "embed": "true",
+                    "watchlater": True,
+                    "share": True,
+                    "embed": True,
                     "hd": "false",
-                    "fullscreen": "true",
-                    "scaling": "true",
-                    "like": "true"
+                    "fullscreen": True,
+                    "scaling": True,
+                    "like": True
                 },
                 "logos": {
-                    "vimeo": "true",
+                    "vimeo": True,
                     "custom": {
                         "active": "false",
-                        "url": "null",
-                        "link": "null",
+                        "url": None,
+                        "link": None,
                         "use_link": "false",
                         "sticky": "false"
                     }
@@ -4671,15 +4745,15 @@ class VideoUploaderViewSetTests(APITestCase):
                     "portrait": "user"
                 },
                 "end_screen": [],
-                "playbar": "true",
-                "pip": "true",
-                "autopip": "true",
-                "volume": "true",
+                "playbar": True,
+                "pip": True,
+                "autopip": True,
+                "volume": True,
                 "color": "00adef",
-                "event_schedule": "true",
+                "event_schedule": True,
                 "interactive": "false",
-                "uri": "null",
-                "speed": "true"
+                "uri": None,
+                "speed": True
             },
             "created_time": "2023-01-27T18:50:40+00:00",
             "modified_time": "2023-01-27T18:50:40+00:00",
@@ -4689,16 +4763,16 @@ class VideoUploaderViewSetTests(APITestCase):
             ],
             "content_rating_class": "unrated",
             "rating_mod_locked": "false",
-            "license": "null",
+            "license": None,
             "privacy": {
                 "view": "anybody",
                 "embed": "public",
                 "download": "false",
-                "add": "true",
+                "add": True,
                 "comments": "anybody"
             },
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -4747,7 +4821,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "7a491d0e8cad256a8ac2fd6d207e647c1b034bad",
-                "default_picture": "true"
+                "default_picture": True
             },
             "tags": [],
             "stats": {
@@ -4757,7 +4831,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "uploader": {
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -4852,7 +4926,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ],
                         "total": 0
                     },
-                    "related": "null",
+                    "related": None,
                     "recommendations": {
                         "uri": "/videos/793454282/recommendations",
                         "options": [
@@ -4887,7 +4961,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "GET"
                         ],
                         "total": 1,
-                        "latest_incomplete_version": "null"
+                        "latest_incomplete_version": None
                     }
                 },
                 "interactions": {
@@ -4899,7 +4973,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "DELETE"
                         ],
                         "added": "false",
-                        "added_time": "null"
+                        "added_time": None
                     },
                     "report": {
                         "uri": "/videos/793454282/report",
@@ -4955,7 +5029,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "properties": [
                             {
                                 "name": "privacy.view",
-                                "required": "true",
+                                "required": True,
                                 "options": [
                                     "anybody",
                                     "nobody",
@@ -5008,12 +5082,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -5219,15 +5293,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -5241,9 +5315,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -5282,12 +5356,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                 "account": "free"
             },
-            "parent_folder": "null",
+            "parent_folder": None,
             "last_user_action_event_date": "2023-01-27T18:50:40+00:00",
             "review_page": {
-                "active": "true",
+                "active": True,
                 "link": "https://vimeo.com/user193125162/review/793454282/dbebc4d84a",
-                "is_shareable": "true"
+                "is_shareable": True
             },
             "play": {
                 "status": "unavailable"
@@ -5301,12 +5375,12 @@ class VideoUploaderViewSetTests(APITestCase):
             "upload": {
                 "status": "in_progress",
                 "upload_link": "https://asia-files.tus.vimeo.com/files/vimeo-prod-src-tus-asia/e1f714d6198eaedc3f6f8c1a16ced86a",
-                "form": "null",
-                "complete_uri": "null",
+                "form": None,
+                "complete_uri": None,
                 "approach": "tus",
                 "size": 1040,
-                "redirect_url": "null",
-                "link": "null"
+                "redirect_url": None,
+                "link": None
             },
             "transcode": {
                 "status": "in_progress"
@@ -5327,6 +5401,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.post(reverse('video_uploader_service-create-video'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_video_mock.assert_called_once()
+        create_video_mock.assert_called_once_with(payload=data)
 
     def test_create_video_without_data(self):
         data = {}
@@ -5334,7 +5409,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
     def test_delete_video(self, delete_video_mock):
         response = {'status_code': 204}
         delete_video_mock.return_value = response
@@ -5342,9 +5417,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_video_mock.assert_called_once()
+        delete_video_mock.assert_called_once_with(video_id='793454282')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
     def test_delete_video_with_no_delete_scope(self, delete_video_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         delete_video_mock.return_value = response
@@ -5352,9 +5429,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_video_mock.assert_called_once()
+        delete_video_mock.assert_called_once_with(video_id='793454282')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
     def test_delete_video_wit_invalid_id(self, delete_video_mock):
         response = {'status_code': 404}
         delete_video_mock.return_value = response
@@ -5362,20 +5441,22 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_video_mock.assert_called_once()
+        delete_video_mock.assert_called_once_with(video_id='793454282')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_video')
     def test_specific_video(self, specific_video_mock):
         response = {"data": {
             "uri": "/videos/793454282",
             "name": "Untitled",
-            "description": "null",
+            "description": None,
             "type": "video",
             "link": "https://vimeo.com/793454282",
             "player_embed_url": "https://player.vimeo.com/video/793454282?h=ed6ba73968",
             "duration": 0,
             "width": 400,
-            "language": "null",
+            "language": None,
             "height": 300,
             "embed": {
                 "html": "<iframe src=\"https://player.vimeo.com/video/793454282?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
@@ -5395,20 +5476,20 @@ class VideoUploaderViewSetTests(APITestCase):
                     "weekend_challenge": "false"
                 },
                 "buttons": {
-                    "watchlater": "true",
-                    "share": "true",
-                    "embed": "true",
+                    "watchlater": True,
+                    "share": True,
+                    "embed": True,
                     "hd": "false",
-                    "fullscreen": "true",
-                    "scaling": "true",
-                    "like": "true"
+                    "fullscreen": True,
+                    "scaling": True,
+                    "like": True
                 },
                 "logos": {
-                    "vimeo": "true",
+                    "vimeo": True,
                     "custom": {
                         "active": "false",
-                        "url": "null",
-                        "link": "null",
+                        "url": None,
+                        "link": None,
                         "use_link": "false",
                         "sticky": "false"
                     }
@@ -5419,15 +5500,15 @@ class VideoUploaderViewSetTests(APITestCase):
                     "portrait": "user"
                 },
                 "end_screen": [],
-                "playbar": "true",
-                "pip": "true",
-                "autopip": "true",
-                "volume": "true",
+                "playbar": True,
+                "pip": True,
+                "autopip": True,
+                "volume": True,
                 "color": "00adef",
-                "event_schedule": "true",
+                "event_schedule": True,
                 "interactive": "false",
-                "uri": "null",
-                "speed": "true"
+                "uri": None,
+                "speed": True
             },
             "created_time": "2023-01-27T18:50:40+00:00",
             "modified_time": "2023-01-27T18:50:40+00:00",
@@ -5437,16 +5518,16 @@ class VideoUploaderViewSetTests(APITestCase):
             ],
             "content_rating_class": "unrated",
             "rating_mod_locked": "false",
-            "license": "null",
+            "license": None,
             "privacy": {
                 "view": "anybody",
                 "embed": "public",
                 "download": "false",
-                "add": "true",
+                "add": True,
                 "comments": "anybody"
             },
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -5495,7 +5576,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "7a491d0e8cad256a8ac2fd6d207e647c1b034bad",
-                "default_picture": "true"
+                "default_picture": True
             },
             "tags": [],
             "stats": {
@@ -5505,7 +5586,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "uploader": {
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -5600,7 +5681,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ],
                         "total": 0
                     },
-                    "related": "null",
+                    "related": None,
                     "recommendations": {
                         "uri": "/videos/793454282/recommendations",
                         "options": [
@@ -5635,7 +5716,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "GET"
                         ],
                         "total": 1,
-                        "latest_incomplete_version": "null"
+                        "latest_incomplete_version": None
                     }
                 },
                 "interactions": {
@@ -5647,7 +5728,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "DELETE"
                         ],
                         "added": "false",
-                        "added_time": "null"
+                        "added_time": None
                     },
                     "report": {
                         "uri": "/videos/793454282/report",
@@ -5703,7 +5784,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "properties": [
                             {
                                 "name": "privacy.view",
-                                "required": "true",
+                                "required": True,
                                 "options": [
                                     "anybody",
                                     "nobody",
@@ -5756,12 +5837,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -5967,15 +6048,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -5989,9 +6070,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -6030,12 +6111,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                 "account": "free"
             },
-            "parent_folder": "null",
+            "parent_folder": None,
             "last_user_action_event_date": "2023-01-27T18:50:40+00:00",
             "review_page": {
-                "active": "true",
+                "active": True,
                 "link": "https://vimeo.com/user193125162/review/793454282/dbebc4d84a",
-                "is_shareable": "true"
+                "is_shareable": True
             },
             "play": {
                 "status": "unavailable"
@@ -6049,12 +6130,12 @@ class VideoUploaderViewSetTests(APITestCase):
             "upload": {
                 "status": "in_progress",
                 "upload_link": "https://asia-files.tus.vimeo.com/files/vimeo-prod-src-tus-asia/e1f714d6198eaedc3f6f8c1a16ced86a",
-                "form": "null",
-                "complete_uri": "null",
+                "form": None,
+                "complete_uri": None,
                 "approach": "tus",
                 "size": 1040,
-                "redirect_url": "null",
-                "link": "null"
+                "redirect_url": None,
+                "link": None
             },
             "transcode": {
                 "status": "in_progress"
@@ -6067,9 +6148,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_video_mock.assert_called_once()
+        specific_video_mock.assert_called_once_with(video_id='793454282')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_video')
     def test_specific_video_wit_invalid_id(self, specific_video_mock):
         response = {'status_code': 404}
         specific_video_mock.return_value = response
@@ -6077,20 +6160,21 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_video_mock.assert_called_once()
+        specific_video_mock.assert_called_once_with(video_id='793454282')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
     def test_update_video(self, update_video_mock):
         response = {"data": {
             "uri": "/videos/793454282",
             "name": "Untitled",
-            "description": "null",
+            "description": None,
             "type": "video",
             "link": "https://vimeo.com/793454282",
             "player_embed_url": "https://player.vimeo.com/video/793454282?h=ed6ba73968",
             "duration": 0,
             "width": 400,
-            "language": "null",
+            "language": None,
             "height": 300,
             "embed": {
                 "html": "<iframe src=\"https://player.vimeo.com/video/793454282?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
@@ -6110,20 +6194,20 @@ class VideoUploaderViewSetTests(APITestCase):
                     "weekend_challenge": "false"
                 },
                 "buttons": {
-                    "watchlater": "true",
-                    "share": "true",
-                    "embed": "true",
+                    "watchlater": True,
+                    "share": True,
+                    "embed": True,
                     "hd": "false",
-                    "fullscreen": "true",
-                    "scaling": "true",
-                    "like": "true"
+                    "fullscreen": True,
+                    "scaling": True,
+                    "like": True
                 },
                 "logos": {
-                    "vimeo": "true",
+                    "vimeo": True,
                     "custom": {
                         "active": "false",
-                        "url": "null",
-                        "link": "null",
+                        "url": None,
+                        "link": None,
                         "use_link": "false",
                         "sticky": "false"
                     }
@@ -6134,15 +6218,15 @@ class VideoUploaderViewSetTests(APITestCase):
                     "portrait": "user"
                 },
                 "end_screen": [],
-                "playbar": "true",
-                "pip": "true",
-                "autopip": "true",
-                "volume": "true",
+                "playbar": True,
+                "pip": True,
+                "autopip": True,
+                "volume": True,
                 "color": "00adef",
-                "event_schedule": "true",
+                "event_schedule": True,
                 "interactive": "false",
-                "uri": "null",
-                "speed": "true"
+                "uri": None,
+                "speed": True
             },
             "created_time": "2023-01-27T18:50:40+00:00",
             "modified_time": "2023-01-27T18:50:40+00:00",
@@ -6152,16 +6236,16 @@ class VideoUploaderViewSetTests(APITestCase):
             ],
             "content_rating_class": "unrated",
             "rating_mod_locked": "false",
-            "license": "null",
+            "license": None,
             "privacy": {
                 "view": "anybody",
                 "embed": "public",
                 "download": "false",
-                "add": "true",
+                "add": True,
                 "comments": "anybody"
             },
             "pictures": {
-                "uri": "null",
+                "uri": None,
                 "active": "false",
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
@@ -6210,7 +6294,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 ],
                 "resource_key": "7a491d0e8cad256a8ac2fd6d207e647c1b034bad",
-                "default_picture": "true"
+                "default_picture": True
             },
             "tags": [],
             "stats": {
@@ -6220,7 +6304,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "uploader": {
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -6315,7 +6399,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ],
                         "total": 0
                     },
-                    "related": "null",
+                    "related": None,
                     "recommendations": {
                         "uri": "/videos/793454282/recommendations",
                         "options": [
@@ -6350,7 +6434,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "GET"
                         ],
                         "total": 1,
-                        "latest_incomplete_version": "null"
+                        "latest_incomplete_version": None
                     }
                 },
                 "interactions": {
@@ -6362,7 +6446,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "DELETE"
                         ],
                         "added": "false",
-                        "added_time": "null"
+                        "added_time": None
                     },
                     "report": {
                         "uri": "/videos/793454282/report",
@@ -6418,7 +6502,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "properties": [
                             {
                                 "name": "privacy.view",
-                                "required": "true",
+                                "required": True,
                                 "options": [
                                     "anybody",
                                     "nobody",
@@ -6471,12 +6555,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -6682,15 +6766,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -6704,9 +6788,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -6745,12 +6829,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                 "account": "free"
             },
-            "parent_folder": "null",
+            "parent_folder": None,
             "last_user_action_event_date": "2023-01-27T18:50:40+00:00",
             "review_page": {
-                "active": "true",
+                "active": True,
                 "link": "https://vimeo.com/user193125162/review/793454282/dbebc4d84a",
-                "is_shareable": "true"
+                "is_shareable": True
             },
             "play": {
                 "status": "unavailable"
@@ -6764,12 +6848,12 @@ class VideoUploaderViewSetTests(APITestCase):
             "upload": {
                 "status": "in_progress",
                 "upload_link": "https://asia-files.tus.vimeo.com/files/vimeo-prod-src-tus-asia/e1f714d6198eaedc3f6f8c1a16ced86a",
-                "form": "null",
-                "complete_uri": "null",
+                "form": None,
+                "complete_uri": None,
                 "approach": "tus",
                 "size": 1040,
-                "redirect_url": "null",
-                "link": "null"
+                "redirect_url": None,
+                "link": None
             },
             "transcode": {
                 "status": "in_progress"
@@ -6783,31 +6867,31 @@ class VideoUploaderViewSetTests(APITestCase):
             "description": "string",
             "embedded": {
                 "buttons": {
-                    "watchlater": "true",
-                    "share": "true",
-                    "embed": "true",
-                    "hd": "true",
-                    "fullscreen": "true",
-                    "scaling": "true",
-                    "like": "true"
+                    "watchlater": True,
+                    "share": True,
+                    "embed": True,
+                    "hd": True,
+                    "fullscreen": True,
+                    "scaling": True,
+                    "like": True
                 },
                 "color": "string",
                 "logos": {
                     "custom": {
                         "id": 0,
-                        "active": "true",
+                        "active": True,
                         "link": "https://api.com",
-                        "sticky": "true"
+                        "sticky": True
                     },
-                    "vimeo": "true"
+                    "vimeo": True
                 },
-                "playbar": "true",
+                "playbar": True,
                 "title": {
                     "name": "hide",
                     "owner": "hide",
                     "portrait": "hide"
                 },
-                "volume": "true"
+                "volume": True
             },
             "license": "by",
             "name": "string",
@@ -6815,20 +6899,21 @@ class VideoUploaderViewSetTests(APITestCase):
             "privacy": {
                 "view": "anybody",
                 "embed": "private",
-                "add": "true",
+                "add": True,
                 "comments": "anybody"
             },
             "review_page": {
-                "active": "true"
+                "active": True
             }
         }
         response = self.client.patch(reverse('video_uploader_service-update-video', args=(video_id,)), data=data,
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_video_mock.assert_called_once()
+        update_video_mock.assert_called_once_with(video_id='793454282', payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
     def test_update_video_wit_invalid_id(self, update_video_mock):
         response = {'status_code': 404}
         update_video_mock.return_value = response
@@ -6837,31 +6922,31 @@ class VideoUploaderViewSetTests(APITestCase):
             "description": "string",
             "embedded": {
                 "buttons": {
-                    "watchlater": "true",
-                    "share": "true",
-                    "embed": "true",
-                    "hd": "true",
-                    "fullscreen": "true",
-                    "scaling": "true",
-                    "like": "true"
+                    "watchlater": True,
+                    "share": True,
+                    "embed": True,
+                    "hd": True,
+                    "fullscreen": True,
+                    "scaling": True,
+                    "like": True
                 },
                 "color": "string",
                 "logos": {
                     "custom": {
                         "id": 0,
-                        "active": "true",
+                        "active": True,
                         "link": "https://api.com",
-                        "sticky": "true"
+                        "sticky": True
                     },
-                    "vimeo": "true"
+                    "vimeo": True
                 },
-                "playbar": "true",
+                "playbar": True,
                 "title": {
                     "name": "hide",
                     "owner": "hide",
                     "portrait": "hide"
                 },
-                "volume": "true"
+                "volume": True
             },
             "license": "by",
             "name": "string",
@@ -6869,17 +6954,18 @@ class VideoUploaderViewSetTests(APITestCase):
             "privacy": {
                 "view": "anybody",
                 "embed": "private",
-                "add": "true",
+                "add": True,
                 "comments": "anybody"
             },
             "review_page": {
-                "active": "true"
+                "active": True
             }
         }
         response = self.client.patch(reverse('video_uploader_service-update-video', args=(video_id,)), data=data,
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_video_mock.assert_called_once()
+        update_video_mock.assert_called_once_with(video_id='793454282', payload=data)
 
     def test_update_video_wit_invalid_data(self):
         video_id = 793454282
@@ -6888,30 +6974,30 @@ class VideoUploaderViewSetTests(APITestCase):
             "embedded": {
                 "buttons": {
                     "watchlater": 76,
-                    "share": "true",
-                    "embed": "true",
-                    "hd": "true",
-                    "fullscreen": "true",
-                    "scaling": "true",
-                    "like": "true"
+                    "share": True,
+                    "embed": True,
+                    "hd": True,
+                    "fullscreen": True,
+                    "scaling": True,
+                    "like": True
                 },
                 "color": "string",
                 "logos": {
                     "custom": {
                         "id": 0,
-                        "active": "true",
+                        "active": True,
                         "link": "https://api.com",
-                        "sticky": "true"
+                        "sticky": True
                     },
-                    "vimeo": "true"
+                    "vimeo": True
                 },
-                "playbar": "true",
+                "playbar": True,
                 "title": {
                     "name": "hide",
                     "owner": "hide",
                     "portrait": "hide"
                 },
-                "volume": "true"
+                "volume": True
             },
             "license": "by",
             "name": "string",
@@ -6919,11 +7005,11 @@ class VideoUploaderViewSetTests(APITestCase):
             "privacy": {
                 "view": "anybody",
                 "embed": "private",
-                "add": "true",
+                "add": True,
                 "comments": "anybody"
             },
             "review_page": {
-                "active": "true"
+                "active": True
             }
         }
         response = self.client.patch(reverse('video_uploader_service-update-video', args=(video_id,)), data=data,
@@ -6931,40 +7017,40 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
     def test_update_video_with_no_edit_scope(self, update_video_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "edit" scope'}, 'status_code': 403}
         update_video_mock.return_value = response
         video_id = 793454282
         data = {
             "description": "string",
             "embedded": {
                 "buttons": {
-                    "watchlater": "true",
-                    "share": "true",
-                    "embed": "true",
-                    "hd": "true",
-                    "fullscreen": "true",
-                    "scaling": "true",
-                    "like": "true"
+                    "watchlater": True,
+                    "share": True,
+                    "embed": True,
+                    "hd": True,
+                    "fullscreen": True,
+                    "scaling": True,
+                    "like": True
                 },
                 "color": "string",
                 "logos": {
                     "custom": {
                         "id": 0,
-                        "active": "true",
+                        "active": True,
                         "link": "https://api.com",
-                        "sticky": "true"
+                        "sticky": True
                     },
-                    "vimeo": "true"
+                    "vimeo": True
                 },
-                "playbar": "true",
+                "playbar": True,
                 "title": {
                     "name": "hide",
                     "owner": "hide",
                     "portrait": "hide"
                 },
-                "volume": "true"
+                "volume": True
             },
             "license": "by",
             "name": "string",
@@ -6972,28 +7058,30 @@ class VideoUploaderViewSetTests(APITestCase):
             "privacy": {
                 "view": "anybody",
                 "embed": "private",
-                "add": "true",
+                "add": True,
                 "comments": "anybody"
             },
             "review_page": {
-                "active": "true"
+                "active": True
             }
         }
         response = self.client.patch(reverse('video_uploader_service-update-video', args=(video_id,)), data=data,
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_video_mock.assert_called_once()
+        update_video_mock.assert_called_once_with(video_id='793454282', payload=data)
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.user_video_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.user_video_list')
     def test_user_video_list(self, user_video_list_mock):
         response = {"data": {
             "total": 2,
             "page": 1,
             "per_page": 25,
             "paging": {
-                "next": "null",
-                "previous": "null",
+                "next": None,
+                "previous": None,
                 "first": "/users/193125162/videos?page=1",
                 "last": "/users/193125162/videos?page=1"
             },
@@ -7007,7 +7095,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     "player_embed_url": "https://player.vimeo.com/video/793501641?h=ff0f65aba9",
                     "duration": 0,
                     "width": 400,
-                    "language": "null",
+                    "language": None,
                     "height": 300,
                     "embed": {
                         "html": "<iframe src=\"https://player.vimeo.com/video/793501641?h=ff0f65aba9&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"string\"></iframe>",
@@ -7027,20 +7115,20 @@ class VideoUploaderViewSetTests(APITestCase):
                             "weekend_challenge": "false"
                         },
                         "buttons": {
-                            "watchlater": "true",
-                            "share": "true",
-                            "embed": "true",
+                            "watchlater": True,
+                            "share": True,
+                            "embed": True,
                             "hd": "false",
-                            "fullscreen": "true",
-                            "scaling": "true",
-                            "like": "true"
+                            "fullscreen": True,
+                            "scaling": True,
+                            "like": True
                         },
                         "logos": {
-                            "vimeo": "true",
+                            "vimeo": True,
                             "custom": {
                                 "active": "false",
-                                "url": "null",
-                                "link": "null",
+                                "url": None,
+                                "link": None,
                                 "use_link": "false",
                                 "sticky": "false"
                             }
@@ -7051,15 +7139,15 @@ class VideoUploaderViewSetTests(APITestCase):
                             "portrait": "user"
                         },
                         "end_screen": [],
-                        "playbar": "true",
-                        "pip": "true",
-                        "autopip": "true",
-                        "volume": "true",
+                        "playbar": True,
+                        "pip": True,
+                        "autopip": True,
+                        "volume": True,
                         "color": "00adef",
-                        "event_schedule": "true",
+                        "event_schedule": True,
                         "interactive": "false",
-                        "uri": "null",
-                        "speed": "true"
+                        "uri": None,
+                        "speed": True
                     },
                     "created_time": "2023-01-27T21:48:42+00:00",
                     "modified_time": "2023-01-27T21:48:42+00:00",
@@ -7069,16 +7157,16 @@ class VideoUploaderViewSetTests(APITestCase):
                     ],
                     "content_rating_class": "unrated",
                     "rating_mod_locked": "false",
-                    "license": "null",
+                    "license": None,
                     "privacy": {
                         "view": "anybody",
                         "embed": "public",
                         "download": "false",
-                        "add": "true",
+                        "add": True,
                         "comments": "anybody"
                     },
                     "pictures": {
-                        "uri": "null",
+                        "uri": None,
                         "active": "false",
                         "type": "default",
                         "base_link": "https://i.vimeocdn.com/video/default",
@@ -7127,7 +7215,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             }
                         ],
                         "resource_key": "7a491d0e8cad256a8ac2fd6d207e647c1b034bad",
-                        "default_picture": "true"
+                        "default_picture": True
                     },
                     "tags": [],
                     "stats": {
@@ -7137,7 +7225,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     "uploader": {
                         "pictures": {
                             "uri": "/users/193125162/pictures/82436258",
-                            "active": "true",
+                            "active": True,
                             "type": "custom",
                             "base_link": "https://i.vimeocdn.com/portrait/82436258",
                             "sizes": [
@@ -7272,7 +7360,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "GET"
                                 ],
                                 "total": 1,
-                                "latest_incomplete_version": "null"
+                                "latest_incomplete_version": None
                             }
                         },
                         "interactions": {
@@ -7284,7 +7372,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "DELETE"
                                 ],
                                 "added": "false",
-                                "added_time": "null"
+                                "added_time": None
                             },
                             "report": {
                                 "uri": "/videos/793501641/report",
@@ -7340,7 +7428,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "properties": [
                                     {
                                         "name": "privacy.view",
-                                        "required": "true",
+                                        "required": True,
                                         "options": [
                                             "anybody",
                                             "nobody",
@@ -7393,12 +7481,12 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location": "",
                         "gender": "",
-                        "bio": "null",
-                        "short_bio": "null",
+                        "bio": None,
+                        "short_bio": None,
                         "created_time": "2023-01-24T06:34:04+00:00",
                         "pictures": {
                             "uri": "/users/193125162/pictures/82436258",
-                            "active": "true",
+                            "active": True,
                             "type": "custom",
                             "base_link": "https://i.vimeocdn.com/portrait/82436258",
                             "sizes": [
@@ -7604,15 +7692,15 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location_details": {
                             "formatted_address": "",
-                            "latitude": "null",
-                            "longitude": "null",
-                            "city": "null",
-                            "state": "null",
-                            "neighborhood": "null",
-                            "sub_locality": "null",
-                            "state_iso_code": "null",
-                            "country": "null",
-                            "country_iso_code": "null"
+                            "latitude": None,
+                            "longitude": None,
+                            "city": None,
+                            "state": None,
+                            "neighborhood": None,
+                            "sub_locality": None,
+                            "state_iso_code": None,
+                            "country": None,
+                            "country_iso_code": None
                         },
                         "skills": [],
                         "available_for_hire": "false",
@@ -7626,9 +7714,9 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "view": "anybody",
                                     "comments": "anybody",
                                     "embed": "public",
-                                    "download": "true",
-                                    "add": "true",
-                                    "allow_share_link": "true"
+                                    "download": True,
+                                    "add": True,
+                                    "allow_share_link": True
                                 }
                             },
                             "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -7667,12 +7755,12 @@ class VideoUploaderViewSetTests(APITestCase):
                         "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                         "account": "free"
                     },
-                    "parent_folder": "null",
+                    "parent_folder": None,
                     "last_user_action_event_date": "2023-01-27T21:48:42+00:00",
                     "review_page": {
-                        "active": "true",
+                        "active": True,
                         "link": "https://vimeo.com/user193125162/review/793501641/ab06e70235",
-                        "is_shareable": "true"
+                        "is_shareable": True
                     },
                     "play": {
                         "status": "unavailable"
@@ -7685,13 +7773,13 @@ class VideoUploaderViewSetTests(APITestCase):
                     "resource_key": "8fe70caf0cab75d464e43b29edef55995aee9731",
                     "upload": {
                         "status": "in_progress",
-                        "upload_link": "null",
-                        "form": "null",
-                        "complete_uri": "null",
+                        "upload_link": None,
+                        "form": None,
+                        "complete_uri": None,
                         "approach": "post",
                         "size": 4040,
-                        "redirect_url": "null",
-                        "link": "null"
+                        "redirect_url": None,
+                        "link": None
                     },
                     "transcode": {
                         "status": "in_progress"
@@ -7706,9 +7794,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-user-video-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         user_video_list_mock.assert_called_once()
+        user_video_list_mock.assert_called_once_with(user_id='193125162')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.user_video_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.user_video_list')
     def test_user_video_list_with_invalid_user_id(self, user_video_list_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         user_video_list_mock.return_value = response
@@ -7716,9 +7806,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-user-video-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         user_video_list_mock.assert_called_once()
+        user_video_list_mock.assert_called_once_with(user_id='193125162')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.like_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
     def test_like_video_with_invalid_user_id(self, like_video_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         like_video_mock.return_value = response
@@ -7727,9 +7818,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         like_video_mock.assert_called_once()
+        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.like_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
     def test_like_video(self, like_video_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 204}
         like_video_mock.return_value = response
@@ -7738,20 +7831,25 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         like_video_mock.assert_called_once()
+        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.like_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
     def test_like_video_with_no_like_scope(self, like_video_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "like" scope'}, 'status_code': 403}
         like_video_mock.return_value = response
         user_id = 193125162
         video_id = 793501641
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         like_video_mock.assert_called_once()
+        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
+
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.unlike_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
     def test_unlike_video_with_invalid_user_id(self, unlike_video_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         unlike_video_mock.return_value = response
@@ -7760,9 +7858,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         unlike_video_mock.assert_called_once()
+        unlike_video_mock.assert_called_once_with(user_id='19312516', video_id='793501641')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.unlike_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
     def test_unlike_video(self, unlike_video_mock):
         response = {"status_code": 204}
         unlike_video_mock.return_value = response
@@ -7771,20 +7871,23 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         unlike_video_mock.assert_called_once()
+        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.unlike_video')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
     def test_unlike_video_with_no_unlike_scope(self, unlike_video_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "unlike" scope'}, 'status_code': 403}
         unlike_video_mock.return_value = response
         user_id = 193125162
         video_id = 793501641
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         unlike_video_mock.assert_called_once()
+        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
     def test_create_folder(self, create_folder_mock):
         response = {"data": {
             "created_time": "2023-01-27T23:01:24+00:00",
@@ -7796,8 +7899,8 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "resource_key": "715b8c49dd3a1a0a9301b9f37bf6b1e097af401b",
             "uri": "/users/193125162/projects/14724344",
-            "link": "null",
-            "pinned_on": "null",
+            "link": None,
+            "pinned_on": None,
             "is_pinned": "false",
             "is_private_to_user": "false",
             "user": {
@@ -7812,12 +7915,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -8023,15 +8126,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -8045,9 +8148,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -8086,7 +8189,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                 "account": "free"
             },
-            "access_grant": "null",
+            "access_grant": None,
             "metadata": {
                 "connections": {
                     "items": {
@@ -8164,7 +8267,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "options": [
                             "POST"
                         ],
-                        "can_add_subfolders": "true",
+                        "can_add_subfolders": True,
                         "subfolder_depth_limit_reached": "false",
                         "content_type": "application/vnd.vimeo.folder",
                         "properties": [
@@ -8175,7 +8278,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             },
                             {
                                 "name": "parent_folder_uri",
-                                "required": "true",
+                                "required": True,
                                 "value": "/users/193125162/projects/14724344"
                             }
                         ]
@@ -8192,9 +8295,10 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_folder_mock.assert_called_once()
+        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
     def test_create_folder_with_invalid_user_id(self, create_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         create_folder_mock.return_value = response
@@ -8206,9 +8310,10 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         create_folder_mock.assert_called_once()
+        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.create_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
     def test_create_folder_with_no_create_scope(self, create_folder_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_folder_mock.return_value = response
@@ -8220,6 +8325,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_folder_mock.assert_called_once()
+        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data)
 
     def test_create_folder_without_data(self):
         user_id = 193125162
@@ -8229,7 +8335,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
     def test_delete_folder_with_invalid_id(self, delete_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         delete_folder_mock.return_value = response
@@ -8238,9 +8344,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_folder_mock.assert_called_once()
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
     def test_delete_folder_with_invalid_user_id(self, delete_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         delete_folder_mock.return_value = response
@@ -8249,9 +8357,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_folder_mock.assert_called_once()
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
     def test_delete_folder(self, delete_folder_mock):
         response = {"data": {"message": "Item deleted successfully."}, "status_code": 204}
         delete_folder_mock.return_value = response
@@ -8260,20 +8370,23 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_folder_mock.assert_called_once()
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
     def test_delete_folder_with_no_delete_scope(self, delete_folder_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "delete" scope'}, 'status_code': 403}
         delete_folder_mock.return_value = response
         user_id = 193125162
         folder_id = 14724344
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_folder_mock.assert_called_once()
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
     def test_update_folder(self, update_folder_mock):
         response = {"data": {
             "created_time": "2023-01-27T23:01:24+00:00",
@@ -8285,8 +8398,8 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "resource_key": "715b8c49dd3a1a0a9301b9f37bf6b1e097af401b",
             "uri": "/users/193125162/projects/14724344",
-            "link": "null",
-            "pinned_on": "null",
+            "link": None,
+            "pinned_on": None,
             "is_pinned": "false",
             "is_private_to_user": "false",
             "user": {
@@ -8301,12 +8414,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -8512,15 +8625,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -8534,9 +8647,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -8575,7 +8688,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                 "account": "free"
             },
-            "access_grant": "null",
+            "access_grant": None,
             "metadata": {
                 "connections": {
                     "items": {
@@ -8653,7 +8766,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "options": [
                             "POST"
                         ],
-                        "can_add_subfolders": "true",
+                        "can_add_subfolders": True,
                         "subfolder_depth_limit_reached": "false",
                         "content_type": "application/vnd.vimeo.folder",
                         "properties": [
@@ -8664,7 +8777,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             },
                             {
                                 "name": "parent_folder_uri",
-                                "required": "true",
+                                "required": True,
                                 "value": "/users/193125162/projects/14724344"
                             }
                         ]
@@ -8682,9 +8795,10 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_folder_mock.assert_called_once()
+        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
     def test_update_folder_with_invalid_id(self, update_folder_mock):
         response = {"data": {}, "status_code": 404}
         update_folder_mock.return_value = response
@@ -8697,11 +8811,13 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_folder_mock.assert_called_once()
+        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data)
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.update_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
     def test_update_folder_with_no_edit_scope(self, update_folder_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "edit" scope'}, 'status_code': 403}
         update_folder_mock.return_value = response
         user_id = 193125162
         folder_id = 14724344
@@ -8712,6 +8828,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_folder_mock.assert_called_once()
+        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data)
 
     def test_update_folder_with_invalid_data(self):
         user_id = 193125162
@@ -8725,7 +8842,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.folder_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.folder_list')
     def test_folder_list_with_invalid_user_id(self, folder_list_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         folder_list_mock.return_value = response
@@ -8733,17 +8850,19 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-folder-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         folder_list_mock.assert_called_once()
+        folder_list_mock.assert_called_once_with(user_id='19312516', query_params={})
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.folder_list')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.folder_list')
     def test_folder_list(self, folder_list_mock):
         response = {"data": {
             "total": 6,
             "page": 1,
             "per_page": 25,
             "paging": {
-                "next": "null",
-                "previous": "null",
+                "next": None,
+                "previous": None,
                 "first": "/users/193125162/projects?page=1",
                 "last": "/users/193125162/projects?page=1"
             },
@@ -8758,8 +8877,8 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "resource_key": "c0b1c5a19037f84e7258b367d763b20740584d26",
                     "uri": "/users/193125162/projects/14722366",
-                    "link": "null",
-                    "pinned_on": "null",
+                    "link": None,
+                    "pinned_on": None,
                     "is_pinned": "false",
                     "is_private_to_user": "false",
                     "user": {
@@ -8774,12 +8893,12 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location": "",
                         "gender": "",
-                        "bio": "null",
-                        "short_bio": "null",
+                        "bio": None,
+                        "short_bio": None,
                         "created_time": "2023-01-24T06:34:04+00:00",
                         "pictures": {
                             "uri": "/users/193125162/pictures/82436258",
-                            "active": "true",
+                            "active": True,
                             "type": "custom",
                             "base_link": "https://i.vimeocdn.com/portrait/82436258",
                             "sizes": [
@@ -8985,15 +9104,15 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "location_details": {
                             "formatted_address": "",
-                            "latitude": "null",
-                            "longitude": "null",
-                            "city": "null",
-                            "state": "null",
-                            "neighborhood": "null",
-                            "sub_locality": "null",
-                            "state_iso_code": "null",
-                            "country": "null",
-                            "country_iso_code": "null"
+                            "latitude": None,
+                            "longitude": None,
+                            "city": None,
+                            "state": None,
+                            "neighborhood": None,
+                            "sub_locality": None,
+                            "state_iso_code": None,
+                            "country": None,
+                            "country_iso_code": None
                         },
                         "skills": [],
                         "available_for_hire": "false",
@@ -9007,9 +9126,9 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "view": "anybody",
                                     "comments": "anybody",
                                     "embed": "public",
-                                    "download": "true",
-                                    "add": "true",
-                                    "allow_share_link": "true"
+                                    "download": True,
+                                    "add": True,
+                                    "allow_share_link": True
                                 }
                             },
                             "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -9048,7 +9167,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                         "account": "free"
                     },
-                    "access_grant": "null",
+                    "access_grant": None,
                     "metadata": {
                         "connections": {
                             "items": {
@@ -9126,7 +9245,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "options": [
                                     "POST"
                                 ],
-                                "can_add_subfolders": "true",
+                                "can_add_subfolders": True,
                                 "subfolder_depth_limit_reached": "false",
                                 "content_type": "application/vnd.vimeo.folder",
                                 "properties": [
@@ -9137,7 +9256,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     },
                                     {
                                         "name": "parent_folder_uri",
-                                        "required": "true",
+                                        "required": True,
                                         "value": "/users/193125162/projects/14722366"
                                     }
                                 ]
@@ -9152,9 +9271,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-folder-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         folder_list_mock.assert_called_once()
+        folder_list_mock.assert_called_once_with(user_id='193125162', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
     def test_specific_folder_with_invalid_user_id(self, specific_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         specific_folder_mock.return_value = response
@@ -9163,9 +9283,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_folder_mock.assert_called_once()
+        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
     def test_specific_folder_with_invalid_folder_id(self, specific_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         specific_folder_mock.return_value = response
@@ -9174,9 +9296,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_folder_mock.assert_called_once()
+        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.specific_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
     def test_specific_folder(self, specific_folder_mock):
         response = {"data": {
             "created_time": "2023-01-27T23:01:24+00:00",
@@ -9188,8 +9312,8 @@ class VideoUploaderViewSetTests(APITestCase):
             },
             "resource_key": "715b8c49dd3a1a0a9301b9f37bf6b1e097af401b",
             "uri": "/users/193125162/projects/14724344",
-            "link": "null",
-            "pinned_on": "null",
+            "link": None,
+            "pinned_on": None,
             "is_pinned": "false",
             "is_private_to_user": "false",
             "user": {
@@ -9204,12 +9328,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location": "",
                 "gender": "",
-                "bio": "null",
-                "short_bio": "null",
+                "bio": None,
+                "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
                     "uri": "/users/193125162/pictures/82436258",
-                    "active": "true",
+                    "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82436258",
                     "sizes": [
@@ -9415,15 +9539,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "location_details": {
                     "formatted_address": "",
-                    "latitude": "null",
-                    "longitude": "null",
-                    "city": "null",
-                    "state": "null",
-                    "neighborhood": "null",
-                    "sub_locality": "null",
-                    "state_iso_code": "null",
-                    "country": "null",
-                    "country_iso_code": "null"
+                    "latitude": None,
+                    "longitude": None,
+                    "city": None,
+                    "state": None,
+                    "neighborhood": None,
+                    "sub_locality": None,
+                    "state_iso_code": None,
+                    "country": None,
+                    "country_iso_code": None
                 },
                 "skills": [],
                 "available_for_hire": "false",
@@ -9437,9 +9561,9 @@ class VideoUploaderViewSetTests(APITestCase):
                             "view": "anybody",
                             "comments": "anybody",
                             "embed": "public",
-                            "download": "true",
-                            "add": "true",
-                            "allow_share_link": "true"
+                            "download": True,
+                            "add": True,
+                            "allow_share_link": True
                         }
                     },
                     "webinar_registrant_lower_watermark_banner_dismissed": []
@@ -9478,7 +9602,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "resource_key": "6697b3c5bb3cead1f3ee2aa384837272ad613e34",
                 "account": "free"
             },
-            "access_grant": "null",
+            "access_grant": None,
             "metadata": {
                 "connections": {
                     "items": {
@@ -9556,7 +9680,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "options": [
                             "POST"
                         ],
-                        "can_add_subfolders": "true",
+                        "can_add_subfolders": True,
                         "subfolder_depth_limit_reached": "false",
                         "content_type": "application/vnd.vimeo.folder",
                         "properties": [
@@ -9567,7 +9691,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             },
                             {
                                 "name": "parent_folder_uri",
-                                "required": "true",
+                                "required": True,
                                 "value": "/users/193125162/projects/14724344"
                             }
                         ]
@@ -9581,9 +9705,10 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_folder_mock.assert_called_once()
+        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366')
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_user_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
@@ -9594,9 +9719,11 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_folder_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
@@ -9607,9 +9734,11 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_video_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
@@ -9620,9 +9749,11 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder(self, add_video_to_folder_mock):
         response = {"data": {"message": "The video was added"}, "status_code": 204}
         add_video_to_folder_mock.return_value = response
@@ -9633,11 +9764,13 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         add_video_to_folder_mock.assert_called_once()
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
+
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUPloaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_no_add_scope(self, add_video_to_folder_mock):
-        response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
+        response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_folder_mock.return_value = response
         user_id = 19312516
         folder_id = 14722366
@@ -9646,3 +9779,4 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_folder_mock.assert_called_once()
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
