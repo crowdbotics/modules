@@ -41,5 +41,6 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 5,
     flex: 1
-  }
+  },
+  compassStyle:{ top: 30, right: 30 }
 });
