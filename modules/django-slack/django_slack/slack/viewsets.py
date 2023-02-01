@@ -82,8 +82,7 @@ class SlackViewSet(viewsets.GenericViewSet):
         response, status_code = self.slack_service.get_channel_id(pk)
         if status_code:
             return Response(data={'channel_id': response}, status=status_code)
-        else:
-            return Response(data=response.data, status=response.status_code)
+
 
     @action(detail=True, methods=['get'], url_path='channel_history')
     def get_channel_history(self, request, pk):
