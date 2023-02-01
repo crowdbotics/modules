@@ -50,8 +50,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.create_access_token(payload=serializer.data,
-                                                                   token=self.convert_into_base64())
+        response = self.video_uploader_service.create_access_token(token=self.convert_into_base64(),
+                                                                   payload=serializer.data)
         data = response.get("data")
         if 'access_token' in data:
             self.video_uploader_service.access_token = data['access_token']
@@ -70,7 +70,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.create_channel(serializer.data)
+        response = self.video_uploader_service.create_channel(payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['delete'], url_path='channel/delete')
@@ -81,7 +81,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int channel_id: ID of the channel to be deleted \n
         :return: Returns no content.
         """
-        response = self.video_uploader_service.delete_channel(channel_id=pk)
+        response = self.video_uploader_service.delete_channel(channel_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['patch'], url_path='channel/update')
@@ -98,7 +98,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.update_channel(channel_id=pk, payload=serializer.data)
+        response = self.video_uploader_service.update_channel(channel_id=pk, payload=serializer.data,
+                                                              query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='channel/list')
@@ -126,7 +127,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int channel_id: ID of the channel to be returned \n
         :return: Returns a specific channel. \n
         """
-        response = self.video_uploader_service.specific_channel(channel_id=pk)
+        response = self.video_uploader_service.specific_channel(channel_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='group/create')
@@ -140,7 +141,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.create_group(serializer.data)
+        response = self.video_uploader_service.create_group(payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['delete'], url_path='group/delete')
@@ -151,7 +152,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int group_id: ID specified to the group \n
         :return: Returns no content.
         """
-        response = self.video_uploader_service.delete_group(group_id=pk)
+        response = self.video_uploader_service.delete_group(group_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='group/list')
@@ -179,11 +180,11 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int group_id: ID specified to the group \n
         :return: Returns a specific group.
         """
-        response = self.video_uploader_service.specific_group(group_id=pk)
+        response = self.video_uploader_service.specific_group(group_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['put'], url_path='group/add-user/(?P<user_id>[A-Za-z0-9]*)')
-    def add_user_to_group(self, request, pk, user_id):
+    def add_user_to_group(self, request, user_id, pk):
         """
         To add a user to a group
 
@@ -191,7 +192,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int user_id: ID specified to the user \n
         :return:  joined the group. Returns no content
         """
-        response = self.video_uploader_service.add_user_to_group(user_id=user_id, group_id=pk)
+        response = self.video_uploader_service.add_user_to_group(user_id=user_id, group_id=pk,
+                                                                 query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['put'], url_path='group/add-video/(?P<video_id>[A-Za-z0-9]*)')
@@ -203,7 +205,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int video_id: ID specified to the video \n
         :return:  was added. Returns OK
         """
-        response = self.video_uploader_service.add_video_to_group(video_id=video_id, group_id=pk)
+        response = self.video_uploader_service.add_video_to_group(group_id=pk, video_id=video_id,
+                                                                  query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['post'], url_path='user/showcase/create')
@@ -227,7 +230,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.create_showcase(user_id=pk, payload=serializer.data)
+        response = self.video_uploader_service.create_showcase(user_id=pk, payload=serializer.data,
+                                                               query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['delete'], url_path='user/showcase/delete/(?P<album_id>[A-Za-z0-9]*)')
@@ -239,7 +243,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int album_id: ID specified to the album \n
         :return: Returns no content.
         """
-        response = self.video_uploader_service.delete_showcase(user_id=pk, album_id=album_id)
+        response = self.video_uploader_service.delete_showcase(user_id=pk, album_id=album_id,
+                                                               query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['patch'], url_path='user/showcase/update/(?P<album_id>[A-Za-z0-9]*)')
@@ -266,7 +271,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.update_showcase(user_id=pk, album_id=album_id, payload=serializer.data)
+        response = self.video_uploader_service.update_showcase(user_id=pk, album_id=album_id, payload=serializer.data,
+                                                               query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['get'], url_path='user/showcase/list')
@@ -295,7 +301,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int album_id: ID specified to the album \n
         :return: Returns a specific showcase \n
         """
-        response = self.video_uploader_service.specific_showcase(user_id=pk, album_id=album_id)
+        response = self.video_uploader_service.specific_showcase(user_id=pk, album_id=album_id,
+                                                                 query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['put'],
@@ -310,7 +317,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :return: Returns no content \n
         The video was added
         """
-        response = self.video_uploader_service.add_video_to_showcase(video_id=video_id, user_id=pk, album_id=album_id)
+        response = self.video_uploader_service.add_video_to_showcase(user_id=pk, album_id=album_id, video_id=video_id,
+                                                                     query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['post'], url_path='user/folder/create')
@@ -325,7 +333,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.create_folder(user_id=pk, payload=serializer.data)
+        response = self.video_uploader_service.create_folder(user_id=pk, payload=serializer.data,
+                                                             query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['delete'], url_path='user/folder/delete/(?P<folder_id>[A-Za-z0-9]*)')
@@ -337,7 +346,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int folder_id: ID specified to the folder \n
         :return: Returns no content.
         """
-        response = self.video_uploader_service.delete_folder(user_id=pk, project_id=folder_id)
+        response = self.video_uploader_service.delete_folder(user_id=pk, project_id=folder_id,
+                                                             query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['patch'], url_path='user/folder/update/(?P<folder_id>[A-Za-z0-9]*)')
@@ -353,7 +363,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.update_folder(user_id=pk, project_id=folder_id, payload=serializer.data)
+        response = self.video_uploader_service.update_folder(user_id=pk, project_id=folder_id, payload=serializer.data,
+                                                             query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['get'], url_path='user/folder/list')
@@ -382,7 +393,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int folder_id: ID specified to the folder \n
         :return: Returns a specific folder.
         """
-        response = self.video_uploader_service.specific_folder(user_id=pk, project_id=folder_id)
+        response = self.video_uploader_service.specific_folder(user_id=pk, project_id=folder_id,
+                                                               query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['put'],
@@ -396,7 +408,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int video_id: ID specified to the video \n
         :return:  was added. Returns no content
         """
-        response = self.video_uploader_service.add_video_to_folder(video_id=video_id, user_id=pk, project_id=folder_id)
+        response = self.video_uploader_service.add_video_to_folder(user_id=pk, project_id=folder_id, video_id=video_id,
+                                                                   query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['delete'], url_path='video/delete')
@@ -407,7 +420,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int video_id: ID specified to the video \n
         :return: Returns no content.
         """
-        response = self.video_uploader_service.delete_video(video_id=pk)
+        response = self.video_uploader_service.delete_video(video_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['get'], url_path='user/video/list')
@@ -418,7 +431,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int user_id: ID specified to the user \n
         :return: Returns all videos list. \n
         """
-        response = self.video_uploader_service.user_video_list(user_id=pk)
+        response = self.video_uploader_service.user_video_list(user_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['get'], url_path='video/specific')
@@ -429,7 +442,7 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int video_id: ID specified to the video \n
         :return: Returns a specific video.
         """
-        response = self.video_uploader_service.specific_video(video_id=pk)
+        response = self.video_uploader_service.specific_video(video_id=pk, query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='video/create')
@@ -462,7 +475,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        response = self.video_uploader_service.update_video(video_id=pk, payload=serializer.data)
+        response = self.video_uploader_service.update_video(video_id=pk, payload=serializer.data,
+                                                            query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['put'],
@@ -475,7 +489,8 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :path_params int video_id: ID specified to the video \n
         :return: Returns no content. The video was liked
         """
-        response = self.video_uploader_service.like_video(video_id=video_id, user_id=pk)
+        response = self.video_uploader_service.like_video(user_id=pk, video_id=video_id,
+                                                          query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['delete'],
@@ -489,5 +504,6 @@ class VideoUploaderViewSet(viewsets.GenericViewSet):
         :return: Returns no content.
         The video was unliked
         """
-        response = self.video_uploader_service.unlike_video(video_id=video_id, user_id=pk)
+        response = self.video_uploader_service.unlike_video(user_id=pk, video_id=video_id,
+                                                            query_params=request.query_params)
         return Response(data=response.get("data"), status=response.get("status_code"))

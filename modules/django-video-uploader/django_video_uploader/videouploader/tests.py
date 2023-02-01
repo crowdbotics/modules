@@ -22,7 +22,6 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         create_access_token_mock.assert_called_once()
 
-
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
         '.create_access_token')
@@ -426,8 +425,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.post(reverse('video_uploader_service-create-channel'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_channel_mock.assert_called_once()
-        create_channel_mock.assert_called_once_with(data)
-
+        create_channel_mock.assert_called_once_with(payload=data)
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_channel')
@@ -443,7 +441,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.post(reverse('video_uploader_service-create-channel'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_channel_mock.assert_called_once()
-        create_channel_mock.assert_called_once_with(data)
+        create_channel_mock.assert_called_once_with(payload=data)
 
     def test_create_channel_without_data(self):
         data = {}
@@ -459,8 +457,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_channel_mock.assert_called_once()
-        delete_channel_mock.assert_called_once_with(channel_id='1829885')
-
+        delete_channel_mock.assert_called_once_with(channel_id='1829885', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
@@ -471,8 +468,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_channel_mock.called_once()
-        delete_channel_mock.called_once_with(channel_id='1829885')
-
+        delete_channel_mock.called_once_with(channel_id='1829885', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
@@ -483,7 +479,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_channel_mock.called_once()
-        delete_channel_mock.called_once_with(channel_id='1829885')
+        delete_channel_mock.called_once_with(channel_id='1829885', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_channel')
@@ -502,8 +498,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_channel_mock.called_once()
-        update_channel_mock.called_once_with(channel_id='1829885', payload=data)
-
+        update_channel_mock.called_once_with(channel_id='1829885', payload=data, query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_channel')
@@ -883,7 +878,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_channel_mock.called_once()
-        update_channel_mock.called_once_with(channel_id='1829885', payload=data)
+        update_channel_mock.called_once_with(channel_id='1829885', payload=data, query_params={})
 
     def test_update_channel_with_empty_data(self):
         channel_id = 1829885
@@ -1271,6 +1266,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-channel-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         channel_list_mock.called_once()
+        channel_list_mock.called_once_with(query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_channel')
@@ -1643,8 +1639,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_channel_mock.called_once()
-        specific_channel_mock.called_once_with(channel_id='1829885')
-
+        specific_channel_mock.called_once_with(channel_id='1829885', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
@@ -1655,7 +1650,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_channel_mock.called_once()
-        specific_channel_mock.called_once_with(channel_id='1829885')
+        specific_channel_mock.called_once_with(channel_id='1829885', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_group')
@@ -2368,6 +2363,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-group-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         group_list_mock.assert_called_once()
+        group_list_mock.assert_called_once_with(query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
@@ -2378,8 +2374,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_group_mock.assert_called_once()
-        delete_group_mock.assert_called_once_with(group_id='808731')
-
+        delete_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
@@ -2390,8 +2385,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_group_mock.assert_called_once()
-        delete_group_mock.assert_called_once_with(group_id='808731')
-
+        delete_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
@@ -2402,7 +2396,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_group_mock.assert_called_once()
-        delete_group_mock.assert_called_once_with(group_id='808731')
+        delete_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_group')
@@ -2413,8 +2407,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_group_mock.assert_called_once()
-        specific_group_mock.assert_called_once_with(group_id='808731')
-
+        specific_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_group')
@@ -2770,7 +2763,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-group', args=(group_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_group_mock.assert_called_once()
-        specific_group_mock.assert_called_once_with(group_id='808731')
+        specific_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
@@ -2782,8 +2775,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         add_user_to_group_mock.assert_called_once()
-        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
-
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
@@ -2795,8 +2787,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_user_to_group_mock.assert_called_once()
-        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
-
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
@@ -2808,8 +2799,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_user_to_group_mock.assert_called_once()
-        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
-
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
@@ -2821,7 +2811,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-user-to-group', args=(group_id, user_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_user_to_group_mock.assert_called_once()
-        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731')
+        add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
@@ -2833,7 +2823,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         add_video_to_group_mock.assert_called_once()
-        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
@@ -2845,8 +2835,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_group_mock.assert_called_once()
-        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
-
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
@@ -2858,8 +2847,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_group_mock.assert_called_once()
-        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
-
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
@@ -2871,7 +2859,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-add-video-to-group', args=(group_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_group_mock.assert_called_once()
-        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731')
+        add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_showcase')
@@ -2896,7 +2884,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_showcase_mock.assert_called_once()
-        create_showcase_mock.assert_called_once_with(user_id='44367021', payload=data)
+        create_showcase_mock.assert_called_once_with(user_id='44367021', payload=data, query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_showcase')
@@ -3283,7 +3271,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_showcase_mock.assert_called_once()
-        create_showcase_mock.assert_called_once_with(user_id='44367021', payload=data)
+        create_showcase_mock.assert_called_once_with(user_id='44367021', payload=data, query_params={})
 
     def test_create_showcase_with_invalid_data(self):
         data = {
@@ -3313,8 +3301,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_showcase_mock.assert_called_once()
-        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612')
-
+        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
@@ -3326,8 +3313,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_showcase_mock.assert_called_once()
-        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612')
-
+        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
@@ -3339,7 +3325,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_showcase_mock.assert_called_once()
-        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612')
+        delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
@@ -3367,7 +3353,8 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_showcase_mock.assert_called_once()
-        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data)
+        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data,
+                                                     query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
@@ -3757,7 +3744,8 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_showcase_mock.assert_called_once()
-        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data)
+        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data,
+                                                     query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
@@ -3778,7 +3766,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "sort": "added_first",
             "theme": "dark",
             "url": "https://api.com",
-            "use_custom_domain":True
+            "use_custom_domain": True
         }
         user_id = 193125162
         album_id = 10146228
@@ -3786,7 +3774,8 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_showcase_mock.assert_called_once()
-        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data)
+        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data,
+                                                     query_params={})
 
     def test_update_showcase_with_invalid_data(self):
         data = {
@@ -4089,43 +4078,57 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "width": 100,
                                 "height": 75,
                                 "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
+                                                         ".vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages"
+                                "%2Fcrawler_play.png"
                             },
                             {
                                 "width": 200,
                                 "height": 150,
                                 "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
+                                                         ".vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
+                                                         "%2Fimages%2Fcrawler_play.png"
                             },
                             {
                                 "width": 295,
                                 "height": 166,
                                 "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
+                                                         ".vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
+                                                         "%2Fimages%2Fcrawler_play.png"
                             },
                             {
                                 "width": 640,
                                 "height": 360,
                                 "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
+                                                         ".vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
+                                "%2Fimages%2Fcrawler_play.png"
                             },
                             {
                                 "width": 960,
                                 "height": 540,
                                 "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
+                                                         ".vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
+                                "%2Fimages%2Fcrawler_play.png"
                             },
                             {
                                 "width": 1280,
                                 "height": 720,
                                 "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
+                                                         ".vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
+                                "%2Fimages%2Fcrawler_play.png"
                             },
                             {
                                 "width": 1920,
                                 "height": 1080,
                                 "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1920x1080&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
+                                                         ".vimeocdn.com%2Fvideo%2Fdefault_1920x1080&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
+                                "%2Fimages%2Fcrawler_play.png"
                             }
                         ],
                         "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
@@ -4202,7 +4205,6 @@ class VideoUploaderViewSetTests(APITestCase):
         showcase_list_mock.assert_called_once()
         showcase_list_mock.assert_called_once_with(user_id='193125162', query_params={})
 
-
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.showcase_list')
     def test_showcase_list_with_invalid_user_id(self, showcase_list_mock):
@@ -4214,9 +4216,9 @@ class VideoUploaderViewSetTests(APITestCase):
         showcase_list_mock.assert_called_once()
         showcase_list_mock.assert_called_once_with(user_id='193125162', query_params={})
 
-
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.specific_showcase')
     def test_specific_showcase_with_invalid_user_id(self, specific_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         specific_showcase_mock.return_value = response
@@ -4225,11 +4227,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_showcase_mock.assert_called_once()
-        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228')
-
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.specific_showcase')
     def test_specific_showcase(self, specific_showcase_mock):
         response = {"data": {
             "uri": "/users/193125162/albums/10146228",
@@ -4490,37 +4492,48 @@ class VideoUploaderViewSetTests(APITestCase):
                         "width": 100,
                         "height": 75,
                         "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
+                                                 ".com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
                     },
                     {
                         "width": 200,
                         "height": 150,
                         "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
+                                                 ".com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
+                        ".png"
                     },
                     {
                         "width": 295,
                         "height": 166,
                         "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
+                                                 ".com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
+                        ".png"
                     },
                     {
                         "width": 640,
                         "height": 360,
                         "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
+                                                 ".com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
+                                                 ".png"
                     },
                     {
                         "width": 960,
                         "height": 540,
                         "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
+                                                 ".com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
+                        ".png"
                     },
                     {
                         "width": 1280,
                         "height": 720,
                         "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
+                                                 ".com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
+                                                 ".png"
                     },
                     {
                         "width": 1920,
@@ -4600,8 +4613,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_showcase_mock.assert_called_once()
-        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228')
-
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_showcase')
@@ -4613,10 +4625,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_showcase_mock.assert_called_once()
-        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228')
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_video_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
@@ -4627,11 +4640,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(video_id='79345428', user_id='93125162', album_id='10146228')
-
+        add_video_to_showcase_mock.assert_called_once_with(video_id='79345428', user_id='93125162', album_id='10146228',
+                                                           query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_user_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
@@ -4642,11 +4656,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(video_id='793454282', user_id='9312516', album_id='10146228')
-
+        add_video_to_showcase_mock.assert_called_once_with(video_id='793454282', user_id='9312516', album_id='10146228',
+                                                           query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_album_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
@@ -4657,11 +4672,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282')
-
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282',
+                                                           query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_showcase')
     def test_add_video_to_showcase(self, add_video_to_showcase_mock):
         response = {"data": {"message": "The video was added."}, 'status_code': 204}
         add_video_to_showcase_mock.return_value = response
@@ -4672,11 +4688,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282')
-
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282',
+                                                           query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_showcase')
     def test_add_video_to_showcase_with_no_add_scope(self, add_video_to_showcase_mock):
         response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_showcase_mock.return_value = response
@@ -4687,7 +4704,8 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282')
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282',
+                                                           query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_video')
@@ -5417,8 +5435,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_video_mock.assert_called_once()
-        delete_video_mock.assert_called_once_with(video_id='793454282')
-
+        delete_video_mock.assert_called_once_with(video_id='793454282', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
@@ -5429,8 +5446,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_video_mock.assert_called_once()
-        delete_video_mock.assert_called_once_with(video_id='793454282')
-
+        delete_video_mock.assert_called_once_with(video_id='793454282', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
@@ -5441,8 +5457,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_video_mock.assert_called_once()
-        delete_video_mock.assert_called_once_with(video_id='793454282')
-
+        delete_video_mock.assert_called_once_with(video_id='793454282', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_video')
@@ -6148,8 +6163,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_video_mock.assert_called_once()
-        specific_video_mock.assert_called_once_with(video_id='793454282')
-
+        specific_video_mock.assert_called_once_with(video_id='793454282', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_video')
@@ -6160,7 +6174,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_video_mock.assert_called_once()
-        specific_video_mock.assert_called_once_with(video_id='793454282')
+        specific_video_mock.assert_called_once_with(video_id='793454282', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
@@ -6910,7 +6924,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_video_mock.assert_called_once()
-        update_video_mock.assert_called_once_with(video_id='793454282', payload=data)
+        update_video_mock.assert_called_once_with(video_id='793454282', payload=data, query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
@@ -6965,7 +6979,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_video_mock.assert_called_once()
-        update_video_mock.assert_called_once_with(video_id='793454282', payload=data)
+        update_video_mock.assert_called_once_with(video_id='793454282', payload=data, query_params={})
 
     def test_update_video_wit_invalid_data(self):
         video_id = 793454282
@@ -7069,8 +7083,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_video_mock.assert_called_once()
-        update_video_mock.assert_called_once_with(video_id='793454282', payload=data)
-
+        update_video_mock.assert_called_once_with(video_id='793454282', payload=data, query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.user_video_list')
@@ -7794,8 +7807,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-user-video-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         user_video_list_mock.assert_called_once()
-        user_video_list_mock.assert_called_once_with(user_id='193125162')
-
+        user_video_list_mock.assert_called_once_with(user_id='193125162', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.user_video_list')
@@ -7806,7 +7818,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-user-video-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         user_video_list_mock.assert_called_once()
-        user_video_list_mock.assert_called_once_with(user_id='193125162')
+        user_video_list_mock.assert_called_once_with(user_id='193125162', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
@@ -7818,8 +7830,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         like_video_mock.assert_called_once()
-        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
-
+        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
@@ -7831,8 +7842,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         like_video_mock.assert_called_once()
-        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
-
+        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
@@ -7844,9 +7854,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         like_video_mock.assert_called_once()
-        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
-
-
+        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
@@ -7858,8 +7866,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         unlike_video_mock.assert_called_once()
-        unlike_video_mock.assert_called_once_with(user_id='19312516', video_id='793501641')
-
+        unlike_video_mock.assert_called_once_with(user_id='19312516', video_id='793501641', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
@@ -7871,8 +7878,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         unlike_video_mock.assert_called_once()
-        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
-
+        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
@@ -7884,7 +7890,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         unlike_video_mock.assert_called_once()
-        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641')
+        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
@@ -8295,7 +8301,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_folder_mock.assert_called_once()
-        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data)
+        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data, query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
@@ -8310,7 +8316,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         create_folder_mock.assert_called_once()
-        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data)
+        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data, query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
@@ -8325,7 +8331,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_folder_mock.assert_called_once()
-        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data)
+        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data, query_params={})
 
     def test_create_folder_without_data(self):
         user_id = 193125162
@@ -8344,8 +8350,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
-
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
@@ -8357,8 +8362,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
-
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
@@ -8370,8 +8374,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
-
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
@@ -8383,7 +8386,7 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344')
+        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
@@ -8795,7 +8798,8 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_folder_mock.assert_called_once()
-        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data)
+        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data,
+                                                   query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
@@ -8811,8 +8815,8 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_folder_mock.assert_called_once()
-        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data)
-
+        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data,
+                                                   query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
@@ -8828,7 +8832,8 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_folder_mock.assert_called_once()
-        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data)
+        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data,
+                                                   query_params={})
 
     def test_update_folder_with_invalid_data(self):
         user_id = 193125162
@@ -8851,7 +8856,6 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         folder_list_mock.assert_called_once()
         folder_list_mock.assert_called_once_with(user_id='19312516', query_params={})
-
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.folder_list')
@@ -9283,8 +9287,8 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_folder_mock.assert_called_once()
-        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366')
-
+        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366',
+                                                     query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
@@ -9296,8 +9300,8 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_folder_mock.assert_called_once()
-        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366')
-
+        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366',
+                                                     query_params={})
 
     @mock.patch(
         'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
@@ -9705,10 +9709,11 @@ class VideoUploaderViewSetTests(APITestCase):
         response = self.client.get(reverse('video_uploader_service-specific-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_folder_mock.assert_called_once()
-        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366')
+        specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_user_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
@@ -9719,11 +9724,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
-
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366'
+                                                         , query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_folder_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
@@ -9734,11 +9740,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
-
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+                                                         project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_video_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
@@ -9749,11 +9756,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
-
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+                                                         project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_folder')
     def test_add_video_to_folder(self, add_video_to_folder_mock):
         response = {"data": {"message": "The video was added"}, "status_code": 204}
         add_video_to_folder_mock.return_value = response
@@ -9764,11 +9772,12 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
-
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+                                                         project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
+        '.add_video_to_folder')
     def test_add_video_to_folder_with_no_add_scope(self, add_video_to_folder_mock):
         response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_folder_mock.return_value = response
@@ -9779,4 +9788,5 @@ class VideoUploaderViewSetTests(APITestCase):
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366')
+        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+                                                         project_id='14722366', query_params={})
