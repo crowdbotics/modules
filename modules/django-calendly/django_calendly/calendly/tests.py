@@ -20,10 +20,11 @@ class CalendlyViewSetTest(APITestCase):
             'updated_at': '2022-12-28T00:07:47.545012Z',
             'uri': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}}, 'status_code': 200}
         user_details_mock.return_value = response
-        Response = self.client.get('/modules/calendly/service/user/details/')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response['data']['resource']['email'], Response.data['resource']['email'])
-        self.assertEqual(response['data']['resource']['avatar_url'], Response.data['resource']['avatar_url'])
+        responses = self.client.get(reverse('calendly_service-user-details'))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['data']['resource']['email'], responses.data['resource']['email'])
+        self.assertEqual(response['data']['resource']['avatar_url'], responses.data['resource']['avatar_url'])
+        user_details_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.event_types')
     def test_event_types(self, event_types_mock):
@@ -43,33 +44,6 @@ class CalendlyViewSetTest(APITestCase):
                          'type': 'User'}, 'scheduling_url': 'https://calendly.com/demomodule-123/30min',
              'secret': False, 'slug': '30min', 'type': 'StandardEventType', 'updated_at': '2022-12-15T07:01:25.735100Z',
              'uri': 'https://api.calendly.com/event_types/58e353c1-09de-4d52-b854-6d36d711e3f9'},
-            {'active': False, 'admin_managed': False, 'booking_method': 'instant', 'color': '#e55cff',
-             'created_at': '2022-12-13T09:05:36.970823Z', 'custom_questions': [
-                {'answer_choices': [], 'enabled': True, 'include_other': False,
-                 'name': 'Please share anything that will help prepare for our meeting.', 'position': 0,
-                 'required': False, 'type': 'text'}], 'deleted_at': None, 'description_html': '<p><br></p>',
-             'description_plain': '', 'duration': 30, 'internal_note': None, 'kind': 'group',
-             'kind_description': 'Group', 'name': 'Demo Collective Event', 'pooling_type': None,
-             'profile': {'name': 'Saad Bin Abid',
-                         'owner': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580',
-                         'type': 'User'}, 'scheduling_url': 'https://calendly.com/saad-abid/demo-collective-event',
-             'secret': False, 'slug': 'demo-collective-event', 'type': 'StandardEventType',
-             'updated_at': '2022-12-16T15:07:24.142672Z',
-             'uri': 'https://api.calendly.com/event_types/b7da2e5c-62a9-4c2a-a1bb-69bc21514780'},
-            {'active': True, 'admin_managed': False, 'booking_method': 'instant', 'color': '#8247f5',
-             'created_at': '2022-12-15T07:01:25.658248Z', 'custom_questions': [
-                {'answer_choices': [], 'enabled': True, 'include_other': False,
-                 'name': 'Please share anything that will help prepare for our meeting.', 'position': 0,
-                 'required': False, 'type': 'text'}], 'deleted_at': None, 'description_html': '<p>events</p>',
-             'description_plain': 'events', 'duration': 30, 'internal_note': None, 'kind': 'solo',
-             'kind_description': 'One-on-One', 'name': 'my event', 'pooling_type': None, 'profile': {'name': 'demo 123',
-                                                                                                     'owner': 'https:'
-                                                                                                              '//api'
-                                                                                                              '.calendly.com/users/75743257-9734-4110-b0ec-336ccfc6c66f',
-                                                                                                     'type': 'User'},
-             'scheduling_url': 'https://calendly.com/demomodule-123/my-event', 'secret': False, 'slug': 'my-event',
-             'type': 'StandardEventType', 'updated_at': '2022-12-15T07:01:49.385838Z',
-             'uri': 'https://api.calendly.com/event_types/f9638431-6122-466f-abcd-8dafda082a01'},
             {'active': True, 'admin_managed': False, 'booking_method': 'instant', 'color': '#17e885',
              'created_at': '2022-12-13T06:49:03.726668Z', 'custom_questions': [
                 {'answer_choices': [], 'enabled': True, 'include_other': False,
@@ -88,12 +62,12 @@ class CalendlyViewSetTest(APITestCase):
             'pagination': {'count': 4, 'next_page': None, 'next_page_token': None,
                            'previous_page': None, 'previous_page_token': None}}, 'status_code': 200}
         event_types_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/event/types/',
-            {'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9',
-             'active': 'true', 'count': '10'})
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
+        query_params = {'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9',
+                        'active': 'true', 'count': '10'}
+        responses = self.client.get(reverse('calendly_service-event-types'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        event_types_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.event_types')
     def test_event_types_with_wrong_params(self, event_types_mock):
@@ -102,12 +76,12 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         event_types_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/event/types/',
-            {'organization': 'https://api.calendly.com/organizations/9a2db856-b35dc45e3d9', 'active': 'tue',
-             'count': '1'})
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
+        query_params = {'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9',
+                        'active': 'true', 'count': '10'}
+        responses = self.client.get(reverse('calendly_service-event-types'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        event_types_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_event_types')
     def test_single_event_type(self, single_event_types_mock):
@@ -131,10 +105,11 @@ class CalendlyViewSetTest(APITestCase):
                          'uri': 'https://api.calendly.com/event_types/b7da2e5c-62a9-4c2a-a1bb-69bc21514780'}},
             'status_code': 200}
         single_event_types_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/b7da2e5c-62a9-4c2a-a1bb-69bc21514780/single/event/types/')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
+        uuid = 'b7da2e5c-62a9-4c2a-a1bb-69bc21514780'
+        responses = self.client.get(reverse('calendly_service-single-event-types', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        single_event_types_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_event_types')
     def test_single_event_type_with_wrong_uuid(self, single_event_types_mock):
@@ -143,10 +118,11 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         single_event_types_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/b7da2e5c-69-4c2a-a1bb-69bc21514780/single/event/types/')
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
+        uuid = 'b7da2e5c-62a9-4c2a-a1bb-69bc21514780'
+        responses = self.client.get(reverse('calendly_service-single-event-types', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        single_event_types_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.event_type_available_times')
     def test_event_type_available_times(self, event_type_available_times_mock):
@@ -187,18 +163,10 @@ class CalendlyViewSetTest(APITestCase):
         Test user availability schedules with all query params in the url and check the response
         """
         response = {'data': {'collection': [{'default': True, 'name': 'Working hours',
-                                             'rules': [{'type': 'wday', 'wday': 'sunday', 'intervals': []},
-                                                       {'type': 'wday', 'wday': 'monday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'tuesday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'wednesday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'thursday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'friday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'saturday', 'intervals': []}],
+                                             'rules': [
+                                                 {'type': 'wday', 'wday': 'friday',
+                                                  'intervals': [{'from': '09:00', 'to': '17:00'}]},
+                                                 {'type': 'wday', 'wday': 'saturday', 'intervals': []}],
                                              'timezone': 'Asia/Karachi',
                                              'uri': 'https://api.calendly.com/user_availability_schedules/2d647721-'
                                                     '4482-4424-a1f3-41a9cabcce26',
@@ -206,45 +174,13 @@ class CalendlyViewSetTest(APITestCase):
                                                      'faf2b858b580'}]},
                     'status_code': 200}
         user_availability_schedules_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/user/availability-schedules/',
-            {'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580',
-             'event_type': 'https://api.calendly.com/event_types/b7da2e5c-62a9-4c2a-a1bb-69bc21514780',
-             'end_time': '2020-01-07T24:00:00.000000Z'})
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-
-    @mock.patch(
-        'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.user_availability_schedules')
-    def test_user_availability_schedules_without_event_type_and_end_time_params(self, user_availability_schedules_mock):
-        """
-        Test user availability schedules without event type and end time  query params in the url and check the response
-        """
-        response = {'data': {'collection': [{'default': True, 'name': 'Working hours',
-                                             'rules': [{'type': 'wday', 'wday': 'sunday', 'intervals': []},
-                                                       {'type': 'wday', 'wday': 'monday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'tuesday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'wednesday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'thursday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'friday',
-                                                        'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                       {'type': 'wday', 'wday': 'saturday', 'intervals': []}],
-                                             'timezone': 'Asia/Karachi',
-                                             'uri': 'https://api.calendly.com/user_availability_schedules/2d647721-4482'
-                                                    '-4424-a1f3-41a9cabcce26',
-                                             'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-'
-                                                     'faf2b858b580'}]},
-                    'status_code': 200}
-        user_availability_schedules_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/user/availability-schedules/',
-            {'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'})
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
+        query_params = {'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580',
+                        'event_type': 'https://api.calendly.com/event_types/b7da2e5c-62a9-4c2a-a1bb-69bc21514780',
+                        'end_time': '2020-01-07T24:00:00.000000Z'}
+        responses = self.client.get(reverse('calendly_service-user-availability-schedules'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        user_availability_schedules_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.user_availability_schedules')
@@ -254,11 +190,11 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         user_availability_schedules_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/user/availability-schedules/',
-            {'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-'})
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
+        query_params = {'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}
+        responses = self.client.get(reverse('calendly_service-user-availability-schedules'), query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        user_availability_schedules_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.user_availability_schedules')
@@ -270,11 +206,10 @@ class CalendlyViewSetTest(APITestCase):
                              'message': 'The supplied parameters are invalid.', 'title': 'Invalid Argument'},
                     'status_code': 400}
         user_availability_schedules_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/user/availability-schedules/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Response.data, response['data'])
+        responses = self.client.get(reverse('calendly_service-user-availability-schedules'))
+        self.assertEqual(responses.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(responses.data, response['data'])
+        user_availability_schedules_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_invitees')
     def test_remove_invitees(self, remove_invitees_mock):
@@ -289,14 +224,15 @@ class CalendlyViewSetTest(APITestCase):
         }
         remove_invitees_mock.return_value = response
         data = {
-            'email': 'saad.abid@crowdbotics.com'
+            "emails": [
+                "test@example.com"
+            ]
         }
-        Response = self.client.post(
-            '/modules/calendly/service/remove/invitees/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.post(reverse('calendly_service-remove-invitees'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        remove_invitees_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_invitees')
     def test_remove_invitees_with_wrong_email(self, remove_invitees_mock):
@@ -311,14 +247,27 @@ class CalendlyViewSetTest(APITestCase):
         }
         remove_invitees_mock.return_value = response
         data = {
-            'email': 'saad.abid@rwdbotics.com'
+            "emails": [
+                "test@example.com"
+            ]
         }
-        Response = self.client.post(
-            '/modules/calendly/service/remove/invitees/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.post(reverse('calendly_service-remove-invitees'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        remove_invitees_mock.called_once()
+
+    def test_remove_invitees_with_invalid_email(self):
+        """
+        Test remove invitees with invalid email  and check the response
+        """
+        data = {
+            "emails": [
+                "testexample.com"
+            ]
+        }
+        response = self.client.post(reverse('calendly_service-remove-invitees'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_invitees')
     def test_remove_invitees_with_non_upgrade_account_email(self, remove_invitees_mock):
@@ -334,15 +283,15 @@ class CalendlyViewSetTest(APITestCase):
         }
         remove_invitees_mock.return_value = response
         data = {
-            'email': 'saad.abid@rwdbotics.com'
+            "emails": [
+                "test@example.com"
+            ]
         }
-        Response = self.client.post(
-            '/modules/calendly/service/remove/invitees/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
-        self.assertEqual(Response.data['title'], response['data']['title'])
+        responses = self.client.post(reverse('calendly_service-remove-invitees'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        self.assertEqual(responses.data['title'], response['data']['title'])
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.organization_'
                 'invitations_list')
@@ -361,13 +310,6 @@ class CalendlyViewSetTest(APITestCase):
                     'uri': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9/invitations/'
                            '99c6b069-51e7-43f6-809a-2315a0dd4071',
                     'user': 'https://api.calendly.com/users/75743257-9734-4110-b0ec-336ccfc6c66f'},
-                    {'created_at': '2022-12-16T13:30:17.233437Z', 'email': 'demomodule.123@gmail.com',
-                     'last_sent_at': '2022-12-16T13:30:17.385537Z',
-                     'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9',
-                     'status': 'accepted', 'updated_at': '2022-12-16T13:31:28.794230Z',
-                     'uri': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9/invitations/'
-                            'aa9aa5df-42fb-4d06-9bbc-cd039053185f',
-                     'user': 'https://api.calendly.com/users/75743257-9734-4110-b0ec-336ccfc6c66f'},
                     {'created_at': '2022-12-19T13:07:15.294228Z', 'email': 'vapim7230@fanneat.com',
                      'last_sent_at': '2022-12-26T13:07:19.043045Z',
                      'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9',
@@ -377,16 +319,15 @@ class CalendlyViewSetTest(APITestCase):
                 'pagination': {'count': 3, 'next_page': None, 'next_page_token': None,
                                'previous_page': None, 'previous_page_token': None}}, 'status_code': 200}
         organization_invitations_list_mock.return_value = response
-        id = '9a2db856-b354-4c0d-96f7-79b7dc45e3d9'
-        Response = self.client.get(
-            f'/modules/calendly/service/{id}/organization/invitations/list/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
+        uuid = '9a2db856-b354-4c0d-96f7-79b7dc45e3d9'
+        responses = self.client.get(reverse('calendly_service-organization-invitations-list', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
         self.assertEqual(response['data']['collection'][0]['organization'],
-                         Response.data['collection'][0]['organization'])
-        self.assertEqual(response['data']['pagination'], Response.data['pagination'])
-        self.assertEqual(Response.data['pagination']['next_page'], response['data']['pagination']['next_page'])
+                         responses.data['collection'][0]['organization'])
+        self.assertEqual(response['data']['pagination'], responses.data['pagination'])
+        self.assertEqual(responses.data['pagination']['next_page'], response['data']['pagination']['next_page'])
+        organization_invitations_list_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.organization_'
                 'invitations_list')
@@ -396,13 +337,12 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         organization_invitations_list_mock.return_value = response
-        id = '9a2db856-b354-4c0d-96f7-79b7dc5e3d9'
-        Response = self.client.get(
-            f'/modules/calendly/service/{id}/organization/invitations/list/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        uuid = '9a2db856-b354-4c0d-96f7-79b7dc45e3d9'
+        responses = self.client.get(reverse('calendly_service-organization-invitations-list', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        organization_invitations_list_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.scheduled_events_list')
     def test_scheduled_events_list(self, organization_invitations_list_mock):
@@ -420,145 +360,6 @@ class CalendlyViewSetTest(APITestCase):
              'start_time': '2022-12-14T06:30:00.000000Z', 'status': 'canceled',
              'updated_at': '2022-12-13T22:36:42.323150Z',
              'uri': 'https://api.calendly.com/scheduled_events/ca78db62-4c0b-4c17-963a-e2c505b89086'},
-            {'calendar_event': {'external_id': 'n3pdu19i41vo5um37j36o4s3og', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': ''},
-             'created_at': '2022-12-15T07:03:12.552940Z', 'end_time': '2022-12-16T10:30:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/75743257-9734-4110-b0ec-336ccfc6c66f'}],
-             'event_type': 'https://api.calendly.com/event_types/f9638431-6122-466f-abcd-8dafda082a01',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp', 'type': 'custom'}, 'name': 'my event',
-             'start_time': '2022-12-16T10:00:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-15T11:12:33.237315Z',
-             'uri': 'https://api.calendly.com/scheduled_events/c1a24978-f568-4df4-abb5-28cdbc0f4667'},
-            {'calendar_event': {'external_id': 'vi9t3gjuasn9k45m5dkobe98n0', 'kind': 'google'},
-             'created_at': '2022-12-15T07:04:21.763694Z', 'end_time': '2022-12-16T05:30:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/81944b44-c443-44e3-a82c-b659d48734b6',
-             'invitees_counter': {'active': 1, 'limit': 100, 'total': 1},
-             'location': {'location': 'bwp', 'type': 'custom'}, 'name': 'saad schedules',
-             'start_time': '2022-12-16T05:00:00.000000Z', 'status': 'active',
-             'updated_at': '2022-12-15T07:04:22.392832Z',
-             'uri': 'https://api.calendly.com/scheduled_events/07d9da9c-8b28-4802-b94c-cc004491af98'},
-            {'calendar_event': {'external_id': '3dscia8r27rmcvu72ek0t1r108', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': ''},
-             'created_at': '2022-12-16T08:09:26.959309Z', 'end_time': '2022-12-22T06:30:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/c7585710-0565-43e6-a9de-d625a21ef718',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'nwp', 'type': 'custom'}, 'name': 'custom',
-             'start_time': '2022-12-22T06:00:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T09:35:11.973897Z',
-             'uri': 'https://api.calendly.com/scheduled_events/ce9cb38a-4e41-49f7-a651-55b72980d5ca'},
-            {'calendar_event': {'external_id': '2nliuk7bbbnmf4t2bev67cdi70', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': None},
-             'created_at': '2022-12-16T08:23:38.557928Z', 'end_time': '2022-12-29T07:00:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/c7585710-0565-43e6-a9de-d625a21ef718',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'nwp', 'type': 'custom'}, 'name': 'custom',
-             'start_time': '2022-12-29T06:30:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T09:37:00.311621Z',
-             'uri': 'https://api.calendly.com/scheduled_events/bf9b0d5b-324e-4f9e-aa0a-5d8b2e914f2e'},
-            {'calendar_event': {'external_id': '2nliuk7bbbnmf4t2bev67cdi70', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': None},
-             'created_at': '2022-12-16T09:37:00.321577Z', 'end_time': '2022-12-29T06:30:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/c7585710-0565-43e6-a9de-d625a21ef718',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'nwp', 'type': 'custom'}, 'name': 'custom',
-             'start_time': '2022-12-29T06:00:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T10:34:05.450099Z',
-             'uri': 'https://api.calendly.com/scheduled_events/7e2b77f9-5ceb-431d-8514-3a23818e0d85'},
-            {'calendar_event': {'external_id': '2nliuk7bbbnmf4t2bev67cdi70', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': ''},
-             'created_at': '2022-12-16T10:34:05.456937Z', 'end_time': '2022-12-28T10:30:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/c7585710-0565-43e6-a9de-d625a21ef718',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'nwp', 'type': 'custom'}, 'name': 'custom',
-             'start_time': '2022-12-28T10:00:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T10:34:39.153888Z',
-             'uri': 'https://api.calendly.com/scheduled_events/82961e2a-55c0-4a62-b513-7e7c82364bec'},
-            {'calendar_event': {'external_id': '0c3jij1etnpf6lu4h6bhndap1g', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': 'i want to cancel'},
-             'created_at': '2022-12-16T11:28:01.002091Z', 'end_time': '2022-12-28T05:00:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/9fa001e1-de93-410e-9b90-9a977d61fdc8',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp, punjab, lahore, pakistan', 'type': 'physical'}, 'name': 'Personal Meeting',
-             'start_time': '2022-12-28T04:30:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T11:29:30.207091Z',
-             'uri': 'https://api.calendly.com/scheduled_events/5848bb8e-274c-4871-add5-819624622224'},
-            {'calendar_event': {'external_id': 'lv9mausuv46gu9k5tnnierjk7o', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': None},
-             'created_at': '2022-12-16T12:04:51.473937Z', 'end_time': '2022-12-28T05:00:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/9fa001e1-de93-410e-9b90-9a977d61fdc8',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp, punjab, lahore, pakistan', 'type': 'physical'}, 'name': 'Personal Meeting',
-             'start_time': '2022-12-28T04:30:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T12:13:41.435368Z',
-             'uri': 'https://api.calendly.com/scheduled_events/669465f0-1426-425d-b9a4-cf0ef23b6b62'},
-            {'calendar_event': {'external_id': 'lv9mausuv46gu9k5tnnierjk7o', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': ''},
-             'created_at': '2022-12-16T12:13:41.443389Z', 'end_time': '2022-12-23T06:00:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/9fa001e1-de93-410e-9b90-9a977d61fdc8',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp, punjab, lahore, pakistan', 'type': 'physical'}, 'name': 'Personal Meeting',
-             'start_time': '2022-12-23T05:30:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T12:14:06.902607Z',
-             'uri': 'https://api.calendly.com/scheduled_events/9b1c1c05-0c2b-4ac2-a96a-696172cf5735'},
-            {'calendar_event': {'external_id': '4oudjlj0nsfmb81d1mo13v5oig', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': None},
-             'created_at': '2022-12-16T12:15:12.951889Z', 'end_time': '2022-12-29T06:30:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/9fa001e1-de93-410e-9b90-9a977d61fdc8',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp, punjab, lahore, pakistan', 'type': 'physical'}, 'name': 'Personal Meeting',
-             'start_time': '2022-12-29T06:00:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T12:16:36.056416Z',
-             'uri': 'https://api.calendly.com/scheduled_events/524c2b73-8e4f-4523-a15f-0393826a5bce'},
-            {'calendar_event': {'external_id': '4oudjlj0nsfmb81d1mo13v5oig', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': ''},
-             'created_at': '2022-12-16T12:16:36.065771Z', 'end_time': '2022-12-29T06:00:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/9fa001e1-de93-410e-9b90-9a977d61fdc8',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp, punjab, lahore, pakistan', 'type': 'physical'}, 'name': 'Personal Meeting',
-             'start_time': '2022-12-29T05:30:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T12:16:46.207557Z',
-             'uri': 'https://api.calendly.com/scheduled_events/6f2b50d6-9a0d-44b4-b32a-d5302717c121'},
-            {'calendar_event': {'external_id': '1v3st071amonu821k0v3hlt9q0', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid',
-                              'reason': 'I am rescheduling the meeting for some personal reasons.'},
-             'created_at': '2022-12-16T12:17:12.285617Z', 'end_time': '2022-12-22T07:00:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/9fa001e1-de93-410e-9b90-9a977d61fdc8',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp, punjab, lahore, pakistan', 'type': 'physical'}, 'name': 'Personal Meeting',
-             'start_time': '2022-12-22T06:30:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T15:02:01.807894Z',
-             'uri': 'https://api.calendly.com/scheduled_events/e6448922-cac9-4a22-b4cf-83d20849ee51'},
-            {'calendar_event': {'external_id': 'v5q0h43loe7cm69rvc5eiue4f4', 'kind': 'google'},
-             'cancellation': {'canceler_type': 'host', 'canceled_by': 'Saad Bin Abid', 'reason': ''},
-             'created_at': '2022-12-16T12:24:40.161545Z', 'end_time': '2022-12-30T07:00:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/c7585710-0565-43e6-a9de-d625a21ef718',
-             'invitees_counter': {'active': 0, 'limit': 1, 'total': 1},
-             'location': {'location': 'nwp', 'type': 'custom'}, 'name': 'custom',
-             'start_time': '2022-12-30T06:30:00.000000Z', 'status': 'canceled',
-             'updated_at': '2022-12-16T12:26:14.104694Z',
-             'uri': 'https://api.calendly.com/scheduled_events/f6433492-c98d-4489-9b6a-2b4a245e714d'},
-            {'calendar_event': {'external_id': '1v3st071amonu821k0v3hlt9q0', 'kind': 'google'},
-             'created_at': '2022-12-16T15:02:01.821077Z', 'end_time': '2022-12-30T05:30:00.000000Z', 'event_guests': [],
-             'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
-             'event_type': 'https://api.calendly.com/event_types/9fa001e1-de93-410e-9b90-9a977d61fdc8',
-             'invitees_counter': {'active': 1, 'limit': 1, 'total': 1},
-             'location': {'location': 'bwp, punjab, lahore, pakistan', 'type': 'physical'}, 'name': 'Personal Meeting',
-             'start_time': '2022-12-30T05:00:00.000000Z', 'status': 'active',
-             'updated_at': '2022-12-16T15:02:02.585602Z',
-             'uri': 'https://api.calendly.com/scheduled_events/5176d074-4fda-4dac-9e95-ae7d35e7d7ef'},
             {'calendar_event': {'external_id': 'svtdjmhr3j4ip1a8o2um080tmk', 'kind': 'google'},
              'created_at': '2023-01-11T17:11:18.439737Z', 'end_time': '2023-01-18T06:00:00.000000Z', 'event_guests': [],
              'event_memberships': [{'user': 'https://api.calendly.com/users/3e1c14de-01c9-4ea8-a87b-faf2b858b580'}],
@@ -571,15 +372,14 @@ class CalendlyViewSetTest(APITestCase):
             'pagination': {'count': 16, 'next_page': None, 'next_page_token': None,
                            'previous_page': None, 'previous_page_token': None}}, 'status_code': 200}
         organization_invitations_list_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/scheduled/event/list/',
-            {'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['collection'][00]['calendar_event']['kind'],
+        query_params = {'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9'}
+        responses = self.client.get(reverse('calendly_service-scheduled-events-list'), query_params)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['collection'][00]['calendar_event']['kind'],
                          response['data']['collection'][00]['calendar_event']['kind'])
-        self.assertEqual(Response.data['pagination']['next_page'], response['data']['pagination']['next_page'])
+        self.assertEqual(responses.data['pagination']['next_page'], response['data']['pagination']['next_page'])
+        organization_invitations_list_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.scheduled_events_list')
     def test_scheduled_events_list_with_wrong_params(self, organization_invitations_list_mock):
@@ -587,15 +387,13 @@ class CalendlyViewSetTest(APITestCase):
         Test scheduled events list with wrong params  and check the response
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
-
         organization_invitations_list_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/scheduled/event/list/',
-            {'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        query_params = {'organization': 'https://api.calendly.com/organizations/9a2db856-b354-4c0d-96f7-79b7dc45e3d9'}
+        responses = self.client.get(reverse('calendly_service-scheduled-events-list'), query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        organization_invitations_list_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_user_availability'
                 '_schedules')
@@ -604,18 +402,12 @@ class CalendlyViewSetTest(APITestCase):
         Test single user availability schedules and check the response
         """
         response = {'data': {'resource': {'default': True, 'name': 'Working hours',
-                                          'rules': [{'type': 'wday', 'wday': 'sunday', 'intervals': []},
-                                                    {'type': 'wday', 'wday': 'monday',
-                                                     'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                    {'type': 'wday', 'wday': 'tuesday',
-                                                     'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                    {'type': 'wday', 'wday': 'wednesday',
-                                                     'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                    {'type': 'wday', 'wday': 'thursday',
-                                                     'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                    {'type': 'wday', 'wday': 'friday',
-                                                     'intervals': [{'from': '09:00', 'to': '17:00'}]},
-                                                    {'type': 'wday', 'wday': 'saturday', 'intervals': []}],
+                                          'rules': [
+                                              {'type': 'wday', 'wday': 'thursday',
+                                               'intervals': [{'from': '09:00', 'to': '17:00'}]},
+                                              {'type': 'wday', 'wday': 'friday',
+                                               'intervals': [{'from': '09:00', 'to': '17:00'}]},
+                                              {'type': 'wday', 'wday': 'saturday', 'intervals': []}],
                                           'timezone': 'Asia/Karachi',
                                           'uri': 'https://api.calendly.com/user_availability_schedules/2d647721-4482'
                                                  '-4424-a1f3-41a9cabcce26',
@@ -624,15 +416,14 @@ class CalendlyViewSetTest(APITestCase):
 
         single_user_availability_schedules_mock.return_value = response
         uuid = '2d647721-4482-4424-a1f3-41a9cabcce26'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/user/single/availability-schedules/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['name'], response['data']['resource']['name'])
-        self.assertEqual(Response.data['resource']['rules'], response['data']['resource']['rules'])
-        self.assertEqual(Response.data['resource']['timezone'], response['data']['resource']['timezone'])
-        self.assertEqual(Response.data['resource']['uri'], response['data']['resource']['uri'])
+        responses = self.client.get(reverse('calendly_service-single-user-availability-schedules', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['name'], response['data']['resource']['name'])
+        self.assertEqual(responses.data['resource']['rules'], response['data']['resource']['rules'])
+        self.assertEqual(responses.data['resource']['timezone'], response['data']['resource']['timezone'])
+        self.assertEqual(responses.data['resource']['uri'], response['data']['resource']['uri'])
+        single_user_availability_schedules_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_user_'
                 'availability_schedules')
@@ -642,13 +433,12 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         single_user_availability_schedules_mock.return_value = response
-        uuid = '2d647721-4482-4424-a13-41a9cabcce26'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/user/single/availability-schedules/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        uuid = '2d647721-4482-4424-a1f3-41a9cabcce26'
+        responses = self.client.get(reverse('calendly_service-single-user-availability-schedules', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        single_user_availability_schedules_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.invite_user_organizations')
     def test_invite_user_organizations(self, invite_user_organizations_mock):
@@ -664,13 +454,16 @@ class CalendlyViewSetTest(APITestCase):
                                 'invitations/fe80a0ee-bbac-46ac-a3e0-2307f586a3e3'}}, 'status_code': 201}
         invite_user_organizations_mock.return_value = response
         uuid = '48335900-a45e-47a5-bfcc-382103e900d5'
-        Response = self.client.post(
-            f'/modules/calendly/service/{uuid}/organization/invite/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['email'], response['data']['resource']['email'])
-        self.assertEqual(Response.data['resource']['organization'], response['data']['resource']['organization'])
+        data = {
+            "email": "saad.abid@crowdbotics.com"
+        }
+        responses = self.client.post(reverse('calendly_service-invite-user-organizations', args=(uuid,)), data=data,
+                                     format='json')
+        self.assertEqual(responses.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['email'], response['data']['resource']['email'])
+        self.assertEqual(responses.data['resource']['organization'], response['data']['resource']['organization'])
+        invite_user_organizations_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.invite_user_'
                 'organizations')
@@ -681,12 +474,27 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         invite_user_organizations_mock.return_value = response
         uuid = '48335900-a45e-47a5-bfcc-382103e900d5'
-        Response = self.client.post(
-            f'/modules/calendly/service/{uuid}/organization/invite/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        data = {
+            "email": "saad.abid@crowdbotics.com"
+        }
+        responses = self.client.post(reverse('calendly_service-invite-user-organizations', args=(uuid,)), data=data,
+                                     format='json')
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        invite_user_organizations_mock.called_once()
+
+    def test_invite_user_organizations_with_wrong_data(self):
+        """
+        Test invite user organizations with wrong data and check the response
+        """
+        uuid = '48335900-a45e-47a5-bfcc-382103e900d5'
+        data = {
+            "email": "saad.abidcrowdbotics.com"
+        }
+        responses = self.client.post(reverse('calendly_service-invite-user-organizations', args=(uuid,)), data=data,
+                                     format='json')
+        self.assertEqual(responses.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.revoke_user_'
                 'organization_invitation')
@@ -696,13 +504,13 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Item deleted successfully.'}, 'status_code': 204}
         revoke_user_organization_invitation_mock.return_value = response
-        Response = self.client.delete(
-            '/modules/calendly/service/organization/revoke/invitation/',
-            {'uuid': 'fe80a0ee-bbac-46ac-a3e0-2307f586a3e3', 'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        query_params = {'uuid': 'fe80a0ee-bbac-46ac-a3e0-2307f586a3e3',
+                        'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
+        responses = self.client.delete(reverse('calendly_service-revoke-user-organization-invitation'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        revoke_user_organization_invitation_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.revoke_user_organization_'
                 'invitation')
@@ -712,13 +520,13 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         revoke_user_organization_invitation_mock.return_value = response
-        Response = self.client.delete(
-            '/modules/calendly/service/organization/revoke/invitation/',
-            {'uuid': 'fe80a0ee-bbac-46ac-a3e0-2307f586a3e3', 'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        query_params = {'uuid': 'fe80a0ee-bbac-46ac-a3e0-2307f586a3e3',
+                        'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
+        responses = self.client.delete(reverse('calendly_service-revoke-user-organization-invitation'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        revoke_user_organization_invitation_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_organization_'
                 'invitation')
@@ -728,20 +536,22 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'resource': {'created_at': '2023-01-12T14:18:03.743223Z', 'email': 'john@example.com',
                                           'last_sent_at': '2023-01-12T14:18:03.817437Z',
-                                          'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5',
+                                          'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5'
+                                                          '-bfcc-382103e900d5',
                                           'status': 'pending', 'updated_at': '2023-01-12T14:18:03.818187Z',
-                                          'uri': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5/invitations/c7197e99-32f1-4679-9ca5-80b0ba41ef89'}},
+                                          'uri': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc'
+                                                 '-382103e900d5/invitations/c7197e99-32f1-4679-9ca5-80b0ba41ef89'}},
                     'status_code': 200}
         single_organization_invitation_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/organization/single/invitation/',
-            {'uuid': 'c7197e99-32f1-4679-9ca5-80b0ba41ef89', 'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['email'], response['data']['resource']['email'])
-        self.assertEqual(Response.data['resource']['last_sent_at'], response['data']['resource']['last_sent_at'])
-        self.assertEqual(Response.data['resource']['organization'], response['data']['resource']['organization'])
+        query_params = {'uuid': 'fe80a0ee-bbac-46ac-a3e0-2307f586a3e3',
+                        'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
+        responses = self.client.get(reverse('calendly_service-single-organization-invitation'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['email'], response['data']['resource']['email'])
+        self.assertEqual(responses.data['resource']['last_sent_at'], response['data']['resource']['last_sent_at'])
+        self.assertEqual(responses.data['resource']['organization'], response['data']['resource']['organization'])
+        single_organization_invitation_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_organization_invitation')
@@ -751,13 +561,13 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         single_organization_invitation_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/organization/single/invitation/',
-            {'uuid': 'c7197e99-32f1-4679-9ca5-80b0ba41ef89', 'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        query_params = {'uuid': 'fe80a0ee-bbac-46ac-a3e0-2307f586a3e3',
+                        'org_uuid': '48335900-a45e-47a5-bfcc-382103e900d5'}
+        responses = self.client.get(reverse('calendly_service-single-organization-invitation'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        single_organization_invitation_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.organization_membership')
     def test_organization_membership(self, organization_membership_mock):
@@ -781,14 +591,12 @@ class CalendlyViewSetTest(APITestCase):
                 "created_at": "2019-01-02T03:04:05.678123Z"
             }
         }, 'status_code': 200}
-
         organization_membership_mock.return_value = response
         uuid = '3e1c14de-01c9-4ea8-a87b-faf2b858b580'
-        url = f'/modules/calendly/service/{uuid}/organization/membership/'
-        Response = self.client.get(url)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data['resource']['user'], response['data']['resource']['user'])
-        self.assertEqual(Response.data['resource']['organization'], response['data']['resource']['organization'])
+        responses = self.client.get(reverse('calendly_service-organization-membership', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data['resource']['user'], response['data']['resource']['user'])
+        self.assertEqual(responses.data['resource']['organization'], response['data']['resource']['organization'])
         organization_membership_mock.assert_called()
 
     @mock.patch(
@@ -826,18 +634,16 @@ class CalendlyViewSetTest(APITestCase):
                 "previous_page_token": 'null'
             }
         }}
-
         organization_membership_list_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/organization/membership/list/',
-            {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['collection'][0]['organization'],
+        query_params = {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5'}
+        responses = self.client.get(reverse('calendly_service-organization-membership-list'), query_params)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['collection'][0]['organization'],
                          response['data']['collection'][0]['organization'])
-        self.assertEqual(Response.data['collection'][0]['role'], response['data']['collection'][0]['role'])
-        self.assertEqual(Response.data['pagination']['next_page'], response['data']['pagination']['next_page'])
+        self.assertEqual(responses.data['collection'][0]['role'], response['data']['collection'][0]['role'])
+        self.assertEqual(responses.data['pagination']['next_page'], response['data']['pagination']['next_page'])
+        organization_membership_list_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.organization_membership_list')
@@ -847,13 +653,12 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         organization_membership_list_mock.return_value = response
-        Response = self.client.get(
-            '/modules/calendly/service/organization/membership/list/',
-            {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        query_params = {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5'}
+        responses = self.client.get(reverse('calendly_service-organization-membership-list'), query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        organization_membership_list_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_user_organization_membership')
@@ -864,12 +669,11 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {'message': 'Item deleted successfully.'}, 'status_code': 204}
         remove_user_organization_membership_mock.return_value = response
         uuid = '47fe2e25-11bc-4c2d-9538-962762d31418'
-        Response = self.client.delete(
-            f'/modules/calendly/service/{uuid}/organization/remove/membership/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.delete(reverse('calendly_service-remove-user-organization-membership', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        remove_user_organization_membership_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_user_organization_membership')
@@ -904,21 +708,21 @@ class CalendlyViewSetTest(APITestCase):
              'timezone': 'Asia/Karachi',
              'tracking': {'utm_campaign': None, 'utm_source': None, 'utm_medium': None, 'utm_content': None,
                           'utm_term': None, 'salesforce_uuid': None}, 'updated_at': '2023-01-12T16:10:55.264711Z',
-             'uri': 'https://api.calendly.com/scheduled_events/8878b00c-b30d-45c5-85ea-531d02cfe2a8/invitees/7dbb53ac-b164-4c0c-9bfe-5dc93c9365db'}],
+             'uri': 'https://api.calendly.com/scheduled_events/8878b00c-b30d-45c5-85ea-531d02cfe2a8/invitees/7dbb53ac'
+                    '-b164-4c0c-9bfe-5dc93c9365db'}],
             'pagination': {'count': 1, 'next_page': None, 'next_page_token': None,
                            'previous_page': None, 'previous_page_token': None}}, 'status_code': 200}
         list_schedule_event_invitee_mock.return_value = response
         uuid = '8878b00c-b30d-45c5-85ea-531d02cfe2a8'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/invitee/list/event-schedule/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['collection'][0]['email'], response['data']['collection'][0]['email'])
-        self.assertEqual(Response.data['collection'][0]['old_invitee'],
+        responses = self.client.get(reverse('calendly_service-list-schedule-event-invitee', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['collection'][0]['email'], response['data']['collection'][0]['email'])
+        self.assertEqual(responses.data['collection'][0]['old_invitee'],
                          response['data']['collection'][0]['old_invitee'])
-        self.assertEqual(Response.data['collection'][0]['reschedule_url'],
+        self.assertEqual(responses.data['collection'][0]['reschedule_url'],
                          response['data']['collection'][0]['reschedule_url'])
+        list_schedule_event_invitee_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.list_schedule_event_invitee')
@@ -929,12 +733,11 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         list_schedule_event_invitee_mock.return_value = response
         uuid = '8878b00c-b30d-45c5-85ea-531d02cfe2a8'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/invitee/list/event-schedule/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.get(reverse('calendly_service-list-schedule-event-invitee', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        list_schedule_event_invitee_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_event_schedule')
     def test_single_event_schedule(self, single_event_schedule_mock):
@@ -974,13 +777,12 @@ class CalendlyViewSetTest(APITestCase):
         }}
         single_event_schedule_mock.return_value = response
         uuid = '8878b00c-b30d-45c5-85ea-531d02cfe2a8'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/schedule/event/single/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['end_time'], response['data']['resource']['end_time'])
-        self.assertEqual(Response.data['resource']['event_guests'], response['data']['resource']['event_guests'])
+        responses = self.client.get(reverse('calendly_service-single-event-schedule', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['end_time'], response['data']['resource']['end_time'])
+        self.assertEqual(responses.data['resource']['event_guests'], response['data']['resource']['event_guests'])
+        single_event_schedule_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_event_schedule')
     def test_single_event_schedule_with_invalid_uuid(self, single_event_schedule_mock):
@@ -990,12 +792,11 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         single_event_schedule_mock.return_value = response
         uuid = '8878b00c-b30d-45c5-85ea-531d02cfe2a8'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/schedule/event/single/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.get(reverse('calendly_service-single-event-schedule', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        single_event_schedule_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.user_busy_times')
     def test_user_busy_times(self, user_busy_times_mock):
@@ -1004,14 +805,14 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'collection': []}, 'status_code': 200}
         user_busy_times_mock.return_value = response
-        Response = self.client.get(
-            f'/modules/calendly/service/user/busy-times/', {'start_time': '2023-01-26T20:00:00.000000Z',
-                                                            'user': 'https://api.calendly.com/users/4a7bf33a-242b-478d-ae5f-10bbd271be33',
-                                                            'end_time': '2023-01-26T24:00:00.000000Z'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['collection'], response['data']['collection'])
+        query_params = {'start_time': '2023-01-26T20:00:00.000000Z',
+                        'user': 'https://api.calendly.com/users/4a7bf33a-242b-478d-ae5f-10bbd271be33',
+                        'end_time': '2023-01-26T24:00:00.000000Z'}
+        responses = self.client.get(reverse('calendly_service-user-busy-times'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['collection'], response['data']['collection'])
+        user_busy_times_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.user_busy_times')
     def test_user_busy_times_with_wrong_params(self, user_busy_times_mock):
@@ -1020,14 +821,14 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         user_busy_times_mock.return_value = response
-        Response = self.client.get(
-            f'/modules/calendly/service/user/busy-times/', {'start_time': '2023-01-26T20:00:00.000000Z',
-                                                            'user': 'https://api.calendly.com/users/4a7bf33a-242b-478d-ae5f-10bbd271be33',
-                                                            'end_time': '2023-01-26T24:00:00.000000Z'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        query_params = {'start_time': '2023-01-26T20:00:00.000000Z',
+                        'user': 'https://api.calendly.com/users/4a7bf33a-242b-478d-ae5f-10bbd271be33',
+                        'end_time': '2023-01-26T24:00:00.000000Z'}
+        responses = self.client.get(reverse('calendly_service-user-busy-times'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        user_busy_times_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.cancel_schedule_event')
     def test_cancel_schedule_event(self, cancel_schedule_event_mock):
@@ -1036,14 +837,12 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'resource': {'canceled_by': 'demo 123', 'canceler_type': 'host', 'reason': None}},
                     'status_code': 201}
-
         cancel_schedule_event_mock.return_value = response
         uuid = 'c1a24978-f568-4df4-abb5-28cdbc0f4667'
-        Response = self.client.post(
-            f'/modules/calendly/service/{uuid}/schedule/event/cancel/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Response.data, response['data'])
+        responses = self.client.post(reverse('calendly_service-cancel-schedule-event', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(responses.data, response['data'])
+        cancel_schedule_event_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.cancel_schedule_event')
     def test_cancel_schedule_event_with_not_exist_uuid(self, cancel_schedule_event_mock):
@@ -1054,13 +853,12 @@ class CalendlyViewSetTest(APITestCase):
                     'status_code': 403}
         cancel_schedule_event_mock.return_value = response
         uuid = 'c1a24978-f568-4df4-abb5-28cdbc0f4667'
-        Response = self.client.post(
-            f'/modules/calendly/service/{uuid}/schedule/event/cancel/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
-        self.assertEqual(Response.data['title'], response['data']['title'])
+        responses = self.client.post(reverse('calendly_service-cancel-schedule-event', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        self.assertEqual(responses.data['title'], response['data']['title'])
+        cancel_schedule_event_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.cancel_schedule_event')
     def test_cancel_schedule_event_with_invalid_uuid(self, cancel_schedule_event_mock):
@@ -1068,15 +866,13 @@ class CalendlyViewSetTest(APITestCase):
         Test cancel schedule event with wrong uuid and check the response
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
-
         cancel_schedule_event_mock.return_value = response
         uuid = 'c1a24978-f568-4df4-abb5-28cdbc0f4667'
-        Response = self.client.post(
-            f'/modules/calendly/service/{uuid}/schedule/event/cancel/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.post(reverse('calendly_service-cancel-schedule-event', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        cancel_schedule_event_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.create_invitee_no_show')
     def test_create_invitee_no_show(self, create_invitee_no_show_mock):
@@ -1086,42 +882,34 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {
             "resource": {
                 "uri": "https://api.calendly.com/invitee_no_shows/639fa667-4c1b-4b20-93b5-1b1969d67dc6",
-                "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97-05e2fb379bfe",
+                "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2"
+                           "-9b97-05e2fb379bfe",
                 "created_at": "2019-01-02T03:04:05.678123Z"
             }
         },
             'status_code': 200}
-
         create_invitee_no_show_mock.return_value = response
         data = {
-            "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97-05e2fb379bfe"
+            "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97"
+                       "-05e2fb379bfe"
         }
-        Response = self.client.post(
-            '/modules/calendly/service/create/invitee-no-show/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['uri'], response['data']['resource']['uri'])
-        self.assertEqual(Response.data['resource']['invitee'], response['data']['resource']['invitee'])
+        responses = self.client.post(reverse('calendly_service-create-invitee-no-show'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['uri'], response['data']['resource']['uri'])
+        self.assertEqual(responses.data['resource']['invitee'], response['data']['resource']['invitee'])
+        create_invitee_no_show_mock.called_once()
 
-    @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.create_invitee_no_show')
-    def test_create_invitee_no_show_with_invalid_data(self, create_invitee_no_show_mock):
+    def test_create_invitee_no_show_with_invalid_data(self):
         """
         Test create invitee no show with invalid data and check the response
         """
-        response = {'data': {'title': 'Invalid Argument', 'message': 'The supplied parameters are invalid.',
-                             'details': [{'message': 'Event is not started yet', 'parameter': 'base'}]},
-                    'status_code': 400}
-
-        create_invitee_no_show_mock.return_value = response
         data = {
-            "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97-05e2fb379bfe"
+            "invitee": "scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97"
+                       "-05e2fb379bfe"
         }
-        Response = self.client.post(
-            '/modules/calendly/service/create/invitee-no-show/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Response.data, response['data'])
+        responses = self.client.post(reverse('calendly_service-create-invitee-no-show'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.create_invitee_no_show')
     def test_create_invitee_no_show_with_invalid_invitee_link(self, create_invitee_no_show_mock):
@@ -1129,17 +917,16 @@ class CalendlyViewSetTest(APITestCase):
         Test create invitee no show with invalid invitee link and check the response
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
-
         create_invitee_no_show_mock.return_value = response
         data = {
-            "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97-05e2fb379bfe"
+            "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97"
+                       "-05e2fb379bfe"
         }
-        Response = self.client.post(
-            '/modules/calendly/service/create/invitee-no-show/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.post(reverse('calendly_service-create-invitee-no-show'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        create_invitee_no_show_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_invitee_no_show')
     def test_single_invitee_no_show(self, single_invitee_no_show_mock):
@@ -1149,20 +936,19 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {
             "resource": {
                 "uri": "https://api.calendly.com/invitee_no_shows/639fa667-4c1b-4b20-93b5-1b1969d67dc6",
-                "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2-9b97-05e2fb379bfe",
+                "invitee": "https://api.calendly.com/scheduled_events/GBGBDCAADAEDCRZ2/invitees/7c1dbe46-bd84-42e2"
+                           "-9b97-05e2fb379bfe",
                 "created_at": "2019-01-02T03:04:05.678123Z"
             }
         }, 'status_code': 200}
-
         single_invitee_no_show_mock.return_value = response
         uuid = '7dbb53ac-b164-4c0c-9bfe-5dc93c9365db'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/single/invitee-no-show/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['uri'], response['data']['resource']['uri'])
-        self.assertEqual(Response.data['resource']['invitee'], response['data']['resource']['invitee'])
+        responses = self.client.get(reverse('calendly_service-single-invitee-no-show', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['uri'], response['data']['resource']['uri'])
+        self.assertEqual(responses.data['resource']['invitee'], response['data']['resource']['invitee'])
+        single_invitee_no_show_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_invitee_no_show')
     def test_single_invitee_no_show_with_invalid_uuid(self, single_invitee_no_show_mock):
@@ -1170,15 +956,13 @@ class CalendlyViewSetTest(APITestCase):
         Test single invitee no show with invalid uuid  and check the response
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
-
         single_invitee_no_show_mock.return_value = response
         uuid = '7dbb53ac-b164-4c0c-9bfe-5dc93c9365db'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/single/invitee-no-show/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.get(reverse('calendly_service-single-invitee-no-show', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        single_invitee_no_show_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_invitee_no_show')
     def test_remove_invitee_no_show(self, remove_invitee_no_show_mock):
@@ -1193,12 +977,11 @@ class CalendlyViewSetTest(APITestCase):
         }
         remove_invitee_no_show_mock.return_value = response
         uuid = '3e1c14de-01c9-4ea8-a87b-faf2b858b580'
-        Response = self.client.delete(
-            f'/modules/calendly/service/{uuid}/remove/invitee-no-show/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.delete(reverse('calendly_service-remove-invitee-no-show', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        remove_invitee_no_show_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_invitee_no_show')
     def test_remove_invitee_no_show_with_invalid_uuid(self, remove_invitee_no_show_mock):
@@ -1208,12 +991,11 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         remove_invitee_no_show_mock.return_value = response
         uuid = '3e1c14de-01c9-4ea8-a87b-faf2b858b580'
-        Response = self.client.delete(
-            f'/modules/calendly/service/{uuid}/remove/invitee-no-show/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.delete(reverse('calendly_service-remove-invitee-no-show', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        remove_invitee_no_show_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.create_webhook_subscription')
@@ -1243,20 +1025,21 @@ class CalendlyViewSetTest(APITestCase):
         }
         create_webhook_subscription_mock.return_value = response
         data = {
-            "url": "https://c21c-39-53-74-22.in.ngrok.io/modules/calendly/webhook-url/",
+            "url": "https://blah.foo/bar",
             "events": [
                 "invitee.created",
                 "invitee.canceled"
             ],
-            "organization": "https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5",
-            "scope": "organization"
+            "organization": "https://api.calendly.com/organizations/AAAAAAAAAAAAAAAA",
+            "user": "https://api.calendly.com/users/BBBBBBBBBBBBBBBB",
+            "scope": "user",
+            "signing_key": "5mEzn9C-I28UtwOjZJtFoob0sAAFZ95GbZkqj4y3i0I"
         }
-        Response = self.client.post(
-            '/modules/calendly/service/create/webhook/subscription/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['uri'], response['data']['resource']['uri'])
+        responses = self.client.post(reverse('calendly_service-create-webhook-subscription'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['uri'], response['data']['resource']['uri'])
+        create_webhook_subscription_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.create_webhook_subscription')
@@ -1268,30 +1051,27 @@ class CalendlyViewSetTest(APITestCase):
                     'status_code': 409}
         create_webhook_subscription_mock.return_value = response
         data = {
-            "url": "https://c21c-39-53-74-22.in.ngrok.io/modules/calendly/webhook-url/",
+            "url": "https://blah.foo/bar",
             "events": [
                 "invitee.created",
                 "invitee.canceled"
             ],
-            "organization": "https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5",
-            "scope": "organization"
+            "organization": "https://api.calendly.com/organizations/AAAAAAAAAAAAAAAA",
+            "user": "https://api.calendly.com/users/BBBBBBBBBBBBBBBB",
+            "scope": "user",
+            "signing_key": "5mEzn9C-I28UtwOjZJtFoob0sAAFZ95GbZkqj4y3i0I"
         }
-        Response = self.client.post(
-            '/modules/calendly/service/create/webhook/subscription/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_409_CONFLICT)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
-        self.assertEqual(Response.data['title'], response['data']['title'])
+        responses = self.client.post(reverse('calendly_service-create-webhook-subscription'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        self.assertEqual(responses.data['title'], response['data']['title'])
+        create_webhook_subscription_mock.called_once()
 
-    @mock.patch(
-        'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.create_webhook_subscription')
-    def test_create_webhook_subscription_with_invalid_data(self, create_webhook_subscription_mock):
+    def test_create_webhook_subscription_with_invalid_data(self):
         """
         Test create webhook subscription with invalid data  and check the response
         """
-        response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
-        create_webhook_subscription_mock.return_value = response
         data = {
             "url": "https://c21c-39-53-74-22.in.ngrok.io/modules/calendly/webhook-url/",
             "events": [
@@ -1301,12 +1081,8 @@ class CalendlyViewSetTest(APITestCase):
             "organization": "https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5",
             "scope": "organization"
         }
-        Response = self.client.post(
-            '/modules/calendly/service/create/webhook/subscription/', data=data
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.post(reverse('calendly_service-create-webhook-subscription'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.webhook_subscription_list')
     def test_webhook_subscription_list(self, webhook_subscription_list_mock):
@@ -1325,16 +1101,14 @@ class CalendlyViewSetTest(APITestCase):
              'user': None}], 'pagination': {'count': 1, 'next_page': None, 'next_page_token': None,
                                             'previous_page': None, 'previous_page_token': None}}, 'status_code': 200}
         webhook_subscription_list_mock.return_value = response
-
-        Response = self.client.get(
-            '/modules/calendly/service/webhook/subscription/list/',
-            {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5',
-             'scope': 'organization'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['collection'][0]['events'][0], response['data']['collection'][0]['events'][0])
-        self.assertEqual(Response.data['collection'][0]['creator'], response['data']['collection'][0]['creator'])
+        query_params = {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5',
+                        'scope': 'organization'}
+        responses = self.client.get(reverse('calendly_service-webhook-subscription-list'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['collection'][0]['events'][0], response['data']['collection'][0]['events'][0])
+        self.assertEqual(responses.data['collection'][0]['creator'], response['data']['collection'][0]['creator'])
+        webhook_subscription_list_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.webhook_subscription_list')
     def test_webhook_subscription_list_without_params(self, webhook_subscription_list_mock):
@@ -1346,13 +1120,11 @@ class CalendlyViewSetTest(APITestCase):
                              'message': 'The supplied parameters are invalid.', 'title': 'Invalid Argument'},
                     'status_code': 400}
         webhook_subscription_list_mock.return_value = response
-
-        Response = self.client.get(
-            '/modules/calendly/service/webhook/subscription/list/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.get(reverse('calendly_service-webhook-subscription-list'))
+        self.assertEqual(responses.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        webhook_subscription_list_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.webhook_subscription_list')
     def test_webhook_subscription_list_with_wrong_params(self, webhook_subscription_list_mock):
@@ -1361,15 +1133,13 @@ class CalendlyViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         webhook_subscription_list_mock.return_value = response
-
-        Response = self.client.get(
-            '/modules/calendly/service/webhook/subscription/list/',
-            {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5',
-             'scope': 'organization'}
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        query_params = {'organization': 'https://api.calendly.com/organizations/48335900-a45e-47a5-bfcc-382103e900d5',
+                        'scope': 'organization'}
+        responses = self.client.get(reverse('calendly_service-webhook-subscription-list'), **query_params)
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        webhook_subscription_list_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_webhook_subscription')
@@ -1396,14 +1166,13 @@ class CalendlyViewSetTest(APITestCase):
         }, 'status_code': 200}
         single_webhook_subscription_mock.return_value = response
         uuid = 'e99982f9-719d-41e4-8544-8c837353c24f'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/single/webhook/subscription/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['resource']['callback_url'], response['data']['resource']['callback_url'])
-        self.assertEqual(Response.data['resource']['retry_started_at'],
+        responses = self.client.get(reverse('calendly_service-single-webhook-subscription', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['resource']['callback_url'], response['data']['resource']['callback_url'])
+        self.assertEqual(responses.data['resource']['retry_started_at'],
                          response['data']['resource']['retry_started_at'])
+        single_webhook_subscription_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.single_webhook_subscription')
@@ -1414,12 +1183,12 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         single_webhook_subscription_mock.return_value = response
         uuid = 'e99982f9-719d-41e4-8544-8c837353c24f'
-        Response = self.client.get(
-            f'/modules/calendly/service/{uuid}/single/webhook/subscription/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        uuid = 'e99982f9-719d-41e4-8544-8c837353c24f'
+        responses = self.client.get(reverse('calendly_service-single-webhook-subscription', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        single_webhook_subscription_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_webhook_subscription')
@@ -1435,12 +1204,11 @@ class CalendlyViewSetTest(APITestCase):
         }
         remove_webhook_subscription_mock.return_value = response
         uuid = '3e1c14de-01c9-4ea8-a87b-faf2b858b580'
-        Response = self.client.delete(
-            f'/modules/calendly/service/{uuid}/remove/webhook/subscription/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.delete(reverse('calendly_service-remove-webhook-subscription', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        remove_webhook_subscription_mock.called_once()
 
     @mock.patch(
         'modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.remove_webhook_subscription')
@@ -1451,12 +1219,11 @@ class CalendlyViewSetTest(APITestCase):
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         remove_webhook_subscription_mock.return_value = response
         uuid = '3e1c14de-01c9-4ea8-a87b-faf2b858b580'
-        Response = self.client.delete(
-            f'/modules/calendly/service/{uuid}/remove/webhook/subscription/'
-        )
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        self.assertEqual(Response.data, response['data'])
-        self.assertEqual(Response.data['message'], response['data']['message'])
+        responses = self.client.delete(reverse('calendly_service-remove-webhook-subscription', args=(uuid,)))
+        self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(responses.data, response['data'])
+        self.assertEqual(responses.data['message'], response['data']['message'])
+        remove_webhook_subscription_mock.called_once()
 
     @mock.patch('modules.django_calendly.calendly.services.CalendlyServices.CalendlyService.webhook')
     def test_webhook(self, test_webhook_mock):

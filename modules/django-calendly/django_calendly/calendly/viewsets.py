@@ -3,6 +3,9 @@ import os
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from .serializers import RemoveInviteesSerializer, InviteUserOrganizationsSerializer, CancelScheduleEventSerializer, \
+    CreateInviteeNoShowSerializer, CreateWebhookSubscriptionSerializer
 from .services.CalendlyServices import CalendlyService
 
 
@@ -11,6 +14,16 @@ class CalendlyViewSet(viewsets.GenericViewSet):
         base_url=os.getenv('CALENDLY_BASE_URL', ""),
         access_token=os.getenv('CALENDLY_ACCESS_TOKEN', ""),
     )
+
+    allowed_serializer = {"remove_invitees": RemoveInviteesSerializer,
+                          "invite_user_organizations": InviteUserOrganizationsSerializer,
+                          "cancel_schedule_event": CancelScheduleEventSerializer,
+                          "create_invitee_no_show": CreateInviteeNoShowSerializer,
+                          "create_webhook_subscription": CreateWebhookSubscriptionSerializer
+                          }
+
+    def get_serializer_class(self):
+        return self.allowed_serializer.get(self.action)
 
     @action(detail=False, methods=['get'], url_path='user/details')
     def user_details(self, request):
@@ -88,7 +101,7 @@ class CalendlyViewSet(viewsets.GenericViewSet):
     def single_user_availability_schedules(self, request, pk):
         """
         To get a single user availability times'
-        :query_params str uuid:  UUID of the availability schedule.
+        :path_params str uuid:  UUID of the availability schedule.
         :return: This will return the details of the availability schedule of the given UUID.
         """
         response = self.calendly_service.single_user_availability_schedules(uuid=pk)
@@ -97,12 +110,14 @@ class CalendlyViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='remove/invitees')
     def remove_invitees(self, request):
         """
-        To remove an invitee data
-        :param array email: Array of emails of invitees going to be deleted
+        To remove invitee data
+        :body_param array emails: Array of emails of invitees going to be deleted
         :return:  Removes invitee data from all previously booked events in your organization and returns deleted
         invitee details.
         """
-        response = self.calendly_service.remove_invitees(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.calendly_service.remove_invitees(serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['get'], url_path='organization/invitations/list')
@@ -120,12 +135,14 @@ class CalendlyViewSet(viewsets.GenericViewSet):
         """
         To get organization invitation list
         :path_param str uuid: The organization's unique identifier
-        :param str email: Email of the user being invited
+        :body_param str email: Email of the user being invited
         :return: Returns a list of Organization Invitations that were sent to the organization's members
         """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         response = self.calendly_service.invite_user_organizations(
             uuid=pk,
-            data=request.data
+            data=serializer.data
         )
         return Response(data=response.get("data"), status=response.get("status_code"))
 
@@ -225,19 +242,24 @@ class CalendlyViewSet(viewsets.GenericViewSet):
         """
         To cancel schedule event
         :path_param str uuid: The scheduled event's unique identifier
+        :body_params str reason
         :return: Cancels specified event and returns cancelled event's information.
         """
-        response = self.calendly_service.cancel_schedule_event(uuid=pk)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.calendly_service.cancel_schedule_event(uuid=pk, data=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='create/invitee-no-show')
     def create_invitee_no_show(self, request):
         """
         To create an invitee no show
-        :param str(uri) invitee: The scheduled event's uri specified to the invitee.
+        :body_param str(uri) invitee: The scheduled event's uri specified to the invitee.
         :return: Marks an Invitee as a No Show and returns the details of that invitee.
         """
-        response = self.calendly_service.create_invitee_no_show(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.calendly_service.create_invitee_no_show(serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=True, methods=['get'], url_path='single/invitee-no-show')
@@ -264,13 +286,15 @@ class CalendlyViewSet(viewsets.GenericViewSet):
     def create_webhook_subscription(self, request):
         """
         To create webhook subscription
-        :param str(uri) url: The URL where you want to receive POST requests for events you are subscribed to
-        :param array events: List of user events to subscribe to
-        :param str(uri) organization: The unique reference to the organization that the webhook will be tied to
-        :param str scope: Indicates if the webhook subscription scope will be "organization" or "user".
+        :body_param str(uri) url: The URL where you want to receive POST requests for events you are subscribed to
+        :body_param array events: List of user events to subscribe to
+        :body_param str(uri) organization: The unique reference to the organization that the webhook will be tied to
+        :body_param str scope: Indicate if the webhook subscription scope will be "organization" or "user".
         :return: Creates a Webhook Subscription for an Organization or User. Returns subscribed webhook information.
         """
-        response = self.calendly_service.create_webhook_subscription(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.calendly_service.create_webhook_subscription(serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='webhook/subscription/list')
@@ -293,7 +317,7 @@ class CalendlyViewSet(viewsets.GenericViewSet):
         """
         To get a webhook subscription
         :path_param str webhook_uuid: unique identifier for the subscribed webhook.
-        :return: Returns details about specified Webhook Subscription.
+        :return: Return details about specified Webhook Subscription.
         """
         response = self.calendly_service.single_webhook_subscription(uuid=pk)
         return Response(data=response.get("data"), status=response.get("status_code"))
