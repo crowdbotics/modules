@@ -32,6 +32,8 @@ class HubspotBase:
             if e.response.status_code == 404:
                 return {"data": {"message": "Resource not found"}, "status_code": e.response.status_code}
             return {"data": e.response.json(), "status_code": e.response.status_code}
+        except Exception as e:
+            return {"data": [], "message": str(e), "status_code": 400}
 
 
 class HubspotService(HubspotBase):
@@ -98,7 +100,9 @@ class HubspotService(HubspotBase):
         try:
             url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/'
             response = self._api_call(request_type="POST", url=url, headers=self.get_header(),
-                                      payload=payload)
+                                      payload={
+                                        "properties": payload
+                                      })
             return response
         except Exception as e:
             return e
@@ -138,17 +142,17 @@ class HubspotService(HubspotBase):
         except Exception as e:
             return e
 
-    def contact_deals_association_list(self, params):
+    def contact_deals_association_list(self, contactId):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/contacts/{params['contactId']}/associations/deals"
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/contacts/{contactId}/associations/deals"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e
 
-    def meeting_contact_association_list(self, params):
+    def meeting_contact_association_list(self, meetingId):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/meetings/{params['meetingId']}/associations/contacts/"
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/meetings/{meetingId}/associations/contacts/"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
@@ -245,3 +249,5 @@ class HubspotService(HubspotBase):
             return response
         except Exception as e:
             return e
+
+            

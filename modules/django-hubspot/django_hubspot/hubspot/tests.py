@@ -9,7 +9,7 @@ So all Test cases write with mocking the Hubspot service with the valid response
 """
 
 
-class HubspotViewSetTest(APITestCase):
+class HubspotViewSetTests(APITestCase):
     """
     This test check we get access token successfully
     """
@@ -19,15 +19,17 @@ class HubspotViewSetTest(APITestCase):
         response = {'data': {
             'token_type': 'bearer',
             'refresh_token': '8c6a2a1c-3ef4-4f1f-82ce-3d79e4ecbd1f',
-            'access_token': 'CIGH6LTZMBIOAAGBQAAAGQIAAAA4AAEYkcOmCyC-oqwXKPHFUjIUerglqvYIekJve41Hy_kMPjX6BsU6MAAAAEEAAAAAwAcAAAAAAAAEgAAAAAAAAAAMACCAAQAOAOABAAAAAAAA_AcAABDwA0IU29FiR7r2GueLK9M6OcsV6CKH7i5KA25hMVIAWgA',
+            'access_token': 'CIGH6LTZMBIOAAGBQAAAGQIAAAA4AAEYkcOmCyC'
+                            '-oqwXKPHFUjIUerglqvYIekJve41Hy_kMPjX6BsU6MAAAAEEAAAAAwAcAAAAAAAAEgAAAAAAAAAAMACCAAQAOA'
+                            'OABAAAAAAAA_AcAABDwA0IU29FiR7r2GueLK9M6OcsV6CKH7i5KA25hMVIAWgA',
             'expires_in': 1800
         }}
         auth_token_mock.return_value = response
         data = {
             "code": "8c6a2a1c-3ef4-4f1f-82ce-3d79e4ecbd1f"
         }
-        Response = self.client.post(reverse('hubspot_service-get-token'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        response = self.client.post(reverse('hubspot_service-get-token'), data=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         auth_token_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.auth_token')
@@ -41,8 +43,8 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "code": "61de550e-0e48-45e1-9f27-dc5281e6f59"
         }
-        Response = self.client.post(reverse('hubspot_service-get-token'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.post(reverse('hubspot_service-get-token'), data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         auth_token_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.auth_token')
@@ -56,9 +58,8 @@ class HubspotViewSetTest(APITestCase):
         data = {
             "code": ""
         }
-        Response = self.client.post(reverse('hubspot_service-get-token'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
-        auth_token_mock.assert_called_once()
+        response = self.client.post(reverse('hubspot_service-get-token'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.contact_deals_association_list')
     def test_service_contact_list_retrieve(self, contact_deals_association_list_mock):
@@ -72,12 +73,9 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 200
         }
         contact_deals_association_list_mock.return_value = response
-
-        data = {
-            "contactId": 51
-        }
-        Response = self.client.get(reverse('hubspot_service-contact-deals-association-list'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        contactId = '51'
+        response = self.client.get(reverse('hubspot_service-contact-deals-association-list', args=(contactId,)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         contact_deals_association_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.contact_deals_association_list')
@@ -92,32 +90,9 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 404
         }
         contact_deals_association_list_mock.return_value = response
-
-        data = {
-            "contactId": '434390'
-        }
-        Response = self.client.get(reverse('hubspot_service-contact-deals-association-list'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        contact_deals_association_list_mock.assert_called_once()
-
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.contact_deals_association_list')
-    def test_service_contact_list_retrieve_without_id(self, contact_deals_association_list_mock):
-        """
-                Test what the response service contact list retrieve with wrong I'd
-        """
-        response = {
-            'data': {
-                'message': 'Resource not found'
-            },
-            'status_code': 404
-        }
-        contact_deals_association_list_mock.return_value = response
-
-        data = {
-            "contactId": ''
-        }
-        Response = self.client.get(reverse('hubspot_service-contact-deals-association-list'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        contactId = '51'
+        response = self.client.get(reverse('hubspot_service-contact-deals-association-list', args=(contactId,)))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         contact_deals_association_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_deal_contact_association')
@@ -128,12 +103,12 @@ class HubspotViewSetTest(APITestCase):
         response = True
         create_deal_contact_association_mock.return_value = response
         data = {
-            "emails": ["emailmaria@hubspot.com"],
-            "dealId": "1"
+            "dealId": 1,
+            "emails": ["string1@gmail.com", "string2@gmail.com", "string3@gmail.com"]
         }
-        Response = self.client.post(reverse('hubspot_service-create-deal-association'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data['result'], 'success')
+        response = self.client.post(reverse('hubspot_service-create-deal-association'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['result'], 'success')
         create_deal_contact_association_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_deal_contact_association')
@@ -145,12 +120,10 @@ class HubspotViewSetTest(APITestCase):
         create_deal_contact_association_mock.return_value = response
         data = {
             "emails": ["emailmariahubspot.com"],
-            "dealId": "1"
+            "dealId": 1
         }
-        Response = self.client.post(reverse('hubspot_service-create-deal-association'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data['result'], 'failure')
-        create_deal_contact_association_mock.assert_called_once()
+        response = self.client.post(reverse('hubspot_service-create-deal-association'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_deal')
     def test_service_deal_create(self, create_deal_mock):
@@ -170,28 +143,24 @@ class HubspotViewSetTest(APITestCase):
                              'archived': False}, 'status_code': 201}
         create_deal_mock.return_value = response
         data = {
-            "properties": {
-                "amount": "1500.00",
-                "closedate": "2023-01-05T11:06:29.345Z",
-                "dealname": "Custom data integrations",
-                "dealstage": "presentationscheduled",
-                "hubspot_owner_id": "1352433",
-                "pipeline": "default"
-            },
+            "amount": "1500.00",
+            "closedate": "2019-12-07T16:50:06.678Z",
+            "dealname": "Custom data integrations",
+            "dealstage": "presentationscheduled",
+            "hubspot_owner_id": "910901",
+            "pipeline": "default",
             "associations": {
-                "emails": ["emailmaria@hubspot.com"],
-                "dealId": "1"
+                "emails": ["string1@gmail.com", "string2@gmail.com", "string3@gmail.com"]
             }
         }
-        Response = self.client.post(reverse('hubspot_service-create-deal'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
+        response = self.client.post(reverse('hubspot_service-create-deal'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_deal_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_deal')
     def test_service_deal_create_without_data(self, create_deal_mock):
         """
                 Test service deal create without data and check response
-
         """
         response = {'data': {'id': '11636160938',
                              'properties': {'createdate': '2023-01-09T18:02:14.093Z', 'days_to_close': '0',
@@ -205,9 +174,8 @@ class HubspotViewSetTest(APITestCase):
                              'createdAt': '2023-01-09T18:02:14.093Z', 'updatedAt': '2023-01-09T18:02:14.093Z',
                              'archived': False}, 'status_code': 201}
         create_deal_mock.return_value = response
-        Response = self.client.post(reverse('hubspot_service-create-deal'), format='json')
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
-        create_deal_mock.assert_called_once()
+        response = self.client.post(reverse('hubspot_service-create-deal'))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.deals_list')
     def test_service_deal_list(self, deals_list_mock):
@@ -222,70 +190,6 @@ class HubspotViewSetTest(APITestCase):
                                                                               'pipeline': None},
                                           'createdAt': '2023-01-05T11:58:08.271Z',
                                           'updatedAt': '2023-01-05T11:58:09.408Z', 'archived': False},
-                                         {'id': '11588871795', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-05T11:31:54.151Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-05T11:31:56.264Z',
-                                                                              'hs_object_id': '11588871795',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-05T11:31:54.151Z',
-                                          'updatedAt': '2023-01-05T11:31:56.264Z', 'archived': False},
-                                         {'id': '11631636045', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-09T08:46:32.359Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-09T08:46:33.730Z',
-                                                                              'hs_object_id': '11631636045',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-09T08:46:32.359Z',
-                                          'updatedAt': '2023-01-09T08:46:33.730Z', 'archived': False},
-                                         {'id': '11633655471', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-09T14:41:57.575Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-09T14:42:00.283Z',
-                                                                              'hs_object_id': '11633655471',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-09T14:41:57.575Z',
-                                          'updatedAt': '2023-01-09T14:42:00.283Z', 'archived': False},
-                                         {'id': '11633687177', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-09T14:47:27.032Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-09T14:47:28.788Z',
-                                                                              'hs_object_id': '11633687177',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-09T14:47:27.032Z',
-                                          'updatedAt': '2023-01-09T14:47:28.788Z', 'archived': False},
-                                         {'id': '11633749047', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-09T14:44:58.619Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-09T14:45:01.476Z',
-                                                                              'hs_object_id': '11633749047',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-09T14:44:58.619Z',
-                                          'updatedAt': '2023-01-09T14:45:01.476Z', 'archived': False},
-                                         {'id': '11633807254', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-09T14:53:45.022Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-09T14:53:47.372Z',
-                                                                              'hs_object_id': '11633807254',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-09T14:53:45.022Z',
-                                          'updatedAt': '2023-01-09T14:53:47.372Z', 'archived': False},
-                                         {'id': '11633835275', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-09T15:15:07.374Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-09T15:15:12.669Z',
-                                                                              'hs_object_id': '11633835275',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-09T15:15:07.374Z',
-                                          'updatedAt': '2023-01-09T15:15:12.669Z', 'archived': False},
-                                         {'id': '11633835355', 'properties': {'amount': None, 'closedate': None,
-                                                                              'createdate': '2023-01-09T15:16:35.377Z',
-                                                                              'dealname': None, 'dealstage': None,
-                                                                              'hs_lastmodifieddate': '2023-01-09T15:16:49.572Z',
-                                                                              'hs_object_id': '11633835355',
-                                                                              'pipeline': None},
-                                          'createdAt': '2023-01-09T15:16:35.377Z',
-                                          'updatedAt': '2023-01-09T15:16:49.572Z', 'archived': False},
                                          {'id': '11633846325', 'properties': {'amount': None, 'closedate': None,
                                                                               'createdate': '2023-01-09T15:40:03.105Z',
                                                                               'dealname': None, 'dealstage': None,
@@ -297,8 +201,8 @@ class HubspotViewSetTest(APITestCase):
             'next': {'after': '11633846326',
                      'link': 'https://api.hubapi.com/crm/v4/objects/deals/?after=11633846326'}}}, 'status_code': 200}
         deals_list_mock.return_value = response
-        Response = self.client.get(reverse('hubspot_service-deals-list'), format='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        response = self.client.get(reverse('hubspot_service-deals-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         deals_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.remove_deal')
@@ -314,18 +218,15 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 204
         }
         remove_deal_mock.return_value = response
-        data = {
-            "dealId": "11634132761"
-        }
-        Response = self.client.delete(reverse('hubspot_service-remove-deal'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
+        dealId = 11634132761
+        response = self.client.delete(reverse('hubspot_service-remove-deal', args=(dealId,)))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         remove_deal_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.remove_deal')
     def test_service_deal_remove_with_wrong_id(self, remove_deal_mock):
         """
                 Test service deal remove with invalid id and check the response
-
         """
         response = {
             'data': {
@@ -334,11 +235,9 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 204
         }
         remove_deal_mock.return_value = response
-        data = {
-            "dealId": "11"
-        }
-        Response = self.client.delete(reverse('hubspot_service-remove-deal'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
+        dealId = 11634132761
+        response = self.client.delete(reverse('hubspot_service-remove-deal', args=(dealId,)))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         remove_deal_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_deal')
@@ -366,18 +265,15 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 200
         }
         single_deal_mock.return_value = response
-        data = {
-            "dealId": "11634568517"
-        }
-        Response = self.client.get(reverse('hubspot_service-single-deal'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        dealId = 11634132761
+        response = self.client.get(reverse('hubspot_service-single-deal', args=(dealId,)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         single_deal_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_deal')
     def test_service_deals_single_retrieve_with_wrong_id(self, single_deal_mock):
         """
                 Test service deal get single retrieve with invalid id and check the response
-
         """
         response = {
             'data': {
@@ -386,14 +282,13 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 404
         }
         single_deal_mock.return_value = response
-        data = {
-            "dealId": "11634568517"
-        }
-        Response = self.client.get(reverse('hubspot_service-single-deal'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        dealId = 11634132761
+        response = self.client.get(reverse('hubspot_service-single-deal', args=(dealId,)))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         single_deal_mock.assert_called_once()
 
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
+    @mock.patch(
+        'modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
     def test_service_meeting_contact_list(self, meeting_contact_association_list_mock):
         """
         Test service meeting contact lis with valid data
@@ -405,40 +300,16 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 200
         }
         meeting_contact_association_list_mock.return_value = response
-        data = {
-            "meetingId": "29123684621",
-            "toObjectType": "contacts"
-        }
-        Response = self.client.get(reverse('hubspot_service-meeting-contacts-association-list'), data=data,
-                                   format='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        meetingId = 29123684621
+        response = self.client.get(reverse('hubspot_service-meeting-contacts-association-list', args=(meetingId,)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         meeting_contact_association_list_mock.assert_called_once()
 
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
+    @mock.patch(
+        'modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
     def test_service_meeting_contact_list_with_wrong_meeting_id(self, meeting_contact_association_list_mock):
         """
         Test service meeting contact lis with invalid meetingId
-        """
-        response = {
-            'data': {
-                'results': []
-            },
-            'status_code': 200
-        }
-        meeting_contact_association_list_mock.return_value = response
-        data = {
-            "meetingId": "291236845454621",
-            "toObjectType": "contacts"
-        }
-        Response = self.client.get(reverse('hubspot_service-meeting-contacts-association-list'), data=data,
-                                   format='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        meeting_contact_association_list_mock.assert_called_once()
-
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.meeting_contact_association_list')
-    def test_service_meeting_contact_list_without_meeting_id(self, meeting_contact_association_list_mock):
-        """
-        Test service meeting contact lis without meetingId
         """
         response = {
             'data': {
@@ -447,13 +318,9 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 404
         }
         meeting_contact_association_list_mock.return_value = response
-        data = {
-            "meetingId": "",
-            "toObjectType": "contacts"
-        }
-        Response = self.client.get(reverse('hubspot_service-meeting-contacts-association-list'), data=data,
-                                   format='json')
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        meetingId = 29123684621
+        response = self.client.get(reverse('hubspot_service-meeting-contacts-association-list', args=(meetingId,)))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         meeting_contact_association_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_ticket_association')
@@ -475,8 +342,8 @@ class HubspotViewSetTest(APITestCase):
                     }
                 ]
                 }
-        Response = self.client.put(reverse('hubspot_service-create-ticket-association'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
+        response = self.client.put(reverse('hubspot_service-create-ticket-association'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_ticket_association.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_ticket_association')
@@ -502,8 +369,8 @@ class HubspotViewSetTest(APITestCase):
                     }
                 ]
                 }
-        Response = self.client.put(reverse('hubspot_service-create-ticket-association'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.put(reverse('hubspot_service-create-ticket-association'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         create_ticket_association.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.ticket_association_list')
@@ -518,12 +385,13 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 200
         }
         ticket_association_list_mock.return_value = response
-        data = {
+        params = {
             "ticketId": "29574639194",
             "toObjectType": "deal"
+
         }
-        Response = self.client.get(reverse('hubspot_service-ticket-association-list'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        response = self.client.get(reverse('hubspot_service-ticket-association-list'), params, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         ticket_association_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.ticket_association_list')
@@ -538,12 +406,12 @@ class HubspotViewSetTest(APITestCase):
             'status_code': 200
         }
         ticket_association_list_mock.return_value = response
-        data = {
+        params = {
             "ticketId": "2957463454549194",
             "toObjectType": "deal"
         }
-        Response = self.client.get(reverse('hubspot_service-ticket-association-list'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        response = self.client.get(reverse('hubspot_service-ticket-association-list'), params, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         ticket_association_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.ticket_association_list')
@@ -557,8 +425,8 @@ class HubspotViewSetTest(APITestCase):
             "ticketId": "",
             "toObjectType": "deal"
         }
-        Response = self.client.get(reverse('hubspot_service-ticket-association-list'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.client.get(reverse('hubspot_service-ticket-association-list'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         ticket_association_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_ticket')
@@ -579,17 +447,15 @@ class HubspotViewSetTest(APITestCase):
                              'archived': False}, 'status_code': 201}
         create_ticket_mock.return_value = response
         data = {
-            "properties": {
-                "hs_pipeline": "0",
-                "hs_pipeline_stage": "2",
-                "hs_ticket_priority": "HIGH",
-                "hubspot_owner_id": "299457121",
-                "subject": "troubleshoot report",
-                "content": "tickect description"
-            }
+            "hs_pipeline": "0",
+            "hs_pipeline_stage": "1",
+            "hs_ticket_priority": "LOW",
+            "hubspot_owner_id": "288254034",
+            "subject": "troubleshoot report",
+            "content": "I am creating new ticket"
         }
-        Response = self.client.post(reverse('hubspot_service-create-ticket'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
+        response = self.client.post(reverse('hubspot_service-create-ticket'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_ticket_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_ticket')
@@ -598,7 +464,9 @@ class HubspotViewSetTest(APITestCase):
         Test ticket create and check the response with invalid data
         """
         response = {'data': {'status': 'error',
-                             'message': 'Property values were not valid: [{"isValid":false,"message":"29947847357121 was not a valid integer (for owner ID).","error":"INVALID_INTEGER","name":"hubspot_owner_id"}]',
+                             'message': 'Property values were not valid: [{"isValid":false,"message":"29947847357121 '
+                                        'was not a valid integer (for owner ID).","error":"INVALID_INTEGER",'
+                                        '"name":"hubspot_owner_id"}]',
                              'correlationId': '5392f03d-ca69-4d85-8383-4dae2ea0fa8a', 'category': 'VALIDATION_ERROR'},
                     'status_code': 400}
         create_ticket_mock.return_value = response
@@ -612,9 +480,8 @@ class HubspotViewSetTest(APITestCase):
                 "content": "tickect description"
             }
         }
-        Response = self.client.post(reverse('hubspot_service-create-ticket'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
-        create_ticket_mock.assert_called_once()
+        response = self.client.post(reverse('hubspot_service-create-ticket'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.ticket_list')
     def test_ticket_list(self, ticket_list_mock):
@@ -632,83 +499,6 @@ class HubspotViewSetTest(APITestCase):
                                                                              'subject': 'troubleshoot report'},
                                           'createdAt': '2023-01-05T14:15:12.347Z',
                                           'updatedAt': '2023-01-05T14:15:21.997Z', 'archived': False},
-                                         {'id': '1362685973', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:42:42.006Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:42:43.918Z',
-                                                                             'hs_object_id': '1362685973',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:42:42.006Z',
-                                          'updatedAt': '2023-01-09T17:42:43.918Z', 'archived': False},
-                                         {'id': '1362685988', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:42:56.945Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:42:58.045Z',
-                                                                             'hs_object_id': '1362685988',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:42:56.945Z',
-                                          'updatedAt': '2023-01-09T17:42:58.045Z', 'archived': False},
-                                         {'id': '1362732044', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:41:10.558Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:41:14.205Z',
-                                                                             'hs_object_id': '1362732044',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:41:10.558Z',
-                                          'updatedAt': '2023-01-09T17:41:14.205Z', 'archived': False},
-                                         {'id': '1362748584', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:42:24.567Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:42:26.843Z',
-                                                                             'hs_object_id': '1362748584',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:42:24.567Z',
-                                          'updatedAt': '2023-01-09T17:42:26.843Z', 'archived': False},
-                                         {'id': '1362758701', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:44:15.860Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:44:17.500Z',
-                                                                             'hs_object_id': '1362758701',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:44:15.860Z',
-                                          'updatedAt': '2023-01-09T17:44:17.500Z', 'archived': False},
-                                         {'id': '1362786088', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T18:07:20.543Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T18:07:35.809Z',
-                                                                             'hs_object_id': '1362786088',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T18:07:20.543Z',
-                                          'updatedAt': '2023-01-09T18:07:35.809Z', 'archived': False},
-                                         {'id': '1362904882', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T18:23:04.770Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T18:23:07.430Z',
-                                                                             'hs_object_id': '1362904882',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T18:23:04.770Z',
-                                          'updatedAt': '2023-01-09T18:23:07.430Z', 'archived': False},
                                          {'id': '1362920803', 'properties': {'content': 'tickect description',
                                                                              'createdate': '2023-01-09T18:17:55.343Z',
                                                                              'hs_lastmodifieddate': '2023-01-09T18:17:57.930Z',
@@ -722,8 +512,8 @@ class HubspotViewSetTest(APITestCase):
                                           'updatedAt': '2023-01-09T18:17:57.930Z', 'archived': False}]},
                     'status_code': 200}
         ticket_list_mock.return_value = response
-        Response = self.client.get(reverse('hubspot_service-ticket-list'))
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        response = self.client.get(reverse('hubspot_service-ticket-list'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         ticket_list_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.remove_ticket')
@@ -733,11 +523,9 @@ class HubspotViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Item deleted successfully.'}, 'status_code': 204}
         remove_ticket_mock.return_value = response
-        data = {
-            "ticketId": "1355771473"
-        }
-        Response = self.client.delete(reverse('hubspot_service-remove-ticket'), data=data, fromat='json')
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
+        ticketId = 1355771473
+        response = self.client.delete(reverse('hubspot_service-remove-ticket', args=(ticketId,)))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         remove_ticket_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.remove_ticket')
@@ -747,11 +535,9 @@ class HubspotViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Item deleted successfully.'}, 'status_code': 204}
         remove_ticket_mock.return_value = response
-        data = {
-            "ticketId": "1355778947841473"
-        }
-        Response = self.client.delete(reverse('hubspot_service-remove-ticket'), data=data, fromat='json')
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
+        ticketId = 1355771473
+        response = self.client.delete(reverse('hubspot_service-remove-ticket', args=(ticketId,)))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         remove_ticket_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_ticket')
@@ -767,11 +553,9 @@ class HubspotViewSetTest(APITestCase):
                                             'subject': 'troubleshoot report'}, 'createdAt': '2023-01-05T14:15:12.347Z',
                              'updatedAt': '2023-01-05T14:15:21.997Z', 'archived': False}, 'status_code': 200}
         single_ticket_mock.return_value = response
-        data = {
-            "ticketId": "1355783574"
-        }
-        Response = self.client.get(reverse('hubspot_service-single-ticket'), data=data, fromat='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        ticketId = 1355771473
+        response = self.client.get(reverse('hubspot_service-single-ticket', args=(ticketId,)))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         single_ticket_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_ticket')
@@ -781,135 +565,9 @@ class HubspotViewSetTest(APITestCase):
         """
         response = {'data': {'message': 'Resource not found'}, 'status_code': 404}
         single_ticket_mock.return_value = response
-        data = {
-            "ticketId": "1355798439483574"
-        }
-        Response = self.client.get(reverse('hubspot_service-single-ticket'), data=data, fromat='json')
-        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
-        single_ticket_mock.assert_called_once()
-
-    @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.single_ticket')
-    def test_tickets_single_retrieve_without_ticketId(self, single_ticket_mock):
-        """
-        Test tickets single get and check the response without ticketId
-        """
-        response = {'data': {'results': [{'id': '1355783574', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-05T14:15:12.347Z',
-                                                                             'hs_lastmodifieddate': '2023-01-05T14:15:21.997Z',
-                                                                             'hs_object_id': '1355783574',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-05T14:15:12.347Z',
-                                          'updatedAt': '2023-01-05T14:15:21.997Z', 'archived': False},
-                                         {'id': '1362685973', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:42:42.006Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:42:43.918Z',
-                                                                             'hs_object_id': '1362685973',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:42:42.006Z',
-                                          'updatedAt': '2023-01-09T17:42:43.918Z', 'archived': False},
-                                         {'id': '1362685988', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:42:56.945Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:42:58.045Z',
-                                                                             'hs_object_id': '1362685988',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:42:56.945Z',
-                                          'updatedAt': '2023-01-09T17:42:58.045Z', 'archived': False},
-                                         {'id': '1362732044', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:41:10.558Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:41:14.205Z',
-                                                                             'hs_object_id': '1362732044',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:41:10.558Z',
-                                          'updatedAt': '2023-01-09T17:41:14.205Z', 'archived': False},
-                                         {'id': '1362748584', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:42:24.567Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:42:26.843Z',
-                                                                             'hs_object_id': '1362748584',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:42:24.567Z',
-                                          'updatedAt': '2023-01-09T17:42:26.843Z', 'archived': False},
-                                         {'id': '1362758701', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T17:44:15.860Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T17:44:17.500Z',
-                                                                             'hs_object_id': '1362758701',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T17:44:15.860Z',
-                                          'updatedAt': '2023-01-09T17:44:17.500Z', 'archived': False},
-                                         {'id': '1362786088', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T18:07:20.543Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T18:07:35.809Z',
-                                                                             'hs_object_id': '1362786088',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T18:07:20.543Z',
-                                          'updatedAt': '2023-01-09T18:07:35.809Z', 'archived': False},
-                                         {'id': '1362895897', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T18:32:58.895Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T18:33:04.588Z',
-                                                                             'hs_object_id': '1362895897',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T18:32:58.895Z',
-                                          'updatedAt': '2023-01-09T18:33:04.588Z', 'archived': False},
-                                         {'id': '1362904882', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T18:23:04.770Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T18:23:07.430Z',
-                                                                             'hs_object_id': '1362904882',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T18:23:04.770Z',
-                                          'updatedAt': '2023-01-09T18:23:07.430Z', 'archived': False},
-                                         {'id': '1362920803', 'properties': {'content': 'tickect description',
-                                                                             'createdate': '2023-01-09T18:17:55.343Z',
-                                                                             'hs_lastmodifieddate': '2023-01-09T18:17:57.930Z',
-                                                                             'hs_object_id': '1362920803',
-                                                                             'hs_pipeline': '0',
-                                                                             'hs_pipeline_stage': '2',
-                                                                             'hs_ticket_category': None,
-                                                                             'hs_ticket_priority': 'HIGH',
-                                                                             'subject': 'troubleshoot report'},
-                                          'createdAt': '2023-01-09T18:17:55.343Z',
-                                          'updatedAt': '2023-01-09T18:17:57.930Z', 'archived': False}]},
-                    'status_code': 200}
-        single_ticket_mock.return_value = response
-        data = {
-            "ticketId": ""
-        }
-        Response = self.client.get(reverse('hubspot_service-single-ticket'), data=data, fromat='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        ticketId = 1355771473
+        response = self.client.get(reverse('hubspot_service-single-ticket', args=(ticketId,)))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         single_ticket_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.webhook')
@@ -919,8 +577,8 @@ class HubspotViewSetTest(APITestCase):
         """
         response = {}
         webhook_mock.return_value = response
-        Response = self.client.post(reverse('hubspot_service-webhook'))
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        response = self.client.post(reverse('hubspot_service-webhook'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         webhook_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_event')
@@ -946,8 +604,8 @@ class HubspotViewSetTest(APITestCase):
             "externalAccountId": "ieur545356645trt",
             "externalEventId": "qr34ieour52trewter"
         }
-        Response = self.client.post(reverse('hubspot_service-create-event'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        response = self.client.post(reverse('hubspot_service-create-event'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         create_event_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_event')
@@ -956,7 +614,11 @@ class HubspotViewSetTest(APITestCase):
         Test create event with valid same data again and check the response
         """
         response = {'data': {'status': 'error',
-                             'message': 'Cannot set PropertyValueCoordinates{portalId=23699857, objectTypeId=ObjectTypeId{legacyObjectType=MARKETING_EVENT}, propertyName=hs_unique_id, value=1352433-23699857-ieur545356645trt-qr34ieour52trewter} on 194235157366. 194235510142 already has that value.',
+                             'message': 'Cannot set PropertyValueCoordinates{portalId=23699857, '
+                                        'objectTypeId=ObjectTypeId{legacyObjectType=MARKETING_EVENT}, '
+                                        'propertyName=hs_unique_id, '
+                                        'value=1352433-23699857-ieur545356645trt-qr34ieour52trewter} on 194235157366. '
+                                        '194235510142 already has that value.',
                              'errorType': 'UNIQUE_VALUE_CONFLICT',
                              'errorTokens': {'objectTypeId': ['0-54'], 'propertyName': ['hs_unique_id'],
                                              'portalId': ['23699857'], 'existingObjectId': ['194235510142'],
@@ -977,8 +639,8 @@ class HubspotViewSetTest(APITestCase):
             "externalAccountId": "ieur545356645trt",
             "externalEventId": "qr34ieour52trewter"
         }
-        Response = self.client.post(reverse('hubspot_service-create-event'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.post(reverse('hubspot_service-create-event'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         create_event_mock.assert_called_once()
 
     @mock.patch('modules.django_hubspot.hubspot.services.HubspotService.HubspotService.create_event')
@@ -987,7 +649,8 @@ class HubspotViewSetTest(APITestCase):
         Test create event with invalid and missing data and check the response
         """
         response = {'data': {'status': 'error',
-                             'message': 'Invalid input JSON on line 1, column 314. Some required fields were not set: [eventName]',
+                             'message': 'Invalid input JSON on line 1, column 314. Some required fields were not set: '
+                                        '[eventName]',
                              'correlationId': '29083dac-6784-43c0-bbd6-d166a0d6392f', 'category': 'VALIDATION_ERROR'},
                     'status_code': 400}
         create_event_mock.return_value = response
@@ -1002,6 +665,6 @@ class HubspotViewSetTest(APITestCase):
             "externalAccountId": "ieur545356645trt",
             "externalEventId": "qr34ieour52trewter"
         }
-        Response = self.client.post(reverse('hubspot_service-create-event'), data=data, format='json')
-        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
-        create_event_mock.assert_called_once()
+        response = self.client.post(reverse('hubspot_service-create-event'), data=data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
