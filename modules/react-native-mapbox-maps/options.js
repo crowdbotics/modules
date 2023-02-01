@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
 
-const MAPBOX_TOKEN = "Your Secret Token";
-const mapStyleURL = "Maps custom style url";
-const ORIGIN = [69.28104374759553, 27.69129424991459];
-const DESTINATION = [73.12076538972593, 30.71524733596121];
+const MAPBOX_TOKEN = "sk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGlwNWdwcTFqdWozcnFwa3Nwc3RwdGoifQ.UnMCRmYGEZBjTHY3hBOhCA";
+const mapStyleURL = "mapbox://styles/fsouda/cldejkf2t001201nwyihsky1c";
+const ORIGIN = [68.377411, 30.573721];
+const DESTINATION = [70.331231, 31.904664];
+const GOOGLE_API_KEY = "AIzaSyBBAV8nWjXDMvpOxR1s90btGIBtudKt61o";
 const POLYGON = {
   type: "Feature",
   geometry: {
@@ -66,9 +67,9 @@ const styles = StyleSheet.create({
   tooltip: { height: 100, width: 150, backgroundColor: "#F4F1F1", borderRadius: 10, padding: 0, margin: 0 },
   markerContainer: {
     alignItems: "center",
-    width: 100,
+    width: 130,
     backgroundColor: "transparent",
-    height: 70
+    height: 80
   },
   textContainer: {
     backgroundColor: "white",
@@ -84,7 +85,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     flex: 1
   },
-  compassStyle: { top: 30, right: 30 }
+  compassStyle: { top: 30, right: 30 },
+  icon: {
+    fontSize: 30,
+    color: "#9aa7fb"
+  },
+  centeringButton: {
+    paddingTop: 10,
+    backgroundColor: "#fff",
+    position: "absolute",
+    padding: 8,
+    right: 8,
+    borderRadius: 5
+  },
+  bottomSheet: {
+    paddingTop: 10,
+    backgroundColor: "#000",
+    opacity: 0.8,
+    position: "absolute",
+    padding: 8,
+    bottom: 0,
+    width: "100%"
+  }
 });
 
 export default {
@@ -95,5 +117,6 @@ export default {
   DESTINATION,
   POLYGON,
   ROUTE,
-  MAP_SETTINGS
+  MAP_SETTINGS,
+  GOOGLE_API_KEY
 };
