@@ -21,21 +21,36 @@ export const renderDestinationAnnotations = (
   setDestinationTitle,
   getOriginAddress) => {
   return (
-      <MapboxGL.MarkerView id={"marker2"} coordinate={destination}>
-          <View>
-            <View style={styles.markerContainer}>
-              {destinationTitle !== "" && <View style={styles.textContainer}>
-                <Text style={styles.text}>{destinationTitle}</Text>
-              </View>}
-              <TouchableOpacity onPress={() => getOriginAddress(destination, setDestinationTitle)}>
-              <Image
-                source={require("./pin.png")}
-                style={styles.markerImg}
-              />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </MapboxGL.MarkerView>
+    <MapboxGL.MarkerView id={"marker2"} coordinate={destination}>
+      <View>
+        <View style={styles.markerContainer}>
+          {destinationTitle !== "" && <View style={styles.textContainer}>
+            <Text style={styles.text}>{destinationTitle}</Text>
+          </View>}
+          <TouchableOpacity onPress={() => getOriginAddress(destination, setDestinationTitle)}>
+            <Image
+              source={require("./pin.png")}
+              style={styles.markerImg}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </MapboxGL.MarkerView>
+  );
+};
+
+export const renderMarkedArea = () => {
+  return (
+    <MapboxGL.MarkerView id={"marker2"} coordinate={options.MARKED_CENTERED}>
+    <View>
+      <View style={styles.markerContainer}>
+          <Image
+            source={require("./pin.png")}
+            style={styles.markerImg}
+          />
+      </View>
+    </View>
+  </MapboxGL.MarkerView>
   );
 };
 
@@ -55,8 +70,33 @@ export const getOriginAddress = async (latlng, setTitle) => {
   }
 };
 
-export const getDirections = async (origin, destination) => {
-  const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${origin[0]}%2C${origin[1]}%3B${destination[0]}%2C${destination[1]}?alternatives=true&annotations=speed&banner_instructions=true&geometries=geojson&language=en&overview=full&steps=true&voice_instructions=true&voice_units=imperial&access_token=${options.MAPBOX_TOKEN}`;
+export const getDirections = async (origin, destination, profile) => {
+  const url = `https://api.mapbox.com/directions/v5/mapbox/${profile}/${origin[0]}%2C${origin[1]}%3B${destination[0]}%2C${destination[1]}?alternatives=true&annotations=speed&banner_instructions=true&geometries=geojson&language=en&overview=full&steps=true&voice_instructions=true&voice_units=imperial&access_token=${options.MAPBOX_TOKEN}`;
+  try {
+    const resp = await fetch(url);
+    const respJson = await resp.json();
+    return respJson;
+  } catch (error) {
+    console.log("ERROR: ", error);
+  }
+};
+
+export const getMarkedArea = async (profile) => {
+  const url = `https://api.mapbox.com/isochrone/v1/mapbox/${profile}/${options.MARKED_CENTERED[0]}%2C${options.MARKED_CENTERED[1]}?contours_meters=2000&&polygons=true&denoise=0.7&generalize=0&access_token=${options.MAPBOX_TOKEN}`;
+  try {
+    const resp = await fetch(url);
+    const respJson = await resp.json();
+    return respJson;
+  } catch (error) {
+    console.log("ERROR: ", error);
+  }
+};
+
+export const getMatchingRoute = async (coords, profile) => {
+  const coordinates = coords.join(";");
+  const radius = coords.map(() => 40);
+  const radiuses = radius.join(";");
+  const url = `https://api.mapbox.com/matching/v5/mapbox/${profile}/${coordinates}?radiuses=${radiuses}&annotations=maxspeed&overview=full&geometries=geojson&access_token=pk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGVsNm55dDBlczMzc28xMHJhNmpmdWwifQ.UMDWB9FWNP48ZBjCR9nZQg`;
   try {
     const resp = await fetch(url);
     const respJson = await resp.json();

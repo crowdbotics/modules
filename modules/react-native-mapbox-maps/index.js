@@ -1,8 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ActivityIndicator, Image, View, Text, TouchableOpacity } from "react-native";
+import SwitchToggle from "react-native-switch-toggle";
 import MapboxGL from "@rnmapbox/maps";
 import options from "./options";
-import { renderDestinationAnnotations, renderPolygon, getOriginAddress, getDirections, toHoursAndMinutes, toMilesAndKM } from "./utils";
+import {
+  renderDestinationAnnotations,
+  renderPolygon,
+  getOriginAddress,
+  getDirections,
+  renderMarkedArea,
+  toHoursAndMinutes,
+  toMilesAndKM,
+  getMatchingRoute,
+  getMarkedArea
+} from "./utils";
 import { lineString as makeLineString } from "@turf/helpers";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 Icon.loadFont();
@@ -15,10 +26,15 @@ const Maps = () => {
   const [defaultOrigin, setDefaultOrigin] = useState(ORIGIN);
   const [destination, setDestination] = useState([]);
   const [firstRoute, setFirstRoute] = useState({});
+  const [secondRoute, setSecondRoute] = useState({});
   const [loading, setLoading] = useState(true);
   const [originTitle, setOriginTitle] = useState("");
   const [destinationTitle, setDestinationTitle] = useState("");
+  const [centerdPolygon, setCenterdPolygon] = useState({});
   const [startNavigation, setStartNavigation] = useState(false);
+  const [profile, setProfile] = useState("driving");
+  const [on, off] = useState(false);
+
   const [duration, setDuration] = useState({
     hours: 0,
     minutes: 0,
@@ -29,8 +45,8 @@ const Maps = () => {
     kilometers: 0
   });
 
-  const fetchRoute = async (origin, destination) => {
-    const res = await getDirections(origin, destination);
+  const fetchRoute = async (origin, destination, profile) => {
+    const res = await getDirections(origin, destination, profile);
     const newRoute1 = makeLineString(res.routes[0].geometry.coordinates);
     setFirstRoute(newRoute1);
     const totalSeconds = res.routes[0].duration;
@@ -39,6 +55,14 @@ const Maps = () => {
     const distanceRes = await toMilesAndKM(totalMeters);
     setDuration(durationRes);
     setDistance(distanceRes);
+    const coords = res.routes[0].geometry.coordinates;
+    const mapRoutes = await getMatchingRoute(coords, profile);
+    if (mapRoutes.code === "Ok") {
+      setSecondRoute(mapRoutes?.matchings[0]?.geometry);
+    } else {
+      off(false);
+      setSecondRoute({});
+    }
   };
 
   const handleStartNavigation = () => {
@@ -48,13 +72,22 @@ const Maps = () => {
   const updateCoordinates = (coords) => {
     if (!startNavigation) {
       setDefaultOrigin(coords);
-      // fetchRoute(coords?.geometry?.coordinates, destination)
       setOriginTitle("");
     } else {
       setDestination(coords);
-      fetchRoute(defaultOrigin, coords);
+      fetchRoute(defaultOrigin, coords, profile);
       setOriginTitle("");
     }
+  };
+
+  useEffect(async () => {
+    const markedCoords = await getMarkedArea(profile);
+    setCenterdPolygon(markedCoords);
+  }, []);
+
+  const changeProfile = async (profile) => {
+    await fetchRoute(defaultOrigin, destination, profile);
+    setProfile(profile);
   };
 
   return (
@@ -71,12 +104,10 @@ const Maps = () => {
         style={styles.map}
         styleURL={mapStyleURL}
         localizeLabels={MAP_SETTINGS.localizeLabels}
-        scaleBarEnabled={true}
-        scaleBarPosition={{ top: 20, left: 18 }}
         onPress={(coords) => { updateCoordinates(coords?.geometry?.coordinates); }}
         compassPosition={styles.compassStyle}
       >
-        <MapboxGL.Camera zoomLevel={MAP_SETTINGS.zoomLevel}
+        <MapboxGL.Camera zoomLevel={12}
           centerCoordinate={defaultOrigin} />
         <MapboxGL.MarkerView id={"marker"} coordinate={defaultOrigin}>
           <View>
@@ -94,10 +125,25 @@ const Maps = () => {
           </View>
         </MapboxGL.MarkerView>
 
-        {Object.keys(firstRoute).length !== 0 && <MapboxGL.ShapeSource id="line1" shape={firstRoute}>
+        {(Object.keys(firstRoute).length !== 0 && !on) && <MapboxGL.ShapeSource id="line1" shape={firstRoute}>
           <MapboxGL.LineLayer
             id="linelayer1"
             style={{ lineColor: "#CC0066", lineWidth: 10 }}
+          />
+        </MapboxGL.ShapeSource>}
+
+        {(Object.keys(secondRoute).length !== 0 && on) && <MapboxGL.ShapeSource id="line3" shape={secondRoute}>
+          <MapboxGL.LineLayer
+            id="linelayer3"
+            style={{ lineColor: "#4682B4", lineWidth: 10 }}
+          />
+        </MapboxGL.ShapeSource>}
+
+        {Object.keys(centerdPolygon).length !== 0 && <MapboxGL.ShapeSource id="line2" shape={centerdPolygon}>
+          <MapboxGL.FillLayer id="fillCentered" style={{ fillColor: "#54278f" }} />
+          <MapboxGL.LineLayer
+            id="linelayer2"
+            style={{ lineColor: "#CC0066", lineWidth: 2 }}
           />
         </MapboxGL.ShapeSource>}
 
@@ -108,26 +154,58 @@ const Maps = () => {
           setDestinationTitle,
           getOriginAddress)}
         </View>
+        <View>{renderMarkedArea()}</View>
       </MapboxGL.MapView>
 
-      <TouchableOpacity style={[styles.centeringButton, { bottom: 100, backgroundColor: startNavigation ? "#fff" : "#dcdee0" }]} onPress={handleStartNavigation}>
+      <TouchableOpacity style={[styles.centeringButton, { backgroundColor: startNavigation ? "#fff" : "#dcdee0" }]} onPress={handleStartNavigation}>
         <Icon name="near-me" style={styles.icon} />
       </TouchableOpacity>
+      <View style={styles.topContainer}>
+        {Object.keys(secondRoute).length !== 0 && <View style={styles.toggleContainer}>
+          <View style={styles.toggleSubContainer}>
+            <Text style={styles.routeText}>R1</Text>
+            <SwitchToggle
+              switchOn={on}
+              onPress={() => off(!on)}
+              circleColorOn={"#00CED1"}
+              circleColorOff={"#00CED1"}
+              backgroundColorOff={"#008080"}
+              backgroundColorOn={"#008080"}
+              containerStyle={styles.toggleCustom}
+              circleStyle={styles.toggleCircle}
+            />
+            <Text style={styles.routeText}>R2</Text>
+          </View>
+        </View>}
+
+        {(destination.length !== 0 && startNavigation) && <View style={styles.profileContainer}>
+          <TouchableOpacity onPress={() => changeProfile("driving")} style={[styles.profileIco, { backgroundColor: profile === "driving" ? "#00CED1" : "#fff" }]}>
+          <Icon name="car" style={styles.icon2} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeProfile("cycling")} style={[styles.profileIco, { backgroundColor: profile === "cycling" ? "#00CED1" : "#fff" }]}>
+          <Icon name="bicycle" style={styles.icon2} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => changeProfile("walking")} style={[styles.profileIco, { backgroundColor: profile === "walking" ? "#00CED1" : "#fff" }]}>
+          <Icon name="walk" style={styles.icon2} />
+          </TouchableOpacity>
+        </View>}
+
+      </View>
 
       <View style={styles.bottomSheet}>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ backgroundColor: "#fff", padding: 10, borderRadius: 20 }}>
-              <Image source={require("./car.png")} style={{ height: 30, width: 30, resizeMode: "contain" }} />
+        <View style={styles.bottomContainer}>
+          <View style={styles.row}>
+            <View style={styles.profileIcon}>
+              <Image source={require("./car.png")} style={styles.iconImg} />
             </View>
-            <View style={{ marginLeft: 20 }}>
-              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 18 }}>
+            <View style={styles.ml}>
+              <Text style={styles.duration}>
                 {duration.hours} Hour, {duration.minutes} Minutes, {duration.seconds.toFixed(0)} Seconds
               </Text>
             </View>
           </View>
-          <View style={{ marginTop: -20 }}>
-            <Text style={{ color: "#fff", fontSize: 16 }}>{distance.kilometers.toFixed(2)} km | {distance.miles.toFixed(2)} mi</Text>
+          <View style={styles.mt}>
+            <Text style={styles.distance}>{distance.kilometers.toFixed(2)} km | {distance.miles.toFixed(2)} mi</Text>
           </View>
         </View>
       </View>

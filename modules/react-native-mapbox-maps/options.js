@@ -1,20 +1,20 @@
 import { StyleSheet } from "react-native";
 
-const MAPBOX_TOKEN = "sk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGlwNWdwcTFqdWozcnFwa3Nwc3RwdGoifQ.UnMCRmYGEZBjTHY3hBOhCA";
-const mapStyleURL = "mapbox://styles/fsouda/cldejkf2t001201nwyihsky1c";
-const ORIGIN = [68.377411, 30.573721];
-const DESTINATION = [70.331231, 31.904664];
-const GOOGLE_API_KEY = "AIzaSyBBAV8nWjXDMvpOxR1s90btGIBtudKt61o";
+const MAPBOX_TOKEN = "";
+const mapStyleURL = "";
+const ORIGIN = [66.99388832116034, 30.15489668965283];
+const MARKED_CENTERED = [67.01328210715224, 30.19992930290644];
+const GOOGLE_API_KEY = "";
 const POLYGON = {
   type: "Feature",
   geometry: {
     type: "Polygon",
     coordinates: [
       [
-        [67.06168864057639, 30.19125014188451],
-        [69.23506795385327, 30.446385920247238],
-        [66.5344736417654, 27.801480997434084],
-        [67.06168864057639, 30.19125014188451]
+        [67.0025388109022, 30.145163342632628],
+        [66.99652020824672, 30.134028219157344],
+        [67.01640602948962, 30.141351645223594],
+        [67.0025388109022, 30.145163342632628]
       ]
     ]
   }
@@ -22,26 +22,10 @@ const POLYGON = {
 
 const MAP_SETTINGS = {
   logoEnabled: false,
-  zoomLevel: 6,
+  zoomLevel: 8,
   compassEnabled: true,
   localizeLabels: true,
   zoomEnabled: true
-};
-const ROUTE = {
-  type: "FeatureCollection",
-  features: [
-    {
-      type: "Feature",
-      properties: {},
-      geometry: {
-        type: "LineString",
-        coordinates: [
-          ORIGIN,
-          DESTINATION
-        ]
-      }
-    }
-  ]
 };
 
 const styles = StyleSheet.create({
@@ -64,7 +48,14 @@ const styles = StyleSheet.create({
     height: 40,
     resizeMode: "cover"
   },
-  tooltip: { height: 100, width: 150, backgroundColor: "#F4F1F1", borderRadius: 10, padding: 0, margin: 0 },
+  tooltip: {
+    height: 100,
+    width: 150,
+    backgroundColor: "#F4F1F1",
+    borderRadius: 10,
+    padding: 0,
+    margin: 0
+  },
   markerContainer: {
     alignItems: "center",
     width: 130,
@@ -85,10 +76,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     flex: 1
   },
-  compassStyle: { top: 30, right: 30 },
+  compassStyle: {
+    top: 30,
+    right: 30
+  },
   icon: {
     fontSize: 30,
     color: "#9aa7fb"
+  },
+  icon2: {
+    fontSize: 27,
+    color: "#000"
   },
   centeringButton: {
     paddingTop: 10,
@@ -96,7 +94,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     padding: 8,
     right: 8,
-    borderRadius: 5
+    borderRadius: 5,
+    bottom: 90
   },
   bottomSheet: {
     paddingTop: 10,
@@ -106,7 +105,64 @@ const styles = StyleSheet.create({
     padding: 8,
     bottom: 0,
     width: "100%"
-  }
+  },
+  bottomContainer: {
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  row: {
+    flexDirection: "row"
+  },
+  profileIcon: {
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 20
+  },
+  iconImg: {
+    height: 30,
+    width: 30,
+    resizeMode: "contain"
+  },
+  ml: {
+    marginLeft: 20
+  },
+  duration: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 18
+  },
+  mt: {
+    marginTop: -20
+  },
+  distance: {
+    color: "#fff",
+    fontSize: 16
+  },
+  scaleBar: {
+    top: 20,
+    left: 18
+  },
+  topContainer: { flexDirection: "row", alignItems: "center" },
+  toggleContainer: { flexDirection: "row", padding: 10 },
+  toggleSubContainer: { flexDirection: "row", justifyContent: "center", alignItems: "center" },
+  routeText: { color: "#40E0D0", fontSize: 16, fontWeight: "bold" },
+  toggleCustom: {
+    width: 70,
+    height: 30,
+    borderRadius: 25,
+    padding: 5,
+    marginHorizontal: 10
+  },
+  toggleCircle: {
+    width: 25,
+    height: 25,
+    borderRadius: 20
+  },
+  profileContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "white", width: 130 },
+  profileIco: { paddingHorizontal: 5 },
+  drive: { height: 50, width: 50, resizeMode: "contain" },
+  cycle: { height: 30, width: 30, resizeMode: "contain" },
+  walk: { height: 25, width: 25, resizeMode: "contain" }
 });
 
 export default {
@@ -114,9 +170,8 @@ export default {
   mapStyleURL,
   styles,
   ORIGIN,
-  DESTINATION,
   POLYGON,
-  ROUTE,
   MAP_SETTINGS,
-  GOOGLE_API_KEY
+  GOOGLE_API_KEY,
+  MARKED_CENTERED
 };
