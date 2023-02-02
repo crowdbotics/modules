@@ -1,7 +1,10 @@
 import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image, Alert } from "react-native";
 import MapboxGL from "@rnmapbox/maps";
 import options from "./options";
+import pinImg  from "./assets/pin.png"
+
+const pinImgUri = Image.resolveAssetSource(pinImg).uri
 
 export const renderPolygon = (polygon) => {
   return (
@@ -19,7 +22,7 @@ export const renderDestinationAnnotations = (
   destination,
   destinationTitle,
   setDestinationTitle,
-  getOriginAddress) => {
+  handleGetOriginAddress) => {
   return (
     <MapboxGL.MarkerView id={"marker2"} coordinate={destination}>
       <View>
@@ -27,9 +30,9 @@ export const renderDestinationAnnotations = (
           {destinationTitle !== "" && <View style={styles.textContainer}>
             <Text style={styles.text}>{destinationTitle}</Text>
           </View>}
-          <TouchableOpacity onPress={() => getOriginAddress(destination, setDestinationTitle)}>
+          <TouchableOpacity onPress={() => handleGetOriginAddress(destination, setDestinationTitle)}>
             <Image
-              source={require("./pin.png")}
+              source={{uri: pinImgUri}}
               style={styles.markerImg}
             />
           </TouchableOpacity>
@@ -42,29 +45,24 @@ export const renderDestinationAnnotations = (
 export const renderMarkedArea = () => {
   return (
     <MapboxGL.MarkerView id={"marker2"} coordinate={options.MARKED_CENTERED}>
-    <View>
-      <View style={styles.markerContainer}>
+      <View>
+        <View style={styles.markerContainer}>
           <Image
-            source={require("./pin.png")}
+            source={{uri: pinImgUri}}
             style={styles.markerImg}
           />
+        </View>
       </View>
-    </View>
-  </MapboxGL.MarkerView>
+    </MapboxGL.MarkerView>
   );
 };
 
-export const getOriginAddress = async (latlng, setTitle) => {
+export const getOriginAddress = async (latlng) => {
   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlng[1]},${latlng[0]}&key=${options.GOOGLE_API_KEY}`;
   try {
     const resp = await fetch(url);
     const respJson = await resp.json();
-    const address = respJson.results[0].formatted_address;
-
-    const [title, ...desc] = address.split(" ");
-    const description = desc.join(" ");
-    console.log(title);
-    setTitle(description);
+    return respJson
   } catch (error) {
     console.log("ERROR: ", error);
   }
@@ -77,7 +75,7 @@ export const getDirections = async (origin, destination, profile) => {
     const respJson = await resp.json();
     return respJson;
   } catch (error) {
-    console.log("ERROR: ", error);
+    Alert.alert("Error: ", error.message)
   }
 };
 
@@ -88,7 +86,7 @@ export const getMarkedArea = async (profile) => {
     const respJson = await resp.json();
     return respJson;
   } catch (error) {
-    console.log("ERROR: ", error);
+   Alert.alert("Error: ", error.message)
   }
 };
 
@@ -96,13 +94,13 @@ export const getMatchingRoute = async (coords, profile) => {
   const coordinates = coords.join(";");
   const radius = coords.map(() => 40);
   const radiuses = radius.join(";");
-  const url = `https://api.mapbox.com/matching/v5/mapbox/${profile}/${coordinates}?radiuses=${radiuses}&annotations=maxspeed&overview=full&geometries=geojson&access_token=pk.eyJ1IjoiZnNvdWRhIiwiYSI6ImNsZGVsNm55dDBlczMzc28xMHJhNmpmdWwifQ.UMDWB9FWNP48ZBjCR9nZQg`;
+  const url = `https://api.mapbox.com/matching/v5/mapbox/${profile}/${coordinates}?radiuses=${radiuses}&annotations=maxspeed&overview=full&geometries=geojson&access_token=${options.MAPBOX_TOKEN}`;
   try {
     const resp = await fetch(url);
     const respJson = await resp.json();
     return respJson;
   } catch (error) {
-    console.log("ERROR: ", error);
+    Alert.alert("Error: ", error.message)
   }
 };
 

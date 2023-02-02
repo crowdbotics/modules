@@ -129,11 +129,12 @@ Update the following options in `mapbox-map/options.js`.
 const MAPBOX_TOKEN = MapBox Secret Token generated above in MapBox Credentials section.
 const mapStyleURL = Map `styleURL`
 const ORIGIN = Initial location for the map
-const DESTINATION = location
+const GOOGLE_API_KEY = "Your google api key";
 const POLYGON = Update the polygon object to draw shape on the map 
-const ROUTE = Update route object to draw line between two points 
+const MARKED_CENTERED = An array containing longitude and latitude;
 const MAP_SETTINGS = settings for map
 ```
+
 
 
 ## Contributing

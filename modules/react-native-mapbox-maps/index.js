@@ -16,8 +16,12 @@ import {
 } from "./utils";
 import { lineString as makeLineString } from "@turf/helpers";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-Icon.loadFont();
+import carImg  from "./assets/car.png"
+import pinImg  from "./assets/pin.png"
 
+Icon.loadFont();
+const carImgUri = Image.resolveAssetSource(carImg).uri
+const pinImgUri = Image.resolveAssetSource(pinImg).uri
 const { styles, mapStyleURL, MAPBOX_TOKEN, ORIGIN, POLYGON, MAP_SETTINGS } = options;
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
@@ -33,7 +37,7 @@ const Maps = () => {
   const [centerdPolygon, setCenterdPolygon] = useState({});
   const [startNavigation, setStartNavigation] = useState(false);
   const [profile, setProfile] = useState("driving");
-  const [on, off] = useState(false);
+  const [isToggleOn, setIsToggleOn] = useState(false);
 
   const [duration, setDuration] = useState({
     hours: 0,
@@ -60,7 +64,7 @@ const Maps = () => {
     if (mapRoutes.code === "Ok") {
       setSecondRoute(mapRoutes?.matchings[0]?.geometry);
     } else {
-      off(false);
+      setIsToggleOn(false);
       setSecondRoute({});
     }
   };
@@ -80,15 +84,28 @@ const Maps = () => {
     }
   };
 
-  useEffect(async () => {
+  const handleGetMarkedCoords = async () => {
     const markedCoords = await getMarkedArea(profile);
     setCenterdPolygon(markedCoords);
+  }
+  useEffect(() => {
+    handleGetMarkedCoords()
   }, []);
 
   const changeProfile = async (profile) => {
     await fetchRoute(defaultOrigin, destination, profile);
     setProfile(profile);
   };
+
+
+ const handleGetOriginAddress = async (origin, setTitle) => {
+    const res = await getOriginAddress(origin)
+    const address = res.results[0].formatted_address;
+    const [title, ...desc] = address.split(" ");
+    const description = desc.join(" ");
+    console.log(title);
+    setTitle(description);
+  }
 
   return (
     <View style={styles.view}>
@@ -115,9 +132,9 @@ const Maps = () => {
               {originTitle !== "" && <View style={styles.textContainer}>
                 <Text style={styles.text}>{originTitle}</Text>
               </View>}
-              <TouchableOpacity onPress={() => getOriginAddress(defaultOrigin, setOriginTitle)}>
+              <TouchableOpacity onPress={() => handleGetOriginAddress(defaultOrigin, setOriginTitle)}>
                 <Image
-                  source={require("./pin.png")}
+                  source={{uri: pinImgUri}}
                   style={styles.markerImg}
                 />
               </TouchableOpacity>
@@ -152,7 +169,7 @@ const Maps = () => {
           destination,
           destinationTitle,
           setDestinationTitle,
-          getOriginAddress)}
+          handleGetOriginAddress)}
         </View>
         <View>{renderMarkedArea()}</View>
       </MapboxGL.MapView>
@@ -165,8 +182,8 @@ const Maps = () => {
           <View style={styles.toggleSubContainer}>
             <Text style={styles.routeText}>R1</Text>
             <SwitchToggle
-              switchOn={on}
-              onPress={() => off(!on)}
+              switchOn={isToggleOn}
+              onPress={() => setIsToggleOn(!isToggleOn)}
               circleColorOn={"#00CED1"}
               circleColorOff={"#00CED1"}
               backgroundColorOff={"#008080"}
@@ -196,7 +213,7 @@ const Maps = () => {
         <View style={styles.bottomContainer}>
           <View style={styles.row}>
             <View style={styles.profileIcon}>
-              <Image source={require("./car.png")} style={styles.iconImg} />
+              <Image source={{uri: carImgUri}} style={styles.iconImg} />
             </View>
             <View style={styles.ml}>
               <Text style={styles.duration}>
