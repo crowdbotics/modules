@@ -16,12 +16,12 @@ import {
 } from "./utils";
 import { lineString as makeLineString } from "@turf/helpers";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import carImg  from "./assets/car.png"
-import pinImg  from "./assets/pin.png"
+import carImg from "./assets/car.png";
+import pinImg from "./assets/pin.png";
 
 Icon.loadFont();
-const carImgUri = Image.resolveAssetSource(carImg).uri
-const pinImgUri = Image.resolveAssetSource(pinImg).uri
+const carImgUri = Image.resolveAssetSource(carImg).uri;
+const pinImgUri = Image.resolveAssetSource(pinImg).uri;
 const { styles, mapStyleURL, MAPBOX_TOKEN, ORIGIN, POLYGON, MAP_SETTINGS } = options;
 
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
@@ -87,9 +87,9 @@ const Maps = () => {
   const handleGetMarkedCoords = async () => {
     const markedCoords = await getMarkedArea(profile);
     setCenterdPolygon(markedCoords);
-  }
+  };
   useEffect(() => {
-    handleGetMarkedCoords()
+    handleGetMarkedCoords();
   }, []);
 
   const changeProfile = async (profile) => {
@@ -97,15 +97,14 @@ const Maps = () => {
     setProfile(profile);
   };
 
-
- const handleGetOriginAddress = async (origin, setTitle) => {
-    const res = await getOriginAddress(origin)
+  const handleGetOriginAddress = async (origin, setTitle) => {
+    const res = await getOriginAddress(origin);
     const address = res.results[0].formatted_address;
     const [title, ...desc] = address.split(" ");
     const description = desc.join(" ");
     console.log(title);
     setTitle(description);
-  }
+  };
 
   return (
     <View style={styles.view}>
@@ -134,7 +133,7 @@ const Maps = () => {
               </View>}
               <TouchableOpacity onPress={() => handleGetOriginAddress(defaultOrigin, setOriginTitle)}>
                 <Image
-                  source={{uri: pinImgUri}}
+                  source={{ uri: pinImgUri }}
                   style={styles.markerImg}
                 />
               </TouchableOpacity>
@@ -142,14 +141,14 @@ const Maps = () => {
           </View>
         </MapboxGL.MarkerView>
 
-        {(Object.keys(firstRoute).length !== 0 && !on) && <MapboxGL.ShapeSource id="line1" shape={firstRoute}>
+        {(Object.keys(firstRoute).length !== 0 && !isToggleOn) && <MapboxGL.ShapeSource id="line1" shape={firstRoute}>
           <MapboxGL.LineLayer
             id="linelayer1"
             style={{ lineColor: "#CC0066", lineWidth: 10 }}
           />
         </MapboxGL.ShapeSource>}
 
-        {(Object.keys(secondRoute).length !== 0 && on) && <MapboxGL.ShapeSource id="line3" shape={secondRoute}>
+        {(Object.keys(secondRoute).length !== 0 && isToggleOn) && <MapboxGL.ShapeSource id="line3" shape={secondRoute}>
           <MapboxGL.LineLayer
             id="linelayer3"
             style={{ lineColor: "#4682B4", lineWidth: 10 }}
@@ -213,7 +212,7 @@ const Maps = () => {
         <View style={styles.bottomContainer}>
           <View style={styles.row}>
             <View style={styles.profileIcon}>
-              <Image source={{uri: carImgUri}} style={styles.iconImg} />
+              <Image source={{ uri: carImgUri }} style={styles.iconImg} />
             </View>
             <View style={styles.ml}>
               <Text style={styles.duration}>

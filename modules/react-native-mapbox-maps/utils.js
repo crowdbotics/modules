@@ -2,9 +2,9 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity, Image, Alert } from "react-native";
 import MapboxGL from "@rnmapbox/maps";
 import options from "./options";
-import pinImg  from "./assets/pin.png"
+import pinImg from "./assets/pin.png";
 
-const pinImgUri = Image.resolveAssetSource(pinImg).uri
+const pinImgUri = Image.resolveAssetSource(pinImg).uri;
 
 export const renderPolygon = (polygon) => {
   return (
@@ -32,7 +32,7 @@ export const renderDestinationAnnotations = (
           </View>}
           <TouchableOpacity onPress={() => handleGetOriginAddress(destination, setDestinationTitle)}>
             <Image
-              source={{uri: pinImgUri}}
+              source={{ uri: pinImgUri }}
               style={styles.markerImg}
             />
           </TouchableOpacity>
@@ -48,7 +48,7 @@ export const renderMarkedArea = () => {
       <View>
         <View style={styles.markerContainer}>
           <Image
-            source={{uri: pinImgUri}}
+            source={{ uri: pinImgUri }}
             style={styles.markerImg}
           />
         </View>
@@ -62,7 +62,7 @@ export const getOriginAddress = async (latlng) => {
   try {
     const resp = await fetch(url);
     const respJson = await resp.json();
-    return respJson
+    return respJson;
   } catch (error) {
     console.log("ERROR: ", error);
   }
@@ -75,7 +75,7 @@ export const getDirections = async (origin, destination, profile) => {
     const respJson = await resp.json();
     return respJson;
   } catch (error) {
-    Alert.alert("Error: ", error.message)
+    Alert.alert("Error: ", error.message);
   }
 };
 
@@ -86,7 +86,7 @@ export const getMarkedArea = async (profile) => {
     const respJson = await resp.json();
     return respJson;
   } catch (error) {
-   Alert.alert("Error: ", error.message)
+    Alert.alert("Error: ", error.message);
   }
 };
 
@@ -100,7 +100,7 @@ export const getMatchingRoute = async (coords, profile) => {
     const respJson = await resp.json();
     return respJson;
   } catch (error) {
-    Alert.alert("Error: ", error.message)
+    Alert.alert("Error: ", error.message);
   }
 };
 
