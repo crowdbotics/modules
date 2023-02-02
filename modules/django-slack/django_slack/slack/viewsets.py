@@ -56,7 +56,10 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='create-channel')
     def create_channel(self, request):
-        """ Create Slack channel """
+        """ 
+        Create Slack channel 
+        User Pass Multiple Emails in CharField using comma separation
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -82,7 +85,6 @@ class SlackViewSet(viewsets.GenericViewSet):
         response, status_code = self.slack_service.get_channel_id(pk)
         if status_code:
             return Response(data={'channel_id': response}, status=status_code)
-
 
     @action(detail=True, methods=['get'], url_path='channel_history')
     def get_channel_history(self, request, pk):
