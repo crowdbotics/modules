@@ -48,10 +48,11 @@ python manage.py runserver
 ## Api Table
 List of api's endpoints with params needed for these apis.
 
-| Api Name                                               | Params                       | Description             |
-|--------------------------------------------------------|:----------------------------:|-------------------------|
-| `/modules/hubspot/service/access/token/`              |    `{code}`                    | This will return an object containing the `refresh_token` and `access_token`. All api calls will be made using this `access_token`.    |
-| `/modules/hubspot/service/deals/list/`                 |  -  | The deals endpoint retrieves all deal data from HubSpot.                                                                               |
+| Api Name                                               |                                         Params                                         | Description                                                                                                                            |
+|--------------------------------------------------------|:--------------------------------------------------------------------------------------:|----------------------------------------------------------------------------------------------------------------------------------------|
+| `/modules/hubspot/service/access/token/`               |                                        `{code}`                                        | This will return an object containing the `refresh_token` and `access_token`. All api calls will be made using this `access_token`.    |
+| `/modules/hubspot/service/events/create/`              |                     [Create Event Payload](#create-event-payload)                      | `Create Event Payload`                                                                                                                 |
+| `/modules/hubspot/service/deals/list/`                 |                                           -                                            | The deals endpoint retrieves all deal data from HubSpot.                                                                               |
 | `/modules/hubspot/service/deals/create/`               |    `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage, content}`     | Create a deal with the given properties and return a copy of the object, including the ID                                              |
 | `/modules/hubspot/service/deals/remove/`               |         `{id}`      | Takes object containing `id` of the deal going to be deleted. Moves an Object identified by `id` to the recycling bin.                 |
 | `/modules/hubspot/service/deals/single/`               |                                         `{id}`                                         | Takes object containing `id` of the deal going to be retrieved.                                                                        |
