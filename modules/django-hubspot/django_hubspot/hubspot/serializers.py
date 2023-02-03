@@ -28,16 +28,9 @@ class TicketSerializer(serializers.Serializer):
     content = serializers.CharField()
 
 
-class AssociationSerializer(serializers.Serializer):
+class TicketAssociationSerializer(serializers.Serializer):
     associationCategory = serializers.CharField()
     associationTypeId = serializers.IntegerField()
-
-
-class TicketAssociationSerializer(serializers.Serializer):
-    ticketId = serializers.IntegerField()
-    toObjectType = serializers.CharField()
-    toObjectId = serializers.IntegerField()
-    param = AssociationSerializer(many=True)
 
 
 class CustomPropertiesSerializer(serializers.Serializer):
@@ -52,21 +45,20 @@ class CustomPropertiesSerializer(serializers.Serializer):
     sourceVid = serializers.ListField()
     sourceMetadata = serializers.CharField()
     requestId = serializers.CharField()
-    updatedByUserId = serializers.IntegerField()
-    persistenceTimestamp = serializers.IntegerField()
-    useTimestampAsPersistenceTimestamp = serializers.BooleanField()
+    updatedByUserId = serializers.IntegerField(required=False)
+    persistenceTimestamp = serializers.IntegerField(required=False)
+    useTimestampAsPersistenceTimestamp = serializers.BooleanField(required=False)
 
 
 class EventSerializer(serializers.Serializer):
     eventName = serializers.CharField()
-    eventType = serializers.CharField()
-    startDateTime = serializers.DateTimeField()
-    endDateTime = serializers.DateTimeField()
+    eventType = serializers.CharField(required=False)
+    startDateTime = serializers.DateTimeField(required=False)
+    endDateTime = serializers.DateTimeField(required=False)
     eventOrganizer = serializers.CharField()
-    eventDescription = serializers.CharField()
-    eventUrl = serializers.CharField()
-    eventCancelled = serializers.BooleanField()
+    eventDescription = serializers.CharField(required=False)
+    eventUrl = serializers.CharField(required=False)
+    eventCancelled = serializers.BooleanField(required=False)
     customProperties = CustomPropertiesSerializer(many=True, required=False, allow_null=True)
     externalAccountId = serializers.CharField()
     externalEventId = serializers.CharField()
-

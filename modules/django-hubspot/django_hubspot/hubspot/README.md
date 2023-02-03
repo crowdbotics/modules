@@ -54,7 +54,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/hubspot/service/events/create/`              |                     [Create Event Payload](#create-event-payload)                      | `Create Event Payload`                                                                                                                 |
 | `/modules/hubspot/service/deals/list/`                 |                                           -                                            | The deals endpoint retrieves all deal data from HubSpot.                                                                               |
 | `/modules/hubspot/service/deals/create/`               |    `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage, content}`     | Create a deal with the given properties and return a copy of the object, including the ID                                              |
-| `/modules/hubspot/service/deals/remove/`               |                                         `{id}`                                         | Takes object containing `id` of the deal going to be deleted. Moves an Object identified by `id` to the recycling bin.                 |
+| `/modules/hubspot/service/deals/remove/`               |         `{id}`      | Takes object containing `id` of the deal going to be deleted. Moves an Object identified by `id` to the recycling bin.                 |
 | `/modules/hubspot/service/deals/single/`               |                                         `{id}`                                         | Takes object containing `id` of the deal going to be retrieved.                                                                        |
 | `/modules/hubspot/service/tickets/create/`             |         `{amount, closedate, dealname, hubspot_owner_id, pipeline, dealstage}`         | Create a ticket with the given properties and return a copy of the object, including the ID                                            |
 | `/modules/hubspot/service/tickets/list/`               |                                           -                                            | The tickets endpoint retrieves all tickets data from HubSpot.                                                                          |
@@ -65,6 +65,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/hubspot/service/contact/deals/list/`         |                                     `{contactId}`                                      | Retrieve a contact associated with deals.                                                                                              |
 | `/modules/hubspot/service/meeting/contacts/list/`      |                                     `{meetingId}`                                      | Retrieve a meeting associated with contacts.                                                                                           |
 | `/modules/hubspot/service/webhook/`                    |                                           -                                            | This url will be used wile creating the webhook for the app. see [Webhook Subscription](#creating-webhook-subscription) details above. |
+| `/modules/hubspot/service/events/create/`      |       `{eventName, eventOrganizer, externalAccountId, externalEventId}`  | To create an event 
 
 
 
