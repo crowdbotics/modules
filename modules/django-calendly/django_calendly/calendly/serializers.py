@@ -21,8 +21,8 @@ class CreateWebhookSubscriptionSerializer(serializers.Serializer):
     url = serializers.URLField()
     events = serializers.ListSerializer(child=serializers.CharField())
     organization = serializers.URLField()
-    user = serializers.URLField()
+    user = serializers.URLField(required=False)
     scope = serializers.CharField()
-    signing_key = serializers.CharField()
+    signing_key = serializers.CharField(required=False)
 
 

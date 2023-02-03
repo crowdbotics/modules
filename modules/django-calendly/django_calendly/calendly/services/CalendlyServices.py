@@ -13,9 +13,9 @@ class CalendlyBase:
         }
         return headers
 
-    def _api_call(self, request_type, url, headers=None, payload=None, data=None):
+    def _api_call(self, request_type, url, headers=None, payload=None, params=None):
         try:
-            response = requests.request(request_type, url, headers=headers, json=payload, data=data)
+            response = requests.request(request_type, url, headers=headers, json=payload, params=params)
             response.raise_for_status()
             if response.status_code == 204:
                 return {"data": {"message": "Item deleted successfully."}, "status_code": response.status_code}
@@ -28,18 +28,18 @@ class CalendlyBase:
 
 class CalendlyService(CalendlyBase):
 
-    def user_details(self):
+    def user_details(self, params):
         try:
-            url = f'{self.CALENDLY_BASE_URL}/users/me'
+            url = f'{self.CALENDLY_BASE_URL}/users/{params}'
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e
 
-    def event_types(self, organization, active, count):
+    def event_types(self, query_params):
         try:
-            url = f'{self.CALENDLY_BASE_URL}/event_types?organization={organization}&active={active}&count={count}'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            url = f'{self.CALENDLY_BASE_URL}/event_types'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
@@ -52,29 +52,26 @@ class CalendlyService(CalendlyBase):
         except Exception as e:
             return e
 
-    def event_type_available_times(self, start_time, event_type, end_time):
+    def event_type_available_times(self, query_params):
         try:
-            url = f'{self.CALENDLY_BASE_URL}/event_type_available_times?start_time={start_time}&event_type=' \
-                  f'{event_type}&end_time={end_time}'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            url = f'{self.CALENDLY_BASE_URL}/event_type_available_times'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def user_busy_times(self, start_time, event_type, end_time):
+    def user_busy_times(self, query_params):
         try:
-            url = f'{self.CALENDLY_BASE_URL}/user_busy_times?start_time={start_time}&event_type=' \
-                  f'{event_type}&end_time={end_time}'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            url = f'{self.CALENDLY_BASE_URL}/user_busy_times'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def user_availability_schedules(self, user):
+    def user_availability_schedules_list(self, query_params):
         try:
-
-            url = f'{self.CALENDLY_BASE_URL}/user_availability_schedules?user={user}'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            url = f'{self.CALENDLY_BASE_URL}/user_availability_schedules'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
@@ -95,18 +92,18 @@ class CalendlyService(CalendlyBase):
         except Exception as e:
             return e
 
-    def organization_invitations_list(self, uuid):
+    def organization_invitations_list(self, uuid, query_params):
         try:
             url = f'{self.CALENDLY_BASE_URL}/organizations/{uuid}/invitations'
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def invite_user_organizations(self, uuid, data):
+    def invite_user_organizations(self, uuid, payload):
         try:
             url = f'{self.CALENDLY_BASE_URL}/organizations/{uuid}/invitations'
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=data)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=payload)
             return response
         except Exception as e:
             return e
@@ -135,10 +132,10 @@ class CalendlyService(CalendlyBase):
         except Exception as e:
             return e
 
-    def organization_membership_list(self, organization):
+    def organization_memberships_list(self, query_params):
         try:
-            url = f"{self.CALENDLY_BASE_URL}/organizations_memberships?organization={organization}"
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            url = f"{self.CALENDLY_BASE_URL}/organizations_memberships"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
@@ -151,23 +148,23 @@ class CalendlyService(CalendlyBase):
         except Exception as e:
             return e
 
-    def list_schedule_event_invitee(self, uuid):
+    def scheduled_event_invitees(self, uuid, query_params):
         try:
             url = f"{self.CALENDLY_BASE_URL}/scheduled_events/{uuid}/invitees"
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def scheduled_events_list(self, organization):
+    def scheduled_events_list(self, query_params):
         try:
-            url = f"{self.CALENDLY_BASE_URL}/scheduled_events?organization={organization}"
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            url = f"{self.CALENDLY_BASE_URL}/scheduled_events"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def single_event_schedule(self, uuid):
+    def single_scheduled_event(self, uuid):
         try:
             url = f"{self.CALENDLY_BASE_URL}/scheduled_events{uuid}"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header())
@@ -175,10 +172,10 @@ class CalendlyService(CalendlyBase):
         except Exception as e:
             return e
 
-    def cancel_schedule_event(self, uuid, data):
+    def cancel_scheduled_event(self, uuid, payload):
         try:
             url = f"{self.CALENDLY_BASE_URL}/scheduled_events/{uuid}/cancellation"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=data)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=payload)
             return response
         except Exception as e:
             return e
@@ -215,10 +212,10 @@ class CalendlyService(CalendlyBase):
         except Exception as e:
             return e
 
-    def webhook_subscription_list(self, organization, scope):
+    def webhook_subscription_list(self, query_params):
         try:
-            url = f"{self.CALENDLY_BASE_URL}/webhook_subscriptions?organization={organization}&scope={scope}"
-            response = self._api_call(request_type="GET", url=url, headers=self.get_header())
+            url = f"{self.CALENDLY_BASE_URL}/webhook_subscriptions"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
