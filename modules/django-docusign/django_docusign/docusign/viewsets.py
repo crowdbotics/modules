@@ -157,7 +157,7 @@ class RetrieveEnvelopeViewSet(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            envelope_id = request.data.get("envelope_id")
+            envelope_id = request.query_params.get('envelope_id')
             access_token = request.META.get('HTTP_AUTHORIZATION')
             if access_token:
                 envelopes_api = EnvelopesApi(api_client=get_authorize_client(access_token))
@@ -177,12 +177,12 @@ class RetrieveEnvelopeViewSet(APIView):
                     'last_modified_date_time': envelope_data.last_modified_date_time,
                     'notification_uri': envelope_data.notification_uri,
                     'recipients_uri': envelope_data.recipients_uri,
-                    'sender_info': {
-                        'sender_account_id': envelope_data.sender.account_id,
-                        'sender_email': envelope_data.sender.email,
-                        'sender_username': envelope_data.sender.user_name,
+                    'sender': {
+                        'account_id': envelope_data.sender.account_id,
+                        'email': envelope_data.sender.email,
+                        'user_name': envelope_data.sender.user_name,
                     },
-                    'sent_date_tim': envelope_data.sent_date_time,
+                    'sent_date_time': envelope_data.sent_date_time,
                     'status': envelope_data.status,
                     'status_changed_date_time': envelope_data.status_changed_date_time,
                     'templates_uri': envelope_data.templates_uri
@@ -205,8 +205,8 @@ class DownloadEnvelopeDocumentViewSet(APIView):
     """
     def get(self, request, *args, **kwargs):
         try:
-            envelope_id = request.data.get("envelope_id")
-            document_id = request.data.get("document_id")
+            envelope_id = request.query_params.get("envelope_id")
+            document_id = request.query_params.get("document_id")
             access_token = request.META.get('HTTP_AUTHORIZATION')
             if access_token:
                 envelopes_api = EnvelopesApi(api_client=get_authorize_client(access_token))
@@ -238,7 +238,7 @@ class RetrieveAllEnvelopeViewSet(APIView):
     def get(self, request, *args, **kwargs):
         try:
             access_token = request.META.get('HTTP_AUTHORIZATION')
-            folder_value = request.data.get('folder_value')
+            folder_value = request.query_params.get('folder_value')
             if access_token:
                 folders_api = FoldersApi(api_client=get_authorize_client(access_token))
                 folder_data = folders_api.search(
