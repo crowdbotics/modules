@@ -3,6 +3,20 @@
 This module contains all needed resources to get the Booking component for React
 Native mobile client.
 
+## Installation
+1. Update `.env` file with:
+```
+SHOPIFY_STORE_URL=https://your-development-store.myshopify.com
+SHOPIFY_STOREFRONT_ACCESS_TOKEN=storefront personal token
+```
+
+2. Run the following commands to get started:
+```
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
 ## Custom/Generic Booking Models:
 
 List of generic models to create a custom booking app.
