@@ -20,6 +20,7 @@ class WordPressAuthTokenTestCase(APITestCase):
         response = self.client.post(url, format='json')
         self.assertEqual(responses['access_token'], response.data['access_token'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_auth_token_mock.assert_called_once()
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressBase.get_auth_token')
     def test_get_auth_token_with_expire_code(self, get_auth_token_mock):
@@ -29,19 +30,18 @@ class WordPressAuthTokenTestCase(APITestCase):
         url = reverse('wordpress_auth-get-auth-token')
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        get_auth_token_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressBase.get_auth_token')
-    def test_get_auth_token_without_code(self, get_auth_token_mock):
-        response = None
-        get_auth_token_mock.return_value = response
+    def test_get_auth_token_without_code(self):
         url = reverse('wordpress_auth-get-auth-token')
-        response = self.client.post(url, format='json')
+        response = self.client.post(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class WordpressPostsTestCase(APITestCase):
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_post')
     def test_create_post(self, create_post_mock):
@@ -69,8 +69,8 @@ class WordpressPostsTestCase(APITestCase):
                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}}, 'post_tag': {},
-                                                                                                    'post_format': {},
-                                                                                                    'mentions': {}},
+                'post_format': {},
+                'mentions': {}},
                               'tags': {}, 'categories': {
                 'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '',
                                   'post_count': 8, 'parent': 0, 'meta': {'links': {
@@ -88,7 +88,6 @@ class WordpressPostsTestCase(APITestCase):
                               'other_URLs': {'permalink_URL': 'https://dummy15.wordpress.com/2023/01/11/%postname%/',
                                              'suggested_slug': 'my-new-personal'}}, 'status_code': 200, 'success': True}
         create_post_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-create-post')
         data = {
             "title": "my new person",
@@ -96,254 +95,20 @@ class WordpressPostsTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        create_post_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_post')
-    def test_create_post_without_token(self, create_post_mock_without_token):
-        response = None
-        create_post_mock_without_token.return_value = response
+    def test_create_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-create-post')
         data = {
             "title": "my new person",
         }
         response = self.client.post(url, data, format='json')
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_multiple_posts')
     def test_get_multiple_posts(self, get_multiple_posts_mock):
-        responses = {'data': {'found': 10, 'posts': [{'ID': 20, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-11T20:21:16+05:00',
-                                                      'modified': '2023-01-11T20:21:16+05:00',
-                                                      'title': 'my new personal',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/11/my-new-personal/',
-                                                      'short_URL': 'https://wp.me/petk36-k', 'content': '',
-                                                      'excerpt': '', 'slug': 'my-new-personal',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/11/my-new-personal/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': '163d2dcc86487215ab6d7e084d24c56c',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '',
-                                  'post_count': 8, 'parent': 0, 'meta': {'links': {
-                        'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                        'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                        'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}}, 'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {}, 'categories': {
-                'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '',
-                                  'post_count': 8, 'parent': 0, 'meta': {'links': {
-                        'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                        'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                        'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}}, 'attachments': {},
-                                                      'attachment_count': 0, 'metadata': [
-                {'id': '121', 'key': 'jabber_published', 'value': '1673450477'}], 'meta': {
-                'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/20',
-                          'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/20/help',
-                          'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                          'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/20/replies/',
-                          'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/20/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 17, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-11T15:53:51+05:00',
-                                                      'modified': '2023-01-11T15:53:51+05:00',
-                                                      'title': 'Protected: string',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/11/string/',
-                                                      'short_URL': 'https://wp.me/setk36-string',
-                                                      'content': '<p>This post is password protected.</p>\n',
-                                                      'excerpt': '<p>There is no excerpt because this is a protected post.</p>\n',
-                                                      'slug': 'string',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/11/string/',
-                                                      'status': 'publish', 'sticky': True, 'password': 'string',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': 'b9c1e4cefcabf7c54b7f8b7248fc2484',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'string': {'ID': 540526, 'name': 'string', 'slug': 'string',
-                                                                    'description': '', 'post_count': 1, 'parent': 0,
-                                                                    'meta': {'links': {
-                                                                        'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:string',
-                                                                        'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:string/help',
-                                                                        'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {
-                                                                                                               'string': {
-                                                                                                                   'ID': 540526,
-                                                                                                                   'name': 'string',
-                                                                                                                   'slug': 'string',
-                                                                                                                   'description': '',
-                                                                                                                   'post_count': 1,
-                                                                                                                   'meta': {
-                                                                                                                       'links': {
-                                                                                                                           'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string',
-                                                                                                                           'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string/help',
-                                                                                                                           'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {
-                                                          'string': {'ID': 540526, 'name': 'string', 'slug': 'string',
-                                                                     'description': '', 'post_count': 1, 'meta': {
-                                                                  'links': {
-                                                                      'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string',
-                                                                      'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string/help',
-                                                                      'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'categories': {
-                                                          'string': {'ID': 540526, 'name': 'string', 'slug': 'string',
-                                                                     'description': '', 'post_count': 1, 'parent': 0,
-                                                                     'meta': {'links': {
-                                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:string',
-                                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:string/help',
-                                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '115', 'key': 'timeline_notification',
-                                                          'value': '1673435314'},
-                                                         {'id': '118', 'key': '_wpas_mess', 'value': 'string'}],
-                                                      'meta': {'links': {
-                                                          'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/17',
-                                                          'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/17/help',
-                                                          'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                          'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/17/replies/',
-                                                          'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/17/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 16, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-11T14:15:41+05:00',
-                                                      'modified': '2023-01-11T14:15:41+05:00', 'title': 'extra post',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/11/extra-post-5/',
-                                                      'short_URL': 'https://wp.me/petk36-g', 'content': '',
-                                                      'excerpt': '', 'slug': 'extra-post-5',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/11/extra-post-5/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': '8df6856f9047f31c83ce23d400b76254',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {}, 'categories': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '100', 'key': 'jabber_published',
-                                                          'value': '1673428542'}], 'meta': {'links': {
-                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/16',
-                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/16/help',
-                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                         'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/16/replies/',
-                                                         'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/16/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 15, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-11T14:14:54+05:00',
-                                                      'modified': '2023-01-11T14:14:54+05:00', 'title': 'extra post',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/11/extra-post-4/',
-                                                      'short_URL': 'https://wp.me/petk36-f', 'content': '',
-                                                      'excerpt': '', 'slug': 'extra-post-4',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/11/extra-post-4/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': '4c84677888994072e308747b48c93138',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {}, 'categories': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '90', 'key': 'jabber_published',
-                                                          'value': '1673428496'}], 'meta': {'links': {
-                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/15',
-                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/15/help',
-                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                         'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/15/replies/',
-                                                         'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/15/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 14, 'site_ID': '213857288',
+        responses = {'data': {'found': 10, 'posts': [{'ID': 14, 'site_ID': '213857288',
                                                       'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
                                                                  'email': False, 'name': 'Shoaib Amjad',
                                                                  'first_name': 'Shoaib', 'last_name': 'Amjad',
@@ -369,338 +134,45 @@ class WordpressPostsTestCase(APITestCase):
                                                       'featured_image': '', 'post_thumbnail': None,
                                                       'format': 'standard', 'geo': False, 'menu_order': 0,
                                                       'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
+                'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
+                                  'slug': 'uncategorized', 'description': '',
+                                  'post_count': 8, 'parent': 0, 'meta': {
+                        'links': {
+                            'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
+                            'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
+                            'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
+                'post_tag': {},
+                'post_format': {},
+                'mentions': {}},
                                                       'tags': {}, 'categories': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
+                'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
+                                  'slug': 'uncategorized', 'description': '',
+                                  'post_count': 8, 'parent': 0, 'meta': {
+                        'links': {
+                            'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
+                            'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
+                            'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
                                                       'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '80', 'key': 'jabber_published',
-                                                          'value': '1673428466'}], 'meta': {'links': {
-                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14',
-                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14/help',
-                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                         'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14/replies/',
-                                                         'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 13, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-11T14:13:48+05:00',
-                                                      'modified': '2023-01-11T14:13:48+05:00', 'title': 'extra post',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/11/extra-post-2/',
-                                                      'short_URL': 'https://wp.me/petk36-d', 'content': '',
-                                                      'excerpt': '', 'slug': 'extra-post-2',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/11/extra-post-2/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': '662d0fc19b651aa3afd1c545bfad067e',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {}, 'categories': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '70', 'key': 'jabber_published',
-                                                          'value': '1673428429'}], 'meta': {'links': {
-                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13',
-                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13/help',
-                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                         'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13/replies/',
-                                                         'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 12, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-11T14:12:51+05:00',
-                                                      'modified': '2023-01-11T14:12:51+05:00', 'title': 'extra post',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/11/extra-post/',
-                                                      'short_URL': 'https://wp.me/petk36-c', 'content': '',
-                                                      'excerpt': '', 'slug': 'extra-post',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/11/extra-post/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': '92b6b0bb3dcb51d181b47f83901bcb07',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {}, 'categories': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '60', 'key': 'jabber_published',
-                                                          'value': '1673428373'}], 'meta': {'links': {
-                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/12',
-                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/12/help',
-                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                         'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/12/replies/',
-                                                         'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/12/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 11, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-11T14:11:00+05:00',
-                                                      'modified': '2023-01-11T17:25:21+05:00', 'title': 'extra post',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/11/my-personal-post/',
-                                                      'short_URL': 'https://wp.me/petk36-b', 'content': '',
-                                                      'excerpt': '', 'slug': 'my-personal-post',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/11/my-personal-post/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': 'ac097acedaaafa4be16b0ebc636df2ee',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {}, 'categories': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '50', 'key': 'jabber_published',
-                                                          'value': '1673428261'}], 'meta': {'links': {
-                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/11',
-                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/11/help',
-                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                         'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/11/replies/',
-                                                         'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/11/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 7, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-03T19:04:28+05:00',
-                                                      'modified': '2023-01-03T19:04:28+05:00', 'title': 'Hello World',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/03/hello-world-2/',
-                                                      'short_URL': 'https://wp.me/petk36-7',
-                                                      'content': '<p>Hello. I am a test post. I was created by the API</p>\n',
-                                                      'excerpt': '<p>Hello. I am a test post. I was created by the API</p>\n',
-                                                      'slug': 'hello-world-2',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/02/hello-world-2/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': True, 'like_count': 1, 'i_like': True,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': '4fad9f0ab94f19440115368adc52fa7f',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'API': {'ID': 4276, 'name': 'API', 'slug': 'api',
-                                                                 'description': '', 'post_count': 1, 'parent': 0,
-                                                                 'meta': {'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:api',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:api/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {
-                                                                                                               'tests': {
-                                                                                                                   'ID': 2436,
-                                                                                                                   'name': 'tests',
-                                                                                                                   'slug': 'tests',
-                                                                                                                   'description': '',
-                                                                                                                   'post_count': 1,
-                                                                                                                   'meta': {
-                                                                                                                       'links': {
-                                                                                                                           'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests',
-                                                                                                                           'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests/help',
-                                                                                                                           'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {'tests': {'ID': 2436, 'name': 'tests', 'slug': 'tests',
-                                                                         'description': '', 'post_count': 1, 'meta': {
-                                                              'links': {
-                                                                  'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests',
-                                                                  'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests/help',
-                                                                  'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'categories': {'API': {'ID': 4276, 'name': 'API', 'slug': 'api',
-                                                                             'description': '', 'post_count': 1,
-                                                                             'parent': 0, 'meta': {'links': {
-                                                              'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:api',
-                                                              'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:api/help',
-                                                              'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '23', 'key': 'jabber_published', 'value': '1672656241'},
-                                                         {'id': '30', 'key': 'timeline_notification',
-                                                          'value': '1672754671'}], 'meta': {'links': {
-                                                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/7',
-                                                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/7/help',
-                                                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                         'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/7/replies/',
-                                                         'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/7/likes/'}},
-                                                      'capabilities': {'publish_post': True, 'delete_post': True,
-                                                                       'edit_post': True}, 'other_URLs': {}},
-                                                     {'ID': 3, 'site_ID': '213857288',
-                                                      'author': {'ID': 230036407, 'login': 'muhammadshoaibeacfc7849e',
-                                                                 'email': False, 'name': 'Shoaib Amjad',
-                                                                 'first_name': 'Shoaib', 'last_name': 'Amjad',
-                                                                 'nice_name': 'muhammadshoaibeacfc7849e',
-                                                                 'URL': 'http://dummy15.wordpress.com',
-                                                                 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
-                                                                 'profile_URL': 'https://en.gravatar.com/muhammadshoaibeacfc7849e',
-                                                                 'site_ID': 213857288},
-                                                      'date': '2023-01-02T07:30:04+00:00',
-                                                      'modified': '2023-01-02T07:30:04+00:00', 'title': 'Hello World!',
-                                                      'URL': 'https://dummy15.wordpress.com/2023/01/02/hello-world/',
-                                                      'short_URL': 'https://wp.me/petk36-3',
-                                                      'content': '\n<p>Welcome to WordPress! This is your first post. Edit or delete it to take the first step in your blogging journey.</p>\n',
-                                                      'excerpt': '<p>Welcome to WordPress! This is your first post. Edit or delete it to take the first step in your blogging journey.</p>\n',
-                                                      'slug': 'hello-world',
-                                                      'guid': 'https://dummy15.wordpress.com/2023/01/02/hello-world/',
-                                                      'status': 'publish', 'sticky': False, 'password': '',
-                                                      'parent': False, 'type': 'post',
-                                                      'discussion': {'comments_open': True, 'comment_status': 'open',
-                                                                     'pings_open': True, 'ping_status': 'open',
-                                                                     'comment_count': 0}, 'likes_enabled': True,
-                                                      'sharing_enabled': False, 'like_count': 0, 'i_like': False,
-                                                      'is_reblogged': False, 'is_following': True,
-                                                      'global_ID': 'c2cef63049efec26336a96386fb81dfe',
-                                                      'featured_image': '', 'post_thumbnail': None,
-                                                      'format': 'standard', 'geo': False, 'menu_order': 0,
-                                                      'page_template': '', 'publicize_URLs': [], 'terms': {'category': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                                                                           'post_tag': {},
-                                                                                                           'post_format': {},
-                                                                                                           'mentions': {}},
-                                                      'tags': {}, 'categories': {
-                                                         'Uncategorized': {'ID': 1, 'name': 'Uncategorized',
-                                                                           'slug': 'uncategorized', 'description': '',
-                                                                           'post_count': 8, 'parent': 0, 'meta': {
-                                                                 'links': {
-                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
-                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
-                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}},
-                                                      'attachments': {}, 'attachment_count': 0, 'metadata': [
-                                                         {'id': '11', 'key': 'sharing_disabled', 'value': [None]},
-                                                         {'id': '12', 'key': 'switch_like_status', 'value': [None]},
-                                                         {'id': '15', 'key': '_wpas_skip_all_services', 'value': '1'}],
-                                                      'meta': {'links': {
-                                                          'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/3',
-                                                          'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/3/help',
-                                                          'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
-                                                          'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/3/replies/',
-                                                          'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/3/likes/'}},
+                {'id': '80', 'key': 'jabber_published',
+                 'value': '1673428466'}], 'meta': {'links': {
+                'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14',
+                'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14/help',
+                'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
+                'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14/replies/',
+                'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14/likes/'}},
                                                       'capabilities': {'publish_post': True, 'delete_post': True,
                                                                        'edit_post': True}, 'other_URLs': {}}], 'meta': {
             'links': {'counts': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/post-counts/post'},
             'wpcom': True}}, 'status_code': 200, 'success': True}
         get_multiple_posts_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-get-multiple-post')
         response = self.client.get(url)
         self.assertEqual(responses['data']['found'], response.data['data']['found'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_multiple_posts_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_multiple_posts')
-    def test_get_multiple_posts_without_token(self, get_multiple_posts_mock):
-        response = None
-        get_multiple_posts_mock.return_value = response
+    def test_get_multiple_posts_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-get-multiple-post')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -730,8 +202,8 @@ class WordpressPostsTestCase(APITestCase):
                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}}, 'post_tag': {},
-                                                                                                    'post_format': {},
-                                                                                                    'mentions': {}},
+                'post_format': {},
+                'mentions': {}},
                               'tags': {}, 'categories': {
                 'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '',
                                   'post_count': 7, 'parent': 0, 'meta': {'links': {
@@ -748,7 +220,6 @@ class WordpressPostsTestCase(APITestCase):
                               'capabilities': {'publish_post': True, 'delete_post': True, 'edit_post': True},
                               'other_URLs': {}}, 'status_code': 200, 'success': True}
         edit_post_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse(f'wordpress_posts-edit-post', kwargs={'pk': 16})
         data = {
             "title": "editing in post",
@@ -756,17 +227,15 @@ class WordpressPostsTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        edit_post_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.edit_post')
-    def test_edit_post_without_token(self, edit_post_mock):
-        response = None
-        edit_post_mock.return_value = response
+    def test_edit_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse(f'wordpress_posts-edit-post', kwargs={'pk': 11})
         data = {
             "title": "extra post",
         }
         response = self.client.post(url, data, format='json')
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_single_post')
@@ -794,8 +263,8 @@ class WordpressPostsTestCase(APITestCase):
                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}}, 'post_tag': {},
-                                                                                                    'post_format': {},
-                                                                                                    'mentions': {}},
+                'post_format': {},
+                'mentions': {}},
                               'tags': {}, 'categories': {
                 'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '',
                                   'post_count': 7, 'parent': 0, 'meta': {'links': {
@@ -814,16 +283,14 @@ class WordpressPostsTestCase(APITestCase):
                                              'suggested_slug': 'my-personal-post__trashed'}}, 'status_code': 200,
                      'success': True}
         delete_single_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-delete-single-post', kwargs={"pk": 11})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        delete_single_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_single_post')
-    def test_delete_single_post_without_token(self, delete_single_mock):
-        response = None
-        delete_single_mock.return_value = response
+    def test_delete_single_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-delete-single-post', kwargs={"pk": 11})
         responses = self.client.post(url, format='json')
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
@@ -879,17 +346,15 @@ class WordpressPostsTestCase(APITestCase):
                                                                 'suggested_slug': 'extra-post-3__trashed'}}}},
                      'status_code': 200, 'success': True}
         delete_multiple_post_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-delete-multiple-post')
         data = {"post_ids": [14]}
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['results']['14'], response.data['data']['results']['14'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        delete_multiple_post_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_multiple_post')
-    def test_delete_multiple_post_without_token(self, delete_multiple_post_mock):
-        response = None
-        delete_multiple_post_mock.return_value = response
+    def test_delete_multiple_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-delete-multiple-post')
         data = {"post_ids": [14]}
         responses = self.client.post(url, data, format='json')
@@ -920,8 +385,8 @@ class WordpressPostsTestCase(APITestCase):
                         'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
                         'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
                         'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}}, 'post_tag': {},
-                                                                                                    'post_format': {},
-                                                                                                    'mentions': {}},
+                'post_format': {},
+                'mentions': {}},
                               'tags': {}, 'categories': {
                 'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '',
                                   'post_count': 6, 'parent': 0, 'meta': {'links': {
@@ -939,16 +404,14 @@ class WordpressPostsTestCase(APITestCase):
                               'other_URLs': {'permalink_URL': 'https://dummy15.wordpress.com/2023/01/11/%postname%/',
                                              'suggested_slug': 'extra-post-3'}}, 'status_code': 200, 'success': True}
         restore_post_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-restore-post', kwargs={"pk": 14})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        restore_post_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.restore_post')
-    def test_restore_post_without_token(self, restore_post_mock):
-        response = None
-        restore_post_mock.return_value = response
+    def test_restore_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-restore-post', kwargs={"pk": 14})
         responses = self.client.post(url, format='json')
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
@@ -968,16 +431,14 @@ class WordpressPostsTestCase(APITestCase):
                                         'ip_address': False, 'site_ID': 213857288, 'site_visible': True,
                                         'default_avatar': True}}, 'status_code': 200, 'success': True}
         like_post_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-like-post', kwargs={"pk": 14})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['site_ID'], response.data['data']['site_ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        like_post_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.like_post')
-    def test_like_post_without_token(self, like_post_mock):
-        response = None
-        like_post_mock.return_value = response
+    def test_like_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-like-post', kwargs={"pk": 14})
         responses = self.client.post(url, format='json')
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
@@ -997,16 +458,14 @@ class WordpressPostsTestCase(APITestCase):
                                         'ip_address': False, 'site_ID': 213857288, 'site_visible': True,
                                         'default_avatar': True}}, 'status_code': 200, 'success': True}
         unlike_post_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-unlike-post', kwargs={"pk": 14})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['site_ID'], response.data['data']['site_ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        unlike_post_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.unlike_post')
-    def test_unlike_post_without_token(self, unlike_post_mock):
-        response = None
-        unlike_post_mock.return_value = response
+    def test_unlike_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-unlike-post', kwargs={"pk": 14})
         responses = self.client.post(url, format='json')
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
@@ -1020,17 +479,14 @@ class WordpressPostsTestCase(APITestCase):
                       'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/14/subscribers/help'}}},
                      'status_code': 200, 'success': True}
         get_list_of_post_subscribers_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-get-list-of-post-subscribers', kwargs={"pk": 14})
         response = self.client.get(url)
         self.assertEqual(responses['data']['subscriptions'], response.data['data']['subscriptions'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_list_of_post_subscribers_mock.assert_called_once()
 
-    @mock.patch(
-        'modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_post_subscribers')
-    def test_get_list_of_post_subscribers_without_token(self, get_list_of_post_subscribers_mock):
-        response = None
-        get_list_of_post_subscribers_mock.return_value = response
+    def test_get_list_of_post_subscribers_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-get-list-of-post-subscribers', kwargs={"pk": 14})
         responses = self.client.get(url)
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
@@ -1041,16 +497,14 @@ class WordpressPostsTestCase(APITestCase):
             'data': {'found': 0, 'i_like': False, 'can_like': True, 'site_ID': 213857288, 'post_ID': 14, 'likes': []},
             'status_code': 200, 'success': True}
         get_list_of_likes_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_posts-get-list-of-likes', kwargs={"pk": 14})
         response = self.client.get(url)
         self.assertEqual(responses['data']['found'], response.data['data']['found'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_list_of_likes_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_likes')
-    def test_get_list_of_likes_without_token(self, get_list_of_likes_mock):
-        response = None
-        get_list_of_likes_mock.return_value = response
+    def test_get_list_of_likes_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_posts-get-list-of-likes', kwargs={"pk": 14})
         responses = self.client.get(url)
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
@@ -1059,6 +513,7 @@ class WordpressPostsTestCase(APITestCase):
 class WordpressUsersTestCase(APITestCase):
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_multiple_users')
     def test_get_multiple_users(self, get_multiple_users_mock):
@@ -1071,24 +526,20 @@ class WordpressUsersTestCase(APITestCase):
              'site_visible': True, 'roles': ['administrator'], 'is_super_admin': False}]}, 'status_code': 200,
                      'success': True}
         get_multiple_users_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_users-get-multiple-users')
         response = self.client.get(url)
         self.assertEqual(responses['data']['found'], response.data['data']['found'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_multiple_users_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_multiple_users')
-    def test_get_multiple_users_without_token(self, get_multiple_users_mock):
-        response = None
-        get_multiple_users_mock.return_value = response
+    def test_get_multiple_users_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_users-get-multiple-users')
         responses = self.client.get(url)
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.update_user_details')
-    def test_update_user_details_without_token(self, update_user_details_mock):
-        response = None
-        update_user_details_mock.return_value = response
+    def test_update_user_details_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_users-update-user-details', kwargs={"pk": 1323})
         data = {
             "first_name": "Muhammad",
@@ -1097,10 +548,8 @@ class WordpressUsersTestCase(APITestCase):
         responses = self.client.post(url, data, format="json")
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_user')
-    def test_delete_user_without_token(self, delete_user_mock):
-        response = None
-        delete_user_mock.return_value = response
+    def test_delete_user_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_users-delete-user', kwargs={"pk": 12333})
         responses = self.client.post(url, format="json")
         self.assertEqual(responses.status_code, status.HTTP_404_NOT_FOUND)
@@ -1109,6 +558,7 @@ class WordpressUsersTestCase(APITestCase):
 class WordpressSitesTestCase(APITestCase):
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch(
         'modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_rendered_shortcode_for_site')
@@ -1117,7 +567,6 @@ class WordpressSitesTestCase(APITestCase):
             'data': {'shortcode': '[[gallery ids="729,732,731,720"]]', 'result': '[gallery ids="729,732,731,720"]'},
             'status_code': 200, 'success': True}
         get_rendered_shortcode_for_site_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_sites-get-rendered-shortcode-for-site')
         params = {
             "shortcode": "[%5Bgallery%20ids%3D%22729%2C732%2C731%2C720%22%5D]"
@@ -1125,12 +574,10 @@ class WordpressSitesTestCase(APITestCase):
         response = self.client.get(url, **params, format='json')
         self.assertEqual(responses['data']['shortcode'], response.data['data']['shortcode'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_rendered_shortcode_for_site_mock.assert_called_once()
 
-    @mock.patch(
-        'modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_rendered_shortcode_for_site')
-    def test_get_rendered_shortcode_for_site_without_token(self, get_rendered_shortcode_for_site_mock):
-        response = None
-        get_rendered_shortcode_for_site_mock.return_value = response
+    def test_get_rendered_shortcode_for_site_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_sites-get-rendered-shortcode-for-site')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1146,17 +593,14 @@ class WordpressSitesTestCase(APITestCase):
             {'id': 'text-1', 'id_base': 'text', 'settings': {'title': '', 'text': '', 'filter': False},
              'sidebar': 'sidebar-2', 'position': 2}]}, 'status_code': 200, 'success': True}
         get_active_inactive_widgets_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_sites-get-active-inactive-widgets')
         response = self.client.get(url, format='json')
         self.assertEqual(responses['data']['widgets'], response.data['data']['widgets'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_active_inactive_widgets_mock.assert_called_once()
 
-    @mock.patch(
-        'modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_active_inactive_widgets')
-    def test_get_active_inactive_widgets_without_token(self, get_active_inactive_widgets_mock):
-        response = None
-        get_active_inactive_widgets_mock.return_value = response
+    def test_get_active_inactive_widgets_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_sites-get-active-inactive-widgets')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1166,7 +610,6 @@ class WordpressSitesTestCase(APITestCase):
         responses = {'data': {'id': 'text-4', 'id_base': 'text', 'settings': {'title': '', 'text': '', 'filter': False},
                               'sidebar': 'sidebar-2', 'position': 3}, 'status_code': 200, 'success': True}
         activate_widget_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_sites-activate-widget')
         data = {
             "id_base": "text",
@@ -1176,11 +619,10 @@ class WordpressSitesTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['id'], response.data['data']['id'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        activate_widget_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.activate_widget')
-    def test_activate_widget_without_token(self, activate_widget_mock):
-        response = None
-        activate_widget_mock.return_value = response
+    def test_activate_widget_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_sites-activate-widget')
         data = {
             "id_base": "text",
@@ -1195,16 +637,14 @@ class WordpressSitesTestCase(APITestCase):
         responses = {'data': {'id': 'text-6', 'id_base': 'text', 'settings': {'title': '', 'text': '', 'filter': False},
                               'sidebar': 'wp_inactive_widgets', 'position': 0}, 'status_code': 200, 'success': True}
         deactivate_widget_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_sites-deactivate-widget', kwargs={"pk": "text-5"})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['id'], response.data['data']['id'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        deactivate_widget_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.deactivate_widget')
-    def test_deactivate_widget_without_token(self, deactivate_widget_mock):
-        response = None
-        deactivate_widget_mock.return_value = response
+    def test_deactivate_widget_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_sites-deactivate-widget', kwargs={"pk": "text-5"})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1213,6 +653,7 @@ class WordpressSitesTestCase(APITestCase):
 class WordpressCommentsTestCase(APITestCase):
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_comment_on_post')
     def test_create_comment_on_post(self, create_comment_on_post_mock):
@@ -1237,17 +678,15 @@ class WordpressCommentsTestCase(APITestCase):
                                  'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/2/likes/'}},
                              'can_moderate': True, 'i_replied': False}, 'status_code': 200, 'success': True}
         create_comment_on_post_mock.return_value = response
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_comments-create-comment-on-post', kwargs={"pk": 13})
         data = {"content": "i dont like this post"}
         Response = self.client.post(url, data, format='json')
         self.assertEqual(response['data']['ID'], Response.data['data']['ID'])
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        create_comment_on_post_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_comment_on_post')
-    def test_create_comment_on_post_without_token(self, create_comment_on_post_mock):
-        response = None
-        create_comment_on_post_mock.return_value = response
+    def test_create_comment_on_post_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_comments-create-comment-on-post', kwargs={"pk": 13})
         data = {"content": "i dont like this post"}
         response = self.client.post(url, data, format='json')
@@ -1276,24 +715,20 @@ class WordpressCommentsTestCase(APITestCase):
                                  'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/2/likes/'}},
                              'can_moderate': True, 'i_replied': False}, 'status_code': 200, 'success': True}
         get_single_comment_mock.return_value = response
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_comments-get-single-comment', kwargs={"pk": 2})
         self.Response = self.client.get(url)
         self.assertEqual(response['data']['ID'], self.Response.data['data']['ID'])
         self.assertEqual(self.Response.status_code, status.HTTP_200_OK)
+        get_single_comment_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_single_comment')
-    def test_get_single_comment_without_token(self, get_single_comment_mock):
-        response = None
-        get_single_comment_mock.return_value = response
+    def test_get_single_comment_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_comments-get-single-comment', kwargs={"pk": 2})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.edit_comment')
-    def test_edit_comment(self, edit_comment_mock):
-        response = None
-        edit_comment_mock.return_value = response
+    def test_edit_comment(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_comments-edit-comment', kwargs={"pk": 2})
         data = {"content": "Sorry I dont like post"}
         response = self.client.post(url, data, format='json')
@@ -1301,54 +736,76 @@ class WordpressCommentsTestCase(APITestCase):
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_comment')
     def test_delete_comment(self, delete_comment_mock):
-        responses = {'data': {'ID': 1, 'post': {'ID': 13, 'title': 'extra post', 'type': 'post', 'link': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13'}, 'author': {'ID': 230036407, 'login': '', 'email': 'muhammad.shoaib@crowdbotics.com', 'name': 'Shoaib Amjad', 'first_name': '', 'last_name': '', 'nice_name': '', 'URL': 'http://dummy15.wordpress.com', 'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/8e49bfafb5fbca11b982d26c4801a8a0', 'ip_address': '39.53.74.22'}, 'date': '2023-01-12T15:50:21+05:00', 'URL': 'https://dummy15.wordpress.com/2023/01/11/extra-post-2/comment-page-1/#comment-1', 'short_URL': 'https://wp.me/petk36-d%23comment-1', 'content': '<p>nice post</p>\n', 'raw_content': 'nice post', 'status': 'trash', 'parent': False, 'type': 'comment', 'like_count': 0, 'i_like': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288', 'post': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/likes/'}}, 'can_moderate': True, 'i_replied': False}, 'status_code': 200, 'success': True}
+        responses = {'data': {'ID': 1, 'post': {'ID': 13, 'title': 'extra post', 'type': 'post',
+                                                'link': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13'},
+                              'author': {'ID': 230036407, 'login': '', 'email': 'muhammad.shoaib@crowdbotics.com',
+                                         'name': 'Shoaib Amjad', 'first_name': '', 'last_name': '', 'nice_name': '',
+                                         'URL': 'http://dummy15.wordpress.com',
+                                         'avatar_URL': 'https://2.gravatar.com/avatar/8e49bfafb5fbca11b982d26c4801a8a0?s=96&d=identicon&r=G',
+                                         'profile_URL': 'https://en.gravatar.com/8e49bfafb5fbca11b982d26c4801a8a0',
+                                         'ip_address': '39.53.74.22'}, 'date': '2023-01-12T15:50:21+05:00',
+                              'URL': 'https://dummy15.wordpress.com/2023/01/11/extra-post-2/comment-page-1/#comment-1',
+                              'short_URL': 'https://wp.me/petk36-d%23comment-1', 'content': '<p>nice post</p>\n',
+                              'raw_content': 'nice post', 'status': 'trash', 'parent': False, 'type': 'comment',
+                              'like_count': 0, 'i_like': False, 'meta': {
+                'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1',
+                          'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/help',
+                          'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
+                          'post': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13',
+                          'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/replies/',
+                          'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/likes/'}},
+                              'can_moderate': True, 'i_replied': False}, 'status_code': 200, 'success': True}
         delete_comment_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_comments-delete-comment', kwargs={"pk": 1})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        delete_comment_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_comment')
-    def test_delete_comment_without_token(self, delete_comment_mock):
-        responses = None
-        delete_comment_mock.result_value = responses
+    def test_delete_comment_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_comments-delete-comment', kwargs={"pk": 2})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.like_comment')
     def test_like_comment(self, like_comment_mock):
-        responses = {'data': {'success': True, 'i_like': True, 'like_count': 1, 'meta': {'links': {'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/likes/new/help', 'post': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13', 'comment': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200, 'success': True}
+        responses = {'data': {'success': True, 'i_like': True, 'like_count': 1, 'meta': {
+            'links': {'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/likes/new/help',
+                      'post': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13',
+                      'comment': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1',
+                      'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200,
+                     'success': True}
         like_comment_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_comments-like-comment', kwargs={"pk": 1})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['like_count'], response.data['data']['like_count'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        like_comment_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.like_comment')
-    def test_like_comment_without_token(self, like_comment_mock):
-        responses = None
-        like_comment_mock.return_value = responses
+    def test_like_comment_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_comments-like-comment', kwargs={"pk": 1})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.unlike_comment')
     def test_unlike_comment(self, unlike_comment_mock):
-        responses = {'data': {'success': True, 'i_like': False, 'like_count': 0, 'meta': {'links': {'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/likes/mine/delete/help', 'post': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13', 'comment': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200, 'success': True}
+        responses = {'data': {'success': True, 'i_like': False, 'like_count': 0, 'meta': {'links': {
+            'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1/likes/mine/delete/help',
+            'post': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/13',
+            'comment': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/comments/1',
+            'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200,
+                     'success': True}
         unlike_comment_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_comments-unlike-comment', kwargs={"pk": 1})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['like_count'], response.data['data']['like_count'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        unlike_comment_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.unlike_comment')
-    def test_unlike_comment_without_token(self, unlike_comment_mock):
-        responses = None
-        unlike_comment_mock.return_value = responses
+    def test_unlike_comment_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_comments-unlike-comment', kwargs={"pk": 1})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1358,30 +815,42 @@ class WordpressTaxonomyTestCase(APITestCase):
 
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
-
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_site_categories')
-    def test_get_list_of_site_categories(self, get_list_of_site_categories_mock):
-        responses = {'data': {'found': 3, 'categories': [{'ID': 4276, 'name': 'API', 'slug': 'api', 'description': '', 'post_count': 1, 'feed_url': 'https://dummy15.wordpress.com/category/api/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:api', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:api/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, {'ID': 540526, 'name': 'string', 'slug': 'string', 'description': '', 'post_count': 1, 'feed_url': 'https://dummy15.wordpress.com/category/string/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:string', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:string/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '', 'post_count': 6, 'feed_url': 'https://dummy15.wordpress.com/category/uncategorized/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}]}, 'status_code': 200, 'success': True}
-        get_list_of_site_categories_mock.return_value = responses
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+
+    @mock.patch(
+        'modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_site_categories')
+    def test_get_list_of_site_categories(self, get_list_of_site_categories_mock):
+        responses = {'data': {'found': 3, 'categories': [
+            {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '', 'post_count': 6,
+             'feed_url': 'https://dummy15.wordpress.com/category/uncategorized/feed/', 'parent': 0, 'meta': {'links': {
+                'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized',
+                'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:uncategorized/help',
+                'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}]}, 'status_code': 200,
+                     'success': True}
+        get_list_of_site_categories_mock.return_value = responses
         url = reverse('wordpress_taxonomy-get-list-of-site-categories')
         response = self.client.get(url)
         self.assertEqual(responses['data']['categories'], response.data['data']['categories'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_list_of_site_categories_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_site_categories')
-    def test_get_list_of_site_categories_without_token(self, get_list_of_site_categories_mock):
-        responses = None
-        get_list_of_site_categories_mock.return_value = responses
+    def test_get_list_of_site_categories_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-get-list-of-site-categories')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_category')
     def test_create_category(self, create_category_mock):
-        responses = {'data': {'ID': 75388, 'name': 'my category', 'slug': 'my-category', 'description': 'for posting app', 'post_count': 0, 'feed_url': 'https://dummy15.wordpress.com/category/api/my-category/feed/', 'parent': 4276, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-category', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-category/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200, 'success': True}
+        responses = {
+            'data': {'ID': 75388, 'name': 'my category', 'slug': 'my-category', 'description': 'for posting app',
+                     'post_count': 0, 'feed_url': 'https://dummy15.wordpress.com/category/api/my-category/feed/',
+                     'parent': 4276, 'meta': {'links': {
+                    'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-category',
+                    'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-category/help',
+                    'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200,
+            'success': True}
         create_category_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_taxonomy-create-category')
         data = {
             "name": "my category",
@@ -1391,20 +860,25 @@ class WordpressTaxonomyTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        create_category_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_category')
-    def test_create_category_without_token(self, create_category_mock):
-        responses = None
-        create_category_mock.return_value = responses
+    def test_create_category_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-create-category')
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.edit_category')
     def test_edit_category(self, edit_category_mock):
-        responses = {'data': {'ID': 4308839, 'name': 'my new category', 'slug': 'my-new-category', 'description': 'for app only ', 'post_count': 0, 'feed_url': 'https://dummy15.wordpress.com/category/api/my-new-category/feed/', 'parent': 4276, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-new-category', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-new-category/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200, 'success': True}
+        responses = {'data': {'ID': 4308839, 'name': 'my new category', 'slug': 'my-new-category',
+                              'description': 'for app only ', 'post_count': 0,
+                              'feed_url': 'https://dummy15.wordpress.com/category/api/my-new-category/feed/',
+                              'parent': 4276, 'meta': {'links': {
+                'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-new-category',
+                'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/categories/slug:my-new-category/help',
+                'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200,
+                     'success': True}
         edit_category_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_taxonomy-edit-category', kwargs={"pk": 'my-category'})
         data = {
             "name": "my new category",
@@ -1414,11 +888,10 @@ class WordpressTaxonomyTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        edit_category_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.edit_category')
-    def test_edit_category_without_token(self, edit_category_mock):
-        responses = None
-        edit_category_mock.return_value = responses
+    def test_edit_category_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-edit-category', kwargs={"pk": 'my-category'})
         data = {
             "name": "my new category",
@@ -1432,43 +905,55 @@ class WordpressTaxonomyTestCase(APITestCase):
     def test_delete_category(self, delete_category_mock):
         responses = {'data': {'slug': 'my-new-category', 'success': 'true'}, 'status_code': 200, 'success': True}
         delete_category_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_taxonomy-delete-category', kwargs={"pk": "my-new-category"})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['slug'], response.data['data']['slug'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        delete_category_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_category')
-    def test_delete_category_without_token(self, delete_category_mock):
-        responses = None
-        delete_category_mock.return_value = responses
+    def test_delete_category_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-delete-category', kwargs={"pk": "my-new-category"})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_site_tags')
     def test_get_list_of_site_tags(self, get_list_of_site_tags_mock):
-        responses = {'data': {'found': 2, 'tags': [{'ID': 540526, 'name': 'string', 'slug': 'string', 'description': '', 'post_count': 1, 'feed_url': 'https://dummy15.wordpress.com/tag/string/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, {'ID': 2436, 'name': 'tests', 'slug': 'tests', 'description': '', 'post_count': 1, 'feed_url': 'https://dummy15.wordpress.com/tag/tests/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}]}, 'status_code': 200, 'success': True}
+        responses = {'data': {'found': 2, 'tags': [
+            {'ID': 540526, 'name': 'string', 'slug': 'string', 'description': '', 'post_count': 1,
+             'feed_url': 'https://dummy15.wordpress.com/tag/string/feed/', 'meta': {
+                'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string',
+                          'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:string/help',
+                          'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}},
+            {'ID': 2436, 'name': 'tests', 'slug': 'tests', 'description': '', 'post_count': 1,
+             'feed_url': 'https://dummy15.wordpress.com/tag/tests/feed/', 'meta': {
+                'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests',
+                          'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:tests/help',
+                          'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}]}, 'status_code': 200,
+                     'success': True}
         get_list_of_site_tags_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_taxonomy-get-list-of-site-tags')
         response = self.client.get(url)
         self.assertEqual(responses['data']['tags'], response.data['data']['tags'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_list_of_site_tags_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_site_tags')
-    def test_get_list_of_site_tags_without_token(self, get_list_of_site_tags_mock):
-        responses = None
-        get_list_of_site_tags_mock.return_value = responses
+    def test_get_list_of_site_tags_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-get-list-of-site-tags')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_tag')
     def test_create_tag(self, create_tag_mock):
-        responses = {'data': {'ID': 21715410, 'name': 'my new tag', 'slug': 'my-new-tag', 'description': 'for app only ', 'post_count': 0, 'feed_url': 'https://dummy15.wordpress.com/tag/my-new-tag/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-new-tag', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-new-tag/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200, 'success': True}
+        responses = {
+            'data': {'ID': 21715410, 'name': 'my new tag', 'slug': 'my-new-tag', 'description': 'for app only ',
+                     'post_count': 0, 'feed_url': 'https://dummy15.wordpress.com/tag/my-new-tag/feed/', 'meta': {
+                    'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-new-tag',
+                              'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-new-tag/help',
+                              'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}},
+            'status_code': 200, 'success': True}
         create_tag_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_taxonomy-create-tag')
         data = {
             "name": "my new tag",
@@ -1477,11 +962,10 @@ class WordpressTaxonomyTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        create_tag_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_tag')
-    def test_create_tag_without_token(self, create_tag_mock):
-        responses = None
-        create_tag_mock.return_value = responses
+    def test_create_tag_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-create-tag')
         data = {
             "name": "my new tag",
@@ -1492,9 +976,15 @@ class WordpressTaxonomyTestCase(APITestCase):
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.edit_tag')
     def test_edit_tag(self, edit_tag_mock):
-        responses = {'data': {'ID': 758797164, 'name': 'my newest tag', 'slug': 'my-newest-tag', 'description': 'private', 'post_count': 0, 'feed_url': 'https://dummy15.wordpress.com/tag/my-newest-tag/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-newest-tag', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-newest-tag/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200, 'success': True}
+        responses = {
+            'data': {'ID': 758797164, 'name': 'my newest tag', 'slug': 'my-newest-tag', 'description': 'private',
+                     'post_count': 0, 'feed_url': 'https://dummy15.wordpress.com/tag/my-newest-tag/feed/', 'meta': {
+                    'links': {
+                        'self': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-newest-tag',
+                        'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/tags/slug:my-newest-tag/help',
+                        'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288'}}}, 'status_code': 200,
+            'success': True}
         edit_tag_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_taxonomy-edit-tag', kwargs={"pk": "my-new-tag"})
         data = {
             "name": "my newest tag",
@@ -1503,11 +993,10 @@ class WordpressTaxonomyTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['ID'], response.data['data']['ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        edit_tag_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.edit_tag')
-    def test_edit_tag_without_token(self, edit_tag_mock):
-        responses = None
-        edit_tag_mock.return_value = responses
+    def test_edit_tag_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-edit-tag', kwargs={"pk": "my-new-tag"})
         data = {
             "name": "my newest tag",
@@ -1520,16 +1009,14 @@ class WordpressTaxonomyTestCase(APITestCase):
     def test_delete_tag(self, delete_tag_mock):
         responses = {'data': {'slug': 'my-newest-tag', 'success': 'true'}, 'status_code': 200, 'success': True}
         delete_tag_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_taxonomy-delete-tag', kwargs={"pk": "my-newest-tag"})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['slug'], response.data['data']['slug'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        delete_tag_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_tag')
-    def test_delete_tag_without_token(self, delete_tag_mock):
-        responses = None
-        delete_tag_mock.return_value = responses
+    def test_delete_tag_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_taxonomy-delete-tag', kwargs={"pk": "my-newest-tag"})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1539,39 +1026,44 @@ class WordpressFollowTestCase(APITestCase):
 
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.follow_blog')
-    def test_follow_blog(self, unfollow_blog_mock):
-        responses = {'data': {'success': True, 'is_following': True, 'meta': {'links': {'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/follows/new/help', 'posts': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/'}}}, 'status_code': 200, 'success': True}
-        unfollow_blog_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+    def test_follow_blog(self, follow_blog_mock):
+        responses = {'data': {'success': True, 'is_following': True, 'meta': {
+            'links': {'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
+                      'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/follows/new/help',
+                      'posts': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/'}}},
+                     'status_code': 200, 'success': True}
+        follow_blog_mock.return_value = responses
         url = reverse('wordpress_follow-follow-blog')
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['is_following'], response.data['data']['is_following'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        follow_blog_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.follow_blog')
-    def test_follow_blog_without_token(self, follow_blog_mock):
-        responses = None
-        follow_blog_mock.return_value = responses
+    def test_follow_blog_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_follow-follow-blog')
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.unfollow_blog')
     def test_unfollow_blog(self, unfollow_blog_mock):
-        responses = {'data': {'success': True, 'is_following': False, 'meta': {'links': {'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/follows/mine/delete/help', 'posts': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/'}}}, 'status_code': 200, 'success': True}
+        responses = {'data': {'success': True, 'is_following': False, 'meta': {
+            'links': {'site': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288',
+                      'help': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/follows/mine/delete/help',
+                      'posts': 'https://public-api.wordpress.com/rest/v1.1/sites/213857288/posts/'}}},
+                     'status_code': 200, 'success': True}
         unfollow_blog_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_follow-unfollow-blog')
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['is_following'], response.data['data']['is_following'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        unfollow_blog_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.unfollow_blog')
-    def test_unfollow_blog_without_token(self, unfollow_blog_mock):
-        responses = None
-        unfollow_blog_mock.return_value = responses
+    def test_unfollow_blog_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_follow-unfollow-blog')
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1581,21 +1073,117 @@ class WordpressFreshlyPressedTestCase(APITestCase):
 
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
-
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_freshly_pressed_posts')
-    def test_get_freshly_pressed_posts(self, get_freshly_pressed_posts_mock):
-        responses = {'data': {'date_range': {'newest': '2016-07-28T16:36:46+00:00', 'oldest': '2015-11-19T16:02:02+00:00'}, 'number': 9, 'posts': [{'ID': 374, 'site_ID': 410409, 'author': {'ID': 414919, 'login': 'ramaarya', 'email': False, 'name': 'Rama Arya', 'first_name': 'Rama', 'last_name': 'Arya', 'nice_name': 'ramaarya', 'URL': 'https://ramaarya.blog', 'avatar_URL': 'https://2.gravatar.com/avatar/b383038b0b90aa74152f11201a4f1331?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/ramaarya', 'ip_address': False, 'site_ID': 410409, 'site_visible': True}, 'date': '2014-03-29T17:50:30+00:00', 'modified': '2018-07-24T22:24:02+05:30', 'title': 'photo essay: the hidden graffiti of bandra', 'URL': 'http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/', 'short_URL': 'https://wp.me/p1ILv-62', 'content': '<p><img data-attachment-id="14736" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/nagranalane_graffiti1-2/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;5.6&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396088011&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;29&quot;,&quot;iso&quot;:&quot;100&quot;,&quot;shutter_speed&quot;:&quot;0.02&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="nagranalane_graffiti1" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg?w=480" class="alignnone size-full wp-image-14736" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>The contemplating sage at\xa0Nagrana Lane</strong></p>\n<p>I moved to Bombay, sorry Mumbai, this February. And I chose <strong><a href="http://en.wikipedia.org/wiki/Bandra" target="_blank" rel="noopener">Bandra</a></strong> as my home. It was one of those ‘destined’ moves as I like to term it. 🙂</p>\n<p>Bandra grows on you. It slowly becomes the center of your life, and you start believing that there is no other world outside of it; an aberration one slowly and gleefully slips into.</p>\n<p>When people ask me what is it like to live in Bandra, my answer, with a grin, is everyone walks in slippers, takes rickshaws, eats breakfast for dinner at Good Luck Cafe &#8211; an Iranian restaurant &#8211; for 110 rupees, prays at <a href="http://www.mountmarybasilicabandra.in/" target="_blank" rel="noopener"><strong>Mount\xa0Mary’s</strong></a>, meets at Bandstand, Mehboob Studio is the landmark for everything, and you have Shahrukh, Salman, Rekha, Farhan Akhtar, John Abraham, etc. etc. living down the road. It is towering high rises, charming Koli and East Indian villages, and centuries old churches, juxtaposed next to each other in quaint harmony.</p>\n<p>Bandra’s bent towards juxtaposition can\xa0perhaps be surmised as the very core\xa0of its reputation as a culturally and artistically ‘open’ minded suburb, which often blatantly, and at other times in subtle undertones, gets expressed. A classic example of the latter being its graffiti decorated walls that have been written much about. Google Bandra + Graffiti, and you will know what I mean. They are works of art in their own right created\xa0by National Institute of Design students and aspiring artists.</p>\n<p>But there are works you will not find on Google. As I walked back from St Peter’s Church on Hill Road this morning, powerful unabashed statements on gender issues met my eye. A street vendor selling keys, seeing my excitement, suggested I take the tiny side lane, Nagrana Lane, by the bus stop further down. “There is much more there. You will like it!” I didn&#8217;t just like it. I was smitten. Bandra was turning its magic on me, a bit more.</p>\n<p><em><strong>Graffiti essay: Tackling gender inequality on Hill Road<br />\n</strong></em>Executed by Population First as part of their <a href="http://www.laadli.org/about_laadli.html" target="_blank" rel="noopener"><strong>Laadli campaign</strong></a> against sex selection and the falling sex ratio in India.<br />\n<img data-attachment-id="14732" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/hillroad_graffiti1/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;6.3&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396087341&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;21&quot;,&quot;iso&quot;:&quot;100&quot;,&quot;shutter_speed&quot;:&quot;0.025&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="hillroad_graffiti1" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg?w=480" class="alignnone size-full wp-image-14732" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>Ms. Humpty Dumpty had a great fall</strong></p>\n<p><img data-attachment-id="14733" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/hillroad_graffiti2/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;6.3&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396087382&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;28&quot;,&quot;iso&quot;:&quot;100&quot;,&quot;shutter_speed&quot;:&quot;0.02&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="hillroad_graffiti2" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg?w=480" class="alignnone size-full wp-image-14733" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>Gender inequality: The unheard voice</strong></p>\n<p><img data-attachment-id="14734" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/hillroad_graffiti3-2/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;5.6&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396087450&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;21&quot;,&quot;iso&quot;:&quot;160&quot;,&quot;shutter_speed&quot;:&quot;0.025&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="hillroad_graffiti3" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg?w=480" class="alignnone size-full wp-image-14734" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>The multitasking woman\xa0=\xa0X</strong></p>\n<p><img data-attachment-id="14735" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/hillroad_graffiti4/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;5.6&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396087420&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;18&quot;,&quot;iso&quot;:&quot;125&quot;,&quot;shutter_speed&quot;:&quot;0.033333333333333&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="hillroad_graffiti4" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg?w=480" class="alignnone size-full wp-image-14735" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>My favorite&#8230; Bharat pita ki jai</strong></p>\n<p><em><strong>Graffiti essay: Modernism\xa0at\xa0Nagrana Lane<br />\n</strong></em>The street art in Nagrana Lane is the creative expression of\xa0Harshvardhan Kadam painting under the pseudonym\xa0<a href="http://www.inkbrushnme.com/" target="_blank" rel="noopener"><strong>Ink Brush N Me</strong></a>.<br />\n<img data-attachment-id="14737" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/nagranalane_graffiti2-2/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;7.1&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396088221&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;18&quot;,&quot;iso&quot;:&quot;100&quot;,&quot;shutter_speed&quot;:&quot;0.02&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="nagranalane_graffiti2" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg?w=480" class="alignnone size-full wp-image-14737" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>A walk through art</strong></p>\n<p><img data-attachment-id="14738" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/nagranalane_graffiti3-2/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;6.3&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396088036&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;25&quot;,&quot;iso&quot;:&quot;100&quot;,&quot;shutter_speed&quot;:&quot;0.02&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="nagranalane_graffiti3" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg?w=480" class="alignnone size-full wp-image-14738" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>Ink brush n me</strong></p>\n<p><img data-attachment-id="14739" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/nagranalane_graffiti4-2/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="nagranalane_graffiti4" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg?w=480" class="alignnone size-full wp-image-14739" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>Left: Detail,\xa0&#8216;Fuck Bollywood&#8217;; Right: Woman at the white window</strong></p>\n<p><img data-attachment-id="14740" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/nagranalane_graffiti5-2/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;6.3&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396088132&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;55&quot;,&quot;iso&quot;:&quot;100&quot;,&quot;shutter_speed&quot;:&quot;0.01&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="nagranalane_graffiti5" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg?w=480" class="alignnone size-full wp-image-14740" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /><br />\n<strong>Flaming\xa0locks and the hijab</strong></p>\n<p><em><strong>Graffiti period: Steps of Bomanjee, circa 1879</strong></em><br />\n<img data-attachment-id="14731" data-permalink="http://ramaarya.blog/2014/03/29/photo-essay-the-hidden-graffiti-of-bandra/bomanjeesteps_1/" data-orig-file="https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg" data-orig-size="584,389" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;6.3&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;Canon EOS 600D&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1396089941&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;55&quot;,&quot;iso&quot;:&quot;100&quot;,&quot;shutter_speed&quot;:&quot;0.01&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="bomanjeesteps_1" data-image-description="" data-image-caption="" data-medium-file="https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg?w=300" data-large-file="https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg?w=480" class="alignnone size-full wp-image-14731" style="margin:0;border:0 none;" src="https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg?w=480" alt="" srcset="https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg?w=480 480w, https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg?w=150 150w, https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg?w=300 300w, https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg 584w" sizes="(max-width: 480px) 100vw, 480px"   /></p>\n', 'excerpt': '<p>The contemplating sage at\xa0Nagrana Lane I moved to Bombay, sorry Mumbai, this February. And I chose Bandra as my home. It was one of those ‘destined’ moves as I like to term it. 🙂 Bandra grows on you. It slowly becomes the center of your life, and you start believing that there is no other [&hellip;]</p>\n', 'slug': 'photo-essay-the-hidden-graffiti-of-bandra', 'guid': 'http://returnoftheprodigal.wordpress.com/?p=374', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 211, 'like_count': 427, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '8d7c45cd40166a182386f57a7f59146f', 'featured_image': 'https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg', 'post_thumbnail': {'ID': 14736, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'Bandra': {'ID': 573504, 'name': 'Bandra', 'slug': 'bandra', 'description': '', 'post_count': 7, 'feed_url': 'http://ramaarya.blog/tag/bandra/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:bandra', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:bandra/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}, 'Gender Inequality': {'ID': 576766, 'name': 'Gender Inequality', 'slug': 'gender-inequality', 'description': '', 'post_count': 1, 'feed_url': 'http://ramaarya.blog/tag/gender-inequality/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:gender-inequality', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:gender-inequality/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}, 'Graffiti': {'ID': 14884, 'name': 'Graffiti', 'slug': 'graffiti', 'description': '', 'post_count': 3, 'feed_url': 'http://ramaarya.blog/tag/graffiti/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:graffiti', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:graffiti/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}, 'Harshvardhan Kadam': {'ID': 199674080, 'name': 'Harshvardhan Kadam', 'slug': 'harshvardhan-kadam', 'description': '', 'post_count': 2, 'feed_url': 'http://ramaarya.blog/tag/harshvardhan-kadam/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:harshvardhan-kadam', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:harshvardhan-kadam/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}, 'Hill Road': {'ID': 4717017, 'name': 'Hill Road', 'slug': 'hill-road', 'description': '', 'post_count': 2, 'feed_url': 'http://ramaarya.blog/tag/hill-road/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:hill-road', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:hill-road/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}, 'Ink Brush N Me': {'ID': 307577629, 'name': 'Ink Brush N Me', 'slug': 'ink-brush-n-me', 'description': '', 'post_count': 2, 'feed_url': 'http://ramaarya.blog/tag/ink-brush-n-me/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:ink-brush-n-me', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:ink-brush-n-me/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}, 'Nagrana Lane': {'ID': 220652916, 'name': 'Nagrana Lane', 'slug': 'nagrana-lane', 'description': '', 'post_count': 1, 'feed_url': 'http://ramaarya.blog/tag/nagrana-lane/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:nagrana-lane', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:nagrana-lane/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}, 'Street Art': {'ID': 57447, 'name': 'Street Art', 'slug': 'street-art', 'description': '', 'post_count': 7, 'feed_url': 'http://ramaarya.blog/tag/street-art/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:street-art', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/tags/slug:street-art/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}}, 'categories': {'Bombay aka Mumbai': {'ID': 220652125, 'name': 'Bombay aka Mumbai', 'slug': 'bombay-aka-mumbai', 'description': '', 'post_count': 33, 'feed_url': 'http://ramaarya.blog/category/bombay-aka-mumbai/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/categories/slug:bombay-aka-mumbai', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/categories/slug:bombay-aka-mumbai/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409'}}}}, 'attachments': {'14740': {'ID': 14740, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti5.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14739': {'ID': 14739, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti4.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14738': {'ID': 14738, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti3.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14737': {'ID': 14737, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti2.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14736': {'ID': 14736, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/nagranalane_graffiti1.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14735': {'ID': 14735, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti4.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14734': {'ID': 14734, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti3.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14733': {'ID': 14733, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti2.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14732': {'ID': 14732, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/hillroad_graffiti1.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}, '14731': {'ID': 14731, 'URL': 'https://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg', 'guid': 'http://ramaarya.files.wordpress.com/2018/07/bomanjeesteps_1.jpg', 'mime_type': 'image/jpeg', 'width': 584, 'height': 389}}, 'metadata': [{'id': '4189', 'key': 'geo_public', 'value': '0'}, {'id': '26302', 'key': '_thumbnail_id', 'value': '14736'}, {'id': '4186', 'key': '_wpas_done_5363770', 'value': '1'}, {'id': '4183', 'key': '_wpas_done_5374760', 'value': '1'}, {'id': '17340', 'key': '_wpas_skip_15046318', 'value': '1'}, {'id': '4181', 'key': '_wpas_skip_5323515', 'value': '1'}, {'id': '4188', 'key': '_wpas_skip_5363770', 'value': '1'}, {'id': '4187', 'key': '_wpas_skip_5374760', 'value': '1'}], 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/posts/374', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/posts/374/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/410409', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/posts/374/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/410409/posts/374/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '8d7c45cd40166a182386f57a7f59146f', 'is_external': False, 'site_name': 'rama toshi arya&#039;s blog', 'site_URL': 'http://ramaarya.blog', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '410409', 'post_id': '374', 'image': 'https://s0.wp.com/imgpress?w=252&url=http%3A%2F%2Framaarya.files.wordpress.com%2F2014%2F03%2Fnagranalane_graffiti11.jpg&unsharpmask=80,0.5,3', 'custom_headline': 'The Hidden Graffiti of Bandra', 'custom_blog_title': '', 'displayed_on': '2016-07-28T16:36:46+00:00', 'picked_on': '1970-01-01T00:33:36+00:00', 'highlight_topic': 'graffiti', 'highlight_topic_title': 'Graffiti', 'screen_offset': '0', 'blog_name': 'rama toshi arya&#039;s blog', 'site_id': '1'}}, {'ID': 2253, 'site_ID': 40536446, 'author': {'ID': 2193192, 'login': 'michelleweber', 'email': False, 'name': 'Michelle Weber', 'first_name': 'Michelle', 'last_name': 'Weber', 'nice_name': 'michelleweber', 'URL': 'http://kingofstates.com', 'avatar_URL': 'https://0.gravatar.com/avatar/6b8ee59cbec2850dce3df67d003086c6?s=96&d=wavatar&r=R', 'profile_URL': 'https://en.gravatar.com/michelleweber', 'ip_address': False, 'site_ID': 40536446, 'site_visible': True}, 'date': '2016-04-27T23:29:04-04:00', 'modified': '2016-08-01T03:44:00-04:00', 'title': 'Flames. Flames, on the side of my face.', 'URL': 'http://kingofstates.com/2016/04/27/flames-flames-on-the-side-of-my-face/', 'short_URL': 'https://wp.me/p2K5nE-Al', 'content': '<p>I suppose we have to add Oklahoma to the <a href="https://kingofstates.com/2012/10/14/new-jersey-will-offer-asylum-to-the-first-500000-connecticutians/">list of states</a> that need to be <a href="http://www.theguardian.com/society/2016/apr/27/oral-sex-rape-ruling-tulsa-oklahoma-alcohol-consent?CMP=Share_iOSApp_Other">burned right down to the ground</a>. Sorry, sane people of Oklahoma.</p>\n<p>A judge there ruled that a dude who fucked an unconscious woman in the mouth (i.e., raped her) cannot be prosecuted because &#8220;[f]orcible sodomy cannot occur where a victim is so intoxicated as to be completely unconscious at the time of the sexual act of oral copulation.&#8221; WHAT THE HOLY FUCK OKLAHOMA, THERE IS LITERALLY NO WAY FOR AN UNCONSCIOUS PERSON TO CONSENT TO ANYTHING, HOW IS STICKING YOUR DICK IN A PASSED-OUT WOMAN&#8217;S MOUTH NOT AN ACT OF FORCE, I CANNOT STOP YELLING AND EVERYONE SHOULD BE YELLING AT OKLAHOMA RIGHT NOW.</p>\n<p>Dear Oklahoma: there is a time for strict construction of legislation, and there is a time for convicting a fuckwit of forcible sodomy when he mouth rapes an unconscious woman. To everything there is a season, and this is the season of me frothing at the mouth with incoherent rage; surely, there is a way to both prosecute this clear act of sexual assault <em>and</em> fix your loophole-ridden laws. Although maybe I can use this ruling as precedent, and avoid an assault rap by\xa0beating this judge with a sock full of nickels while he&#8217;s asleep and unable to protest. I do not normally condone violence, but seriously, Oklahoma, you started it.</p>\n<p>As ever, any fleeing Oklahomans who believe that women are people are welcome in New Jersey (I know I don&#8217;t actually live there any more, but I still feel comfortable extending the invitation).</p>\n', 'excerpt': '<p>I suppose we have to add Oklahoma to the list of states that need to be burned right down to the ground. Sorry, sane people of Oklahoma.</p>\n', 'slug': 'flames-flames-on-the-side-of-my-face', 'guid': 'http://kingofstates.com/?p=2253', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 29, 'like_count': 304, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '18696dd1df82a93bf1fad9defc5fc4b2', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'Oklahoma': {'ID': 6084, 'name': 'Oklahoma', 'slug': 'oklahoma', 'description': '', 'post_count': 1, 'feed_url': 'http://kingofstates.com/tag/oklahoma/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/tags/slug:oklahoma', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/tags/slug:oklahoma/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446'}}}, 'Rape Culture': {'ID': 556525, 'name': 'Rape Culture', 'slug': 'rape-culture', 'description': '', 'post_count': 4, 'feed_url': 'http://kingofstates.com/tag/rape-culture/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/tags/slug:rape-culture', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/tags/slug:rape-culture/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446'}}}, 'Too filled with rage to think of a funny third tag': {'ID': 488653759, 'name': 'Too filled with rage to think of a funny third tag', 'slug': 'too-filled-with-rage-to-think-of-a-funny-third-tag', 'description': '', 'post_count': 1, 'feed_url': 'http://kingofstates.com/tag/too-filled-with-rage-to-think-of-a-funny-third-tag/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/tags/slug:too-filled-with-rage-to-think-of-a-funny-third-tag', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/tags/slug:too-filled-with-rage-to-think-of-a-funny-third-tag/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446'}}}}, 'categories': {'New Jersey': {'ID': 22720, 'name': 'New Jersey', 'slug': 'new-jersey', 'description': '', 'post_count': 21, 'feed_url': 'http://kingofstates.com/category/new-jersey/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/categories/slug:new-jersey', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/categories/slug:new-jersey/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446'}}}, 'To Hell In a Handbasket': {'ID': 27091747, 'name': 'To Hell In a Handbasket', 'slug': 'to-hell-in-a-handbasket', 'description': '', 'post_count': 19, 'feed_url': 'http://kingofstates.com/category/to-hell-in-a-handbasket/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/categories/slug:to-hell-in-a-handbasket', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/categories/slug:to-hell-in-a-handbasket/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446'}}}, "You've Built a Crawl Space Under Your All-Time Low": {'ID': 124554079, 'name': "You've Built a Crawl Space Under Your All-Time Low", 'slug': 'youve-built-a-crawl-space-under-your-all-time-low', 'description': '', 'post_count': 15, 'feed_url': 'http://kingofstates.com/category/youve-built-a-crawl-space-under-your-all-time-low/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/categories/slug:youve-built-a-crawl-space-under-your-all-time-low', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/categories/slug:youve-built-a-crawl-space-under-your-all-time-low/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446'}}}}, 'attachments': {}, 'metadata': [{'id': '4706', 'key': 'geo_public', 'value': '0'}, {'id': '4462', 'key': '_wpas_done_1646632', 'value': '1'}, {'id': '4466', 'key': '_wpas_done_2368022', 'value': '1'}, {'id': '4708', 'key': '_wpas_skip_1646632', 'value': '1'}, {'id': '4707', 'key': '_wpas_skip_2368022', 'value': '1'}], 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/posts/2253', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/posts/2253/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/posts/2253/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/40536446/posts/2253/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '18696dd1df82a93bf1fad9defc5fc4b2', 'is_external': False, 'site_name': 'King of States!', 'site_URL': 'http://kingofstates.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '40536446', 'post_id': '2253', 'image': 'https://s1.wp.com/mshots/v1/http%3A%2F%2Fkingofstates.com%2F2016%2F04%2F27%2Fflames-flames-on-the-side-of-my-face%2F?w=252', 'custom_headline': '', 'custom_blog_title': '', 'displayed_on': '2016-07-14T23:11:38+00:00', 'picked_on': '1970-01-01T00:33:36+00:00', 'highlight_topic': '0', 'highlight_topic_title': '', 'screen_offset': '0', 'blog_name': 'King of States!', 'site_id': '1'}}, {'ID': 449, 'site_ID': 22603338, 'author': {'ID': 22980442, 'login': 'arnabchanda', 'email': False, 'name': 'Arnab Chanda', 'first_name': 'Arnab', 'last_name': 'Chanda', 'nice_name': 'arnabchanda', 'URL': 'http://arnabchanda.wordpress.com', 'avatar_URL': 'https://0.gravatar.com/avatar/cf0709f744ec0f1c35c8638dc181dc47?s=96&d=https%3A%2F%2F0.gravatar.com%2Favatar%2Fad516503a11cd5ca435acc9bb6523536%3Fs%3D96&r=G', 'profile_URL': 'https://en.gravatar.com/arnabchanda', 'ip_address': False, 'site_ID': 22603338, 'site_visible': True}, 'date': '2015-11-11T14:33:55+00:00', 'modified': '2015-11-20T07:03:56+00:00', 'title': 'Why Aziz Ansari Has Destroyed My Chances, And Why He Is So So Important:', 'URL': 'https://arnabchanda.wordpress.com/2015/11/11/why-aziz-ansari-has-destroyed-my-chances-and-why-he-is-so-so-important/', 'short_URL': 'https://wp.me/p1wQ9Y-7f', 'content': '<p>Throughout my life, even though we’ve never met, Aziz Ansari has consistently beaten me to the punch. It’s becoming a theme. A sometimes very annoying theme. Although, for various reasons I’ll discuss below, I do believe he has been the most important Indian Comedy Actor in the past 10 years.</p>\n<p>In his new series on Netflix, <em>Master of None</em>, Aziz Ansari says “There can only be two,” referring to the idea that there can only ever be 2 Indians in one show at any point, max. Studio Executives and Networks are afraid to put any more than that, and they’re afraid most of the time, to even put one on.</p>\n<p>I remember when I started doing stand-up in New York City in 2003, and after watching me, a fellow comic asked me “Oh, do you know Aziz Ansari? He’s an young Indian stand up as well.” Aziz was another comedian starting out in NYC at the same time as me. But even then, in 2003… in one of the biggest cities in the world, I got the feeling, “Wow, it’s like there’s only two of us.”</p>\n<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-</p>\n<p>I love acting. Since I was a kid, it was the only thing I ever wanted to do in my life. I was good at it too. I won theatre awards in Middle School, High School, and University. It was my dream and I was determined to make it happen.</p>\n<p>But, as an Indian guy with a British passport and an American accent due to growing up abroad, it’s been somewhat of an impossible dream living here in London. Not just because of my lack of talent with accents, but with the inherent racism that seems to quietly exist within the entertainment industry here.</p>\n<p>The great myth I had, when I started stand-up, was that doing stand-up would lead to comedy acting. It was the only reason I was determined to compete in U.K. stand-up competitions like the Amused Moose or Jongleurs, and try and win them, which I did. And it was the only reason I continued to grind away on the circuit for 8 years, day in and day out, and do stand-up spots on TV, with the tiny hope that I would get the opportunity to act in something, which would then lead to something else. But I never enjoyed stand-up, and I did it for no other reason than I thought it would potentially guide me back to acting.</p>\n<p>But the reality is, stand-up is not the TV or Film industry. Stand-up is a meritocracy. If you work your ass off, the best comics will, for the most part, rise. You can command audiences to come see you. And these audiences will pay regardless of your race or gender or ethnicity. They just want funny.</p>\n<p>The same is not true in TV or Film. Stand-up\xa0was always a means to an end for me. The problem, I discovered, is that the “end”, does not exist.</p>\n<p>In Britain, the below is the essence of every conversation I’ve ever had with a Producer or Agent or Director:</p>\n<p><strong>Them:</strong> We can’t cast you because of your accent.</p>\n<p><strong>Me:</strong> Why?</p>\n<p><strong>Them:</strong> Well, we’re looking for someone from London.</p>\n<p><strong>Me:</strong> But I live in London. I’ve lived here for over 10 years.</p>\n<p><strong>Them:</strong> I know. But we’re looking for someone English.</p>\n<p><strong>Me:</strong> I am English. I’ve lived here for 16 years of my life. I was born here.</p>\n<p><strong>Them:</strong> I know, but English English.</p>\n<p><strong>Me:</strong> What’s that mean?</p>\n<p><strong>Them:</strong> Someone with an English accent.</p>\n<p><strong>Me:</strong> Why?</p>\n<p><strong>Them:</strong> Because… uhhh.</p>\n<p><strong>END SCENE.</strong></p>\n<p>This has been my life as an British-Asian-American Accent actor in London for the past 11 years. There-just-aren’t-any-roles.</p>\n<div class="embed-vimeo"><iframe src="https://player.vimeo.com/video/135233056" width="480" height="270" frameborder="0" title="Arnab Chanda Acting Showreel" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>\n<p>Of the roles on my acting showreel (Found here: <a href="https://vimeo.com/135233056">https://vimeo.com/135233056</a>), about 85% of them have come from friends and performers essentially writing parts for me: Dan Clark, Julia Davis, Noel Fielding, etc., all wrote parts specifically with me in mind. Only two roles I’ve ever gotten in 11 years have come from auditioning. One was an ITV2 series called <em>Trinity</em>, in which I played a University student, and the other was a BBC3 pilot called <em>UP!</em>, in which I played, yes, a University student. It is as though the only possible scenarios in Britain to have an American or Asian in a show is if it’s set at university or school. It’s frankly, insane.</p>\n<p>I’m not even talking about Asians either. I’m talking about how parochially BRITISH shows are in Britain. If you were to watch English comedies, you would get the sense that there are absolutely no American or foreign people here at all.</p>\n<p><em>Catastrophe</em>, starring Rob Delaney and Sharon Horgan, is one of the first comedies I’ve seen in the U.K. that stars an American. <em>The Mighty Boosh</em>, with Rich Fulcher, is the only other one in the past 11 years I’ve seen since living here. 11 years. 2 Americans in comedies. It’s shocking.</p>\n<p>I remember being in a meeting at the BBC about an Australian female comic. They said it was hard to have her be a lead, however, because she was Australian, and British audiences wouldn’t understand how she ended up in London. My heart sank. What in God’s name were they talking about?!? We live in LONDON. A capital of the world. People from all over the world move here and live here. Why would an audience find it odd to have an Australian lead? It’s mind boggling.</p>\n<p>As Aziz states in his brilliant article (<a href="http://www.nytimes.com/2015/11/15/arts/television/aziz-ansari-on-acting-race-and-hollywood.html?emc=eta1&amp;_r=0">http://www.nytimes.com/2015/11/15/arts/television/aziz-ansari-on-acting-race-and-hollywood.html?emc=eta1&amp;_r=0</a>), what we see on TV isn’t representative of the diversity we see in life. We don’t live in a closed world anymore. People move around. People have weird accents. People have weird names and looks. And here’s the thing: it’s not that important. In fact, it’s the least interesting thing about that person.</p>\n<p>Kal Penn (from <em>Harold and Kumar</em> fame) has talked extensively about how he had to change and aglicize his name because he wasn’t getting any auditions with his real name, Kalpen Suresh Modi. After he changed it, his job offers escalated by 50% because Casting Directors couldn’t tell he was Indian from his name anymore.</p>\n<p>Arj Barker (from <em>Flight of the Conchords</em>), another one of my favourite comedians of all time, also changed his name from Arjun Singh.</p>\n<p>Why is this necessary? Why does this keep happening?</p>\n<p>It is why I admire Aziz Ansari so much. In 2003, in New York City, you did not want a name like “Aziz Ansari.” It was still post 9/11, and the comedy climate was not good. People were still on edge, and walking on stage with a name like Aziz could not have been easy. I know that walking on stage with a name like Arnab wasn’t easy. People judged. Quick.</p>\n<p>But he never changed his name, and he hustled. He started doing his own shows at UCB, made one of the best sketch shows I’ve ever seen in my life for MTV (Human Giant), and played Tom Haverford in <em>Parks and Recreation</em>. Tom Haverford. He beat a whole bunch of white dudes to land that role. He’s the man.</p>\n<p>&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-</p>\n<p>As much as I support and appreciate the female fight for wage parity in Hollywood, a really awful and selfish part of me always thinks “At least you have a wage battle you can wage! We can’t even audition for any roles!”</p>\n<p>I’m not asking anyone for anything. I’ve learned in this life that you have to hustle and bust your ass to get anything. You have to write your own scripts and make your own things. I’ve also worked in Advertising, TV writing, and as a Producer just to make a living, because I couldn’t make a living doing what I wanted to do. Not everyone in life can do what they want. Life is not fair, and I’m not going to cry about it. And there are obviously much worse off people than me in the world. But, one of the main problems for me, and for other Asian actors, is that we can’t get breaks in our careers, because there are none to be had.</p>\n<p>There’s a problem with the industry, and it has to change. It starts with Commissioners, and it works it’s way down to Producers and Directors and Writers. It’s a group effort, but when you see shows like <em>Master of None</em> or BBC3’s <em>Romesh Ranganathan: Asian Provocateur</em>, you genuinely realize we’re neglecting a lot of interesting voices out there.</p>\n<p>I recently wrote a comedy pilot called &#8220;International Boy&#8221; which was exactly about all the above themes that I&#8217;ve had to deal with in my life. It was a personal script about the complicated times in which we live, and how one can&#8217;t seem to be accepted because they&#8217;re just too many things.\xa0Aziz Ansari might have beaten me to the punch again about this, but that&#8217;s ok. Someone needs to get the message out there that things need to change, and he has the smarts and hustle to do it.</p>\n<p><strong>Arnab Chanda is a BBC Radio Comedy Producer, Writer, &amp; Actor.</strong><br />\n<strong>Follow Arnab on Twitter!</strong> <a href="https://twitter.com/arnabacus" target="_blank">@arnabacus</a><br />\n<strong>Check out his Website:</strong> <a href="http://www.arnabchanda.com/" target="_blank">http://www.arnabchanda.com\xa0</a></p>\n', 'excerpt': '<p>Throughout my life, even though we’ve never met, Aziz Ansari has consistently beaten me to the punch. It’s becoming a theme. A sometimes very annoying theme. Although, for various reasons I’ll discuss below, I do believe he has been the most important Indian Comedy Actor in the past 10 years. In his new series on [&hellip;]</p>\n', 'slug': 'why-aziz-ansari-has-destroyed-my-chances-and-why-he-is-so-so-important', 'guid': 'https://arnabchanda.wordpress.com/?p=449', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 126, 'like_count': 1536, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '189f815b675c69d710ed7db212fa4c09', 'featured_image': 'https://arnabchanda.files.wordpress.com/2015/11/15aziz1-blog427-v4.jpg', 'post_thumbnail': {'ID': 461, 'URL': 'https://arnabchanda.files.wordpress.com/2015/11/15aziz1-blog427-v4.jpg', 'guid': 'http://arnabchanda.files.wordpress.com/2015/11/15aziz1-blog427-v4.jpg', 'mime_type': 'image/jpeg', 'width': 427, 'height': 717}, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'arnab chanda': {'ID': 62560610, 'name': 'arnab chanda', 'slug': 'arnab-chanda', 'description': '', 'post_count': 17, 'feed_url': 'https://arnabchanda.wordpress.com/tag/arnab-chanda/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:arnab-chanda', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:arnab-chanda/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338'}}}, 'Aziz Ansari': {'ID': 421469, 'name': 'Aziz Ansari', 'slug': 'aziz-ansari', 'description': '', 'post_count': 1, 'feed_url': 'https://arnabchanda.wordpress.com/tag/aziz-ansari/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:aziz-ansari', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:aziz-ansari/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338'}}}, 'comedy': {'ID': 17540954, 'name': 'comedy', 'slug': 'comedy', 'description': '', 'post_count': 1, 'feed_url': 'https://arnabchanda.wordpress.com/tag/comedy/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:comedy', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:comedy/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338'}}}, 'Master of None': {'ID': 3109255, 'name': 'Master of None', 'slug': 'master-of-none', 'description': '', 'post_count': 1, 'feed_url': 'https://arnabchanda.wordpress.com/tag/master-of-none/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:master-of-none', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:master-of-none/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338'}}}, 'Netflix': {'ID': 1182, 'name': 'Netflix', 'slug': 'netflix', 'description': '', 'post_count': 2, 'feed_url': 'https://arnabchanda.wordpress.com/tag/netflix/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:netflix', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/tags/slug:netflix/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338'}}}}, 'categories': {'Comedy': {'ID': 6234, 'name': 'Comedy', 'slug': 'comedy', 'description': '', 'post_count': 3, 'feed_url': 'https://arnabchanda.wordpress.com/category/comedy/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/categories/slug:comedy', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/categories/slug:comedy/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338'}}}}, 'attachments': {'461': {'ID': 461, 'URL': 'https://arnabchanda.files.wordpress.com/2015/11/15aziz1-blog427-v4.jpg', 'guid': 'http://arnabchanda.files.wordpress.com/2015/11/15aziz1-blog427-v4.jpg', 'mime_type': 'image/jpeg', 'width': 427, 'height': 717}}, 'metadata': [{'id': '944', 'key': '_thumbnail_id', 'value': '461'}], 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/posts/449', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/posts/449/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/posts/449/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/22603338/posts/449/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '189f815b675c69d710ed7db212fa4c09', 'is_external': False, 'site_name': 'Arnab Chanda', 'site_URL': 'https://arnabchanda.wordpress.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '22603338', 'post_id': '449', 'image': 'https://s1.wp.com/imgpress?w=252&url=http%3A%2F%2Farnabchanda.files.wordpress.com%2F2015%2F11%2F15aziz1-blog427-v4.jpg&unsharpmask=80,0.5,3', 'custom_headline': "Why Aziz Ansari Has Destroyed My Chances (and Why He\\'s So, So Important)", 'custom_blog_title': '', 'displayed_on': '2015-11-22T21:02:02+00:00', 'picked_on': '1970-01-01T00:33:35+00:00', 'highlight_topic': 'acting', 'highlight_topic_title': 'Acting', 'screen_offset': '-3', 'blog_name': 'Arnab Chanda', 'site_id': '1'}}, {'ID': 85, 'site_ID': 101057758, 'author': {'ID': 96089745, 'login': 'jeremiahrufini', 'email': False, 'name': 'jeremiahrufini', 'first_name': 'Jeremiah', 'last_name': 'Rufini', 'nice_name': 'jeremiahrufini', 'URL': 'http://cthockeyviolence.wordpress.com', 'avatar_URL': 'https://2.gravatar.com/avatar/8fb68ec17a1d4549143de360ed0faa39?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/jeremiahrufini', 'ip_address': False, 'site_ID': 101057758, 'site_visible': True}, 'date': '2015-10-18T18:33:21+00:00', 'modified': '2015-10-18T18:33:22+00:00', 'title': 'GORDIE, HOMEY, AND THE TIME I PISSED MY PANTS IN PUBLIC.', 'URL': 'http://cthockeyviolence.com/2015/10/18/gordie-homey-and-the-time-i-pissed-my-pants-in-public/', 'short_URL': 'https://wp.me/p6Q1JQ-1n', 'content': '<p><a href="https://cthockeyviolence.files.wordpress.com/2015/10/gordieandhomie.png"><img loading="lazy" data-attachment-id="86" data-permalink="http://cthockeyviolence.com/2015/10/18/gordie-homey-and-the-time-i-pissed-my-pants-in-public/gordieandhomie/" data-orig-file="https://cthockeyviolence.files.wordpress.com/2015/10/gordieandhomie.png" data-orig-size="625,250" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="gordieandhomie" data-image-description="" data-image-caption="" data-medium-file="https://cthockeyviolence.files.wordpress.com/2015/10/gordieandhomie.png?w=300" data-large-file="https://cthockeyviolence.files.wordpress.com/2015/10/gordieandhomie.png?w=480" class=" wp-image-86 alignleft" src="https://cthockeyviolence.files.wordpress.com/2015/10/gordieandhomie.png?w=463&#038;h=196" alt="gordieandhomie" width="463" height="196" /></a>The single most prominent memory I have of the Hartford Whalers from my childhood is not any of the historical milestones that are typical of nostalgic anecdotes; no Ron Francis trade, no Adams Division titles, no Whalermania parades. I didn&#8217;t even go to the last game. I was a deeply troubled sixteen year-old runaway and drop-out by the time the Whalers said goodbye to Hartford. The Civic Center and the 15,000 or so mourners who packed it to the rafters that day seemed a million miles away to my teenage self. It was a dark time to live in Connecticut and a dark time in my life, and quite frankly I was far too concerned with cultivating my image as a miserably cool punk rock kid to be caught dead wearing kelly green and crying in public.</p>\n<p>In a way it is perfectly fitting that the one thing I remember most vividly is a meaningless old-timer&#8217;s game in the early nineties, a cold day in Hartford on which I had both the chance to meet Gordie Howe, and I pissed my pants in public. I remember that day with equal measures of shame, pride and awe, and it has come to encapsulate everything it means to me to be a Whalers fan.</p>\n<p>I don&#8217;t remember becoming a Whalers fan. My grandmother had been an active member of the Booster Club since before I was born, and it was just something I accepted as a fact of life. The sky was blue, the Earth was round, and the Rufini family rooted for the Whalers. I very much took it for granted. The unlikely set of circumstances which led to the Civic Center being built, the Whalers coming to town, surviving the Civic Center roof collapse, and somehow joining the NHL to become our first and only major league franchise were recent history in my childhood, but still history. I had no memories before the Whalers and even as I grew older and uncertainty about their future began to grow, I never really believed they would go. Kevin Dineen was this guy my grandma knew. They practiced at the same dumpy rec rink where my Uncle Jimmy coached the ECHO Stars and Mike Veisor was his buddy. They were completely and thoroughly integrated into our unexceptional suburban Connecticut world.</p>\n<p>I don&#8217;t have a lot of memories of going to games, so it was notable when our entire family &#8211; grandparents and aunts and uncles and cousins and all &#8211; packed into several cars that day and departed for the Mall to see my cousin Jimmy&#8217;s youth hockey team play against the Whaler&#8217;s old-timer squad. My folks were blue-collar through and through, and tickets weren&#8217;t cheap or easy to come by. Corporations bought up all the good seats in blocks and our fans were derided as &#8220;nerds and actuaries&#8221; by our neighbors to the north in Boston. If we went at all, it was one of us at a time with Grandma Rufini.</p>\n<p>On the ride over, somebody, it could have been my dad or my mom but I&#8217;m really not sure, suggested off-handedly that &#8220;Maybe you&#8217;ll get to meet Gordie Howe today&#8221;. I don&#8217;t remember who said it, but I remember with perfect clarity the revelation that followed:</p>\n<p><em>This is a big deal.<a href="https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg"><img loading="lazy" data-attachment-id="96" data-permalink="http://cthockeyviolence.com/2015/10/18/gordie-homey-and-the-time-i-pissed-my-pants-in-public/hccexterior2/" data-orig-file="https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg" data-orig-size="200,225" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="hccexterior2" data-image-description="" data-image-caption="" data-medium-file="https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg?w=200" data-large-file="https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg?w=200" class=" wp-image-96 alignright" src="https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg?w=288&#038;h=322" alt="hccexterior2" width="288" height="322" srcset="https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg 200w, https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg?w=133&amp;h=150 133w" sizes="(max-width: 288px) 100vw, 288px" /></a></em></p>\n<p>There was a good crowd outside the Civic Center that day, even hours before the game. The atmosphere was akin to a street festival, as strange as that may seem now. I&#8217;ve asked various family members to pin down a month or even a year, but the answers I&#8217;ve received range from &#8220;had to be the eighties&#8221; to &#8221; I have no clue&#8221;. The sole identifying detail I recall from that day is a surreal vision of a man on stilts impersonating Homey D. Clown, the character from <em>In Living Color,</em> which places this game firmly somewhere between 1990-1993. Gordie was over sixty years old at that point, and been retired for about a decade. I imagine that it really was a big deal to see him play a game at that point, even a meaningless one against my cousin&#8217;s stupid youth team.</p>\n<p>We got there early and killed time in the mall, as was standard procedure at the time. My folks let me go off by myself for a bit and I eventually found myself in some now-extinct chain book store, either a Bretanos or Waldenbooks, pacing nervous circles in the magazine section. I was an anxious kid and the offhand mention of possibly meeting Gordie Howe had grown from a flutter in my stomach to full-blown nausea. This was the greatest to ever play the game, the Babe Ruth of Hockey. I paced a circle in the corner of that book store tighter and tighter and faster and faster until I thought to myself &#8220;Oh Shit&#8221; and was certain that whatever it was I&#8217;d eaten for lunch, presumably Wendy&#8217;s, was going to come up. But it didn&#8217;t.</p>\n<p>I felt a warm wet spot grow in my pants, looked down and saw I was standing in a puddle of piss in the middle of Bretanos/Waldenbooks/whatever it was. I was so nervous about meeting Gordie Howe that I had literally pissed my pants.</p>\n<p><a href="https://cthockeyviolence.files.wordpress.com/2015/10/whalestore.jpg"><img loading="lazy" data-attachment-id="101" data-permalink="http://cthockeyviolence.com/2015/10/18/gordie-homey-and-the-time-i-pissed-my-pants-in-public/whalestore/" data-orig-file="https://cthockeyviolence.files.wordpress.com/2015/10/whalestore.jpg" data-orig-size="1024,576" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="whalestore" data-image-description="" data-image-caption="" data-medium-file="https://cthockeyviolence.files.wordpress.com/2015/10/whalestore.jpg?w=300" data-large-file="https://cthockeyviolence.files.wordpress.com/2015/10/whalestore.jpg?w=480" class=" wp-image-101 alignleft" src="https://cthockeyviolence.files.wordpress.com/2015/10/whalestore.jpg?w=359&#038;h=208" alt="whalestore" width="359" height="208" /></a>The details of what followed are understandably vague. As busy as the mall was that day, that corner of the book store was mercifully empty. I somehow covered myself up and found my father, who bought me a pair of grey sweatpants emblazoned with Pucky the Whale, took me to the bathroom and threw my pissed jeans in the trash. We sat close to the ice, far closer than I&#8217;d ever been, and I watched a sixty-something year-old Gordie Howe absolutely demolish my cousin on the ice of the Hartford Civic Center.</p>\n<p>I&#8217;m pretty sure that I had a chance to meet Gordie Howe at some point that day, just as I&#8217;m equally sure I was too scared to go through with it. I&#8217;d be lying if I said I remembered either way. I wore those Pucky sweatpants to school the following week and one of my friends, a Bruins fan, asked me incredulously, &#8220;Dude, you like the Hartford Failers?&#8221;</p>\n<p>Twenty years later, I was living in Hartford working 70 hour weeks in my first head chef job, when a friend invited me and the kids back to the Civic Center for a Sunday matinee. &#8220;The Whale is back,&#8221; they said. &#8220;Sort of.&#8221; The monster-truck rally vibe I got from the marketing of previous minor league team, the Hartford Wolf Pack, had failed to catch my interest in the same way that the Bruins and the Rangers failed to do so. They&#8217;d made so little impact that I wasn&#8217;t even aware that they&#8217;d gone. I liked hockey well enough, but above all, I loved Hartford. The was no replacing that weird underdog team that brought Gordie Howe to my backyard and made me piss my pants. I didn&#8217;t know much about minor-league hockey but I said sure.</p>\n<p>So I watched a hockey game for the first time in many years, now a father with two kids of my own. It was familiar in as many ways as it was different. On that winter day in early 2011, in the span of just a few hours, the Whale had gone from a painful old wound from my childhood to my kids first hockey game. They lost, true to form.</p>\n<p>We exited the arena at the corner of Ann and Church, where my toddler son abruptly pulled down his pants and took a piss right on to the stairs of the coliseum.</p>\n<p>&#8220;Sorry,&#8221; he said sheepishly. &#8220;I just got really excited and had to go.&#8221;</p>\n', 'excerpt': '<p>The single most prominent memory I have of the Hartford Whalers from my childhood is not any of the historical milestones that are typical of nostalgic anecdotes; no Ron Francis trade, no Adams Division titles, no Whalermania parades. I didn&#8217;t even go to the last game. I was a deeply troubled sixteen year-old runaway and [&hellip;]</p>\n', 'slug': 'gordie-homey-and-the-time-i-pissed-my-pants-in-public', 'guid': 'https://cthockeyviolence.wordpress.com/?p=85', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 17, 'like_count': 599, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'f20ade44e945a9c73acaac08d35afddd', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {}, 'categories': {'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '', 'post_count': 30, 'feed_url': 'http://cthockeyviolence.com/category/uncategorized/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758/categories/slug:uncategorized', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758/categories/slug:uncategorized/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758'}}}}, 'attachments': {'101': {'ID': 101, 'URL': 'https://cthockeyviolence.files.wordpress.com/2015/10/whalestore.jpg', 'guid': 'http://cthockeyviolence.files.wordpress.com/2015/10/whalestore.jpg', 'mime_type': 'image/jpeg', 'width': 1024, 'height': 576}, '96': {'ID': 96, 'URL': 'https://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg', 'guid': 'http://cthockeyviolence.files.wordpress.com/2015/10/hccexterior2.jpg', 'mime_type': 'image/jpeg', 'width': 200, 'height': 225}, '86': {'ID': 86, 'URL': 'https://cthockeyviolence.files.wordpress.com/2015/10/gordieandhomie.png', 'guid': 'http://cthockeyviolence.files.wordpress.com/2015/10/gordieandhomie.png', 'mime_type': 'image/png', 'width': 625, 'height': 250}}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758/posts/85', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758/posts/85/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758/posts/85/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/101057758/posts/85/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'f20ade44e945a9c73acaac08d35afddd', 'is_external': False, 'site_name': 'EXILE ON TRUMBULL STREET', 'site_URL': 'http://cthockeyviolence.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '101057758', 'post_id': '85', 'image': 'https://s1.wp.com/imgpress?w=252&url=http%3A%2F%2Fcthockeyviolence.files.wordpress.com%2F2015%2F10%2Fgordieandhomie.png&unsharpmask=80,0.5,3', 'custom_headline': 'Gordie, Homey, and the Time I Pissed My Pants in Public', 'custom_blog_title': '', 'displayed_on': '2015-11-22T16:02:02+00:00', 'picked_on': '1970-01-01T00:33:35+00:00', 'highlight_topic': 'hockey', 'highlight_topic_title': 'Hockey', 'screen_offset': '0', 'blog_name': 'EXILE ON TRUMBULL STREET', 'site_id': '1'}}, {'ID': 1013, 'site_ID': 14916998, 'author': {'ID': 15416596, 'login': 'chillercold', 'email': False, 'name': 'chiller', 'first_name': 'Chiller', 'last_name': '', 'nice_name': 'chillercold', 'URL': 'http://chillercold.wordpress.com', 'avatar_URL': 'https://1.gravatar.com/avatar/4c8ae8c06ba847e1d7f9c3b832cde406?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/chillercold', 'ip_address': False, 'site_ID': 14916998, 'site_visible': True}, 'date': '2015-06-12T19:09:23+01:00', 'modified': '2015-06-12T19:09:23+01:00', 'title': 'Heels', 'URL': 'https://chillercold.wordpress.com/2015/06/12/heels/', 'short_URL': 'https://wp.me/s10AAK-heels', 'content': '<p>An audio version of this post is available <a href="http://soundcloud.com/chillercold/heels">here</a>.</p>\n<p>Somehow the shoes &#8211; not the clothes &#8211; were what did for me. Two crammed bin liners in, and I abruptly threw the second one down and walked out of the room. (It needs doing. It needs doing.) All the dresses I&#8217;d had made for me by my tailor in the 90s and noughties, those went some time ago. I didn&#8217;t feel much more than a fleeting sadness for them. I&#8217;m older now. I wear different clothes. I couldn&#8217;t get into them anyway. That is the order of things as one gets older. </p>\n<p>But the shoes, those are different. I could get into all of them. But I couldn&#8217;t walk in any of them, not five steps. And what would I wear them to? I don&#8217;t leave the house. </p>\n<p>Dozens of spike heels. These ones I bought for a bash at the Savoy. These, I got in Church&#8217;s at Chancery Lane, their neat black ankle strap always looked so elegant. These ones went perfectly with those brown trousers I had. These were my fuck me heels. They worked. Running shoes. That I ran in, in the cool black evenings, gloves on, headphones on. Here are summer wedges, gingham, high, I made him take them off me with his teeth. These came to New York. These to Frankfurt, there&#8217;s still blood in them. These boots went to Rome and Istanbul. These Mary Janes went to Venice. Paris, Paris, and Paris: these ones. Brussels: the first Eurostar out, always, in the blue grey London dawn, in a rattling black cab over the pink waking Thames, and nobody has breathed the air yet. It is all mine. Those went to Dallas. These went to Chicago. I bought these in Vermont while skiing (skiing!), these in New York, these in &#8230; where the hell did I buy these? Spain? Portugal? </p>\n<p>Grey patent. Red patent. Red glitter. Red velvet. Red suede. Raspberry patent. Dark blue velvet, kitten heels, I climbed a mountain in Thailand in you. Incongruously. Emerald printed cotton. Yellow silk. Purple silk. Silver.</p>\n<p>Here are the black strappy wedge boots I was wearing that night, about a week before I got signed off work. It was autumn. I&#8217;d been falling over a lot for a year, but this one was memorable. I went over for no reason whatsoever in that little lane that leads down to Catford Bridge, and I came down on that massive wooden sleeper thing. Hand, knee. And there was a woman there and I couldn&#8217;t get up and it was the first time I&#8217;d experienced that, the complete marionetting of my body, the cutting of all strings. The lack of connection between intent and action. I couldn&#8217;t move while she asked, down a tunnel, through a blanket, in a foreign language I slowly realised was English &#8220;Are you alright?&#8221; It was only seconds and when my body switched back on again I exploded upright &#8211; &#8220;Fuck!&#8221;<br />\n&#8220;Are you alright?&#8221;<br />\n&#8220;Yes,&#8221; as I stamped off. But I wasn&#8217;t. And suddenly there wasn&#8217;t any wiggle room to pretend I was, any more, in these boots, these pretty boots.</p>\n<p>And here&#8217;s what happened next, going into the bin liners: the Uggs that I lived in solidly from January &#8217;09 for a year or two. The only things I could stand up in. The only things that didn&#8217;t make me bleed when I walked. After I bought them I never wore any of my lovely shoes again. Not once. </p>\n<p>It&#8217;s like going through the possessions of someone who has died. There is no bright side to it. Just loss. I am troubled by her ghost. </p>\n<p>I am troubled by my ghost. </p>\n<p>I remember being alive, and it is difficult to reconcile then and now, difficult to reconcile me and this. I struggle with it. I work hard not to.</p>\n<p>So I take a break and write this.&nbsp; It needs doing. The clearing, I mean. You can&#8217;t live with the dead tucked under your bed and in the bottom of your wardrobe. You can&#8217;t live with it and expect to be ok. It needs doing. </p>\n<p>And writing about it needs doing too. I can jam all that stuff into black bags and junk it, but I also need to sit down with that grief and look it in the eye. Not indulge it or invite it to come and live with me. But admit that it&#8217;s there. I feel sad for the things that happened to her, that girl. She was odd, but good. Odd, but loyal. Odd, and all fire. Unstoppable, until she stopped, unbreakable until she broke.&nbsp; Now she is gone, and nothing rushes in to fill the space she left. Nothing. Rushes. In. </p>\n<p>I don&#8217;t know what the future holds. But there is a future. So it must hold something. It won&#8217;t be spike heels, running shoes, ski boots.</p>\n<p>Something else.</p>\n', 'excerpt': '<p>An audio version of this post is available here. Somehow the shoes &#8211; not the clothes &#8211; were what did for me. Two crammed bin liners in, and I abruptly threw the second one down and walked out of the room. (It needs doing. It needs doing.) All the dresses I&#8217;d had made for me [&hellip;]</p>\n', 'slug': 'heels', 'guid': 'https://chillercold.wordpress.com/?p=1013', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 148, 'like_count': 1269, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '9bcac9a4551c8cd08a3665821cfa8c3d', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'me/cfs': {'ID': 576941, 'name': 'me/cfs', 'slug': 'me-cfs', 'description': '', 'post_count': 23, 'feed_url': 'https://chillercold.wordpress.com/tag/me-cfs/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/tags/slug:me-cfs', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/tags/slug:me-cfs/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998'}}}}, 'categories': {'Uncategorized': {'ID': 1, 'name': 'Uncategorized', 'slug': 'uncategorized', 'description': '', 'post_count': 36, 'feed_url': 'https://chillercold.wordpress.com/category/uncategorized/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/categories/slug:uncategorized', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/categories/slug:uncategorized/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998'}}}}, 'attachments': {}, 'metadata': [{'id': '4405', 'key': '_wpas_done_468575', 'value': '1'}], 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/posts/1013', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/posts/1013/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/posts/1013/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/14916998/posts/1013/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '9bcac9a4551c8cd08a3665821cfa8c3d', 'is_external': False, 'site_name': 'Chiller', 'site_URL': 'https://chillercold.wordpress.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '14916998', 'post_id': '1013', 'image': 'https://s1.wp.com/mshots/v1/https%3A%2F%2Fchillercold.wordpress.com%2F2015%2F06%2F12%2Fheels%2F?w=252', 'custom_headline': '', 'custom_blog_title': '', 'displayed_on': '2015-11-21T21:02:02+00:00', 'picked_on': '1970-01-01T00:33:35+00:00', 'highlight_topic': 'personal-essay', 'highlight_topic_title': 'Personal Essay', 'screen_offset': '0', 'blog_name': 'Chiller', 'site_id': '1'}}, {'ID': 488, 'site_ID': 5088426, 'author': {'ID': 5330707, 'login': 'sunnyrap', 'email': False, 'name': 'sunnyrap', 'first_name': 'Sunita', 'last_name': 'Rappai', 'nice_name': 'sunnyrap', 'URL': '', 'avatar_URL': 'https://1.gravatar.com/avatar/d72a72dd49be6ed84d1662c822349a68?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/sunnyrap', 'ip_address': False, 'site_ID': 5088426, 'site_visible': True}, 'date': '2015-11-06T11:50:24+02:00', 'modified': '2019-11-13T10:14:12+02:00', 'title': 'The Art of Wabi-Sabi (or Things You Will Learn Later in your Life)', 'URL': 'http://sunitarappai.com/2015/11/06/the-art-of-wabi-sabi-or-things-you-will-learn-later-in-your-life/', 'short_URL': 'https://wp.me/pllJo-7S', 'content': '<p style="text-align:center;"><a href="https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg"><img loading="lazy" data-attachment-id="504" data-permalink="http://sunitarappai.com/2015/11/06/the-art-of-wabi-sabi-or-things-you-will-learn-later-in-your-life/wabi-sabi-small_fotor/" data-orig-file="https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg" data-orig-size="320,320" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="wabi sabi small_Fotor" data-image-description="" data-image-caption="" data-medium-file="https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg?w=300" data-large-file="https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg?w=320" class="alignnone size-medium wp-image-504" src="https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg?w=300&#038;h=300" alt="wabi sabi small_Fotor" width="300" height="300" srcset="https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg?w=300&amp;h=300 300w, https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg?w=150&amp;h=150 150w, https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg 320w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>\n<p><strong>You are 37</strong> when you first fall in love &#8211;properly, passionately, the way you dreamed of when you scribbled furiously in your teenage notebooks and that has eluded you until precisely this moment in a dusty Cairo hotel. It is not love at first sight and there is no Hollywood meet-cute, but there is a touching of souls, as Joni Mitchell once sang, that reverberates long after you meet him.</p>\n<p>Months later, you leave everything you know and traverse continents to go back to him and a new life in the city he has bequeathed you. Over the next three years, you learn that Great Loves can be irrational and painful, full of terrible highs and soaring lows, that passion is overrated, and it is never good, as someone once told you, to love another person more than you love yourself. One day, you wake up and realise that love is not enough.</p>\n<p>Love, in fact, is never enough.</p>\n<p>&nbsp;</p>\n<p><strong>You are 28</strong> when you experience death&#8211;sudden, tragic, wrenching&#8211;for the first time. On a bright summer’s day in your office in London, you get a call from a policeman who tells you that your oldest sister, who has been missing for months, has been found dead in a car park overlooking the Cornish coast. You drop everything and run out for shelter in a Soho doorway, watching the world continue to turn as yours changes forever.</p>\n<p>Late that night, you make the five-hour drive down to a Cornish hospital with your mother and sister to identify her, in the tiny chapel where they have laid out her body, and receive a crash course in pain, the finality of death, and the meaning of loss. You discover what it’s like to grieve under a terrible litany of <em>shoulda/woulda/couldas</em> and <em>what ifs</em>\xa0that spin endlessly into a vortex and threaten to suck you into the darkness.</p>\n<p>For a long time after, you dream that she is with you&#8211;at a gathering or a party or at home. She gets up to go, as she always does, and you urge her to stay – over and over again. She never listens.</p>\n<p>&nbsp;</p>\n<p>(<strong>You are 14</strong>\xa0the first time a boy calls you beautiful. Late one summer night, by the swings in Oakmere Park, where you have gone with a friend for a walk. He whispers into your ear urgently and you smile in a way that\xa0suggests you’re used to such things. Inside you know that tomorrow you will put on your ugly school uniform and go back to normal life.)</p>\n<p>&nbsp;</p>\n<p><strong>You are 5 years and six months old</strong> when your parents take you and your sisters from your home in England and\xa0deposit you in a Catholic boarding school in a South Indian hill station &#8211;\xa0once the summer retreat of the colonial English. You do not realise it then but you will be ensconced there for the next seven years, only flying back home to England for the winter and summer holidays.</p>\n<p>Twice a year for the next seven years, you will dread the long tunnel at the entrance to Heathrow airport, which you will always associate with your mother’s sobs as she tries to say goodbye. When you get to the school in the Indian hill station, you will cry into your pillow quietly for three nights as great waves of homesickness and guilt and regret consume you, until\xa0one morning you wake up and the strange boarding school has become your home again.</p>\n<p>You will also cry each time you leave the school to go home for the holidays.</p>\n<p>&nbsp;</p>\n<p><strong>You are 33</strong> – the age your sister was when she died (and Jesus)&#8211;an age you secretly thought you would never reach because you thought you had been cursed to die too, like the heroine of some morbid fairytale. You have spent the last five years caring less and less about your life, drinking too much, partying more recklessly, haunting crowded bars and clubs, indulging in careless flings and desperate love affairs, going through the motions in a career you hate more and more.</p>\n<p>On your 33<sup>rd</sup> birthday, you leave the job, end the last relationship, and clear out your cupboards. At some point during this year, you will embark on a new career as a journalist, which you will embrace like it is your calling. For the first time in your life, you are proud of what you do.</p>\n<p>&nbsp;</p>\n<p><strong>You are 12</strong> when your mother takes you out of your boarding school and puts you in a school near your home in England. You don&#8217;t know it then but she has begged the headmaster to let you in, even though he knows nothing about you &#8211;\xa0a strange Indian child in his very English school. He puts you in the bottom class of your year, with kids who already know they’re destined for hours of woodworking lessons and dreary home ec classes.</p>\n<p>You realise for the first time that you look different from your classmates, who also seem strange to you in\xa0their overwhelming whiteness and brash confidence and determination to break\xa0the rules. Being around boys for the first time makes you self-conscious. You get called a Paki on your way home by two awkward boys from the other school in the neighbourhood, on the other side of town. You don&#8217;t know who&#8217;s more embarrassed.\xa0The next term, you’re moved up to the top set and a different world.</p>\n<p>&nbsp;</p>\n<p><strong>You are 39,</strong> four months from your 40<sup>th</sup> birthday, when you watch your father take his last racking breath in a quiet hospice bed in a North London suburb. He has been diagnosed with a brain tumour almost exactly two months earlier. You fly back home to England from Cairo when your sister tells you this, steeling yourself for your entry into\xa0the darkness once more.</p>\n<p>Unlike your sister’s passing, however, your father’s death offers a chance at redemption. Your relationship with him has long been strained but you visit him twice a day, feed him, sit with him and try somehow to transmit all the love you can muster when you hold his hand. He cannot speak but his eyes follow you around the room as you move and you hope that, somewhere inside, he recognises that he is not alone.</p>\n<p>After he dies, you feel an overwhelming urge to have a child&#8211;a primal call, you think, to complete\xa0the circle of life. It doesn’t happen.</p>\n<p>&nbsp;</p>\n<p><strong>You are 42</strong> and in a committed relationship for the first time in your life. You, who have always fled commitment and run headlong into the arms of men incapable of giving it to you, are bowled over now by the sweetness of love and how it doesn&#8217;t have to hurt or feel like you’re jumping into the darkness without a safety net and how you can love from a place of strength without losing parts of yourself, rather than going\xa0into battle and coming out with the scars.</p>\n<p>You learn what it’s like to love and be loved unconditionally, when you’re PMS’ing and grouchy, on your fat days and bad hair days, and the days when you’re tired and vulnerable and don’t want to get out of bed. You understand for the first time what it is to seek shelter in another’s arms, and that it is possible to trust, that what feels like the end often isn’t, and that everything is possible if you take a leap of faith.</p>\n<p>&nbsp;</p>\n<p><strong>You are 45</strong> when you start writing again, properly. By now, you have given up much in your life&#8211;sugar, alcohol, cigarettes, careless love affairs with careless men. You try to eat well, exercise regularly, dabble in meditation and yoga to calm the restless soul. Sometimes you miss the old you, the sense of freedom, the open roads, the unpredictability and terrible glamour of a life less lived.</p>\n<p>But by and large you think&#8211;and hope&#8211;this:</p>\n<p>Slowly, very slowly, you are coming home.</p>\n', 'excerpt': '<p>You are 37 when you first fall in love &#8211;properly, passionately, the way you dreamed of when you scribbled furiously in your teenage notebooks and that has eluded you until precisely this moment in a dusty Cairo hotel. It is not love at first sight and there is no Hollywood meet-cute, but there is a [&hellip;]</p>\n', 'slug': 'the-art-of-wabi-sabi-or-things-you-will-learn-later-in-your-life', 'guid': 'https://sunnyrap.wordpress.com/?p=488', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 408, 'like_count': 2518, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'ac54bf0f39a63449a875d9b16ddb14de', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'death': {'ID': 8437, 'name': 'death', 'slug': 'death', 'description': '', 'post_count': 1, 'feed_url': 'http://sunitarappai.com/tag/death/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:death', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:death/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426'}}}, 'life': {'ID': 124, 'name': 'life', 'slug': 'life', 'description': '', 'post_count': 5, 'feed_url': 'http://sunitarappai.com/tag/life/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:life', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:life/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426'}}}, 'personal growth': {'ID': 38245, 'name': 'personal growth', 'slug': 'personal-growth', 'description': '', 'post_count': 1, 'feed_url': 'http://sunitarappai.com/tag/personal-growth/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:personal-growth', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:personal-growth/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426'}}}, 'wabi-sabi': {'ID': 156315, 'name': 'wabi-sabi', 'slug': 'wabi-sabi', 'description': '', 'post_count': 1, 'feed_url': 'http://sunitarappai.com/tag/wabi-sabi/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:wabi-sabi', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/tags/slug:wabi-sabi/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426'}}}}, 'categories': {'life': {'ID': 124, 'name': 'life', 'slug': 'life', 'description': '', 'post_count': 26, 'feed_url': 'http://sunitarappai.com/category/life/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/categories/slug:life', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/categories/slug:life/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426'}}}, 'Relationships': {'ID': 197, 'name': 'Relationships', 'slug': 'relationships', 'description': '', 'post_count': 7, 'feed_url': 'http://sunitarappai.com/category/relationships/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/categories/slug:relationships', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/categories/slug:relationships/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426'}}}}, 'attachments': {'504': {'ID': 504, 'URL': 'https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg', 'guid': 'http://sunnyrap.files.wordpress.com/2015/10/wabi-sabi-small_fotor.jpg', 'mime_type': 'image/jpeg', 'width': 320, 'height': 320}, '494': {'ID': 494, 'URL': 'https://sunnyrap.files.wordpress.com/2015/10/wabi-sabi.jpg', 'guid': 'http://sunnyrap.files.wordpress.com/2015/10/wabi-sabi.jpg', 'mime_type': 'image/jpeg', 'width': 736, 'height': 736}, '489': {'ID': 489, 'URL': 'https://sunnyrap.files.wordpress.com/2015/10/becoming-1.jpg', 'guid': 'http://sunnyrap.files.wordpress.com/2015/10/becoming-1.jpg', 'mime_type': 'image/jpeg', 'width': 736, 'height': 981}}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/posts/488', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/posts/488/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/posts/488/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/5088426/posts/488/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'ac54bf0f39a63449a875d9b16ddb14de', 'is_external': False, 'site_name': 'Black coffee and cigarettes', 'site_URL': 'http://sunitarappai.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '5088426', 'post_id': '488', 'image': 'https://s0.wp.com/imgpress?w=252&url=http%3A%2F%2Fsunnyrap.files.wordpress.com%2F2015%2F10%2Fbecoming-1.jpg&unsharpmask=80,0.5,3', 'custom_headline': 'The Art of Wabi-Sabi (or Things You Will Learn Later in Your Life)', 'custom_blog_title': '', 'displayed_on': '2015-11-20T21:02:02+00:00', 'picked_on': '1970-01-01T00:33:35+00:00', 'highlight_topic': 'life', 'highlight_topic_title': '', 'screen_offset': '-20', 'blog_name': 'Black coffee and cigarettes', 'site_id': '1'}}, {'ID': 10896, 'site_ID': 7891743, 'author': {'ID': 8186714, 'login': 'hmunro', 'email': False, 'name': 'Heide', 'first_name': 'Heide', 'last_name': '', 'nice_name': 'hmunro', 'URL': '', 'avatar_URL': 'https://2.gravatar.com/avatar/bc3e61d35f8725a51a486c732b7185f0?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/hmunro', 'ip_address': False, 'site_ID': 7891743, 'site_visible': True}, 'date': '2015-11-11T12:34:50-05:30', 'modified': '2019-03-15T18:57:01-05:00', 'title': 'Dynamite and Prayers', 'URL': 'http://heideblog.com/2015/11/11/dynamite-and-prayers/', 'short_URL': 'https://wp.me/px70b-2PK', 'content': '<p><em>Dynamite and Prayers</em> is the title of photographer Max Becherer’s <a href="http://www.dynamiteandprayers.com/" target="_blank" rel="noopener noreferrer">stunning new book</a>.</p>\n<p><a href="https://sporkblog.files.wordpress.com/2015/11/dynamite-and-prayers-cover-blog1.jpg"><img loading="lazy" class="alignnone size-full wp-image-384" src="https://sporkblog.files.wordpress.com/2015/11/dynamite-and-prayers-cover-blog1.jpg?w=1016" alt="Dynamite and Prayers cover BLOG" width="500" height="427" /></a></p>\n<p>Although the subject is the emerald miners of Afghanistan, Max’s storytelling transports us to a sweeping landscape few of us can even imagine — and unveils the true cost of war.</p>\n<p><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-rainbow-spread.jpg"><img loading="lazy" data-attachment-id="378" data-permalink="http://heideblog.com/2009/06/18/seven-cities-in-10-days-part-6/florence-rooftops/" data-orig-file="https://hmunro.files.wordpress.com/2009/06/florence-rooftops.jpg" data-orig-size="504,378" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;4&quot;,&quot;credit&quot;:&quot;Heather Munro&quot;,&quot;camera&quot;:&quot;Canon PowerShot S3 IS&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1190380937&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;28.4&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0.00125&quot;,&quot;title&quot;:&quot;Florence rooftops&quot;}" data-image-title="Florence rooftops" data-image-description="" data-image-caption="" data-medium-file="https://hmunro.files.wordpress.com/2009/06/florence-rooftops.jpg?w=300" data-large-file="https://hmunro.files.wordpress.com/2009/06/florence-rooftops.jpg?w=480" class="alignnone size-full wp-image-378" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-rainbow-spread.jpg?w=1016" alt="Max Becherer rainbow spread" width="500" height="212" /></a></p>\n<p>I’ve had the privilege of working with many world-class photographers, but Max is one of only two I know personally who have chosen to focus on war. He’s captured <a href="https://www.google.com/search?q=max+becherer+war+images&amp;biw=1158&amp;bih=613&amp;tbm=isch&amp;tbo=u&amp;source=univ&amp;sa=X&amp;ved=0CBwQsARqFQoTCKCQ9sfphckCFQzRYwodX8YDBg" target="_blank" rel="noopener noreferrer">some of the most famous images</a> of the conflicts in Iraq and Afghanistan — his C.V. is full of names like Baghdad and Fallujah — and in the process he’s repeatedly risked his life.</p>\n<p>A war photographer’s work is obviously taxing: While everyone around you is trying to either kill or survive, your job is to watch and record. Over time, it can take a toll on your humanity.</p>\n<p>But in Max’s case, exposure to war has actually <em>amplified</em> his humanity. In the decade he’s spent living and working in the Middle East, he’s somehow managed to look beyond the endless conflict and see the human beings whose lives unfold far beneath the headlines. Perhaps by being at the very epicenter of war he’s come to understand its far-reaching ripple effects.</p>\n<p>In Max’s own words,</p>\n<blockquote><p>Dynamite and Prayers is not about the people who wage war. It is a story about people who spend their lives living with war, and the pain that comes from watching one’s life be ruined by it even in the most beautiful place on earth.</p></blockquote>\n<p>It’s ironic, then, that I mistook the first image I saw from his new book for a man with a machine gun.</p>\n<p><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-drill-blog.jpg"><img loading="lazy" data-attachment-id="369" data-permalink="http://heideblog.com/2009/06/18/seven-cities-in-10-days-part-6/florence-view-from-belltower-2/" data-orig-file="https://hmunro.files.wordpress.com/2009/06/florence-another-tower-view.jpg" data-orig-size="504,378" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;4&quot;,&quot;credit&quot;:&quot;Heather Munro&quot;,&quot;camera&quot;:&quot;Canon PowerShot S3 IS&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1190379154&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;14.2&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0.0008&quot;,&quot;title&quot;:&quot;Florence view from belltower 2&quot;}" data-image-title="Florence view from belltower 2" data-image-description="" data-image-caption="" data-medium-file="https://hmunro.files.wordpress.com/2009/06/florence-another-tower-view.jpg?w=300" data-large-file="https://hmunro.files.wordpress.com/2009/06/florence-another-tower-view.jpg?w=480" class="alignnone size-full wp-image-369" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-drill-blog.jpg?w=1016" alt="Max Becherer drill BLOG" width="500" height="333" /></a></p>\n<p>As Max explains <a href="https://vimeo.com/119006298" target="_blank" rel="noopener noreferrer">in this video</a>, it’s actually an apt comparison: With this drill, Ahmad Jawead is quite literally fighting for his life. But I won’t tell that story today (because I could never do Max’s work justice — and anyway, you should <a href="http://www.dynamiteandprayers.com/explore-select-pages/BookCoverPageLG/" target="_blank" rel="noopener noreferrer">see it for yourself</a>). So instead, today I’d like to pass on some of the stories and insights behind the book that Max has so graciously shared with me.</p>\n<p>Let’s start at the beginning …</p>\n<p><strong>What drew you to become a war journalist?</strong> [The] value of photojournalism is something I understood from a young age. Growing up, my mother would read us stories of Max and Moritz — a German children’s tale — which would spark my mother’s memory, and she would tell us stories from her childhood in Germany during the 1940s. … On [one] occasion, she said, she was taking shelter from an Allied bombing raid in the darkness of the basement of her apartment building. They heard a thunderous crash during the raid and did not dare move until the bombing was over. When the raid had completed they went to investigate … and discovered that a bomb had fallen through all three stories of their apartment building and rolled to a stop at the bottom of the stairs of the basement they were taking shelter in. The men of the group gathered the bomb up in blankets and carried it to the railroad tracks where the army collected unexploded bombs. In this way “story time” was also “history time” with my mother, but it was not until I was old enough to read and check out my own library books about World War II that I could start to understand the depth of what my mother experienced. In particular I felt the photographs from World War II had done the best job of relating her experience. From that experience I sought out a vocation that allowed me to help bridge the understanding from war zone to home front.</p>\n<p><strong>One of the key tenets of journalism is objectivity — but war depends on a clear “us versus them.” As a war journalist, how do you stay objective and not take sides?</strong> Stories are the most impactful when they intimately relate a perspective of a conflict. Relating many different stories that take the perspective of each the individual side of a conflict is one way to present a complete view of any given conflict. I feel the best service I can provide to readers is to leave as little interpretation as possible between what a subject relates to me and what I present. It is inevitable that a particular story will be biased by the subject, but by being able to relate both sides I give the viewer or reader the opportunity to judge the situation for themselves without my interpretation. In the case of this project I felt that the perspective of violence between the Taliban and the Afghan or international army is adequately represented to most viewers.</p>\n<p><strong>What is the most important lesson you learned about your fellow human by observing him/her at war?</strong> I think the idea that all humans are remarkably the same goes without saying, so I will add this observation: Humans are predictable and can therefore be anticipated. The trick of photojournalism is to be such a keen observer of humans that you can anticipate when a particular event will take place, allowing you to capture it. Photographing in war zones makes this skill particularly valuable because it can help you predict human behavior that may take your life. In the micro scale of this skill I am able to predict that a neighborhood bread stall that is empty and in hard mid-day light will be beautiful and busy with people in the early morning when family members are gathering their breakfast bread. [Or I can predict] that roadside bombs are often hidden in trash or on the opposite side of an obstacle placed in a walkway — so avoiding walking through trash or stepping far over or to the side of an obstacle in a trail will give me a better chance of not stepping on a land mine. In the macro version of this lesson I realize people are skilled observers of American foreign policy. This means that organizations like the Taliban often anticipate the 180-degree change in American foreign policy every time there is a new U.S. President, with remarkable success.</p>\n<p><strong>And by observing your fellow humans at war, what’s the most important lesson you learned about yourself?</strong> I think the most powerful realization was that making a list of small steps that I believe will lead me to accomplishing what I want will <em>actually</em> lead me to what I want. Knocking on a door, sending that email, reaching out for help is always the first step in going and doing the things I want to do.</p>\n<p><strong>How long did it take you to compile the images in your book? And how did you gain the Afghan miners’ trust and acceptance?</strong> The images for the book were created over the course of a two-week trip to the Panjshir mountains. However, the … intimacy of the images came because I had built a relationship over time with a member of the family of the miners. I had meet him in Kabul and worked with him as a translator and a guide. We had taken several dangerous trips together and we had grown to know each other very well. That made all the difference when I arrived in the valley to do the story because I was received as a guest of the village, and not as an outsider.</p>\n<h5><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-author-pic-blog.jpg"><img loading="lazy" data-attachment-id="371" data-permalink="http://heideblog.com/2009/06/18/seven-cities-in-10-days-part-6/florence-dimedici-perspective/" data-orig-file="https://hmunro.files.wordpress.com/2009/06/florence-david-copy.jpg" data-orig-size="359,504" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;4&quot;,&quot;credit&quot;:&quot;Heather Munro&quot;,&quot;camera&quot;:&quot;Canon PowerShot S3 IS&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1190402091&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;8.6&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0.0025&quot;,&quot;title&quot;:&quot;Florence DiMedici perspective&quot;}" data-image-title="Florence DiMedici perspective" data-image-description="" data-image-caption="" data-medium-file="https://hmunro.files.wordpress.com/2009/06/florence-david-copy.jpg?w=214" data-large-file="https://hmunro.files.wordpress.com/2009/06/florence-david-copy.jpg?w=359" class="alignnone size-full wp-image-371" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-author-pic-blog.jpg?w=1016" alt="Max Becherer author pic BLOG" width="500" height="333" /><br />\n</a>Photographer Max Becherer, above, in the Panjshir mountains</h5>\n<p>I was housed in the home of a prominent family. But even more, I suffered the climb up the mountain with the miners and I spent several nights sleeping in the cold mountainside huts, eating their food, and listening to their stories. The miners were unguarded and we suffered together.</p>\n<h5><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-inside-mine-2-blog.jpg"><img loading="lazy" data-attachment-id="372" data-permalink="http://heideblog.com/2009/06/18/seven-cities-in-10-days-part-6/florence-dimedici-perspective-2/" data-orig-file="https://hmunro.files.wordpress.com/2009/06/florence-dimedici-perspective-2.jpg" data-orig-size="378,504" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;3.5&quot;,&quot;credit&quot;:&quot;Heather Munro&quot;,&quot;camera&quot;:&quot;Canon PowerShot S3 IS&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1190403105&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;32.2&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0.01&quot;,&quot;title&quot;:&quot;Florence DiMedici perspective 2&quot;}" data-image-title="Florence DiMedici perspective 2" data-image-description="" data-image-caption="" data-medium-file="https://hmunro.files.wordpress.com/2009/06/florence-dimedici-perspective-2.jpg?w=225" data-large-file="https://hmunro.files.wordpress.com/2009/06/florence-dimedici-perspective-2.jpg?w=378" class="alignnone size-full wp-image-372" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-inside-mine-2-blog.jpg?w=1016" alt="Max Becherer inside mine 2 BLOG" width="500" height="333" /></a><br />\nMax spent long hours in the mines to capture these images of the dangerous, exhausting work.</h5>\n<p><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-inside-mine-blog.jpg"><img loading="lazy" data-attachment-id="373" data-permalink="http://heideblog.com/2009/06/18/seven-cities-in-10-days-part-6/florence-dimedici-perspective-4/" data-orig-file="https://hmunro.files.wordpress.com/2009/06/florence-dimedici-perspective-4.jpg" data-orig-size="378,504" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;3.5&quot;,&quot;credit&quot;:&quot;Heather Munro&quot;,&quot;camera&quot;:&quot;Canon PowerShot S3 IS&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1190403459&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;17.3&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0.02&quot;,&quot;title&quot;:&quot;Florence DiMedici perspective 4&quot;}" data-image-title="Florence DiMedici perspective 4" data-image-description="" data-image-caption="" data-medium-file="https://hmunro.files.wordpress.com/2009/06/florence-dimedici-perspective-4.jpg?w=225" data-large-file="https://hmunro.files.wordpress.com/2009/06/florence-dimedici-perspective-4.jpg?w=378" class="alignnone wp-image-373 size-full" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-inside-mine-blog.jpg?w=1016" alt="" width="500" height="333" /></a></p>\n<p>A surprising postscript to the project came from the emerald miner’s reaction to the book and the story I wrote. My host had suffered from the cold and the climbing so he’d stopped translating all of the miners’ stories. I think they figured that half of what they were telling me was being lost. But I was very diligent in making audio recordings of all their conversations, even the ones between each other. When I got back to Kabul and was rested I had all of their interviews transcribed and was in that way able to relate the richest and most meaningful stories. The were very grateful that I had recorded their stories so faithfully.</p>\n<h5><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-mountainside-blog.jpg"><img loading="lazy" data-attachment-id="370" data-permalink="http://heideblog.com/2009/06/18/seven-cities-in-10-days-part-6/florence-view-from-belltower/" data-orig-file="https://hmunro.files.wordpress.com/2009/06/florence-belltower-interior.jpg" data-orig-size="504,378" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;2.7&quot;,&quot;credit&quot;:&quot;Heather Munro&quot;,&quot;camera&quot;:&quot;Canon PowerShot S3 IS&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1190380132&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;6&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0.02&quot;,&quot;title&quot;:&quot;Florence view from belltower&quot;}" data-image-title="Florence view from belltower" data-image-description="" data-image-caption="" data-medium-file="https://hmunro.files.wordpress.com/2009/06/florence-belltower-interior.jpg?w=300" data-large-file="https://hmunro.files.wordpress.com/2009/06/florence-belltower-interior.jpg?w=480" class="alignnone size-full wp-image-370" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-mountainside-blog.jpg?w=1016" alt="Max Becherer mountainside BLOG" width="500" height="333" /><br />\n</a>The landscape is beautiful, but the cold and altitude can take their toll on the miners.</h5>\n<p><strong>Your images of the <a href="http://apps.npr.org/buzkashi/" target="_blank" rel="noopener noreferrer">Buzkashi</a> tournament were breathtaking. How did you get these shots?</strong> These Buzkashi photographs have stood the test of time and are captivating every time I look at them. There are two images that stand out in particular from this series. The first image is the panorama of the horse riders chasing the leader with the “goat” on page 46. (I say “goat” because that is what is traditionally used even though in this case a calf was used.) This image was made as I was low to the ground, shooting up toward the riders, with a 200 mm lens on my camera that compressed the distance between the riders and the golden leaves of fall behind the riders.</p>\n<p><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-get-the-goat-spread-blog.jpg"><img loading="lazy" class="alignnone size-full wp-image-367" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-get-the-goat-spread-blog.jpg?w=1016" alt="Max Becherer get the goat spread BLOG" width="500" height="206" /></a></p>\n<p>On page 52 is an image that shows a rider in the heart of the scrum of horsemen as they fight each other for the “goat.” I made this image when the horsemen came barreling toward me and I found refuge on a large rock that was at the side of the field of play. The spectators around me had retreated up the hill. I stood fast on the boulder and used a 20mm lens to snap this image. This is one of those moments where I had to steady myself to keep shooting and was rewarded with a beautiful shot.</p>\n<p><a href="https://sporkblog.files.wordpress.com/2015/11/max-becherer-get-the-goat-blog.jpg"><img loading="lazy" class="alignnone wp-image-366 size-full" src="https://sporkblog.files.wordpress.com/2015/11/max-becherer-get-the-goat-blog.jpg?w=1016" alt="" width="500" height="333" /></a></p>\n<p><strong>In <a href="https://vimeo.com/119006298" target="_blank" rel="noopener noreferrer">the video on your blog</a>, you said you hoped this book would help raise awareness of the plight of the thousands of would-be refugees who are seeking a better life. What can the average American or European citizen do to help?</strong> I think internalizing that the people fleeing these places, for the most part, are desperate to go back to their home. As you can see from this book, many of them come from some of the most breathtaking places on earth. When you encounter these people in their community it is important to remember that if you were in their community they would offer you a seat inside their home and some tea and act as your host while you are in their community. This is a custom that is often only afforded to close family in our culture but it is a custom afforded to any traveler or stranger in their culture. This can translate into a simple act of helping refugees navigate your city or as elaborate as helping refugees navigate government services.</p>\n<p><strong>Are there any stories behind any of the photos you’d especially like to share?</strong> The climb up the mountain takes the miners about four hours. They start off from the valley floor at first light with their supplies piled onto donkeys and make their mountain camps by noon. I was slow to start, so there were no more donkeys at the market to help me carry my week’s worth of supplies up the mountain. I was offered porters to carry my bags for me. I started up the mountain and the porters quickly left me in the dust. After four hours I was less than halfway up the mountain and the porters met me on their way down, my bags already safely delivered. They collected their pay from me and were on their way. I reached the camp that day just as the sun set.</p>\n<h3>Learn more</h3>\n<p>• See Max&#8217;s work at <a href="https://photonola.org/" target="_blank" rel="noopener noreferrer">PhotoNOLA</a>,\xa0<strong>December 10-13</strong>, Second Story Gallery, 2372 St. Claude Ave., New Orleans, Louisiana<br />\n• <a href="https://www.etsy.com/shop/Maxography?ref=search_shop_redirect" target="_blank" rel="noopener noreferrer">Purchase Max&#8217;s book and select prints on Etsy </a><br />\n• See more of Max&#8217;s work at <a href="http://www.maxbecherer.com" target="_blank" rel="noopener noreferrer">www.maxbecherer.com<br />\n</a>• Follow Max on Twitter <a href="https://twitter.com/mlbecherer?lang=en" target="_blank" rel="noopener noreferrer">@mlbecherer<br />\n</a>• Subscribe to <a href="https://maxbecherer.wordpress.com/" target="_blank" rel="noopener noreferrer">Max&#8217;s WordPress blog</a></p>\n', 'excerpt': '<p>Dynamite and Prayers is the title of photographer Max Becherer’s stunning new book. Although the subject is the emerald miners of Afghanistan, Max’s storytelling transports us to a sweeping landscape few of us can even imagine — and unveils the true cost of war. I’ve had the privilege of working with many world-class photographers, but [&hellip;]</p>\n', 'slug': 'dynamite-and-prayers', 'guid': 'https://hmunro.wordpress.com/?p=10896', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': False, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 96, 'like_count': 830, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '98068c659fde032436c1383feaf1a4dc', 'featured_image': 'https://hmunro.files.wordpress.com/2015/11/dynamite-and-prayers-cover-cover.jpg', 'post_thumbnail': {'ID': 17571, 'URL': 'https://hmunro.files.wordpress.com/2015/11/dynamite-and-prayers-cover-cover.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/dynamite-and-prayers-cover-cover.jpg', 'mime_type': 'image/jpeg', 'width': 554, 'height': 554}, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'Afghanistan': {'ID': 4338, 'name': 'Afghanistan', 'slug': 'afghanistan', 'description': '', 'post_count': 2, 'feed_url': 'http://heideblog.com/tag/afghanistan/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:afghanistan', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:afghanistan/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'Dynamite and Prayers': {'ID': 418384997, 'name': 'Dynamite and Prayers', 'slug': 'dynamite-and-prayers', 'description': '', 'post_count': 1, 'feed_url': 'http://heideblog.com/tag/dynamite-and-prayers/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:dynamite-and-prayers', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:dynamite-and-prayers/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'emerald mines': {'ID': 68080648, 'name': 'emerald mines', 'slug': 'emerald-mines', 'description': '', 'post_count': 1, 'feed_url': 'http://heideblog.com/tag/emerald-mines/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:emerald-mines', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:emerald-mines/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'Iraq war': {'ID': 2481, 'name': 'Iraq war', 'slug': 'iraq-war', 'description': '', 'post_count': 2, 'feed_url': 'http://heideblog.com/tag/iraq-war/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:iraq-war', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:iraq-war/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'Max Becherer': {'ID': 12554021, 'name': 'Max Becherer', 'slug': 'max-becherer', 'description': '', 'post_count': 1, 'feed_url': 'http://heideblog.com/tag/max-becherer/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:max-becherer', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:max-becherer/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'war photography': {'ID': 1001084, 'name': 'war photography', 'slug': 'war-photography', 'description': '', 'post_count': 2, 'feed_url': 'http://heideblog.com/tag/war-photography/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:war-photography', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/tags/slug:war-photography/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}}, 'categories': {'Friends and family': {'ID': 17689, 'name': 'Friends and family', 'slug': 'friends-and-family', 'description': '', 'post_count': 182, 'feed_url': 'http://heideblog.com/category/friends-and-family/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:friends-and-family', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:friends-and-family/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'Photography': {'ID': 436, 'name': 'Photography', 'slug': 'photography', 'description': '', 'post_count': 259, 'feed_url': 'http://heideblog.com/category/photography/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:photography', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:photography/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'Psychology': {'ID': 4909, 'name': 'Psychology', 'slug': 'psychology', 'description': '', 'post_count': 291, 'feed_url': 'http://heideblog.com/category/psychology/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:psychology', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:psychology/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}, 'Travel': {'ID': 200, 'name': 'Travel', 'slug': 'travel', 'description': '', 'post_count': 202, 'feed_url': 'http://heideblog.com/category/travel/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:travel', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/categories/slug:travel/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743'}}}}, 'attachments': {'17571': {'ID': 17571, 'URL': 'https://hmunro.files.wordpress.com/2015/11/dynamite-and-prayers-cover-cover.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/dynamite-and-prayers-cover-cover.jpg', 'mime_type': 'image/jpeg', 'width': 554, 'height': 554}, '10905': {'ID': 10905, 'URL': 'https://hmunro.files.wordpress.com/2015/11/dynamite-and-prayers-cover-blog1.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/dynamite-and-prayers-cover-blog1.jpg', 'mime_type': 'image/jpeg', 'width': 648, 'height': 554}, '10904': {'ID': 10904, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-rainbow-spread.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-rainbow-spread.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 382}, '10903': {'ID': 10903, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-drill-blog.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-drill-blog.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 600}, '10902': {'ID': 10902, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-author-pic-blog.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-author-pic-blog.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 600}, '10901': {'ID': 10901, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-inside-mine-2-blog.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-inside-mine-2-blog.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 600}, '10900': {'ID': 10900, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-inside-mine-blog.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-inside-mine-blog.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 600}, '10899': {'ID': 10899, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-mountainside-blog.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-mountainside-blog.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 600}, '10898': {'ID': 10898, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-get-the-goat-spread-blog.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-get-the-goat-spread-blog.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 370}, '10897': {'ID': 10897, 'URL': 'https://hmunro.files.wordpress.com/2015/11/max-becherer-get-the-goat-blog.jpg', 'guid': 'http://hmunro.files.wordpress.com/2015/11/max-becherer-get-the-goat-blog.jpg', 'mime_type': 'image/jpeg', 'width': 900, 'height': 600}}, 'metadata': [{'id': '26611', 'key': '_thumbnail_id', 'value': '17571'}], 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/posts/10896', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/posts/10896/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/posts/10896/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/7891743/posts/10896/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '98068c659fde032436c1383feaf1a4dc', 'is_external': False, 'site_name': 'HeideBlog', 'site_URL': 'http://heideblog.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '7891743', 'post_id': '10896', 'image': 'https://s0.wp.com/imgpress?w=252&url=http%3A%2F%2Fsporkblog.files.wordpress.com%2F2015%2F11%2Fmax-becherer-get-the-goat-blog.jpg&unsharpmask=80,0.5,3', 'custom_headline': 'Dynamite and Prayers: A Photojournalist in Afghanistan', 'custom_blog_title': '', 'displayed_on': '2015-11-20T16:02:02+00:00', 'picked_on': '1970-01-01T00:33:35+00:00', 'highlight_topic': 'photography', 'highlight_topic_title': '', 'screen_offset': '0', 'blog_name': 'HeideBlog', 'site_id': '1'}}, {'ID': 1707, 'site_ID': 26322146, 'author': {'ID': 26089999, 'login': 'bentrovatowhippingboy', 'email': False, 'name': 'Ben Trovato – Durban Poison', 'first_name': 'Ben', 'last_name': 'Trovato', 'nice_name': 'bentrovatowhippingboy', 'URL': 'http://bentrovatowhippingboy.wordpress.com', 'avatar_URL': 'https://0.gravatar.com/avatar/385ba95012d874896fbc0b73f877a8f9?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/bentrovatowhippingboy', 'ip_address': False, 'site_ID': 26322146, 'site_visible': True}, 'date': '2015-11-08T12:27:47+00:00', 'modified': '2015-11-20T05:05:09+00:00', 'title': 'Hairy lips, healthy balls', 'URL': 'https://bentrovatowhippingboy.wordpress.com/2015/11/08/hairy-lips-mean-healthy-balls/', 'short_URL': 'https://wp.me/p1MrAK-rx', 'content': '<p>You know who else liked moustaches? I&#8217;ll tell you. Hitler. Stalin. Saddam. Gaddafi. Mussolini. That&#8217;s who. And here we are, being bullied into growing fanny dusters fit only for tyrants. Movember my ass. Having us walk around with moustaches for a month isn&#8217;t going to raise awareness of men&#8217;s health. All it will do is make women ridicule us even more than usual.</p>\n<p>You mightn&#8217;t be so quick to put out a welcome mat on the doorstep of Casa Nostrils if it wasn&#8217;t called a moustache, a word that has the ring of the usual French nonsense about it. But what if you lived in Germany, where a moustache is called a schnorrbart? Would you want to be associated with Schnorrvember? Or, if you&#8217;re in Iceland, Yfirvaraskeggvember? Never mind if you&#8217;re from Slovenia. Those poor bastards would have to celebrate Brkivember. The idea of three vowels in one word is enough to drive your average Slove to suicide.</p>\n<p>Normal people like me and perhaps you are not going to be pressured into cultivating a nasty habit that could well affect our political leanings and, indeed, our very sexuality. If Freddie Mercury had kept his top lip clean, he&#8217;d be living as Farrokh Bulsara in a trailer park in downtown Orlando today with a wife called Blanche and three gifted but disturbed children.</p>\n<p>Having said that, it&#8217;s interesting to note that gay bikers and heterosexual farmers alike are huge fans of the mouth brow. And yet if you had to walk into a bar and ask a biker if he&#8217;s a farmer or a farmer if he&#8217;s a bottie-bandit, you&#8217;d probably get your face broken.</p>\n<p>I don&#8217;t have a moustache because, in my line of work, it&#8217;s important to be trusted. People need to believe that what I write is the truth. If I am to be taken seriously, my upper lip needs to be dusted with nothing more than anxious beads of sweat. Unfortunately, and I don&#8217;t claim to know how this came about, men with moustaches cannot be trusted. I might lie through my teeth, but at least I don&#8217;t lie through my moustache as well.</p>\n<p>Don&#8217;t get me wrong. My face doesn&#8217;t always resemble a finely buffed piece of Carrara marble. If anyone ever makes a movie called Unshorn of the Dead, I&#8217;m their guy. Fact is, men who live alone tend to let themselves go from time to time. Especially those who make their living within the confines of their own home. Not that you can call this a living. Or even a home.</p>\n<p>This means my entire head is covered in fur for at least three weeks of the month. Not thick, coarse clumps of it. I&#8217;m not Chewbacca. Once there is a beard involved, though, the moustache ceases to be a moustache. It simply becomes part of a general facial flocculence that has been the defining feature of many of history&#8217;s lovable rogues ranging from Santa Claus to Charles Manson, from Jesus Christ to George Washington.</p>\n<p>I dislike my hairy face, but I like shaving even less. By week four I will catch sight of myself in a shop window and recoil. That&#8217;s when I buy a case of beer on a Friday night, turn up the music and have a one-man shaving party. Pathetic doesn&#8217;t come close.</p>\n<p>But what really gets my goat, apart from the stock thief in number nine, is that we allow these shadowy organisations to influence our decisions based on nebulous notions such as men&#8217;s health. I&#8217;m not even sure such a thing exists. Obviously I&#8217;m talking from first-hand experience here.</p>\n<p>I&#8217;m reluctant to do this because I don&#8217;t get paid enough to involve myself in research, but apparently the idea of Movember originated in a bar in Adelaide in 1999. What a surprise. A bunch of Aussies off their faces decided that everyone should grow a moustache in November. Even the women, presumably, what with Australia being such an egalitarian society.</p>\n<p>&#8220;What if they don&#8217;t do it, Bruce?&#8221;</p>\n<p>&#8220;Well, mate, we&#8217;ll cut off their goolies.&#8221;</p>\n<p>&#8220;And roger all the Sheilas!&#8221;</p>\n<p>A stray dingo must have walked in at some point because the members of the freshly formed Movember Committee decided they&#8217;d sell T-shirts and give the money to animal welfare.</p>\n<p>Being Adelaide, there was no real rush to get things moving. The committee passed motions, water and out. The dingo eventually ate the treasurer and, in turn, was taken to the kitchen and converted into bar snacks. Such are the laws of nature.</p>\n<p>Five years went by and Movember, much like the committee, was still struggling to get to its feet. Meanwhile, a far sharper group of spritzer-drinking Aussies got together in Melbourne and started their own moustache-based event. Being more cunning and almost certainly more sober than the Adelaide mob, they linked theirs to a campaign to raise awareness for prostate cancer and depression in men.</p>\n<p>&#8220;But, honey, what about the …&#8221;</p>\n<p>&#8220;Shut up. Your lot doesn&#8217;t have a prostate.&#8221;</p>\n<p>&#8220;I am depressed, though.&#8221;</p>\n<p>&#8220;Of course you are. You don&#8217;t have a bloody prostate.&#8221;</p>\n<p>So these new blokes formed the Movember Foundation which spread quicker than typhoid. More than $174-million has been raised around the world since then. I don&#8217;t know where it’s gone. I like to think some went to shelters for women traumatised by having to kiss men with moustaches.</p>\n<p>In 2010, Movember merged with a testicular cancer event called Touchback. Quite frankly, I find the connotations of reciprocity disturbing. I don&#8217;t mind checking my own landing gear, but that&#8217;s where it ends.</p>\n<p>Few South African men suffer from intellectualism and we should perhaps point out to the common herd that growing a moustache in November does not constitute adequate protection against prostate cancer.</p>\n<p>Nor will the general health of men magically improve by a mass sprouting of soup strainers, no matter what the witches and warlocks of Limpopo province say. We might, however, be healthier if we didn&#8217;t have to work so damn hard. When I say we, I mean men who aren&#8217;t me. Men are becoming increasingly stressed by roadblocks and paternity tests. We get depressed by speed limits and flea markets. So let&#8217;s tackle the real issues first.</p>\n<p>Movember&#8217;s main man in South Africa, Garron Gsell, if that&#8217;s his real name, says there&#8217;s a stigma around diseases that affect men, impacting on early detection and life expectancy. Never mind the bollocks. There&#8217;s a stigma around men, period. And early detection of a doomed marriage can also greatly improve life expectancy.</p>\n<p>Gsell says the underlying message of this year&#8217;s theme is that &#8220;if you choose to live well and follow a healthy lifestyle … you can help shape your future&#8221;. In other news, if you wear shoes you can avoid getting thorns in your feet. Also, using an umbrella in the rain can help you stay dry. And not drinking a bottle of brandy for breakfast is good for you.</p>\n<p>Finally, let us not forget that the biggest cause of depression among men is an inability to grow a moustache in November. Mo-shaming is a real thing. So if you do come across someone without a moustache, try to restrain yourself from smashing a beer glass into his face. He might not be a contumacious misanthropic iconoclast at all. He might, for instance, be unable to grow a moustache because he&#8217;s had radiotherapy to treat testicular cancer.</p>\n<p><a href="https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg"><img data-attachment-id="1709" data-permalink="https://bentrovatowhippingboy.wordpress.com/2015/11/08/hairy-lips-mean-healthy-balls/mask/" data-orig-file="https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg" data-orig-size="235,247" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;2.2&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;iPhone 6 Plus&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;1445444066&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;4.15&quot;,&quot;iso&quot;:&quot;50&quot;,&quot;shutter_speed&quot;:&quot;0.03030303030303&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;1&quot;}" data-image-title="mask" data-image-description="" data-image-caption="" data-medium-file="https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg?w=235" data-large-file="https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg?w=235" class="alignnone size-full wp-image-1709" src="https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg?w=480" alt="mask" srcset="https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg 235w, https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg?w=143 143w" sizes="(max-width: 235px) 100vw, 235px"   /></a></p>\n', 'excerpt': '<p>You know who else liked moustaches? I&#8217;ll tell you. Hitler. Stalin. Saddam. Gaddafi. Mussolini. That&#8217;s who. And here we are, being bullied into growing fanny dusters fit only for tyrants. Movember my ass. Having us walk around with moustaches for a month isn&#8217;t going to raise awareness of men&#8217;s health. All it will do is [&hellip;]</p>\n', 'slug': 'hairy-lips-mean-healthy-balls', 'guid': 'https://bentrovatowhippingboy.wordpress.com/?p=1707', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 142, 'like_count': 796, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '84cd5376d98c4472103cd4d20073f1f1', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'Adolf Hitler': {'ID': 203238, 'name': 'Adolf Hitler', 'slug': 'adolf-hitler', 'description': '', 'post_count': 4, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/adolf-hitler/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:adolf-hitler', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:adolf-hitler/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Ben Trovato': {'ID': 13212829, 'name': 'Ben Trovato', 'slug': 'ben-trovato', 'description': '', 'post_count': 378, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/ben-trovato/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:ben-trovato', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:ben-trovato/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Charles Manson': {'ID': 298304, 'name': 'Charles Manson', 'slug': 'charles-manson', 'description': '', 'post_count': 1, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/charles-manson/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:charles-manson', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:charles-manson/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Durban Poison': {'ID': 15634762, 'name': 'Durban Poison', 'slug': 'durban-poison', 'description': '', 'post_count': 256, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/durban-poison/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:durban-poison', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:durban-poison/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'gay bikers': {'ID': 24402703, 'name': 'gay bikers', 'slug': 'gay-bikers', 'description': '', 'post_count': 1, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/gay-bikers/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:gay-bikers', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:gay-bikers/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Jesus Christ': {'ID': 18209, 'name': 'Jesus Christ', 'slug': 'jesus-christ', 'description': '', 'post_count': 18, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/jesus-christ/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:jesus-christ', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:jesus-christ/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Josef Stalin': {'ID': 784181, 'name': 'Josef Stalin', 'slug': 'josef-stalin', 'description': '', 'post_count': 2, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/josef-stalin/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:josef-stalin', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:josef-stalin/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Moustache': {'ID': 107649, 'name': 'Moustache', 'slug': 'moustache', 'description': '', 'post_count': 1, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/moustache/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:moustache', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:moustache/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Movember': {'ID': 317813, 'name': 'Movember', 'slug': 'movember', 'description': '', 'post_count': 1, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/movember/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:movember', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:movember/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Mustache': {'ID': 963748, 'name': 'Mustache', 'slug': 'mustache', 'description': '', 'post_count': 1, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/mustache/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:mustache', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:mustache/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'Santa Claus': {'ID': 62411, 'name': 'Santa Claus', 'slug': 'santa-claus', 'description': '', 'post_count': 1, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/santa-claus/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:santa-claus', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:santa-claus/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}, 'South Africa': {'ID': 6231, 'name': 'South Africa', 'slug': 'south-africa', 'description': '', 'post_count': 141, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/tag/south-africa/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:south-africa', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/tags/slug:south-africa/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}}, 'categories': {'Durban Poison': {'ID': 15634762, 'name': 'Durban Poison', 'slug': 'durban-poison', 'description': '', 'post_count': 318, 'feed_url': 'https://bentrovatowhippingboy.wordpress.com/category/durban-poison/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/categories/slug:durban-poison', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/categories/slug:durban-poison/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146'}}}}, 'attachments': {'1709': {'ID': 1709, 'URL': 'https://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg', 'guid': 'http://bentrovatowhippingboy.files.wordpress.com/2015/11/mask.jpg', 'mime_type': 'image/jpeg', 'width': 235, 'height': 247}, '1708': {'ID': 1708, 'URL': 'https://bentrovatowhippingboy.files.wordpress.com/2015/11/maxresdefault.jpg', 'guid': 'http://bentrovatowhippingboy.files.wordpress.com/2015/11/maxresdefault.jpg', 'mime_type': 'image/jpeg', 'width': 1280, 'height': 720}}, 'metadata': [{'id': '9537', 'key': 'geo_public', 'value': '0'}, {'id': '9548', 'key': '_wpas_done_929656', 'value': '1'}, {'id': '9545', 'key': '_wpas_done_929657', 'value': '1'}, {'id': '9550', 'key': '_wpas_done_929658', 'value': '1'}, {'id': '9562', 'key': '_wpas_skip_929656', 'value': '1'}, {'id': '9560', 'key': '_wpas_skip_929657', 'value': '1'}, {'id': '9561', 'key': '_wpas_skip_929658', 'value': '1'}], 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/posts/1707', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/posts/1707/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/posts/1707/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/26322146/posts/1707/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '84cd5376d98c4472103cd4d20073f1f1', 'is_external': False, 'site_name': 'BEN TROVATO – Durban Poison', 'site_URL': 'https://bentrovatowhippingboy.wordpress.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '26322146', 'post_id': '1707', 'image': 'https://s2.wp.com/imgpress?w=252&url=http%3A%2F%2Fbentrovatowhippingboy.files.wordpress.com%2F2015%2F11%2Fmaxresdefault.jpg&unsharpmask=80,0.5,3', 'custom_headline': 'Movember: Hairy Lips Mean Healthy Balls', 'custom_blog_title': '', 'displayed_on': '2015-11-19T21:02:02+00:00', 'picked_on': '1970-01-01T00:33:35+00:00', 'highlight_topic': 'satire', 'highlight_topic_title': 'Satire', 'screen_offset': '0', 'blog_name': 'BEN TROVATO – Durban Poison', 'site_id': '1'}}, {'ID': 5270, 'site_ID': 4042294, 'author': {'ID': 4278874, 'login': 'gaiavince', 'email': False, 'name': 'Gaia', 'first_name': 'Gaia', 'last_name': 'Vince', 'nice_name': 'gaiavince', 'URL': 'http://', 'avatar_URL': 'https://0.gravatar.com/avatar/93398742b4a0f095168e2bacfc30cbba?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/gaiavince', 'ip_address': False, 'site_ID': 4042294, 'site_visible': True}, 'date': '2014-07-08T09:05:03+00:00', 'modified': '2019-09-27T10:04:34+00:00', 'title': 'Homni: The new superorganism taking over Earth', 'URL': 'http://wanderinggaia.com/2014/07/08/homni-the-new-superorganism-taking-over-earth/', 'short_URL': 'https://wp.me/pgXAi-1n0', 'content': '<p>In Ancient Greek mythology, the Earth Goddess Gaia had nine titan sons, who attempted to control not just the Earth, but the entire Universe. I’d like to introduce another. It’s a new creature who emerged only in recent decades. But it’s a creature who is already as influential over life on the planet as the phytoplankton or forests that regulate global temperature, the weather and the air we breathe.</p>\n<p>That new creature is us, or more precisely, what humanity is becoming. The entirety of our species, <i>Homo sapiens</i>, is evolving into a superorganism; I’ll call this new life force <i>Homo omnis</i>, or ‘Homni’.</p>\n<p>We have now become the dominant force shaping our planet. Some say that because of our actions we have entered a new geological epoch: <a href="http://www.bbc.com/future/story/20120209-welcome-to-the-age-of-modern-man">the Anthropocene</a>, or the age of man. Homni is a product of this age, a product of human industrialisation, population expansion, globalisation and the revolution in communications technology, and he is immensely powerful. Homni can influence the biosphere, and has needs – currently, he uses <a href="http://www.eia.gov/cfapps/ipdbproject/iedindex3.cfm">18 terawatts</a> (trillion watts) of energy at any time, <a href="http://www.scientificamerican.com/article/graphic-science-how-much-water-nations-consume/">9,000 billion cubic metres of water</a> per year, <a href="http://news.nationalgeographic.com/news/2005/12/1209_051209_crops_map.html">40% of global land area</a> for farming, and a plethora of other natural and mineral resources.</p>\n<p>Only time will tell if he will be a benign caretaker, or a monster that destroys life and with it himself. But there are clues, and here I will examine what Homni is, and what he means for our species, the planet and the rest of life on Earth.</p>\n<p><b>Crowd power</b></p>\n<p>To understand Homni, let me first take you down into the soil to consider one of the most simple and ancient single-celled organisms, an amoeba called a slime mould. It evolved some 600 million years ago, and occupies soils across the world, from Antarctica to the Arctic. For most of its life-cycle, the cell lives the unexceptional life of most amoeba. But sometimes, these single cells <a href="http://www.nytimes.com/2011/10/04/science/04slime.html?pagewanted=all">gather in their thousands to create an organism</a>, encased in its own slime, that can creep, crawl, pulsate, grow tentacles and even negotiate a maze.</p>\n<p>Scientists describe these slime moulds as ‘societies’ because of the way the individual amoebae work together towards a common cause, sometimes sacrificing themselves on the way. For example, if food is scarce in their soil patch, the amoeba coalesce together forming a tendril that creeps up to the light. Once it has reached the surface, a portion of them form a stalk above ground, by turning their bodies into hard cellulose – a process that kills them. The rest of the mould then climbs the stalk and waits in a blob at the top for a passing animal to transport them to new soils. All this, from the simplest organism.</p>\n<p>The human brain is a bit like the mould. Each single brain cell, or neuron, cannot be described as conscious or sentient, and yet, when all 86 billion neurons are networked together, the human brain is far, far more than the sum of its parts, capable of thinking and processing ideas in original ways. We still don’t understand how thoughts or personality or behaviours are seeded and take root in this network, or how the neurons become organised to drive such processes, but somehow consciousness is created from the most prosaic building materials.</p>\n<p><a href="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg"><img loading="lazy" data-attachment-id="5279" data-permalink="http://wanderinggaia.com/2014/07/08/homni-the-new-superorganism-taking-over-earth/rocina/" data-orig-file="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg" data-orig-size="333,500" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="rocina" data-image-description="" data-image-caption="" data-medium-file="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=200" data-large-file="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=333" class="aligncenter size-medium wp-image-5279" src="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=199&#038;h=300" alt="rocina" width="199" height="300" srcset="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=199&amp;h=300 199w, https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=100&amp;h=150 100w, https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg 333w" sizes="(max-width: 199px) 100vw, 199px" /></a></p>\n<p>We can describe the intelligence, creativity and sociability of Homni as being comparable to the networked, linked-up, conversational accumulation of all the human brains, including those from the past who have left a cultural and intellectual legacy, and also the artificial ‘brains’ of our technological inventions, such as computer programs and Wikipedia. Homni is a global network of civilisations with a stream of knowledge already being channelled for human protection. Just as a cloud of starlings suddenly flips direction en masse, it is difficult to predict how Homni’s behaviour will play out.</p>\n<p>But this is just one aspect of Homni.</p>\n<p><b>&#8216;Artificial Man&#8217;</b></p>\n<p>Not long ago, I sat in a rainforest in Belize, watching a troop of fire ants at work. Individually, each is a formidable beast, a few centimetres long but with a powerful bite. But together, they form what entomologist EO Wilson described as a superorganism of thousands of organised ants that systematically devours everything in its path, tearing down trees and crops and stripping the insulation off wiring and other electrical equipment. In some places the ants run a protection racket for other aphids and bugs, <a href="http://blogs.discovermagazine.com/notrocketscience/2011/12/05/fire-ants-conquered-america-by-monopolising-calorie-rich-food/#more-5921">which supply them with nectar</a>. And the superorganism has even figured out a way of surviving heavy rainfall, by clinging to each other and <a href="http://www.pnas.org/content/108/19/7669.long">forming a floating life raft</a> in times of flooding. Once they’ve exhausted their environment’s resources, the entire community ups and moves to pastures new. Ants are sophisticated farmers – pre-dating human farmers by more than 50 million years – and they also raise and milk livestock (aphids), they build complex residences, keep slaves, and wage massive battles that involve psychological warfare. The comparisons with humans are multiple.</p>\n<p>Applying the idea of superorganisms to humanity is more complicated – individually, we are more autonomous than cells, or even ants. But over the centuries, the idea has emerged in many different guises. The Ancient Greeks imagined each of us as cells in the greater being. Others have referred to the roles that different parts of society play – such as generating energy or food – as analogous to organs in a body. The 17th Century English philosopher Thomas Hobbes also described society as forming an &#8216;Artificial Man&#8217; that functions (through civilisation) in a way as to ensure its own survival.</p>\n<p>Now, as we advance into the Anthropocene, we are seeing these ideas put into practice on an unprecedented scale. While individual humans or societies can exert a local or regional effect on landscapes, water flow or biodiversity, the impact of our superspecies is planetary. Homni now controls three-quarters of Earth’s freshwater supplies, has modified <a href="http://ecotope.org/people/ellis/papers/ellis_2008.pdf">more than three-quarters</a> of ice-free land surface, and modulates the planet&#8217;s air, biodiversity, and oceanic chemistry and biology. Homni has even started <a href="http://www.bbc.com/future/story/20120518-danger-space-junk-alert">littering space</a> with telescopes, satellites and other artificial junk. Homni’s actions are like the environmental rampaging of Argentinian ants on a global scale.</p>\n<p>Increasingly, individual people are less and less able to function independently in modern society – we rely on the superorganism to feed, clothe and power our many tools, to inform and heal us, even to help us reproduce through surrogacy or IVF. In coming decades, it is likely that access to the internet will have reached <a href="http://www.bbc.com/future/story/20140214-the-last-places-without-internet">almost every part of the globe</a> and, as we become more cohesive as a networked society, individuals who remain outside of the new superorganism will find themselves isolated culturally and technologically from what it means to be a human in the Anthropocene.</p>\n<p>In the coming decades, it is also likely that access to electricity, sanitation and antibiotics will become near universal – thus, describing a human in the Anthropocene will increasingly assume a doubled lifespan and basic awareness of the scientific, geopolitical, cultural and social factors behind how the world operates. The result will be a new way of living that is almost akin to being a new subspecies. It is the new modern human that created the Anthropocene and gave rise to Homni, but it is Homni who now sculpts the new human.</p>\n<p><b>Monster issues</b></p>\n<p>And here lies an interesting paradox. Humans may have evolved through a process of natural selection – essentially outcompeting rivals to death – but as <a href="http://www.theguardian.com/commentisfree/video/2011/apr/04/tim-flannery-global-shared-beliefs-video">palaeontologist Tim Flannery</a> says, this has led not to a &#8220;dog-eat-dog world&#8221;, but to a cooperative society. He believes we are in the process of forming an interdependent global society with a set of shared beliefs – a &#8220;civilisation of ideas&#8221; – that will transform Earth into a more equitable and ecologically curated planet. It&#8217;s an optimistic view of Homni, based on the fact that most people want to get on with each other and look after their neighbourhood environment. Whether, or to what degree, Flannery&#8217;s altruistic view of humanity bears out is the big question.</p>\n<p>Individuals may exert an influence over Homni to some degree, rather like the single neuron that fires off a signal, starting an original thought, which then progresses to a painting, song or an invention like the iPod. Or the individual who sends a single tweet that then becomes an internet meme propagating and evolving through the internet. The “tipping point” is thought to be low: just 10% are needed to hold a new belief before it <a href="http://news.rpi.edu/luwakkey/2902">spreads to the majority of the population</a>.</p>\n<p>Although individuals may be able to steer Homni to some level, it is far from obvious how we might do this to ensure our survival through the Anthropocene. Homni’s influence is already being seen in planetary changes unprecedented for millions of years, affecting humans and our relationship to the natural world. We are changing the climate by increasing the level of carbon dioxide in the atmosphere; we&#8217;re reducing the planet&#8217;s biodiversity, causing what scientists fear may be the <a href="http://www.nature.com/nature/journal/v471/n7336/full/nature09678.html">sixth mass extinction</a> in its history; and terraforming Earth&#8217;s land surface with multiple megacities of concrete, steel and glass. Deciding as an individual to reduce freshwater waste, or cut my carbon footprint has negligible impact on the state of the world&#8217;s rivers or global temperature.</p>\n<p>Homni is essentially a concept – I invented him because our superorganism has characteristics that go beyond the simple accumulation of humans. In other examples from the animal world, like bee hives or ant nests, killing the queen results in the collapse of the entire colony. Homni has no single queen, though, and in this way he is as robust as a forest. It would take a catastrophe on an epic scale – an epidemic, massive environmental change, an asteroid impact, or nuclear war – to possibly kill Homni, leaving a straggle of human survivors.</p>\n<p>But our impulse would always be to strengthen rather than kill Homni – we are social collaborators and most of our recent discoveries, inventions and successes have been born out of group effort. And the secret to ensuring a better Anthropocene is in recognising Homni&#8217;s power, but also nurturing his human side, the side committed to improving relations with the neighbours and cleaning up the neighbourhood. Will we achieve this through global international agreements? Possibly. I think that increasingly, as we see through a network of eyes, in the form of the many powerful satellites and remote cameras that track individual trees in rainforests or reveal the extent of glacial carving, we will start to read Homni’s mind, and have more nuanced control over his actions.</p>\n<p>Maybe then we will begin to use the power of Homni to restore and curate the planet. The alternative is too monstrous to contemplate.</p>\n<p><em>This article <a href="http://www.bbc.com/future/story/20140701-the-superorganism-engulfing-earth" target="_blank">first appeared on BBC Future</a>. My book </em><strong>Adventures In The Anthropocene: A Journey to the Heart of the Planet We Made</strong><em> is available <a href="http://www.amazon.co.uk/Adventures-Anthropocene-Journey-Heart-Planet/dp/0701187344" target="_blank">online</a> and in bookstores.</em></p>\n', 'excerpt': '<p>In Ancient Greek mythology, the Earth Goddess Gaia had nine titan sons, who attempted to control not just the Earth, but the entire Universe. I’d like to introduce another. It’s a new creature who emerged only in recent decades. But it’s a creature who is already as influential over life on the planet as the [&hellip;]</p>\n', 'slug': 'homni-the-new-superorganism-taking-over-earth', 'guid': 'http://wanderinggaia.com/?p=5270', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 70, 'like_count': 881, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '798e118abcc36c9daaab3f8c938f8e19', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'ADVENTURES IN THE ANTHROPOCENE': {'ID': 331408322, 'name': 'ADVENTURES IN THE ANTHROPOCENE', 'slug': 'adventures-in-the-anthropocene', 'description': 'Adventures In The Anthropocene', 'post_count': 36, 'feed_url': 'http://wanderinggaia.com/tag/adventures-in-the-anthropocene/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:adventures-in-the-anthropocene', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:adventures-in-the-anthropocene/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}}, 'anthropocene': {'ID': 375137, 'name': 'anthropocene', 'slug': 'anthropocene', 'description': '', 'post_count': 10, 'feed_url': 'http://wanderinggaia.com/tag/anthropocene/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:anthropocene', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:anthropocene/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}}, 'Opinion': {'ID': 352, 'name': 'Opinion', 'slug': 'opinion', 'description': '', 'post_count': 94, 'feed_url': 'http://wanderinggaia.com/tag/opinion/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:opinion', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:opinion/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}}}, 'categories': {'BOOKS': {'ID': 178, 'name': 'BOOKS', 'slug': 'books', 'description': '', 'post_count': 87, 'feed_url': 'http://wanderinggaia.com/category/books/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:books', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:books/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}}, 'Latest': {'ID': 13493, 'name': 'Latest', 'slug': 'latest', 'description': '', 'post_count': 164, 'feed_url': 'http://wanderinggaia.com/category/latest/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:latest', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:latest/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}}}, 'attachments': {'5279': {'ID': 5279, 'URL': 'https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg', 'guid': 'http://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg', 'mime_type': 'image/jpeg', 'width': 333, 'height': 500}}, 'metadata': [{'id': '12804', 'key': 'geo_public', 'value': '0'}, {'id': '12807', 'key': '_wpas_done_1896860', 'value': '1'}, {'id': '12811', 'key': '_wpas_done_1896866', 'value': '1'}, {'id': '12814', 'key': '_wpas_skip_1896860', 'value': '1'}, {'id': '12815', 'key': '_wpas_skip_1896866', 'value': '1'}], 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '798e118abcc36c9daaab3f8c938f8e19', 'is_external': False, 'site_name': 'Wandering Gaia', 'site_URL': 'http://wanderinggaia.com', 'site_is_private': False, 'featured_media': {}, 'editorial': {'blog_id': '4042294', 'post_id': '5270', 'image': 'https://s1.wp.com/imgpress?w=252&url=http%3A%2F%2Fwanderinggaia.files.wordpress.com%2F2014%2F07%2Frocina.jpg&unsharpmask=80,0.5,3', 'custom_headline': 'Homni: The New Superorganism Taking Over Earth', 'custom_blog_title': '', 'displayed_on': '2015-11-19T16:02:02+00:00', 'picked_on': '1970-01-01T00:33:35+00:00', 'highlight_topic': 'environment', 'highlight_topic_title': 'Environment', 'screen_offset': '0', 'blog_name': 'Wandering Gaia', 'site_id': '1'}}]}, 'status_code': 200, 'success': True}
-        get_freshly_pressed_posts_mock.return_value = responses
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
+
+    @mock.patch(
+        'modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_freshly_pressed_posts')
+    def test_get_freshly_pressed_posts(self, get_freshly_pressed_posts_mock):
+        responses = {
+            'data': {'date_range': {'newest': '2016-07-28T16:36:46+00:00', 'oldest': '2015-11-19T16:02:02+00:00'},
+                     'number': 9, 'posts': [{'ID': 5270, 'site_ID': 4042294,
+                                             'author': {'ID': 4278874, 'login': 'gaiavince', 'email': False,
+                                                        'name': 'Gaia', 'first_name': 'Gaia', 'last_name': 'Vince',
+                                                        'nice_name': 'gaiavince', 'URL': 'http://',
+                                                        'avatar_URL': 'https://0.gravatar.com/avatar/93398742b4a0f095168e2bacfc30cbba?s=96&d=identicon&r=G',
+                                                        'profile_URL': 'https://en.gravatar.com/gaiavince',
+                                                        'ip_address': False, 'site_ID': 4042294, 'site_visible': True},
+                                             'date': '2014-07-08T09:05:03+00:00',
+                                             'modified': '2019-09-27T10:04:34+00:00',
+                                             'title': 'Homni: The new superorganism taking over Earth',
+                                             'URL': 'http://wanderinggaia.com/2014/07/08/homni-the-new-superorganism-taking-over-earth/',
+                                             'short_URL': 'https://wp.me/pgXAi-1n0',
+                                             'content': '<p>In Ancient Greek mythology, the Earth Goddess Gaia had nine titan sons, who attempted to control not just the Earth, but the entire Universe. I’d like to introduce another. It’s a new creature who emerged only in recent decades. But it’s a creature who is already as influential over life on the planet as the phytoplankton or forests that regulate global temperature, the weather and the air we breathe.</p>\n<p>That new creature is us, or more precisely, what humanity is becoming. The entirety of our species, <i>Homo sapiens</i>, is evolving into a superorganism; I’ll call this new life force <i>Homo omnis</i>, or ‘Homni’.</p>\n<p>We have now become the dominant force shaping our planet. Some say that because of our actions we have entered a new geological epoch: <a href="http://www.bbc.com/future/story/20120209-welcome-to-the-age-of-modern-man">the Anthropocene</a>, or the age of man. Homni is a product of this age, a product of human industrialisation, population expansion, globalisation and the revolution in communications technology, and he is immensely powerful. Homni can influence the biosphere, and has needs – currently, he uses <a href="http://www.eia.gov/cfapps/ipdbproject/iedindex3.cfm">18 terawatts</a> (trillion watts) of energy at any time, <a href="http://www.scientificamerican.com/article/graphic-science-how-much-water-nations-consume/">9,000 billion cubic metres of water</a> per year, <a href="http://news.nationalgeographic.com/news/2005/12/1209_051209_crops_map.html">40% of global land area</a> for farming, and a plethora of other natural and mineral resources.</p>\n<p>Only time will tell if he will be a benign caretaker, or a monster that destroys life and with it himself. But there are clues, and here I will examine what Homni is, and what he means for our species, the planet and the rest of life on Earth.</p>\n<p><b>Crowd power</b></p>\n<p>To understand Homni, let me first take you down into the soil to consider one of the most simple and ancient single-celled organisms, an amoeba called a slime mould. It evolved some 600 million years ago, and occupies soils across the world, from Antarctica to the Arctic. For most of its life-cycle, the cell lives the unexceptional life of most amoeba. But sometimes, these single cells <a href="http://www.nytimes.com/2011/10/04/science/04slime.html?pagewanted=all">gather in their thousands to create an organism</a>, encased in its own slime, that can creep, crawl, pulsate, grow tentacles and even negotiate a maze.</p>\n<p>Scientists describe these slime moulds as ‘societies’ because of the way the individual amoebae work together towards a common cause, sometimes sacrificing themselves on the way. For example, if food is scarce in their soil patch, the amoeba coalesce together forming a tendril that creeps up to the light. Once it has reached the surface, a portion of them form a stalk above ground, by turning their bodies into hard cellulose – a process that kills them. The rest of the mould then climbs the stalk and waits in a blob at the top for a passing animal to transport them to new soils. All this, from the simplest organism.</p>\n<p>The human brain is a bit like the mould. Each single brain cell, or neuron, cannot be described as conscious or sentient, and yet, when all 86 billion neurons are networked together, the human brain is far, far more than the sum of its parts, capable of thinking and processing ideas in original ways. We still don’t understand how thoughts or personality or behaviours are seeded and take root in this network, or how the neurons become organised to drive such processes, but somehow consciousness is created from the most prosaic building materials.</p>\n<p><a href="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg"><img loading="lazy" data-attachment-id="5279" data-permalink="http://wanderinggaia.com/2014/07/08/homni-the-new-superorganism-taking-over-earth/rocina/" data-orig-file="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg" data-orig-size="333,500" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;}" data-image-title="rocina" data-image-description="" data-image-caption="" data-medium-file="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=200" data-large-file="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=333" class="aligncenter size-medium wp-image-5279" src="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=199&#038;h=300" alt="rocina" width="199" height="300" srcset="https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=199&amp;h=300 199w, https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg?w=100&amp;h=150 100w, https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg 333w" sizes="(max-width: 199px) 100vw, 199px" /></a></p>\n<p>We can describe the intelligence, creativity and sociability of Homni as being comparable to the networked, linked-up, conversational accumulation of all the human brains, including those from the past who have left a cultural and intellectual legacy, and also the artificial ‘brains’ of our technological inventions, such as computer programs and Wikipedia. Homni is a global network of civilisations with a stream of knowledge already being channelled for human protection. Just as a cloud of starlings suddenly flips direction en masse, it is difficult to predict how Homni’s behaviour will play out.</p>\n<p>But this is just one aspect of Homni.</p>\n<p><b>&#8216;Artificial Man&#8217;</b></p>\n<p>Not long ago, I sat in a rainforest in Belize, watching a troop of fire ants at work. Individually, each is a formidable beast, a few centimetres long but with a powerful bite. But together, they form what entomologist EO Wilson described as a superorganism of thousands of organised ants that systematically devours everything in its path, tearing down trees and crops and stripping the insulation off wiring and other electrical equipment. In some places the ants run a protection racket for other aphids and bugs, <a href="http://blogs.discovermagazine.com/notrocketscience/2011/12/05/fire-ants-conquered-america-by-monopolising-calorie-rich-food/#more-5921">which supply them with nectar</a>. And the superorganism has even figured out a way of surviving heavy rainfall, by clinging to each other and <a href="http://www.pnas.org/content/108/19/7669.long">forming a floating life raft</a> in times of flooding. Once they’ve exhausted their environment’s resources, the entire community ups and moves to pastures new. Ants are sophisticated farmers – pre-dating human farmers by more than 50 million years – and they also raise and milk livestock (aphids), they build complex residences, keep slaves, and wage massive battles that involve psychological warfare. The comparisons with humans are multiple.</p>\n<p>Applying the idea of superorganisms to humanity is more complicated – individually, we are more autonomous than cells, or even ants. But over the centuries, the idea has emerged in many different guises. The Ancient Greeks imagined each of us as cells in the greater being. Others have referred to the roles that different parts of society play – such as generating energy or food – as analogous to organs in a body. The 17th Century English philosopher Thomas Hobbes also described society as forming an &#8216;Artificial Man&#8217; that functions (through civilisation) in a way as to ensure its own survival.</p>\n<p>Now, as we advance into the Anthropocene, we are seeing these ideas put into practice on an unprecedented scale. While individual humans or societies can exert a local or regional effect on landscapes, water flow or biodiversity, the impact of our superspecies is planetary. Homni now controls three-quarters of Earth’s freshwater supplies, has modified <a href="http://ecotope.org/people/ellis/papers/ellis_2008.pdf">more than three-quarters</a> of ice-free land surface, and modulates the planet&#8217;s air, biodiversity, and oceanic chemistry and biology. Homni has even started <a href="http://www.bbc.com/future/story/20120518-danger-space-junk-alert">littering space</a> with telescopes, satellites and other artificial junk. Homni’s actions are like the environmental rampaging of Argentinian ants on a global scale.</p>\n<p>Increasingly, individual people are less and less able to function independently in modern society – we rely on the superorganism to feed, clothe and power our many tools, to inform and heal us, even to help us reproduce through surrogacy or IVF. In coming decades, it is likely that access to the internet will have reached <a href="http://www.bbc.com/future/story/20140214-the-last-places-without-internet">almost every part of the globe</a> and, as we become more cohesive as a networked society, individuals who remain outside of the new superorganism will find themselves isolated culturally and technologically from what it means to be a human in the Anthropocene.</p>\n<p>In the coming decades, it is also likely that access to electricity, sanitation and antibiotics will become near universal – thus, describing a human in the Anthropocene will increasingly assume a doubled lifespan and basic awareness of the scientific, geopolitical, cultural and social factors behind how the world operates. The result will be a new way of living that is almost akin to being a new subspecies. It is the new modern human that created the Anthropocene and gave rise to Homni, but it is Homni who now sculpts the new human.</p>\n<p><b>Monster issues</b></p>\n<p>And here lies an interesting paradox. Humans may have evolved through a process of natural selection – essentially outcompeting rivals to death – but as <a href="http://www.theguardian.com/commentisfree/video/2011/apr/04/tim-flannery-global-shared-beliefs-video">palaeontologist Tim Flannery</a> says, this has led not to a &#8220;dog-eat-dog world&#8221;, but to a cooperative society. He believes we are in the process of forming an interdependent global society with a set of shared beliefs – a &#8220;civilisation of ideas&#8221; – that will transform Earth into a more equitable and ecologically curated planet. It&#8217;s an optimistic view of Homni, based on the fact that most people want to get on with each other and look after their neighbourhood environment. Whether, or to what degree, Flannery&#8217;s altruistic view of humanity bears out is the big question.</p>\n<p>Individuals may exert an influence over Homni to some degree, rather like the single neuron that fires off a signal, starting an original thought, which then progresses to a painting, song or an invention like the iPod. Or the individual who sends a single tweet that then becomes an internet meme propagating and evolving through the internet. The “tipping point” is thought to be low: just 10% are needed to hold a new belief before it <a href="http://news.rpi.edu/luwakkey/2902">spreads to the majority of the population</a>.</p>\n<p>Although individuals may be able to steer Homni to some level, it is far from obvious how we might do this to ensure our survival through the Anthropocene. Homni’s influence is already being seen in planetary changes unprecedented for millions of years, affecting humans and our relationship to the natural world. We are changing the climate by increasing the level of carbon dioxide in the atmosphere; we&#8217;re reducing the planet&#8217;s biodiversity, causing what scientists fear may be the <a href="http://www.nature.com/nature/journal/v471/n7336/full/nature09678.html">sixth mass extinction</a> in its history; and terraforming Earth&#8217;s land surface with multiple megacities of concrete, steel and glass. Deciding as an individual to reduce freshwater waste, or cut my carbon footprint has negligible impact on the state of the world&#8217;s rivers or global temperature.</p>\n<p>Homni is essentially a concept – I invented him because our superorganism has characteristics that go beyond the simple accumulation of humans. In other examples from the animal world, like bee hives or ant nests, killing the queen results in the collapse of the entire colony. Homni has no single queen, though, and in this way he is as robust as a forest. It would take a catastrophe on an epic scale – an epidemic, massive environmental change, an asteroid impact, or nuclear war – to possibly kill Homni, leaving a straggle of human survivors.</p>\n<p>But our impulse would always be to strengthen rather than kill Homni – we are social collaborators and most of our recent discoveries, inventions and successes have been born out of group effort. And the secret to ensuring a better Anthropocene is in recognising Homni&#8217;s power, but also nurturing his human side, the side committed to improving relations with the neighbours and cleaning up the neighbourhood. Will we achieve this through global international agreements? Possibly. I think that increasingly, as we see through a network of eyes, in the form of the many powerful satellites and remote cameras that track individual trees in rainforests or reveal the extent of glacial carving, we will start to read Homni’s mind, and have more nuanced control over his actions.</p>\n<p>Maybe then we will begin to use the power of Homni to restore and curate the planet. The alternative is too monstrous to contemplate.</p>\n<p><em>This article <a href="http://www.bbc.com/future/story/20140701-the-superorganism-engulfing-earth" target="_blank">first appeared on BBC Future</a>. My book </em><strong>Adventures In The Anthropocene: A Journey to the Heart of the Planet We Made</strong><em> is available <a href="http://www.amazon.co.uk/Adventures-Anthropocene-Journey-Heart-Planet/dp/0701187344" target="_blank">online</a> and in bookstores.</em></p>\n',
+                                             'excerpt': '<p>In Ancient Greek mythology, the Earth Goddess Gaia had nine titan sons, who attempted to control not just the Earth, but the entire Universe. I’d like to introduce another. It’s a new creature who emerged only in recent decades. But it’s a creature who is already as influential over life on the planet as the [&hellip;]</p>\n',
+                                             'slug': 'homni-the-new-superorganism-taking-over-earth',
+                                             'guid': 'http://wanderinggaia.com/?p=5270', 'status': 'publish',
+                                             'sticky': False, 'password': '', 'parent': False, 'type': 'post',
+                                             'comments_open': True, 'pings_open': True, 'likes_enabled': True,
+                                             'sharing_enabled': True, 'comment_count': 70, 'like_count': 881,
+                                             'i_like': False, 'is_reblogged': False, 'is_following': False,
+                                             'global_ID': '798e118abcc36c9daaab3f8c938f8e19', 'featured_image': '',
+                                             'post_thumbnail': None, 'format': 'standard', 'geo': False,
+                                             'menu_order': 0, 'publicize_URLs': [], 'tags': {
+                                                'ADVENTURES IN THE ANTHROPOCENE': {'ID': 331408322,
+                                                                                   'name': 'ADVENTURES IN THE ANTHROPOCENE',
+                                                                                   'slug': 'adventures-in-the-anthropocene',
+                                                                                   'description': 'Adventures In The Anthropocene',
+                                                                                   'post_count': 36,
+                                                                                   'feed_url': 'http://wanderinggaia.com/tag/adventures-in-the-anthropocene/feed/',
+                                                                                   'meta': {'links': {
+                                                                                       'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:adventures-in-the-anthropocene',
+                                                                                       'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:adventures-in-the-anthropocene/help',
+                                                                                       'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}},
+                                                'anthropocene': {'ID': 375137, 'name': 'anthropocene',
+                                                                 'slug': 'anthropocene', 'description': '',
+                                                                 'post_count': 10,
+                                                                 'feed_url': 'http://wanderinggaia.com/tag/anthropocene/feed/',
+                                                                 'meta': {'links': {
+                                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:anthropocene',
+                                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:anthropocene/help',
+                                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}},
+                                                'Opinion': {'ID': 352, 'name': 'Opinion', 'slug': 'opinion',
+                                                            'description': '', 'post_count': 94,
+                                                            'feed_url': 'http://wanderinggaia.com/tag/opinion/feed/',
+                                                            'meta': {'links': {
+                                                                'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:opinion',
+                                                                'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/tags/slug:opinion/help',
+                                                                'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}}},
+                                             'categories': {'BOOKS': {'ID': 178, 'name': 'BOOKS', 'slug': 'books',
+                                                                      'description': '', 'post_count': 87,
+                                                                      'feed_url': 'http://wanderinggaia.com/category/books/feed/',
+                                                                      'parent': 0, 'meta': {'links': {
+                                                     'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:books',
+                                                     'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:books/help',
+                                                     'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}},
+                                                            'Latest': {'ID': 13493, 'name': 'Latest', 'slug': 'latest',
+                                                                       'description': '', 'post_count': 164,
+                                                                       'feed_url': 'http://wanderinggaia.com/category/latest/feed/',
+                                                                       'parent': 0, 'meta': {'links': {
+                                                                    'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:latest',
+                                                                    'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/categories/slug:latest/help',
+                                                                    'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294'}}}},
+                                             'attachments': {'5279': {'ID': 5279,
+                                                                      'URL': 'https://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg',
+                                                                      'guid': 'http://wanderinggaia.files.wordpress.com/2014/07/rocina.jpg',
+                                                                      'mime_type': 'image/jpeg', 'width': 333,
+                                                                      'height': 500}},
+                                             'metadata': [{'id': '12804', 'key': 'geo_public', 'value': '0'},
+                                                          {'id': '12807', 'key': '_wpas_done_1896860', 'value': '1'},
+                                                          {'id': '12811', 'key': '_wpas_done_1896866', 'value': '1'},
+                                                          {'id': '12814', 'key': '_wpas_skip_1896860', 'value': '1'},
+                                                          {'id': '12815', 'key': '_wpas_skip_1896866', 'value': '1'}],
+                                             'meta': {'links': {
+                                                 'self': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270',
+                                                 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270/help',
+                                                 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294',
+                                                 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270/replies/',
+                                                 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/4042294/posts/5270/likes/'}},
+                                             'current_user_can': {'publish_post': False, 'delete_post': False,
+                                                                  'edit_post': False},
+                                             'capabilities': {'publish_post': False, 'delete_post': False,
+                                                              'edit_post': False},
+                                             'pseudo_ID': '798e118abcc36c9daaab3f8c938f8e19', 'is_external': False,
+                                             'site_name': 'Wandering Gaia', 'site_URL': 'http://wanderinggaia.com',
+                                             'site_is_private': False, 'featured_media': {},
+                                             'editorial': {'blog_id': '4042294', 'post_id': '5270',
+                                                           'image': 'https://s1.wp.com/imgpress?w=252&url=http%3A%2F%2Fwanderinggaia.files.wordpress.com%2F2014%2F07%2Frocina.jpg&unsharpmask=80,0.5,3',
+                                                           'custom_headline': 'Homni: The New Superorganism Taking Over Earth',
+                                                           'custom_blog_title': '',
+                                                           'displayed_on': '2015-11-19T16:02:02+00:00',
+                                                           'picked_on': '1970-01-01T00:33:35+00:00',
+                                                           'highlight_topic': 'environment',
+                                                           'highlight_topic_title': 'Environment', 'screen_offset': '0',
+                                                           'blog_name': 'Wandering Gaia', 'site_id': '1'}}]},
+            'status_code': 200, 'success': True}
+        get_freshly_pressed_posts_mock.return_value = responses
         url = reverse('wordpress_freshly_pressed-get-freshly-pressed-posts')
         response = self.client.get(url, format='json')
         self.assertEqual(responses['data']['date_range']['newest'], response.data['data']['date_range']['newest'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_freshly_pressed_posts_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_freshly_pressed_posts')
-    def test_get_freshly_pressed_posts_without_token(self, get_freshly_pressed_posts_mock):
-        responses = None
-        get_freshly_pressed_posts_mock.return_value = responses
+    def test_get_freshly_pressed_posts_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_freshly_pressed-get-freshly-pressed-posts')
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1605,29 +1193,38 @@ class WordpressInsightsTestCase(APITestCase):
 
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_insights')
     def test_get_list_of_insights(self, get_list_of_insights_mock):
-        responses = {'data': {'ID': 83370, 'name': 'test-app', 'insights': ['rest-api-calls', 'rest-api-writes', 'rest-api-reads', 'rest-api-errors', 'api-insights-connections', 'api-insights-posts', 'api-insights-comments', 'api-insights-likes'], 'today': {'rest_api_calls': {'number': None, 'percent': '%'}, 'rest_api_writes': {'number': None, 'percent': '%'}, 'rest_api_reads': {'number': None, 'percent': '%'}, 'rest_api_errors': {'number': None, 'percent': '%'}, 'api_insights_connections': {'number': None, 'percent': '-100%'}, 'api_insights_posts': {'number': None, 'percent': '-100%'}, 'api_insights_comments': {'number': '2', 'percent': '%'}, 'api_insights_likes': {'number': None, 'percent': '%'}}, 'has_custom': False}, 'status_code': 200, 'success': True}
+        responses = {'data': {'ID': 83370, 'name': 'test-app',
+                              'insights': ['rest-api-calls', 'rest-api-writes', 'rest-api-reads', 'rest-api-errors',
+                                           'api-insights-connections', 'api-insights-posts', 'api-insights-comments',
+                                           'api-insights-likes'],
+                              'today': {'rest_api_calls': {'number': None, 'percent': '%'},
+                                        'rest_api_writes': {'number': None, 'percent': '%'},
+                                        'rest_api_reads': {'number': None, 'percent': '%'},
+                                        'rest_api_errors': {'number': None, 'percent': '%'},
+                                        'api_insights_connections': {'number': None, 'percent': '-100%'},
+                                        'api_insights_posts': {'number': None, 'percent': '-100%'},
+                                        'api_insights_comments': {'number': '2', 'percent': '%'},
+                                        'api_insights_likes': {'number': None, 'percent': '%'}}, 'has_custom': False},
+                     'status_code': 200, 'success': True}
         get_list_of_insights_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_insights-get-list-of-insights')
         response = self.client.get(url)
         self.assertEqual(responses['data']['insights'], response.data['data']['insights'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_list_of_insights_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_insights')
-    def test_get_list_of_insights_without_token(self, get_list_of_insights_mock):
-        responses = None
-        get_list_of_insights_mock.return_value = responses
+    def test_get_list_of_insights_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_insights-get-list-of-insights')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_raw_data_graph')
-    def test_get_raw_data_graph_without_token(self, get_raw_data_graph_mock):
-        responses = None
-        get_raw_data_graph_mock.return_value = responses
+    def test_get_raw_data_graph_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_insights-get-raw-data-graph', kwargs={"pk": "rest-api-calls"})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1637,93 +1234,263 @@ class WordpressReaderTestCase(APITestCase):
 
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_default_reader_menu')
     def test_get_default_reader_menu(self, get_default_reader_menu_mock):
-        responses = {'data': {'default': {'following': {'title': 'Blogs I Follow', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/following'}, 'freshly-pressed': {'title': 'Freshly Pressed', 'URL': 'https://public-api.wordpress.com/rest/v1.1/freshly-pressed'}, 'liked': {'title': 'My Likes', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/liked'}}, 'subscribed': [], 'recommended': {'2806': {'ID': 2806, 'title': 'Art &amp; Design', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/art-design/posts', 'slug': 'art-design', 'display_name': 'art-design', 'type': 'tag'}, '178': {'ID': 178, 'title': 'Books', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/books/posts', 'slug': 'books', 'display_name': 'books', 'type': 'tag'}, '258845': {'ID': 258845, 'title': 'Business &amp; Technology', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/business-technology/posts', 'slug': 'business-technology', 'display_name': 'business-technology', 'type': 'tag'}, '63611190': {'ID': 63611190, 'title': 'Crafts &amp; Fashion', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/crafts-fashion/posts', 'slug': 'crafts-fashion', 'display_name': 'crafts-fashion', 'type': 'tag'}, '1098': {'ID': 1098, 'title': 'Culture', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/culture/posts', 'slug': 'culture', 'display_name': 'culture', 'type': 'tag'}, '406': {'ID': 406, 'title': 'Family', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/family/posts', 'slug': 'family', 'display_name': 'family', 'type': 'tag'}, '960817': {'ID': 960817, 'title': 'Fiction &amp; Poetry', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/fiction-poetry/posts', 'slug': 'fiction-poetry', 'display_name': 'fiction-poetry', 'type': 'tag'}, '586': {'ID': 586, 'title': 'Food', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/food/posts', 'slug': 'food', 'display_name': 'food', 'type': 'tag'}, '13985': {'ID': 13985, 'title': 'Health &amp; Wellness', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/health-wellness/posts', 'slug': 'health-wellness', 'display_name': 'health-wellness', 'type': 'tag'}, '376': {'ID': 376, 'title': 'Humor', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/humor/posts', 'slug': 'humor', 'display_name': 'humor', 'type': 'tag'}, '35328892': {'ID': 35328892, 'title': 'Longreads', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/longreads/posts', 'slug': 'longreads', 'display_name': 'longreads', 'type': 'tag'}, '3750': {'ID': 3750, 'title': 'Magazines', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/magazines/posts', 'slug': 'magazines', 'display_name': 'magazines', 'type': 'tag'}, '10016773': {'ID': 10016773, 'title': 'Musings &amp; Personal', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/musings-personal/posts', 'slug': 'musings-personal', 'display_name': 'musings-personal', 'type': 'tag'}, '84776': {'ID': 84776, 'title': 'News &amp; Current Events', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/news-current-events/posts', 'slug': 'news-current-events', 'display_name': 'news-current-events', 'type': 'tag'}, '436': {'ID': 436, 'title': 'Photography', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/photography/posts', 'slug': 'photography', 'display_name': 'photography', 'type': 'tag'}, '87210105': {'ID': 87210105, 'title': 'Popular Culture &amp; Entertainment', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/popular-culture-entertainment/posts', 'slug': 'popular-culture-entertainment', 'display_name': 'popular-culture-entertainment', 'type': 'tag'}, '26879': {'ID': 26879, 'title': 'Portfolios', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/portfolios/posts', 'slug': 'portfolios', 'display_name': 'portfolios', 'type': 'tag'}, '116': {'ID': 116, 'title': 'Religion', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/religion/posts', 'slug': 'religion', 'display_name': 'religion', 'type': 'tag'}, '38881': {'ID': 38881, 'title': 'Science &amp; Nature', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/science-nature/posts', 'slug': 'science-nature', 'display_name': 'science-nature', 'type': 'tag'}, '1446729': {'ID': 1446729, 'title': 'Sports &amp; Gaming', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/sports-gaming/posts', 'slug': 'sports-gaming', 'display_name': 'sports-gaming', 'type': 'tag'}, '200': {'ID': 200, 'title': 'Travel', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/travel/posts', 'slug': 'travel', 'display_name': 'travel', 'type': 'tag'}, '676': {'ID': 676, 'title': 'Websites', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/websites/posts', 'slug': 'websites', 'display_name': 'websites', 'type': 'tag'}, '998458': {'ID': 998458, 'title': 'Writing &amp; Blogging', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/writing-blogging/posts', 'slug': 'writing-blogging', 'display_name': 'writing-blogging', 'type': 'tag'}}}, 'status_code': 200, 'success': True}
+        responses = {'data': {'default': {'following': {'title': 'Blogs I Follow',
+                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/following'},
+                                          'freshly-pressed': {'title': 'Freshly Pressed',
+                                                              'URL': 'https://public-api.wordpress.com/rest/v1.1/freshly-pressed'},
+                                          'liked': {'title': 'My Likes',
+                                                    'URL': 'https://public-api.wordpress.com/rest/v1.1/read/liked'}},
+                              'subscribed': [], 'recommended': {'2806': {'ID': 2806, 'title': 'Art &amp; Design',
+                                                                         'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/art-design/posts',
+                                                                         'slug': 'art-design',
+                                                                         'display_name': 'art-design', 'type': 'tag'},
+                                                                '178': {'ID': 178, 'title': 'Books',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/books/posts',
+                                                                        'slug': 'books', 'display_name': 'books',
+                                                                        'type': 'tag'}, '258845': {'ID': 258845,
+                                                                                                   'title': 'Business &amp; Technology',
+                                                                                                   'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/business-technology/posts',
+                                                                                                   'slug': 'business-technology',
+                                                                                                   'display_name': 'business-technology',
+                                                                                                   'type': 'tag'},
+                                                                '63611190': {'ID': 63611190,
+                                                                             'title': 'Crafts &amp; Fashion',
+                                                                             'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/crafts-fashion/posts',
+                                                                             'slug': 'crafts-fashion',
+                                                                             'display_name': 'crafts-fashion',
+                                                                             'type': 'tag'},
+                                                                '1098': {'ID': 1098, 'title': 'Culture',
+                                                                         'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/culture/posts',
+                                                                         'slug': 'culture', 'display_name': 'culture',
+                                                                         'type': 'tag'},
+                                                                '406': {'ID': 406, 'title': 'Family',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/family/posts',
+                                                                        'slug': 'family', 'display_name': 'family',
+                                                                        'type': 'tag'}, '960817': {'ID': 960817,
+                                                                                                   'title': 'Fiction &amp; Poetry',
+                                                                                                   'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/fiction-poetry/posts',
+                                                                                                   'slug': 'fiction-poetry',
+                                                                                                   'display_name': 'fiction-poetry',
+                                                                                                   'type': 'tag'},
+                                                                '586': {'ID': 586, 'title': 'Food',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/food/posts',
+                                                                        'slug': 'food', 'display_name': 'food',
+                                                                        'type': 'tag'},
+                                                                '13985': {'ID': 13985, 'title': 'Health &amp; Wellness',
+                                                                          'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/health-wellness/posts',
+                                                                          'slug': 'health-wellness',
+                                                                          'display_name': 'health-wellness',
+                                                                          'type': 'tag'},
+                                                                '376': {'ID': 376, 'title': 'Humor',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/humor/posts',
+                                                                        'slug': 'humor', 'display_name': 'humor',
+                                                                        'type': 'tag'},
+                                                                '35328892': {'ID': 35328892, 'title': 'Longreads',
+                                                                             'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/longreads/posts',
+                                                                             'slug': 'longreads',
+                                                                             'display_name': 'longreads',
+                                                                             'type': 'tag'},
+                                                                '3750': {'ID': 3750, 'title': 'Magazines',
+                                                                         'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/magazines/posts',
+                                                                         'slug': 'magazines',
+                                                                         'display_name': 'magazines', 'type': 'tag'},
+                                                                '10016773': {'ID': 10016773,
+                                                                             'title': 'Musings &amp; Personal',
+                                                                             'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/musings-personal/posts',
+                                                                             'slug': 'musings-personal',
+                                                                             'display_name': 'musings-personal',
+                                                                             'type': 'tag'}, '84776': {'ID': 84776,
+                                                                                                       'title': 'News &amp; Current Events',
+                                                                                                       'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/news-current-events/posts',
+                                                                                                       'slug': 'news-current-events',
+                                                                                                       'display_name': 'news-current-events',
+                                                                                                       'type': 'tag'},
+                                                                '436': {'ID': 436, 'title': 'Photography',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/photography/posts',
+                                                                        'slug': 'photography',
+                                                                        'display_name': 'photography', 'type': 'tag'},
+                                                                '87210105': {'ID': 87210105,
+                                                                             'title': 'Popular Culture &amp; Entertainment',
+                                                                             'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/popular-culture-entertainment/posts',
+                                                                             'slug': 'popular-culture-entertainment',
+                                                                             'display_name': 'popular-culture-entertainment',
+                                                                             'type': 'tag'},
+                                                                '26879': {'ID': 26879, 'title': 'Portfolios',
+                                                                          'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/portfolios/posts',
+                                                                          'slug': 'portfolios',
+                                                                          'display_name': 'portfolios', 'type': 'tag'},
+                                                                '116': {'ID': 116, 'title': 'Religion',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/religion/posts',
+                                                                        'slug': 'religion', 'display_name': 'religion',
+                                                                        'type': 'tag'},
+                                                                '38881': {'ID': 38881, 'title': 'Science &amp; Nature',
+                                                                          'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/science-nature/posts',
+                                                                          'slug': 'science-nature',
+                                                                          'display_name': 'science-nature',
+                                                                          'type': 'tag'}, '1446729': {'ID': 1446729,
+                                                                                                      'title': 'Sports &amp; Gaming',
+                                                                                                      'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/sports-gaming/posts',
+                                                                                                      'slug': 'sports-gaming',
+                                                                                                      'display_name': 'sports-gaming',
+                                                                                                      'type': 'tag'},
+                                                                '200': {'ID': 200, 'title': 'Travel',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/travel/posts',
+                                                                        'slug': 'travel', 'display_name': 'travel',
+                                                                        'type': 'tag'},
+                                                                '676': {'ID': 676, 'title': 'Websites',
+                                                                        'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/websites/posts',
+                                                                        'slug': 'websites', 'display_name': 'websites',
+                                                                        'type': 'tag'}, '998458': {'ID': 998458,
+                                                                                                   'title': 'Writing &amp; Blogging',
+                                                                                                   'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/writing-blogging/posts',
+                                                                                                   'slug': 'writing-blogging',
+                                                                                                   'display_name': 'writing-blogging',
+                                                                                                   'type': 'tag'}}},
+                     'status_code': 200, 'success': True}
         get_default_reader_menu_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_reader-get-default-reader-menu')
         response = self.client.get(url)
         self.assertEqual(responses['data']['default']['following'], response.data['data']['default']['following'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_default_reader_menu_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_default_reader_menu')
-    def test_get_default_reader_menu_without_token(self, get_default_reader_menu_mock):
-        responses = None
-        get_default_reader_menu_mock.return_value = responses
+    def test_get_default_reader_menu_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_reader-get-default-reader-menu')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_feed_details')
     def test_get_feed_details(self, get_feed_details_mock):
-        responses = {'data': {'blog_ID': '0', 'feed_ID': '2806', 'name': '- Simplicity &amp; Reality -', 'URL': 'http://simplicityandreality.blogspot.com/', 'feed_URL': 'http://simplicityandreality.blogspot.com', 'subscribers_count': 2, 'is_following': False, 'last_update': None, 'last_checked': '2023-01-07T18:52:02+00:00', 'marked_for_refresh': False, 'next_refresh_time': '2023-01-15T18:52:02+00:00', 'organization_id': 0, 'unseen_count': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/read/feed/2806'}}, 'resolved_feed_url': 'http://simplicityandreality.blogspot.com/'}, 'status_code': 200, 'success': True}
+        responses = {'data': {'blog_ID': '0', 'feed_ID': '2806', 'name': '- Simplicity &amp; Reality -',
+                              'URL': 'http://simplicityandreality.blogspot.com/',
+                              'feed_URL': 'http://simplicityandreality.blogspot.com', 'subscribers_count': 2,
+                              'is_following': False, 'last_update': None, 'last_checked': '2023-01-07T18:52:02+00:00',
+                              'marked_for_refresh': False, 'next_refresh_time': '2023-01-15T18:52:02+00:00',
+                              'organization_id': 0, 'unseen_count': 0,
+                              'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/read/feed/2806'}},
+                              'resolved_feed_url': 'http://simplicityandreality.blogspot.com/'}, 'status_code': 200,
+                     'success': True}
         get_feed_details_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_reader-get-feed-details', kwargs={"pk": 2806})
         response = self.client.get(url)
         self.assertEqual(responses['data']['feed_ID'], response.data['data']['feed_ID'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_feed_details_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_feed_details')
-    def test_get_feed_details_without_token(self, get_feed_details_mock):
-        responses = None
-        get_feed_details_mock.return_value = responses
+    def test_get_feed_details_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_reader-get-feed-details', kwargs={"pk": 2806})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_post_from_tag')
+    @mock.patch(
+        'modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_post_from_tag')
     def test_get_list_of_post_from_tag(self, get_list_of_post_from_tag_mock):
-        responses = {'data': {'date_range': {'before': '2022-05-15T18:46:21+07:00', 'after': '2022-05-15T12:32:15+07:00'}, 'number': 10, 'posts': [{'ID': 1156, 'site_ID': 205952253, 'author': {'ID': 219921523, 'login': 'ndekaony', 'email': False, 'name': 'ndekao nyaopo', 'first_name': 'ndekao', 'last_name': 'nyaopo', 'nice_name': 'ndekaony', 'URL': 'http://wes62gelem.wordpress.com', 'avatar_URL': 'https://0.gravatar.com/avatar/3f6d46cacf67a3dc678bcf9437761d98?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/ndekaony', 'ip_address': False, 'site_ID': 205562445, 'site_visible': True}, 'date': '2022-05-15T18:46:21+07:00', 'modified': '2022-05-15T18:46:21+07:00', 'title': '1y69h2be74216z5o261000u', 'URL': 'https://oxlg9sijz2.wordpress.com/2022/05/15/1y69h2be74216z5o261000u/', 'short_URL': 'https://wp.me/pdW9Ax-iE', 'content': '<p><a href="https://groups.google.com/g/lolyp0phungry3/c/xh5i6HtK7_o" target="_blank">1y69h</a> Sed ultricies purus id purus fringilla rutrum. Nullam a laoreet diam. Aliquam faucibus dui vitae quam efficitur tristique. Quisque porta vel lacus nec lobortis. Maecenas condimentum ultricies enim sit amet auctor. Suspendisse maximus ante eu mauris aliquam, eu scelerisque metus rutrum. Vivamus lobortis et diam ut venenatis. Pellentesque convallis dignissim augue, sed commodo justo placerat vehicula. Praesent vulputate a sem sed vulputate. Morbi et mauris sed metus faucibus pellentesque at nec massa. Sed ut libero augue. In non felis vitae libero blandit fringilla nec eu diam. Vestibulum in turpis et eros feugiat vehicula. Donec faucibus est et arcu mattis ornare.</p>\n', 'excerpt': '<p>1y69h Sed ultricies purus id purus fringilla rutrum. Nullam a laoreet diam. Aliquam faucibus dui vitae quam efficitur tristique. Quisque porta vel lacus nec lobortis. Maecenas condimentum ultricies enim sit amet auctor. Suspendisse maximus ante eu mauris aliquam, eu scelerisque metus rutrum. Vivamus lobortis et diam ut venenatis. Pellentesque convallis dignissim augue, sed commodo justo [&hellip;]</p>\n', 'slug': '1y69h2be74216z5o261000u', 'guid': 'https://oxlg9sijz2.wordpress.com/?p=1156', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'e134ef0d0f2825243e7c4b14876c15d1', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 133, 'feed_url': 'https://oxlg9sijz2.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253'}}}}, 'categories': {'49': {'ID': 332907, 'name': '49', 'slug': '49', 'description': '', 'post_count': 16, 'feed_url': 'https://oxlg9sijz2.wordpress.com/category/49/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/categories/slug:49', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/categories/slug:49/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/1156', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/1156/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/1156/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/1156/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'e134ef0d0f2825243e7c4b14876c15d1', 'is_external': False, 'site_name': 'fxOJFdU2', 'site_URL': 'https://oxlg9sijz2.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 74, 'site_ID': 205552412, 'author': {'ID': 220317836, 'login': 'olierkimite89', 'email': False, 'name': 'olier kimite', 'first_name': 'olier', 'last_name': 'kimite', 'nice_name': 'olierkimite89', 'URL': 'http://whrqjuus3.wordpress.com', 'avatar_URL': 'https://2.gravatar.com/avatar/b41cee1c0c0bec390af2b3b1f9909deb?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/olierkimite89', 'ip_address': False, 'site_ID': 205552412, 'site_visible': True}, 'date': '2022-05-15T17:07:04+07:00', 'modified': '2022-05-15T17:07:04+07:00', 'title': '4f64h3vs22738d4c258931y', 'URL': 'https://whrqjuus3.wordpress.com/2022/05/15/4f64h3vs22738d4c258931y/', 'short_URL': 'https://wp.me/pdUtzu-1c', 'content': '<p><a href="https://groups.google.com/g/hurung739a0scut6/c/22UfHgr4dso" target="_blank">8931y</a> In sapien leo, egestas sollicitudin justo in, aliquam sollicitudin tortor. Nam posuere dolor a condimentum elementum. Cras consequat quam ac orci feugiat, vitae rhoncus justo euismod. Sed eget urna non elit elementum porta. In nec dui eu arcu mollis pretium. Sed ac odio velit. Aliquam eleifend diam tempor, faucibus sapien id, commodo turpis. Donec id felis et ligula ornare congue ultrices nec ipsum. Sed scelerisque ornare tristique.</p>\n', 'excerpt': '<p>8931y In sapien leo, egestas sollicitudin justo in, aliquam sollicitudin tortor. Nam posuere dolor a condimentum elementum. Cras consequat quam ac orci feugiat, vitae rhoncus justo euismod. Sed eget urna non elit elementum porta. In nec dui eu arcu mollis pretium. Sed ac odio velit. Aliquam eleifend diam tempor, faucibus sapien id, commodo turpis. Donec [&hellip;]</p>\n', 'slug': '4f64h3vs22738d4c258931y', 'guid': 'https://whrqjuus3.wordpress.com/?p=74', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'aad5af182cbfbe3d104d181db45ce414', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 177, 'feed_url': 'https://whrqjuus3.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412'}}}}, 'categories': {'23': {'ID': 66510, 'name': '23', 'slug': '23', 'description': '', 'post_count': 25, 'feed_url': 'https://whrqjuus3.wordpress.com/category/23/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/categories/slug:23', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/categories/slug:23/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/posts/74', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/posts/74/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/posts/74/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205552412/posts/74/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'aad5af182cbfbe3d104d181db45ce414', 'is_external': False, 'site_name': '1cPWiaj', 'site_URL': 'https://whrqjuus3.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 1168, 'site_ID': 205514760, 'author': {'ID': 220275661, 'login': 'difebbosaucer', 'email': False, 'name': 'Difebbo Saucer', 'first_name': 'Difebbo', 'last_name': 'Saucer', 'nice_name': 'difebbosaucer', 'URL': 'http://mb3n3kbcah.wordpress.com', 'avatar_URL': 'https://2.gravatar.com/avatar/be234bbce80efa5b8d1fb3de005b5669?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/difebbosaucer', 'ip_address': False, 'site_ID': 205514760, 'site_visible': True}, 'date': '2022-05-15T17:00:12+07:00', 'modified': '2022-05-15T17:00:12+07:00', 'title': '6m79r5ey44391h0v190327g', 'URL': 'https://mb3n3kbcah.wordpress.com/2022/05/15/6m79r5ey44391h0v190327g/', 'short_URL': 'https://wp.me/pdUjMc-iQ', 'content': '<p><a href="https://groups.google.com/g/koq635junieser6/c/doBL8gPUiXc" target="_blank">0327g</a> Integer eget elit eget nisi bibendum dignissim. Sed iaculis imperdiet dui et viverra. Curabitur sed ultricies odio, at venenatis dui. Sed vitae enim sit amet tortor egestas porttitor. Morbi quis eleifend risus. Sed sed suscipit eros. Vestibulum et tempor neque. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc sed diam vel purus mattis pharetra et id odio. Proin at porta justo. Quisque ut auctor elit.</p>\n', 'excerpt': '<p>0327g Integer eget elit eget nisi bibendum dignissim. Sed iaculis imperdiet dui et viverra. Curabitur sed ultricies odio, at venenatis dui. Sed vitae enim sit amet tortor egestas porttitor. Morbi quis eleifend risus. Sed sed suscipit eros. Vestibulum et tempor neque. Suspendisse potenti. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis [&hellip;]</p>\n', 'slug': '6m79r5ey44391h0v190327g', 'guid': 'https://mb3n3kbcah.wordpress.com/?p=1168', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'dacde76729f3773dbfcc534bbc18921b', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 175, 'feed_url': 'https://mb3n3kbcah.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760'}}}}, 'categories': {'51': {'ID': 86792, 'name': '51', 'slug': '51', 'description': '', 'post_count': 19, 'feed_url': 'https://mb3n3kbcah.wordpress.com/category/51/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/categories/slug:51', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/categories/slug:51/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/posts/1168', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/posts/1168/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/posts/1168/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205514760/posts/1168/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'dacde76729f3773dbfcc534bbc18921b', 'is_external': False, 'site_name': 'ngasi', 'site_URL': 'https://mb3n3kbcah.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 30, 'site_ID': 205725696, 'author': {'ID': 220509463, 'login': 'nguyc3293', 'email': False, 'name': 'cin nguy', 'first_name': 'cin', 'last_name': 'nguy', 'nice_name': 'nguyc3293', 'URL': 'http://o0mjhnkei.wordpress.com', 'avatar_URL': 'https://2.gravatar.com/avatar/50618e5fab83a8701b3016ee1a145379?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/nguyc3293', 'ip_address': False, 'site_ID': 205725696, 'site_visible': True}, 'date': '2022-05-15T15:09:40+07:00', 'modified': '2022-05-15T15:09:40+07:00', 'title': '5n32a4wc36785v9g953694f', 'URL': 'https://o0mjhnkei.wordpress.com/2022/05/15/5n32a4wc36785v9g953694f/', 'short_URL': 'https://wp.me/pdVcEo-u', 'content': '<p><a href="https://groups.google.com/g/ark3sdfj5jaee4/c/vm33ug07l8Y" target="_blank">3694f</a> Pellentesque imperdiet nisi sed nunc consequat, in sagittis justo lobortis. Nam sodales tempus porta. Sed et lacus molestie, commodo tortor blandit, posuere purus. Nam mattis tellus eget arcu tempus viverra. Donec sit amet sem scelerisque, accumsan dui id, laoreet ante. Pellentesque lacinia dapibus lorem quis tincidunt. Cras lacinia non enim a iaculis. Proin semper turpis nibh, et congue lorem faucibus at. Fusce at lectus sit amet ipsum suscipit fringilla eget nec elit. Sed euismod urna sit amet ligula tincidunt condimentum. In odio arcu, finibus non fermentum consectetur, fringilla sed augue. Donec dapibus cursus ligula vel feugiat. Nullam euismod enim eu arcu tempus tincidunt id sed augue.</p>\n', 'excerpt': '<p>3694f Pellentesque imperdiet nisi sed nunc consequat, in sagittis justo lobortis. Nam sodales tempus porta. Sed et lacus molestie, commodo tortor blandit, posuere purus. Nam mattis tellus eget arcu tempus viverra. Donec sit amet sem scelerisque, accumsan dui id, laoreet ante. Pellentesque lacinia dapibus lorem quis tincidunt. Cras lacinia non enim a iaculis. Proin semper [&hellip;]</p>\n', 'slug': '5n32a4wc36785v9g953694f', 'guid': 'https://o0mjhnkei.wordpress.com/?p=30', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'e686593e701323be71d709bf8a25d0f5', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 16, 'feed_url': 'https://o0mjhnkei.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696'}}}}, 'categories': {'30': {'ID': 150838, 'name': '30', 'slug': '30', 'description': '', 'post_count': 3, 'feed_url': 'https://o0mjhnkei.wordpress.com/category/30/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/categories/slug:30', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/categories/slug:30/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/posts/30', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/posts/30/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/posts/30/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205725696/posts/30/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'e686593e701323be71d709bf8a25d0f5', 'is_external': False, 'site_name': 'CGEDwfqd', 'site_URL': 'https://o0mjhnkei.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 417, 'site_ID': 205553345, 'author': {'ID': 220318801, 'login': 'kkaieuewpajk', 'email': False, 'name': 'kkaieu ewpajk', 'first_name': 'kkaieu', 'last_name': 'ewpajk', 'nice_name': 'kkaieuewpajk', 'URL': 'http://g665snlmv.wordpress.com', 'avatar_URL': 'https://1.gravatar.com/avatar/a244c26b0c495c365bac949e565b6fae?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/kkaieuewpajk', 'ip_address': False, 'site_ID': 205553345, 'site_visible': True}, 'date': '2022-05-15T14:27:38+07:00', 'modified': '2022-05-15T14:27:38+07:00', 'title': '1e13g8qv28056x1z677640o', 'URL': 'https://g665snlmv.wordpress.com/2022/05/15/1e13g8qv28056x1z677640o/', 'short_URL': 'https://wp.me/pdUtOx-6J', 'content': '<p><a href="https://groups.google.com/g/recomen2re4d1/c/ZlbKbK0TpHE" target="_blank">7640o</a> Sed eu mi molestie, laoreet nunc bibendum, vulputate orci. In sem purus, pellentesque non sem et, imperdiet interdum ipsum. Vivamus aliquam at mi sed egestas. Mauris faucibus eget ligula sed tincidunt. Aliquam aliquet augue non tortor fringilla commodo. Donec scelerisque ante suscipit consequat tristique. Duis at justo non mi semper faucibus quis eu ipsum. Sed auctor eget tortor nec pretium.</p>\n', 'excerpt': '<p>7640o Sed eu mi molestie, laoreet nunc bibendum, vulputate orci. In sem purus, pellentesque non sem et, imperdiet interdum ipsum. Vivamus aliquam at mi sed egestas. Mauris faucibus eget ligula sed tincidunt. Aliquam aliquet augue non tortor fringilla commodo. Donec scelerisque ante suscipit consequat tristique. Duis at justo non mi semper faucibus quis eu ipsum. [&hellip;]</p>\n', 'slug': '1e13g8qv28056x1z677640o', 'guid': 'https://g665snlmv.wordpress.com/?p=417', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'e398b88af5ebd1fa49d2d71edef5a622', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 78, 'feed_url': 'https://g665snlmv.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345'}}}}, 'categories': {'39': {'ID': 332903, 'name': '39', 'slug': '39', 'description': '', 'post_count': 12, 'feed_url': 'https://g665snlmv.wordpress.com/category/39/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/categories/slug:39', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/categories/slug:39/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/posts/417', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/posts/417/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/posts/417/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205553345/posts/417/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'e398b88af5ebd1fa49d2d71edef5a622', 'is_external': False, 'site_name': '2C7kj3P', 'site_URL': 'https://g665snlmv.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 22, 'site_ID': 205952253, 'author': {'ID': 219921523, 'login': 'ndekaony', 'email': False, 'name': 'ndekao nyaopo', 'first_name': 'ndekao', 'last_name': 'nyaopo', 'nice_name': 'ndekaony', 'URL': 'http://wes62gelem.wordpress.com', 'avatar_URL': 'https://0.gravatar.com/avatar/3f6d46cacf67a3dc678bcf9437761d98?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/ndekaony', 'ip_address': False, 'site_ID': 205562445, 'site_visible': True}, 'date': '2022-05-15T14:17:45+07:00', 'modified': '2022-05-15T14:17:45+07:00', 'title': '5p53t1kw23954f1d545673v', 'URL': 'https://oxlg9sijz2.wordpress.com/2022/05/15/5p53t1kw23954f1d545673v/', 'short_URL': 'https://wp.me/pdW9Ax-m', 'content': '<p><a href="https://groups.google.com/g/badha4gr4tauyang5/c/7Mx_JEuBB1k" target="_blank">5p53t</a> Praesent a ante quis lorem imperdiet molestie. Vestibulum scelerisque accumsan quam. Donec et dapibus velit. Pellentesque et lacus iaculis, venenatis justo eu, feugiat mi. Morbi venenatis mollis quam eget sagittis. Cras interdum, dolor non porttitor vulputate, arcu mi dignissim eros, rhoncus mollis nibh felis sagittis justo. Cras et lacus sed libero fermentum commodo. Quisque id ipsum fermentum, ultricies eros eu, auctor purus. Fusce aliquet condimentum ipsum, at pretium mauris laoreet non. In pharetra arcu eu fringilla commodo. Quisque sodales, lacus vitae cursus mattis, turpis purus ullamcorper ligula, vitae viverra nisi risus vitae ligula. Proin nulla neque, feugiat et rhoncus a, maximus sed nulla.</p>\n', 'excerpt': '<p>5p53t Praesent a ante quis lorem imperdiet molestie. Vestibulum scelerisque accumsan quam. Donec et dapibus velit. Pellentesque et lacus iaculis, venenatis justo eu, feugiat mi. Morbi venenatis mollis quam eget sagittis. Cras interdum, dolor non porttitor vulputate, arcu mi dignissim eros, rhoncus mollis nibh felis sagittis justo. Cras et lacus sed libero fermentum commodo. Quisque [&hellip;]</p>\n', 'slug': '5p53t1kw23954f1d545673v', 'guid': 'https://oxlg9sijz2.wordpress.com/?p=22', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '14904e68cbb9aa5c4411996c7e5d5e5c', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 133, 'feed_url': 'https://oxlg9sijz2.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253'}}}}, 'categories': {'57': {'ID': 332910, 'name': '57', 'slug': '57', 'description': '', 'post_count': 19, 'feed_url': 'https://oxlg9sijz2.wordpress.com/category/57/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/categories/slug:57', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/categories/slug:57/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/22', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/22/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/22/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205952253/posts/22/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '14904e68cbb9aa5c4411996c7e5d5e5c', 'is_external': False, 'site_name': 'fxOJFdU2', 'site_URL': 'https://oxlg9sijz2.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 52, 'site_ID': 205594275, 'author': {'ID': 220363888, 'login': 'tamaramarsito', 'email': False, 'name': 'Marsito Tamara', 'first_name': 'Marsito', 'last_name': 'Tamara', 'nice_name': 'tamaramarsito', 'URL': 'http://9zaqndgik.wordpress.com', 'avatar_URL': 'https://1.gravatar.com/avatar/17acf3ee661f5bebb032f6c39d92dbb6?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/tamaramarsito', 'ip_address': False, 'site_ID': 205594275, 'site_visible': True}, 'date': '2022-05-15T14:02:29+07:00', 'modified': '2022-05-15T14:02:29+07:00', 'title': '1v52c4at25543r7u382895j', 'URL': 'https://9zaqndgik.wordpress.com/2022/05/15/1v52c4at25543r7u382895j/', 'short_URL': 'https://wp.me/pdUEsH-Q', 'content': '<p><a href="https://groups.google.com/g/nek9saiki83yojan5/c/O81sHaIE58M" target="_blank">2895j</a> Vestibulum ut pharetra velit. Sed interdum, leo sit amet gravida gravida, nibh tellus laoreet enim, et porta turpis libero vel nunc. Vivamus efficitur eros nisl, at sodales tellus laoreet in. Morbi luctus, nunc vel malesuada fringilla, dolor eros malesuada sapien, ac porttitor dolor diam sed quam. Phasellus placerat lorem orci, ut aliquet mauris iaculis eu. Etiam condimentum lacus felis, sed faucibus tellus congue eu. Donec tincidunt mauris erat, vitae fringilla tellus convallis tempor. Integer vehicula vitae magna a egestas. Sed sollicitudin est et auctor molestie. Sed tristique non lectus nec tincidunt. Mauris vitae tristique dolor. Nullam vehicula rutrum nisl, in tincidunt enim venenatis id. Etiam ultricies quam eget nibh viverra ultrices. Sed molestie nisl nulla, ut sagittis tellus sollicitudin non.</p>\n', 'excerpt': '<p>2895j Vestibulum ut pharetra velit. Sed interdum, leo sit amet gravida gravida, nibh tellus laoreet enim, et porta turpis libero vel nunc. Vivamus efficitur eros nisl, at sodales tellus laoreet in. Morbi luctus, nunc vel malesuada fringilla, dolor eros malesuada sapien, ac porttitor dolor diam sed quam. Phasellus placerat lorem orci, ut aliquet mauris iaculis [&hellip;]</p>\n', 'slug': '1v52c4at25543r7u382895j', 'guid': 'https://9zaqndgik.wordpress.com/?p=52', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'a60418a2b418b9ec218450c225a5febd', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 192, 'feed_url': 'https://9zaqndgik.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275'}}}}, 'categories': {'60': {'ID': 86793, 'name': '60', 'slug': '60', 'description': '', 'post_count': 26, 'feed_url': 'https://9zaqndgik.wordpress.com/category/60/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/categories/slug:60', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/categories/slug:60/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/posts/52', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/posts/52/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/posts/52/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205594275/posts/52/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'a60418a2b418b9ec218450c225a5febd', 'is_external': False, 'site_name': 'Ac5D0Tt', 'site_URL': 'https://9zaqndgik.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 94, 'site_ID': 205718259, 'author': {'ID': 220501062, 'login': 'kitallanjut61', 'email': False, 'name': 'kital lanjut', 'first_name': 'kital', 'last_name': 'lanjut', 'nice_name': 'kitallanjut61', 'URL': 'http://hmfwag1j0.wordpress.com', 'avatar_URL': 'https://0.gravatar.com/avatar/3131ac8c29bf3e64b3882c0ba7625b74?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/kitallanjut61', 'ip_address': False, 'site_ID': 205718259, 'site_visible': True}, 'date': '2022-05-15T13:22:03+07:00', 'modified': '2022-05-15T13:22:03+07:00', 'title': '7w73h6ak59516w3h610736b', 'URL': 'https://hmfwag1j0.wordpress.com/2022/05/15/7w73h6ak59516w3h610736b/', 'short_URL': 'https://wp.me/pdVaIr-1w', 'content': '<p><a href="https://groups.google.com/g/ark3sdfj5jaee6/c/D6FgSUDAKjE" target="_blank">0736b</a> Nam eget tempus tortor, id egestas nisi. Maecenas luctus ullamcorper tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec lacinia aliquet sollicitudin. Phasellus ut posuere augue, non pretium ipsum. Donec ipsum odio, tincidunt vel ligula pulvinar, bibendum pulvinar justo. Maecenas nec pellentesque elit, sit amet rutrum lectus. Aliquam placerat arcu sit amet tellus vehicula lobortis. Quisque gravida enim sit amet tellus dignissim maximus. Vestibulum lacinia posuere ante, vitae dignissim nulla maximus a. Aliquam bibendum hendrerit nibh et semper. Praesent at ipsum id ligula luctus tempor eu eu enim.</p>\n', 'excerpt': '<p>0736b Nam eget tempus tortor, id egestas nisi. Maecenas luctus ullamcorper tortor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec lacinia aliquet sollicitudin. Phasellus ut posuere augue, non pretium ipsum. Donec ipsum odio, tincidunt vel ligula pulvinar, bibendum pulvinar justo. Maecenas nec pellentesque elit, sit amet rutrum lectus. Aliquam [&hellip;]</p>\n', 'slug': '7w73h6ak59516w3h610736b', 'guid': 'https://hmfwag1j0.wordpress.com/?p=94', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '6d8e0b3ad5225c3200ffee913d03d9e3', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 13, 'feed_url': 'https://hmfwag1j0.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259'}}}}, 'categories': {'78': {'ID': 28294, 'name': '78', 'slug': '78', 'description': '', 'post_count': 3, 'feed_url': 'https://hmfwag1j0.wordpress.com/category/78/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/categories/slug:78', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/categories/slug:78/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/posts/94', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/posts/94/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/posts/94/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205718259/posts/94/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '6d8e0b3ad5225c3200ffee913d03d9e3', 'is_external': False, 'site_name': 'lXsNYKxW', 'site_URL': 'https://hmfwag1j0.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 710, 'site_ID': 205482620, 'author': {'ID': 220238789, 'login': 'menulginoye', 'email': False, 'name': 'ginoye menul', 'first_name': 'ginoye', 'last_name': 'menul', 'nice_name': 'menulginoye', 'URL': 'http://ny4rk3nyar.wordpress.com', 'avatar_URL': 'https://0.gravatar.com/avatar/989606efa9bfd98e1dc907a19ec2cc35?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/menulginoye', 'ip_address': False, 'site_ID': 205482620, 'site_visible': True}, 'date': '2022-05-15T12:40:29+07:00', 'modified': '2022-05-15T12:40:29+07:00', 'title': '8a70p3jr83660r4x923440y', 'URL': 'https://ny4rk3nyar.wordpress.com/2022/05/15/8a70p3jr83660r4x923440y/', 'short_URL': 'https://wp.me/pdUbpO-bs', 'content': '<p><a href="https://groups.google.com/g/lhakok938orada2/c/2vOzDSDJPVo" target="_blank">3440y</a> Donec facilisis ex ut nunc dignissim, vitae efficitur purus imperdiet. Donec vel ante vel lectus semper rutrum. In fringilla consectetur aliquam. Cras ac ex quis dui accumsan eleifend at laoreet libero. Nullam id volutpat velit, a tempor tellus. Suspendisse nec convallis massa. Integer vel lacus ac odio blandit semper. Praesent sit amet vestibulum massa. Maecenas varius quis eros id cursus. Vivamus tincidunt, sem vitae blandit faucibus, est mi pharetra felis, a laoreet felis libero ut nisl. Integer tristique mi vitae odio varius scelerisque. Morbi elementum tincidunt rutrum.</p>\n', 'excerpt': '<p>3440y Donec facilisis ex ut nunc dignissim, vitae efficitur purus imperdiet. Donec vel ante vel lectus semper rutrum. In fringilla consectetur aliquam. Cras ac ex quis dui accumsan eleifend at laoreet libero. Nullam id volutpat velit, a tempor tellus. Suspendisse nec convallis massa. Integer vel lacus ac odio blandit semper. Praesent sit amet vestibulum massa. [&hellip;]</p>\n', 'slug': '8a70p3jr83660r4x923440y', 'guid': 'https://ny4rk3nyar.wordpress.com/?p=710', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': '483ed18f427eca5ab64b3266c9c86212', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 137, 'feed_url': 'https://ny4rk3nyar.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620'}}}}, 'categories': {'28': {'ID': 249913, 'name': '28', 'slug': '28', 'description': '', 'post_count': 17, 'feed_url': 'https://ny4rk3nyar.wordpress.com/category/28/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/categories/slug:28', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/categories/slug:28/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/posts/710', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/posts/710/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/posts/710/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205482620/posts/710/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': '483ed18f427eca5ab64b3266c9c86212', 'is_external': False, 'site_name': 'uru0ng', 'site_URL': 'https://ny4rk3nyar.wordpress.com', 'site_is_private': False, 'featured_media': {}}, {'ID': 805, 'site_ID': 205554117, 'author': {'ID': 220319694, 'login': 'tiwullele', 'email': False, 'name': 'Tiwul Lele', 'first_name': 'Tiwul', 'last_name': 'Lele', 'nice_name': 'tiwullele', 'URL': 'http://m66y3q4yj.wordpress.com', 'avatar_URL': 'https://1.gravatar.com/avatar/7a6c7177942958d03717aa1b622b551c?s=96&d=identicon&r=G', 'profile_URL': 'https://en.gravatar.com/tiwullele', 'ip_address': False, 'site_ID': 205554117, 'site_visible': True}, 'date': '2022-05-15T12:32:15+07:00', 'modified': '2022-05-15T12:32:15+07:00', 'title': '7z71h1yg18258e9e420205a', 'URL': 'https://m66y3q4yj.wordpress.com/2022/05/15/7z71h1yg18258e9e420205a/', 'short_URL': 'https://wp.me/pdUu0Z-cZ', 'content': '<p><a href="https://groups.google.com/g/kal5ahntjd2/c/VC0d7musAUg" target="_blank">0205a</a> Quisque nec pellentesque ante. Nam vulputate, lorem fringilla tempus euismod, ex lectus ultricies quam, non tempus libero enim eget diam. Sed ac neque tincidunt, varius neque eu, suscipit dolor. Ut euismod lectus ac dolor finibus facilisis. Vestibulum non lorem tincidunt, finibus magna sed, feugiat ante. Nam fermentum felis in nisl mattis, nec auctor mauris tempor. Donec fringilla volutpat lacus ac bibendum. In a justo vel lacus sodales porta ut nec ipsum. Mauris cursus commodo neque, dictum tincidunt velit interdum ac. Aenean ac ipsum condimentum, condimentum ante non, dignissim arcu. Mauris leo augue, gravida sit amet lacus at, porttitor posuere orci. Donec mi arcu, eleifend vel venenatis id, ornare vel lorem.</p>\n', 'excerpt': '<p>0205a Quisque nec pellentesque ante. Nam vulputate, lorem fringilla tempus euismod, ex lectus ultricies quam, non tempus libero enim eget diam. Sed ac neque tincidunt, varius neque eu, suscipit dolor. Ut euismod lectus ac dolor finibus facilisis. Vestibulum non lorem tincidunt, finibus magna sed, feugiat ante. Nam fermentum felis in nisl mattis, nec auctor mauris [&hellip;]</p>\n', 'slug': '7z71h1yg18258e9e420205a', 'guid': 'https://m66y3q4yj.wordpress.com/?p=805', 'status': 'publish', 'sticky': False, 'password': '', 'parent': False, 'type': 'post', 'comments_open': True, 'pings_open': True, 'likes_enabled': True, 'sharing_enabled': True, 'comment_count': 0, 'like_count': 0, 'i_like': False, 'is_reblogged': False, 'is_following': False, 'global_ID': 'a016870148f48e416c2e88a31249f05c', 'featured_image': '', 'post_thumbnail': None, 'format': 'standard', 'geo': False, 'menu_order': 0, 'publicize_URLs': [], 'tags': {'2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '', 'post_count': 185, 'feed_url': 'https://m66y3q4yj.wordpress.com/tag/2/feed/', 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/tags/slug:2', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/tags/slug:2/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117'}}}}, 'categories': {'27': {'ID': 249915, 'name': '27', 'slug': '27', 'description': '', 'post_count': 27, 'feed_url': 'https://m66y3q4yj.wordpress.com/category/27/feed/', 'parent': 0, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/categories/slug:27', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/categories/slug:27/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117'}}}}, 'attachments': {}, 'metadata': False, 'meta': {'links': {'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805', 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805/help', 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117', 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805/replies/', 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805/likes/'}}, 'current_user_can': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'capabilities': {'publish_post': False, 'delete_post': False, 'edit_post': False}, 'pseudo_ID': 'a016870148f48e416c2e88a31249f05c', 'is_external': False, 'site_name': 'VncdYYf', 'site_URL': 'https://m66y3q4yj.wordpress.com', 'site_is_private': False, 'featured_media': {}}]}, 'status_code': 200, 'success': True}
+        responses = {
+            'data': {'date_range': {'before': '2022-05-15T18:46:21+07:00', 'after': '2022-05-15T12:32:15+07:00'},
+                     'number': 10, 'posts': [{'ID': 805, 'site_ID': 205554117,
+                                              'author': {'ID': 220319694, 'login': 'tiwullele', 'email': False,
+                                                         'name': 'Tiwul Lele', 'first_name': 'Tiwul',
+                                                         'last_name': 'Lele', 'nice_name': 'tiwullele',
+                                                         'URL': 'http://m66y3q4yj.wordpress.com',
+                                                         'avatar_URL': 'https://1.gravatar.com/avatar/7a6c7177942958d03717aa1b622b551c?s=96&d=identicon&r=G',
+                                                         'profile_URL': 'https://en.gravatar.com/tiwullele',
+                                                         'ip_address': False, 'site_ID': 205554117,
+                                                         'site_visible': True}, 'date': '2022-05-15T12:32:15+07:00',
+                                              'modified': '2022-05-15T12:32:15+07:00',
+                                              'title': '7z71h1yg18258e9e420205a',
+                                              'URL': 'https://m66y3q4yj.wordpress.com/2022/05/15/7z71h1yg18258e9e420205a/',
+                                              'short_URL': 'https://wp.me/pdUu0Z-cZ',
+                                              'content': '<p><a href="https://groups.google.com/g/kal5ahntjd2/c/VC0d7musAUg" target="_blank">0205a</a> Quisque nec pellentesque ante. Nam vulputate, lorem fringilla tempus euismod, ex lectus ultricies quam, non tempus libero enim eget diam. Sed ac neque tincidunt, varius neque eu, suscipit dolor. Ut euismod lectus ac dolor finibus facilisis. Vestibulum non lorem tincidunt, finibus magna sed, feugiat ante. Nam fermentum felis in nisl mattis, nec auctor mauris tempor. Donec fringilla volutpat lacus ac bibendum. In a justo vel lacus sodales porta ut nec ipsum. Mauris cursus commodo neque, dictum tincidunt velit interdum ac. Aenean ac ipsum condimentum, condimentum ante non, dignissim arcu. Mauris leo augue, gravida sit amet lacus at, porttitor posuere orci. Donec mi arcu, eleifend vel venenatis id, ornare vel lorem.</p>\n',
+                                              'excerpt': '<p>0205a Quisque nec pellentesque ante. Nam vulputate, lorem fringilla tempus euismod, ex lectus ultricies quam, non tempus libero enim eget diam. Sed ac neque tincidunt, varius neque eu, suscipit dolor. Ut euismod lectus ac dolor finibus facilisis. Vestibulum non lorem tincidunt, finibus magna sed, feugiat ante. Nam fermentum felis in nisl mattis, nec auctor mauris [&hellip;]</p>\n',
+                                              'slug': '7z71h1yg18258e9e420205a',
+                                              'guid': 'https://m66y3q4yj.wordpress.com/?p=805', 'status': 'publish',
+                                              'sticky': False, 'password': '', 'parent': False, 'type': 'post',
+                                              'comments_open': True, 'pings_open': True, 'likes_enabled': True,
+                                              'sharing_enabled': True, 'comment_count': 0, 'like_count': 0,
+                                              'i_like': False, 'is_reblogged': False, 'is_following': False,
+                                              'global_ID': 'a016870148f48e416c2e88a31249f05c', 'featured_image': '',
+                                              'post_thumbnail': None, 'format': 'standard', 'geo': False,
+                                              'menu_order': 0, 'publicize_URLs': [], 'tags': {
+                                                 '2': {'ID': 14407, 'name': '2', 'slug': '2', 'description': '',
+                                                       'post_count': 185,
+                                                       'feed_url': 'https://m66y3q4yj.wordpress.com/tag/2/feed/',
+                                                       'meta': {'links': {
+                                                           'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/tags/slug:2',
+                                                           'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/tags/slug:2/help',
+                                                           'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117'}}}},
+                                              'categories': {
+                                                  '27': {'ID': 249915, 'name': '27', 'slug': '27', 'description': '',
+                                                         'post_count': 27,
+                                                         'feed_url': 'https://m66y3q4yj.wordpress.com/category/27/feed/',
+                                                         'parent': 0, 'meta': {'links': {
+                                                          'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/categories/slug:27',
+                                                          'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/categories/slug:27/help',
+                                                          'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117'}}}},
+                                              'attachments': {}, 'metadata': False, 'meta': {'links': {
+                                                 'self': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805',
+                                                 'help': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805/help',
+                                                 'site': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117',
+                                                 'replies': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805/replies/',
+                                                 'likes': 'https://public-api.wordpress.com/rest/v1.1/sites/205554117/posts/805/likes/'}},
+                                              'current_user_can': {'publish_post': False, 'delete_post': False,
+                                                                   'edit_post': False},
+                                              'capabilities': {'publish_post': False, 'delete_post': False,
+                                                               'edit_post': False},
+                                              'pseudo_ID': 'a016870148f48e416c2e88a31249f05c', 'is_external': False,
+                                              'site_name': 'VncdYYf', 'site_URL': 'https://m66y3q4yj.wordpress.com',
+                                              'site_is_private': False, 'featured_media': {}}]}, 'status_code': 200,
+            'success': True}
         get_list_of_post_from_tag_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_reader-get-list-of-post-from-tag', kwargs={"pk": 2})
         response = self.client.get(url, format='json')
         self.assertEqual(responses['data']['date_range'], response.data['data']['date_range'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_list_of_post_from_tag_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_list_of_post_from_tag')
-    def test_get_list_of_post_from_tag_without_token(self, get_list_of_post_from_tag_mock):
-        responses = None
-        get_list_of_post_from_tag_mock.return_value = responses
-        url = reverse('wordpress_reader-get-list-of-post-from-tag', kwargs={"pk":2})
+    def test_get_list_of_post_from_tag_without_token(self):
+        self.client.force_authenticate(token=None)
+        url = reverse('wordpress_reader-get-list-of-post-from-tag', kwargs={"pk": 2})
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.subscribe_new_tag')
     def test_subscribe_new_tag(self, subscribe_new_tag_mock):
-        responses = {'data': {'subscribed': True, 'tags': [{'ID': '14407', 'slug': '2', 'title': '2', 'display_name': '2', 'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/2/posts'}], 'added_tag': '14407'}, 'status_code': 200, 'success': True}
+        responses = {'data': {'subscribed': True, 'tags': [
+            {'ID': '14407', 'slug': '2', 'title': '2', 'display_name': '2',
+             'URL': 'https://public-api.wordpress.com/rest/v1.1/read/tags/2/posts'}], 'added_tag': '14407'},
+                     'status_code': 200, 'success': True}
         subscribe_new_tag_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_reader-subscribe-new-tag', kwargs={"pk": 2})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['subscribed'], response.data['data']['subscribed'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        subscribe_new_tag_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.subscribe_new_tag')
-    def test_subscribe_new_tag_without_token(self, subscribe_new_tag_mock):
-        responses = None
-        subscribe_new_tag_mock.return_value = responses
+    def test_subscribe_new_tag_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_reader-subscribe-new-tag', kwargs={"pk": 2})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.unsubscribe_tag')
     def test_unsubscribe_tag(self, unsubscribe_tag_mock):
-        responses = {'data': {'subscribed': False, 'tags': [], 'removed_tag': '14407'}, 'status_code': 200, 'success': True}
+        responses = {'data': {'subscribed': False, 'tags': [], 'removed_tag': '14407'}, 'status_code': 200,
+                     'success': True}
         unsubscribe_tag_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_reader-unsubscribe-tag', kwargs={"pk": 2})
         response = self.client.post(url, format='json')
         self.assertEqual(responses['data']['subscribed'], response.data['data']['subscribed'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        unsubscribe_tag_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.unsubscribe_tag')
-    def test_unsubscribe_tag_without_token(self, unsubscribe_tag_mock):
-        responses = None
-        unsubscribe_tag_mock.return_value = responses
+    def test_unsubscribe_tag_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_reader-unsubscribe-tag', kwargs={"pk": 2})
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1733,75 +1500,198 @@ class WordpressStatsTestCase(APITestCase):
 
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_site_stats')
     def test_get_site_stats(self, get_site_stats_mock):
-        responses = {'data': {'date': '2023-01-12', 'stats': {'visitors_today': 0, 'visitors_yesterday': 0, 'visitors': 0, 'views_today': 0, 'views_yesterday': 0, 'views_best_day': '', 'views_best_day_total': 0, 'views': 0, 'comments': 0, 'posts': 8, 'followers_blog': 0, 'followers_comments': 0, 'comments_per_month': 0, 'comments_most_active_recent_day': '', 'comments_most_active_time': 'N/A', 'comments_spam': 0, 'categories': 3, 'tags': 2, 'shares': 0, 'shares_twitter': 0, 'shares_press-this': 0, 'shares_facebook': 0}, 'visits': {'date': '2023-01-12', 'unit': 'day', 'fields': ['period', 'views', 'visitors'], 'data': [['2022-12-14', 0, 0], ['2022-12-15', 0, 0], ['2022-12-16', 0, 0], ['2022-12-17', 0, 0], ['2022-12-18', 0, 0], ['2022-12-19', 0, 0], ['2022-12-20', 0, 0], ['2022-12-21', 0, 0], ['2022-12-22', 0, 0], ['2022-12-23', 0, 0], ['2022-12-24', 0, 0], ['2022-12-25', 0, 0], ['2022-12-26', 0, 0], ['2022-12-27', 0, 0], ['2022-12-28', 0, 0], ['2022-12-29', 0, 0], ['2022-12-30', 0, 0], ['2022-12-31', 0, 0], ['2023-01-01', 0, 0], ['2023-01-02', 0, 0], ['2023-01-03', 0, 0], ['2023-01-04', 0, 0], ['2023-01-05', 0, 0], ['2023-01-06', 0, 0], ['2023-01-07', 0, 0], ['2023-01-08', 0, 0], ['2023-01-09', 0, 0], ['2023-01-10', 0, 0], ['2023-01-11', 0, 0], ['2023-01-12', 0, 0]]}}, 'status_code': 200, 'success': True}
+        responses = {'data': {'date': '2023-01-12',
+                              'stats': {'visitors_today': 0, 'visitors_yesterday': 0, 'visitors': 0, 'views_today': 0,
+                                        'views_yesterday': 0, 'views_best_day': '', 'views_best_day_total': 0,
+                                        'views': 0, 'comments': 0, 'posts': 8, 'followers_blog': 0,
+                                        'followers_comments': 0, 'comments_per_month': 0,
+                                        'comments_most_active_recent_day': '', 'comments_most_active_time': 'N/A',
+                                        'comments_spam': 0, 'categories': 3, 'tags': 2, 'shares': 0,
+                                        'shares_twitter': 0, 'shares_press-this': 0, 'shares_facebook': 0},
+                              'visits': {'date': '2023-01-12', 'unit': 'day', 'fields': ['period', 'views', 'visitors'],
+                                         'data': [['2022-12-14', 0, 0], ['2022-12-15', 0, 0], ['2022-12-16', 0, 0],
+                                                  ['2022-12-17', 0, 0], ['2022-12-18', 0, 0], ['2022-12-19', 0, 0],
+                                                  ['2022-12-20', 0, 0], ['2022-12-21', 0, 0], ['2022-12-22', 0, 0],
+                                                  ['2022-12-23', 0, 0], ['2022-12-24', 0, 0], ['2022-12-25', 0, 0],
+                                                  ['2022-12-26', 0, 0], ['2022-12-27', 0, 0], ['2022-12-28', 0, 0],
+                                                  ['2022-12-29', 0, 0], ['2022-12-30', 0, 0], ['2022-12-31', 0, 0],
+                                                  ['2023-01-01', 0, 0], ['2023-01-02', 0, 0], ['2023-01-03', 0, 0],
+                                                  ['2023-01-04', 0, 0], ['2023-01-05', 0, 0], ['2023-01-06', 0, 0],
+                                                  ['2023-01-07', 0, 0], ['2023-01-08', 0, 0], ['2023-01-09', 0, 0],
+                                                  ['2023-01-10', 0, 0], ['2023-01-11', 0, 0], ['2023-01-12', 0, 0]]}},
+                     'status_code': 200, 'success': True}
         get_site_stats_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_stats-get-site-stats')
         response = self.client.get(url)
         self.assertEqual(responses['data']['date'], response.data['data']['date'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_site_stats_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_site_stats')
-    def test_get_site_stats_without_token(self, get_site_stats_mock):
-        responses = None
-        get_site_stats_mock.return_value = responses
+    def test_get_site_stats_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_stats-get-site-stats')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_site_stats_summary')
     def test_get_site_stats_summary(self, get_site_stats_summary_mock):
-        responses = {'data': {'date': '2023-01-12', 'period': 'day', 'views': 0, 'visitors': 0, 'likes': 0, 'reblogs': 0, 'comments': 0, 'followers': 0}, 'status_code': 200, 'success': True}
+        responses = {
+            'data': {'date': '2023-01-12', 'period': 'day', 'views': 0, 'visitors': 0, 'likes': 0, 'reblogs': 0,
+                     'comments': 0, 'followers': 0}, 'status_code': 200, 'success': True}
         get_site_stats_summary_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_stats-get-site-stats-summary')
         response = self.client.get(url)
         self.assertEqual(responses['data']['date'], response.data['data']['date'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_site_stats_summary_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_site_stats_summary')
-    def test_get_site_stats_summary_without_token(self, get_site_stats_summary_mock):
-        responses = None
-        get_site_stats_summary_mock.return_value = responses
+    def test_get_site_stats_summary_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_stats-get-site-stats-summary')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_post_views')
     def test_get_post_views(self, get_post_views_mock):
-        responses = {'data': {'date': '2023-01-12', 'views': 0, 'years': {'1970': {'months': [], 'total': 0}, '1971': {'months': [], 'total': 0}, '1972': {'months': [], 'total': 0}, '1973': {'months': [], 'total': 0}, '1974': {'months': [], 'total': 0}, '1975': {'months': [], 'total': 0}, '1976': {'months': [], 'total': 0}, '1977': {'months': [], 'total': 0}, '1978': {'months': [], 'total': 0}, '1979': {'months': [], 'total': 0}, '1980': {'months': [], 'total': 0}, '1981': {'months': [], 'total': 0}, '1982': {'months': [], 'total': 0}, '1983': {'months': [], 'total': 0}, '1984': {'months': [], 'total': 0}, '1985': {'months': [], 'total': 0}, '1986': {'months': [], 'total': 0}, '1987': {'months': [], 'total': 0}, '1988': {'months': [], 'total': 0}, '1989': {'months': [], 'total': 0}, '1990': {'months': [], 'total': 0}, '1991': {'months': [], 'total': 0}, '1992': {'months': [], 'total': 0}, '1993': {'months': [], 'total': 0}, '1994': {'months': [], 'total': 0}, '1995': {'months': [], 'total': 0}, '1996': {'months': [], 'total': 0}, '1997': {'months': [], 'total': 0}, '1998': {'months': [], 'total': 0}, '1999': {'months': [], 'total': 0}, '2000': {'months': [], 'total': 0}, '2001': {'months': [], 'total': 0}, '2002': {'months': [], 'total': 0}, '2003': {'months': [], 'total': 0}, '2004': {'months': [], 'total': 0}, '2005': {'months': [], 'total': 0}, '2006': {'months': [], 'total': 0}, '2007': {'months': [], 'total': 0}, '2008': {'months': [], 'total': 0}, '2009': {'months': [], 'total': 0}, '2010': {'months': [], 'total': 0}, '2011': {'months': [], 'total': 0}, '2012': {'months': [], 'total': 0}, '2013': {'months': [], 'total': 0}, '2014': {'months': [], 'total': 0}, '2015': {'months': [], 'total': 0}, '2016': {'months': [], 'total': 0}, '2017': {'months': [], 'total': 0}, '2018': {'months': [], 'total': 0}, '2019': {'months': [], 'total': 0}, '2020': {'months': [], 'total': 0}, '2021': {'months': [], 'total': 0}, '2022': {'months': [], 'total': 0}, '2023': {'months': [], 'total': 0}}, 'averages': {'1970': {'months': [], 'overall': 0}, '1971': {'months': [], 'overall': 0}, '1972': {'months': [], 'overall': 0}, '1973': {'months': [], 'overall': 0}, '1974': {'months': [], 'overall': 0}, '1975': {'months': [], 'overall': 0}, '1976': {'months': [], 'overall': 0}, '1977': {'months': [], 'overall': 0}, '1978': {'months': [], 'overall': 0}, '1979': {'months': [], 'overall': 0}, '1980': {'months': [], 'overall': 0}, '1981': {'months': [], 'overall': 0}, '1982': {'months': [], 'overall': 0}, '1983': {'months': [], 'overall': 0}, '1984': {'months': [], 'overall': 0}, '1985': {'months': [], 'overall': 0}, '1986': {'months': [], 'overall': 0}, '1987': {'months': [], 'overall': 0}, '1988': {'months': [], 'overall': 0}, '1989': {'months': [], 'overall': 0}, '1990': {'months': [], 'overall': 0}, '1991': {'months': [], 'overall': 0}, '1992': {'months': [], 'overall': 0}, '1993': {'months': [], 'overall': 0}, '1994': {'months': [], 'overall': 0}, '1995': {'months': [], 'overall': 0}, '1996': {'months': [], 'overall': 0}, '1997': {'months': [], 'overall': 0}, '1998': {'months': [], 'overall': 0}, '1999': {'months': [], 'overall': 0}, '2000': {'months': [], 'overall': 0}, '2001': {'months': [], 'overall': 0}, '2002': {'months': [], 'overall': 0}, '2003': {'months': [], 'overall': 0}, '2004': {'months': [], 'overall': 0}, '2005': {'months': [], 'overall': 0}, '2006': {'months': [], 'overall': 0}, '2007': {'months': [], 'overall': 0}, '2008': {'months': [], 'overall': 0}, '2009': {'months': [], 'overall': 0}, '2010': {'months': [], 'overall': 0}, '2011': {'months': [], 'overall': 0}, '2012': {'months': [], 'overall': 0}, '2013': {'months': [], 'overall': 0}, '2014': {'months': [], 'overall': 0}, '2015': {'months': [], 'overall': 0}, '2016': {'months': [], 'overall': 0}, '2017': {'months': [], 'overall': 0}, '2018': {'months': [], 'overall': 0}, '2019': {'months': [], 'overall': 0}, '2020': {'months': [], 'overall': 0}, '2021': {'months': [], 'overall': 0}, '2022': {'months': [], 'overall': 0}, '2023': {'months': [], 'overall': 0}}, 'weeks': [{'days': [{'day': '2022-12-05', 'count': 0}, {'day': '2022-12-06', 'count': 0}, {'day': '2022-12-07', 'count': 0}, {'day': '2022-12-08', 'count': 0}, {'day': '2022-12-09', 'count': 0}, {'day': '2022-12-10', 'count': 0}, {'day': '2022-12-11', 'count': 0}], 'total': 0, 'average': 0, 'change': None}, {'days': [{'day': '2022-12-12', 'count': 0}, {'day': '2022-12-13', 'count': 0}, {'day': '2022-12-14', 'count': 0}, {'day': '2022-12-15', 'count': 0}, {'day': '2022-12-16', 'count': 0}, {'day': '2022-12-17', 'count': 0}, {'day': '2022-12-18', 'count': 0}], 'total': 0, 'average': 0, 'change': 0}, {'days': [{'day': '2022-12-19', 'count': 0}, {'day': '2022-12-20', 'count': 0}, {'day': '2022-12-21', 'count': 0}, {'day': '2022-12-22', 'count': 0}, {'day': '2022-12-23', 'count': 0}, {'day': '2022-12-24', 'count': 0}, {'day': '2022-12-25', 'count': 0}], 'total': 0, 'average': 0, 'change': 0}, {'days': [{'day': '2022-12-26', 'count': 0}, {'day': '2022-12-27', 'count': 0}, {'day': '2022-12-28', 'count': 0}, {'day': '2022-12-29', 'count': 0}, {'day': '2022-12-30', 'count': 0}, {'day': '2022-12-31', 'count': 0}, {'day': '2023-01-01', 'count': 0}], 'total': 0, 'average': 0, 'change': 0}, {'days': [{'day': '2023-01-02', 'count': 0}, {'day': '2023-01-03', 'count': 0}, {'day': '2023-01-04', 'count': 0}, {'day': '2023-01-05', 'count': 0}, {'day': '2023-01-06', 'count': 0}, {'day': '2023-01-07', 'count': 0}, {'day': '2023-01-08', 'count': 0}], 'total': 0, 'average': 0, 'change': 0}, {'days': [{'day': '2023-01-09', 'count': 0}, {'day': '2023-01-10', 'count': 0}, {'day': '2023-01-11', 'count': 0}, {'day': '2023-01-12', 'count': 0}], 'total': 0, 'average': 0, 'change': 0}], 'fields': ['period', 'views'], 'data': [['2023-01-10', 0], ['2023-01-11', 0], ['2023-01-12', 0]], 'highest_month': 0, 'highest_day_average': 0, 'highest_week_average': 0, 'post': {'ID': 20, 'post_author': '230036407', 'post_date': '2023-01-11 20:21:16', 'post_date_gmt': '2023-01-11 15:21:16', 'post_content': '', 'post_title': 'my new personal', 'post_excerpt': '', 'post_status': 'publish', 'comment_status': 'open', 'ping_status': 'open', 'post_password': '', 'post_name': 'my-new-personal', 'to_ping': '', 'pinged': '', 'post_modified': '2023-01-11 20:21:16', 'post_modified_gmt': '2023-01-11 15:21:16', 'post_content_filtered': '', 'post_parent': 0, 'guid': 'https://dummy15.wordpress.com/2023/01/11/my-new-personal/', 'menu_order': 0, 'post_type': 'post', 'post_mime_type': '', 'comment_count': '0', 'filter': 'raw', 'permalink': 'http://dummy15.wordpress.com/2023/01/11/my-new-personal/'}}, 'status_code': 200, 'success': True}
+        responses = {'data': {'date': '2023-01-12', 'views': 0,
+                              'years': {'1970': {'months': [], 'total': 0}, '1971': {'months': [], 'total': 0},
+                                        '1972': {'months': [], 'total': 0}, '1973': {'months': [], 'total': 0},
+                                        '1974': {'months': [], 'total': 0}, '1975': {'months': [], 'total': 0},
+                                        '1976': {'months': [], 'total': 0}, '1977': {'months': [], 'total': 0},
+                                        '1978': {'months': [], 'total': 0}, '1979': {'months': [], 'total': 0},
+                                        '1980': {'months': [], 'total': 0}, '1981': {'months': [], 'total': 0},
+                                        '1982': {'months': [], 'total': 0}, '1983': {'months': [], 'total': 0},
+                                        '1984': {'months': [], 'total': 0}, '1985': {'months': [], 'total': 0},
+                                        '1986': {'months': [], 'total': 0}, '1987': {'months': [], 'total': 0},
+                                        '1988': {'months': [], 'total': 0}, '1989': {'months': [], 'total': 0},
+                                        '1990': {'months': [], 'total': 0}, '1991': {'months': [], 'total': 0},
+                                        '1992': {'months': [], 'total': 0}, '1993': {'months': [], 'total': 0},
+                                        '1994': {'months': [], 'total': 0}, '1995': {'months': [], 'total': 0},
+                                        '1996': {'months': [], 'total': 0}, '1997': {'months': [], 'total': 0},
+                                        '1998': {'months': [], 'total': 0}, '1999': {'months': [], 'total': 0},
+                                        '2000': {'months': [], 'total': 0}, '2001': {'months': [], 'total': 0},
+                                        '2002': {'months': [], 'total': 0}, '2003': {'months': [], 'total': 0},
+                                        '2004': {'months': [], 'total': 0}, '2005': {'months': [], 'total': 0},
+                                        '2006': {'months': [], 'total': 0}, '2007': {'months': [], 'total': 0},
+                                        '2008': {'months': [], 'total': 0}, '2009': {'months': [], 'total': 0},
+                                        '2010': {'months': [], 'total': 0}, '2011': {'months': [], 'total': 0},
+                                        '2012': {'months': [], 'total': 0}, '2013': {'months': [], 'total': 0},
+                                        '2014': {'months': [], 'total': 0}, '2015': {'months': [], 'total': 0},
+                                        '2016': {'months': [], 'total': 0}, '2017': {'months': [], 'total': 0},
+                                        '2018': {'months': [], 'total': 0}, '2019': {'months': [], 'total': 0},
+                                        '2020': {'months': [], 'total': 0}, '2021': {'months': [], 'total': 0},
+                                        '2022': {'months': [], 'total': 0}, '2023': {'months': [], 'total': 0}},
+                              'averages': {'1970': {'months': [], 'overall': 0}, '1971': {'months': [], 'overall': 0},
+                                           '1972': {'months': [], 'overall': 0}, '1973': {'months': [], 'overall': 0},
+                                           '1974': {'months': [], 'overall': 0}, '1975': {'months': [], 'overall': 0},
+                                           '1976': {'months': [], 'overall': 0}, '1977': {'months': [], 'overall': 0},
+                                           '1978': {'months': [], 'overall': 0}, '1979': {'months': [], 'overall': 0},
+                                           '1980': {'months': [], 'overall': 0}, '1981': {'months': [], 'overall': 0},
+                                           '1982': {'months': [], 'overall': 0}, '1983': {'months': [], 'overall': 0},
+                                           '1984': {'months': [], 'overall': 0}, '1985': {'months': [], 'overall': 0},
+                                           '1986': {'months': [], 'overall': 0}, '1987': {'months': [], 'overall': 0},
+                                           '1988': {'months': [], 'overall': 0}, '1989': {'months': [], 'overall': 0},
+                                           '1990': {'months': [], 'overall': 0}, '1991': {'months': [], 'overall': 0},
+                                           '1992': {'months': [], 'overall': 0}, '1993': {'months': [], 'overall': 0},
+                                           '1994': {'months': [], 'overall': 0}, '1995': {'months': [], 'overall': 0},
+                                           '1996': {'months': [], 'overall': 0}, '1997': {'months': [], 'overall': 0},
+                                           '1998': {'months': [], 'overall': 0}, '1999': {'months': [], 'overall': 0},
+                                           '2000': {'months': [], 'overall': 0}, '2001': {'months': [], 'overall': 0},
+                                           '2002': {'months': [], 'overall': 0}, '2003': {'months': [], 'overall': 0},
+                                           '2004': {'months': [], 'overall': 0}, '2005': {'months': [], 'overall': 0},
+                                           '2006': {'months': [], 'overall': 0}, '2007': {'months': [], 'overall': 0},
+                                           '2008': {'months': [], 'overall': 0}, '2009': {'months': [], 'overall': 0},
+                                           '2010': {'months': [], 'overall': 0}, '2011': {'months': [], 'overall': 0},
+                                           '2012': {'months': [], 'overall': 0}, '2013': {'months': [], 'overall': 0},
+                                           '2014': {'months': [], 'overall': 0}, '2015': {'months': [], 'overall': 0},
+                                           '2016': {'months': [], 'overall': 0}, '2017': {'months': [], 'overall': 0},
+                                           '2018': {'months': [], 'overall': 0}, '2019': {'months': [], 'overall': 0},
+                                           '2020': {'months': [], 'overall': 0}, '2021': {'months': [], 'overall': 0},
+                                           '2022': {'months': [], 'overall': 0}, '2023': {'months': [], 'overall': 0}},
+                              'weeks': [{'days': [{'day': '2022-12-05', 'count': 0}, {'day': '2022-12-06', 'count': 0},
+                                                  {'day': '2022-12-07', 'count': 0}, {'day': '2022-12-08', 'count': 0},
+                                                  {'day': '2022-12-09', 'count': 0}, {'day': '2022-12-10', 'count': 0},
+                                                  {'day': '2022-12-11', 'count': 0}], 'total': 0, 'average': 0,
+                                         'change': None}, {'days': [{'day': '2022-12-12', 'count': 0},
+                                                                    {'day': '2022-12-13', 'count': 0},
+                                                                    {'day': '2022-12-14', 'count': 0},
+                                                                    {'day': '2022-12-15', 'count': 0},
+                                                                    {'day': '2022-12-16', 'count': 0},
+                                                                    {'day': '2022-12-17', 'count': 0},
+                                                                    {'day': '2022-12-18', 'count': 0}], 'total': 0,
+                                                           'average': 0, 'change': 0}, {
+                                            'days': [{'day': '2022-12-19', 'count': 0},
+                                                     {'day': '2022-12-20', 'count': 0},
+                                                     {'day': '2022-12-21', 'count': 0},
+                                                     {'day': '2022-12-22', 'count': 0},
+                                                     {'day': '2022-12-23', 'count': 0},
+                                                     {'day': '2022-12-24', 'count': 0},
+                                                     {'day': '2022-12-25', 'count': 0}], 'total': 0, 'average': 0,
+                                            'change': 0}, {'days': [{'day': '2022-12-26', 'count': 0},
+                                                                    {'day': '2022-12-27', 'count': 0},
+                                                                    {'day': '2022-12-28', 'count': 0},
+                                                                    {'day': '2022-12-29', 'count': 0},
+                                                                    {'day': '2022-12-30', 'count': 0},
+                                                                    {'day': '2022-12-31', 'count': 0},
+                                                                    {'day': '2023-01-01', 'count': 0}], 'total': 0,
+                                                           'average': 0, 'change': 0}, {
+                                            'days': [{'day': '2023-01-02', 'count': 0},
+                                                     {'day': '2023-01-03', 'count': 0},
+                                                     {'day': '2023-01-04', 'count': 0},
+                                                     {'day': '2023-01-05', 'count': 0},
+                                                     {'day': '2023-01-06', 'count': 0},
+                                                     {'day': '2023-01-07', 'count': 0},
+                                                     {'day': '2023-01-08', 'count': 0}], 'total': 0, 'average': 0,
+                                            'change': 0}, {'days': [{'day': '2023-01-09', 'count': 0},
+                                                                    {'day': '2023-01-10', 'count': 0},
+                                                                    {'day': '2023-01-11', 'count': 0},
+                                                                    {'day': '2023-01-12', 'count': 0}], 'total': 0,
+                                                           'average': 0, 'change': 0}], 'fields': ['period', 'views'],
+                              'data': [['2023-01-10', 0], ['2023-01-11', 0], ['2023-01-12', 0]], 'highest_month': 0,
+                              'highest_day_average': 0, 'highest_week_average': 0,
+                              'post': {'ID': 20, 'post_author': '230036407', 'post_date': '2023-01-11 20:21:16',
+                                       'post_date_gmt': '2023-01-11 15:21:16', 'post_content': '',
+                                       'post_title': 'my new personal', 'post_excerpt': '', 'post_status': 'publish',
+                                       'comment_status': 'open', 'ping_status': 'open', 'post_password': '',
+                                       'post_name': 'my-new-personal', 'to_ping': '', 'pinged': '',
+                                       'post_modified': '2023-01-11 20:21:16',
+                                       'post_modified_gmt': '2023-01-11 15:21:16', 'post_content_filtered': '',
+                                       'post_parent': 0,
+                                       'guid': 'https://dummy15.wordpress.com/2023/01/11/my-new-personal/',
+                                       'menu_order': 0, 'post_type': 'post', 'post_mime_type': '', 'comment_count': '0',
+                                       'filter': 'raw',
+                                       'permalink': 'http://dummy15.wordpress.com/2023/01/11/my-new-personal/'}},
+                     'status_code': 200, 'success': True}
         get_post_views_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_stats-get-post-views', kwargs={"pk": 20})
         response = self.client.get(url)
         self.assertEqual(responses['data']['views'], response.data['data']['views'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_post_views_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_post_views')
-    def test_get_post_views_without_token(self, get_post_views_mock):
-        responses = None
-        get_post_views_mock.return_value = responses
+    def test_get_post_views_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_stats-get-post-views', kwargs={"pk": 20})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_site_followers')
     def test_get_site_followers(self, get_site_followers_mock):
-        responses = {'data': {'page': 1, 'pages': 0, 'total': 0, 'total_email': 0, 'total_wpcom': 0, 'subscribers': []}, 'status_code': 200, 'success': True}
+        responses = {'data': {'page': 1, 'pages': 0, 'total': 0, 'total_email': 0, 'total_wpcom': 0, 'subscribers': []},
+                     'status_code': 200, 'success': True}
         get_site_followers_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_stats-get-site-followers')
         response = self.client.get(url)
         self.assertEqual(responses['data']['subscribers'], response.data['data']['subscribers'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_site_followers_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_site_followers')
-    def test_get_site_followers_without_token(self, get_site_followers_mock):
-        responses = None
-        get_site_followers_mock.return_value = responses
+    def test_get_site_followers_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_stats-get-site-followers')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1811,22 +1701,21 @@ class WordpressMenuTestCase(APITestCase):
 
     def setUp(self):
         self.access_token = os.getenv("WORDPRESS_ACCESS_TOKEN")
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_navigation_menu')
     def test_create_navigation_menu(self, create_navigation_menu_mock):
         responses = {'data': {'id': 758797165}, 'status_code': 200, 'success': True}
         create_navigation_menu_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_menu-create-navigation-menu')
         data = {"name": "shoaib"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['id'], response.data['data']['id'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        create_navigation_menu_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.create_navigation_menu')
-    def test_create_navigation_menu_without_token(self, create_navigation_menu_mock):
-        responses = None
-        create_navigation_menu_mock.return_value = responses
+    def test_create_navigation_menu_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_menu-create-navigation-menu')
         data = {"name": "shoaib"}
         response = self.client.post(url, data, format='json')
@@ -1834,19 +1723,19 @@ class WordpressMenuTestCase(APITestCase):
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.update_navigation_menu')
     def test_update_navigation_menu(self, update_navigation_menu_mock):
-        responses = {'data': {'menu': {'id': 758797165, 'name': 'amjad', 'description': '', 'items': [], 'locations': []}}, 'status_code': 200, 'success': True}
+        responses = {
+            'data': {'menu': {'id': 758797165, 'name': 'amjad', 'description': '', 'items': [], 'locations': []}},
+            'status_code': 200, 'success': True}
         update_navigation_menu_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_menu-update-navigation-menu', kwargs={"pk": 758797165})
         data = {"name": "amjad"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(responses['data']['menu']['id'], response.data['data']['menu']['id'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        update_navigation_menu_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.update_navigation_menu')
-    def test_update_navigation_menu_without_token(self, update_navigation_menu_mock):
-        responses = None
-        update_navigation_menu_mock.return_value = responses
+    def test_update_navigation_menu_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_menu-update-navigation-menu', kwargs={"pk": 758797165})
         data = {"name": "amjad"}
         response = self.client.post(url, data, format='json')
@@ -1854,18 +1743,18 @@ class WordpressMenuTestCase(APITestCase):
 
     @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_all_navigation_menu')
     def test_get_all_navigation_menu(self, get_all_navigation_menu_mock):
-        responses = {'data': {'menus': [{'id': 758797165, 'name': 'amjad', 'description': '', 'items': [], 'locations': []}], 'locations': []}, 'status_code': 200, 'success': True}
+        responses = {
+            'data': {'menus': [{'id': 758797165, 'name': 'amjad', 'description': '', 'items': [], 'locations': []}],
+                     'locations': []}, 'status_code': 200, 'success': True}
         get_all_navigation_menu_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_menu-get-all-navigation-menu')
         response = self.client.get(url)
         self.assertEqual(responses['data']['menus'], response.data['data']['menus'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        get_all_navigation_menu_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.get_all_navigation_menu')
-    def test_get_all_navigation_menu_without_token(self, get_all_navigation_menu_mock):
-        responses = None
-        get_all_navigation_menu_mock.return_value = responses
+    def test_get_all_navigation_menu_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_menu-get-all-navigation-menu')
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -1874,17 +1763,14 @@ class WordpressMenuTestCase(APITestCase):
     def test_delete_navigation_menu(self, delete_navigation_menu_mock):
         responses = {'data': {'deleted': True}, 'status_code': 200, 'success': True}
         delete_navigation_menu_mock.return_value = responses
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + self.access_token)
         url = reverse('wordpress_menu-delete-navigation-menu', kwargs={"pk": 758797165})
         response = self.client.post(url)
         self.assertEqual(responses['data']['deleted'], response.data['data']['deleted'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        delete_navigation_menu_mock.assert_called_once()
 
-    @mock.patch('modules.django_wordpress.wordpress.services.WordpressService.WordpressService.delete_navigation_menu')
-    def test_delete_navigation_menu_without_token(self, delete_navigation_menu_mock):
-        responses = None
-        delete_navigation_menu_mock.return_value = responses
+    def test_delete_navigation_menu_without_token(self):
+        self.client.force_authenticate(token=None)
         url = reverse('wordpress_menu-delete-navigation-menu', kwargs={"pk": 758797165})
         response = self.client.post(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
