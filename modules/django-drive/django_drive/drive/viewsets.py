@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .services.DriveService import DriveService
-from .serializers import FileListSerializer, CreateFolderSerializer, ShareFileSerializer, UploadFileSerializer
+from .serializers import CreateFolderSerializer, ShareFileSerializer, UploadFileSerializer
 
 
 class DriveViewSet(viewsets.GenericViewSet):
@@ -19,22 +19,21 @@ class DriveViewSet(viewsets.GenericViewSet):
     """
 
     allowed_serializers = {
-        "file_list": FileListSerializer,
         "create_folder": CreateFolderSerializer,
         "share_file": ShareFileSerializer,
         "upload_file": UploadFileSerializer,
     }
 
     def get_serializer_class(self):
-        return self.allowed_serializers.get(self.action, FileListSerializer)
+        return self.allowed_serializers.get(self.action)
 
     @action(detail=False, methods=['get'], url_path='file/list')
     def file_list(self, request):
         try:
             drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
-            serializer = self.get_serializer(data=request.query_params)
-            serializer.is_valid(raise_exception=True)
-            response = drive_service.get_drive_files(**serializer.data)
+            response = drive_service.get_drive_files(query=request.query_params.get('query', None),
+                                                     page_token=request.query_params.get('page_token', None),
+                                                     page_size=request.query_params.get('page_size', None))
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)

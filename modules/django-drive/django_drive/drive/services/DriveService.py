@@ -1,4 +1,3 @@
-import os
 
 from google.oauth2 import service_account
 from googleapiclient import discovery
@@ -23,11 +22,12 @@ class DriveService:
 
     def get_drive_files(self, query=None, page_token=None, page_size=None):
         """
-            :query_param str query: To search for a specific set of files or folders, use the query.
-            :query_param num page_size: The maximum number of files to return per page
-            :query_param str page_token: The token for continuing a previous list request on the next page.
-                This should be set to the value of 'nextPageToken' from the previous response.
-            :return: Returns list of the files and folder from user's Google Drive.
+        To get all files
+        :query_param str query: To search for a specific set of files or folders, use the query
+        :query_param num page_size: The maximum number of files to return per page
+        :query_param str page_token: The token for continuing a previous list request on the next page.
+        This should be set to the value of 'nextPageToken' from the previous response.
+        :return: Returns list of the files and folder from user's Google Drive.
         """
         try:
             files = self.drive_service.files().list(

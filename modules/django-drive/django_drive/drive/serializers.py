@@ -1,12 +1,6 @@
 from rest_framework import serializers
 
 
-class FileListSerializer(serializers.Serializer):
-    query = serializers.CharField(required=False)
-    page_token = serializers.CharField(required=False)
-    page_size = serializers.CharField(required=False)
-
-
 class CreateFolderSerializer(serializers.Serializer):
     folder_name = serializers.CharField(required=True)
     share_with = serializers.ListField(
