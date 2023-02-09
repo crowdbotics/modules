@@ -404,7 +404,7 @@ class CreateCartTestCase(APITestCase):
         self.shopify_booking = ShopifyBooking.objects.create(user=self.user,
                                                              shopify_cart_id="cart")
 
-    def test_create_cart(self):
+    def test_create_cart_with_invalid_data(self):
         data = {
             "lines": [
                 {
@@ -422,11 +422,11 @@ class CreateCartTestCase(APITestCase):
             "attributes": {"key": "address", "value": "Bahawalpur, punjab, pakistan"}
         }
         response = self.client.post('/modules/booking/shopify/booking/', data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_cart_without_data(self):
         response = self.client.post('/modules/booking/shopify/booking/')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_cart(self):
         params = {

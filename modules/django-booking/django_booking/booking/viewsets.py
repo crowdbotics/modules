@@ -5,7 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer, BookingCreateSerializer
+from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer,\
+    BookingCreateSerializer
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
 import requests
 import os
@@ -49,7 +50,6 @@ class CreateBookingView(ModelViewSet):
 class CreateCartView(APIView):
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
-    queryset = ShopifyBooking.objects.all()
 
     def post(self, request, *args, **kwargs):
         """
@@ -90,13 +90,13 @@ class CreateCartView(APIView):
             payload = {
                 "query": query,
                 "variables": {
-                    "lines": request.data["lines"]
+                    "lines": request.data.get("lines", [])
                 }
             }
             req = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
                                 headers={"X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
                                          "Content-Type": "application/json"})
-            load = json.loads(req.text)
+            load = req.json()
             shopify_id = ShopifyBooking.objects.create(user=request.user, shopify_cart_id=load["data"]["cartCreate"]["cart"]["id"])
             shopify_id.save()
             return Response(load, status=status.HTTP_200_OK)
