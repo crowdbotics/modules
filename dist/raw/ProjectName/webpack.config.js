@@ -34,8 +34,15 @@ const HTMLWebpackPlugin = require("html-webpack-plugin")
 const babelOptions = require("./babel.config.js")
 const appDirectory = path.resolve(__dirname)
 
+const isProduction =
+  process.argv[process.argv.indexOf("--mode") + 1] === "production"
+
+const html_template_path = isProduction
+  ? "./public/django_index.html"
+  : "./public/index.html"
+
 const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
-  template: path.resolve(appDirectory, "./public/index.html"),
+  template: path.resolve(appDirectory, html_template_path),
   filename: "index.html",
   inject: false
 })
@@ -86,9 +93,8 @@ module.exports = {
 
   // configures where the build ends up
   output: {
-    filename: "static/bundle.[hash].js",
+    filename: "bundle.[hash].js",
     path: path.resolve(appDirectory, "backend", "web_build"),
-    publicPath: "/",
     clean: true
   },
 
