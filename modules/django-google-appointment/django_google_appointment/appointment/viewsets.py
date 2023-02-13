@@ -28,7 +28,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     def get_serializer_class(self):
         return self.allowed_serializers.get(self.action, EventsListSerializer)
 
-    @action(detail=False, methods=['get'], url_path='appointment-list')
+    @action(detail=False, methods=['get'], url_path='appointment/list')
     def appointment_list(self, request):
         """
                Returns a list of the all the events scheduled in past and for the future
@@ -51,7 +51,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['get'], url_path='appointment-single')
+    @action(detail=True, methods=['get'], url_path='appointment/single')
     def single_appointment(self, request, pk):
         """
                 Retrieves a single event from the calendar
@@ -66,7 +66,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'], url_path='appointment-create')
+    @action(detail=False, methods=['post'], url_path='appointment/create')
     def create_appointment(self, request):
         """
                 Creates a new event of the calendar.
@@ -87,7 +87,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=True, methods=['delete'], url_path='appointment-remove')
+    @action(detail=True, methods=['delete'], url_path='appointment/remove')
     def delete_appointment(self, request, pk):
         """
                 Deletes a single event from the calendar
@@ -102,7 +102,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['post'], url_path='appointment-sync')
+    @action(detail=False, methods=['post'], url_path='appointment/sync')
     def sync_appointment(self, request):
         """
         Syncs all the appointments from the Google Calendar 
@@ -120,7 +120,7 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-    @action(detail=False, methods=['get'], url_path='appointment-synced-list', permission_classes=[IsAuthenticated],
+    @action(detail=False, methods=['get'], url_path='appointment/synced/list', permission_classes=[IsAuthenticated],
             authentication_classes=[SessionAuthentication, TokenAuthentication])
     def synced_appointment_list(self, request):
         """
