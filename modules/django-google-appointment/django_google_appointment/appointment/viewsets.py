@@ -30,6 +30,18 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['get'], url_path='appointment-list')
     def appointment_list(self, request):
+        """
+               Returns a list of the all the events scheduled in past and for the future
+
+               :query_params int max_results: Maximum number of events returned on one result page  \n
+               :query_params str order_by: The order of the events returned in the result. Supported values are 'startTime' and 'updated'  \n
+               :query_params str time_max: An event's start time to filter by. Supported format is '2011-06-03T10:00:00-07:00'  \n
+               :query_params str time_min: An event's end time to filter by. Supported format is '2011-06-03T10:00:00-07:00'  \n
+               :query_params str page_token: Token specifying which result page to return  \n
+               :query_params bool show_deleted: Whether to include deleted events (with status equals "cancelled") in the result  \n
+               :query_params bool single_events: Whether to expand recurring events into instances and only return single one-off events and instances of recurring events  \n
+               :return: Returns events on the according to the specified queries if are provided.  \n
+               """
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.query_params)
@@ -41,6 +53,12 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
 
     @action(detail=True, methods=['get'], url_path='appointment-single')
     def single_appointment(self, request, pk):
+        """
+                Retrieves a single event from the calendar
+
+                :path_param eventId: The id of the scheduled event  \n
+                :return: Returns a single event object
+                """
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             response = google_appointment_service.single_appointment(eventId=pk)
@@ -50,6 +68,18 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='appointment-create')
     def create_appointment(self, request):
+        """
+                Creates a new event of the calendar.
+
+                :param str summary: The title for the appointment  \n
+                :param str description: Description for the appointment  \n
+                :param str location: Location where meeting will be held  \n
+                :param obj start: Object containing the starting `dateTime` for the appointment   \n
+                :param obj end: Object containing the ending `dateTime` for the appointment   \n
+                :param arr attendees: Array/List containing objects. Each object has the attendees `email`   \n
+                :param obj conferenceData: Object containing details if the user wants to create the meeting hangoutLink.  \n
+                :return: Creates a new event/appointment on the calendar and returns event object.  \n
+                """
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             response = google_appointment_service.create_appointment(request.data)
@@ -59,6 +89,12 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
 
     @action(detail=True, methods=['delete'], url_path='appointment-remove')
     def delete_appointment(self, request, pk):
+        """
+                Deletes a single event from the calendar
+
+                :path_param eventId: The id of the scheduled event  \n
+                :return: Removes a single event object from the calendar.   \n
+                """
         try:
             google_appointment_service = GoogleAppointmentService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             response = google_appointment_service.delete_appointment(eventId=pk)
@@ -68,6 +104,9 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='appointment-sync')
     def sync_appointment(self, request):
+        """
+        Syncs all the appointments from the Google Calendar 
+        """
         try:
             query = {
                 "show_deleted": True
@@ -84,5 +123,8 @@ class GoogleAppointmentViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['get'], url_path='appointment-synced-list', permission_classes=[IsAuthenticated],
             authentication_classes=[SessionAuthentication, TokenAuthentication])
     def synced_appointment_list(self, request):
+        """
+        Returns list of all asynced appointments
+        """
         serializer = MeetingListSerializer(Meetings.objects.all(), many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

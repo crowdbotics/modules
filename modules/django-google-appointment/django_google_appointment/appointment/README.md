@@ -3,15 +3,15 @@ This module contains all needed resources to get the Google Appointment componen
 Native mobile client.
 
 ### How to get Credentials file  
-In [Google Cloud Console](https://console.cloud.google.com/) choose your project or start new one.
+1. In [Google Cloud Console](https://console.cloud.google.com/) choose your project or start new one.
 
-In the navigation menu choose "APIs & Services" enable new APIs and then look up "calendar API", enable the API
+2. In the navigation menu choose "APIs & Services" enable new APIs and then look up "calendar API", enable the API
 
-Under "APIs & Services">"Credentials", select "Create Credentials" and click on "service account", fill in the desired name, and continue. Set role as owner(or other desired)(owner gives full access you you might want to switch to something less powerful). Click "Done"
+3. Under "APIs & Services">"Credentials", select "Create Credentials" and click on "service account", fill in the desired name, and continue. Set role as owner(or other desired)(owner gives full access you you might want to switch to something less powerful). Click "Done"
+This will redirect you to the credentials page. Under the "Service accounts" click on the desired account(this will redirect you to the IAM & Admin panel).
+4. Under the tab "Keys" click "ADD KEY" and select json, this will download a json file to your computer.
 
-This will redirect you to the credentials page. Under the "Service accounts" click on the desired account(this will redirect you to the IAM & Admin panel) Under the tab "Keys" click "ADD KEY" and select json, this will download a json file to your computer.
-
-Add that file into project directory and set the file path to "CREDENTIAL_FILE_PATH" variable in .env 
+5. Add that file into project directory and set the file path to "CREDENTIAL_FILE_PATH" variable in .env 
 
 
 ### Installation
