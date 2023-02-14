@@ -29,6 +29,15 @@ class DriveViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['get'], url_path='file/list')
     def file_list(self, request):
+        """
+        Retrieve list of files and folders from the google drive 
+
+        :query_param str query: To search for a specific set of files or folders, use the query. \n
+        :query_param num page_size: The maximum number of files to return per page \n
+        :query_param str page_token: The token for continuing a previous list request on the next page. \n
+            This should be set to the value of 'nextPageToken' from the previous response. \n
+        :return: Returns list of the files and folder from user's Google Drive.
+        """
         try:
             drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             response = drive_service.get_drive_files(query=request.query_params.get('query', None),
@@ -40,6 +49,12 @@ class DriveViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='create/folder')
     def create_folder(self, request):
+        """
+        Create a new folder with given name in Google Drive
+
+        :param folder_name: Folder will be created with this name in Google Drive \n
+        :return: Creates the folder and returns folder id.
+        """
         try:
             drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
@@ -51,6 +66,15 @@ class DriveViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='share/file')
     def share_file(self, request):
+        """
+        Shares a folder with provided list of user's emails
+
+        :param str file_id: ID of the file/folder that will be shared with the user \n
+        :param str emails: A list of emails which user wants to share file \n
+        :param str role: Object containing the `role`, `type` and `email` of the user sharing file with \n
+        :param str user_type: "user" or "group" \n
+        :return: Shares file/folder with the user and returns the shared file/folder detail object
+        """
         try:
             drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
@@ -62,6 +86,14 @@ class DriveViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='upload/file')
     def upload_file(self, request):
+        """
+        Uploads a file on Google Drive
+
+        :param file: The file sent needs to be uploaded on the Google Drive. File must be sent as
+            multipart/form-data \n
+        :param parent_folder_id: Use if user wants to add file inside the specific folder \n
+        :return: Uploads the file to the specified folder and returns file id.
+        """
         try:
             drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)

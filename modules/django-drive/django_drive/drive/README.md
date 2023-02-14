@@ -47,7 +47,7 @@ Here is the payload needed to share a file or folder with users
 ```javascript
 {
    file_id: "File/Folder id going to be shared with user",
-   role: "writer",                                         // role can be: reader(only reade permisions) or writer(reade and write permisions)
+   role: "writer",                                         // role can be: reader(only reade permissions) or writer(reade and write permissions)
    user_type: "user",                                      // type of the user: user, anyone
    emails: ["john123@gmail.com", "john.snow@gmail.com"]    // email address of the users sharing file with only if the "user_type=user"
 }
