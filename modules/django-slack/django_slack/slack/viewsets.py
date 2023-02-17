@@ -36,7 +36,13 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='send-message')
     def send_message(self, request):
-        """ Send Message to specific Slack Channel """
+        """
+        Send Message inside a specific Slack Channel
+
+        :body_params str message: Message to send in the channel  \n
+        :body_params channel_name str message: channel name where message is being sent \n
+        :return: sends to the specific channel
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -45,7 +51,14 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='upload-file')
     def upload_file(self, request):
-        """ upload_message: Send File with message to specific Slack Channel """
+        """
+        Send File with message to specific Slack Channel
+
+        :body_params  file: File to be uploaded with message to channel    \n
+        :body_params  str message: Test message to be sent in the channel    \n
+        :body_params  str channel_name: Name of the channel where file will be uploaded  \n
+        :return: Returns  upload file with message to the specific channel
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -59,6 +72,10 @@ class SlackViewSet(viewsets.GenericViewSet):
         """ 
         Create Slack channel 
         User Pass Multiple Emails in CharField using comma separation
+
+        :channel_name str message: Message    \n
+        :body_params str emails: An emails list separated with ',' to invite users to channel    \n
+        :return: Returns create channel
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -68,7 +85,14 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='invite-user-to-channel')
     def invite_user_to_channel(self, request):
-        """ Invite user to specific Slack channel """
+        """
+        Invite user to specific Slack channel
+
+        :body_params str channel_id: id of channel from invite    \n
+        :body_params  str channel_name: name of channel from invite     \n
+        :body_params str emails: An emails list separated with ',' to invite users to channel   \n
+        :return: Returns  Invite users to channel
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -79,7 +103,9 @@ class SlackViewSet(viewsets.GenericViewSet):
     def get_channel_id(self, request, pk):
         """
         Returns channel id by passing channel name
-        :params str pk: Channel Name (Required)
+
+        :path_params str channel_name: Channel Name to get its ID \n
+        :return: Returns Get channel Id
         """
 
         response, status_code = self.slack_service.get_channel_id(pk)
@@ -90,7 +116,10 @@ class SlackViewSet(viewsets.GenericViewSet):
     def get_channel_history(self, request, pk):
         """
         Returns all the history and conversations done in specific channel
-        :params str pk: Channel ID (Required)
+
+        :path_params str channel_id: ID of the channel to get its history \n
+        :return: Returns Get channel History
+
         """
 
         next_cursor = request.query_params.get('next_cursor')
@@ -102,7 +131,10 @@ class SlackViewSet(viewsets.GenericViewSet):
     def archive_channel(self, request, pk):
         """
         Archive the specific channel
-        :params str pk: Channel ID (Required)
+
+        :path_params str channel_id: ID of the channel going to be archived  \n
+        :return: Returns Archived channel
+
         """
 
         response = self.slack_service.archive_channel(pk)
