@@ -58,6 +58,7 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def get_audience_lists(self, request):
         """
         Provide information about all lists in the account.
+        :return : List of all available audience
         """
 
         response = mailchimp_service.get_audience_lists()
@@ -67,8 +68,9 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def add_audience_list(self, request):
         """
         Create a new list in Mailchimp account.
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(name, contact, ....) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/lists/add-list/
+        :return : Audience list that has been added
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -80,7 +82,8 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def get_audience_list(self, request, pk):
         """
         Provide information about a specific list in Mailchimp account.
-        :param str pk: List ID (required)
+        :path_param str pk: List ID (required)
+        :return : A specific audience list
         """
 
         response = mailchimp_service.get_audience_list(list_id=pk)
@@ -90,10 +93,12 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def update_audience_list(self, request, pk):
         """
         Update the settings for a specific list.
-        :param str pk: List ID (required)
-        Required the request body. For details about request body visit the given link below
+        :path_params str pk: List ID (required)
+        :body_params: For details about request body (name, contact, ...) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/lists/update-lists/
+        :return : updated audience list
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.update_audience_list(body=serializer.data, list_id=pk)
@@ -103,7 +108,8 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def delete_audience_list(self, request, pk):
         """
         Delete a list from Mailchimp account.
-        :param str pk: List ID (required)
+        :path_param str pk: List ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.delete_audience_list(list_id=pk)
@@ -114,9 +120,11 @@ class MailchimpAudienceViewSet(GenericViewSet):
         """
         Batch subscribe or unsubscribe list members.
         :param str pk: List ID (required)
-        Required the request body. For details about request body visit the given link below
+        :body_params: For details about request body (list_id, members, ....) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/lists/batch-subscribe-or-unsubscribe/
+        :return : A batch subscribe or unsubscribe ids with details
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.batch_subscribe_or_unsubscribe_audience(list_id=pk, body=serializer.data)
@@ -126,7 +134,8 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def list_member_info(self, request, pk):
         """
         Get information about members in a specific Mailchimp list.
-        :param str pk: List ID (required)
+        :path_params str pk: List ID (required)
+        :return : list member info details
         """
 
         params = request.query_params.dict()
@@ -137,9 +146,10 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def add_list_member(self, request, pk):
         """
         Add a new member to the list.
-        Required the request body. For details about request body visit the given link below
+        :body_params. For details about request body (email_address, status) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/list-members/add-member-to-list/
-        :param str pk: List ID (required)
+        :path_param str pk: List ID (required)
+        :return : Added list member with ID and details
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -151,8 +161,9 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def get_member_info(self, request, pk, subscriber_hash):
         """
         Get information about a specific list member, including a currently subscribed, unsubscribed, or bounced member.
-        :param str pk: List ID (required)
-        :param str subscriber_hash: Subscriber Hash (required)
+        :path_params str pk: List ID (required)
+        :query_param str subscriber_hash: Subscriber Hash (required)
+        :return : Get member info with id and details
         """
 
         response = mailchimp_service.get_member_info(list_id=pk, subscriber_hash=subscriber_hash)
@@ -162,9 +173,11 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def update_list_member(self, request, pk, subscriber_hash):
         """
         Update information for a specific list member.
+        :body_params. For details about request body (email_address, status) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/list-members/update-list-member/
-        :param str pk: List ID (required)
-        :param str subscriber_hash: Subscriber Hash (required)
+        :path_param str pk: List ID (required)
+        :query_param str subscriber_hash: Subscriber Hash (required)
+        :return : updated member list
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -178,8 +191,9 @@ class MailchimpAudienceViewSet(GenericViewSet):
         """
         Delete all personally identifiable information related to a list member, and remove them from a list.
         This will make it impossible to re-import the list member.
-        :param str pk: List ID (required)
-        :param str subscriber_hash: Subscriber Hash (required)
+        :path_param str pk: List ID (required)
+        :query_param str subscriber_hash: Subscriber Hash (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.delete_list_member(list_id=pk, subscriber_hash=subscriber_hash)
@@ -189,8 +203,9 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def get_list_member_tags(self, request, pk, subscriber_hash):
         """
         Provide the tags on a list member.
-        :param str pk: List ID (required)
-        :param str subscriber_hash: Subscriber Hash (required)
+        :path_param str pk: List ID (required)
+        :query_param str subscriber_hash: Subscriber Hash (required)
+        :return : member list tags with id and details
         """
 
         response = mailchimp_service.get_list_member_tags(list_id=pk, subscriber_hash=subscriber_hash)
@@ -200,9 +215,11 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def add_or_remove_member_tag(self, request, pk, subscriber_hash):
         """
         Add or remove tags from a list member.
-        :param str pk: List ID (required)
-        :param str subscriber_hash: Subscriber Hash (required)
+        :path_param str pk: List ID (required)
+        :query_param str subscriber_hash: Subscriber Hash (required)
+        :return : Added or removed member tag id and details
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.add_or_remove_member_tag(list_id=pk, subscriber_hash=subscriber_hash,
@@ -213,7 +230,8 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def list_segment(self, request, pk):
         """
         Provide information about all available segments for a specific list.
-        :param str pk: List ID (required)
+        :path_param str pk: List ID (required)
+        :return : line segment details
         """
 
         response = mailchimp_service.list_segments(list_id=pk)
@@ -223,9 +241,10 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def add_segment(self, request, pk):
         """
         Create a new segment in a specific list.
-        :param str pk: List ID (required)
-        Required the request body. For details about request body visit the given link below
+        :path_param str pk: List ID (required)
+        :body_params: For details about request body(name, static_segment) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/list-segments/add-segment/
+        :return : Added segment ID and details
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -236,8 +255,8 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def get_segment_info(self, request, pk, segment_id):
         """
         Get information about a specific segment.
-        :param str pk: List ID (required)
-        :param str segment_id: Segment ID (required)
+        :path_param str pk: List ID (required), Segment ID (required)
+        :return : segment information with ID and details
         """
         response = mailchimp_service.get_segment_info(list_id=pk, segment_id=segment_id)
         return Response(response.get('text'), status=response.get('status_code'))
@@ -246,8 +265,8 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def delete_segment(self, request, pk, segment_id):
         """
         Delete a specific segment in a list.
-        :param str pk: List ID (required)
-        :param str segment_id: Segment ID (required)
+        :path_param str pk: List ID (required), Segment ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.delete_segment(list_id=pk, segment_id=segment_id)
@@ -257,11 +276,12 @@ class MailchimpAudienceViewSet(GenericViewSet):
     def update_segment(self, request, pk, segment_id):
         """
         Update a specific segment in a list.
-        :param str pk: List ID (required)
-        :param str segment_id: Segment ID (required)
-        Required the request body. For details about request body visit the given link below
+        :param str pk: List ID (required), Segment ID (required)
+        :body_params : For details about request body(name) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/list-segments/update-segment/
+        :return : updated segment details
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.update_segment(list_id=pk, segment_id=segment_id, body=serializer.data)
@@ -299,6 +319,7 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def list_template(self, request):
         """
         Get a list of an account's available templates.
+        :return : list of all templates
         """
         response = mailchimp_service.list_template()
         return Response(response.get('text'), status=response.get('status_code'))
@@ -307,9 +328,11 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def add_template(self, request):
         """
         Create a new template for the account. Only Classic templates are supported.
-        Required the request body. For details about request body visit the given link below
+        :body_params: For details about request body(name, html, .....) visit seriaizers or the given link below
         https://mailchimp.com/developer/marketing/api/templates/add-template/
+        :return : Added template ID and details
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.add_template(body=serializer.data)
@@ -319,7 +342,8 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def get_template_info(self, request, pk):
         """
         Get information about a specific template.
-        :param str pk: Template ID (required)
+        :path_param str pk: Template ID (required)
+        :return : specific template with ID and details
         """
 
         response = mailchimp_service.get_template_info(template_id=pk)
@@ -330,7 +354,8 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def delete_template(self, request, pk):
         """
         Delete a specific template.
-        :param str pk: Template ID (required)
+        :path_param str pk: Template ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.delete_template(template_id=pk)
@@ -340,10 +365,12 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def update_template(self, request, pk):
         """
          Update the name, HTML, or folder_id of an existing template.
-         :param str pk: Template ID (required)
-         Required the request body. For details about request body visit the given link below
+         :path_param str pk: Template ID (required)
+         :body_params : For details about request body(name, html, ....) visit serializers or the given link below
          https://mailchimp.com/developer/marketing/api/templates/update-template/
+         :return : updated template with ID and details
          """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.update_template(template_id=pk, body=serializer.data)
@@ -353,6 +380,7 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def list_template_folder(self, request):
         """
         Get all folders used to organize templates.
+        :return : list of all folders
         """
 
         response = mailchimp_service.list_template_folder()
@@ -362,9 +390,11 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def add_template_folder(self, request):
         """
         Create a new template folder.
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(name) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/template-folders/add-template-folder/
+        :return : A created template folder with ID and details
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.add_template_folder(body=serializer.data)
@@ -374,7 +404,8 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def get_template_folder(self, request, pk):
         """
         Get information about a specific template.
-        :param str pk: Folder ID (required)
+        :path_param str pk: Folder ID (required)
+        :return : specific template folder with ID and details
         """
 
         response = mailchimp_service.get_template_folder(folder_id=pk)
@@ -384,7 +415,8 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def delete_template_folder(self, request, pk):
         """
         Delete a specific template folder, and mark all the templates in the folder as 'unfilled'.
-        :param str pk: Folder ID (required)
+        :path_param str pk: Folder ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.delete_template_folder(folder_id=pk)
@@ -394,9 +426,10 @@ class MailchimpTemplatesViewSet(GenericViewSet):
     def update_template_folder(self, request, pk):
         """
         Update a specific folder used to organize templates.
-        :param str pk: Folder ID (required)
-        Required the request body. For details about request body visit the given link below
+        :path_param str pk: Folder ID (required)
+        :body_params:  For details about request body(name) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/template-folders/update-template-folder/
+        :return : Updated template folder with ID and details
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -438,6 +471,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def list_campaigns(self, request):
         """
         Get all campaigns in an account.
+        :return : List of all campaigns
         """
 
         response = mailchimp_service.list_campaigns()
@@ -447,9 +481,11 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def add_campaigns(self, request):
         """
         Create a new Mailchimp campaign.
-        Required the request body. For details about request body visit the given link below
+        :body_params:  For details about request body(type) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/campaigns/add-campaign/
+        :return : Added campaigns with ID and details
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.add_campaigns(body=serializer.data)
@@ -459,7 +495,8 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def get_campaign_info(self, request, pk):
         """
         Get information about a specific campaign.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : A specific campaign info
         """
 
         response = mailchimp_service.get_campaign_info(campaign_id=pk)
@@ -469,7 +506,8 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def delete_campaign(self, request, pk):
         """
         Remove a campaign from your Mailchimp account.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.delete_campaign(campaign_id=pk)
@@ -479,9 +517,10 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def update_campaign_settings(self, request, pk):
         """
         Update some or all of the settings for a specific campaign.
-        :param str pk: Campaign ID (required)
-        Required the request body. For details about request body visit the given link below
+        :path_param str pk: Campaign ID (required)
+        :body_params : For details about request body(settings) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/campaigns/update-campaign-settings/
+        :return : Updated campaign settings details
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -492,7 +531,8 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def cancel_campaign(self, request, pk):
         """
         Cancel a Regular or Plain-Text Campaign after you send, before all of your recipients receive it. This feature is included with Mailchimp Pro.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.cancel_campaign(campaign_id=pk)
@@ -502,7 +542,8 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def send_campaign(self, request, pk):
         """
         Send a Mailchimp campaign. For RSS Campaigns, the campaign will send according to its schedule. All other campaigns will send immediately.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.send_campaign(campaign_id=pk)
@@ -512,9 +553,10 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def schedule_campaign(self, request, pk):
         """
         Schedule a campaign for delivery. If you're using Multivariate Campaigns to test send times or sending RSS Campaigns, use the send action instead.
-        :param str pk: Campaign ID (required)
-        Required the request body. For details about request body visit the given link below
+        :path_param str pk: Campaign ID (required)
+        :body_params: For details about request body(schedule_time, batch_delivery, ...) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/campaigns/schedule-campaign/
+        :return : 204 no content
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -527,8 +569,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
         """
         Unschedule a scheduled campaign that hasn't started sending.
         :param str pk: Campaign ID (required)
-        Required the request body. For details about request body visit the given link below
-        https://mailchimp.com/developer/marketing/api/campaigns/unschedule-campaign/
+        :return : 204 no content
         """
 
         response = mailchimp_service.unschedule_campaign(campaign_id=pk)
@@ -538,6 +579,7 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def list_campaign_folder(self, request):
         """
         Get all folders used to organize campaigns.
+        :return : list of all campaign folders
         """
 
         response = mailchimp_service.list_campaign_folder()
@@ -547,9 +589,11 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def add_campaign_folder(self, request):
         """
         Create a new campaign folder.
-        Required the request body. For details about request body visit the given link below
+        :body_params: For details about request body(name) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/campaign-folders/add-campaign-folder/
+        :return : Added campaign folder ID and details
         """
+
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = mailchimp_service.add_campaign_folder(body=serializer.data)
@@ -559,9 +603,9 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def get_campaign_folder(self, request, pk):
         """
         Get information about a specific folder used to organize campaigns.
-        :param str pk: Folder ID (required)
-        Required the request body. For details about request body visit the given link below
-        https://mailchimp.com/developer/marketing/api/campaign-folders/get-campaign-folder/
+        :path_param str pk: Folder ID (required)
+        :query_params optional : fields, excluded_fields
+        :return : specific folder ID and details
         """
 
         response = mailchimp_service.get_campaign_folder(folder_id=pk)
@@ -571,9 +615,8 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def delete_campaign_folder(self, request, pk):
         """
         Delete a specific campaign folder, and mark all the campaigns in the folder as 'unfiled'.
-        :param str pk: Folder ID (required)
-        Required the request body. For details about request body visit the given link below
-        https://mailchimp.com/developer/marketing/api/campaign-folders/delete-campaign-folder/
+        :path_param str pk: Folder ID (required)
+        :return : 204 no content
         """
 
         response = mailchimp_service.delete_campaign_folder(folder_id=pk)
@@ -583,9 +626,10 @@ class MailchimpCampaignViewSet(GenericViewSet):
     def update_campaign_folder(self, request, pk):
         """
         Update a specific folder used to organize campaigns.
-        :param str pk: Folder ID (required)
-        Required the request body. For details about request body visit the given link below
+        :path_param str pk: Folder ID (required)
+        :body_params: For details about request body(name) visit serializers or the given link below
         https://mailchimp.com/developer/marketing/api/campaign-folders/update-campaign-folder/
+        :return : Updated campaign folder with ID and details
         """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -609,6 +653,7 @@ class MailchimpReportsViewSet(GenericViewSet):
     def list_campaign_report(self, request):
         """
         Get campaign reports.
+        :return : list of all reports
         """
 
         response = mailchimp_service.list_campaign_reports()
@@ -618,7 +663,8 @@ class MailchimpReportsViewSet(GenericViewSet):
     def get_campaign_report(self, request, pk):
         """
         Get report details for a specific sent campaign.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : specific details of campaign report
         """
 
         response = mailchimp_service.get_campaign_report(campaign_id=pk)
@@ -628,7 +674,8 @@ class MailchimpReportsViewSet(GenericViewSet):
     def get_campaign_abuse_reports(self, request, pk):
         """
         Get a list of abuse complaints for a specific campaign.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : get specific report with abuse campaign
         """
 
         response = mailchimp_service.get_campaign_abuse_reports(campaign_id=pk)
@@ -638,8 +685,9 @@ class MailchimpReportsViewSet(GenericViewSet):
     def get_campaign_abuse_report(self, request, pk, report_id):
         """
         Get information about a specific abuse report for a campaign.
-        :param str pk: Campaign ID (required)
-        :param str report_id: Report ID (required)
+        :path_param str pk: Campaign ID (required)
+        :query_param str report_id: Report ID (required)
+        :return : specific report of campaign abuse reports
         """
 
         response = mailchimp_service.get_campaign_abuse_report(campaign_id=pk, report_id=report_id)
@@ -649,7 +697,8 @@ class MailchimpReportsViewSet(GenericViewSet):
     def get_campaign_open_details(self, request, pk):
         """
         Get detailed information about any campaign emails that were opened by a list member.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : specific campaign open detail
         """
 
         response = mailchimp_service.get_campaign_open_details(campaign_id=pk)
@@ -659,7 +708,8 @@ class MailchimpReportsViewSet(GenericViewSet):
     def get_campaign_click_details(self, request, pk):
         """
         Get information about clicks on specific links in your Mailchimp campaigns.
-        :param str pk: Campaign ID (required)
+        :path_param str pk: Campaign ID (required)
+        :return : specific campaign click details
         """
 
         response = mailchimp_service.get_campaign_click_details(campaign_id=pk)
