@@ -68,7 +68,6 @@ class AuthTokenViewSet(APIView):
      - OAuth host name
      - token expire time
      - token scope.
-
     """
 
     def get(self, request, *args, **kwargs):
@@ -120,7 +119,8 @@ class CreateEnvelopeViewSet(APIView):
      - signer name
      - recipientId
      - status
-
+     :authorization : access_token(required)
+     :return : Created envelope attachment with details
     """
 
     def post(self, request, *args, **kwargs):
@@ -153,6 +153,9 @@ class RetrieveEnvelopeViewSet(APIView):
     """
     API will return envelope based on envelope id. To get envelope API will require Access Token from API header and
     envelope id from API body.
+    :authorization : access_token(required)
+    :query_params : envelope_id(required)
+    :return : retrieve specific envelope details
     """
 
     def get(self, request, *args, **kwargs):
@@ -202,6 +205,9 @@ class DownloadEnvelopeDocumentViewSet(APIView):
     """
     API will return the specific document from envelope. To get document from envelope API will require Access Token
     from API header to authenticate, envelope id and document id from API body.
+    :authorization : access_token(required)
+    :query_params : envelope_id(required), document_id(required)
+    :return : downloaded specific envelope with details
     """
     def get(self, request, *args, **kwargs):
         try:
@@ -233,7 +239,9 @@ class RetrieveAllEnvelopeViewSet(APIView):
     from API header to authenticate, folder value from API body. Folder value Specifies the envelope group that is
     searched by the request. These are logical groupings, not actual folder names. Valid values are: drafts,
     awaiting_my_signature, completed, out_for_signature.
-
+    :authorization : access_token(required)
+    :query_params : folder_value(required)
+    :return : Retrieve all envelope list
     """
     def get(self, request, *args, **kwargs):
         try:
