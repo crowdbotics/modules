@@ -28,6 +28,8 @@ class TextractOCRViewSet(GenericViewSet):
     def get_text(self, request):
         """
         Extract text from images and return string
+        :body_params  file: File to be uploaded /n
+        :return: Extracted data in the form of string
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -39,7 +41,9 @@ class TextractOCRViewSet(GenericViewSet):
     @action(detail=False, methods=['post'], url_path='json')
     def get_key_value(self, request):
         """
-        Extract text from image that contains tables and forms and return key value pairs
+        Extract text from image that contains tables and forms
+        :body_params  file: File to be uploaded /n
+        :return: Extracted data in the form of  key value pairs
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -62,6 +66,8 @@ class GoogleOCRViewSet(GenericViewSet):
     def get_text(self, request):
         """
         Extract text from images and return string
+        :body_params  file: File to be uploaded /n
+        :return: Extracted data in the form of string
         """
 
         serializer = self.get_serializer(data=request.data)
@@ -86,6 +92,9 @@ class TesserOCRViewSet(GenericViewSet):
             Image need to be modified in some cases to get good result such as
             - Increase Sharpness of image
             - Enhance Text outline in image
+
+            :body_params  file: File to be uploaded /n
+            :return: Extracted data in the form of string
 
         """
 
