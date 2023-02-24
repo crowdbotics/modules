@@ -29,6 +29,8 @@ class WordpressAuthViewSet(GenericViewSet):
         """
         Provide Auth Token to perform further Authentication. \n
         WordPress code is required in the "Authorization" key.
+        :headers : wordpress-code(required)
+        :return : access_token(Bearer)
         """
 
         code = request.META.get('HTTP_WORDPRESS_CODE')
@@ -70,9 +72,10 @@ class WordpressPostsViewSet(GenericViewSet):
     def create_post(self, request):
         """
         Create a post on WordPress. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(date, title, content,...) visit serializers or the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/posts/new/   \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Created post with ID and details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -91,9 +94,10 @@ class WordpressPostsViewSet(GenericViewSet):
     def edit_post(self, request, pk):
         """
         Edit a post on WordPress.
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(date, title, content,...) visit serializers or the given link below). \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/posts/%24post_ID/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Edited post with ID and details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -113,9 +117,10 @@ class WordpressPostsViewSet(GenericViewSet):
     def get_multiple_post(self, request):
         """
         Get a list of matching posts. \n
-        User can use optional query params (For details about query params visit the given link below). \n
+        :query params optional : For details about query params visit the given link below \n
         https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/posts/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : List  of multiple posts with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -134,8 +139,9 @@ class WordpressPostsViewSet(GenericViewSet):
         """
          Delete a post (Note: If the trash is enabled, this request will send the post to the trash). \n
          A second request will permanently delete the post. \n
-        :param str pk: Post ID (required) \n
-        Authorization Token is required in the header.
+        :path_param str pk: Post ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : Details of deleted post
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -153,9 +159,10 @@ class WordpressPostsViewSet(GenericViewSet):
         """
         Delete multiple posts (Note: If the trash is enabled, this request will send non-trashed posts to the trash). \n
         Trashed posts will be permanently deleted. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(context, preety, ...) visit serializers or the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/posts/delete/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : A result with empty list
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -174,8 +181,9 @@ class WordpressPostsViewSet(GenericViewSet):
     def restore_post(self, request, pk):
         """
         Restore posts. \n
-        :param str pk: Post ID (required) \n
-        Authorization Token is required in the header.
+        :path param str pk: Post ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : A restored post with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -193,7 +201,9 @@ class WordpressPostsViewSet(GenericViewSet):
     def get_list_of_likes(self, request, pk):
         """
         Get a list of the likes for a post. \n
-        :param str pk: Post ID (required) \n
+        :path param str pk: Post ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : Details about likes of post
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -210,8 +220,9 @@ class WordpressPostsViewSet(GenericViewSet):
     def like_post(self, request, pk):
         """
         Like a post. \n
-        :param str pk: Post ID (required) \n
-        Authorization Token is required in the header.
+        :path params str pk: Post ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : Liked post with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -228,8 +239,9 @@ class WordpressPostsViewSet(GenericViewSet):
     def unlike_post(self, request, pk):
         """
         Unlike a post. \n
-        :param str pk: Post ID (required) \n
-        Authorization Token is required in the header.
+        :path params str pk: Post ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : Unliked post with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -246,8 +258,9 @@ class WordpressPostsViewSet(GenericViewSet):
     def get_list_of_post_subscribers(self, request, pk):
         """
         Get a list of the specified post's subscribers. \n
-        :param str pk: Post ID (required).  \n
-        Authorization Token is required in the header.
+        :path params str pk: Post ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : Detail about list of post subscribers
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -281,9 +294,10 @@ class WordpressUsersViewSet(GenericViewSet):
     def get_multiple_users(self, request):
         """
         List the users of a site. \n
-        User can use optional query params (For details about query params visit the given link below). \n
+        query params optional : For details about query params(context, number, ..) visit serializers or the given link below. \n
         https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/users/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : List of multiple users with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -302,9 +316,10 @@ class WordpressUsersViewSet(GenericViewSet):
         """
         Update details of a user of a site. \n
         :param str pk: User ID (required) \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body_params : For details about request body(Id, login, email,...) visit serializers or the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/users/%24user_id/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Updated user details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -326,8 +341,9 @@ class WordpressUsersViewSet(GenericViewSet):
     def delete_user(self, request, pk):
         """
         Delete a User. \n
-        :param str pk: User ID (required).  \n
-        Authorization Token is required in the header.
+        :path params str pk: User ID (required).  \n
+        :Authorization Token : access_token(required)
+        :return : Deleted user details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -362,9 +378,10 @@ class WordpressSitesViewSet(GenericViewSet):
     def get_rendered_shortcode_for_site(self, request):
         """
         Get a rendered shortcode for a site (Note: The current user must have publishing access). \n
-        User have to you required query params (For details about query params visit the given link below). \n
+        query params : For details about query params visit the given link below \n
         https://developer.wordpress.com/docs/api/1.1/get/sites/%24site/shortcodes/render/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Rendered shortcode for site with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -382,7 +399,8 @@ class WordpressSitesViewSet(GenericViewSet):
     def get_active_inactive_widgets(self, request):
         """
         Retrieve the active and inactive widgets for a site.  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : A list of active and inactive widgets with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -399,9 +417,10 @@ class WordpressSitesViewSet(GenericViewSet):
     def activate_widget(self, request):
         """
         Activate a widget on a site. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(id_base, position, ...) visit serializers or the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/widgets/new/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Details about activated widgets
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -420,8 +439,9 @@ class WordpressSitesViewSet(GenericViewSet):
     def deactivate_widget(self, request, pk):
         """
         Deactivate a widget on a site. \n
-        :param str pk: Widget ID (required)  \n
-        Authorization Token is required in the header.
+        :path param str pk: Widget ID (required)  \n
+        :Authorization Token : access_token(required)
+        :return : Details about deactivated widgets
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -458,8 +478,9 @@ class WordpressCommentsViewSet(GenericViewSet):
     def get_single_comment(self, request, pk):
         """
         Get a single comment. \n
-        :param str pk: Comment ID (required)  \n
-        Authorization Token is required in the header.
+        :path param str pk: Comment ID (required)  \n
+        :Authorization Token : access_token(required)
+        :return : Details about single comment
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -476,10 +497,11 @@ class WordpressCommentsViewSet(GenericViewSet):
     def edit_comment(self, request, pk):
         """
         Edit a comment \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(author, author_email, author_url,...) visit serializers or the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/comments/%24comment_ID/  \n
-        :param str pk: Comment ID (required)  \n
-        Authorization Token is required in the header.
+        :path param str pk: Comment ID (required)  \n
+        :Authorization Token : access_token(required)
+        :return : Edited comment with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -501,8 +523,9 @@ class WordpressCommentsViewSet(GenericViewSet):
     def delete_comment(self, request, pk):
         """
         Delete a comment \n
-        :param str pk: Comment ID (required) \n
-        Authorization Token is required in the header.
+        :path param str pk: Comment ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : Details about deleted comment
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -521,10 +544,11 @@ class WordpressCommentsViewSet(GenericViewSet):
     def create_comment_on_post(self, request, pk):
         """
         Creates a comment on post \n
-        :param str pk: Post ID (required) \n
-        Required the request body (For details about request body visit the given link below). \n
+        :path param str pk: Post ID (required) \n
+        :body params : For details about request body(content) visit the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/posts/%24post_ID/replies/new/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Created comment on post with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -546,8 +570,9 @@ class WordpressCommentsViewSet(GenericViewSet):
     def like_comment(self, request, pk):
         """
         Like a comment. \n
-        :param str pk: Comment ID (required)  \n
-        Authorization Token is required in the header.
+        :path param str pk: Comment ID (required)  \n
+        :Authorization Token : access_token(required)
+        :return : Details about liked comment
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -566,8 +591,9 @@ class WordpressCommentsViewSet(GenericViewSet):
     def unlike_comment(self, request, pk):
         """
         Unlike a comment. \n
-        :param str pk: Comment ID (required) \n
-        Authorization Token is required in the header.
+        :path param str pk: Comment ID (required) \n
+        :Authorization Token : access_token(required)
+        :return : Details about unliked comment
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -610,7 +636,8 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def get_list_of_site_categories(self, request):
         """
         Get a list of a site's categories. \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : List of site categories with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -627,9 +654,10 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def create_category(self, request):
         """
         Create a new category. \n
-        Required the request body. (For details about request body visit the given link below). \n
+        :body params : For details about request body(name, description,...) visit serializers or the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/categories/new/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Created category with ID and details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -650,10 +678,11 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def edit_category(self, request, pk):
         """
         Edit a category. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(name, description,...) visit serializers or the given link below). \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/categories/slug:%24category/  \n
-        :param str pk: Category Slug (required)  \n
-        Authorization Token is required in the header.
+        :path param str pk: Category Slug (required)  \n
+        :Authorization Token : access_token(required)
+        :return : Edited category with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -675,8 +704,9 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def delete_category(self, request, pk):
         """
         Delete a category. \n
-        :param str pk: Category Slug (required)  \n
-        Authorization Token is required in the header.
+        :path param str pk: Category Slug (required)  \n
+        :Authorization Token : access_token(required)
+        :return : Details about deleted comment
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -695,7 +725,8 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def get_list_of_site_tags(self, request):
         """
         Get a list of a site's tags. \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : List of site tags with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -712,9 +743,10 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def create_tag(self, request):
         """
         Create a new Tag. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(name and description) visit serializers or the given link below \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/tags/new/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Created tag with ID and details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -735,10 +767,11 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def edit_tag(self, request, pk):
         """
         Edit a tag. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(name and description) visit serializers or the given link below. \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/tags/slug:%24tag/  \n
-        :param str pk: Tag Slug (required)  \n
-        Authorization Token is required in the header.
+        :path param str pk: Tag Slug (required)  \n
+        :Authorization Token : access_token(required)
+        :return : Edited tag with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -760,8 +793,9 @@ class WordpressTaxonomyViewSet(GenericViewSet):
     def delete_tag(self, request, pk):
         """
         Delete a tag. \n
-        :param str pk: Tag Slug (required) \n
-        Authorization Token is required in the header.
+        :path param str pk: Tag Slug (required) \n
+        :Authorization Token : access_token(required)
+        :return : Details about deleted tag
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -789,7 +823,8 @@ class WordpressFollowViewSet(GenericViewSet):
     def follow_blog(self, request):
         """
         Follow a blog.  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Followed blog with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -806,7 +841,8 @@ class WordpressFollowViewSet(GenericViewSet):
     def unfollow_blog(self, request):
         """
         Unfollow a blog.  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Unfollowed blog with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -831,9 +867,10 @@ class WordpressFreshlyPressedViewSet(GenericViewSet):
     def get_freshly_pressed_posts(self, request):
         """
          Get a list of Freshly Pressed posts. \n
-         User can use optional query params (For details about query params visit the given link below) \n
+         :query params optional : For details about query params visit the given link below \n
          https://developer.wordpress.com/docs/api/1.1/get/freshly-pressed/  \n
-         Authorization Token is required in the header.
+         :Authorization Token : access_token(required)
+         :return : List of freshly pressed posts
          """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -854,14 +891,14 @@ class WordpressInsightsViewSet(GenericViewSet):
 
     - get_list_of_insights : Get a list of stats/metrics/insights that the current user has access to. \n
     - get_raw_data_graph : Get raw data for a particular graph. \n
-    Authorization Token is required in the header.
     """
 
     @action(detail=False, methods=['get'], url_path='get-list-of-insights')
     def get_list_of_insights(self, request):
         """
         Get a list of stats/metrics/insights that the current user has access to. \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : List of insights with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -879,7 +916,8 @@ class WordpressInsightsViewSet(GenericViewSet):
         """
         Get raw data for a particular graph. \n
         :param pk: Insight Slug (required) \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Details of specific raw data graph
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -911,7 +949,8 @@ class WordpressReaderViewSet(GenericViewSet):
     def get_default_reader_menu(self, request):
         """
         Get default reader menu. \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Details about default reader menu
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -929,8 +968,8 @@ class WordpressReaderViewSet(GenericViewSet):
         """
         Get details about a feed. \n
         :param pk: Feed ID or URL (required) \n
-        Authorization Token is required in the header.
-
+        :Authorization Token : access_token(required)
+        :return : Specific feed details
         """
         access_token = request.META.get('HTTP_AUTHORIZATION')
         if access_token:
@@ -947,7 +986,8 @@ class WordpressReaderViewSet(GenericViewSet):
         """
         Get a list of posts from a tag. \n
         :param pk: Tag Name (required) \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : List of post from specific tag
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -964,8 +1004,9 @@ class WordpressReaderViewSet(GenericViewSet):
     def subscribe_new_tag(self, request, pk):
         """
         Subscribe to a new tag. \n
-        :param pk: Tag Name (required) \n
-        Authorization Token is required in the header.
+        :path param pk: Tag Name (required) \n
+        :Authorization Token : access_token(required)
+        :return : Subscribed tag with ID and details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -982,8 +1023,9 @@ class WordpressReaderViewSet(GenericViewSet):
     def unsubscribe_tag(self, request, pk):
         """
         Unsubscribe to a tag. \n
-        :param pk: Tag Name (required) \n
-        Authorization Token is required in the header.
+        :path param pk: Tag Name (required) \n
+        :Authorization Token : access_token(required)
+        :return : Unsubscribed tag with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1011,7 +1053,8 @@ class WordpressStatsViewSet(GenericViewSet):
     def get_site_stats(self, request):
         """
         Get a site's stats \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Site stats with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1028,7 +1071,8 @@ class WordpressStatsViewSet(GenericViewSet):
     def get_site_stats_summary(self, request):
         """
         View a site's summarized views, visitors, likes and comments \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Site stats summary with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1046,7 +1090,8 @@ class WordpressStatsViewSet(GenericViewSet):
         """
         View a post's views \n
         :param pk: Post ID (required) \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Details about post views
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1063,7 +1108,8 @@ class WordpressStatsViewSet(GenericViewSet):
     def get_site_followers(self, request):
         """
         View a site's followers \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Site followers with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1098,9 +1144,10 @@ class WordpressMenuViewSet(GenericViewSet):
     def create_navigation_menu(self, request):
         """
         Create a new navigation menu. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(name) visit serializers or the given link below. \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/menus/new/  \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : Created navigation menu with ID abd details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1121,10 +1168,11 @@ class WordpressMenuViewSet(GenericViewSet):
     def update_navigation_menu(self, request, pk):
         """
         Update a navigation menu. \n
-        Required the request body (For details about request body visit the given link below). \n
+        :body params : For details about request body(name) visit serializers or the given link below. \n
         https://developer.wordpress.com/docs/api/1.1/post/sites/%24site/menus/%24menu_id/  \n
-        :param pk: Menu ID (Required) \n
-        Authorization Token is required in the header.
+        :path param pk: Menu ID (Required) \n
+        :Authorization Token : access_token(required)
+        :return : Updated navigation menu with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1146,7 +1194,8 @@ class WordpressMenuViewSet(GenericViewSet):
     def get_all_navigation_menu(self, request):
         """
         Get a list of all navigation menus. \n
-        Authorization Token is required in the header.
+        :Authorization Token : access_token(required)
+        :return : List of navigation menu with details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
@@ -1163,8 +1212,9 @@ class WordpressMenuViewSet(GenericViewSet):
     def delete_navigation_menu(self, request, pk):
         """
         Delete a navigation menu \n
-        :param pk: Menu ID (Required) \n
-        Authorization Token is required in the header.
+        :path param pk: Menu ID (Required) \n
+        :Authorization Token : access_token(required)
+        :return : Deleted navigation menu details
         """
 
         access_token = request.META.get('HTTP_AUTHORIZATION')
