@@ -1,0 +1,13 @@
+{
+  "name": "@modules/phone-number-picker",
+  "version": "1.0.0",
+  "description": "Phone Number Picker module.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {},
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {
+    
+    }
+}
