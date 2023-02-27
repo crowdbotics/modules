@@ -19,7 +19,7 @@ const PhoneNumberPicker = () => {
 
   const renderItem = ({ item }) => {
     return (
-      <TouchableOpacity onPress={() => handleUpdate(item)} style={[styles.item]}>
+      <TouchableOpacity onPress={() => handleUpdate(item)} style={[styles.item]} key={item.id}>
         <Text style={styles.flag}>{item.flag}</Text>
         <Text style={[styles.title]}>
           {item.name} <Text>({item.dial_code})</Text>
