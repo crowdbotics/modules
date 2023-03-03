@@ -23,8 +23,8 @@ const Camera = () => {
   const fetchImages = async () => {
     try {
       const res = await fetch(`${gOptions.url}/modules/camera/photos/user/`);
-      const data = await res.json();
-      setData(data);
+      const results = await res.json();
+      setData(results?.data || results);
     } catch (error) {
       console.log(error);
     }
