@@ -20,7 +20,7 @@ const PrivacyPolicy = ({ navigation, headingContainerStyle = {}, headingTextStyl
   useEffect(() => {
     fetch(`${gOptions.url}/modules/privacy-policy/`)
       .then((response) => response.json())
-      .then((data) => setHtmlContent(data[0].body))
+      .then((res) => setHtmlContent(res?.data[0]?.body || res[0].body))
       .catch((err) => {
         console.log(err);
         setHtmlContent(
@@ -45,7 +45,7 @@ const PrivacyPolicy = ({ navigation, headingContainerStyle = {}, headingTextStyl
         ></TouchableOpacity>
         <Text style={[styles.header, headingTextStyle]}>Privacy Policy</Text>
       </View>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={styles.privacyContainer}>
         <HTML
           source={{ html: htmlContent }}
           contentWidth={contentWidth}

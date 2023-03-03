@@ -18,5 +18,6 @@ export const styles = StyleSheet.create({
   icon: { width: 18, height: 16 },
   touchableopacity: { padding: 5 },
   scrollview: { flex: 1, padding: 20 },
-  header: { color: "#fff", fontSize: 16 }
+  header: { color: "#fff", fontSize: 16 },
+  privacyContainer: { flex: 1, backgroundColor: "#fff" }
 });
