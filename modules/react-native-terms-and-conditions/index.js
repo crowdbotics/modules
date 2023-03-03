@@ -19,7 +19,7 @@ const TermsAndConditions = ({ navigation, headingContainerStyle = {}, contentCon
     // Set your API's URL via Module Options - in options.js
     fetch(globalOptions.url + options.path)
       .then((response) => response.json())
-      .then((data) => setHtmlContent(data[0].body))
+      .then((res) => setHtmlContent(res?.data[0]?.body || res[0].body))
       .catch((err) => {
         console.log(err);
         return setHtmlContent("<h1>Error Loading Terms and Conditions</h1>");
