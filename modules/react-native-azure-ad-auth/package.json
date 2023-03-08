@@ -1,0 +1,15 @@
+{
+  "name": "@modules/azure-ad-auth",
+  "version": "1.0.0",
+  "description": "Module that allow you to authenticate users with Azure AD",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "dependencies": {
+    
+  },
+  "x-dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.11",
+    "react-native-azure-auth": "^1.8.7"
+  }
+}
