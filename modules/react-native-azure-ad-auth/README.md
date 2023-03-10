@@ -3,22 +3,30 @@
 First, you will need to register your application with Microsoft Azure Portal. This will give you an Application ID for your application, as well as enable it to receive tokens.
 
 1. Sign in to the [Microsoft Azure Portal](https://portal.azure.com).
-1. First you need to find the **App Registration Service**. You could just type in the service name in the search bar on the middle top of the window and select it or do like following:
+2. First you need to find the **App Registration Service**. You could just type in the service name in the search bar on the middle top of the window and select it or do like following:
    1. Click on **All services** in the left panel
    2. Then select from the shown in bold categories the **Identity**
    3. Click on the star sign near the _App registration_ service name to add it to favorites
    4. Now you can easily access the service using the left portal panel
-1. After selecting _App registration_ service click **New registration**
-1. Enter a friendly name for the application
-1. Select account type that should be supported by your app. The default choice _"Accounts in any organizational directory and personal Microsoft accounts"_ is the widest one.
-1. Now you need to add **Redirect URI**
+3. After selecting _App registration_ service click **New registration**
+4. Enter a friendly name for the application
+5. Select account type that should be supported by your app. The default choice _"Accounts in any organizational directory and personal Microsoft accounts"_ is the widest one.
+6. Now you need to add **Redirect URI**
    1. Select _Public client (mobile & desktop)_ from dropdown
    2. Type in the URI. See the URI format in the section below.
-1. Click **Register** to create the app registration record.
-1. Find the _Application (client) ID_ value in **Overview** section, copy and save the value in a safe location.
-1. You don't need to set _API Permissions_. It is meant for admin consent only.
-1. Now select **Authentication** from the left menu
-1. Click **Save** button above to save changes.
+7. Click **Register** to create the app registration record.
+8. Find the _Application (client) ID_ value in **Overview** section, copy and save the value in a safe location.
+9. You don't need to set _API Permissions_. It is meant for admin consent only.
+10. Now select **Authentication** from the left menu
+11. lick **Save** button above to save changes.
+12. Select **Manifest** from the left menu. A Json type file will be opened.
+    1. Find 
+    ```json
+    "oauth2AllowIdTokenImplicitFlow": false,
+    "oauth2AllowImplicitFlow": false
+    ```
+    2. Set both properties to `true`.
+    3. Click `Save` button.
 
 #### Callback URL(s)
 
