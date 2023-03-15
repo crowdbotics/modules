@@ -167,7 +167,6 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
             style={styles.cover}
           />
         </View>
-
         <View style={styles.trackName}>
           <Text style={[styles.textDark]}>
             {selectedTrack?.title || ""}
@@ -175,15 +174,9 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
         </View>
       </View>
       <View style={styles.seekBar}>
-        <Slider
-          minimumValue={0}
-          maximumValue={100}
-          trackStyle={styles.track}
-          thumbStyle={styles.thumb}
-          value={percent}
-          minimumTrackTintColor="#93A8B3"
-          onValueChange={(seconds) => changeTime(seconds)}
-        />
+
+        <AudioSlider percent={percent} changeTime={changeTime}/>
+
         <View style={styles.inProgress}>
           <Text style={[styles.textLight, styles.timeStamp]}>
             {!inProgress
@@ -265,17 +258,7 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 25
   },
-  track: {
-    height: 2,
-    borderRadius: 1,
-    backgroundColor: "#FFF",
-    width: "100%"
-  },
-  thumb: {
-    width: 8,
-    height: 8,
-    backgroundColor: "#3D425C"
-  },
+
   timeStamp: {
     fontSize: 11,
     fontWeight: "500"
@@ -299,3 +282,31 @@ export default {
   title: "AudioPlayer",
   navigator: AudioPlayer
 };
+
+const AudioSlider = ({ percent, changeTime }) => {
+  return (
+    <Slider
+          minimumValue={0}
+          maximumValue={100}
+          trackStyle={sliderStyles.track}
+          thumbStyle={sliderStyles.thumb}
+          value={percent}
+          minimumTrackTintColor="#93A8B3"
+          onValueChange={(seconds) => changeTime(seconds)}
+        />
+  );
+};
+
+const sliderStyles = StyleSheet.create({
+  track: {
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: "#FFF",
+    width: "100%"
+  },
+  thumb: {
+    width: 8,
+    height: 8,
+    backgroundColor: "#3D425C"
+  }
+});
