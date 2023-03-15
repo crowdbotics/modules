@@ -17,16 +17,6 @@ const PhoneNumberPicker = () => {
   const [dialCode, setDialCode] = useState("+376");
   const [flag, setFlag] = useState("🇦🇩");
 
-  const renderItem = ({ item }) => {
-    return (
-      <TouchableOpacity onPress={() => handleUpdate(item)} style={[styles.item]} key={item.id}>
-        <Text style={styles.flag}>{item.flag}</Text>
-        <Text style={[styles.title]}>
-          {item.name} <Text>({item.dial_code})</Text>
-        </Text>
-      </TouchableOpacity>
-    );
-  };
   const handleUpdate = (item) => {
     setDialCode(item.dial_code);
     setFlag(item.flag);
@@ -38,35 +28,9 @@ const PhoneNumberPicker = () => {
         <TouchableOpacity style={styles.InputContainer} onPress={() => setModalVisible(true)}>
           <Text style={styles.dialCode}>{flag} {" "}<Text>{dialCode}</Text></Text>
         </TouchableOpacity>
-        <Input
-          placeholder="Enter Number"
-          onChangeText={setPhoneNumber}
-          value={phoneNumber}
-          containerStyle={styles.searchBarContainerStyle}
-          inputContainerStyle={styles.searchBarInputContainerStyle}
-          inputStyle={styles.searchBarInputStyle}
-        />
+        <PhoneInput placeholder={"Enter Number"} phoneNumber={phoneNumber} setValue={setPhoneNumber} />
       </View>
-      <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <TouchableOpacity
-          style={styles.mainIconView}
-          onPress={() => setModalVisible(false)}
-        >
-          <MaterialCommunityIcons name="close-thick" color="black" size={30} />
-        </TouchableOpacity>
-        <FlatList
-          data={countryCodes}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          style={styles.flatList}
-        />
-      </Modal>
+      <CoutriesListModal setModalVisible={setModalVisible} modalVisible={modalVisible} countryCodes={countryCodes} handleUpdate={handleUpdate} />
     </View>
   );
 };
@@ -77,24 +41,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 10
   },
-  item: {
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center"
-  },
   InputContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center"
-  },
-  title: {
-    fontSize: 18
-  },
-  flag: {
-    marginRight: 10
   },
   dialCode: {
     fontSize: 16,
@@ -102,15 +52,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#c0c0c0",
     padding: 15,
     borderRadius: 5
-  },
-  flatList: {
-    marginTop: 10
-  },
-  mainIconView: {
-    alignSelf: "flex-end",
-    paddingTop: 20,
-    paddingRight: 20
-  },
+  }
+});
+
+export default {
+  title: "Phone Number Picker",
+  navigator: PhoneNumberPicker
+};
+
+const PhoneInput = ({ placeholder, setValue, phoneNumber }) => {
+  return (
+    <Input
+      placeholder={placeholder}
+      onChangeText={(val) => setValue(val)}
+      value={phoneNumber}
+      containerStyle={inputStyles.searchBarContainerStyle}
+      inputContainerStyle={inputStyles.searchBarInputContainerStyle}
+      inputStyle={inputStyles.searchBarInputStyle}
+    />
+  );
+};
+
+const inputStyles = StyleSheet.create({
   searchBarContainerStyle: {
     width: "75%",
     backgroundColor: "white",
@@ -129,7 +92,65 @@ const styles = StyleSheet.create({
   }
 });
 
-export default {
-  title: "Phone Number Picker",
-  navigator: PhoneNumberPicker
+const CoutriesListModal = ({ setModalVisible, modalVisible, countryCodes, handleUpdate }) => {
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity onPress={() => handleUpdate(item)} style={[modalStyles.item]} key={item.id}>
+        <Text style={modalStyles.flag}>{item.flag}</Text>
+        <Text style={[modalStyles.title]}>
+          {item.name} <Text>({item.dial_code})</Text>
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <TouchableOpacity
+          style={modalStyles.mainIconView}
+          onPress={() => setModalVisible(false)}
+        >
+          <MaterialCommunityIcons name="close-thick" color="black" size={30} />
+        </TouchableOpacity>
+        <FlatList
+          data={countryCodes}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={modalStyles.flatList}
+        />
+      </Modal>
+    </View>
+  );
 };
+
+const modalStyles = StyleSheet.create({
+  item: {
+    padding: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  title: {
+    fontSize: 18
+  },
+  flag: {
+    marginRight: 10
+  },
+  flatList: {
+    marginTop: 10
+  },
+  mainIconView: {
+    alignSelf: "flex-end",
+    paddingTop: 20,
+    paddingRight: 20
+  }
+});
