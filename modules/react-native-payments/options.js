@@ -44,13 +44,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "#016f70"
   },
-  inputField: {
-    padding: 15,
-    borderWidth: 1,
-    fontSize: 18,
-    borderRadius: 8,
-    backgroundColor: "#fff"
-  },
   bold: {
     fontWeight: "600"
   },

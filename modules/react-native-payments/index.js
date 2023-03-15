@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Text, View, FlatList } from "react-native";
+import { Text, View, FlatList, StyleSheet } from "react-native";
 import { OptionsContext } from "@options";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { CheckoutScreen } from "./checkout";
@@ -48,20 +48,7 @@ const Payments = () => {
       >
         <CheckoutScreen />
       </StripeProvider>
-      <View>
-        <Text
-          style={{ marginHorizontal: 15, marginTop: 15, paddingBottom: 10 }}
-        >
-          Payment History
-        </Text>
-        <FlatList
-          data={payments}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          onRefresh={getPayments}
-          refreshing={refresh}
-        />
-      </View>
+      < PaymentsList renderItem={renderItem} payments={payments} getPayments={getPayments} refresh={refresh} />
     </View>
   );
 };
@@ -70,3 +57,26 @@ export default {
   title: "Payments",
   navigator: Payments
 };
+
+const PaymentsList = ({ renderItem, payments, getPayments, refresh }) => {
+  return (
+    <View>
+      <Text
+        style={paymentStyles.list}
+      >
+        Payment History
+      </Text>
+      <FlatList
+        data={payments}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        onRefresh={getPayments}
+        refreshing={refresh}
+      />
+    </View>
+  );
+};
+
+const paymentStyles = StyleSheet.create({
+  list: { marginHorizontal: 15, marginTop: 15, paddingBottom: 10 }
+});

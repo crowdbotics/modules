@@ -6,7 +6,8 @@ import {
   TextInput,
   Platform,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  StyleSheet
 } from "react-native";
 import { OptionsContext, getGlobalOptions } from "@options";
 import {
@@ -165,12 +166,7 @@ export const CheckoutScreen = (params) => {
     <View>
       <View style={{ paddingHorizontal: 15, margin: 20 }}>
         <Text style={{}}>Amount</Text>
-        <TextInput
-          placeholder={"Enter Amount"}
-          value={value.amount}
-          onChangeText={(text) => setValue({ ...value, amount: text })}
-          style={styles.inputField}
-        ></TextInput>
+        <Input placeholder={"Enter Amount"} value={value} setValue={setValue}/>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
         <TouchableOpacity
@@ -204,3 +200,24 @@ export const CheckoutScreen = (params) => {
     </View>
   );
 };
+
+const Input = ({ placeholder, value, setValue }) => {
+  return (
+    <TextInput
+      placeholder={placeholder}
+      value={value.amount}
+      onChangeText={(text) => setValue({ ...value, amount: text })}
+      style={inputStyles.inputField}
+    ></TextInput>
+  );
+};
+
+const inputStyles = StyleSheet.create({
+  inputField: {
+    padding: 15,
+    borderWidth: 1,
+    fontSize: 18,
+    borderRadius: 8,
+    backgroundColor: "#fff"
+  }
+});
