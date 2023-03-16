@@ -18,6 +18,7 @@ fs.renameSync(path.join(customFiles, "options"), path.join(cwd, "options"));
 fs.renameSync(path.join(customFiles, "store"), path.join(cwd, "store"));
 fs.renameSync(path.join(customFiles, "public"), path.join(cwd, "public"));
 fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
+fs.copyFileSync(path.join(customFiles, "index.js"), path.join(cwd, "index.js"));
 
 // CircleCI
 fs.renameSync(path.join(customFiles, ".circleci"), path.join(cwd, ".circleci"));
@@ -36,6 +37,10 @@ fs.copyFileSync(
 fs.copyFileSync(
   path.join(customFiles, "heroku.yml"),
   path.join(cwd, "heroku.yml")
+);
+fs.copyFileSync(
+  path.join(customFiles, "Dockerfile"),
+  path.join(cwd, "Dockerfile")
 );
 fs.copyFileSync(
   path.join(customFiles, "metro.config.js"),
