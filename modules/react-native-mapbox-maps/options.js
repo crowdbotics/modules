@@ -97,67 +97,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     bottom: 90
   },
-  bottomSheet: {
-    paddingTop: 10,
-    backgroundColor: "#000",
-    opacity: 0.8,
-    position: "absolute",
-    padding: 8,
-    bottom: 0,
-    width: "100%"
-  },
-  bottomContainer: {
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  row: {
-    flexDirection: "row"
-  },
-  profileIcon: {
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 20
-  },
-  iconImg: {
-    height: 30,
-    width: 30,
-    resizeMode: "contain"
-  },
-  ml: {
-    marginLeft: 20
-  },
-  duration: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 18
-  },
-  mt: {
-    marginTop: -20
-  },
-  distance: {
-    color: "#fff",
-    fontSize: 16
-  },
   scaleBar: {
     top: 20,
     left: 18
   },
   topContainer: { flexDirection: "row", alignItems: "center" },
-  toggleContainer: { flexDirection: "row", padding: 10 },
-  toggleSubContainer: { flexDirection: "row", justifyContent: "center", alignItems: "center" },
-  routeText: { color: "#40E0D0", fontSize: 16, fontWeight: "bold" },
-  toggleCustom: {
-    width: 70,
-    height: 30,
-    borderRadius: 25,
-    padding: 5,
-    marginHorizontal: 10
-  },
-  toggleCircle: {
-    width: 25,
-    height: 25,
-    borderRadius: 20
-  },
   profileContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", backgroundColor: "white", width: 130 },
   profileIco: { paddingHorizontal: 5 },
   drive: { height: 50, width: 50, resizeMode: "contain" },
