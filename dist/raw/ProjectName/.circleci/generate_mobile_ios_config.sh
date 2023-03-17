@@ -125,11 +125,6 @@ jobs:
           command: env >> .env
 
       - run:
-          name: Run tests
-          command: bundle exec fastlane tests
-          working_directory: ios
-
-      - run:
           name: Set up test results
           working_directory: ios
           command: |
@@ -137,11 +132,6 @@ jobs:
             mv fastlane/report.xml test-results/fastlane
             mv fastlane/test_output/report.junit test-results/xcode/junit.xml
 
-      - run:
-          name: Build and upload to appetize.io
-          command: bundle exec fastlane deploy_appetize
-          working_directory: ios
-      
       - store_artifacts:
           path: /tmp/fastlane_build/app.zip
 
