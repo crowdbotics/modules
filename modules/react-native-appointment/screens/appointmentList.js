@@ -1,40 +1,59 @@
 import React, { useState, useCallback } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native"; // @ts-ignore
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList
+} from "react-native"; // @ts-ignore
 
 import CalendarStrip from "react-native-calendar-strip";
-import { getAppointmentByDate } from "../api";
 import Loader from "../components/Loader"; // @ts-ignore
-
+import { getAppointmentByDate } from "../store";
+import { useDispatch } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import AppointmentModal from "../components/AppointmentDetailModal"; // @ts-ignore
 
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import moment from "moment";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-const Appointment = ({
-  navigation
-}) => {
+const Appointment = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [modalItem, setModalItem] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [filterDate, setFilterDate] = useState(new Date().toISOString());
   const [filteredAppointments, setFilteredAppointments] = useState([]);
-  useFocusEffect(useCallback(() => {
-    getAllAppointment();
-  }, [filterDate]));
+
+  const dispatch = useDispatch();
+
+  useFocusEffect(
+    useCallback(() => {
+      getAllAppointment();
+    }, [filterDate])
+  );
 
   const getAllAppointment = async () => {
     setIsLoading(true); // access token with calendar scope
 
     const tokens = await GoogleSignin.getTokens();
-    getAppointmentByDate(tokens.accessToken, 100, filterDate).then(res => res.json()).then(res => {
-      __DEV__ && console.log(res);
-      setFilteredAppointments(res.items);
-      setIsLoading(false);
-    }).catch(error => {
-      console.log(error);
-      setIsLoading(false);
-    });
+    await dispatch(
+      getAppointmentByDate({
+        accessToken: tokens.accessToken,
+        maxResults: 100,
+        datetime: filterDate
+      })
+    )
+      .then(unwrapResult)
+      .then(res => {
+        __DEV__ && console.log(res);
+        setFilteredAppointments(res.items);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
 
   const modalHandler = item => {
@@ -42,27 +61,39 @@ const Appointment = ({
     setModalVisible(true);
   };
 
-  const renderItem = ({
-    item
-  }) => <TouchableOpacity onPress={() => modalHandler(item)}>
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => modalHandler(item)}>
       <View style={styles.appointmentItem}>
-        <Text style={styles.listText}>{"start" in item ? moment(new Date(item.start.dateTime)).format("h:mm A") : ""}</Text>
+        <Text style={styles.listText}>
+          {"start" in item
+            ? moment(new Date(item.start.dateTime)).format("h:mm A")
+            : ""}
+        </Text>
         <View style={[styles.card]}>
-          <Text numberOfLines={1} style={styles.eWkmXrRh}>{item.summary}</Text>
+          <Text numberOfLines={1} style={styles.eWkmXrRh}>
+            {item.summary}
+          </Text>
         </View>
       </View>
-    </TouchableOpacity>;
+    </TouchableOpacity>
+  );
 
-  return <View style={styles.container}>
+  return (
+    <View style={styles.container}>
       {isLoading && <Loader />}
       <View style={styles.calendarTextContainer}>
         <Text style={styles.calendarText}>Calendar</Text>
       </View>
-      <CalendarStrip selectedDate={filterDate} daySelectionAnimation={{
-        type: "background",
-        duration: 10,
-        highlightColor: "#E6E6E6"
-      }} style={styles.vFIpjHzC} onDateSelected={date => setFilterDate(new Date(date).toISOString())} />
+      <CalendarStrip
+        selectedDate={filterDate}
+        daySelectionAnimation={{
+          type: "background",
+          duration: 10,
+          highlightColor: "#E6E6E6"
+        }}
+        style={styles.vFIpjHzC}
+        onDateSelected={date => setFilterDate(new Date(date).toISOString())}
+      />
       <View>
         <View style={styles.viewAll}>
           <Text style={styles.listText}>List of Appointments</Text>
@@ -71,10 +102,20 @@ const Appointment = ({
           </TouchableOpacity>
         </View>
       </View>
-      <FlatList data={filteredAppointments?.length && filteredAppointments} renderItem={renderItem} keyExtractor={item => item.id} />
-      {modalVisible && <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible} />}
-
-    </View>;
+      <FlatList
+        data={filteredAppointments?.length && filteredAppointments}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
+      {modalVisible && (
+        <AppointmentModal
+          setModalVisible={setModalVisible}
+          modalItem={modalItem}
+          modalVisible={modalVisible}
+        />
+      )}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
