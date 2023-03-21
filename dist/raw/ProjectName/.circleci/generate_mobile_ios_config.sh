@@ -123,15 +123,6 @@ jobs:
       - run:
           name: Populate EnvFile
           command: env >> .env
-
-      - run:
-          name: Set up test results
-          working_directory: ios
-          command: |
-            mkdir -p test-results/fastlane test-results/xcode
-            mv fastlane/report.xml test-results/fastlane
-            mv fastlane/test_output/report.junit test-results/xcode/junit.xml
-
       - store_artifacts:
           path: /tmp/fastlane_build/app.zip
 
