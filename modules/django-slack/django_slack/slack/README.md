@@ -1,9 +1,28 @@
 # Slack
+By using this module, users will be able to deliver reminders, teammates, upload files and send messages in channels and DMs through slack bot.
 
-Module to send Slack messages with or without Attachments.
+# Features
+The following are the critical features in scope of this module.
 
-- Send Message with Attachment
-- Send Message without Attachment 
+1. Slack Authentication Access Token
+2. Get users list
+3. Send message
+4. Upload files
+5. Create channels
+6. Get specific channel id
+7. Get specific channel history
+8. Invite user to channel
+9. Archive channel
+
+# Setup
+
+ Run the following commands to get started:
+
+```
+python manage.py migrate
+python manage.py runserver
+
+```
 
 # Environment variables
 
