@@ -1,13 +1,13 @@
 // @ts-ignore
-import create from 'zustand';
-import { users } from './storage';
-const randIndex = Math.floor(Math.random() * users.length)
+import create from "zustand";
+import { users } from "./storage";
+const randIndex = Math.floor(Math.random() * users.length);
 export const uuid = users[randIndex]._id; // uuidv4()
-export const user = users[randIndex]
-export var ChannelType;
+export const user = users[randIndex];
+export let ChannelType;
 (function (ChannelType) {
-  ChannelType[ChannelType["Direct"] = 0] = "Direct";
-  ChannelType[ChannelType["Group"] = 1] = "Group";
+  ChannelType[ChannelType.Direct = 0] = "Direct";
+  ChannelType[ChannelType.Group = 1] = "Group";
 })(ChannelType || (ChannelType = {}));
 export const useStore = create(setState => ({
   state: {
@@ -15,7 +15,7 @@ export const useStore = create(setState => ({
     messages: {},
     members: {},
     contacts: users,
-    user,
+    user
   },
   dispatch: newState => setState((oldState) => ({ state: { ...oldState.state, ...newState } }))
 }));
