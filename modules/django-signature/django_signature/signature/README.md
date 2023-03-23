@@ -1,4 +1,7 @@
 # Signature
+In this module users have the ability to upload their signatures created from frontend to database.
+
+# Setup
 
  Run the following commands to get started:
 
