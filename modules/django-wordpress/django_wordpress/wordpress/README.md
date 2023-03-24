@@ -4,7 +4,7 @@ The Module use to handle WordPress Integrations and allow users to create or edi
 
 This Module is related to WordPress.com not WordPress.org The main difference between the two versions is the way your site is hosted. WordPress.com is a hosting platform that provides you with a turnkey solution, while WordPress.org is a self-hosted solution (you take care of it yourself).
 
-# Scope Features
+## Scope Features
 The following are the critical features in scope for this module.
 1. Generate Access Token
 2. Give the list of users of a site and other functionality related to user like (get, update detail of a user, remove user)
@@ -14,7 +14,7 @@ The following are the critical features in scope for this module.
 6. Get a list of site categories, detail about a single category. And also create and delete the category.
 7. Give some functionality about categories like (get multiple categories, edit category, create and delete category).
 
-# Keys And Credientials Setup
+## Keys And Credientials Setup
 You can get environment variable by the following steps:
 1. Create a [developer account](https://login.wordpress.org/register?locale=en_US) on Wordpress. Fulfill your details and click on Create Account.
 2. You will be asked to complete a few steps by entering your details. Once you have completed the process you will be directed to your dashboard. Then Go to My Apps.
@@ -23,7 +23,7 @@ You can get environment variable by the following steps:
 5. When you click on the create button your client id, client secret and redirect uri will appear.
 6. Copy your client id, client secret and redirect uri and paste it in .env file.
 
-# Environment variables
+## Environment variables
 
 ```
 WORDPRESS_BASE_URL = ""
@@ -34,7 +34,7 @@ WORDPRESS DOMAIN = ""
 ```
 To get Token authentication you need a WordPress code, a front-end Developer must hit this [Authorize URL](https://public-api.wordpress.com/oauth2/authorize?client_id={client_id}&redirect_uri={uri}&response_type=code)
 
-# Setup Installation
+## Setup Installation
 Start the server by running the following command :
 ```
 python manage.py runserver
@@ -98,7 +98,16 @@ List of api's endpoints with params needed for these apis.
 | `/modules/wordpress/insights/get-list-of-insights/`                |                  None                  | Get a list of stats/metrics/insights that the current user has access to.                                                                                                                                                                                                                                                  |
 | `/modules/wordpress/insights/{insight_slug}/get-raw-data-graph/`   |          Url `{insight_slug}`          | Get raw data for a particular graph                                                                                                                                                                                                                                                                                        |
 
-
-# Postman Collection Of Wordpress APIs
+## Postman Collection Of Wordpress APIs
 Here is a collection of all the api endpoints for the wordpress module.
 [Wordpress-APIs Postman Collection](https://drive.google.com/file/d/19l6tOhFxQAZ9lEfVjLYcZqepAO-jBD1r/view?usp=share_link)
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1OMUhgHQm7NlkEa-YREjCy9GEj9807rVaV6MRyp4j-mc/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
