@@ -82,12 +82,15 @@ By clicking "Resend", the code is resent to Phone number or email
 ### Module Specifications
 Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.
 
+### Postman Collection for Module APi Endpoints
+Here is a collection of all the api endpoints for the module.
+[Two Factor Authentication Postman Collection](https://drive.google.com/file/d/1R-m8h6wODbENoABT2Pe2151xjMMtP91V/view?usp=share_link)
 
-## Contributing
+### Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
 
-## License
+### License
 
 [MIT](https://choosealicense.com/licenses/mit/)
