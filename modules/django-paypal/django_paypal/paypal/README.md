@@ -1,7 +1,15 @@
 # PayPal
+By using this module, users will be able to handle payment transactions using paypal services.
 
-Module for handle PayPal Integrations.
+# Scopes Features
+The following are the critical features in scope for this module.
 
+1. Generate Access Token
+2. Create and show orders and make authorization payments for orders
+3. Show, reauthorize, capture authorized payments and refund capture payments and show refund details 
+4. Generate, show and list Invoices
+5. Create, show, update, suspend, active and cancel the subscriptions 
+6. Create, show, list, deactivate and activate the plans
 
 # Environment variables
 
@@ -11,6 +19,23 @@ PAYPAL_CLIENT_ID = ""
 PAYPAL_CLIENT_SECRETS = ""
 ```
 
+# Keys And Credientials Setup
+You can get environment variable keys by the following steps:
+1. Create a [developer account](https://www.paypal.com/signin/client?flow=provisionUser&country.x=US&locale.x=en_US) on Paypal and put your  information in it.
+2. After Signup in paypal your dashboard will appear. Click on Apps & Credentials.
+3. Then click on Create App.
+4. Enter your App name and click on Create app button.
+5. When your app is created. Your sandbox account, client id and client secret will appear.
+6. Copy your sandbox account, client id,client secret and base URL and save them for later use. 
+7. Come back to your dashboard and click on Testing Tools and then on the sandbox account.
+8. After these above steps you must have your two accounts one is business and the other one personal. These accounts are valid,  you can use them as both business or personal. 
+
+# Setup Installation
+
+Start the server by running the following command :
+```
+python manage.py runserver
+```
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
@@ -46,3 +71,7 @@ List of api's endpoints with params needed for these apis.
 | `paypal/service/{dispute_id}/get-dispute-details/`                             |           url `dispute_id`           | Shows details for a dispute, by ID.                                                                                                                                                                                                                                                                                                                                                   |
 | `paypal/service/{dispute_id}/accept-claim/`                                    |   url `dispute_id`,   request.body   | Accepts liability for a claim, by ID. When you accept liability for a claim, the dispute closes in the customer’s favor and PayPal automatically refunds money to the customer from the merchant's account. Required the request body. For details about request body visit the given link  https://developer.paypal.com/docs/api/customer-disputes/v1/#disputes-actions_accept-claim |
 | `paypal/service/create-web-hook/`                                              |             request.body             | Subscribes your webhook listener to events. Required the request body. For details about request body visit the given link  https://developer.paypal.com/docs/api/webhooks/v1/#webhooks_post                                                                                                                                                                                          |
+
+# Postman Collection Of Paypal APIs
+Here is a collection of all the api endpoints for the paypal module.
+[Paypal-Apis Postman Collection](https://drive.google.com/file/d/1L5Y9Z56f57Ubocz_hI78GFIGK981tABp/view?usp=share_link)
