@@ -22,6 +22,7 @@ You can get environment variable by the following steps:
 4. To create new application enter your details  such as name, redirect_uri(important) and type etc.
 5. When you click on the create button your client id, client secret and redirect uri will appear.
 6. Copy your client id, client secret and redirect uri and paste it in .env file.
+![screenshot-developer wordpress com-2023 03 24-14_33_46](https://user-images.githubusercontent.com/120275623/227482252-4b579e05-34af-4c5e-bc02-a289dd6ecdb4.png)
 
 ## Environment variables
 
