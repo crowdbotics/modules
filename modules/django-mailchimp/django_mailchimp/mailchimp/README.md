@@ -30,6 +30,8 @@ You can get environment variable (MailChimp API Keys & credientials) by the foll
 3. Once the developer account is successfully created open the MailChimp Dashboard > On Lower Left corner of Side Bar Click on 'User Profile' Logo.
 4. Click 'Profile'.
 5. Click 'Extras' > Click 'API keys'. > Scroll the page down > Click 'Create A Key'.
+![screenshot-us21 admin mailchimp com-2023 03 24-14_48_30](https://user-images.githubusercontent.com/120275623/227486815-2987705e-3dd4-4b22-bf65-c4cf95a9920b.png)
+
 
 ## Environment variables
 
