@@ -100,6 +100,10 @@ const Camera = modules[module_index].value.navigator;  //module_index : position
 ### Module Specifications
 Here is the [Module Specification Document](https://docs.google.com/document/d/197btS3Arq50GvivzCuCwOOp299E6i10O67jMBt3ZfoI/edit), which provides more information about the module's actual intentions.
 
+### Postman Collection for Module APi Endpoints
+Here is a collection of all the api endpoints for the module.
+[Camera Module Postman Collection](https://drive.google.com/file/d/1fDxG_ZG0uz7889G8LpZqClrlny4LqxpR/view?usp=share_link)
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
