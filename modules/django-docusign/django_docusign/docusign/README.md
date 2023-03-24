@@ -56,6 +56,10 @@ You can get environment variable keys which can used to hit the APIs
 4. Next, click on the Add App and Integration Key button.
 5. You will be asked to complete a few steps by entering the details. Once you have completed the process you will be directed to your Apis keys and credentials.
 6. Copy your client id, user id, account id, host name, redirect uri, scopes  and save it for later use. Must remember that the session will expire after 10 to 30 minutes.
+![screenshot-admindemo docusign com-2023 03 24-12_59_44](https://user-images.githubusercontent.com/120275623/227461456-8c872b39-5929-4a7c-84c9-ee8874d84f43.png)
+
+.
+
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
