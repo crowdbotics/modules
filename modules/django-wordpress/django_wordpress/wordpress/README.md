@@ -1,20 +1,44 @@
 # WordPress
 
-Module for handle WordPress Integrations.
+The Module use to handle WordPress Integrations and allow users to create or edit content on any “WordPress.com” site and also on any self-hosted(WordPress.org) site.
 
 This Module is related to WordPress.com not WordPress.org The main difference between the two versions is the way your site is hosted. WordPress.com is a hosting platform that provides you with a turnkey solution, while WordPress.org is a self-hosted solution (you take care of it yourself).
 
+# Scope Features
+The following are the critical features in scope for this module.
+1. Generate Access Token
+2. Give the list of users of a site and other functionality related to user like (get, update detail of a user, remove user)
+3. Give the list of shortcodes available on a site and provide other information about site like (activate, deactivate, get widgets on a site etc)
+4. Get a single post (by ID) and also create, delete, update the post.
+5. Get a single/list of comments and also delete, like and, kill the comment on a post.
+6. Get a list of site categories, detail about a single category. And also create and delete the category.
+7. Give some functionality about categories like (get multiple categories, edit category, create and delete category).
+
+# Keys And Credientials Setup
+You can get environment variable by the following steps:
+1. Create a [developer account](https://login.wordpress.org/register?locale=en_US) on Wordpress. Fulfill your details and click on Create Account.
+2. You will be asked to complete a few steps by entering your details. Once you have completed the process you will be directed to your dashboard. Then Go to My Apps.
+3. After that you have to click on Create New Application.
+4. To create new application enter your details  such as name, redirect_uri(important) and type etc.
+5. When you click on the create button your client id, client secret and redirect uri will appear.
+6. Copy your client id, client secret and redirect uri and paste it in .env file.
 
 # Environment variables
 
 ```
 WORDPRESS_BASE_URL = ""
 WORDPRESS_CLIENT_ID = ""
+PAYPAL_CLIENT_SECRETS = ""
 WORDPRESS_REDIRECT_URL = ""
 WORDPRESS DOMAIN = ""
 ```
-To get WordPress code front-end Developer must hit the following url: <br/>
-`https://public-api.wordpress.com/oauth2/authorize?client_id={client_id}&redirect_uri={uri}&response_type=code`
+To get Token authentication you need a WordPress code, a front-end Developer must hit this [Authorize URL](https://public-api.wordpress.com/oauth2/authorize?client_id={client_id}&redirect_uri={uri}&response_type=code)
+
+# Setup Installation
+Start the server by running the following command :
+```
+python manage.py runserver
+```
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
@@ -74,3 +98,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/wordpress/insights/get-list-of-insights/`                |                  None                  | Get a list of stats/metrics/insights that the current user has access to.                                                                                                                                                                                                                                                  |
 | `/modules/wordpress/insights/{insight_slug}/get-raw-data-graph/`   |          Url `{insight_slug}`          | Get raw data for a particular graph                                                                                                                                                                                                                                                                                        |
 
+
+# Postman Collection Of Wordpress APIs
+Here is a collection of all the api endpoints for the wordpress module.
+[Wordpress-APIs Postman Collection](https://drive.google.com/file/d/19l6tOhFxQAZ9lEfVjLYcZqepAO-jBD1r/view?usp=share_link)
