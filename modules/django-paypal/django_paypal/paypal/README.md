@@ -1,7 +1,7 @@
 # PayPal
 By using this module, users will be able to handle payment transactions using paypal services.
 
-# Scopes Features
+## Scopes Features
 The following are the critical features in scope for this module.
 
 1. Generate Access Token
@@ -11,15 +11,7 @@ The following are the critical features in scope for this module.
 5. Create, show, update, suspend, active and cancel the subscriptions 
 6. Create, show, list, deactivate and activate the plans
 
-# Environment variables
-
-```
-PAYPAL_BASE_URL = ""
-PAYPAL_CLIENT_ID = ""
-PAYPAL_CLIENT_SECRETS = ""
-```
-
-# Keys And Credientials Setup
+## Keys And Credientials Setup
 You can get environment variable keys by the following steps:
 1. Create a [developer account](https://www.paypal.com/signin/client?flow=provisionUser&country.x=US&locale.x=en_US) on Paypal and put your  information in it.
 2. After Signup in paypal your dashboard will appear. Click on Apps & Credentials.
@@ -30,10 +22,19 @@ You can get environment variable keys by the following steps:
 7. Come back to your dashboard and click on Testing Tools and then on the sandbox account.
 8. After these above steps you must have your two accounts one is business and the other one personal. These accounts are valid,  you can use them as both business or personal. 
 
-# Setup Installation
+## Environment variables
+
+```
+PAYPAL_BASE_URL = ""
+PAYPAL_CLIENT_ID = ""
+PAYPAL_CLIENT_SECRETS = ""
+```
+
+## Setup Installation
 
 Start the server by running the following command :
 ```
+python manage.py migrate
 python manage.py runserver
 ```
 
@@ -72,6 +73,14 @@ List of api's endpoints with params needed for these apis.
 | `paypal/service/{dispute_id}/accept-claim/`                                    |   url `dispute_id`,   request.body   | Accepts liability for a claim, by ID. When you accept liability for a claim, the dispute closes in the customer’s favor and PayPal automatically refunds money to the customer from the merchant's account. Required the request body. For details about request body visit the given link  https://developer.paypal.com/docs/api/customer-disputes/v1/#disputes-actions_accept-claim |
 | `paypal/service/create-web-hook/`                                              |             request.body             | Subscribes your webhook listener to events. Required the request body. For details about request body visit the given link  https://developer.paypal.com/docs/api/webhooks/v1/#webhooks_post                                                                                                                                                                                          |
 
-# Postman Collection Of Paypal APIs
+## Postman Collection Of Paypal APIs
 Here is a collection of all the api endpoints for the paypal module.
 [Paypal-Apis Postman Collection](https://drive.google.com/file/d/1L5Y9Z56f57Ubocz_hI78GFIGK981tABp/view?usp=share_link)
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1OMUhgHQm7NlkEa-YREjCy9GEj9807rVaV6MRyp4j-mc/edit?usp=sharing), which provides more information about the module's actual intentions.
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
