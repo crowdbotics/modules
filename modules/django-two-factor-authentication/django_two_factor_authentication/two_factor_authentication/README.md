@@ -1,5 +1,54 @@
-# Two Factor Authentication
-Module will implement a two-factor authentication flow.
+# Django Two Factor Authentication
+Django Two Factor Authentication module is a backend support for React Native 2FA Module, which will implement a two-factor authentication flow, which will prompt for username/email and password and then a time-based generated code. User is granted access to a application only after successfully presenting evidence to an authentication.
+
+## Features
+1. Send the user a unique token via SMS text message, normally a 5-10 digit code.
+2. Send token via email.
+3. Verify unique code sent to the user via SMS or Email.
+
+
+## Required Dependencies/Packages
+* **twilio**
+
+The Twilio REST API allows you to query and manage meta-data about your account, phone numbers, usage, and access tokens. It makes it easy to send and receive SMS and MMS messages as well as query meta-data about text messages.
+Install it by running the command:
+```console
+pip install twilio
+```
+
+* **sendgrid**
+SendGrid delivers your transactional and marketing emails through the world's largest cloud-based email delivery platform.
+Install the package using this command:
+```console
+pip install sendgrid
+```
+
+## Module Credentials/Keys
+We need to setup twillio ans sendgrid accounts to get the required creds to make module work.
+
+### Setting up Twillio account
+1. Login in to [twillio](https://www.twilio.com/login) site.
+2. On the twillio dashboard you will find your `Account SID` and `Auth Token`, save them for letter use.
+
+
+
+### Setting up Sendgrid account
+1. Login in to [SendGrid](https://signup.sendgrid.com/) site.
+2. Create a new sender by clicking `Create New Sender` Button.
+3. Enter all the sender details and save.
+4. In the left side-bar, under `Email API` select `Integration Guide`.
+5. Choose `SMTP Relay` as your setup method.
+6. Enter the name of your secret key and enter `Create` button.
+7. Copy the following things for later use:
+
+    ```
+    SendGrid API Key: SG.xxxxxxxxxxxxxxxxxxxxxxxxxx
+    Server:	smtp.sendgrid.net
+    Ports: 25, 587	(for unencrypted/TLS connections) 465	(for SSL connections)
+    Username:	apikey
+    Password: SG.xxxxxxxxxxxxxxxxxxxxxx
+    ```
+
 
 ## Installations
 
@@ -54,4 +103,14 @@ List of api's endpoints with params needed for these apis.
 
 
 
+### Module Specifications
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.
 
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
