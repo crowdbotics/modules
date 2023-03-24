@@ -34,7 +34,6 @@ If user gets verified successfully, redirect user to home page of the applicatio
 * **getGoogleAuthenticatorQR**
 `getGoogleAuthenticatorQR` method is used return the QR code link which you can use to register on Google Authenticator App.
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
 
 ## Manual Setup
 
@@ -46,6 +45,7 @@ import TwoFactorAuthentication from "@modules/2fa";
 const { title, navigator } = TwoFactorAuthentication;
 ```
 
+2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
 
 ```javascript
 import { modules } from '@modules';
