@@ -2,7 +2,7 @@
 
 The module allow user to build custom features related to campaign, members, manage segments and target audiences and templates.
 
-# Scope Features
+## Scope Features
 The following are the critical features in scope for this module.
 1. Create a new campaign folder.
 2. Get & Update information about a specific folder used to organize campaigns.
@@ -14,13 +14,16 @@ The following are the critical features in scope for this module.
 8. Give information about list members who unsubscribed from a specific campaign.
 9. Give all folders used to organize templates.
 
-# Package Installation
-A 3rd party integration requirements which is [mailchimp-marketing](https://pypi.org/project/mailchimp-marketing/) and can be install by following command:
+## Package Installation
+A 3rd party integration requirements which is:
+-  [mailchimp-marketing](https://pypi.org/project/mailchimp-marketing/)
+
+Can be install by following command:
 - pip install mailchimp-marketing
 
 This SDK is provided as open source, which enables you to customize its functionality to suit your particular use case.
 
-# Keys And Credientials Setup
+## Keys And Credientials Setup
 You can get environment variable (MailChimp API Keys & credientials) by the following steps:
 1. Create  MailChimp Developer account.
 2. Activate Mailchimp Account from the mail sent to user's provided email.
@@ -28,7 +31,7 @@ You can get environment variable (MailChimp API Keys & credientials) by the foll
 4. Click 'Profile'.
 5. Click 'Extras' > Click 'API keys'. > Scroll the page down > Click 'Create A Key'.
 
-# Environment variables
+## Environment variables
 
 ```
 MAILCHIMP_API_KEY=""
@@ -42,6 +45,7 @@ python -m pip install .
 ```
 Start the server by running the following command :
 ```
+python manage.py migrate
 python manage.py runserver
 ```
 
@@ -95,6 +99,16 @@ List of api's endpoints with params needed for these apis.
 | `/modules/mailchimp/templates/add-template-folder/`                               |                    request.body                     | Create a new template folder.Required the request body. For details about request body visit the given link .https://mailchimp.com/developer/marketing/api/template-folders/add-template-folder/                                       |
 | `/modules/mailchimp/templates/list-template/`                                     |                        None                         | Get a list of an account's available templates.                                                                                                                                                                                        |
 | `/modules/mailchimp/templates/list-template-folder/`                              |                        None                         | Get all folders used to organize templates.                                                                                                                                                                                            |                                                                                          |
-# Postman Collection Of Mailchimp APIs
+## Postman Collection Of Mailchimp APIs
 Here is a collection of all the api endpoints for the mailchimp module.
 [Mailchimp-APIs Postman Collection](https://drive.google.com/file/d/1kzci3MH3eVcxX6nniaDQOSaeHQe24xFD/view?usp=share_link)
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1M2fLvKpNeSkFlPKmVkHkmN4Hr8bGGFxej1oRzMNXWZ4/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
