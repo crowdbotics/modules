@@ -1,12 +1,35 @@
 # Docusign
+The Module used to generate and retrieve eSignature docs.
 
-Module to generate and retrieve eSignature docs.
 
+# Scope Features
+The following are the critical features in scope for this module.
 - Get Access Token
 - eSignature Generation
 - Retrieve eSignature doc
 - Create an envelope that include documents that will be signed electronically, sender information, recipient information
 - Status information that tracks delivery and signature progress
+
+# Packages Installation
+A 3rd party integration requirements which is [docu-esign](https://pypi.org/project/docusign-esign/) and can be install by following command:
+- pip install docusign-esign
+
+This SDK is provided as open source, which enables you to customize its functionality to suit your particular use case.
+
+## Setup Installation
+To install the given dependencies in `setup.py`. Go to the `modules/django-docusign/docusign/` and run the following command:
+```
+python -m pip install .
+```
+Run Migrations
+```
+python manage.py migrate
+```
+
+Start the server by running the following command :
+```
+python manage.py runserver
+```
 
 # Environment variables
 
@@ -16,11 +39,20 @@ USER_ID = "Your account USER_ID"
 ACCOUNT_ID = "API Account ID"
 HOST = "host_url{Account Base URL}/restapi/"
 OAUTH_HOST_NAME = "account-d.docusign.com"
-PRIVATE_KEY_FILE_PATH = "./demo/private.key" -> while creating app in your developer account, go to service integration and CLICK ON [GENERATE RSA] then copy your private key and paste it in [private.key] file
+PRIVATE_KEY_FILE_PATH = "./demo/private.key" -> while creating app in your Google service's developer account, go to service integration and CLICK ON [GENERATE RSA] then copy your private key and paste it in [private.key] file
 EXPIRES_IN = 28800
 SCOPES = ["signature", "impersonation"]
 REDIRECT_URI = "https://www.crowdbotics.com/"
 ```
+
+# Keys And Credientals Setup
+You can get environment variable keys which can used to hit the APIs
+1. Create a [developer account](https://developers.docusign.com/platform/account/) on Docu-Sign
+2. After clicking on Create Account add the following details about the developer.
+3. When your account is created. From your dashboard click on your profile, then click on My Apps and Keys.
+4. Next, click on the Add App and Integration Key button.
+5. You will be asked to complete a few steps by entering the details. Once you have completed the process you will be directed to your Apis keys and credentials.
+6. Copy your client id, user id, account id, host name, redirect uri, scopes  and save it for later use. Must remember that the session will expire after 10 to 30 minutes.
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
