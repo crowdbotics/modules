@@ -51,8 +51,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_order(self, request):
         """
         create_order: Creates an order
-        Required the request body. For details about request body visit the given link below
+        :body_params: For details about request body(intent, purchased_unit, amount, ....) visit serializers or the given link below
         https://developer.paypal.com/docs/api/orders/v2/#orders_create
+        :return : Order ID and details
         """
 
         data = request.data
@@ -62,8 +63,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=['get'], url_path='get-order-details')
     def get_order_details(self, request, pk):
         """
-        Shows details for an order, by ID.
-        :param str pk: Order ID (required)
+        Shows details for an order by ID.
+        :path_param str pk: Order ID (required)
+        :return : specific order details
         """
 
         response = self.paypal_service.show_order_details(order_id=pk)
@@ -74,7 +76,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
         """
         Authorizes payment for an order. To successfully authorize payment for an order, the buyer must
         first approve the order.
-        :param str pk: Order ID (required)
+        :path_param str pk: Order ID (required)
+        :return : Authorized payment for order with ID and details
         """
 
         response = self.paypal_service.authorize_payment_for_order(order_id=pk)
@@ -85,7 +88,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
         """
         Captures payment for an order. To successfully capture payment for an order, the buyer must first approve
         the order.
-        :param str pk: Order ID (required)
+        :path_param str pk: Order ID (required)
+        :return : Captured payment for order with ID and details
         """
 
         response = self.paypal_service.capture_payment_for_order(order_id=pk)
@@ -95,7 +99,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def get_authorized_payment(self, request, pk):
         """
         Shows details for an authorized payment, by ID
-        :param str pk: Authorization ID (required)
+        :path_param str pk: Authorization ID (required)
+        :return : specific authorized payment with ID and details
         """
 
         response = self.paypal_service.show_authorized_payment(authorization_id=pk)
@@ -104,10 +109,11 @@ class PaypalViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=['post'], url_path='capture-authorized-payment')
     def capture_authorized_payment(self, request, pk):
         """
-        Captures an authorized payment, by ID.
-        :param str pk: Authorization ID (required)
-        The API also required Capture details in request body. For details about request body visit the given link below
+        Captures an authorized payment by ID.
+        :path_param str pk: Authorization ID (required)
+        :body_params : For details about request body(amount, invoice_id, ...) visit serializers or the given link below
         https://developer.paypal.com/docs/api/payments/v2/#authorizations_capture
+        :return : captured authorized payment with ID and details
         """
 
         details = request.data
@@ -119,7 +125,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def get_captured_payment(self, request, pk):
         """
         Shows details for a captured payment, by ID.
-        :param str pk: Capture ID (required)
+        :path_param str pk: Capture ID (required)
+        :return : Specific captured payment details
         """
 
         response = self.paypal_service.show_captured_payment(capture_id=pk)
@@ -129,10 +136,11 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def refund_capture_payment(self, request, pk):
         """
         Refunds a captured payment, by ID. For a full refund, include an empty payload in the JSON request body.
-        For a partial refund, include an amount object in the JSON request body.For more details about request body visit
+        :body_params : For more details about request body(amount) visit serializers or
         the given link below.
         https://developer.paypal.com/docs/api/payments/v2/#captures_refund
-        :param str pk: Capture ID (required)
+        :path_param str pk: Capture ID (required)
+        :return : Refund captured payment with ID and details
         """
 
         details = request.data
@@ -143,7 +151,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def get_refund_details(self, request, pk):
         """
         Shows details for a refund, by ID.
-        :param str pk: Refund ID (required)
+        :path_param str pk: Refund ID (required)
+        :return : Specific refund details
         """
 
         response = self.paypal_service.show_refund_details(refund_id=pk)
@@ -152,9 +161,10 @@ class PaypalViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='create-product')
     def create_product(self, request):
         """
-        Creates a product
-        Required the request body. For details about request body visit the given link below
+        Create a product
+        :body_params : For details about request body(name, descripton, category, ...) visit serializers or the given link below
         https://developer.paypal.com/docs/api/catalog-products/v1/#products_create
+        :return : Created product with ID and details
         """
 
         product_data = request.data
@@ -164,8 +174,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=['get'], url_path='get-product-details')
     def get_product_details(self, request, pk):
         """
-        Shows details for a product, by ID
-        :param str pk: Product ID (required)
+        Shows details for a product by ID
+        :path_param str pk: Product ID (required)
+        :return : Specific product details
         """
 
         response = self.paypal_service.show_product_details(product_id=pk)
@@ -175,8 +186,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_plan(self, request):
         """
         Creates a plan that defines pricing and billing cycle details for subscriptions.
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(product_id, name, ....) visit serializers or the given link below
         https://developer.paypal.com/docs/api/subscriptions/v1/#plans_create
+        :return : Created plan with ID and details
         """
 
         plan_data = request.data
@@ -187,7 +199,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def get_plan_details(self, request, pk):
         """
         Shows details for a plan, by ID.
-        :param str pk: Plan ID (required)
+        :path_param str pk: Plan ID (required)
+        :return : Specific plan details
         """
 
         response = self.paypal_service.show_plans_details(plan_id=pk)
@@ -196,8 +209,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     @action(detail=True, methods=['post'], url_path='deactivate-plan')
     def deactivate_plan(self, request, pk):
         """
-        Deactivates a plan, by ID.
-        :param str pk: Plan ID (required)
+        Deactivates a plan by ID.
+        :path_param str pk: Plan ID (required)
+        :return : 204 no content
         """
 
         response = self.paypal_service.deactivate_plan(plan_id=pk)
@@ -207,7 +221,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def activate_plan(self, request, pk):
         """
          Activates a plan, by ID.
-        :param str pk: Plan ID (required)
+        :path_param str pk: Plan ID (required)
+        :return : 204 no content
         """
 
         response = self.paypal_service.activate_plan(plan_id=pk)
@@ -217,8 +232,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_subscription(self, request):
         """
         Creates a subscription.
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(plan_id, start_time, shipping_amount, ...) visit serializers or the given link below
         https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_create
+        :return : Created subscription with ID and details
         """
         subscription_data = request.data
         response = self.paypal_service.create_subscription(subscription_details=subscription_data)
@@ -228,7 +244,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def get_subscription_details(self, request, pk):
         """
         Shows details for a subscription, by ID.
-        :param str pk: Subscription ID (required)
+        :path_param str pk: Subscription ID (required)
+        :return : Specific subscription details
         """
 
         response = self.paypal_service.show_subscription_details(subscription_id=pk)
@@ -238,7 +255,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def suspend_subscription(self, request, pk):
         """
         Suspends the subscription.
-        :param str pk: Subscription ID (required)
+        :path_param str pk: Subscription ID (required)
+        :return : 204 no content
         """
 
         response = self.paypal_service.suspend_subscription(subscription_id=pk)
@@ -248,7 +266,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def activate_subscription(self, request, pk):
         """
         Activates the subscription.
-        :param str pk: Subscription ID (required)
+        :path_param str pk: Subscription ID (required)
+        :return : 204 no content
         """
 
         response = self.paypal_service.activate_subscription(subscription_id=pk)
@@ -258,7 +277,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def cancel_subscription(self, request, pk):
         """
         Cancels the subscription. To cancel the subscription you must suspend it first
-        :param str pk: Subscription ID (required)
+        :path_param str pk: Subscription ID (required)
+        :return : 204 no content
         """
 
         reason = request.data
@@ -269,9 +289,10 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def capture_authorized_payment_on_subscription(self, request, pk):
         """
         Captures an authorized payment from the subscriber on the subscription.
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(note, capture_type, amount, ...) visit serializers or the given link below
         https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_capture
-        :param str pk: Subscription ID (required)
+        :path_param str pk: Subscription ID (required)
+        :return : 202 accepted
         """
 
         data = request.data
@@ -283,6 +304,7 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def generate_invoice_number(self, request):
         """
         Generates the next invoice number that is available to the merchant
+        :return : Invoice Number
         """
 
         response = self.paypal_service.generate_invoice_number()
@@ -292,8 +314,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_draft_invoice(self, request):
         """
         Creates a draft invoice. To move the invoice from a draft to payable state, you must send the invoice
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(detail, business, amount,...) visit serializers or the given link below
         https://developer.paypal.com/docs/api/invoicing/v2/#invoices_create
+        :return : Created draft invoice with ID and details
         """
 
         body = request.data
@@ -304,7 +327,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def get_invoice_details(self, request, pk):
         """
         Shows details for an invoice, by ID.
-        :param str pk: Invoice ID (required)
+        :path_aram str pk: Invoice ID (required)
+        :return : Specific invoice details
+
         """
 
         response = self.paypal_service.show_invoice_details(invoice_id=pk)
@@ -314,8 +339,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def send_invoice(self, request, pk):
         """
         Sends or schedules an invoice, by ID, to be sent to a customer.
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(send_to_invoicer) visit serializers or the given link below
         https://developer.paypal.com/docs/api/invoicing/v2/#invoices_send
+        :return : 202 accepted
         """
         body = request.data
         response = self.paypal_service.send_invoice(message_body=body, invoice_id=pk)
@@ -326,6 +352,7 @@ class PaypalViewSet(viewsets.GenericViewSet):
         """
         Lists disputes with a summary set of details, which shows the dispute_id, reason, status, dispute_state,
         dispute_life_cycle_stage, dispute_channel, dispute_amount, create_time and update_time fields
+        :return : List of all disputes
         """
 
         response = self.paypal_service.list_disputes()
@@ -336,6 +363,7 @@ class PaypalViewSet(viewsets.GenericViewSet):
         """
         Shows details for a dispute, by ID.
         :param str pk: Dispute ID (required)
+        :return : Specific dispute details
         """
         response = self.paypal_service.show_dispute_details(dispute_id=pk)
         return Response(data=response, status=response.get("status_code"))
@@ -345,9 +373,11 @@ class PaypalViewSet(viewsets.GenericViewSet):
         """
         Accepts liability for a claim, by ID. When you accept liability for a claim, the dispute closes in the
         customer’s favor and PayPal automatically refunds money to the customer from the merchant's account.
-        Required the request body. For details about request body visit the given link below
+        :body_params:  For details about request body(note) visit serializers or the given link below
         https://developer.paypal.com/docs/api/customer-disputes/v1/#disputes-actions_accept-claim
+        :return : Accepted clam with Links and details
         """
+
         message = request.data
         response = self.paypal_service.accept_claim(dispute_id=pk, message=message)
         return Response(data=response, status=response.get("status_code"))
@@ -356,8 +386,9 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_web_hook(self, request):
         """
         Subscribes your webhook listener to events.
-        Required the request body. For details about request body visit the given link below
+        :body_params : For details about request body(URL, event_type, ...) visit serializers or the given link below
         https://developer.paypal.com/docs/api/webhooks/v1/#webhooks_post
+        :return : Created webhook ID and details
         """
         message = request.data
         response = self.paypal_service.create_web_hook(body=message)
