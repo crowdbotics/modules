@@ -21,6 +21,8 @@ You can get environment variable keys by the following steps:
 6. Copy your sandbox account, client id,client secret and base URL and save them for later use. 
 7. Come back to your dashboard and click on Testing Tools and then on the sandbox account.
 8. After these above steps you must have your two accounts one is business and the other one personal. These accounts are valid,  you can use them as both business or personal. 
+ ![screenshot-developer paypal com-2023 03 24-13_21_22](https://user-images.githubusercontent.com/120275623/227464447-7a9c576f-4745-4b9d-b383-fb2ffa19b520.png)
+
 
 ## Environment variables
 
