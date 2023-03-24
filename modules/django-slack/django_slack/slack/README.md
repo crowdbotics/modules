@@ -1,7 +1,7 @@
 # Slack
 By using this module, users will be able to deliver reminders, teammates, upload files and send messages in channels and DMs through slack bot.
 
-# Features
+# Scope Features
 The following are the critical features in scope of this module.
 
 1. Slack Authentication Access Token
@@ -14,22 +14,16 @@ The following are the critical features in scope of this module.
 8. Invite user to channel
 9. Archive channel
 
-# Setup
+# Required SDKs and Libraries
 
- Run the following commands to get started:
+To implement the module, the following assets shall be required:
+- [slack-sdk](https://pypi.org/project/slack-sdk/)
 
-```
-python manage.py migrate
-python manage.py runserver
+Can be install by the follwing command:
+- pip install slack-sdk
 
-```
-
-# Environment variables
-
-```
-SLACK_BOT_TOKEN = ""
-```
-
+# Keys And Credientials Setup
+Get the Slack APi keys and credientials by the following steps:
 1. To get the slack token user have to visit the "https://api.slack.com/apps/"
 2. Create new app and scroll down to section 
 3. "Add feature and functionality" then select "bot" then select "review scopes to add" then scroll down to scopes section 
@@ -37,6 +31,24 @@ SLACK_BOT_TOKEN = ""
 5. Install bot to workspace then copy the "Bot User OAuth Token" and paste the token in env file then get token from env to settings file 
 6. Assign it to the variable the name of the variable should be "SLACK_BOT_TOKEN"
 
+
+# Environment variables
+```
+SLACK_BOT_TOKEN = ""
+```
+
+# Setup 
+To install the given dependencies in `setup.py`. Go to the `modules/django-slack/slack/` and run the following command:
+```
+python -m pip install .
+```
+
+ Run the following commands to get started:
+
+```
+python manage.py migrate
+python manage.py runserver
+```
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
@@ -50,6 +62,8 @@ List of api's endpoints with params needed for these apis.
 | `/slack/service/{channel_name}/get-channel-id/` |                       url `company_name`                        | Takes channel name and return channel id                                                           |
 | `/slack/service/{channel_id}/channel_history/`  |        url `channel_id` query_param `next_cursor, limit`        | Takes channel id and limit and return conversation and channel history                             |
 | `/slack/service/{channel_id}/archive_channel/`  |                        url `channel_id`                         | Takes channel id and archive that channel                                                          |
-| `/slack/service/get_users/`                     |                              None                               | This method returns a list of all users in the workspace. This includes deleted/deactivated users. |
+| `/slack/service/get_users/`                     |                              None                               | This method returns a list of all users in the workspace. This includes deleted/deactivated users. |                                                                           |
 
-                                                                                         |
+# Slack Endpoints Postman Collection:
+Here is a collection of all the api endpoints for the Slack module.
+[Slack-Apis Postman Collection](https://drive.google.com/file/d/1L5Y9Z56f57Ubocz_hI78GFIGK981tABp/view?usp=share_link)
