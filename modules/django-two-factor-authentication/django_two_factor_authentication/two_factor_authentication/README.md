@@ -17,6 +17,7 @@ pip install twilio
 ```
 
 * **sendgrid**
+
 SendGrid delivers your transactional and marketing emails through the world's largest cloud-based email delivery platform.
 Install the package using this command:
 ```console
@@ -30,6 +31,7 @@ We need to setup twillio ans sendgrid accounts to get the required creds to make
 1. Login in to [twillio](https://www.twilio.com/login) site.
 2. On the twillio dashboard you will find your `Account SID` and `Auth Token`, save them for letter use.
 
+![Twillio](https://user-images.githubusercontent.com/76822297/227456078-ddba88d4-e9bf-4207-af06-94fe34d895fd.png)
 
 
 ### Setting up Sendgrid account
@@ -48,6 +50,8 @@ We need to setup twillio ans sendgrid accounts to get the required creds to make
     Username:	apikey
     Password: SG.xxxxxxxxxxxxxxxxxxxxxx
     ```
+ ![SendgridKEys](https://user-images.githubusercontent.com/76822297/227455983-9d1e7191-52ee-4c52-8052-c4bf68a64f38.png)
+
 
 
 ## Installations
@@ -104,7 +108,7 @@ List of api's endpoints with params needed for these apis.
 
 
 ### Module Specifications
-Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.
+Here is the [Module Specification Document](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ## Contributing
 
