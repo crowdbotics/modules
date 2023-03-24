@@ -30,6 +30,7 @@ Get the Slack APi keys and credientials by the following steps:
 4. Add "chat:write, files:write" after adding the scopes scroll up to "OAuth Tokens for Your Workspace" section
 5. Install bot to workspace then copy the "Bot User OAuth Token" and paste the token in env file then get token from env to settings file 
 6. Assign it to the variable the name of the variable should be "SLACK_BOT_TOKEN"
+![screenshot-nimbusweb me-2023 03 24-15_14_46](https://user-images.githubusercontent.com/120275623/227494434-9983e205-dab8-44b1-845c-947ad69f923c.png)
 
 
 ## Environment variables
