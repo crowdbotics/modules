@@ -1,26 +1,44 @@
 # Zoom Info Module
 By using this module, users will be able to retrieve the data related to Sales, Marketing, operations and job candidates.
 
-## Migration
-```
-python manage.py makemigrations
-python manage.py migrate
+# Scope Features 
+The following are the critical features in scope for this module.
 
-```
- 
-Start the server by running the following command :
-```
-python manage.py runserver
-```
+1. Secure Authentication using JWT
+2. Retrieve different type of data  using search endpoint 
+3. Retrieve different type of data  using enrich endpoint 
+4. Retrieve different type of bulk data using multiple endpoints 
+
+# Keys And Credientials Setup
+To get the zoom info crediential setup follow the steps which are given below:
+1. Create an account in [Zoom info](https://login.zoominfo.com/).
+2. Go to Api integration and pick up your base URL.
 
 ## settings.py
 ```
 ZOOM_INFO_BASE_URL=""
 ```
 
-# Setup Account
-1. Create an account in Zoom info.
-2. Go to Api integration and pick up your base URL.
+## Setup Installation
+
+For Makemigration setup :
+```
+python manage.py makemigrations
+```
+Run Migrations :
+```
+python manage.py migrate
+
+```
+Start the server by running the following command :
+```
+python manage.py runserver
+```
+ 
+Start the server by running the following command :
+```
+python manage.py runserver
+```
 
 
 ## Api Table
