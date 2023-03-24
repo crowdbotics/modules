@@ -1,7 +1,7 @@
 # Slack
 By using this module, users will be able to deliver reminders, teammates, upload files and send messages in channels and DMs through slack bot.
 
-# Scope Features
+## Scope Features
 The following are the critical features in scope of this module.
 
 1. Slack Authentication Access Token
@@ -14,7 +14,7 @@ The following are the critical features in scope of this module.
 8. Invite user to channel
 9. Archive channel
 
-# Required SDKs and Libraries
+## Required SDKs and Libraries
 
 To implement the module, the following assets shall be required:
 - [slack-sdk](https://pypi.org/project/slack-sdk/)
@@ -22,7 +22,7 @@ To implement the module, the following assets shall be required:
 Can be install by the follwing command:
 - pip install slack-sdk
 
-# Keys And Credientials Setup
+## Keys And Credientials Setup
 Get the Slack APi keys and credientials by the following steps:
 1. To get the slack token user have to visit the "https://api.slack.com/apps/"
 2. Create new app and scroll down to section 
@@ -32,12 +32,12 @@ Get the Slack APi keys and credientials by the following steps:
 6. Assign it to the variable the name of the variable should be "SLACK_BOT_TOKEN"
 
 
-# Environment variables
+## Environment variables
 ```
 SLACK_BOT_TOKEN = ""
 ```
 
-# Setup 
+## Setup Installation
 To install the given dependencies in `setup.py`. Go to the `modules/django-slack/slack/` and run the following command:
 ```
 python -m pip install .
@@ -64,6 +64,16 @@ List of api's endpoints with params needed for these apis.
 | `/slack/service/{channel_id}/archive_channel/`  |                        url `channel_id`                         | Takes channel id and archive that channel                                                          |
 | `/slack/service/get_users/`                     |                              None                               | This method returns a list of all users in the workspace. This includes deleted/deactivated users. |                                                                           |
 
-# Slack Endpoints Postman Collection:
+## Slack Endpoints Postman Collection:
 Here is a collection of all the api endpoints for the Slack module.
 [Slack-Apis Postman Collection](https://drive.google.com/file/d/1L5Y9Z56f57Ubocz_hI78GFIGK981tABp/view?usp=share_link)
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1n0yk8fjT1D-Xs05vUUE5K5Y_O9dGS-q6vCxb6srvfoo/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
