@@ -29,6 +29,7 @@ Can be install by the following commands:
 - Click on the Download Key File button to download the access key file.  
 - Open the downloaded file and copy the Access Key ID and Secret Access Key.  
 - Store the Access Key ID and Secret Access Key in a safe place.
+![screenshot-nimbusweb me-2023 03 24-15_10_46](https://user-images.githubusercontent.com/120275623/227495935-5d4c540a-eb54-4b8b-93c5-32c255d83e8b.png)
 
 2. Steps to get Google Vision OCR Credentials
 - Sign in to the Google Cloud Platform Console.
@@ -41,6 +42,8 @@ Can be install by the following commands:
 - Generate an OAuth 2.0 Client ID, by clicking Create credentials > OAuth client ID.  
 - Select the Web application option, provide a name and click the Create button.
 - Copy the Client ID and Client secret for use with the Google Vision OCR API.
+![screenshot-nimbusweb me-2023 03 24-15_31_51](https://user-images.githubusercontent.com/120275623/227498291-7e2ae584-70a5-40a4-bd09-3d234a958cba.png)
+
 
 ## Environment variables
 
