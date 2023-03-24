@@ -57,7 +57,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/contact-us/contact_us/` | object `{ email: '', message: '', name: '' }` | Takes object containing email, message and name of the user who wants to contact.|
 
 ## Module Specifications
-Here is the [Module Specification Document](https://docs.google.com/document/d/1kHM3qxlO7OhScV4elBxI-nlY3X55IV5uUnMKJgsZFX4/edit?usp=sharing), which provides more information about the module's actual intentions.
+Here is the [Module Specification Document](https://docs.google.com/document/d/1Qpt2bEOMZx3KbVVhpXwv-b0jKutmCv0lHMPmrBgSf_0/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
