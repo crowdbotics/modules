@@ -2,7 +2,7 @@
 The Module used to generate and retrieve eSignature docs.
 
 
-# Scope Features
+## Scope Features
 The following are the critical features in scope for this module.
 - Get Access Token
 - eSignature Generation
@@ -10,8 +10,11 @@ The following are the critical features in scope for this module.
 - Create an envelope that include documents that will be signed electronically, sender information, recipient information
 - Status information that tracks delivery and signature progress
 
-# Packages Installation
-A 3rd party integration requirements which is [docu-esign](https://pypi.org/project/docusign-esign/) and can be install by following command:
+## Packages Installation
+A 3rd party integration requirements which is:
+- [docu-esign](https://pypi.org/project/docusign-esign/)
+
+Can be install by following command:
 - pip install docusign-esign
 
 This SDK is provided as open source, which enables you to customize its functionality to suit your particular use case.
@@ -31,7 +34,7 @@ Start the server by running the following command :
 python manage.py runserver
 ```
 
-# Environment variables
+## Environment variables
 
 ```
 CLIENT_ID = "Integration key of your app" 
@@ -45,7 +48,7 @@ SCOPES = ["signature", "impersonation"]
 REDIRECT_URI = "https://www.crowdbotics.com/"
 ```
 
-# Keys And Credientals Setup
+## Keys And Credientals Setup
 You can get environment variable keys which can used to hit the APIs
 1. Create a [developer account](https://developers.docusign.com/platform/account/) on Docu-Sign
 2. After clicking on Create Account add the following details about the developer.
@@ -64,3 +67,16 @@ List of api's endpoints with params needed for these apis.
 | `envelope/retrieve/`     |                                                                                               `Bearer Token` object `{envelope_id: ''}`                                                                                               | Takes envelope id and return the status and data related to envelope based on envelope id.                                                                                  |
 | `envelope/download/`     |                                                                                      `Bearer Token`, objects {envelope_id: '', document_id: ''}                                                                                       | Takes envelope id and document id return the specific document present in envelope based on document id.                                                                    |
 | `envelope/retrieve-all/` |                                                    `Bearer Token` objects {folder value: ''}. Valid values are `drafts`, `awaiting_my_signature`, `completed`, `out_for_signature`                                                    | Takes Folder valid value and return all the envelopes present in that folder.                                                                                               |
+
+## Docu-sign Endpoints Postman Collection:
+Here is a collection of all the api endpoints for the Docu-sign module.
+
+[Docu-Sign Postman Collection](https://drive.google.com/file/d/1SERBkw54zLknAmULrXjniiLUuhFH3IQE/view?usp=share_link)
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1cEJ1_80JOmDBxI__Qf70Rkz0lWv3yUA6pyXVvHrJb0M/edit?usp=sharing), which provides more information about the module's actual intentions.
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
