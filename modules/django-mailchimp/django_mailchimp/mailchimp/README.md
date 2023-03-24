@@ -1,23 +1,49 @@
 # MailChimp
 
-Module for handle MailChimp Integrations.
+The module allow user to build custom features related to campaign, members, manage segments and target audiences and templates.
 
+# Scope Features
+The following are the critical features in scope for this module.
+1. Create a new campaign folder.
+2. Get & Update information about a specific folder used to organize campaigns.
+3. Give all campaigns in an account
+4. Create a new Mailchimp campaign.
+5. Add a new store to the user's Mailchimp account.
+6. Give information about all lists in the account.
+7. Give information about members in a specific Mailchimp list.
+8. Give information about list members who unsubscribed from a specific campaign.
+9. Give all folders used to organize templates.
 
+# Package Installation
+A 3rd party integration requirements which is [mailchimp-marketing](https://pypi.org/project/mailchimp-marketing/) and can be install by following command:
+- pip install mailchimp-marketing
+
+This SDK is provided as open source, which enables you to customize its functionality to suit your particular use case.
+
+# Keys And Credientials Setup
+You can get environment variable (MailChimp API Keys & credientials) by the following steps:
+1. Create  MailChimp Developer account.
+2. Activate Mailchimp Account from the mail sent to user's provided email.
+3. Once the developer account is successfully created open the MailChimp Dashboard > On Lower Left corner of Side Bar Click on 'User Profile' Logo.
+4. Click 'Profile'.
+5. Click 'Extras' > Click 'API keys'. > Scroll the page down > Click 'Create A Key'.
 
 # Environment variables
 
 ```
 MAILCHIMP_API_KEY=""
 MAILCHIMP_SERVER_REGION=""
-
 ```
-Steps to get MailChimp API Key: <br/>
 
-> - Create  MailChimp Developer account. <br/>
-> - Activate Mailchimp Account from the mail sent to user's provided email. <br/>
-> - Once the developer account is successfully created open the MailChimp Dashboard > On Lower Left corner of Side Bar Click on 'User Profile' Logo. <br/>
-> -  Click 'Profile'. <br/>
-> - Click 'Extras' > Click 'API keys'. > Scroll the page down > Click 'Create A Key'. <br/>
+## Setup Installation
+To install the given dependencies in `setup.py`. Go to the `modules/django-mailchimp/mailchimp/` and run the following command:
+```
+python -m pip install .
+```
+Start the server by running the following command :
+```
+python manage.py runserver
+```
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
@@ -69,4 +95,6 @@ List of api's endpoints with params needed for these apis.
 | `/modules/mailchimp/templates/add-template-folder/`                               |                    request.body                     | Create a new template folder.Required the request body. For details about request body visit the given link .https://mailchimp.com/developer/marketing/api/template-folders/add-template-folder/                                       |
 | `/modules/mailchimp/templates/list-template/`                                     |                        None                         | Get a list of an account's available templates.                                                                                                                                                                                        |
 | `/modules/mailchimp/templates/list-template-folder/`                              |                        None                         | Get all folders used to organize templates.                                                                                                                                                                                            |                                                                                          |
-
+# Postman Collection Of Mailchimp APIs
+Here is a collection of all the api endpoints for the mailchimp module.
+[Mailchimp-APIs Postman Collection](https://drive.google.com/file/d/1kzci3MH3eVcxX6nniaDQOSaeHQe24xFD/view?usp=share_link)
