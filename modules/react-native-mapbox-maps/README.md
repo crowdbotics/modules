@@ -30,6 +30,8 @@ All the required packages are given in the `package.json` file. Make sure all th
 3. Select the required scopes and click `create token` button.
 4. Copy the new created token and save it for later use.
 
+![token_mapbox](https://user-images.githubusercontent.com/76822297/227925384-a845ff6d-c128-4ab2-92bb-7a0d50245e9b.png)
+
 
 ## Design a custom map style
 1. On your [Account Page](https://account.mapbox.com/), Click `Create map in studio ->` button.
@@ -38,6 +40,8 @@ All the required packages are given in the `package.json` file. Make sure all th
 4. Customize your map and click `publish` button to save the map styles.
 5. Your map will be displayed on the Style page.
 6. click `:` button and copy the `styleURL` which will look something like this `mapbox://styles/{your_account}/xxxxxxxxxxxx`. 
+
+![mapbox_url](https://user-images.githubusercontent.com/76822297/227925487-04c61ccb-f08f-4396-aca3-4ad989fbf1d6.png)
 
 ## Configure your secret token
 To avoid exposing your secret token, add it as an environment variable:
