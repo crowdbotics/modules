@@ -1,6 +1,30 @@
+# Payment Module
+Payments module allow user to pay through the stripe payment. It helps user to accept payments and send payouts globally. Lists user's payment history. 
+
+## Features
+1. Get payment history list
+2. Pay using credit/debit card.
 
 
-# iOS
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+  ```
+  yarn install
+  ```
+
+## API Calling Methods
+All the api calling methods reside in `api.js` file.
+
+* **fetchPaymentSheetParams**
+`fetchPaymentSheetParams` method takes `amount` creates a stripe `paymentIntentSheet` to start the process of payment,.
+
+* **fetchPaymentHistory**
+`fetchPaymentHistory` fetches user's stripe payment history from database.
+
+
+
+## Module Configurations
+### iOS
 making sure the minimal iOS platform is set to 11 in `ios/Podfile` file
 
 if you see this error
@@ -19,7 +43,7 @@ Open your project via Xcode, go to project -> build settings, find library searc
 Create a new Swift file to the project (File > New > File > Swift), give it any name (e.g. Fix.swift) and create a bridging header when prompted by Xcode.
 
 
-# Android
+### Android
 AndroidManifest.xml
 <application>
 ...
@@ -39,10 +63,16 @@ dependencies {
 
 }
 
+## Setting up a Stripe Account
+1. Sign up for Stripe at https://dashboard.stripe.com/register.
+2. After successful sign up, on the dashboard click `Home` tab.
+3. Copy the stripe `Secrete Key` and `Publish Key` for later use. 
 
-# Global configs
+![stripe](https://user-images.githubusercontent.com/76822297/227866954-e3fd72a4-e8c5-46e2-84d8-d0e59bc91a5c.png
 
-## Update api url in options/options.js
+## Global configs
+
+### Update api url in options/options.js
 in options/options.js
 
 configue your server endpoints like this
@@ -54,15 +84,15 @@ export const globalOptions = {
   stripeSecretKey: "sk_test_xxxxxxxx"
 }
 
-# Local configs
+## Local configs
 
-## Update token in modules/payments/api.js
+### Update token in modules/payments/api.js
 Update your django authorization token to make authorized api calls.
 ```
 const token = "Token c47e419eb3....";
 ```
 
-## Update stripePublishKey in modules/payments/options.js
+### Update stripePublishKey in modules/payments/options.js
 Update your stripePublishKey.
 ```
 export const localOptions = {
@@ -71,11 +101,6 @@ export const localOptions = {
 };
 ```
 
-# Server
-
-python manage.py runserver 192.168.100.7:8000
-
-here ip is local ip (can get it from ifconfig of your network settings)
 
 ## Manual Setup
 
@@ -121,3 +146,16 @@ buildscript {
     ...
 }
 ```
+
+
+### Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1dYIXsSBkNeicBd30648KukkU58tH_kSloPf2vf9x1nM/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
