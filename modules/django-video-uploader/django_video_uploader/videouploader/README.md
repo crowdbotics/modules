@@ -41,6 +41,7 @@ Native mobile client. The Vimeo API includes a full set of features for uploadin
 3. Enter the `name`, `description` of your app and click `Create app` button.
 4. On your app page you will be able to see the `Client identifier` and `Client secrets` which can be used to get the `access_token` to authenticate the API calls.
 5. To get the personal `access_token` to authenticate api calls, check the radio button `Authenticated(you)` to and select the scops of the token. Click the `Generate` button. Token will be generated with the selected scops. This token will be a `bearer` token.
+![Vimeo](https://user-images.githubusercontent.com/76822297/227928463-93aa27ec-2cf4-463f-9fbb-fdc6f82a0bd5.png)
 
 
 ### Setup Environment Variables
