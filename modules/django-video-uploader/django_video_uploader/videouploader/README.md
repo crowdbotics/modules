@@ -1,7 +1,37 @@
 ## Crowdbotics Video Uploader (Vimeo) Component - Backend
 
 This module contains all needed resources to get the Video Uploader component for React
-Native mobile client.
+Native mobile client. The Vimeo API includes a full set of features for uploading and managing video files. you can access all the amazing upload capabilities of `vimeo.com`.
+
+
+## Features
+1. Create a video
+2. Get a specific video
+3. Get the list of videos
+4. Edit an existing video
+5. Delete an existing video
+6. Like and unlike video
+7. Create a new folder
+8. Get folder details and list
+9. Edit folder
+10. Delete a specific folder
+11. Add videos to folder
+12. Create a new showcase
+13. Edit showcase
+14. Get showcase detail list
+15. Update an existing showcase
+16. Delete a specific showcase
+17. Add videos to showcase
+18. Create groups
+19. Get group details and list
+20. Update group
+21. Delete group
+22. Add users and videos to group
+23. Create channels
+24. Get channel details and list
+25. Update channel
+26. Delete an existing channel
+
 
 
 ### Setup App on Vimeo ang get credentials
@@ -23,12 +53,15 @@ VIDEO_UPLOADER_CLIENT_ID=Your App's Client identifier
 VIDEO_UPLOADER_CLIENT_SECRET=Your App's Client secret
 ```
 
-### Installation
+## Installations
 
-Run the following commands to get started:
-
+3. Run migrations
 ```
 python manage.py migrate
+```
+
+4. Run the server
+```
 python manage.py runserver
 ```
 
@@ -73,3 +106,16 @@ List of api's endpoints with params needed for these apis.
 
 **Note**
 Some of the api's working will be limited if using with vimeo free trial.
+
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1SMV-SVuyNENi71y_3nYJu4W1PT4kqeiA9r0qRFOvPSk/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
