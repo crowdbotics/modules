@@ -57,3 +57,11 @@ const ContactUs = modules[module_index].value.navigator;  //module_index : posit
 ### Module Specifications
 Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1Qpt2bEOMZx3KbVVhpXwv-b0jKutmCv0lHMPmrBgSf_0/edit?usp=sharing), which provides more information about the module's actual intentions.
 
+### Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+### License
+
+[MIT](https://choosealicense.com/licenses/mit/)
