@@ -1,6 +1,8 @@
 # Phone Number Picker Module
 Module allows user to select the country code and enter the country phone number. 
 
+## Scope Features
+The key features in scope for this module is that it has ability to select country code of any phone number.
 
 ## Manual Setup
 
