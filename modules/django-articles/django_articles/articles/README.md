@@ -6,6 +6,7 @@ In this module users can view the articles list and read a specific article. Sto
   in your Crowdbotics app in order to get it working properly.
 
 ## Scope Features
+The following are the key features in scope for this module.
 1. Ability to request article information in accordance with the model configuration at the backend 
 - Image
 - Textfield
