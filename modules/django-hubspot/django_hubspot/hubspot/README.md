@@ -3,6 +3,24 @@
 This module contains all needed resources to get the HubSpot component for React
 Native mobile client.
 
+## Features
+1. List companies and add new companies
+2. Add contacts and get the list of the contacts
+3. Add/remove deals
+4. Get the list of the deals
+5. Create and delete line_items
+6. Get the list of available line_items
+7. Get the owners to list
+8. Create/Remove a product or group of products
+9. Get the list of the available products
+10. Get the list of emails with associations and without associations
+11. Create/remove emails with associations and without associations
+12. Get the list of meetings and tasks
+13. Create/remove meetings and tasks
+14. Get the list of Notes
+15. Create/remove Notes
+16. Receive Webhook data about the triggered events
+
 
 ## HubSpot Setup
 In order to configure the module, the first thing you should do is to create an app on Hubspot. Here's the steps detailing that process:
@@ -84,3 +102,19 @@ Here is the payload required to create an event on hubspot.
 }
                
 ```
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1JSVmoi1enRshXPicdLd5ONom1FAydQOqWuc6M-MUiak/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+### Postman Collection for Module APi Endpoints
+Here is a collection of all the api endpoints for the module.
+[HubSpot Postman Collection](https://drive.google.com/file/d/1nEhSDEP1dX7CkH_o4C7NBZDcPrhwGli5/view?usp=share_link)
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
