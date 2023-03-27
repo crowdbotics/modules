@@ -34,6 +34,7 @@ In order to configure the module, the first thing you should do is to create an 
 7. Add the redirect url and select all the related scopes for your app.
 8. Click `Save changes` button to create your app.
 
+![hubspot](https://user-images.githubusercontent.com/76822297/227908790-6b9cfd19-7bb9-41f1-a98e-91e106fca2f4.png)
 
 ## Creating Webhook Subscription
 The Webhooks API allows you to subscribe to events happening in a HubSpot account with your integration installed. Rather than making an API call when an event happens in a connected account, HubSpot can send an HTTP request to an endpoint you configure.
@@ -43,6 +44,8 @@ Create a webhook for your app by following these steps:
 2. Click on `Webhook` tab on the left sidebar of the page. Add the webhook url as `Target Url` for your webhook. 
 HubSpot will send a JSON payload to this URL with details about events when they trigger.
 3. Create subscription by clicking  `Create subscription` button on top-right corner of the page. 
+
+![webhook](https://user-images.githubusercontent.com/76822297/227908883-60404885-2c84-4aa4-a789-8130cbc0e7c0.png)
 
 
 ## Installation
@@ -106,7 +109,7 @@ Here is the payload required to create an event on hubspot.
 ## Module Specifications
 Here is the [Module Specification Document](https://docs.google.com/document/d/1JSVmoi1enRshXPicdLd5ONom1FAydQOqWuc6M-MUiak/edit?usp=sharing), which provides more information about the module's actual intentions.
 
-### Postman Collection for Module APi Endpoints
+## Postman Collection for Module APi Endpoints
 Here is a collection of all the api endpoints for the module.
 [HubSpot Postman Collection](https://drive.google.com/file/d/1nEhSDEP1dX7CkH_o4C7NBZDcPrhwGli5/view?usp=share_link)
 
