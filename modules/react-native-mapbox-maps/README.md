@@ -1,5 +1,27 @@
 # MapBox Maps
 MapBox Maps module is a react-native based module. Helps user to search and navigate to the required locations.
+Using this module users will implement a dynamic, highly customized, and optimized map for various use cases or design their own custom style map.
+
+## Features
+1. Ability to display the map
+2. Ability to set the custom markers
+3. Ability to add custom annotations on the map
+4. Ability to draw polylines and polygons between coordinates
+5. Ability to add custom layers on map
+6. Ability to change the label fonts, color, and sizes on the map
+7. Ability to change the streets, buildings, and water theme colors
+8. Ability to mark the point of interest on the map.
+9. Ability to get the distance and duration between the origin and destination
+10. Ability to get the routes according to the walking, cycling, and driving mode.
+11. Ability to get the other possible route to the destination
+
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+  ```
+  yarn install
+  ```
+
 
 
 ## MapBox Credentials
@@ -135,6 +157,8 @@ const MARKED_CENTERED = An array containing longitude and latitude;
 const MAP_SETTINGS = settings for map
 ```
 
+### Module Specifications
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1zz1woIU_bHO4uECTRElSuuae_xBwmLKBTBQy_YzNtK8/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 
 ## Contributing
