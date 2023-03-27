@@ -35,6 +35,7 @@ pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
 5. Add that file into project directory and set the file path to `CREDENTIAL_FILE_PATH` variable in `.env` file.
 
+![service_account](https://user-images.githubusercontent.com/76822297/227890333-1767d60a-696e-40f4-b33e-7ef480593902.png)
 
 ### Installation
 Install the Google client library for Python:
