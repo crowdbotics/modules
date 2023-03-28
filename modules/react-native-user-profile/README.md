@@ -9,7 +9,13 @@ The following are the key features in scope for this module.
 2. Ability to update the user profile
 
 ## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+  "react-native-elements": "^2.3.2",
+  "@react-navigation/native": "^5.9.2"
+```
+and run this command.
   ```
   yarn install
   ```
