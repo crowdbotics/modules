@@ -17,7 +17,7 @@ const BusinessDetails = () => {
     setRatings([5, 4, 3, 2, 1]);
     setBusiness({
       name: "Business Name",
-      earnigs: "2,500.00"
+      earnings: "2,500.00"
     });
     setSkills(["Skills name", "Skills name", "Skills name"]);
   }, []);
@@ -34,7 +34,7 @@ const BusinessDetails = () => {
         <View style={styles.header}>
           <Text style={styles.headerText}>Earnings</Text>
           <View style={styles.earningsContainer}>
-            <Text style={styles.bold}>$ {business.earnigs}</Text>
+            <Text style={styles.bold}>$ {business.earnings}</Text>
             <Image
               source={require("./assets/menuIcon.png")}
               style={styles.menuIcon}
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
 
 export default BusinessDetails;
 
-const Footer = props => {
+const Footer = (props) => {
   return (
     <View style={footerStyles.footer}>
       {props.titles.map((title, index) => (
@@ -200,7 +200,8 @@ const Footer = props => {
             style={[
               footerStyles.footerItemText,
               index === props.active ? footerStyles.active : null
-            ]}>
+            ]}
+          >
             {title}
           </Text>
         </View>
@@ -242,7 +243,7 @@ const footerStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const btnStyle = {
     backgroundColor: params.outline ? "#fff" : "#000",
     borderColor: params.outline ? "#000" : "#fff",

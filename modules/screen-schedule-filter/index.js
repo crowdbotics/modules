@@ -64,7 +64,7 @@ const ScheduleFilter = () => {
               numColumns={4}
               columnWrapperStyle={styles.columnWrapper}
             />
-            <View style={styles.buttonnsContainer}>
+            <View style={styles.buttonsContainer}>
               <Button
                 buttonText="Confirm"
                 onPress={() => setModalVisible(false)}
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   selected: {
     borderColor: "#12D790"
   },
-  buttonnsContainer: {
+  buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 30

@@ -117,8 +117,8 @@ platform(:ios) do
     create_build
 
     upload_to_testflight(
-      email: '{{cookiecutter.owner_email}}',
-      beta_app_description: "Beta version of #{app_name} uploaded by Crowdbotics"
+      beta_app_description: "Beta version of #{app_name} uploaded by Crowdbotics",
+      itc_provider: team_id
     )
   end
 
@@ -126,7 +126,7 @@ platform(:ios) do
   lane(:upload_release) do
     init_app
 
-    create_build    
+    create_build
 
     upload_to_app_store # configured in Deliverfile
   end

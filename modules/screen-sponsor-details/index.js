@@ -64,7 +64,7 @@ const SponsorDetails = () => {
           require("./assets/taskIcon.png"),
           require("./assets/mapIcon.png")
         ]}
-        titles={["Home", "Spnsors", "Tasks", "Map"]}
+        titles={["Home", "Sponsors", "Tasks", "Map"]}
         active={0}
         activeColor="#7C7C7C"
       />
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
 
 export default SponsorDetails;
 
-const Footer = props => {
+const Footer = (props) => {
   const generator = props.hideTitle ? props.images : props.titles;
   const bgColor = {
     backgroundColor: props.backgroundColor ? props.backgroundColor : "#C4C4C4"
@@ -176,7 +176,8 @@ const Footer = props => {
                 titleColor,
                 footerStyles.footerItemText,
                 index === props.active ? activeColor : null
-              ]}>
+              ]}
+            >
               {title}
             </Text>
               )}
@@ -216,7 +217,7 @@ const footerStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -232,7 +233,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
