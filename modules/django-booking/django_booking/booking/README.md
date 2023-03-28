@@ -1,7 +1,13 @@
 # Crowdbotics Booking Component - Backend
 
 This module contains all needed resources to get the Booking component for React
-Native mobile client.
+Native mobile client. Module will allow user to create reservations/booking for hotel rooms, cars, theater tickets, etc. This is a generic module consisting only of the backend to create and retrieve bookings from Shopify.
+
+## Features
+1. Create a booking.
+2. Add booking to cart
+3. Cancel booking
+4. Refund the booking
 
 ## Installation
 1. Update `.env` file with:
@@ -176,16 +182,21 @@ In case of renting car, Cars can be of different sizes and colors.
 2. `Color` Variant can be used to define color of the car.
 
 
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1dmzTBeBDrdrqQ78RMXkGwXoXsjOhJWs6O_yHfChoUm8/edit?usp=sharing), which provides more information about the module's actual intentions.
 
+## Postman Collection for Module APi Endpoints
+Here is a collection of all the api endpoints for the module.
+[Booking Postman Collection](https://drive.google.com/file/d/1Lg_ynN-NHnfS-Gyml2JAo5lve_MGwqEZ/view?usp=share_link)
 
+## Contributing
 
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
 
+## License
 
-
-
-
-
-
+[MIT](https://choosealicense.com/licenses/mit/)
  
 
 
