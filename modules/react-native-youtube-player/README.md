@@ -28,6 +28,7 @@ For keys and credientials setup the following steps are given:
 1. Signup or login into Google Console account.
 2. From your dashboard, on the top left side, click on `menubar` then go to `api & services` => `library`.
 3. After that click on `search menubar` and search for "youtube data api".
+![console cloud google](https://user-images.githubusercontent.com/120275623/228167168-7c7d9091-2f0c-4390-9037-278efc0b77be.png)
 
 ## Configurations for react-native-youtube
 After installation linking is automatically done. You must have your YouTube developer API Key.
