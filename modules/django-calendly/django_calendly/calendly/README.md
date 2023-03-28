@@ -6,8 +6,20 @@ Native mobile client.
  This module is built using [Calendly API v2](https://developer.calendly.com/api-docs), users will be able to retrieve events, sync scheduled meetings, and manage users on [Calendly Dashboard](https://calendly.com/event_types/user/me).
  Automatically receive Calendly data with webhook subscriptions anytime invitees schedule, cancel, or reschedule a meeting.
 
+## Features
+1. Get the list of all scheduled events
+2. Cancel a scheduled event
+3. Get the list of event invitees
+4. Get the list of event types
+5. Invite a user to the organization
+6. List of all the organization invitations
+7. Revoke a user’s organization invitation
+8. Get a list of user availability schedules
+9. Create a Webhook Subscription for an Organization or User.
+10. Get a single or list of Webhooks Subscriptions for a specified Organization or User
 
-## Calendy Personal Token
+
+## Calendly Personal Token
 Calendly personal token is a [Bearer Token](https://cloud.google.com/docs/authentication/token-types#:~:text=Bearer%20tokens%20are%20a%20general,JWTs%20are%20all%20bearer%20tokens). The Calendly API v2 uses personal access tokens to authenticate requests. It is necessary to get a personal access tokens to make successful requests to calendly.
 
 1. Log in to [Calendly](https://calendly.com/login). 
@@ -15,7 +27,8 @@ Calendly personal token is a [Bearer Token](https://cloud.google.com/docs/authen
 3. Select `API and Webhooks` in `All integrations` section.
 4. Click on `Generate New Token` to get your personal token.
 
-## Envirment Variables
+
+## Environment Variables
 Update `.env` file with:
 
 ```
@@ -79,3 +92,19 @@ The organization subscription scope triggers the webhook for all subscribed even
     scope: 'organization'          //Indicates if the webhook subscription scope will be "organization" or "user"
  }
  ```
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1LY9VQ7Pj6Riheg64OKDBM3j2IVaOdWE5_o8cnAFsC5I/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+### Postman Collection for Module APi Endpoints
+Here is a collection of all the api endpoints for the module.
+[Calendly Postman Collection](https://drive.google.com/file/d/1MAxP1Q9oztMpOc2Xg3P-lOKVOcmNI3Y_/view?usp=share_link)
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
