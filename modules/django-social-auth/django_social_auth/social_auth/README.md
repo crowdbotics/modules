@@ -1,6 +1,23 @@
 # Crowdbotics Social Login Module - Backend
 This module contains all needed resources and information to set up Social Login in your app backend.
 
+## Features
+1. Users are able to login using “Facebook”.
+2. Users are able to login using “Google”.
+3. Users are able to login using “Apple”.
+4. Users are able to login/signup using a simple email.
+
+## Required Dependencies/Packages
+* **dj-rest-auth==2.2.5**
+
+**dj-rest-auth** has basic auth functionality like login, logout, password reset, registration and social media authentication. 
+Install it by running the command:
+```console
+pip install dj-rest-auth==2.2.5
+```
+***Note***: Keep the package in `Pipfile`. So that when backend is deployed our module requirements are complete.
+
+
 ## Requirements
 - The project must have `django-allauth` with version 0.43.0 or higher in order to support Apple provider
 
@@ -175,3 +192,16 @@ The following endpoints are available to be used:
 - [Django-allauth and Apple signin](https://github.com/pennersr/django-allauth/pull/2424#issuecomment-670597679)
 - [Facebook Login Official Docs](https://developers.facebook.com/docs/facebook-login/web/)
 - [Google Login Official Docs](https://developers.google.com/identity/sign-in/web/server-side-flow)
+
+
+### Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1lB3R-qXdG-CyNA6Hke1AbCOTBdF8oZ9brYZmWR6HCMM/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
