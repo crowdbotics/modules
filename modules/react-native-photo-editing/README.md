@@ -1,6 +1,67 @@
 # Photo Editing
+The module allows users to edit photo, by applying filters, contrast, opacity, resizing, crop etc.
 
+## Features
 
+This module contains the following list of features.
+* Crop
+* Filters
+* Edits
+* Shadows
+
+### Crop
+Image can be cropped by given Aspect ratios.
+1. 1.1
+2. 2.3
+3. 3.2
+4. 3.4
+5. 4.3
+6. 4.5
+
+### Filters
+List of filters that can be applied to the photo.
+1. Warm
+2. Classic
+3. Vintage
+4. Sharp
+5. Negative
+6. Bright
+7. Cool
+
+### Edits
+List of effects to edit the image.
+1. Contrast
+2. Saturation.
+3. Brightness
+4. Temperature
+
+### Shadows
+Add Shadows to the image by adjusting 
+1. Blur
+2. Blur Passes
+3. List of Maps
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+    "gl-react" : "^4.0.1",
+    "gl-react-native" : "^4.0.1",
+    "react-native-gl-image-filters": "0.5.0",
+    "react-native-unimodules": "0.13.3",
+    "@react-native-community/slider": "4.2.2",
+    "react-native-image-resizer": "1.4.5",
+    "react-native-image-picker": "4.8.3",
+    "@react-native-community/cameraroll": "4.1.2",
+    "@react-navigation/native-stack": "6.5.0",
+    "react-native-screens": "3.10.2",
+    "react-native-calendars": "1.1282.0"
+```
+and run this command.
+  ```
+  yarn install
+  ```
+  
 ## Configuration for Android
 
 ### Configuration for react-native-unimodules
@@ -181,44 +242,14 @@ const PhotoEditing = modules[module_index].value.navigator;  //module_index : po
 <PhotoEditing  />
 ```
 
+## Module Specifications
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1yQif_n5127CpRxgsdMBsvn1qgQvQUfDXxttcCDx9Z10/edit?usp=sharing), which provides more information about the module's actual intentions.
 
-## Features
+## Contributing
 
-This module contains the following list of features.
-* Crop
-* Filters
-* Edits
-* Shadows
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
 
-### Crop
-Image can be cropped by given Aspect ratios.
-1. 1.1
-2. 2.3
-3. 3.2
-4. 3.4
-5. 4.3
-6. 4.5
+## License
 
-### Filters
-List of filters that can be applied to the photo.
-1. Warm
-2. Classic
-3. Vintage
-4. Sharp
-5. Negative
-6. Bright
-7. Cool
-
-### Edits
-List of effects to edit the image.
-1. Contrast
-2. Saturation.
-3. Brightness
-4. Temperature
-
-### Shadows
-Add Shadows to the image by adjusting 
-1. Blur
-2. Blur Passes
-3. List of Maps
-
+[MIT](https://choosealicense.com/licenses/mit/)
