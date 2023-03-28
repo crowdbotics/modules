@@ -14,13 +14,17 @@ The following are the critical features in scope for this module.
 8. Give information about list members who unsubscribed from a specific campaign.
 9. Give all folders used to organize templates.
 
-## Package Installation
+## Required SDKs and Libraries
 A 3rd party integration requirements which is:
 -  [mailchimp-marketing](https://pypi.org/project/mailchimp-marketing/)
 
 Can be install by following command:
 - pip install mailchimp-marketing
 
+And add this package in `pipfile`
+```
+mailchimp-marketing=3.0.80"
+```
 This SDK is provided as open source, which enables you to customize its functionality to suit your particular use case.
 
 ## Keys And Credientials Setup
