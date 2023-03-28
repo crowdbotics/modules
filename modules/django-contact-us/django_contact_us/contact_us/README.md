@@ -15,6 +15,10 @@ A 3rd party integration requirements which is :
 Can be install by the following command: 
 - pip install sendgrid
 
+And add this package in `pipfile`
+```
+sendgrid="6.10.0"
+```
 ## Keys And Credientials Setup
 1. Login in to [SendGrid](https://signup.sendgrid.com/) site.
 2. Create a new sender by clicking `Create New Sender` Button.
