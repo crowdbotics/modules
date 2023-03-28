@@ -22,6 +22,11 @@ To implement the module, the following assets shall be required:
 Can be install by the follwing command:
 - pip install slack-sdk
 
+And add this packages in `pipfile`
+```
+slack-sdk="3.20.2"
+```
+
 ## Keys And Credientials Setup
 Get the Slack APi keys and credientials by the following steps:
 1. To get the slack token user have to visit the "https://api.slack.com/apps/"
