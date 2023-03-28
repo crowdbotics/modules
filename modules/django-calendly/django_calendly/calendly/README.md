@@ -27,6 +27,8 @@ Calendly personal token is a [Bearer Token](https://cloud.google.com/docs/authen
 3. Select `API and Webhooks` in `All integrations` section.
 4. Click on `Generate New Token` to get your personal token.
 
+![calendly](https://user-images.githubusercontent.com/76822297/228194358-21695a02-d4fd-4b81-ae9b-7db61b695af5.png)
+
 
 ## Environment Variables
 Update `.env` file with:
