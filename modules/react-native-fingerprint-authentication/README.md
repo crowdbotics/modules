@@ -1,7 +1,21 @@
 # Fingerprint Authentication module
 Fingerprint Authentication module is React Native based module, which helps user to verify a person's identity based on one or more of their fingerprints.
 
+## Scope Features
+The following are the critical features in scope for this module.
 
+1. Verify User fingerprints
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+    "react-native-fingerprint-scanner": "6.0.0"
+```
+and run this command.
+  ```
+  yarn install
+  ```
 ## Manual Configuration
 ### iOS
 
@@ -69,6 +83,8 @@ Below is the list of all params that can be passed to the module.
 | onAuthentication| `function` | Called after successfully fingerprint authentication.|
 | onAuthenticationError| `function` | Called fingerprint authentication gets failed by any reason.  |
 
+## Module Specifications
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1mKZg1T2piDlQHnpUkY09_oSbQjxSCtu-xRPysLvAORU/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ## Contributing
 
