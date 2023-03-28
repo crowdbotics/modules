@@ -1,8 +1,33 @@
-## Crowdbotics Google Appointment Component - Backend
+# Crowdbotics Google Appointment Component - Backend
 This module contains all needed resources to get the Google Appointment component for React
-Native mobile client.
+Native mobile client. The module will enable new appointments to be created and synced with Google calendar. User will be able to create, delete, and sync appointments/events from the Google Calendar.
 
-### How to get Credentials file  
+## Features
+1. Ability to add appointment
+2. Ability deletes an appointment
+3. Ability to retrieve a single appointment
+4. Ability to sync Appointments with Google Calendar
+5. Ability to list the appointment attendees and organizer
+
+
+
+## Required Dependencies/Packages
+
+* **google-api-python-client**
+`google-api-python-client` The Google API Client Library for Python is designed for Python client-application developers. It offers simple, flexible access to many Google APIs.
+
+* **google-auth-httplib2**
+`google-auth-httplib2` This library simplifies using Google's various server-to-server authentication mechanisms to access Google APIs.
+
+* **google-auth-oauthlib**
+`google-auth-oauthlib` Google authentication library for Python. This library provides the ability to authenticate to Google APIs using various methods. It also provides integration with several HTTP libraries.
+
+Install the packages by running the command:
+```console
+pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+```
+
+## How to get Credentials file  
 1. In [Google Cloud Console](https://console.cloud.google.com/) choose your project or start new one.
 
 2. In the navigation menu choose "APIs & Services" enable new APIs and then look up "calendar API", enable the API
@@ -13,8 +38,10 @@ This will redirect you to the credentials page. Under the "Service accounts" cli
 
 5. Add that file into project directory and set the file path to "CREDENTIAL_FILE_PATH" variable in .env 
 
+![service_account](https://user-images.githubusercontent.com/76822297/227890333-1767d60a-696e-40f4-b33e-7ef480593902.png)
 
-### Installation
+
+## Installation
 1. In `.env` file add the credentials file:
 
 ```py
@@ -45,7 +72,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/appointment/service/appointment/synced/list/ ` | - | Returns a list of Synced event of the calendar.|
 
 
-### Create Event Object
+## Create Event Object
 Object containing the list of parameters for creating a new event on the calendar.
 
 ```javascript
@@ -73,3 +100,19 @@ Object containing the list of parameters for creating a new event on the calenda
       }
     }
 ```
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1hZZU-EBnMTdZaUoG0onDHnq3pB4l6ULDK8BKkUV9Pi8/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Postman Collection for Module APi Endpoints
+Here is a collection of all the api endpoints for the module.
+[Django Google Appointment Postman Collection](https://drive.google.com/file/d/1o9ZyKMFsn_a_IPjIO2dVRBovP_7wJxa-/view?usp=share_link)
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
