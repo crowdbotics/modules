@@ -20,7 +20,14 @@ The following are the key features in scope for this module.
 5. Ability to save the picture.
 
 ## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+    "@react-native-community/cameraroll": "^4.1.2",
+    "react-native-vector-icons": "^9.2.0",
+    "react-native-filter-camera": "0.1.18"
+```
+and run this command.
   ```
   yarn install
   ```
