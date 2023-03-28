@@ -1,6 +1,29 @@
 # Google Analytics(firebase) Module
 The Google Analytics(firebase) Module is a React Native-based module that allows the user to get insight into how users engage with his app and app’s marketing performance on his firebase dashboard.
 
+## Scope Features
+The following are the key features in scope for this module.
+
+1. Ability to signify that a user has logged in/signed up
+2. Ability to report continuous engagement of app-users.
+3. Ability to signify that an item was added/removed.
+4. Ability to signify that a user has submitted their payment information to your app.
+5. Ability to identify the most popular content in your app.
+6. Ability to identify the most shared content.
+7. Ability to signifies the start/completion of the on-boarding process in app.
+8. Ability to identify the screen user is currently viewing.
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+"@react-native-firebase/app": "14.11.0",
+"@react-native-firebase/analytics": "14.11.0"
+```
+and run this command.
+  ```
+  yarn install
+  ```
 
 ## Installation
 1. On the Firebase console, add a new Android application and enter your projects details. The "Android package name" must match your local projects package name which can be found inside of the manifest tag within the /android/app/src/main/AndroidManifest.xml file within your project.
@@ -481,4 +504,13 @@ Automatic screenview reporting can be turned off/on through google_analytics_aut
 
 https://user-images.githubusercontent.com/76822297/176847557-ba7c3b34-5213-4cf0-9090-930fb2919122.mp4
 
+## Module Specifications
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1lfGAFB239bvUEc0gZ6GAYvLpla3Wknc9hm0rNtL7L-I/edit?usp=sharing), which provides more information about the module's actual intentions.
 
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
