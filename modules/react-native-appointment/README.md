@@ -67,8 +67,7 @@ const androidClientId = "";
 const webClientId = "";
 const iosClientId = ""
 ```
-
-
+![cloud-console-keys](https://user-images.githubusercontent.com/76822297/228150010-a7b709f1-d805-400a-a8df-471424103242.png)
 
 
 ## Module Configurations
