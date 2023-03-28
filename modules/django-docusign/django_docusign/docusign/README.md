@@ -10,13 +10,17 @@ The following are the critical features in scope for this module.
 - Create an envelope that include documents that will be signed electronically, sender information, recipient information
 - Status information that tracks delivery and signature progress
 
-## Packages Installation
+## Required SDKs and Libraries
 A 3rd party integration requirements which is:
 - [docu-esign](https://pypi.org/project/docusign-esign/)
 
 Can be install by following command:
 - pip install docusign-esign
 
+And add the package in `pipfile`
+```
+docusign="3.21.0"
+```
 This SDK is provided as open source, which enables you to customize its functionality to suit your particular use case.
 
 ## Setup Installation
