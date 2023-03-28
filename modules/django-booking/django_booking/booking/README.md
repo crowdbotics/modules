@@ -127,6 +127,8 @@ Shopify Admin API's and Shopify Storefront API's  are being used to create booki
 7. Select the `configuration` tab and Click on `Edit` button of `Admin API Integration`. Select the scoops for your app. Click `Edit` button of` Storefront API integration` and select the scoops for your app. click `Save` button.
 8. Select the `API Credentials` tab and now you can see your `X-Shopify-Storefront-Access-Token`,  `X-Shopify-Access-Token` and `API keys`.
 
+![shopify](https://user-images.githubusercontent.com/76822297/228190942-bb2d0831-ce66-4a69-acb9-c67073ecceb9.png)
+
 
 ### Creating Cart and Adding Line_Items:
 To add the booking into cart a booking `variantId` will be and `quantity` will be needed.
