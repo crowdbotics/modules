@@ -2,6 +2,15 @@
 
 The Navigation tabs module is a React Native based module, helps the user to use dynamic tabs, set the position of tabs, change icons and customize styling. 
 
+## Scope Features
+The following are the key features in scope for this module:
+
+1. Dynamic Tabs.
+2. Swipe tabs.
+3. Scrollable tabs.
+4. Tab customization.
+5. Add icons on tabs icon.
+6. Change tab layout
 
 ## Manual Setup
 
@@ -109,6 +118,9 @@ const tabList = [
   ...
 ]
 ```
+
+## Module Specifications
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1AXdONG5TS3CAaAyD5dliRlQ84x7XDT7qK-mIfv8DkGU/edit?usp=sharing), which provides more information about the module's actual intentions.
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
