@@ -20,6 +20,12 @@ Can be install by the following commands:
 - pip install amazon-textract-response-parser
 - pip install google-cloud-vision
 
+And add these packages in `pipfile`
+```
+tesserocr="2.6.0"
+amazon-textract-response-parser="0.1.44"
+google-cloud-vision="3.4.1"
+```
 ## Keys And Credietials Setup
 1. Steps to get AWS Textract Credentials
 - Log in to the AWS Management Console.
