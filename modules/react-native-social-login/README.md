@@ -2,6 +2,55 @@
 
 This is React Native code for social login feature. For this feature to be fully functional, you will need to install and configure Social Login - Backend module.
 
+## Features
+1. Users are able to login using “Facebook”.
+2. Users are able to login using “Google”.
+3. Users are able to login using “Apple”.
+4. Users are able to login/signup using a simple email.
+
+## Required Dependencies
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
+Keep the below packages in project's package.json file.
+```
+   "@react-native-google-signin/google-signin": "^6.0.0",
+    "react-native-fbsdk": "3.0.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
+    "@invertase/react-native-apple-authentication": "^2.1.0",
+    "@react-navigation/native": "^5.9.2",
+    "@react-navigation/stack": "^5.14.2",
+    "uuid": "^8.3.2",
+    "react-native-get-random-values": "^1.6.0"
+```
+RUn the command to install dependencies:
+  ```
+  yarn install
+  ```
+
+## API Calling Methods
+All the api calling methods reside in `auth/api.js` file.
+
+* **apiLoginRequest**
+`apiLoginRequest` method takes an object containing email and password. Logs in user successfully after checking the credentials at backend.
+
+* **apiSignupRequest**
+`apiSignupRequest` method takes object containing email and password. Registers a new user if does not exist already.
+
+* **apiLogoutRequest**
+`apiLogoutRequest` method logs out the user form the app.
+
+* **apiResetPasswordRequest**
+`apiResetPasswordRequest` takes email and sends a link to the email to reset the password.
+
+* **apiFacebookLogin**
+`apiFacebookLogin` allows user to login using facebook account.
+
+* **apiGoogleLogin**
+`apiGoogleLogin`  allows user to login using Google account.
+
+* **apiAppleLogin**
+`apiAppleLogin`  allows user to login using Apple account.
+
+
 ## Initial Setup
 
 In this section, for every mention of `<module_directory>`, consider the directory name of this module installed in your app. For example, if the SocialLogin module has a folder/directory with name `SocialLogin12345`, then that's what you should use to replace `<module_directory>`.
@@ -406,7 +455,14 @@ Note that the majority of the configuration here is to help you get started with
 8. [DEVELOPER_ERROR when trying to login on appetize, but working locally](https://github.com/react-native-google-signin/google-signin/issues/949#issuecomment-778070056)
 
 
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1lB3R-qXdG-CyNA6Hke1AbCOTBdF8oZ9brYZmWR6HCMM/edit?usp=sharing), which provides more information about the module's actual intentions.
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
