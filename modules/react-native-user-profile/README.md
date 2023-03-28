@@ -2,6 +2,18 @@
 
 The user Profile Screen is a React Native-based screen that allows the user to view other users' profiles and edit its own profile information.
 
+## Scope Features
+The following are the key features in scope for this module. 
+
+1. Ability to get details of a specific user
+2. Ability to update the user profile
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+  ```
+  yarn install
+  ```
+
 ## Requirements
 
 For this module to be fully functional, we recommend first installing and configuring the `Login` or `Social Login` modules available in the storyboard's list of verified modules.
@@ -46,18 +58,40 @@ The second use case is for displaying **other** users' information. For example,
   onPress={() => navigation.navigate("userProfile", { id: 123 })}
 />
 ```
+## API Calling Methods
+All the api calling methods reside in `store/api.js` file.
+
+* **getUserById**
+`getUserById` method used to retrieve the specific user details.
+
+* **updateUserById**
+`updateUserById` method is used for update the user details.
+
+* **getUsers**
+`getUsers` method is used for a list of users.
 
 ## Manual Setup
 
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
 ```javascript
 import UserProfile from "@modules/user-profile";
 
 const { title, navigator, slice } = UserProfile;
 ```
+2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
 
+```javascript
+import { modules } from '@modules';
+const UserProfile = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+<UserProfile />;
+```
+## View responses
+User can view responses
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
