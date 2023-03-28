@@ -4,8 +4,15 @@ This module will be used by users for contacting the customer support or app own
 User can contact the admin
 
 User can write email to the admin directly 
-## Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+  "@react-navigation/native": "6.0.8",
+  "@react-navigation/native-stack": "6.5.0",
+  "react-native-screens": "3.10.2"
+```
+and run this command.
   ```
   yarn install
   ```
