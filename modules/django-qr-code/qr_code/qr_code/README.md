@@ -13,6 +13,8 @@ Install using the following command:
 ```console
 pip install qrcode
 ```
+***Note***: Keep the packages/dependencies in `Pipfile`. So that when backend is deployed our module requirements are complete.
+
 
 ## Setup
 Install the required dependency for the module.
