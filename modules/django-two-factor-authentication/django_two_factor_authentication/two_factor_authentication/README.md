@@ -23,6 +23,7 @@ Install the package using this command:
 ```console
 pip install sendgrid
 ```
+***Note***: Keep the packages/dependencies in `Pipfile`. So that when backend is deployed our module requirements are complete.
 
 ## Module Credentials/Keys
 We need to setup twillio ans sendgrid accounts to get the required creds to make module work.
