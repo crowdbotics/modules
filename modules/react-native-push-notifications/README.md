@@ -1,5 +1,24 @@
 # Push Notifications
+Push notification are implemented using onSignal. Module allows user to deliver Personalized Customer notifications.
 
+## Scope Features 
+The following are the key features in scope for this module.
+1. Recieve notifications from one signal.
+2. Increase Message Visibility
+3. Create a Connected User Experience
+4. Use highly visible push alerts to remind users
+5. Engage your users with updates and new content.
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+ "react-native-onesignal": "^4.0.3"
+```
+and run this command.
+  ```
+  yarn install
+  ```
 ## Introduction
 
 This modules uses the [OneSignal](https://onesignal.com) service to provide push notifications capabilities to your Android or iOS app.
@@ -49,14 +68,19 @@ Setup steps:
 
 ## Manual Setup
 
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
 
 ```javascript
 import PushNotifications from "@modules/push-notifications";
 
 const { title, hook } = PushNotifications;
 ```
-
+2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
+```javascript
+import { modules } from '@modules';
+const PushNotifications = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+<PushNotifications/>
+```
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
