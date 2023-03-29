@@ -1,6 +1,25 @@
 # Audio Player Module
 This is a react-native module for audio player. This module provides simple player functionalities for both android and ios platforms.
 
+## Features
+1. Play audios with smoothness
+2. Download playing audio
+3. Select audio to play from playlist
+4. Playing of the previous/next song
+
+
+## Required Dependencies
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
+Keep the below packages in project's package.json file.
+```
+  "react-native-audio-recorder-player": "2.6.2",
+  "react-native-slider": "^0.11.0",
+  "rn-fetch-blob": "0.12.0"
+```
+RUn the command to install dependencies:
+  ```
+  yarn install
+  ```
 
 ## Installation
 ### Android
