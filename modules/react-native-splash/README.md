@@ -2,7 +2,23 @@
 The Splash Module is a React Native based splash Module, by that means, it truly isn't executed until after the app
 is fully loaded. If it's desired to appear during load, you will need to build a native screen in both Android and iOS directories of the project.
 
+## Scope Features
+The following are the key features in scope for this module:
+1. Sets the tone for the rest of the user experience
+2. Smooths out loading delays
+3. Ensures that each user has early experience is a positive one
 
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+"react-native-splash-screen" : "3.3.0",
+"prop-types" : "15.8.1"
+```
+and run this command.
+  ```
+  yarn install
+  ```
 ## Installation
 ### Android
 1. Update the `MainActivity.java` to use react-native-splash-screen via the following changes:
