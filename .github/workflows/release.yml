@@ -3,8 +3,9 @@ name: Release
 on:
   push:
     branches:
-      - 'master'
-      - 'develop'
+      - master
+    tags:
+      - "[0-9]+.[0-9]+"
 
 jobs:
   set_environment:
@@ -12,19 +13,20 @@ jobs:
       my_env: ${{ steps.setenv.outputs.my_env }}
     runs-on: ubuntu-latest
     steps:
-    - id: setenv
-      run: |
-        if [ $GITHUB_REF_NAME == develop ]; then
-        echo "my_env=staging" >> $GITHUB_OUTPUT
-        fi
-        if [ $GITHUB_REF_NAME == master ]; then
-        echo "my_env=production" >> $GITHUB_OUTPUT
-        fi
+      - id: setenv
+        run: |
+          if [ $GITHUB_REF_NAME == master ]; then
+          echo "my_env=staging" >> $GITHUB_OUTPUT
+          fi
+          if [[ $GITHUB_REF_NAME =~ ^[0-9]+\.[0-9]+$ ]]; then
+          echo "release tag: $GITHUB_REF_NAME"
+          echo "my_env=production" >> $GITHUB_OUTPUT
+          fi
 
   release:
     runs-on: ubuntu-latest
     needs: set_environment
-    environment: 
+    environment:
       name: ${{ needs.set_environment.outputs.my_env }}
     name: ${{ needs.set_environment.outputs.my_env }}-release
     steps:
@@ -40,4 +42,5 @@ jobs:
           EOF
       - name: release modules
         run: |
+          heroku config:set REACT_NATIVE_SCAFFOLD_REPO_BRANCH=$GITHUB_REF_NAME -a ${{ secrets.HEROKU_APP }}
           heroku run 'python manage.py update_crowdbotics_modules' -a ${{ secrets.HEROKU_APP }}
