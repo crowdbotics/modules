@@ -98,6 +98,8 @@ The following are the steps for credientails setup:
 3. Enter the App Name and click `Create` button.
 4. Click on the app that you have created.
 5. Copy the `Publish Key`, `Subscribe Key` and `Secret Key` and save them for later use. 
+![pubnub](https://user-images.githubusercontent.com/120275623/228430230-e9eb0b29-3b90-4361-b9a2-536a8abc6bfc.png)
+
 
 ## Configurations Keys
 
