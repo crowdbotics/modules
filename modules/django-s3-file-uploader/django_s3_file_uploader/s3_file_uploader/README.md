@@ -21,6 +21,7 @@ Install it by running the command:
 ```console
 pip install boto3
 ```
+***Note***: Keep the packages/dependencies in `Pipfile`. So that when backend is deployed our module requirements are complete.
 
 ## Setup AWS S3 Account
 1. Create a developer account on [AWS Management Console](https://aws.amazon.com/console/). Click on Create a new AWS account.
