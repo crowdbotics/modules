@@ -1,6 +1,41 @@
 # Login Module
 The Login Module is a React Native-based module that allows the user to login or signup within their app.
 
+## Scope Features
+The following are the key features in scope for this module. 
+1. Ability to log in/signup using a custom email and password.
+2. Ability to reset/forgot password - a recovery email link is generated on the registered email address.
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+  "react-native-keyboard-aware-scroll-view": "^0.9.3",
+  "@react-navigation/native": "^5.9.2",
+  "@react-navigation/stack": "^5.14.2",
+  "prop-types": "15.8.1"
+  "@react-native-async-storage/async-storage": "1.17.9"
+```
+and run this command.
+  ```
+  yarn install
+  ```
+
+## API Calling Methods
+All the api calling methods reside in `auth/api.js` file.
+
+* **apiLoginRequest**
+`apiLoginRequest` method used for login with objects containing `email`, `password`.
+
+* **apiSignupRequest**
+`apiSignupRequest` method used for signup.
+
+* **apiLogoutRequest**
+`apiLogoutRequest` method used for logout.
+
+* **apiAuthUserRequest**
+`apiAuthUserRequest` method used to get rest auth user token which is required for session login.
+
 ## Installation
 
 #### Update api url in options/options.js
@@ -15,8 +50,8 @@ export const globalOptions = {
   url: "https://my-app.botics.co",
    ...
   {}
+}
 ```
-
 Note for developers: you can access the user token through the reducer state (i.e. `state.login.token` and user auth information like email at `state.login.user`)
 
 ### Change Login screen destination to your desired screen (likely Home screen).
@@ -87,3 +122,7 @@ To verify if your project is on the latest version, look for a `.crowdbotics.jso
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
