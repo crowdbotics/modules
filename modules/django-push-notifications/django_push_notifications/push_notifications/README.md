@@ -33,3 +33,13 @@ Click `Configure your Platform` button.
 Enter the `Firebase Server Key` and `Sender ID` and click `Save and Continue` button.
 Select the type of your sdk and click `Save and Continue` button.
 Copy the app id and click `Done` button.
+
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
