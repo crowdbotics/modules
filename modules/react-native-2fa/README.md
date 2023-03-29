@@ -15,8 +15,17 @@ export const globalOptions = {
 }
 ```
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+## Required Dependencies
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
+Keep the below packages in project's `package.json` file.
+```
+  "react-native-qrcode-svg": "6.1.2",
+  "react-native-svg":"12.3.0"
+  "react-native-country-picker-modal":"2.0.0",
+  "react-native-qrcode-svg": "6.1.2",
+  "react-native-svg":"12.3.0"
+```
+RUn the command to install dependencies:
   ```
   yarn install
   ```
