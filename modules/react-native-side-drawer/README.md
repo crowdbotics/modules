@@ -1,6 +1,21 @@
 # Side Drawer module
 React Native based module that renders a navigation drawer which can be opened and closed via gestures.
 
+## Features
+Navigation between screens
+
+## Required Dependencies
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
+Keep the below packages in project's package.json file.
+```
+    "@react-navigation/drawer": "^5.12.9",
+    "prop-types" : "15.8.1"
+```
+RUn the command to install dependencies:
+  ```
+  yarn install
+  ```
+
 ## Local Configs
 in `modules/side-drawer/options.js` provide the `screenSet` and `drawerOptions`.
 
@@ -87,7 +102,6 @@ const screenSet = [
     ...
 ]
 ```
-
 
 
 ## Contributing
