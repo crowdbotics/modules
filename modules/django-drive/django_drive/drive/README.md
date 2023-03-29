@@ -26,6 +26,7 @@ Install the packages by running the command:
 ```console
 pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
 ```
+***Note***: Keep the packages/dependencies in `Pipfile`. So that when backend is deployed our module requirements are complete.
 
 ### How to obtain the credential file 
 1. On [Google Cloud Console](https://console.cloud.google.com/) choose your project or start new one.
