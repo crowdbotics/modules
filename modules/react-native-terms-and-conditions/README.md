@@ -2,6 +2,22 @@
 
 The Terms and Conditions Screen is a React Native based screen that renders a Terms and Conditions page with a simple header.
 
+## Features
+
+1. Retrieve terms and conditions from database and display for the app user.
+
+
+## Required Dependencies
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
+Keep the below packages in project's package.json file.
+```
+  "react-native-render-html": "^5.1.0"
+```
+RUn the command to install dependencies:
+  ```
+  yarn install
+  ```
+
 ## Manual Setup
 
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
