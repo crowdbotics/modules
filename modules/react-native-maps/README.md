@@ -1,6 +1,27 @@
 # Maps
 Maps module is a react-native based module. Helps user to search and navigate to the required locations.
 
+## Scope Features
+The following are the key features in scope for this module. 
+
+1. Ability to display the map
+2. Ability to set the custom markers
+3. Ability to add custom annotations on the map
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+"react-native-maps": "0.27.1",
+"react-native-maps-directions": "1.8.0",
+"react-native-google-places-autocomplete": "2.4.1",
+"prop-types": "15.8.1"
+```
+and run this command.
+  ```
+  yarn install
+  ```
+
 ## Android
 ### Add Google Maps Key
 
