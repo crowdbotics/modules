@@ -1,12 +1,17 @@
-# Getting Started
+# Django Terms and Conditions
+Module saves terms and conditions as HTML code in database against a user and retrieves it to the frontend.
+
+## Features
+1. Store terms and conditions for the app users.
 
 ## Install:
 
 1. No additional packages should be required for v1. 
-2. If your app is already up and running, after adding these modules via the npm commands you need to make migrations and run them. In docker: 
+2. If your app is already up and running, after adding these modules via the npm commands you need to make migrations and run them.: 
 	```
-	docker-compose exec web python3 manage.py makemigrations
-   	docker-compose exec web python3 manage.py migrate
+	python manage.py makemigrations
+   	python manage.py migrate
+	python manage.py runserver
 	```
    You should see something about the 0001_terms migration running and adding the TermAndCondition model.
 3. Set the url the frontend calls. In /terms-and-conditions/modules/index.js, change the URL in the fetch call, where it says <APP_URL_HERE>, to your app's url.
@@ -33,3 +38,12 @@ Example Response:
 
 
 ```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
