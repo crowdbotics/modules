@@ -1,12 +1,18 @@
-# Getting Started
+# Django Privacy Policy
+Module saves privacy policy as HTML code in database against a user and retrieves it to the frontend.
+
+## Features
+1. Store privacy policy instructions for the app users.
+
 
 ## Install:
 
 1. No additional packages should be required for v1. 
 2. If your app is already up and running, after adding this modules via the `npm run add` command, you need to make migrations and run them. In docker: 
 	```
-	docker-compose exec web python3 manage.py makemigrations
-   	docker-compose exec web python3 manage.py migrate
+	python manage.py makemigrations
+   	python manage.py migrate
+	python manage.py runserver 
 	```
    You should see something about the first privacy migration running and adding the PrivacyPolicy model to the db.
 3. Set the url the frontend calls. In /privacy-policy/modules/index.js, change the URL in the fetch call, where it says <APP_URL_HERE>, to your app's url.
@@ -33,3 +39,12 @@ Example Response:
 
 
 ```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
