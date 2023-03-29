@@ -3,6 +3,24 @@
 The Onboarding Tutorial Screen is a ReactNative based onboarding screen. It can be configured to have 1 or many
 slide screens with content and expansion detailed in the file.
 
+## Scope Features
+The following are the critical features in scope for this module.
+1. Educate the user about the functions and benefits of the app
+2. Allow the user to register their login details
+3. Collect profile information that can be used to deliver personalized content and notifications
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+  "react-native-app-intro-slider": "^4.0.4",
+  "prop-types" : "^15.8.1"
+```
+and run this command.
+  ```
+  yarn install
+  ```
+
 ## Manual Setup
 
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
