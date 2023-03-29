@@ -39,6 +39,8 @@ The follow are th steps for credientials setup:
 5. Enter all the details required for the sdk.
 6. Once your details are submitted and verified click `App Credentials` tab.
 7. Copy `SDK Key`, `SDK Secret`, `Client ID` and `Client Secret` and save them for later use.
+![zoom calling (1)](https://user-images.githubusercontent.com/120275623/228444016-9f265712-5c89-4115-bace-97b239fb11df.png)
+
 ## Configurations Keys
 ```
 CLIENT_ID = "...”
