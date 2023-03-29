@@ -1,6 +1,29 @@
 # Image Gallery Module
 Image Gallery is a React-native based module for accessing and displaying images, albums and videos from the device.
 
+## Features
+
+1. List all photos, albums, and videos:
+2. Display photos from a specific album or group:
+3. Display a limited number of photos and videos:
+4. Display photos and videos within a specific time span:
+5. Display photos according to sizes and location:
+6. Display photos and videos in different ranges:
+7. Filter photos and videos by their creation time:
+
+
+## Required Dependencies
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
+Keep the below packages in project's package.json file.
+```
+  "@react-native-camera-roll/camera-roll" : "5.0.2",
+  "prop-types": "15.8.1"
+```
+RUn the command to install dependencies:
+  ```
+  yarn install
+  ```
+
 
 ## Installation
 ### Android
@@ -75,6 +98,9 @@ Below is the list of all Params with their data types that are considered primit
 | toTime     | `string` |  Filter by creation time with a timestamp in milliseconds. This time is inclusive, so we'll select all photos with ` timestamp <= toTime `.|
 | include    | `array` |  Whether to include some fields that are slower to fetch: Array might contain [`filename`, `fileSize`, `location`, `imageSize`, `playableDuration`]|
 
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1XtxXJF1hFzAJSbN3llsxyfdOHjaAngnt4tJjHZhXuJw/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ## Contributing
 
