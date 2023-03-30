@@ -15,17 +15,8 @@ export const globalOptions = {
 }
 ```
 
-## Required Dependencies
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
-Keep the below packages in project's `package.json` file.
-```
-  "react-native-qrcode-svg": "6.1.2",
-  "react-native-svg":"12.3.0"
-  "react-native-country-picker-modal":"2.0.0",
-  "react-native-qrcode-svg": "6.1.2",
-  "react-native-svg":"12.3.0"
-```
-RUn the command to install dependencies:
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
   ```
   yarn install
   ```
@@ -43,6 +34,7 @@ If user gets verified successfully, redirect user to home page of the applicatio
 * **getGoogleAuthenticatorQR**
 `getGoogleAuthenticatorQR` method is used return the QR code link which you can use to register on Google Authenticator App.
 
+2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
 
 ## Manual Setup
 
@@ -54,7 +46,6 @@ import TwoFactorAuthentication from "@modules/2fa";
 const { title, navigator } = TwoFactorAuthentication;
 ```
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
 
 ```javascript
 import { modules } from '@modules';
@@ -89,7 +80,7 @@ By clicking "Resend", the code is resent to Phone number or email
 
 
 ### Module Specifications
-Here is the [Module Specification Document](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ### Postman Collection for Module APi Endpoints
 Here is a collection of all the api endpoints for the module.
