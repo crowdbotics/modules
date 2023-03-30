@@ -1,6 +1,22 @@
 # Terms And Conditions Webview Module
 The Terms And Conditions Webview Module is a React Native based Module, by that means, a component that allows users to render a Terms And Conditions page through the url.
 
+## Scope Features
+The following are the key features in scope for this module. 
+
+1. Ability to load the terms and conditions in the browser
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+ "react-native-webview": "11.23.0"
+```
+and run this command.
+  ```
+  yarn install
+  ```
+
 ## Local Configs
 In **modules/terms-and-conditions-webview/options.js** update `termsUrl` with your terms and conditions page url.
 
@@ -41,6 +57,8 @@ const TermsAndConditionsWebview = modules[module_index].value.navigator;  //modu
 <TermsAndConditionsWebview url={"Your terms and conditions page url"} />;
 
 ```
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1CN12SHKp3gXmw9p2yBbkdG3TJIVtckpABK5Wd9kGFKQ/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ## Contributing
 
