@@ -1,6 +1,26 @@
 # Address Selection (Google Autocomplete) module
  Address Selection Autocomplete module reflect real searches. To determine what predictions to show, module looks for common queries that match when someone starts to enter into the search box. 
 
+## Scope Features
+The following are the key features in scope for this module. 
+
+1. Search and Select Addresses
+2. Search address form the map
+3. Search and select address by moving map
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module.
+Here are the required packages for the module:
+```
+  "react-native-google-places-autocomplete":"2.4.1",
+  "@react-native-community/geolocation":"2.1.0",
+  "prop-types": "15.8.1",
+  "react-native-maps": "0.27.1"
+```
+and run this command.
+  ```
+  yarn install
+  ```
 
 ## Installation
 
