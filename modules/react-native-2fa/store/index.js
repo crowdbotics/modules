@@ -73,11 +73,10 @@ export const set2faMethod = createAsyncThunk(
   }
 );
 
-
 const initialState = {
   token: null,
   user: {},
-  otpCode:{},
+  otpCode: {},
   api: { loading: "idle", error: null }
 };
 export const slice = createSlice({
@@ -189,6 +188,6 @@ export const slice = createSlice({
           state.api.error = action.error;
           state.api.loading = "idle";
         }
-      })
-    }
+      });
+  }
 });

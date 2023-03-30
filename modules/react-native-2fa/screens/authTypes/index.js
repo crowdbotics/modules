@@ -1,54 +1,54 @@
-import React, { Fragment, useState, useContext } from "react"
-import { Text, StyleSheet, View } from "react-native"
-import {sendVerification, getGoogleAuthenticatorQR} from '../../store'
-import Button from "../../components/Button"
-import Loader from "../../components/Loader"
-import { useDispatch } from "react-redux"
-import { OptionsContext } from "@options"
-import { unwrapResult } from "@reduxjs/toolkit"
+import React, { Fragment, useState, useContext } from "react";
+import { Text, StyleSheet, View } from "react-native";
+import { sendVerification, getGoogleAuthenticatorQR } from "../../store";
+import Button from "../../components/Button";
+import Loader from "../../components/Loader";
+import { useDispatch } from "react-redux";
+import { OptionsContext } from "@options";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const AuthTypes = props => {
-  const dispatch = useDispatch()
-  const options = useContext(OptionsContext)
-  const [isLoading, setIsLoading] = useState(false)
-  const [errors, setErrors] = useState({})
+  const dispatch = useDispatch();
+  const options = useContext(OptionsContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const onHandleMethod = async method => {
-    setIsLoading(true)
-    let apiResult = null
+    setIsLoading(true);
+    let apiResult = null;
     if (method === "google_authenticator") {
       await dispatch(getGoogleAuthenticatorQR())
-      .then(unwrapResult)
-      .then(res => {
-        apiResult = res
-        setIsLoading(false)
-      })
-      .catch((error) => {
-        apiResult=error
-        setIsLoading(false)
-      })
+        .then(unwrapResult)
+        .then(res => {
+          apiResult = res;
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          apiResult = error;
+          setIsLoading(false);
+        });
     } else {
       await dispatch(sendVerification({ method: method }))
         .then(unwrapResult)
         .then(res => {
-          apiResult = res
-          setIsLoading(false)
+          apiResult = res;
+          setIsLoading(false);
         })
         .catch((error) => {
-          apiResult=error
-          setIsLoading(false)
-        })
+          apiResult = error;
+          setIsLoading(false);
+        });
     }
-    setIsLoading(false)
+    setIsLoading(false);
     if (apiResult.ok) {
       props.navigation.navigate("Verification", {
         method: method,
         link: apiResult?.link
-      })
+      });
     } else {
-      setErrors(apiResult)
+      setErrors(apiResult);
     }
-  }
+  };
 
   return (
     <Fragment>
@@ -75,21 +75,23 @@ const AuthTypes = props => {
       <View style={styles.main}>
         {Object.keys(errors).map(key => (
           <Fragment key={key}>
-            {errors.length ? (
-              errors[key].map((obj, index) => (
+            {errors.length
+              ? (
+                  errors[key].map((obj, index) => (
                 <Text key={index} style={styles.error}>
                   {key}: {obj}
                 </Text>
-              ))
-            ) : (
+                  ))
+                )
+              : (
               <Text style={styles.error}>{errors[key]}</Text>
-            )}
+                )}
           </Fragment>
         ))}
       </View>
     </Fragment>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   main: {
@@ -110,6 +112,6 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     color: "red"
   }
-})
+});
 
-export default AuthTypes
+export default AuthTypes;

@@ -57,10 +57,6 @@ function verify2FA(payload) {
   return authAPI.post("/modules/two-factor-authentication/2fa", payload);
 }
 
-function verify2FA(payload) {
-  return authAPI.post("/modules/two-factor-authentication/2fa", payload);
-}
-
 function set2faMethod(payload) {
   return authAPI.patch(
     `/modules/two-factor-authentication/twofactorauth/${payload.id}/`,
