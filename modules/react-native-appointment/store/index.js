@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./api";
 
 export const createAppointment = createAsyncThunk(
-  "login/createAppointment",
+  "appointment/createAppointment",
   async (accessToken, payload, { rejectWithValue }) => {
     try {
       const response = await api.createAppointment(accessToken, payload);
@@ -14,7 +14,7 @@ export const createAppointment = createAsyncThunk(
 );
 
 export const deleteAppointment = createAsyncThunk(
-  "login/deleteAppointment",
+  "appointment/deleteAppointment",
   async (accessToken, id, { rejectWithValue }) => {
     try {
       const response = await api.deleteAppointment(accessToken, id);
@@ -26,7 +26,7 @@ export const deleteAppointment = createAsyncThunk(
 );
 
 export const getAppointmentByDate = createAsyncThunk(
-  "login/getAppointmentByDate",
+  "appointment/getAppointmentByDate",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.getAppointmentByDate(payload);
@@ -38,7 +38,7 @@ export const getAppointmentByDate = createAsyncThunk(
 );
 
 export const getAllAppointments = createAsyncThunk(
-  "login/getAllAppointments",
+  "appointment/getAllAppointments",
   async (accessToken, { rejectWithValue }) => {
     try {
       const response = await api.getAllAppointments(accessToken);
@@ -50,7 +50,7 @@ export const getAllAppointments = createAsyncThunk(
 );
 
 export const createSlackChannel = createAsyncThunk(
-  "login/createSlackChannel",
+  "appointment/createSlackChannel",
   async (accessToken, payload, { rejectWithValue }) => {
     try {
       const response = await api.createSlackChannel(accessToken, payload);
@@ -62,7 +62,7 @@ export const createSlackChannel = createAsyncThunk(
 );
 
 export const createGoogleFolder = createAsyncThunk(
-  "login/createGoogleFolder",
+  "appointment/createGoogleFolder",
   async (accessToken, payload, { rejectWithValue }) => {
     try {
       const response = await api.createGoogleFolder(accessToken, payload);
@@ -74,7 +74,7 @@ export const createGoogleFolder = createAsyncThunk(
 );
 
 export const createHubSpotContact = createAsyncThunk(
-  "login/createHubSpotContact",
+  "appointment/createHubSpotContact",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.createHubSpotContact(payload);
@@ -86,7 +86,7 @@ export const createHubSpotContact = createAsyncThunk(
 );
 
 export const createHubSpotDeal = createAsyncThunk(
-  "login/createHubSpotDeal",
+  "appointment/createHubSpotDeal",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.createHubSpotDeal(payload);
@@ -104,7 +104,7 @@ const initialState = {
   api: { loading: "idle", error: null }
 };
 export const slice = createSlice({
-  name: "login",
+  name: "appointment",
   initialState: initialState,
   reducers: {},
   extraReducers: builder => {

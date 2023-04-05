@@ -1,6 +1,7 @@
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import { LogBox, StyleSheet, Text, Button } from "react-native";
 import Navigator from "./Navigator"; // @ts-ignore
+import { slice } from "./store";
 import { OptionsContext } from "@options";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
@@ -72,5 +73,6 @@ const styles = StyleSheet.create({
 });
 export default {
   title: "Appointment",
-  navigator: Appointment
+  navigator: Appointment,
+  slice
 };
