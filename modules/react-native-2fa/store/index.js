@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./api";
 
 export const getUser = createAsyncThunk(
-  "login/getUser",
+  "2fa/getUser",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.getUser(payload);
@@ -14,7 +14,7 @@ export const getUser = createAsyncThunk(
 );
 
 export const getCode = createAsyncThunk(
-  "login/getCode",
+  "2fa/getCode",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.getCode(payload);
@@ -26,7 +26,7 @@ export const getCode = createAsyncThunk(
 );
 
 export const sendVerification = createAsyncThunk(
-  "login/sendVerification",
+  "2fa/sendVerification",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.sendVerification(payload);
@@ -38,19 +38,19 @@ export const sendVerification = createAsyncThunk(
 );
 
 export const verifyCode = createAsyncThunk(
-  "login/verifyCode",
+  "2fa/verifyCode",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.verifyCode(payload);
-      return response.data;
+      return response;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error);
     }
   }
 );
 
 export const verify2FA = createAsyncThunk(
-  "login/verify2FA",
+  "2fa/verify2FA",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.verify2FA(payload);
@@ -62,7 +62,7 @@ export const verify2FA = createAsyncThunk(
 );
 
 export const set2faMethod = createAsyncThunk(
-  "login/set2faMethod",
+  "2fa/set2faMethod",
   async (payload, { rejectWithValue }) => {
     try {
       const response = await api.set2faMethod(payload);
@@ -80,7 +80,7 @@ const initialState = {
   api: { loading: "idle", error: null }
 };
 export const slice = createSlice({
-  name: "login",
+  name: "2fa",
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {

@@ -2,10 +2,13 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   FlexRowSpaceBetween: {
-    display: "flex", flexDirection: "row", justifyContent: "space-between"
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   FlexRow: {
-    display: "flex", flexDirection: "row"
+    display: "flex",
+    flexDirection: "row"
   },
   wp50: {
     width: "50%"
@@ -20,8 +23,14 @@ const styles = StyleSheet.create({
 
 // User token
 const token = "";
-
+const user = {
+  id: 1,
+  phone_number: "",
+  email: "",
+  Method: "" // EMAIL|SMS
+};
 export default {
   styles: styles,
-  token
+  token,
+  user
 };

@@ -15,6 +15,18 @@ export const globalOptions = {
 }
 ```
 
+## Local configs
+in module's `options.js` file update the following:
+```javascript
+const token = "";
+const user = {
+  id: 1,
+  phone_number: "",
+  email: "",
+  Method: "" //EMAIL|SMS
+};
+```
+
 ## Install Required Dependencies/Packages
 All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
   ```

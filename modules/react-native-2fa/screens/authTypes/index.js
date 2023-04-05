@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useContext } from "react";
-import { Text, StyleSheet, View } from "react-native";
-import { sendVerification, getGoogleAuthenticatorQR } from "../../store";
+import { Text, StyleSheet, View, Alert } from "react-native";
+import { getCode, sendVerification } from "../../store";
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import { useDispatch } from "react-redux";
@@ -11,42 +11,48 @@ const AuthTypes = props => {
   const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState({});
 
   const onHandleMethod = async method => {
     setIsLoading(true);
-    let apiResult = null;
     if (method === "google_authenticator") {
-      await dispatch(getGoogleAuthenticatorQR())
+      await dispatch(getCode({ id: options.user.id }))
         .then(unwrapResult)
         .then(res => {
-          apiResult = res;
           setIsLoading(false);
+          props.navigation.navigate("GoogleAuth", {
+            link: res?.link
+          });
         })
         .catch((error) => {
-          apiResult = error;
+          Alert.alert("Error", error.message);
+          setIsLoading(false);
+        });
+    } else if (method === "phone_number") {
+      await dispatch(sendVerification({ phone_number: options.user.phone_number }))
+        .then(unwrapResult)
+        .then(res => {
+          setIsLoading(false);
+          props.navigation.navigate("Verification", {
+            method: method
+          });
+        })
+        .catch(error => {
+          Alert.alert("Error", error.message);
           setIsLoading(false);
         });
     } else {
-      await dispatch(sendVerification({ method: method }))
+      await dispatch(sendVerification({ email: options.user.email }))
         .then(unwrapResult)
         .then(res => {
-          apiResult = res;
           setIsLoading(false);
+          props.navigation.navigate("Verification", {
+            method: method
+          });
         })
-        .catch((error) => {
-          apiResult = error;
+        .catch(error => {
+          Alert.alert("Error", error.message);
           setIsLoading(false);
         });
-    }
-    setIsLoading(false);
-    if (apiResult.ok) {
-      props.navigation.navigate("Verification", {
-        method: method,
-        link: apiResult?.link
-      });
-    } else {
-      setErrors(apiResult);
     }
   };
 
@@ -71,23 +77,6 @@ const AuthTypes = props => {
             Google Authenticator
           </Button>
         </View>
-      </View>
-      <View style={styles.main}>
-        {Object.keys(errors).map(key => (
-          <Fragment key={key}>
-            {errors.length
-              ? (
-                  errors[key].map((obj, index) => (
-                <Text key={index} style={styles.error}>
-                  {key}: {obj}
-                </Text>
-                  ))
-                )
-              : (
-              <Text style={styles.error}>{errors[key]}</Text>
-                )}
-          </Fragment>
-        ))}
       </View>
     </Fragment>
   );

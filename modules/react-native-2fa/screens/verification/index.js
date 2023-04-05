@@ -1,62 +1,82 @@
-import React, { Fragment, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { Fragment, useState, useContext } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import { sendVerification, verifyCode } from "../../store";
 import Loader from "../../components/Loader";
+import { OptionsContext } from "@options";
 import { useRoute } from "@react-navigation/native";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 
-const Verification = props => {
+const Verification = (props) => {
+  const options = useContext(OptionsContext);
   const dispatch = useDispatch();
   const route = useRoute();
   const [code, setCode] = useState("");
-  const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const handleVerification = async () => {
     setIsLoading(true);
-    let apiResult = null;
-    await dispatch(verifyCode({ method: route.params.method, code: code }))
-      .then(unwrapResult)
-      .then(res => {
-        apiResult = res;
-        setIsLoading(false);
-      })
-      .catch(error => {
-        apiResult = error;
-        setIsLoading(false);
-      });
-    setIsLoading(false);
-    if (apiResult.ok) {
-      props.navigation.navigate("Home");
+    if (route.params.method === "email") {
+      await dispatch(verifyCode({ code: `+${code}`, email: options.user.email }))
+        .then(unwrapResult)
+        .then((res) => {
+          if (res.status === 200) {
+            setIsLoading(false);
+            props.navigation.navigate("Home");
+          } else {
+            setIsLoading(false);
+            Alert.alert("Error", res.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoading(false);
+        });
     } else {
-      setErrors(apiResult);
+      await dispatch(verifyCode({ code: `+${code}`, phone_number: options.user.phone_number }))
+        .then(unwrapResult)
+        .then((res) => {
+          if (res.status === 200) {
+            setIsLoading(false);
+            props.navigation.navigate("Home");
+          } else {
+            setIsLoading(false);
+            Alert.alert("Error", res.message);
+          }
+        })
+        .catch((error) => {
+          Alert.alert("Error", error.message);
+          setIsLoading(false);
+        });
     }
   };
 
   const handleResendCode = async () => {
     setIsLoading(true);
-    let apiResult = null;
-    await dispatch(sendVerification({ method: route.params.method }))
-      .then(unwrapResult)
-      .then(res => {
-        apiResult = res;
-        setIsLoading(false);
-      })
-      .catch(error => {
-        apiResult = error;
-        setIsLoading(false);
-      });
-    setIsLoading(false);
-    if (apiResult.ok) {
-      props.navigation.navigate("Verification", {
-        method: route.params.method,
-        link: apiResult?.link
-      });
+    if (route.params.method === "phone_number") {
+      await dispatch(sendVerification({ phone_number: options.user.phone_number }))
+        .then(unwrapResult)
+        .then(res => {
+          setIsLoading(false);
+          Alert.alert("Message", res.message);
+        })
+        .catch(error => {
+          Alert.alert("Error", error.message);
+          setIsLoading(false);
+        });
     } else {
-      setErrors(apiResult);
+      await dispatch(sendVerification({ email: options.user.email }))
+        .then(unwrapResult)
+        .then(res => {
+          setIsLoading(false);
+          Alert.alert("Message", res.message);
+        })
+        .catch(error => {
+          Alert.alert("Error", error.message);
+          setIsLoading(false);
+        });
     }
   };
 
@@ -93,21 +113,6 @@ const Verification = props => {
             autoCapitalize="none"
             placeholder="Verification code"
           />
-          {Object.keys(errors).map(key => (
-            <Fragment key={key}>
-              {errors.length
-                ? (
-                    errors[key].map((obj, index) => (
-                  <Text key={index} style={styles.error}>
-                    {key}: {obj}
-                  </Text>
-                    ))
-                  )
-                : (
-                <Text style={styles.error}>{errors[key]}</Text>
-                  )}
-            </Fragment>
-          ))}
           <View>
             <Button mode="contained" onPress={handleVerification}>
               Verify
