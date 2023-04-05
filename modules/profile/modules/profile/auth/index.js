@@ -41,7 +41,7 @@ const initialState = {
   user: {},
   api: { loading: "idle", error: null }
 };
-export const profileSlice = createSlice({
+export const slice = createSlice({
   name: "profile",
   initialState: initialState,
   reducers: {},
@@ -98,4 +98,4 @@ export const profileSlice = createSlice({
   }
 });
 
-export default profileSlice.reducer;
+export default slice.reducer;

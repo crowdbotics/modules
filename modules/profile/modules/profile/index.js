@@ -5,7 +5,7 @@ import {
 } from "react-native";
 import DocumentPicker from "react-native-document-picker";
 import { useDispatch } from "react-redux";
-import { adduser, deleteUser, getUser } from "./auth";
+import { adduser, deleteUser, getUser, slice } from "./auth";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import Loader from "./components/Loader";
@@ -316,5 +316,6 @@ const styles = StyleSheet.create({
 
 export default {
   title: "profile",
-  navigator: Profile
+  navigator: Profile,
+  slice
 };
