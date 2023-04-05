@@ -13,7 +13,7 @@ import { getOauthToken, parseQueryString } from "../utils";
 import FormItem from "../components/FormItem";
 import Loader from "../components/Loader";
 import { unwrapResult } from "@reduxjs/toolkit";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 
 const TypeformWebhook = (props) => {
   const options = useContext(OptionsContext);
@@ -26,7 +26,7 @@ const TypeformWebhook = (props) => {
 
   const toggleSwitch = (id, enable) => {
     setIsLoading(true);
-    dispatch(createWebHook({oauthToken, id, enable}))
+    dispatch(createWebHook({ oauthToken, id, enable }))
       .then(unwrapResult)
       .then(res => {
         const tmpResult = JSON.parse(JSON.stringify(formList));
