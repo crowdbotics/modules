@@ -31,7 +31,7 @@ export const getOauthToken = async (code) => {
 
 export function groupByToken(data) {
   const groupData = [];
-  const tokens = data[0].form_answers.map(obj => obj.token);
+  const tokens = data[0]?.form_answers.map(obj => obj.token);
   tokens.forEach(token => {
     const tmpData = [];
     data.forEach(obj => {

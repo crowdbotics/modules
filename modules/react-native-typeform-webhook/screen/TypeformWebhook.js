@@ -8,10 +8,12 @@ import {
 // @ts-ignore
 import { WebView } from "react-native-webview";
 import { OptionsContext } from "@options";
-import { createWebHook, getForms } from "../api";
+import { getForms, createWebHook } from "../store";
 import { getOauthToken, parseQueryString } from "../utils";
 import FormItem from "../components/FormItem";
 import Loader from "../components/Loader";
+import { unwrapResult } from "@reduxjs/toolkit";
+import {useDispatch} from "react-redux";
 
 const TypeformWebhook = (props) => {
   const options = useContext(OptionsContext);
@@ -20,11 +22,12 @@ const TypeformWebhook = (props) => {
   const [formList, setFormList] = useState([]);
   const [isFirst, setIsFirst] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleSwitch = (id, enable) => {
     setIsLoading(true);
-    createWebHook(oauthToken, id, enable)
-      .then(res => res.json())
+    dispatch(createWebHook({oauthToken, id, enable}))
+      .then(unwrapResult)
       .then(res => {
         const tmpResult = JSON.parse(JSON.stringify(formList));
         const obj = tmpResult.find(obj => obj.id === id);
@@ -41,8 +44,8 @@ const TypeformWebhook = (props) => {
   useEffect(() => {
     if (oauthToken) {
       setIsLoading(true);
-      getForms(oauthToken)
-        .then(res => res.json())
+      dispatch(getForms(oauthToken))
+        .then(unwrapResult)
         .then(res => {
           setFormList(res.items);
           setIsLoading(false);

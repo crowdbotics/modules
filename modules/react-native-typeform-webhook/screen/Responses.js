@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, SectionList } from "react-native";
-import { getResponses } from "../api";
+import { getResponses } from "../store";
 import Loader from "../components/Loader";
 import Response from "../components/Response";
 import { groupByToken, formatDate } from "../utils";
+import { unwrapResult } from "@reduxjs/toolkit";
+import {useDispatch} from "react-redux";
+
 
 const Responses = ({ route }) => {
   const [responseList, setResponseList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { formId } = route.params;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsLoading(true);
-    getResponses(formId)
-      .then(res => res.json())
+    dispatch(getResponses({formId: formId}))
+      .then(unwrapResult)
       .then(res => {
         setResponseList(groupByToken(res));
         setIsLoading(false);
