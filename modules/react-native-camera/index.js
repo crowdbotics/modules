@@ -8,10 +8,14 @@ import {
   LogBox
 } from "react-native";
 import ActionSheet from "react-native-actionsheet";
-import { pickFromCamera, pickFromGallery, uploadImage } from "./utils";
+import { pickFromCamera, pickFromGallery } from "./utils";
+import { fetchUserImages, uploadImage, slice } from "./store";
 import { OptionsContext, GlobalOptionsContext } from "@options";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 const Camera = () => {
+  const dispatch = useDispatch();
   const actionSheet = useRef(null);
   const options = useContext(OptionsContext);
   const gOptions = useContext(GlobalOptionsContext);
@@ -22,12 +26,37 @@ const Camera = () => {
 
   const fetchImages = async () => {
     try {
-      const res = await fetch(`${gOptions.url}/modules/camera/photos/user/`);
-      const results = await res.json();
-      setData(results?.data || results);
+      await dispatch(fetchUserImages())
+        .then(unwrapResult)
+        .then(res => {
+          console.log("images: ", res);
+          setData(res?.data || res);
+        })
+        .catch(e => {
+          console.log(e);
+        });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const uploadUserImage = async (res) => {
+    const data = new FormData();
+    data.append("image", {
+      name: `rnd-${res.path}`,
+      type: "image/jpg",
+      uri: res.path,
+      data: res.data
+    });
+    await dispatch(uploadImage(data))
+      .then(unwrapResult)
+      .then(res => {
+        console.log("upload images: ", res);
+        fetchImages();
+      })
+      .catch(e => {
+        console.log(e);
+      });
   };
 
   useEffect(() => {
@@ -71,9 +100,7 @@ const Camera = () => {
               break;
           }
           if (res) {
-            uploadImage(res, gOptions).then(() => {
-              fetchImages();
-            });
+            uploadUserImage();
           }
         }}
       />
@@ -89,5 +116,6 @@ const Camera = () => {
 
 export default {
   title: "Camera",
-  navigator: Camera
+  navigator: Camera,
+  slice
 };

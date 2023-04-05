@@ -2,8 +2,6 @@ import { Alert, Platform } from "react-native";
 import * as Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker";
 
-import axios from "axios";
-
 async function askPermission(permission) {
   try {
     const status = await Permissions.check(permission);
@@ -105,36 +103,4 @@ export const pickFromCamera = async () => {
       return false;
     }
   }
-};
-
-const APP_PLATFORM = "Mobile";
-
-export const request = axios.create({
-  headers: {
-    app_platform: APP_PLATFORM,
-    app_version: 1
-  }
-});
-
-export async function apiPost(endpoint, data) {
-  try {
-    const res = await request.post(endpoint, data);
-    if (res) {
-      return res;
-    }
-  } catch (error) {
-    console.log("API POST ERROR endpoint:", endpoint, " || error:", error);
-  }
-}
-
-export const uploadImage = async (response, options) => {
-  const BASE_URL = options.url;
-  const data = new FormData();
-  data.append("image", {
-    name: `rnd-${response.path}`,
-    type: "image/jpg",
-    uri: response.path,
-    data: response.data
-  });
-  await apiPost(BASE_URL + "/modules/camera/upload_image/", data);
 };
