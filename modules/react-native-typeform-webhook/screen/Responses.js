@@ -5,8 +5,7 @@ import Loader from "../components/Loader";
 import Response from "../components/Response";
 import { groupByToken, formatDate } from "../utils";
 import { unwrapResult } from "@reduxjs/toolkit";
-import {useDispatch} from "react-redux";
-
+import { useDispatch } from "react-redux";
 
 const Responses = ({ route }) => {
   const [responseList, setResponseList] = useState([]);
@@ -16,7 +15,7 @@ const Responses = ({ route }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    dispatch(getResponses({formId: formId}))
+    dispatch(getResponses({ formId: formId }))
       .then(unwrapResult)
       .then(res => {
         setResponseList(groupByToken(res));
