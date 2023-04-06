@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   }
 });
 
+const token = "Token user_authentication_token";
 export const localOptions = {
   stripeSecretKey: "",
   merchantName: "Example Inc.",
@@ -71,5 +72,6 @@ export default {
   title: "App Menu",
   copy: "Routes available",
   styles: styles,
-  localOptions: localOptions
+  localOptions: localOptions,
+  token: token
 };

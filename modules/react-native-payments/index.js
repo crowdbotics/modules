@@ -3,18 +3,28 @@ import { Text, View, FlatList, StyleSheet } from "react-native";
 import { OptionsContext } from "@options";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { CheckoutScreen } from "./checkout";
-import { fetchPaymentHistory } from "./api";
+import { fetchPaymentHistory, slice } from "./store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 const Payments = () => {
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const { styles, localOptions } = options;
   const [payments, setPayments] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const getPayments = async () => {
     setRefresh(true);
-    const res = await fetchPaymentHistory();
-    setPayments(res);
-    setRefresh(false);
+    await dispatch(fetchPaymentHistory())
+      .then(unwrapResult)
+      .then(res => {
+        setPayments(res.data);
+        setRefresh(false);
+      })
+      .catch(error => {
+        setRefresh(false);
+        console.log(error);
+      });
   };
   const { stripePublishKey, merchantIdentifier } = localOptions;
   useEffect(async () => {
@@ -55,7 +65,8 @@ const Payments = () => {
 
 export default {
   title: "Payments",
-  navigator: Payments
+  navigator: Payments,
+  slice
 };
 
 const PaymentsList = ({ renderItem, payments, getPayments, refresh }) => {

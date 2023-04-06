@@ -87,12 +87,14 @@ export const globalOptions = {
 ## Local configs
 
 ### Update token in modules/payments/api.js
+
+
+### Update stripePublishKey in modules/payments/options.js
 Update your django authorization token to make authorized api calls.
 ```
 const token = "Token c47e419eb3....";
 ```
 
-### Update stripePublishKey in modules/payments/options.js
 Update your stripePublishKey.
 ```
 export const localOptions = {

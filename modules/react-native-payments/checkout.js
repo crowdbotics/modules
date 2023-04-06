@@ -18,13 +18,16 @@ import {
   ApplePayButton,
   GooglePayButton
 } from "@stripe/stripe-react-native";
-import { fetchPaymentSheetParams } from "./api";
-const deviceWidth = Dimensions.get("window").width;
+import { fetchPaymentSheetParams } from "./store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
+const deviceWidth = Dimensions.get("window").width;
 const global = getGlobalOptions();
 
 export const CheckoutScreen = (params) => {
   // continued from above
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const { styles, localOptions } = options;
   const {
@@ -45,23 +48,28 @@ export const CheckoutScreen = (params) => {
   const clientSecret = global.stripeSecretKey;
 
   const initializePaymentSheet = async () => {
-    const { paymentIntent, ephemeralKey, customer } =
-      await fetchPaymentSheetParams(value.amount);
-
-    const { error } = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-      merchantDisplayName: merchantName,
-      applePay: false,
-      googlePay: enableGooglePay,
-      merchantCountryCode: merchantCountryCode,
-      testEnv: stripeTestEnv // use test environment
-    });
-    __DEV__ && console.log(error);
-    if (!error) {
-      setLoading(true);
-    }
+    await dispatch(fetchPaymentSheetParams(value.amount))
+      .then(unwrapResult)
+      .then(async (res) => {
+        const { paymentIntent, ephemeralKey, customer } = res;
+        const { error } = await initPaymentSheet({
+          customerId: customer,
+          customerEphemeralKeySecret: ephemeralKey,
+          paymentIntentClientSecret: paymentIntent,
+          merchantDisplayName: merchantName,
+          applePay: false,
+          googlePay: enableGooglePay,
+          merchantCountryCode: merchantCountryCode,
+          testEnv: stripeTestEnv // use test environment
+        });
+        __DEV__ && console.log(error);
+        if (!error) {
+          setLoading(true);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   // Pay Through Credit Card
@@ -104,17 +112,23 @@ export const CheckoutScreen = (params) => {
       Alert.alert(error.code, error.message);
     } else {
       __DEV__ && console.log(JSON.stringify(paymentMethod, null, 2));
-      const { paymentIntent } = await fetchPaymentSheetParams(value.amount);
 
-      const { error: confirmApplePayError } = await confirmApplePayPayment(
-        paymentIntent
-      );
-
-      if (confirmApplePayError) {
-        Alert.alert(confirmApplePayError.code, confirmApplePayError.message);
-      } else {
-        Alert.alert("Success", "The payment was confirmed successfully!");
-      }
+      await dispatch(fetchPaymentSheetParams(value.amount))
+        .then(unwrapResult)
+        .then(async (res) => {
+          const { paymentIntent } = res;
+          const { error: confirmApplePayError } = await confirmApplePayPayment(
+            paymentIntent
+          );
+          if (confirmApplePayError) {
+            Alert.alert(confirmApplePayError.code, confirmApplePayError.message);
+          } else {
+            Alert.alert("Success", "The payment was confirmed successfully!");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   };
   if (enableGooglePay) {
@@ -149,17 +163,24 @@ export const CheckoutScreen = (params) => {
   }
 
   const payGoogle = async () => {
-    const { paymentIntent } = await fetchPaymentSheetParams(value.amount);
-    const { error } = await presentGooglePay({
-      clientSecret: paymentIntent,
-      currencyCode: merchantCurrency
-    });
+    await dispatch(fetchPaymentSheetParams(value.amount))
+      .then(unwrapResult)
+      .then(async (res) => {
+        const { paymentIntent } = res;
+        const { error } = await presentGooglePay({
+          clientSecret: paymentIntent,
+          currencyCode: merchantCurrency
+        });
 
-    if (error) {
-      Alert.alert(error.code, error.message);
-      return;
-    }
-    Alert.alert("Success", "The SetupIntent was confirmed successfully.");
+        if (error) {
+          Alert.alert(error.code, error.message);
+          return;
+        }
+        Alert.alert("Success", "The SetupIntent was confirmed successfully.");
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   return (
