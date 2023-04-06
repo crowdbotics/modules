@@ -68,7 +68,8 @@ dependencies {
 2. After successful sign up, on the dashboard click `Home` tab.
 3. Copy the stripe `Secrete Key` and `Publish Key` for later use. 
 
-![stripe](https://user-images.githubusercontent.com/76822297/227866954-e3fd72a4-e8c5-46e2-84d8-d0e59bc91a5c.png
+![stripe](https://user-images.githubusercontent.com/76822297/227875225-01312368-b637-43bf-affd-2a74e9c7ef2e.png)
+
 
 ## Global configs
 
