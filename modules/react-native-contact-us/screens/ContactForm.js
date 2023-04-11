@@ -1,13 +1,16 @@
 import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, ToastAndroid, Linking } from "react-native";
-import { sendQuery } from "../api";
+import { sendQuery } from "../store";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
 import Input from "../components/TextInput";
 import { validateEmail } from "../utils";
 import { OptionsContext } from "@options";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 const ContactForm = () => {
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -30,17 +33,22 @@ const ContactForm = () => {
     }
 
     setIsLoading(true);
-    await sendQuery({ email, message, name })
-      .then((res) => res.json())
-      .then((res) => showToastWithGravity(res.message))
-      .catch((error) => showToastWithGravity(error.message));
+    await dispatch(sendQuery({ email, message, name }))
+      .then(unwrapResult)
+      .then(res => {
+        showToastWithGravity(res.message);
+        setIsLoading(false);
+      })
+      .catch(error => {
+        showToastWithGravity(error.message);
+        setIsLoading(false);
+      });
 
     setName("");
     setEmail("");
     setMessage("");
     setMessageValidations("");
     setEmailValidations("");
-    setIsLoading(false);
   };
   const showToastWithGravity = (message) => {
     ToastAndroid.showWithGravityAndOffset(
