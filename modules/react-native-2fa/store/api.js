@@ -39,29 +39,8 @@ const verifyCode = async (data) => {
   }
 };
 
-function verify2FA(payload) {
-  return authAPI.post("/modules/two-factor-authentication/2fa", payload);
-}
-
-function set2faMethod(payload) {
-  return authAPI.patch(
-    `/modules/two-factor-authentication/twofactorauth/${payload.id}/`,
-    { method: payload.method }
-  );
-}
-
-function getUser(payload) {
-  return authAPI.get(
-    `/modules/two-factor-authentication/twofactorauth/${payload.id}/`,
-    payload
-  );
-}
-
 export const api = {
   getCode,
   sendVerification,
-  verifyCode,
-  verify2FA,
-  set2faMethod,
-  getUser
+  verifyCode
 };
