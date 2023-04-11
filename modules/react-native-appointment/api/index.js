@@ -1,19 +1,5 @@
 const baseUrlGoogle = "https://www.googleapis.com/calendar/v3/calendars";
-export const createAppointment = async (accessToken, data) => {
-  try {
-    const response = await fetch(`${baseUrlGoogle}/primary/events?conferenceDataVersion=1`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(data)
-    });
-    return response.json();
-  } catch (error) {
-    throw new Error("NETWORK_ERROR").message;
-  }
-};
+
 export const getAppointmentByDate = async (accessToken, maxResults = 100, datetime) => {
   try {
     const response = await fetch(`${baseUrlGoogle}/primary/events?showDeleted=false&orderBy=startTime&singleEvents=true&maxResults=${maxResults}&timeMin=${datetime}`, {

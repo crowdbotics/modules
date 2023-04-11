@@ -3,9 +3,9 @@ import { api } from "./api";
 
 export const createAppointment = createAsyncThunk(
   "appointment/createAppointment",
-  async (accessToken, payload, { rejectWithValue }) => {
+  async (payload, { rejectWithValue }) => {
     try {
-      const response = await api.createAppointment(accessToken, payload);
+      const response = await api.createAppointment(payload);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

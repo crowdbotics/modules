@@ -1,26 +1,37 @@
 import React, { useState, useContext } from "react";
-import { Text, View, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity
+} from "react-native";
 import Input from "../components/InputText"; // @ts-ignore
 
 import { OptionsContext, GlobalOptionsContext } from "@options";
 import Button from "../components/Button";
-import { createAppointment, createSlackChannel, createGoogleFolder, createHubSpotDeal } from "../api";
+import {
+  createSlackChannel,
+  createGoogleFolder,
+  createHubSpotDeal
+} from "../api";
+
+import { createAppointment } from "../store";
+
 import Loader from "../components/Loader";
 import moment from "moment";
 import { validateEmail } from "../utils"; // @ts-ignore
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
-const CreateAppointment = ({
-  route,
-  navigation
-}) => {
+const CreateAppointment = ({ route, navigation }) => {
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const gOptions = useContext(GlobalOptionsContext);
-  const {
-    duration,
-    selectedDate
-  } = route.params;
+  const { duration, selectedDate } = route.params;
   const [title, setTitle] = useState(null);
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
@@ -66,12 +77,14 @@ const CreateAppointment = ({
         associations: shouldCreateHubSpotContact && {
           emails: attendeesList.map(attendee => attendee.email).toString()
         }
-      }).then(res => {
-        console.log("res", res);
-      }).catch(err => {
-        console.log("err", err);
-        setIsLoading(false);
-      });
+      })
+        .then(res => {
+          console.log("res", res);
+        })
+        .catch(err => {
+          console.log("err", err);
+          setIsLoading(false);
+        });
     }
 
     console.log("folder---", folder);
@@ -84,7 +97,9 @@ const CreateAppointment = ({
         dateTime: moment(`${selectedDate} ${timeSlot}`).format()
       },
       end: {
-        dateTime: moment(`${selectedDate} ${timeSlot}`).add(moment.duration(duration)).format()
+        dateTime: moment(`${selectedDate} ${timeSlot}`)
+          .add(moment.duration(duration))
+          .format()
       },
       attendees: attendeesList,
       conferenceData: {
@@ -95,22 +110,32 @@ const CreateAppointment = ({
           requestId: Date.now().toString()
         }
       },
-      attachments: createSharedFolder && folder && [{
-        fileId: folder.id,
-        title: title
-      }]
+      attachments: createSharedFolder &&
+        folder && [
+        {
+          fileId: folder.id,
+          title: title
+        }
+      ]
     };
     console.log("calendarInvite", calendarInvite);
-    await createAppointment(tokens.accessToken, calendarInvite).then(async () => {
-      if (shouldCreateSlackChannel) {
-        await createSlackChannel(gOptions.url, slackAdminCreds, {
-          channel_name: "Deal " + title,
-          emails: attendeesList.map(item => item.email).toString()
-        });
-      }
-      setIsLoading(false);
-      navigation.replace("Home");
-    }).catch(e => console.log(e));
+
+    await dispatch(createAppointment({ accessToken: tokens.accessToken, calendarInvite: calendarInvite }))
+      .then(unwrapResult)
+      .then(async res => {
+        if (shouldCreateSlackChannel) {
+          await createSlackChannel(gOptions.url, slackAdminCreds, {
+            channel_name: "Deal " + title,
+            emails: attendeesList.map(item => item.email).toString()
+          });
+        }
+        setIsLoading(false);
+        navigation.replace("Home");
+      })
+      .catch(error => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
 
   const addAttendee = () => {
@@ -124,9 +149,12 @@ const CreateAppointment = ({
       });
     }
 
-    setAttendeesList(attendeesList => [...attendeesList, {
-      email: attendee
-    }]);
+    setAttendeesList(attendeesList => [
+      ...attendeesList,
+      {
+        email: attendee
+      }
+    ]);
     setAttendee("");
   };
 
@@ -143,7 +171,8 @@ const CreateAppointment = ({
     setAttendeesList(tmpAttendeesList);
   };
 
-  return <SafeAreaView>
+  return (
+    <SafeAreaView>
       <ScrollView>
         {isLoading && <Loader />}
         <View style={styles.container}>
@@ -163,51 +192,94 @@ const CreateAppointment = ({
           </View>
           <View style={styles.mt15}>
             <Text style={styles.mb10}>Title</Text>
-            <Input placeholder='Title' setValue={setTitle} value={title} />
+            <Input placeholder="Title" setValue={setTitle} value={title} />
           </View>
           <View style={styles.mt15}>
             <Text style={styles.mb10}>Location</Text>
-            <Input placeholder='Location' setValue={setLocation} value={location} />
+            <Input
+              placeholder="Location"
+              setValue={setLocation}
+              value={location}
+            />
           </View>
           <View style={styles.mt15}>
             <Text style={styles.mb10}>Description</Text>
-            <Input placeholder='Description' setValue={setDescription} value={description} multiline={true} />
+            <Input
+              placeholder="Description"
+              setValue={setDescription}
+              value={description}
+              multiline={true}
+            />
           </View>
           <View style={styles.mt15}>
             <Text style={styles.mb10}>Participants</Text>
             <View style={styles.attendeeContainer}>
-              <Input placeholder='Participant Email' setValue={handleChangeAttendee} value={attendee} multiline={true} styles={styles.attendeeInput} />
-              <TouchableOpacity style={styles.addAttendee} onPress={addAttendee}>
+              <Input
+                placeholder="Participant Email"
+                setValue={handleChangeAttendee}
+                value={attendee}
+                multiline={true}
+                styles={styles.attendeeInput}
+              />
+              <TouchableOpacity
+                style={styles.addAttendee}
+                onPress={addAttendee}
+              >
                 <Text style={styles.buttonText}>Add</Text>
               </TouchableOpacity>
             </View>
-            {validationError.email !== "" && <Text style={styles.error}>{validationError.email}</Text>}
+            {validationError.email !== "" && (
+              <Text style={styles.error}>{validationError.email}</Text>
+            )}
           </View>
           <View style={styles.attendeesList}>
-            {attendeesList.map((attendee, index) => <View style={styles.attendee} key={index}>
-                  <Text style={styles.attendeeText}>{attendee?.email}</Text>
-                  <TouchableOpacity onPress={() => handleRemoveAttendee(index)} style={styles.removeAttendee}>
-                    <Text style={styles.removeAttendeeText}>X</Text>
-                  </TouchableOpacity>
-                </View>)}
+            {attendeesList.map((attendee, index) => (
+              <View style={styles.attendee} key={index}>
+                <Text style={styles.attendeeText}>{attendee?.email}</Text>
+                <TouchableOpacity
+                  onPress={() => handleRemoveAttendee(index)}
+                  style={styles.removeAttendee}
+                >
+                  <Text style={styles.removeAttendeeText}>X</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
           </View>
           <Text style={styles.jZgRJHGs}>Time Slot</Text>
           <View style={styles.list}>
-            {options.timeSlots.map((item, index) => <TouchableOpacity style={[styles.items, {
-              backgroundColor: timeSlot === item ? "#000" : "#FFF"
-            }]} onPress={() => selectTimeSlot(item)} key={index}>
-                <Text style={{
-                  color: timeSlot === item ? "#FFF" : "#000"
-                }}>{item}</Text>
-              </TouchableOpacity>)}
+            {options.timeSlots.map((item, index) => (
+              <TouchableOpacity
+                style={[
+                  styles.items,
+                  {
+                    backgroundColor: timeSlot === item ? "#000" : "#FFF"
+                  }
+                ]}
+                onPress={() => selectTimeSlot(item)}
+                key={index}
+              >
+                <Text
+                  style={{
+                    color: timeSlot === item ? "#FFF" : "#000"
+                  }}
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
           <View style={styles.button}>
-            <Button disabled={!!(!title || attendeesList.length === 0)} onPress={pressHandler}>Create Appointment</Button>
+            <Button
+              disabled={!!(!title || attendeesList.length === 0)}
+              onPress={pressHandler}
+            >
+              Create Appointment
+            </Button>
           </View>
-
         </View>
       </ScrollView>
-    </SafeAreaView>;
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
