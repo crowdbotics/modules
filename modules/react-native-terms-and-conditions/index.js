@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { OptionsContext, GlobalOptionsContext } from "@options";
+import { OptionsContext } from "@options";
 import {
   Text,
   View,
@@ -7,19 +7,28 @@ import {
   TouchableOpacity,
   useWindowDimensions
 } from "react-native";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { fetchTerms, slice } from "./store";
 import HTML from "react-native-render-html";
 
-const TermsAndConditions = ({ navigation, headingContainerStyle = {}, contentContainerStyle = {}, headingTextStyle = {} }) => {
+const TermsAndConditions = ({
+  navigation,
+  headingContainerStyle = {},
+  contentContainerStyle = {},
+  headingTextStyle = {}
+}) => {
   const options = useContext(OptionsContext);
-  const globalOptions = useContext(GlobalOptionsContext);
   const contentWidth = useWindowDimensions().width;
   const [htmlContent, setHtmlContent] = useState("<h1>Loading...</h1>");
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    // Set your API's URL via Module Options - in options.js
-    fetch(globalOptions.url + options.path)
-      .then((response) => response.json())
-      .then((res) => setHtmlContent(res?.data[0]?.body || res[0].body))
+  useEffect(async () => {
+    await dispatch(fetchTerms())
+      .then(unwrapResult)
+      .then((res) => {
+        setHtmlContent(res[0]?.body);
+      })
       .catch((err) => {
         console.log(err);
         return setHtmlContent("<h1>Error Loading Terms and Conditions</h1>");
@@ -35,7 +44,9 @@ const TermsAndConditions = ({ navigation, headingContainerStyle = {}, contentCon
             navigation.goBack();
           }}
         ></TouchableOpacity>
-        <Text style={[options.styles.header, headingTextStyle]}>{options.title}</Text>
+        <Text style={[options.styles.header, headingTextStyle]}>
+          {options.title}
+        </Text>
       </View>
       <ScrollView style={[{ flex: 1 }, contentContainerStyle]}>
         <HTML source={{ html: htmlContent }} contentWidth={contentWidth} />
@@ -46,5 +57,6 @@ const TermsAndConditions = ({ navigation, headingContainerStyle = {}, contentCon
 
 export default {
   title: "Terms and Conditions",
-  navigator: TermsAndConditions
+  navigator: TermsAndConditions,
+  slice
 };
