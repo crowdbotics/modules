@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -8,19 +8,23 @@ import {
 } from "react-native";
 import { styles } from "./styles";
 import HTML from "react-native-render-html";
-import { GlobalOptionsContext } from "@options";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { fetchPrivacy, slice } from "./store";
 
 const PrivacyPolicy = ({ navigation, headingContainerStyle = {}, headingTextStyle = {}, contentContainerStyle = {} }) => {
-  const gOptions = useContext(GlobalOptionsContext);
   const contentWidth = useWindowDimensions().width;
   const [htmlContent, setHtmlContent] = useState(
     "<h3> Loading Privacy Policy... </h3>"
   );
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    fetch(`${gOptions.url}/modules/privacy-policy/`)
-      .then((response) => response.json())
-      .then((res) => setHtmlContent(res?.data[0]?.body || res[0].body))
+  useEffect(async () => {
+    await dispatch(fetchPrivacy())
+      .then(unwrapResult)
+      .then((res) => {
+        setHtmlContent(res[0]?.body);
+      })
       .catch((err) => {
         console.log(err);
         setHtmlContent(
@@ -58,5 +62,6 @@ const PrivacyPolicy = ({ navigation, headingContainerStyle = {}, headingTextStyl
 
 export default {
   title: "Privacy Policy",
-  navigator: PrivacyPolicy
+  navigator: PrivacyPolicy,
+  slice
 };
