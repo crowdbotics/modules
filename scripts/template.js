@@ -12,7 +12,7 @@ const parent = path.dirname(template);
 fse.ensureDir(template);
 fse.ensureDir(custom);
 fse.renameSync(custom, path.join(parent, "custom"));
-fs.rmdirSync(template, { recursive: true });
+fs.rmSync(template, { recursive: true });
 fse.copySync(
   path.join(cwd, "node_modules", "react-native", "template"),
   template

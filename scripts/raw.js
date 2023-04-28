@@ -8,7 +8,7 @@ const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 const target = path.join(process.cwd(), config.dist.builds.raw.directory);
 
 if (fs.existsSync(target)) {
-  fs.rmdirSync(target, { recursive: true });
+  fs.rmSync(target, { recursive: true });
 }
 
 fs.mkdirSync(target);

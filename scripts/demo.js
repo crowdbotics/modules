@@ -10,7 +10,7 @@ const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
 if (fs.existsSync(demoDir)) {
-  fs.rmdirSync(demoDir, { recursive: true });
+  fs.rmSync(demoDir, { recursive: true });
 }
 
 const command = generateCommand([

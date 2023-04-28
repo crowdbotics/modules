@@ -96,7 +96,7 @@ const parseModules = (dir) => {
 
     // cleanup node_modules
     if (existsSync(path.join(modulePath, "node_modules"))) {
-      fs.rmdirSync(path.join(modulePath, "node_modules"), {
+      fs.rmSync(path.join(modulePath, "node_modules"), {
         recursive: true
       });
     }
