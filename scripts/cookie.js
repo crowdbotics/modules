@@ -10,7 +10,7 @@ const source = path.join(process.cwd(), config.dist.builds.raw.directory);
 const target = path.join(process.cwd(), config.dist.builds.cookie.directory);
 
 if (fs.existsSync(target)) {
-  fs.rmdirSync(target, { recursive: true });
+  fs.rmSync(target, { recursive: true });
 }
 
 const rawNodeModules = path.join(
@@ -20,7 +20,7 @@ const rawNodeModules = path.join(
 );
 
 if (fs.existsSync(rawNodeModules)) {
-  fs.rmdirSync(rawNodeModules, { recursive: true });
+  fs.rmSync(rawNodeModules, { recursive: true });
 }
 
 fse.copySync(source, target);

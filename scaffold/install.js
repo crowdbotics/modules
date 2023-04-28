@@ -100,4 +100,4 @@ packageJson.devDependencies = Object.assign(
 fs.writeFileSync(packageFile, JSON.stringify(packageJson, null, 2));
 
 // Cleanup
-fs.rmdirSync(path.join(customFiles), { recursive: true });
+fs.rmSync(path.join(customFiles), { recursive: true });
