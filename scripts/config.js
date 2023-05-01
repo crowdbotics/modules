@@ -5,10 +5,6 @@ const DEMO_DIRECTORY = path.join("demo");
 const DISTRIBUTION_DIRECTORY = path.join("dist");
 
 export default {
-  versions: {
-    rn: "0.64.0",
-    node: "14.15.4"
-  },
   constants: {},
   scaffold: {
     directory: SCAFFOLD_DIRECTORY
