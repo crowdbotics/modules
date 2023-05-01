@@ -16,8 +16,7 @@ if (fs.existsSync(demoDir)) {
 const command = generateCommand([
   "npx react-native",
   `init ${config.demo.placeholderName}`,
-  `--template ${template}`,
-  `--version ${config.versions.rn}`
+  `--template ${template}`
 ]);
 
 execSync(command);

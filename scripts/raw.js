@@ -17,7 +17,6 @@ const command = generateCommand([
   "npx react-native",
   `init ${config.dist.builds.raw.placeholderName}`,
   `--template ${template}`,
-  `--version ${config.versions.rn}`,
   `--title "${config.dist.builds.raw.titlePlaceholder}"`
 ]);
 
