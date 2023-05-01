@@ -5,25 +5,27 @@ const cwd = process.cwd();
 const customFiles = path.join(cwd, "custom");
 const { execSync } = require("child_process");
 
-// docs
+// Documentation
 fs.copyFileSync(
   path.join(customFiles, "README.md"),
   path.join(cwd, "README.md")
 );
 
-// Crowdbotics modules, store, options and screens files
+// Crowdbotics custom directories: modules, screens, store, options and public
 fs.renameSync(path.join(customFiles, "modules"), path.join(cwd, "modules"));
 fs.renameSync(path.join(customFiles, "screens"), path.join(cwd, "screens"));
 fs.renameSync(path.join(customFiles, "options"), path.join(cwd, "options"));
 fs.renameSync(path.join(customFiles, "store"), path.join(cwd, "store"));
 fs.renameSync(path.join(customFiles, "public"), path.join(cwd, "public"));
-fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
-fs.copyFileSync(path.join(customFiles, "index.js"), path.join(cwd, "index.js"));
 
 // CircleCI
 fs.renameSync(path.join(customFiles, ".circleci"), path.join(cwd, ".circleci"));
 // Github
 fs.renameSync(path.join(customFiles, ".github"), path.join(cwd, ".github"));
+
+// App entry point
+fs.copyFileSync(path.join(customFiles, "index.js"), path.join(cwd, "index.js"));
+fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
 
 // File overrides
 fs.copyFileSync(
@@ -67,7 +69,7 @@ fs.copyFileSync(
   path.join(cwd, ".gitignore")
 );
 
-// dotenv
+// environment variables files
 fs.copyFileSync(path.join(customFiles, ".env"), path.join(cwd, ".env"));
 fs.copyFileSync(
   path.join(customFiles, ".env.template"),
@@ -81,11 +83,13 @@ fs.copyFileSync(
   path.join(cwd, "Gemfile.lock")
 );
 
-// native files
+// platform specific files
 execSync(`cp -r ${path.join(customFiles, "android")} ${path.join(cwd)}`);
 execSync(`cp -r ${path.join(customFiles, "ios")} ${path.join(cwd)}`);
 
-// package.json manipulation
+// package.json update
+// Install custom dependencies and devDependencies maintained in
+// custom/dependencies.json
 const packageFile = path.join(cwd, "package.json");
 const packageJson = require(packageFile);
 const dependencies = require(path.join(customFiles, "dependencies.json"));
