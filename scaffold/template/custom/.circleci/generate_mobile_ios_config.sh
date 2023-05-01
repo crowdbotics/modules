@@ -2,7 +2,7 @@
 set -o pipefail
 
 mkdir configs/
-cat << EOF > configs/generated_config.yml
+cat <<EOF >configs/generated_config.yml
 {% raw -%}
 version: 2.1
 
@@ -63,6 +63,17 @@ jobs:
             - 'ProjectSSHKeyFingerPrint'
 {% raw %}
       - checkout
+
+      - run:
+          name: Check if app has a paid plan
+          command: |
+            if [ "$HAS_PAID_PLAN" != 1 ]; then
+              exit 1
+            fi
+
+      - run:
+          name: set Ruby version
+          command: echo "ruby-2.6.10" > ~/.ruby-version
 
       - restore_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
