@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "# React Native Scaffold",
   "main": "index.js",
+  "bin": {
+    "crowdbotics-modules": "./index.js"
+  },
   "type": "module",
   "engines": {
     "node": ">16"
