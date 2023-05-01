@@ -25,7 +25,7 @@ fs.renameSync(path.join(customFiles, ".github"), path.join(cwd, ".github"));
 
 // App entry point
 fs.copyFileSync(path.join(customFiles, "index.js"), path.join(cwd, "index.js"));
-fs.copyFileSync(path.join(customFiles, "App.js"), path.join(cwd, "App.js"));
+fs.copyFileSync(path.join(customFiles, "App.tsx"), path.join(cwd, "App.tsx"));
 
 // File overrides
 fs.copyFileSync(

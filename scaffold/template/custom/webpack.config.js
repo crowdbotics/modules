@@ -4,7 +4,7 @@
  *
  * Compiles the following files and directories:
  * - index.js
- * - App.js
+ * - App.tsx
  * - modules
  * - options
  * - screens
@@ -57,7 +57,7 @@ const babelLoaderConfiguration = {
   // Add every directory that needs to be compiled by Babel during the build.
   include: [
     path.resolve(appDirectory, "index.js"),
-    path.resolve(appDirectory, "App.js"),
+    path.resolve(appDirectory, "App.tsx"),
     path.resolve(appDirectory, "modules"),
     path.resolve(appDirectory, "screens"),
     path.resolve(appDirectory, "options"),
@@ -83,6 +83,12 @@ const imageLoaderConfiguration = {
   }
 }
 
+const typescriptLoaderConfiguration = {
+  test: /\.tsx?$/,
+  use: "ts-loader",
+  exclude: /node_modules/
+}
+
 module.exports = {
   entry: [
     // load any web API polyfills
@@ -101,7 +107,11 @@ module.exports = {
   // ...the rest of your config
 
   module: {
-    rules: [babelLoaderConfiguration, imageLoaderConfiguration]
+    rules: [
+      babelLoaderConfiguration,
+      imageLoaderConfiguration,
+      typescriptLoaderConfiguration
+    ]
   },
   plugins: [HTMLWebpackPluginConfig],
   resolve: {
@@ -115,6 +125,6 @@ module.exports = {
     // If you're working on a multi-platform React Native app, web-specific
     // module implementations should be written in files using the extension
     // `.web.js`.
-    extensions: [".web.js", ".js"]
+    extensions: [".web.js", ".js", ".ts", ".jsx", ".tsx"]
   }
 }
