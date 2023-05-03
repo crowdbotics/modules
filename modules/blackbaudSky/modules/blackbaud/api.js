@@ -4,10 +4,10 @@ import axios from "axios";
 const BASE_URL = localOptions.url; // change your BASE_URL in `/options.js` to edit this value
 
 export const sendCode = async (code) => {
-  let data = JSON.stringify({
+  const data = JSON.stringify({
     code
   });
-  let config = {
+  const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${BASE_URL}/modules/blackbaud-sky/service/access/token/`,
@@ -20,12 +20,12 @@ export const sendCode = async (code) => {
 };
 
 export const getListing = async (accessToken) => {
-  let config = {
+  const config = {
     method: "get",
     maxBodyLength: Infinity,
     url: `${BASE_URL}/modules/blackbaud-sky/service/events/list/`,
     headers: {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken}`
     }
   };
   return axios.request(config);

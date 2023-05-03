@@ -54,8 +54,10 @@ const BlackbaudSky = () => {
   return (
     <View>
       <ScrollView>
-        {login ? (
-          !code ? (
+        {login
+          ? (
+              !code
+                ? (
             <WebView
               source={{
                 uri: `https://app.blackbaud.com/oauth/authorize?client_id=${localOptions.client_id}&response_type=code&redirect_uri=${localOptions.redirectUrl}`
@@ -63,7 +65,9 @@ const BlackbaudSky = () => {
               style={{ height: hp("90%"), width: wp("100%") }}
               onNavigationStateChange={(val) => checkUrl(val?.url)}
             />
-          ) : requesting ? (
+                  )
+                : requesting
+                  ? (
             <>
               <View style={{ height: hp("45%"), justifyContent: "flex-end" }}>
                 <ActivityIndicator
@@ -73,12 +77,13 @@ const BlackbaudSky = () => {
                 />
               </View>
             </>
-          ) : (
+                    )
+                  : (
             <>
               <ScrollView style={{ marginTop: 10 }}>
                 {listing &&
-                  listing.map((item) => (
-                    <View style={styles.listingComponent}>
+                  listing.map((item, index) => (
+                    <View style={styles.listingComponent} key={index}>
                       <Text style={{ color: "#fff" }}>Name: {item.name}</Text>
                       <Text style={{ color: "#fff" }}>
                         Start date: {item.start_date}
@@ -90,8 +95,9 @@ const BlackbaudSky = () => {
                   ))}
               </ScrollView>
             </>
-          )
-        ) : (
+                    )
+            )
+          : (
           <View style={{ height: hp("45%"), justifyContent: "flex-end" }}>
             <TouchableOpacity onPress={() => setLogin(true)}>
               <View style={styles.loginButton}>
@@ -99,7 +105,7 @@ const BlackbaudSky = () => {
               </View>
             </TouchableOpacity>
           </View>
-        )}
+            )}
       </ScrollView>
     </View>
   );
