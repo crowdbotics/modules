@@ -85,10 +85,10 @@ function setupLocalModulesRepo() {
   spawnSync("git", ["remote", "add", "origin", MODULES_REPO_ORIGIN], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
-  spawnSync("git", ["fetch", "origin", PREVIOUS_VERSION_LATEST_SHA], {
+  spawnSync("git", ["fetch"], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
-  spawnSync("git", ["reset", "--hard", "FETCH_HEAD"], {
+  spawnSync("git", ["checkout", PREVIOUS_VERSION_LATEST_SHA], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
 }
@@ -188,6 +188,32 @@ function setupCookiecutter(context) {
   if (run.status) {
     console.error(run.stdout);
     console.error(run.stderr);
+    invalid("template creation failed");
+  }
+
+  spawnSync("git", ["checkout", NEW_VERSION_LATEST_SHA], {
+    cwd: path.join(userdir, MODULES_REPO_DIR)
+  });
+  const run2 = spawnSync(
+    "pipenv",
+    [
+      "run",
+      "cookiecutter",
+      path.join(userdir, MODULES_REPO_DIR, "dist", "cookie"),
+      "--config-file",
+      path.join(userdir, MODULES_REPO_DIR, "context.yaml"),
+      "--output-dir",
+      path.join(userdir, MODULES_REPO_DIR, "newbaked"),
+      "--no-input"
+    ],
+    {
+      cwd: path.join(userdir, MODULES_REPO_DIR),
+      encoding: "utf8"
+    }
+  );
+  if (run2.status) {
+    console.error(run2.stdout);
+    console.error(run2.stderr);
     invalid("template creation failed");
   }
 }
