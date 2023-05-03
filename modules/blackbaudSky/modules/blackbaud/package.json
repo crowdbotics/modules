@@ -1,0 +1,16 @@
+{
+    "name": "@modules/blackbaud-sky",
+    "version": "1.0.1",
+    "description": "blackbaud Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+     "react-native-responsive-screen": "^1.4.2",
+     "axios": "^0.21.1"
+    },
+    "x-dependencies": {
+        "react-native-webview": "^11.17.2"
+    }
+}
