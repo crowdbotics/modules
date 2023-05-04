@@ -381,7 +381,7 @@ function updateFiles(slug, oldfile, newfile, type) {
     const dest = path.join(userdir, name);
     fs.copyFileSync(src, dest);
     warn(
-      `${oldfile} - Failed integrity check. Refer to the new version: ${name}`
+      `${oldfile} - Failed integrity check. Refer to the new version ${name}`
     );
   } else {
     if (oldfile != newfile) {
@@ -393,7 +393,7 @@ function updateFiles(slug, oldfile, newfile, type) {
         }
       );
     }
-    valid(`${oldfile} - Integrity check passed. File has been replaced.`);
+    valid(oldfile);
     const dest = path.join(userdir, newfile);
     fs.copyFileSync(src, dest);
   }
@@ -427,9 +427,11 @@ const upgrade = () => {
   const context = getProjectCookiecutterContext();
   setupCookiecutter(context);
   section("Check files integrity and upgrade to new versions");
-  manifest.forEach((pair) =>
-    updateFiles(context.project_slug, pair.old, pair.new, pair.type)
-  );
+  manifest.forEach((pair) => {
+    pair.old = pair.old.replace(/\$\{slug\}/g, context.project_slug);
+    pair.new = pair.new.replace(/\$\{slug\}/g, context.project_slug);
+    updateFiles(context.project_slug, pair.old, pair.new, pair.type);
+  });
   cleanup(saved);
   finish();
 };
