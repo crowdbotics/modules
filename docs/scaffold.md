@@ -41,3 +41,35 @@ platform :ios, min_ios_version_supported
 ```
 
 ## Upgrading the scaffold to a newer React Native version
+
+Create a new branch and run the command:
+
+```
+cd your-repo-dir
+git checkout -b upgrade-scaffold
+npx crowdbotics/modules
+```
+
+And choose the "Upgrade my scaffold" option:
+
+```
+$ npx crowdbotics/modules
+? What do you want to do? (Use arrow keys)
+❯ Upgrade my scaffold
+  Check cookiecutter context
+  Clean cached directories
+  git reset to HEAD
+  Quit
+```
+
+Pay special attention to this section:
+
+> Check files integrity and upgrade to new versions
+
+> ✅ App.js - Integrity check passed. File has been replaced.
+
+> ⚠ babel.config.js - Failed integrity check. Refer to the new version: babel.config.new.js
+
+Manually review any files that we couldn't upgraded automatically (`.new` files). Merge the contents of those with your existing files, and commit everything.
+
+Create a Pull Request. Done!
