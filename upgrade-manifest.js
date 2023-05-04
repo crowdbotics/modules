@@ -10,5 +10,10 @@ export const manifest = [
     old: path.join("babel.config.js"),
     new: path.join("babel.config.js"),
     type: "babel"
+  },
+  {
+    old: path.join(".crowdbotics.json"),
+    new: path.join(".crowdbotics.json"),
+    type: "json"
   }
 ];

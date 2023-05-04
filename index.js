@@ -315,6 +315,26 @@ function updateFiles(slug, oldfile, newfile, type) {
         console.error(B.stderr);
       }
       break;
+    case "json":
+      fs.writeFileSync(
+        path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
+        JSON.stringify(
+          JSON.parse(fs.readFileSync(path.join(userdir, oldfile), "utf8"))
+        ),
+        "utf8"
+      );
+      fs.writeFileSync(
+        path.join(userdir, MODULES_REPO_DIR, DIFF, "B"),
+        JSON.stringify(
+          JSON.parse(
+            fs.readFileSync(
+              path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile)
+            )
+          )
+        ),
+        "utf8"
+      );
+      break;
     default:
       fs.copyFileSync(
         path.join(userdir, oldfile),
