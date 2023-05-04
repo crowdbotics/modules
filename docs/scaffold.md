@@ -55,13 +55,13 @@ Create a new branch and run the command:
 ```
 cd your-repo-dir
 git checkout -b upgrade-scaffold
-npx crowdbotics/modules
+npx crowdbotics/modules#upgrade/react-71
 ```
 
 And choose the "Upgrade my scaffold" option:
 
 ```
-$ npx crowdbotics/modules
+$ npx crowdbotics/modules#upgrade/react-71
 ? What do you want to do? (Use arrow keys)
 ❯ Upgrade my scaffold
   Check cookiecutter context
