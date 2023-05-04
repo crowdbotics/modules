@@ -236,7 +236,7 @@ function getProjectCookiecutterContext() {
 }
 
 function setupCookiecutter(context) {
-  section("Generating baked template with cookiecutter");
+  section("Generating v1.1.0 template with cookiecutter");
   const yaml = dump({
     default_context: context
   });
@@ -269,7 +269,7 @@ function setupCookiecutter(context) {
     invalid("template creation failed");
   }
 
-  section("Generating newbaked template with cookiecutter");
+  section("Generating v2.0.0 template with cookiecutter");
   spawnSync("git", ["checkout", NEW_VERSION_LATEST_SHA], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
