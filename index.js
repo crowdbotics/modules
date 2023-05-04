@@ -59,6 +59,15 @@ const warn = (...args) => {
 function start() {
   section("Scaffold upgrade started");
   section("Checking environment compatibility");
+  const yarn = spawnSync("yarn", ["--version"], {
+    cwd: userdir,
+    encoding: "utf8"
+  });
+  if (yarn.status) {
+    invalid("yarn is not available in your system");
+  } else {
+    valid(yarn.stdout);
+  }
   const git = spawnSync("git", ["--version"], {
     cwd: userdir,
     encoding: "utf8"
@@ -76,6 +85,15 @@ function start() {
     invalid("python is not available in your system");
   } else {
     valid(python.stdout);
+  }
+  const pipenv = spawnSync("pipenv", ["--version"], {
+    cwd: userdir,
+    encoding: "utf8"
+  });
+  if (pipenv.status) {
+    invalid("pipenv is not available in your system");
+  } else {
+    valid(pipenv.stdout);
   }
 }
 

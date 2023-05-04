@@ -48,6 +48,7 @@ Before we start please make sure that you meet the requirements:
 - yarn
 - git
 - python
+- pipenv
 
 Create a new branch and run the command:
 
