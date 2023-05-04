@@ -6,33 +6,18 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
-
-const FILES_PAIRS_LOOKUP = [
-  {
-    old: path.join("App.js"),
-    new: path.join("App.tsx"),
-    babel: true
-  },
-  {
-    old: path.join("babel.config.js"),
-    new: path.join("babel.config.js"),
-    babel: true
-  }
-];
+import { manifest } from "./upgrade-manifest.js";
 
 const COOKIECUTTER_PACKAGE = "cookiecutter==1.7.3";
-
 const PREVIOUS_VERSION = "1.1.0";
 const PREVIOUS_VERSION_LATEST_SHA = "b89bf7efd2818b69673961d87378321cc6e8afc4";
 const NEW_VERSION = "2.0.0";
 const NEW_VERSION_LATEST_SHA = "upgrade/react-71";
-
-const MODULES_REPO_DIR = "build/crowdbotics";
 const MODULES_REPO_ORIGIN = "https://github.com/crowdbotics/modules.git";
-
+const MODULES_REPO_DIR = "build/crowdbotics";
 const DIFF = "build/diff";
-const BAKED = "build/baked";
-const NEW_BAKED = "build/newbaked";
+const TEMPLATE_V1 = "build/v1";
+const TEMPLATE_V2 = "build/v2";
 const CONTEXT_YAML = "build/context.yaml";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -254,7 +239,7 @@ function setupCookiecutter(context) {
       "--config-file",
       path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
       "--output-dir",
-      path.join(userdir, MODULES_REPO_DIR, BAKED),
+      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1),
       "--no-input",
       "--overwrite-if-exists"
     ],
@@ -282,7 +267,7 @@ function setupCookiecutter(context) {
       "--config-file",
       path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
       "--output-dir",
-      path.join(userdir, MODULES_REPO_DIR, NEW_BAKED),
+      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2),
       "--no-input",
       "--overwrite-if-exists"
     ],
@@ -298,51 +283,54 @@ function setupCookiecutter(context) {
   }
 }
 
-function updateFiles(slug, oldfile, newfile, babel = false) {
-  if (babel) {
-    const A = spawnSync(
-      "npx",
-      [
-        "babel",
-        "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-        `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "A")}`,
-        path.join(userdir, oldfile)
-      ],
-      {
-        cwd: path.join(userdir, MODULES_REPO_DIR),
-        encoding: "utf8"
+function updateFiles(slug, oldfile, newfile, type) {
+  switch (type) {
+    case "babel":
+      const A = spawnSync(
+        "npx",
+        [
+          "babel",
+          "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
+          `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "A")}`,
+          path.join(userdir, oldfile)
+        ],
+        {
+          cwd: path.join(userdir, MODULES_REPO_DIR),
+          encoding: "utf8"
+        }
+      );
+      if (A.status) {
+        console.error(A.stdout);
+        console.error(A.stderr);
       }
-    );
-    if (A.status) {
-      console.error(A.stdout);
-      console.error(A.stderr);
-    }
-    const B = spawnSync(
-      "npx",
-      [
-        "babel",
-        "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-        `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "B")}`,
-        path.join(userdir, MODULES_REPO_DIR, BAKED, slug, oldfile)
-      ],
-      {
-        cwd: path.join(userdir, MODULES_REPO_DIR),
-        encoding: "utf8"
+      const B = spawnSync(
+        "npx",
+        [
+          "babel",
+          "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
+          `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "B")}`,
+          path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile)
+        ],
+        {
+          cwd: path.join(userdir, MODULES_REPO_DIR),
+          encoding: "utf8"
+        }
+      );
+      if (B.status) {
+        console.error(B.stdout);
+        console.error(B.stderr);
       }
-    );
-    if (B.status) {
-      console.error(B.stdout);
-      console.error(B.stderr);
-    }
-  } else {
-    fs.copyFileSync(
-      path.join(userdir, oldfile),
-      path.join(userdir, MODULES_REPO_DIR, DIFF, "A")
-    );
-    fs.copyFileSync(
-      path.join(userdir, MODULES_REPO_DIR, BAKED, slug, oldfile),
-      path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
-    );
+      break;
+    default:
+      fs.copyFileSync(
+        path.join(userdir, oldfile),
+        path.join(userdir, MODULES_REPO_DIR, DIFF, "A")
+      );
+      fs.copyFileSync(
+        path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+        path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
+      );
+      break;
   }
 
   const git = spawnSync(
@@ -358,7 +346,7 @@ function updateFiles(slug, oldfile, newfile, babel = false) {
       cwd: path.join(userdir, MODULES_REPO_DIR)
     }
   );
-  const src = path.join(userdir, MODULES_REPO_DIR, NEW_BAKED, slug, newfile);
+  const src = path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile);
   if (git.status) {
     let name = `${path.basename(
       newfile,
@@ -413,8 +401,8 @@ const upgrade = () => {
   const context = getProjectCookiecutterContext();
   setupCookiecutter(context);
   section("Check files integrity and upgrade to new versions");
-  FILES_PAIRS_LOOKUP.forEach((pair) =>
-    updateFiles(context.project_slug, pair.old, pair.new, pair.babel)
+  manifest.forEach((pair) =>
+    updateFiles(context.project_slug, pair.old, pair.new, pair.type)
   );
   cleanup(saved);
   finish();
