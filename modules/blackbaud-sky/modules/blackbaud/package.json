@@ -7,8 +7,8 @@
     "author": "Crowdbotics",
     "license": "ISC",
     "dependencies": {
-        "react-native-app-auth": "^6.4.3"
     },
     "x-dependencies": {
+        "react-native-app-auth": "^6.4.3"
     }
 }

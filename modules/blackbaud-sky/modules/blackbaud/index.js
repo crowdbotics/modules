@@ -1,65 +1,64 @@
 import { OptionsContext } from "@options";
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
   View
 } from "react-native";
 import { authorize } from "react-native-app-auth";
-import { getListing } from "./api";
+import { slice, eventList } from "./store";
+import { useDispatch, useSelector } from "react-redux";
 
 const BlackbaudSky = () => {
   const options = useContext(OptionsContext);
-  const { localOptions } = options;
-  const [listing, setListing] = useState(false);
-  const [requesting, setRequesting] = useState(false);
+  const { config } = options;
+  const dispatch = useDispatch();
+
+  const events = useSelector((state) => state.Events.events);
+  const loading = useSelector((state) => state.Events.api.loading);
 
   useEffect(() => {
     try {
-      setRequesting(true);
-      authorize(localOptions.config).then(response => {
-        getListing(response?.accessToken)
-          .then((response) => {
-            setListing(response?.data?.value);
-            setRequesting(false);
-          })
-          .catch((error) => {
-            console.log(error.response);
-            setRequesting(false);
-          });
-      }).catch(err => console.log("err", err));
+      authorize(config)
+        .then((response) => {
+          dispatch(eventList(response?.accessToken));
+        })
+        .catch((err) => Alert.alert("Error", err));
     } catch (error) {
-      console.log("error", error);
+      Alert.alert("Error", error);
     }
   }, []);
 
   return (
     <View>
       <ScrollView style={{ marginTop: 10 }}>
-        {requesting
-          ? <ActivityIndicator
-          size={"large"}
-          color={"#065171"}
-          style={{ alignSelf: "center" }}
-        />
-          : <Fragment>
-            {listing &&
-              listing.map((item, index) => (
+        {loading === "pending"
+          ? (
+          <ActivityIndicator
+            size={"large"}
+            color={"#065171"}
+            style={{ alignSelf: "center" }}
+          />
+            )
+          : (
+          <Fragment>
+            {events.length !== 0 &&
+              events.map((item, index) => (
                 <View style={styles.listingComponent} key={index}>
-                  <Text style={{ color: "#fff" }}>Name: {item.name}</Text>
-                  <Text style={{ color: "#fff" }}>
+                  <Text style={styles.textColor}>Name: {item.name}</Text>
+                  <Text style={styles.textColor}>
                     Start date: {item.start_date}
                   </Text>
-                  <Text style={{ color: "#fff" }}>
+                  <Text style={styles.textColor}>
                     End date: {item.end_date}
                   </Text>
                 </View>
               ))}
           </Fragment>
-        }
-
+            )}
       </ScrollView>
     </View>
   );
@@ -83,10 +82,14 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingVertical: 10,
     marginVertical: 5
+  },
+  textColor: {
+    color: "#fff"
   }
 });
 
 export default {
   title: "BlackbaudSky",
-  navigator: BlackbaudSky
+  navigator: BlackbaudSky,
+  slice
 };
