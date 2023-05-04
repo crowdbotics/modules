@@ -12,6 +12,11 @@ const FILES_PAIRS_LOOKUP = [
     old: path.join("App.js"),
     new: path.join("App.tsx"),
     babel: true
+  },
+  {
+    old: path.join("babel.config.js"),
+    new: path.join("babel.config.js"),
+    babel: true
   }
 ];
 
@@ -276,8 +281,6 @@ function setupCookiecutter(context) {
 }
 
 function updateFiles(slug, oldfile, newfile, babel = false) {
-  section("Check files integrity and update to new versions");
-
   if (babel) {
     const A = spawnSync(
       "npx",
@@ -346,7 +349,7 @@ function updateFiles(slug, oldfile, newfile, babel = false) {
     const dest = path.join(userdir, name);
     fs.copyFileSync(src, dest);
     warn(
-      `Diff detected in your ${oldfile}, Please refer to the new version at ${name}.`
+      `${oldfile} - Failed integrity check. Refer to the new version: ${name}`
     );
   } else {
     if (oldfile != newfile) {
@@ -358,7 +361,7 @@ function updateFiles(slug, oldfile, newfile, babel = false) {
         }
       );
     }
-    valid(`${oldfile} - Integrity check pass, file was replaced.`);
+    valid(`${oldfile} - Integrity check passed. File has been replaced.`);
     const dest = path.join(userdir, newfile);
     fs.copyFileSync(src, dest);
   }
@@ -391,6 +394,7 @@ const upgrade = () => {
   setupLocalModulesRepo();
   const context = getProjectCookiecutterContext();
   setupCookiecutter(context);
+  section("Check files integrity and upgrade to new versions");
   FILES_PAIRS_LOOKUP.forEach((pair) =>
     updateFiles(context.project_slug, pair.old, pair.new, pair.babel)
   );
