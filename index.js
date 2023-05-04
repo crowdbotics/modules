@@ -10,7 +10,8 @@ import { dump } from "js-yaml";
 const FILES_PAIRS_LOOKUP = [
   {
     old: path.join("App.js"),
-    new: path.join("App.tsx")
+    new: path.join("App.tsx"),
+    babel: true
   }
 ];
 
@@ -274,42 +275,53 @@ function setupCookiecutter(context) {
   }
 }
 
-function updateFiles(slug, oldfile, newfile) {
+function updateFiles(slug, oldfile, newfile, babel = false) {
   section("Check files integrity and update to new versions");
-  const A = spawnSync(
-    "npx",
-    [
-      "babel",
-      "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-      `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "A")}`,
-      path.join(userdir, oldfile)
-    ],
-    {
-      cwd: path.join(userdir, MODULES_REPO_DIR),
-      encoding: "utf8"
-    }
-  );
-  if (A.status) {
-    console.error(A.stdout);
-    console.error(A.stderr);
-  }
 
-  const B = spawnSync(
-    "npx",
-    [
-      "babel",
-      "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-      `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "B")}`,
-      path.join(userdir, MODULES_REPO_DIR, BAKED, slug, oldfile)
-    ],
-    {
-      cwd: path.join(userdir, MODULES_REPO_DIR),
-      encoding: "utf8"
+  if (babel) {
+    const A = spawnSync(
+      "npx",
+      [
+        "babel",
+        "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
+        `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "A")}`,
+        path.join(userdir, oldfile)
+      ],
+      {
+        cwd: path.join(userdir, MODULES_REPO_DIR),
+        encoding: "utf8"
+      }
+    );
+    if (A.status) {
+      console.error(A.stdout);
+      console.error(A.stderr);
     }
-  );
-  if (B.status) {
-    console.error(B.stdout);
-    console.error(B.stderr);
+    const B = spawnSync(
+      "npx",
+      [
+        "babel",
+        "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
+        `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "B")}`,
+        path.join(userdir, MODULES_REPO_DIR, BAKED, slug, oldfile)
+      ],
+      {
+        cwd: path.join(userdir, MODULES_REPO_DIR),
+        encoding: "utf8"
+      }
+    );
+    if (B.status) {
+      console.error(B.stdout);
+      console.error(B.stderr);
+    }
+  } else {
+    fs.copyFileSync(
+      path.join(userdir, oldfile),
+      path.join(userdir, MODULES_REPO_DIR, DIFF, "A")
+    );
+    fs.copyFileSync(
+      path.join(userdir, MODULES_REPO_DIR, BAKED, slug, oldfile),
+      path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
+    );
   }
 
   const git = spawnSync(
@@ -380,7 +392,7 @@ const upgrade = () => {
   const context = getProjectCookiecutterContext();
   setupCookiecutter(context);
   FILES_PAIRS_LOOKUP.forEach((pair) =>
-    updateFiles(context.project_slug, pair.old, pair.new)
+    updateFiles(context.project_slug, pair.old, pair.new, pair.babel)
   );
   cleanup(saved);
   finish();
