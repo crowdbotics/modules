@@ -42,6 +42,13 @@ platform :ios, min_ios_version_supported
 
 ## Upgrading the scaffold to a newer React Native version
 
+Before we start please make sure that you meet the requirements:
+
+- node
+- yarn
+- git
+- python
+
 Create a new branch and run the command:
 
 ```
