@@ -12,6 +12,7 @@ module.exports = {
         allowUndefined: true
       }
     ],
-    "import-glob-meta"
+    "import-glob-meta",
+    "react-native-reanimated/plugin"
   ]
 }
