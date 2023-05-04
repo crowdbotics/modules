@@ -221,6 +221,9 @@ function setupCookiecutter(context) {
     yaml,
     "utf8"
   );
+  spawnSync("git", ["checkout", PREVIOUS_VERSION_LATEST_SHA], {
+    cwd: path.join(userdir, MODULES_REPO_DIR)
+  });
   const run = spawnSync(
     "pipenv",
     [
