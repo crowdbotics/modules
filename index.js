@@ -7,11 +7,14 @@ import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
 
+const COOKIECUTTER_PACKAGE = "cookiecutter==1.7.3";
+
 const PREVIOUS_VERSION = "1.1.0";
 const PREVIOUS_VERSION_LATEST_SHA = "b89bf7efd2818b69673961d87378321cc6e8afc4";
+const NEW_VERSION = "2.0.0";
 const NEW_VERSION_LATEST_SHA = "upgrade/react-71";
-const MODULES_REPO_DIR = ".modules-git";
-const COOKIECUTTER_PACKAGE = "cookiecutter==1.7.3";
+
+const MODULES_REPO_DIR = "build/crowdbotics";
 const MODULES_REPO_ORIGIN = "https://github.com/crowdbotics/modules.git";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -31,56 +34,68 @@ const invalid = (...args) => {
   process.exit(1);
 };
 
-function start() {
-  section("scaffold upgrade started");
-  section("checking environment compatibility");
-  const git = spawnSync("git", ["--version"], {
-    cwd: userdir,
-    stdio: "inherit"
-  });
-  if (git.status) {
-    invalid("git is not available in your system");
-  }
-  const python = spawnSync("python", ["--version"], {
-    cwd: userdir,
-    stdio: "inherit"
-  });
-  if (python.status) {
-    invalid("python is not available in your system");
-  }
-}
+const warn = (...args) => {
+  console.log("\u26A0", ...args);
+};
 
-function stashSave() {
-  const cmd = spawnSync("git", ["stash", "save", "-u"], {
+function start() {
+  section("Scaffold upgrade started");
+  section("Checking environment compatibility");
+  const git = spawnSync("git", ["--version"], {
     cwd: userdir,
     encoding: "utf8"
   });
-  const saved = cmd.stdout.includes("Saved working directory and index state");
-  if (saved) section("unsaved changes have been stashed");
-  return saved;
+  if (git.status) {
+    invalid("git is not available in your system");
+  } else {
+    valid(git.stdout);
+  }
+  const python = spawnSync("python", ["--version"], {
+    cwd: userdir,
+    encoding: "utf8"
+  });
+  if (python.status) {
+    invalid("python is not available in your system");
+  } else {
+    valid(python.stdout);
+  }
 }
 
 function versionCheck() {
-  section("detecting your .crowdbotics.json version");
+  section("Detecting your .crowdbotics.json version");
   const crowdboticsJSON = fs.readFileSync(
     path.join(userdir, ".crowdbotics.json"),
     "utf8"
   );
   const { version } = JSON.parse(crowdboticsJSON).scaffold;
 
-  if (version != PREVIOUS_VERSION) {
+  if (version == NEW_VERSION) {
+    invalid("You are already at the latest scaffold version");
+  } else if (version != PREVIOUS_VERSION) {
     invalid(`Expected version ${PREVIOUS_VERSION}, got`, version);
   } else {
-    valid("Compatible version detected:", version);
+    valid("Upgradable version detected:", version);
   }
+}
+
+function stashSave() {
+  section("Checking for unsaved/untracked files here");
+  const cmd = spawnSync("git", ["stash", "save", "-u"], {
+    cwd: userdir,
+    encoding: "utf8"
+  });
+  const saved = cmd.stdout.includes("Saved working directory and index state");
+  if (saved) valid("Unsaved changes have been stashed");
+  return saved;
 }
 
 function setupLocalModulesRepo() {
   if (fs.existsSync(path.join(userdir, MODULES_REPO_DIR))) {
-    section("reusing local clone of modules repo");
+    section("Reusing local clone of modules repo");
     return;
   }
-  section("cloning modules repo");
+  section("Cloning modules repo");
+  spawnSync("mkdir", ["build", "-p"], { cwd: userdir });
   spawnSync("git", ["init", MODULES_REPO_DIR], { cwd: userdir });
   spawnSync("git", ["remote", "add", "origin", MODULES_REPO_ORIGIN], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
@@ -91,10 +106,28 @@ function setupLocalModulesRepo() {
   spawnSync("git", ["checkout", PREVIOUS_VERSION_LATEST_SHA], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
+  spawnSync("yarn", ["install"], {
+    cwd: path.join(userdir, MODULES_REPO_DIR)
+  });
+  spawnSync(
+    "yarn",
+    [
+      "add",
+      "@babel/preset-typescript",
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    {
+      cwd: path.join(userdir, MODULES_REPO_DIR)
+    }
+  );
+  spawnSync("mkdir", ["diff", "-p"], {
+    cwd: path.join(userdir, MODULES_REPO_DIR)
+  });
 }
 
 function getProjectCookiecutterContext() {
-  section("detecting your project name and slug");
+  section("Detecting your project name, slug, and ssh key fingerprint");
   const context = {};
 
   const options = {
@@ -103,7 +136,6 @@ function getProjectCookiecutterContext() {
   const parser = new XMLParser(options);
   let txt, xml, obj;
 
-  // TODO - test more targets for parsing project_name and measure hit rate?
   xml = fs.readFileSync(
     path.join(
       userdir,
@@ -122,7 +154,6 @@ function getProjectCookiecutterContext() {
     (str) => str["@_name"] === "original_app_name"
   )[0]["#text"];
 
-  // TODO - test more targets for parsing project_slug and measure hit rate?
   xml = fs.readFileSync(
     path.join(userdir, "android", "app", "src", "main", "AndroidManifest.xml"),
     "utf8"
@@ -138,17 +169,16 @@ function getProjectCookiecutterContext() {
     .split("\n");
 
   let index = txt.findIndex((line) => line.includes("fingerprints:")) + 1;
-  context["ssh_key_fingerprint"] = txt[index];
+  context["ssh_key_fingerprint"] = txt[index]
+    .trim()
+    .replace("- '", "")
+    .replace("'", "");
 
   return context;
 }
 
 function setupCookiecutter(context) {
-  if (fs.existsSync(path.join(userdir, MODULES_REPO_DIR, "baked"))) {
-    section("reusing cookiecutter baked template");
-    return;
-  }
-  section("setting up cookiecutter");
+  section("Setting up cookiecutter");
   const install = spawnSync("pipenv", ["install", COOKIECUTTER_PACKAGE], {
     cwd: path.join(userdir, MODULES_REPO_DIR),
     encoding: "utf8"
@@ -159,7 +189,7 @@ function setupCookiecutter(context) {
     invalid("cookiecutter installation failed");
   }
 
-  section("generating template with cookiecutter");
+  section("Generating baked template with cookiecutter");
   const yaml = dump({
     default_context: context
   });
@@ -178,7 +208,8 @@ function setupCookiecutter(context) {
       path.join(userdir, MODULES_REPO_DIR, "context.yaml"),
       "--output-dir",
       path.join(userdir, MODULES_REPO_DIR, "baked"),
-      "--no-input"
+      "--no-input",
+      "--overwrite-if-exists"
     ],
     {
       cwd: path.join(userdir, MODULES_REPO_DIR),
@@ -191,6 +222,7 @@ function setupCookiecutter(context) {
     invalid("template creation failed");
   }
 
+  section("Generating newbaked template with cookiecutter");
   spawnSync("git", ["checkout", NEW_VERSION_LATEST_SHA], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
@@ -204,7 +236,8 @@ function setupCookiecutter(context) {
       path.join(userdir, MODULES_REPO_DIR, "context.yaml"),
       "--output-dir",
       path.join(userdir, MODULES_REPO_DIR, "newbaked"),
-      "--no-input"
+      "--no-input",
+      "--overwrite-if-exists"
     ],
     {
       cwd: path.join(userdir, MODULES_REPO_DIR),
@@ -218,39 +251,113 @@ function setupCookiecutter(context) {
   }
 }
 
-function cleanup() {
-  section("cleaning up");
-  //fs.rmSync(path.join(userdir, MODULES_REPO_DIR), { recursive: true });
+function updateFiles(slug) {
+  section("Check files integrity and update to new versions");
+  const file = "App.js";
+  const A = spawnSync(
+    "npx",
+    [
+      "babel",
+      "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
+      `--out-file=${path.join(userdir, MODULES_REPO_DIR, "diff", "A")}`,
+      path.join(userdir, file)
+    ],
+    {
+      cwd: path.join(userdir, MODULES_REPO_DIR),
+      encoding: "utf8"
+    }
+  );
+  if (A.status) {
+    console.error(A.stdout);
+    console.error(A.stderr);
+  }
+
+  const B = spawnSync(
+    "npx",
+    [
+      "babel",
+      "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
+      `--out-file=${path.join(userdir, MODULES_REPO_DIR, "diff", "B")}`,
+      path.join(userdir, MODULES_REPO_DIR, "baked", slug, "index.js")
+    ],
+    {
+      cwd: path.join(userdir, MODULES_REPO_DIR),
+      encoding: "utf8"
+    }
+  );
+  if (B.status) {
+    console.error(B.stdout);
+    console.error(B.stderr);
+  }
+
+  const git = spawnSync(
+    "git",
+    [
+      "diff",
+      "--no-index",
+      "--",
+      path.join(userdir, MODULES_REPO_DIR, "diff", "A"),
+      path.join(userdir, MODULES_REPO_DIR, "diff", "B")
+    ],
+    {
+      cwd: path.join(userdir, MODULES_REPO_DIR)
+    }
+  );
+  const src = path.join(userdir, MODULES_REPO_DIR, "newbaked", slug, "App.tsx");
+
+  if (git.status) {
+    const dest = path.join(userdir, "App.tsx.new");
+    fs.copyFileSync(src, dest);
+    warn(
+      `Diff detected in your ${file}, Please refer to the new version at ${file}.new.`
+    );
+  } else {
+    const dest = path.join(userdir, "App.tsx");
+    fs.copyFileSync(src, dest);
+  }
 }
 
-function stashPop(saved) {
+function cleanup(saved, cache = true) {
+  section("Cleaning up");
+  if (!cache) {
+    fs.rmSync(path.join(userdir, MODULES_REPO_DIR), { recursive: true });
+  } else {
+    valid("Caching modules repo for future runs");
+  }
   if (!saved) return;
-  section("popping previously saved git stash");
   spawnSync("git", ["stash", "pop"], {
     cwd: userdir
   });
+  valid("Git stash pop previously saved git stash");
 }
 
 function finish() {
-  section("scaffold upgrade finished");
+  section("Scaffold upgrade finished");
   process.exit(0);
 }
 
 const upgrade = () => {
   start();
-  const saved = stashSave();
   versionCheck();
+  const saved = stashSave();
   setupLocalModulesRepo();
   const context = getProjectCookiecutterContext();
   setupCookiecutter(context);
-  cleanup();
-  stashPop(saved);
+  updateFiles(context.project_slug);
+  cleanup(saved);
   finish();
+};
+
+const parse = () => {
+  const context = getProjectCookiecutterContext();
+  console.log(context);
+  process.exit(0);
 };
 
 const actions = {
   ["Quit"]: () => process.exit(0),
-  ["Upgrade my scaffold"]: upgrade
+  ["Upgrade my scaffold"]: upgrade,
+  ["Check cookiecutter context"]: parse
 };
 
 inquirer
@@ -259,7 +366,7 @@ inquirer
       type: "list",
       name: "action",
       message: "What do you want to do?",
-      choices: ["Upgrade my scaffold", "Quit"]
+      choices: ["Upgrade my scaffold", "Check cookiecutter context", "Quit"]
     }
   ])
   .then((answers) => actions[answers.action]())
