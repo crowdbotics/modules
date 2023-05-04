@@ -45,3 +45,10 @@ List of api's endpoints with params needed for these apis.
 | `/modules/blackbaud-sky/service/consent/channels/` |       ``        | This will return the channels details containing all its objects.                                                                   |                                                                                                  |
 | `/modules/blackbaud-sky/service/constituents/list/` |       ``        | This will return an constituents list containing all its objects.                                                                   |
 | `/modules/blackbaud-sky/service/events/list/ ` |       ``        | This will return an event list containing all its objects.                                                                                                     |
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)

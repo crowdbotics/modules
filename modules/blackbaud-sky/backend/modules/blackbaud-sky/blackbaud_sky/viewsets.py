@@ -12,12 +12,11 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         redirect_url=os.getenv('BLACKBAUD_REDIRECT_URL', ""),
         client_id=os.getenv('BLACKBAUD_CLIENT_ID', ""),
         client_secret=os.getenv('BLACKBAUD_CLIENT_SECRET', ""),
-        access_token=os.getenv('BLACKBAUD_ACCESS_TOKEN', ""),
-        Bb_Api_Subscription_Key=os.getenv('BB_API_SUBSCRIPTION_KEY', "")
+        api_subscription_key=os.getenv('BB_API_SUBSCRIPTION_KEY', "")
     )
 
     @action(detail=False, methods=['post'], url_path='access/token')
-    def get_token(self, request):
+    def get_access_token(self, request):
         """
         To get the access token
         :return: Returns access_token, refresh_token and expires_in.
