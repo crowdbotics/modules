@@ -62,15 +62,6 @@ function start() {
   } else {
     valid(git.stdout);
   }
-  const python = spawnSync("python", ["--version"], {
-    cwd: userdir,
-    encoding: "utf8"
-  });
-  if (python.status) {
-    invalid("python is not available in your system");
-  } else {
-    valid(python.stdout);
-  }
   const pipenv = spawnSync("pipenv", ["--version"], {
     cwd: userdir,
     encoding: "utf8"
