@@ -7,6 +7,13 @@ import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
 
+const FILES_PAIRS_LOOKUP = [
+  {
+    old: path.join("App.js"),
+    new: path.join("App.tsx")
+  }
+];
+
 const COOKIECUTTER_PACKAGE = "cookiecutter==1.7.3";
 
 const PREVIOUS_VERSION = "1.1.0";
@@ -16,6 +23,11 @@ const NEW_VERSION_LATEST_SHA = "upgrade/react-71";
 
 const MODULES_REPO_DIR = "build/crowdbotics";
 const MODULES_REPO_ORIGIN = "https://github.com/crowdbotics/modules.git";
+
+const DIFF = "build/diff";
+const BAKED = "build/baked";
+const NEW_BAKED = "build/newbaked";
+const CONTEXT_YAML = "build/context.yaml";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const userdir = process.cwd();
@@ -106,6 +118,7 @@ function setupLocalModulesRepo() {
   spawnSync("git", ["checkout", PREVIOUS_VERSION_LATEST_SHA], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
+  section("installing npm packages");
   spawnSync("yarn", ["install"], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
@@ -121,7 +134,28 @@ function setupLocalModulesRepo() {
       cwd: path.join(userdir, MODULES_REPO_DIR)
     }
   );
-  spawnSync("mkdir", ["diff", "-p"], {
+  spawnSync("mkdir", [DIFF, "-p"], {
+    cwd: path.join(userdir, MODULES_REPO_DIR)
+  });
+  section("installing python packages");
+  const install = spawnSync("pipenv", ["install", COOKIECUTTER_PACKAGE], {
+    cwd: path.join(userdir, MODULES_REPO_DIR),
+    encoding: "utf8"
+  });
+  if (install.status) {
+    console.error(install.stdout);
+    console.error(install.stderr);
+    invalid("cookiecutter installation failed");
+  }
+  section("git commit package manager files");
+  spawnSync(
+    "git",
+    ["add", "Pipfile", "Pipfile.lock", "package.json", "yarn.lock"],
+    {
+      cwd: path.join(userdir, MODULES_REPO_DIR)
+    }
+  );
+  spawnSync("git", ["commit", "-m", '"update package manager files"'], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
 }
@@ -178,23 +212,12 @@ function getProjectCookiecutterContext() {
 }
 
 function setupCookiecutter(context) {
-  section("Setting up cookiecutter");
-  const install = spawnSync("pipenv", ["install", COOKIECUTTER_PACKAGE], {
-    cwd: path.join(userdir, MODULES_REPO_DIR),
-    encoding: "utf8"
-  });
-  if (install.status) {
-    console.error(install.stdout);
-    console.error(install.stderr);
-    invalid("cookiecutter installation failed");
-  }
-
   section("Generating baked template with cookiecutter");
   const yaml = dump({
     default_context: context
   });
   fs.writeFileSync(
-    path.join(userdir, MODULES_REPO_DIR, "context.yaml"),
+    path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
     yaml,
     "utf8"
   );
@@ -205,9 +228,9 @@ function setupCookiecutter(context) {
       "cookiecutter",
       path.join(userdir, MODULES_REPO_DIR, "dist", "cookie"),
       "--config-file",
-      path.join(userdir, MODULES_REPO_DIR, "context.yaml"),
+      path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
       "--output-dir",
-      path.join(userdir, MODULES_REPO_DIR, "baked"),
+      path.join(userdir, MODULES_REPO_DIR, BAKED),
       "--no-input",
       "--overwrite-if-exists"
     ],
@@ -233,9 +256,9 @@ function setupCookiecutter(context) {
       "cookiecutter",
       path.join(userdir, MODULES_REPO_DIR, "dist", "cookie"),
       "--config-file",
-      path.join(userdir, MODULES_REPO_DIR, "context.yaml"),
+      path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
       "--output-dir",
-      path.join(userdir, MODULES_REPO_DIR, "newbaked"),
+      path.join(userdir, MODULES_REPO_DIR, NEW_BAKED),
       "--no-input",
       "--overwrite-if-exists"
     ],
@@ -251,16 +274,15 @@ function setupCookiecutter(context) {
   }
 }
 
-function updateFiles(slug) {
+function updateFiles(slug, oldfile, newfile) {
   section("Check files integrity and update to new versions");
-  const file = "App.js";
   const A = spawnSync(
     "npx",
     [
       "babel",
       "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-      `--out-file=${path.join(userdir, MODULES_REPO_DIR, "diff", "A")}`,
-      path.join(userdir, file)
+      `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "A")}`,
+      path.join(userdir, oldfile)
     ],
     {
       cwd: path.join(userdir, MODULES_REPO_DIR),
@@ -277,8 +299,8 @@ function updateFiles(slug) {
     [
       "babel",
       "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-      `--out-file=${path.join(userdir, MODULES_REPO_DIR, "diff", "B")}`,
-      path.join(userdir, MODULES_REPO_DIR, "baked", slug, "index.js")
+      `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "B")}`,
+      path.join(userdir, MODULES_REPO_DIR, BAKED, slug, oldfile)
     ],
     {
       cwd: path.join(userdir, MODULES_REPO_DIR),
@@ -296,34 +318,43 @@ function updateFiles(slug) {
       "diff",
       "--no-index",
       "--",
-      path.join(userdir, MODULES_REPO_DIR, "diff", "A"),
-      path.join(userdir, MODULES_REPO_DIR, "diff", "B")
+      path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
+      path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
     ],
     {
       cwd: path.join(userdir, MODULES_REPO_DIR)
     }
   );
-  const src = path.join(userdir, MODULES_REPO_DIR, "newbaked", slug, "App.tsx");
-
+  const src = path.join(userdir, MODULES_REPO_DIR, NEW_BAKED, slug, newfile);
   if (git.status) {
-    const dest = path.join(userdir, "App.tsx.new");
+    let name = `${path.basename(
+      newfile,
+      path.extname(newfile)
+    )}.new${path.extname(newfile)}`;
+    const dest = path.join(userdir, name);
     fs.copyFileSync(src, dest);
     warn(
-      `Diff detected in your ${file}, Please refer to the new version at ${file}.new.`
+      `Diff detected in your ${oldfile}, Please refer to the new version at ${name}.`
     );
   } else {
-    const dest = path.join(userdir, "App.tsx");
+    if (oldfile != newfile) {
+      spawnSync(
+        "git",
+        ["mv", path.join(userdir, oldfile), path.join(userdir, newfile)],
+        {
+          cwd: path.join(userdir)
+        }
+      );
+    }
+    valid(`${oldfile} - Integrity check pass, file was replaced.`);
+    const dest = path.join(userdir, newfile);
     fs.copyFileSync(src, dest);
   }
 }
 
-function cleanup(saved, cache = true) {
+function cleanup(saved) {
   section("Cleaning up");
-  if (!cache) {
-    fs.rmSync(path.join(userdir, MODULES_REPO_DIR), { recursive: true });
-  } else {
-    valid("Caching modules repo for future runs");
-  }
+  valid("Caching modules repo for future runs");
   if (!saved) return;
   spawnSync("git", ["stash", "pop"], {
     cwd: userdir
@@ -333,6 +364,11 @@ function cleanup(saved, cache = true) {
 
 function finish() {
   section("Scaffold upgrade finished");
+  section("Running git status for review");
+  spawnSync("git", ["status"], {
+    cwd: path.join(userdir),
+    stdio: "inherit"
+  });
   process.exit(0);
 }
 
@@ -343,7 +379,9 @@ const upgrade = () => {
   setupLocalModulesRepo();
   const context = getProjectCookiecutterContext();
   setupCookiecutter(context);
-  updateFiles(context.project_slug);
+  FILES_PAIRS_LOOKUP.forEach((pair) =>
+    updateFiles(context.project_slug, pair.old, pair.new)
+  );
   cleanup(saved);
   finish();
 };
@@ -354,10 +392,23 @@ const parse = () => {
   process.exit(0);
 };
 
+const removeCache = () => {
+  fs.rmSync(path.join(userdir, MODULES_REPO_DIR), { recursive: true });
+};
+
+const resetHEAD = () => {
+  spawnSync("git", ["reset", "--hard", "HEAD"], {
+    cwd: path.join(userdir),
+    stdio: "inherit"
+  });
+};
+
 const actions = {
   ["Quit"]: () => process.exit(0),
   ["Upgrade my scaffold"]: upgrade,
-  ["Check cookiecutter context"]: parse
+  ["Check cookiecutter context"]: parse,
+  ["Clean cached directories"]: removeCache,
+  ["git reset to HEAD"]: resetHEAD
 };
 
 inquirer
@@ -366,7 +417,13 @@ inquirer
       type: "list",
       name: "action",
       message: "What do you want to do?",
-      choices: ["Upgrade my scaffold", "Check cookiecutter context", "Quit"]
+      choices: [
+        "Upgrade my scaffold",
+        "Check cookiecutter context",
+        "Clean cached directories",
+        "git reset to HEAD",
+        "Quit"
+      ]
     }
   ])
   .then((answers) => actions[answers.action]())
