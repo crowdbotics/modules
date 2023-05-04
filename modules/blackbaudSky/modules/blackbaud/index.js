@@ -1,111 +1,65 @@
-import React, { useState, useContext } from "react";
-import {
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  StyleSheet
-} from "react-native";
 import { OptionsContext } from "@options";
-import { WebView } from "react-native-webview";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp
-} from "react-native-responsive-screen";
-import { getListing, sendCode } from "./api";
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from "react-native";
+import { authorize } from "react-native-app-auth";
+import { getListing } from "./api";
 
 const BlackbaudSky = () => {
   const options = useContext(OptionsContext);
   const { localOptions } = options;
-
-  const [code, setCode] = useState(false);
-  const [login, setLogin] = useState(false);
   const [listing, setListing] = useState(false);
   const [requesting, setRequesting] = useState(false);
 
-  const checkUrl = (url) => {
-    if (!url.includes("client_id")) {
-      if (url.includes("state")) {
-        // console.log("URLLL FROM STATE", url?.split("state=")[0]);
-      } else {
-        setCode(url?.split("code=")[1]);
-        setRequesting(true);
-        sendCode(url?.split("code=")[1])
+  useEffect(() => {
+    try {
+      setRequesting(true);
+      authorize(localOptions.config).then(response => {
+        getListing(response?.accessToken)
           .then((response) => {
-            getListing(response?.data?.access_token)
-              .then((response) => {
-                setListing(response?.data?.value);
-                setRequesting(false);
-              })
-              .catch((error) => {
-                console.log(error.response);
-                setRequesting(false);
-              });
+            setListing(response?.data?.value);
+            setRequesting(false);
           })
           .catch((error) => {
-            setRequesting(false);
             console.log(error.response);
+            setRequesting(false);
           });
-      }
+      }).catch(err => console.log("err", err));
+    } catch (error) {
+      console.log("error", error);
     }
-  };
+  }, []);
 
   return (
     <View>
-      <ScrollView>
-        {login
-          ? (
-              !code
-                ? (
-            <WebView
-              source={{
-                uri: `https://app.blackbaud.com/oauth/authorize?client_id=${localOptions.client_id}&response_type=code&redirect_uri=${localOptions.redirectUrl}`
-              }}
-              style={{ height: hp("90%"), width: wp("100%") }}
-              onNavigationStateChange={(val) => checkUrl(val?.url)}
-            />
-                  )
-                : requesting
-                  ? (
-            <>
-              <View style={{ height: hp("45%"), justifyContent: "flex-end" }}>
-                <ActivityIndicator
-                  size={"large"}
-                  color={"#065171"}
-                  style={{ alignSelf: "center" }}
-                />
-              </View>
-            </>
-                    )
-                  : (
-            <>
-              <ScrollView style={{ marginTop: 10 }}>
-                {listing &&
-                  listing.map((item, index) => (
-                    <View style={styles.listingComponent} key={index}>
-                      <Text style={{ color: "#fff" }}>Name: {item.name}</Text>
-                      <Text style={{ color: "#fff" }}>
-                        Start date: {item.start_date}
-                      </Text>
-                      <Text style={{ color: "#fff" }}>
-                        End date: {item.end_date}
-                      </Text>
-                    </View>
-                  ))}
-              </ScrollView>
-            </>
-                    )
-            )
-          : (
-          <View style={{ height: hp("45%"), justifyContent: "flex-end" }}>
-            <TouchableOpacity onPress={() => setLogin(true)}>
-              <View style={styles.loginButton}>
-                <Text style={{ color: "#fff" }}>Log In</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-            )}
+      <ScrollView style={{ marginTop: 10 }}>
+        {requesting
+          ? <ActivityIndicator
+          size={"large"}
+          color={"#065171"}
+          style={{ alignSelf: "center" }}
+        />
+          : <Fragment>
+            {listing &&
+              listing.map((item, index) => (
+                <View style={styles.listingComponent} key={index}>
+                  <Text style={{ color: "#fff" }}>Name: {item.name}</Text>
+                  <Text style={{ color: "#fff" }}>
+                    Start date: {item.start_date}
+                  </Text>
+                  <Text style={{ color: "#fff" }}>
+                    End date: {item.end_date}
+                  </Text>
+                </View>
+              ))}
+          </Fragment>
+        }
+
       </ScrollView>
     </View>
   );

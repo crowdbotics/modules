@@ -7,10 +7,8 @@
     "author": "Crowdbotics",
     "license": "ISC",
     "dependencies": {
-     "react-native-responsive-screen": "^1.4.2",
-     "axios": "^0.21.1"
+        "react-native-app-auth": "^6.4.3"
     },
     "x-dependencies": {
-        "react-native-webview": "^11.17.2"
     }
 }
