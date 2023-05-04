@@ -107,7 +107,7 @@ function setupLocalModulesRepo() {
     return;
   }
   section("Cloning modules repo");
-  spawnSync("mkdir", ["build", "-p"], { cwd: userdir });
+  spawnSync("mkdir", ["-p", "build"], { cwd: userdir });
   spawnSync("git", ["init", MODULES_REPO_DIR], { cwd: userdir });
   spawnSync("git", ["remote", "add", "origin", MODULES_REPO_ORIGIN], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
@@ -134,7 +134,7 @@ function setupLocalModulesRepo() {
       cwd: path.join(userdir, MODULES_REPO_DIR)
     }
   );
-  spawnSync("mkdir", [DIFF, "-p"], {
+  spawnSync("mkdir", ["-p", DIFF], {
     cwd: path.join(userdir, MODULES_REPO_DIR)
   });
   section("installing python packages");
