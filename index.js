@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import inquirer from "inquirer";
-import { spawnSync } from "node:child_process";
+import { spawnSync, execSync } from "node:child_process";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
 import { manifest } from "./upgrade-manifest.js";
@@ -466,6 +466,10 @@ const removeCache = () => {
 
 const resetHEAD = () => {
   spawnSync("git", ["reset", "--hard", "HEAD"], {
+    cwd: path.join(userdir),
+    stdio: "inherit"
+  });
+  execSync("rm $(git status -u --porcelain=v1 | cut -c 4-)", {
     cwd: path.join(userdir),
     stdio: "inherit"
   });
