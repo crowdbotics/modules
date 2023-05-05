@@ -210,7 +210,7 @@ export const manifest = [
     type: "text"
   },
   { old: "app.json", new: "app.json", type: "json" },
-  { old: "App.js", new: "App.tsx", type: "babel" },
+  { old: "App.js", new: "App.js", type: "babel" },
   { old: "babel.config.js", new: "babel.config.js", type: "babel" },
   { old: ".bundle/config", new: ".bundle/config", type: "addition" },
   { old: ".circleci/config.yml", new: ".circleci/config.yml", type: "text" },
