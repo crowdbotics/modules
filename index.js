@@ -186,6 +186,9 @@ function getProjectCookiecutterContext() {
     (str) => str["@_name"] === "original_app_name"
   )[0]["#text"];
 
+  // TODO - look at other files to parse project_slug with more confidence?
+  // search for {{cookiecutter.project_slug}} in dist/cookie
+  // for listing all the places where this name could be parsed from
   xml = fs.readFileSync(
     path.join(userdir, "android", "app", "src", "main", "AndroidManifest.xml"),
     "utf8"
