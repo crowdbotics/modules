@@ -45,7 +45,7 @@ const BlackbaudSky = () => {
             )
           : (
           <Fragment>
-            {events.length !== 0 &&
+            {events?.length !== 0 &&
               events.map((item, index) => (
                 <View style={styles.listingComponent} key={index}>
                   <Text style={styles.textColor}>Name: {item.name}</Text>
