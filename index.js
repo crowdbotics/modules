@@ -3,7 +3,6 @@ import fs from "node:fs";
 import path from "node:path";
 import inquirer from "inquirer";
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
 import { manifest } from "./upgrade-manifest.js";
@@ -20,7 +19,6 @@ const TEMPLATE_V1 = "build/v1";
 const TEMPLATE_V2 = "build/v2";
 const CONTEXT_YAML = "build/context.yaml";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const userdir = process.cwd();
 
 const section = (msg) => {
@@ -81,9 +79,9 @@ function versionCheck() {
   );
   const { version } = JSON.parse(crowdboticsJSON).scaffold;
 
-  if (version == NEW_VERSION) {
+  if (version === NEW_VERSION) {
     invalid("You are already at the latest scaffold version");
-  } else if (version != PREVIOUS_VERSION) {
+  } else if (version !== PREVIOUS_VERSION) {
     invalid(`Expected version ${PREVIOUS_VERSION}, got`, version);
   } else {
     valid("Upgradable version detected:", version);
@@ -168,7 +166,7 @@ function getProjectCookiecutterContext() {
     ignoreAttributes: false
   };
   const parser = new XMLParser(options);
-  let txt, xml, obj;
+  let xml, obj;
 
   xml = fs.readFileSync(
     path.join(
@@ -184,7 +182,7 @@ function getProjectCookiecutterContext() {
     "utf8"
   );
   obj = parser.parse(xml);
-  context["project_name"] = obj.resources.string.filter(
+  context.project_name = obj.resources.string.filter(
     (str) => str["@_name"] === "original_app_name"
   )[0]["#text"];
 
@@ -193,17 +191,17 @@ function getProjectCookiecutterContext() {
     "utf8"
   );
   obj = parser.parse(xml);
-  context["project_slug"] = obj.manifest["@_package"].replace(/^(com\.)/g, "");
+  context.project_slug = obj.manifest["@_package"].replace(/^(com\.)/g, "");
 
-  txt = fs
+  const txt = fs
     .readFileSync(
       path.join(userdir, ".circleci", "generate_mobile_ios_config.sh"),
       "utf8"
     )
     .split("\n");
 
-  let index = txt.findIndex((line) => line.includes("fingerprints:")) + 1;
-  context["ssh_key_fingerprint"] = txt[index]
+  const index = txt.findIndex((line) => line.includes("fingerprints:")) + 1;
+  context.ssh_key_fingerprint = txt[index]
     .trim()
     .replace("- '", "")
     .replace("'", "");
@@ -278,20 +276,19 @@ function setupCookiecutter(context) {
 }
 
 function updateFiles(slug, oldfile, newfile, type) {
-  if (type === "addition") {
-    const dir = path.dirname(oldfile);
-    if (dir !== ".") {
-      spawnSync("mkdir", ["-p", dir], { cwd: userdir });
-    }
-    fs.copyFileSync(
-      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, oldfile),
-      path.join(userdir, oldfile)
-    );
-    return;
-  }
-
   switch (type) {
-    case "babel":
+    case "addition": {
+      const dir = path.dirname(oldfile);
+      if (dir !== ".") {
+        spawnSync("mkdir", ["-p", dir], { cwd: userdir });
+      }
+      fs.copyFileSync(
+        path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, oldfile),
+        path.join(userdir, oldfile)
+      );
+      return;
+    }
+    case "babel": {
       const A = spawnSync(
         "npx",
         [
@@ -327,7 +324,8 @@ function updateFiles(slug, oldfile, newfile, type) {
         console.error(B.stderr);
       }
       break;
-    case "json":
+    }
+    case "json": {
       fs.writeFileSync(
         path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
         JSON.stringify(
@@ -347,6 +345,7 @@ function updateFiles(slug, oldfile, newfile, type) {
         "utf8"
       );
       break;
+    }
     default:
       fs.copyFileSync(
         path.join(userdir, oldfile),
@@ -374,7 +373,7 @@ function updateFiles(slug, oldfile, newfile, type) {
   );
   const src = path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile);
   if (git.status) {
-    let name = `${path.basename(
+    const name = `${path.basename(
       newfile,
       path.extname(newfile)
     )}.new${path.extname(newfile)}`;
@@ -384,7 +383,7 @@ function updateFiles(slug, oldfile, newfile, type) {
       `${oldfile} - Failed integrity check. Refer to the new version ${name}`
     );
   } else {
-    if (oldfile != newfile) {
+    if (oldfile !== newfile) {
       spawnSync(
         "git",
         ["mv", path.join(userdir, oldfile), path.join(userdir, newfile)],
@@ -428,8 +427,8 @@ const upgrade = () => {
   setupCookiecutter(context);
   section("Check files integrity and upgrade to new versions");
   manifest.forEach((pair) => {
-    pair.old = pair.old.replace(/\$\{slug\}/g, context.project_slug);
-    pair.new = pair.new.replace(/\$\{slug\}/g, context.project_slug);
+    pair.old = pair.old.replace(/\{\{slug\}\}/g, context.project_slug);
+    pair.new = pair.new.replace(/\{\{slug\}\}/g, context.project_slug);
     updateFiles(context.project_slug, pair.old, pair.new, pair.type);
   });
   cleanup(saved);
@@ -454,11 +453,11 @@ const resetHEAD = () => {
 };
 
 const actions = {
-  ["Quit"]: () => process.exit(0),
-  ["Upgrade my scaffold"]: upgrade,
-  ["Check cookiecutter context"]: parse,
-  ["Clean cached directories"]: removeCache,
-  ["git reset to HEAD"]: resetHEAD
+  Quit: () => process.exit(0),
+  "Upgrade my scaffold": upgrade,
+  "Check cookiecutter context": parse,
+  "Clean cached directories": removeCache,
+  "git reset to HEAD": resetHEAD
 };
 
 inquirer
