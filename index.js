@@ -380,7 +380,7 @@ function updateFiles(slug, oldfile, newfile, type) {
       newfile,
       path.extname(newfile)
     )}.new${path.extname(newfile)}`;
-    const dest = path.join(userdir, name);
+    const dest = path.join(userdir, path.join(path.dirname(newfile), name));
     fs.copyFileSync(src, dest);
     warn(
       `${oldfile} - Failed integrity check. Refer to the new version ${name}`
