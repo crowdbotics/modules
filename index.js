@@ -291,8 +291,10 @@ function updateFiles(slug, oldfile, newfile, type) {
       path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
       path.join(userdir, newfile)
     );
+    valid(newfile);
     return;
   }
+
   switch (type) {
     case "addition": {
       const dir = path.dirname(oldfile);
@@ -428,7 +430,7 @@ function cleanup(saved) {
 function finish() {
   section("Scaffold upgrade finished");
   section("Running git status for review");
-  spawnSync("git", ["status"], {
+  spawnSync("git", ["status", "-u"], {
     cwd: path.join(userdir),
     stdio: "inherit"
   });
