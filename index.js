@@ -279,6 +279,7 @@ function setupCookiecutter(context) {
 }
 
 function updateFiles(slug, oldfile, newfile, type) {
+  // file doesn't exist in the user repo
   if (
     !fs.existsSync(path.join(userdir, oldfile)) &&
     !fs.existsSync(path.join(userdir, newfile))
@@ -292,6 +293,20 @@ function updateFiles(slug, oldfile, newfile, type) {
       path.join(userdir, newfile)
     );
     valid(newfile);
+    return;
+  }
+
+  // file is unchanged from PREVIOUS_VERSION to NEW_VERSION
+  const A = fs.readFileSync(
+    path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+    "utf8"
+  );
+  const B = fs.readFileSync(
+    path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
+    "utf8"
+  );
+  if (A === B) {
+    valid(oldfile);
     return;
   }
 
@@ -376,7 +391,6 @@ function updateFiles(slug, oldfile, newfile, type) {
       );
       break;
   }
-
   const git = spawnSync(
     "git",
     [
