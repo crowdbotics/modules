@@ -279,6 +279,20 @@ function setupCookiecutter(context) {
 }
 
 function updateFiles(slug, oldfile, newfile, type) {
+  if (
+    !fs.existsSync(path.join(userdir, oldfile)) &&
+    !fs.existsSync(path.join(userdir, newfile))
+  ) {
+    const dir = path.dirname(newfile);
+    if (dir !== ".") {
+      spawnSync("mkdir", ["-p", dir], { cwd: userdir });
+    }
+    fs.copyFileSync(
+      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
+      path.join(userdir, newfile)
+    );
+    return;
+  }
   switch (type) {
     case "addition": {
       const dir = path.dirname(oldfile);
