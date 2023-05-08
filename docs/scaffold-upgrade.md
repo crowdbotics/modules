@@ -144,7 +144,7 @@ index fea5ce4..30580d7 100644
 +}
 ```
 
-The diff shows us that our file diverged from the original version (scaffold), more specifically one dependency got added:
+The diff shows us that our file diverged from the original version, more specifically one dependency got added (the other diffs here are only lines reordering):
 
 ```diff
 +    "@modules/articles": "file:./modules/articles/",
