@@ -498,7 +498,7 @@ function updateFiles(slug, oldfile, newfile, type) {
 # you would like to bring to the new version of this file:
 # ${pristine}.
 #
-# When you are done replace your ${path.basename(oldfile)} with ${pristine}.\n`;
+# When you finish replace your ${path.basename(oldfile)} with ${pristine}.\n\n`;
     const diff = fs.readFileSync(diffPath, "utf8");
     fs.writeFileSync(diffPath, diffHeader.concat(diff));
     warn(

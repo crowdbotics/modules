@@ -1,6 +1,7 @@
 ## Documentation
 
-- [Maintaing the React-Native scaffold](/docs/scaffold.md)
+- [Upgrading your React Native scaffold](/docs/scaffold-upgrade.md)
+- [Scaffold documentation](/docs/scaffold.md)
 - [Commands](/docs/commands.md)
 - [Modules available](/docs/modules.md)
 - [Autoloading modules](/docs/autoloading.md)
