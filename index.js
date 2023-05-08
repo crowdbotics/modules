@@ -186,15 +186,58 @@ function getProjectCookiecutterContext() {
     (str) => str["@_name"] === "original_app_name"
   )[0]["#text"];
 
-  // TODO - look at other files to parse project_slug with more confidence?
-  // search for {{cookiecutter.project_slug}} in dist/cookie
-  // for listing all the places where this name could be parsed from
+  context.project_slug = [];
+
   xml = fs.readFileSync(
     path.join(userdir, "android", "app", "src", "main", "AndroidManifest.xml"),
     "utf8"
   );
   obj = parser.parse(xml);
-  context.project_slug = obj.manifest["@_package"].replace(/^(com\.)/g, "");
+  let slug = obj.manifest["@_package"].replace(/^(com\.)/g, "");
+  context.project_slug.push(slug);
+
+  try {
+    xml = fs.readFileSync(
+      path.join(userdir, "ios", slug, "LaunchScreen.storyboard"),
+      "utf8"
+    );
+    obj = parser.parse(xml);
+    context.project_slug.push(
+      obj.document.scenes.scene.objects.viewController.view.subviews.label[0][
+        "@_text"
+      ]
+    );
+    let json = JSON.parse(
+      fs.readFileSync(path.join(userdir, "app.json"), "utf8")
+    );
+    context.project_slug.push(json.name);
+    context.project_slug.push(json.displayName);
+
+    let freqArray = context.project_slug,
+      freqMap = {},
+      mostFrequent = context.project_slug[0],
+      mostFrequentCount = 1;
+
+    for (let i = 0; i < freqArray.length; i++) {
+      let element = freqArray[i];
+
+      if (freqMap[element]) {
+        freqMap[element]++;
+      } else {
+        freqMap[element] = 1;
+      }
+
+      if (freqMap[element] > mostFrequentCount) {
+        mostFrequent = element;
+        mostFrequentCount = freqMap[element];
+      }
+    }
+
+    context.project_slug = mostFrequent;
+  } catch (err) {
+    context.project_slug = context.project_slug[0];
+    warn("project_slug extracted with low confidence:", err.message);
+  }
 
   const txt = fs
     .readFileSync(
