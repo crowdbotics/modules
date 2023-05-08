@@ -96,7 +96,6 @@ function stashSave() {
   });
   const saved = cmd.stdout.includes("Saved working directory and index state");
   if (saved) valid("Unsaved changes have been stashed");
-  return saved;
 }
 
 function setupLocalModulesRepo() {
@@ -414,7 +413,9 @@ function updateFiles(slug, oldfile, newfile, type) {
       fs.writeFileSync(
         path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
         JSON.stringify(
-          JSON.parse(fs.readFileSync(path.join(userdir, oldfile), "utf8"))
+          JSON.parse(fs.readFileSync(path.join(userdir, oldfile), "utf8")),
+          null,
+          2
         ),
         "utf8"
       );
@@ -423,9 +424,12 @@ function updateFiles(slug, oldfile, newfile, type) {
         JSON.stringify(
           JSON.parse(
             fs.readFileSync(
-              path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile)
+              path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+              "utf8"
             )
-          )
+          ),
+          null,
+          2
         ),
         "utf8"
       );
@@ -442,6 +446,7 @@ function updateFiles(slug, oldfile, newfile, type) {
       );
       break;
   }
+
   const git = spawnSync(
     "git",
     [
@@ -452,19 +457,52 @@ function updateFiles(slug, oldfile, newfile, type) {
       path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
     ],
     {
-      cwd: path.join(userdir, MODULES_REPO_DIR)
+      cwd: path.join(userdir, MODULES_REPO_DIR),
+      encoding: "utf8"
     }
   );
   const src = path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile);
+
   if (git.status) {
-    const name = `${path.basename(
+    // Create a pristine file
+    const pristine = `${path.basename(
       newfile,
       path.extname(newfile)
     )}.new${path.extname(newfile)}`;
-    const dest = path.join(userdir, path.join(path.dirname(newfile), name));
+    const dest = path.join(userdir, path.join(path.dirname(newfile), pristine));
     fs.copyFileSync(src, dest);
+
+    // Create a diff file
+    const diffFile = `${path.basename(newfile)}.diff`;
+    const diffPath = path.join(userdir, path.dirname(newfile), diffFile);
+    spawnSync(
+      "git",
+      [
+        "diff",
+        "--no-index",
+        `--output=${diffPath}`,
+        "--",
+        path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+        path.join(userdir, oldfile)
+      ],
+      {
+        cwd: path.join(userdir),
+        encoding: "utf8"
+      }
+    );
+    const diffHeader = `# File: ${path.join(userdir, oldfile)}
+# Original: ${path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile)}
+#
+# This is a git diff between your local version of the file and the scaffold
+# original. Go over all the changes displayed here and consider which ones
+# you would like to bring to the new version of this file:
+# ${pristine}.
+#
+# When you are done replace your ${path.basename(oldfile)} with ${pristine}.\n`;
+    const diff = fs.readFileSync(diffPath, "utf8");
+    fs.writeFileSync(diffPath, diffHeader.concat(diff));
     warn(
-      `${oldfile} - Failed integrity check. Refer to the new version ${name}`
+      `${oldfile} - Failed integrity check. Refer to the new version ${pristine} and it's diff.`
     );
   } else {
     if (oldfile !== newfile) {
@@ -486,16 +524,6 @@ function updateFiles(slug, oldfile, newfile, type) {
   }
 }
 
-function cleanup(saved) {
-  section("Cleaning up");
-  valid("Caching modules repo for future runs");
-  if (!saved) return;
-  spawnSync("git", ["stash", "pop"], {
-    cwd: userdir
-  });
-  valid("Git stash pop previously saved git stash");
-}
-
 function finish() {
   section("Scaffold upgrade finished");
   section("Running git status for review");
@@ -509,7 +537,7 @@ function finish() {
 const upgrade = () => {
   start();
   versionCheck();
-  const saved = stashSave();
+  stashSave();
   setupLocalModulesRepo();
   const context = getProjectCookiecutterContext();
   setupCookiecutter(context);
@@ -519,7 +547,6 @@ const upgrade = () => {
     pair.new = pair.new.replace(/\{\{slug\}\}/g, context.project_slug);
     updateFiles(context.project_slug, pair.old, pair.new, pair.type);
   });
-  cleanup(saved);
   finish();
 };
 
@@ -544,12 +571,20 @@ const resetHEAD = () => {
   });
 };
 
+const removeDiffs = () => {
+  execSync('find . -type f -name "*.diff" -delete', {
+    cwd: path.join(userdir),
+    stdio: "inherit"
+  });
+};
+
 const actions = {
   Quit: () => process.exit(0),
   "Upgrade my scaffold": upgrade,
-  "Check cookiecutter context": parse,
-  "Clean cached directories": removeCache,
-  "git reset to HEAD": resetHEAD
+  "Undo all changes": resetHEAD,
+  "Remove all diff files": removeDiffs,
+  "Print cookiecutter context (debug)": parse,
+  "Clear local cache (debug)": removeCache
 };
 
 inquirer
@@ -560,10 +595,11 @@ inquirer
       message: "What do you want to do?",
       choices: [
         "Upgrade my scaffold",
-        "Check cookiecutter context",
-        "Clean cached directories",
-        "git reset to HEAD",
-        "Quit"
+        "Undo all changes",
+        "Remove all diff files",
+        "Quit",
+        "Print cookiecutter context (debug)",
+        "Clear local cache (debug)"
       ]
     }
   ])
