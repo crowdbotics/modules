@@ -292,6 +292,10 @@ function updateFiles(slug, oldfile, newfile, type) {
       path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
       path.join(userdir, newfile)
     );
+    spawnSync("git", ["add", path.join(userdir, newfile)], {
+      cwd: userdir,
+      stdio: "inherit"
+    });
     valid(newfile);
     return;
   }
@@ -320,6 +324,10 @@ function updateFiles(slug, oldfile, newfile, type) {
         path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, oldfile),
         path.join(userdir, oldfile)
       );
+      spawnSync("git", ["add", path.join(userdir, oldfile)], {
+        cwd: userdir,
+        stdio: "inherit"
+      });
       return;
     }
     case "babel": {
@@ -428,6 +436,10 @@ function updateFiles(slug, oldfile, newfile, type) {
     valid(oldfile);
     const dest = path.join(userdir, newfile);
     fs.copyFileSync(src, dest);
+    spawnSync("git", ["add", dest], {
+      cwd: userdir,
+      stdio: "inherit"
+    });
   }
 }
 
