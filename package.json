@@ -15,6 +15,7 @@
     "add": "node scripts/add.js",
     "remove": "node scripts/remove.js",
     "parse": "node scripts/parse.js",
+    "semver": "node scripts/semver.js",
     "dist": "node scripts/parse.js --write",
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
