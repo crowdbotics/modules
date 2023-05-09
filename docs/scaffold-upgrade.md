@@ -1,6 +1,6 @@
 # Upgrading the scaffold to v2
 
-This tool will guide you in upgrading the React Native scaffold of your app from version 1.1.0 to version 2.0.0.
+This document will guide you in upgrading the React Native scaffold of your app from version 1.1.0 to version 2.0.0.
 
 ## Requirements
 
@@ -153,7 +153,6 @@ The diff shows us that our file diverged from the original version, more specifi
 This means that we have to add the same dependency to `package.new.json` and replace the old file, i.e. with yarn:
 
 ```shell
-rm package.json
 mv package.new.json package.json
 yarn add file:./modules/articles
 git add package.json yarn.lock
