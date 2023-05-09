@@ -192,7 +192,7 @@ function getProjectCookiecutterContext() {
     "utf8"
   );
   obj = parser.parse(xml);
-  let slug = obj.manifest["@_package"].replace(/^(com\.)/g, "");
+  const slug = obj.manifest["@_package"].replace(/^(com\.)/g, "");
   context.project_slug.push(slug);
 
   try {
@@ -206,19 +206,19 @@ function getProjectCookiecutterContext() {
         "@_text"
       ]
     );
-    let json = JSON.parse(
+    const json = JSON.parse(
       fs.readFileSync(path.join(userdir, "app.json"), "utf8")
     );
     context.project_slug.push(json.name);
     context.project_slug.push(json.displayName);
 
-    let freqArray = context.project_slug,
-      freqMap = {},
-      mostFrequent = context.project_slug[0],
-      mostFrequentCount = 1;
+    const freqArray = context.project_slug;
+    const freqMap = {};
+    let mostFrequent = context.project_slug[0];
+    let mostFrequentCount = 1;
 
     for (let i = 0; i < freqArray.length; i++) {
-      let element = freqArray[i];
+      const element = freqArray[i];
 
       if (freqMap[element]) {
         freqMap[element]++;
