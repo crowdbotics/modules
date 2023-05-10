@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .services.BlackbaudService import BlackbaudService
+from .serializers import CreateConstituentsSerializers, CreateConstituentsAttachmentsSerializers, \
+    CreateConstituentsCodeSerializers
 
 
 class BlackbaudViewSet(viewsets.GenericViewSet):
@@ -14,6 +16,15 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         client_secret=os.getenv('BLACKBAUD_CLIENT_SECRET', ""),
         api_subscription_key=os.getenv('BB_API_SUBSCRIPTION_KEY', "")
     )
+
+    allowed_serializer = {
+        "create_constituents": CreateConstituentsSerializers,
+        "create_constituents_attachment": CreateConstituentsAttachmentsSerializers,
+        "create_constituent_code": CreateConstituentsCodeSerializers
+    }
+
+    def get_serializer_class(self):
+        return self.allowed_serializer.get(self.action)
 
     @action(detail=False, methods=['post'], url_path='access/token')
     def get_access_token(self, request):
@@ -37,19 +48,20 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         response = self.blackbaud_service.event_list(request.META.get("HTTP_AUTHORIZATION"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='event/details')
-    def get_event_details(self, request):
+    @action(detail=False, methods=['get'], url_path='event/details/(?P<event_id>\d+)')
+    def get_event_details(self, request, **kwargs):
         """
         To get the Event Details
         :headers: "Authorization: Bearer (token)"
         :body_params: "event_id"
         :return: Returns an event with details containing all its objects.
         """
-        response = self.blackbaud_service.event_details(request.META.get("HTTP_AUTHORIZATION"), request.data.get('event_id'))
+        response = self.blackbaud_service.event_details(request.META.get("HTTP_AUTHORIZATION"),
+                                                        kwargs.get("event_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='event/participants_list')
-    def get_event_participants_list(self, request):
+    @action(detail=False, methods=['get'], url_path='event/participants_list/(?P<event_id>\d+)')
+    def get_event_participants_list(self, request, **kwargs):
         """
         To get the Event Participants List
         :headers: "Authorization: Bearer (token)"
@@ -57,7 +69,7 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :return: Returns an event details with including participants.
         """
         response = self.blackbaud_service.event_participants_list(request.META.get("HTTP_AUTHORIZATION"),
-                                                        request.data.get('event_id'))
+                                                                  kwargs.get("event_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='consent/channels')
@@ -78,4 +90,58 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :return: Returns an constituents list details containing all its objects.
       """
         response = self.blackbaud_service.constituents_list(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituents/create_constituent')
+    def create_constituents(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_constituents(request.META.get("HTTP_AUTHORIZATION"),
+                                                              payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituents/convert_non_constituent_to_constituent')
+    def create_convert_non_constituent_to_constituent(self, request):
+        response = self.blackbaud_service.convert_non_constituent_to_constituent(request.META.get("HTTP_AUTHORIZATION"),
+                                                                                 request.data.get("non_constituent_id"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/constituent_details/(?P<constituent_id>\d+)')
+    def get_constituent_details(self, request, *args, **kwargs):
+        response = self.blackbaud_service.constituent_details_by_id(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    kwargs.get("constituent_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/constituent_appeal_list')
+    def get_constituent_appeal_list(self, request):
+        response = self.blackbaud_service.constituent_appeal_list(request.META.get("HTTP_AUTHORIZATION"),
+                                                                  request.data.get("constituent_id"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituents/create_attachment')
+    def create_constituents_attachment(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_constituent_attachment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                        payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='constituents/delete_attachment/(?P<attachment_id>\d+)')
+    def delete_constituent_attachment(self, request, *args, **kwargs):
+        response = self.blackbaud_service.delete_constituent_attachment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                        kwargs.get("attachment_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/constituent_attachment_list/(?P<constituent_id>\d+)')
+    def get_constituent_attachment_list(self, request, *args, **kwargs):
+        response = self.blackbaud_service.constituent_attachment_list(request.META.get("HTTP_AUTHORIZATION"),
+                                                                      kwargs.get("constituent_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituents/create_constituent_code')
+    def create_constituent_code(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.constituent_code(request.META.get("HTTP_AUTHORIZATION"),
+                                                           payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
