@@ -59,6 +59,22 @@ class BlackbaudService(BlackbaudBase):
         except Exception as e:
             return e
 
+    def event_details(self, access_token, event_id):
+        try:
+            url = f'{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_participants_list(self, access_token, event_id):
+        try:
+            url = f'{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/participants'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
     def consent_channels(self, access_token):
         try:
             url = f'{self.BLACKBAUD_BASE_URL}/commpref/v1/consent/channels'
