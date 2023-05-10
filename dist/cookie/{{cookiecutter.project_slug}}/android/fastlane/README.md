@@ -1,20 +1,14 @@
-# fastlane documentation
+## fastlane documentation
 
 # Installation
 
 Make sure you have the latest version of the Xcode command line tools installed:
 
-```
+```sh
 xcode-select --install
 ```
 
-Install _fastlane_ using
-
-```
-[sudo] gem install fastlane -NV
-```
-
-or alternatively using `brew install fastlane`
+For _fastlane_ installation instructions, see [Installing _fastlane_](https://docs.fastlane.tools/#installing-fastlane)
 
 # Available Actions
 
@@ -22,46 +16,72 @@ or alternatively using `brew install fastlane`
 
 ### android test
 
-```
-fastlane android test
+```sh
+[bundle exec] fastlane android test
 ```
 
 Runs all the tests
 
+### android deploy_and_build
+
+```sh
+[bundle exec] fastlane android deploy_and_build
+```
+
+deploy appetize and build
+
+### android internal
+
+```sh
+[bundle exec] fastlane android internal
+```
+
+Submit a new Internal Build
+
+### android alpha
+
+```sh
+[bundle exec] fastlane android alpha
+```
+
+Promote from internal to alpha
+
 ### android beta
 
-```
-fastlane android beta
+```sh
+[bundle exec] fastlane android beta
 ```
 
-Submit a new Beta Build
+Promote from internal to beta
 
-### android deploy
+### android production
 
-```
-fastlane android deploy
+```sh
+[bundle exec] fastlane android production
 ```
 
 Deploy a new version to the Google Play
 
 ### android deploy_appetize
 
-```
-fastlane android deploy_appetize
+```sh
+[bundle exec] fastlane android deploy_appetize
 ```
 
 Deployment to Appetize
 
 ### android build_aab
 
-```
-fastlane android build_aab
+```sh
+[bundle exec] fastlane android build_aab
 ```
 
 create a new android app bundle build
 
 ---
 
-This README.md is auto-generated and will be re-generated every time [fastlane](https://fastlane.tools) is run.
-More information about fastlane can be found on [fastlane.tools](https://fastlane.tools).
-The documentation of fastlane can be found on [docs.fastlane.tools](https://docs.fastlane.tools).
+This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
+
+More information about _fastlane_ can be found on [fastlane.tools](https://fastlane.tools).
+
+The documentation of _fastlane_ can be found on [docs.fastlane.tools](https://docs.fastlane.tools).
