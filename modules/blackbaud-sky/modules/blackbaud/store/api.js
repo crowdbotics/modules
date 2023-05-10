@@ -13,6 +13,34 @@ export const getEventListing = (accessToken) => {
   return axios.request(config);
 };
 
+export const getEventDetails = (accessToken, id) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud-sky/service/event/details/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+
+export const getAttendeeList = (accessToken, id) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud-sky/service/event/participants_list/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+
 export const api = {
-  getEventListing
+  getEventListing,
+  getEventDetails,
+  getAttendeeList
 };
