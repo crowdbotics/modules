@@ -6,7 +6,7 @@ from unittest import mock
 
 class TestBlackbaudViewSet(APITestCase):
 
-    @mock.patch('modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.auth_token')
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.auth_token')
     def test_auth_token_with_valid_code(self, auth_token_mock):
         response = {
             'data': {
@@ -31,11 +31,11 @@ class TestBlackbaudViewSet(APITestCase):
         data = {
             'code': "f1c25e95cc9c4b718a8c64d1be7f1d67"
         }
-        Response = self.client.post(reverse('blackbaud_service-get-access-token'), data=data)
+        Response = self.client.post(reverse('blackbaud-get-access-token'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         auth_token_mock.assert_called()
 
-    @mock.patch('modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.auth_token')
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.auth_token')
     def test_auth_token_with_invalid_code(self, auth_token_mock):
         response = {
             'data': {
@@ -47,11 +47,11 @@ class TestBlackbaudViewSet(APITestCase):
         data = {
             'code': "f1c25e95cc9c4b718a8c6"
         }
-        Response = self.client.post(reverse('blackbaud_service-get-access-token'), data=data)
+        Response = self.client.post(reverse('blackbaud-get-access-token'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         auth_token_mock.assert_called_once()
 
-    @mock.patch('modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.auth_token')
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.auth_token')
     def test_auth_token_without_code(self, auth_token_mock):
         response = {
             'data': {
@@ -63,11 +63,11 @@ class TestBlackbaudViewSet(APITestCase):
         data = {
 
         }
-        Response = self.client.post(reverse('blackbaud_service-get-access-token'), data=data)
+        Response = self.client.post(reverse('blackbaud-get-access-token'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         auth_token_mock.assert_called_once()
 
-    @mock.patch('modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.event_list')
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_list')
     def test_event_list(self, event_list_mock):
         response = {
             'data': {
@@ -98,11 +98,11 @@ class TestBlackbaudViewSet(APITestCase):
             }, 'status_code': 200
         }
         event_list_mock.return_value = response
-        Response = self.client.get(reverse('blackbaud_service-get-event-list'))
+        Response = self.client.get(reverse('blackbaud-get-event-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         event_list_mock.assert_called()
 
-    @mock.patch('modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.event_details')
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_details')
     def test_event_details_with_valid_event_id(self, event_details_mock):
         response = {
             'data': {
@@ -130,12 +130,12 @@ class TestBlackbaudViewSet(APITestCase):
         event_details_mock.return_value = response
 
         event_id = 32582
-        url = reverse('blackbaud_service-get-event-details', kwargs={'event_id': event_id})
+        url = reverse('blackbaud-get-event-details', kwargs={'event_id': event_id})
         Response = self.client.get(url)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         event_details_mock.assert_called_once()
 
-    @mock.patch('modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.event_details')
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_details')
     def test_event_details_with_invalid_event_id(self, event_details_mock):
         response = {
             'data': [
@@ -150,13 +150,13 @@ class TestBlackbaudViewSet(APITestCase):
         }
         event_details_mock.return_value = response
         event_id = 23
-        url = reverse('blackbaud_service-get-event-details', kwargs={'event_id': event_id})
+        url = reverse('blackbaud-get-event-details', kwargs={'event_id': event_id})
         Response = self.client.get(url)
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         event_details_mock.assert_called_once()
 
     @mock.patch(
-        'modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.event_participants_list')
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participants_list')
     def test_event_participants_list(self, event_participants_list_mock):
         response = {
             'data': {
@@ -195,12 +195,12 @@ class TestBlackbaudViewSet(APITestCase):
         }
         event_participants_list_mock.return_value = response
         event_id = 32582
-        Response = self.client.get(reverse('blackbaud_service-get-event-participants-list', kwargs={'event_id': event_id}))
+        Response = self.client.get(reverse('blackbaud-get-event-participants-list', kwargs={'event_id': event_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         event_participants_list_mock.assert_called_once()
 
     @mock.patch(
-        'modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.event_participants_list')
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participants_list')
     def test_event_participants_list_with_invalid_event_id(self, event_participants_list_mock):
         response = {
             'data': [
@@ -215,12 +215,12 @@ class TestBlackbaudViewSet(APITestCase):
         }
         event_participants_list_mock.return_value = response
         event_id = 282
-        Response = self.client.get(reverse('blackbaud_service-get-event-participants-list', kwargs={'event_id': event_id}))
+        Response = self.client.get(reverse('blackbaud-get-event-participants-list', kwargs={'event_id': event_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         event_participants_list_mock.assert_called_once()
 
     @mock.patch(
-        'modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.consent_channels')
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.consent_channels')
     def test_consent_channels(self, consent_channels_mock):
         response = {'data': {'count': 8, 'value': [{'description': 'AutoPhone'}, {'description': 'DataProcessing'},
                                                    {'description': 'Email'}, {'description': 'Mail'},
@@ -228,12 +228,12 @@ class TestBlackbaudViewSet(APITestCase):
                                                    {'description': 'SMS'}, {'description': 'Social'}]},
                     'status_code': 200}
         consent_channels_mock.return_value = response
-        Response = self.client.get(reverse('blackbaud_service-get-consent-channels'))
+        Response = self.client.get(reverse('blackbaud-get-consent-channels'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         consent_channels_mock.assert_called_once()
 
     @mock.patch(
-        'modules.blackbaud-sky.blackbaud_sky.services.BlackbaudService.BlackbaudService.constituents_list')
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_list')
     def test_constituents_list(self, constituents_list_mock):
         response = {'data': {'count': 28329,
                              'next_link': 'https://api.sky.blackbaud.com/constituent/v1/constituents?offset=500',
@@ -250,6 +250,6 @@ class TestBlackbaudViewSet(APITestCase):
                                                   'do_not_email': False, 'inactive': False, 'primary': True,
                                                   'type': 'Email'}, 'type': 'Individual'}]}, 'status_code': 200}
         constituents_list_mock.return_value = response
-        Response = self.client.get(reverse('blackbaud_service-get-constituents-list'))
+        Response = self.client.get(reverse('blackbaud-get-constituents-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         constituents_list_mock.assert_called_once()

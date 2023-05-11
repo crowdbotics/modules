@@ -100,10 +100,10 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                               payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='constituents/convert_non_constituent_to_constituent')
-    def create_convert_non_constituent_to_constituent(self, request):
+    @action(detail=False, methods=['post'], url_path='constituents/convert_non_constituent_to_constituent/(?P<non_constituent_id>\d+)')
+    def create_convert_non_constituent_to_constituent(self, request, *args, **kwargs):
         response = self.blackbaud_service.convert_non_constituent_to_constituent(request.META.get("HTTP_AUTHORIZATION"),
-                                                                                 request.data.get("non_constituent_id"))
+                                                                                 kwargs.get("non_constituent_id"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='constituents/constituent_details/(?P<constituent_id>\d+)')
@@ -144,4 +144,25 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         response = self.blackbaud_service.constituent_code(request.META.get("HTTP_AUTHORIZATION"),
                                                            payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='constituents/delete_constituent_code/(?P<constituent_code_id>\d+)')
+    def delete_constituent_code(self, request, *args, **kwargs):
+        response = self.blackbaud_service.delete_constituent_code(request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_code_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_code_details/(?P<constituent_code_id>\d+)')
+    def get_constituent_code_details(self, request, *args, **kwargs):
+        response = self.blackbaud_service.constituent_code_details(request.META.get("HTTP_AUTHORIZATION"),
+                                                                  kwargs.get("constituent_code_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_code_list')
+    def get_constituent_code_list(self, request):
+        response = self.blackbaud_service.constituent_code_list(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_code_list_in_constituent/(?P<constituent_id>\d+)')
+    def get_constituent_code_list_in_constituent(self, request, *args, **kwargs):
+        response = self.blackbaud_service.constituent_code_list_in_constituent(request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_id"))
         return Response(data=response.get("data"), status=response.get("status_code"))

@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class BlackbaudConfig(AppConfig):
-    name = "modules.blackbaud-sky.blackbaud_sky"
+    name = "modules.blackbaud.blackbaud"
     verbose_name = "Blackbaud"

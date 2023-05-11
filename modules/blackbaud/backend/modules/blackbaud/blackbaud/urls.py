@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .viewsets import BlackbaudViewSet
 
 router = DefaultRouter()
-router.register("service", BlackbaudViewSet, basename="blackbaud_service")
+router.register("", BlackbaudViewSet, basename="blackbaud")
 
 
 urlpatterns = [
