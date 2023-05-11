@@ -5,7 +5,7 @@ export const getEventListing = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud-sky/service/events/list/`,
+    url: `${globalOptions.url}/modules/blackbaud/events/list/`,
     headers: {
       Authorization: `Bearer ${accessToken}`
     }
@@ -17,7 +17,7 @@ export const getEventDetails = (accessToken, id) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud-sky/service/event/details/${id}/`,
+    url: `${globalOptions.url}/modules/blackbaud/event/details/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -30,7 +30,7 @@ export const getAttendeeList = (accessToken, id) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud-sky/service/event/participants_list/${id}/`,
+    url: `${globalOptions.url}/modules/blackbaud/event/participants_list/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
