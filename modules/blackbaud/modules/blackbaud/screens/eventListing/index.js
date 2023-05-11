@@ -33,7 +33,6 @@ const EventListing = ({ navigation }) => {
       authorize(config)
         .then((response) => {
           dispatch(eventList(response?.accessToken));
-          console.log("EVENT", response?.accessToken);
           dispatch(slice.actions.saveAccessToken(response?.accessToken));
           setBrowserRequesting(false);
         })

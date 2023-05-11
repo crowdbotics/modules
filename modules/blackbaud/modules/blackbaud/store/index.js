@@ -1,28 +1,43 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./api";
+import { Alert } from "react-native";
 
 export const eventList = createAsyncThunk(
   "events/eventList",
   async (accessToken) => {
-    const response = await api.getEventListing(accessToken);
-    return response.data;
+    try {
+      const response = await api.getEventListing(accessToken);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
   }
 );
 
 export const eventDetails = createAsyncThunk(
   "events/eventDetails",
   async (data) => {
-    const response = await api.getEventDetails(data.token, data.id);
-    return response.data;
+    try {
+      const response = await api.getEventDetails(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
   }
 );
 
 export const attendeeList = createAsyncThunk(
   "events/attendeeList",
   async (data) => {
-    const response = await api.getAttendeeList(data.token, data.id);
-    console.log("respoinse ATTENDEE LIST", response);
-    return response.data;
+    try {
+      const response = await api.getAttendeeList(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
   }
 );
 
