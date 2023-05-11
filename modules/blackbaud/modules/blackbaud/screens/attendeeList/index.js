@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { attendeeList } from "../../store";
 import userIcon from "../../assets/userIcon.png";
 import backIcon from "../../assets/backIcon.png";
+import { useIsFocused } from "@react-navigation/native";
 
 const AttendeeList = (props) => {
   const dispatch = useDispatch();
@@ -20,13 +21,17 @@ const AttendeeList = (props) => {
 
   const { params } = route;
 
+  const isFocused = useIsFocused();
+
   const loading = useSelector((state) => state.Events.attendeeListApi.loading);
   const token = useSelector((state) => state.Events.accessToken);
   const attendees = useSelector((state) => state.Events.attendeeList);
 
   useEffect(() => {
-    dispatch(attendeeList({ id: params?.id, token: token }));
-  }, []);
+    if (isFocused) {
+      dispatch(attendeeList({ id: params?.id, token: token }));
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>

@@ -37,13 +37,13 @@ const EventListing = ({ navigation }) => {
           setBrowserRequesting(false);
         })
         .catch((err) => {
+          navigation.navigate("Login");
           Alert.alert("Error", err.message);
-          navigation.goBack();
           setBrowserRequesting(false);
         });
     } catch (error) {
+      navigation.navigate("Login");
       Alert.alert("Error", error.message);
-      navigation.goBack();
       setBrowserRequesting(false);
     }
   }, []);
