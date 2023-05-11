@@ -27,9 +27,9 @@ class BlackbaudBase:
         except requests.exceptions.RequestException as e:
             return {"data": e.response.json(), "status_code": e.response.status_code}
 
-    def _api_call(self, request_type, url, headers=None, payload=None, data=None):
+    def _api_call(self, request_type, url, headers=None, payload=None, data=None, params=None):
         try:
-            response = requests.request(request_type, url, headers=headers, json=payload, data=data)
+            response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
             data = json.loads(response.text)
             return {"data": data, "status_code": response.status_code}
         except requests.exceptions.RequestException as e:
@@ -152,7 +152,8 @@ class BlackbaudService(BlackbaudBase):
     def constituent_code(self, access_token, payload):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituentcodes"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
@@ -185,6 +186,49 @@ class BlackbaudService(BlackbaudBase):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/constituentcodes"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_custom_fields(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/customfields"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_custom_field_categories(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/customfields/categories"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_custom_field_categories_details(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/customfields/categories/details"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_custom_field_categories_values(self, access_token, category_name):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/customfields/categories/values"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token),
+                                      params={"category_name": category_name})
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_custom_field_collection(self, access_token, constituent_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/customfieldcollection"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e

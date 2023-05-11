@@ -4,7 +4,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .services.BlackbaudService import BlackbaudService
 from .serializers import CreateConstituentsSerializers, CreateConstituentsAttachmentsSerializers, \
-    CreateConstituentsCodeSerializers
+    CreateConstituentsCodeSerializers, CreateConstituentsCustomFieldsSerializers, \
+    CreateConstituentsCustomFieldsCollectionSerializers
 
 
 class BlackbaudViewSet(viewsets.GenericViewSet):
@@ -20,7 +21,9 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
     allowed_serializer = {
         "create_constituents": CreateConstituentsSerializers,
         "create_constituents_attachment": CreateConstituentsAttachmentsSerializers,
-        "create_constituent_code": CreateConstituentsCodeSerializers
+        "create_constituent_code": CreateConstituentsCodeSerializers,
+        "create_constituent_custom_field": CreateConstituentsCustomFieldsSerializers,
+        "create_constituent_custom_collection": CreateConstituentsCustomFieldsCollectionSerializers
     }
 
     def get_serializer_class(self):
@@ -100,7 +103,8 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                               payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='constituents/convert_non_constituent_to_constituent/(?P<non_constituent_id>\d+)')
+    @action(detail=False, methods=['post'],
+            url_path='constituents/convert_non_constituent_to_constituent/(?P<non_constituent_id>\d+)')
     def create_convert_non_constituent_to_constituent(self, request, *args, **kwargs):
         response = self.blackbaud_service.convert_non_constituent_to_constituent(request.META.get("HTTP_AUTHORIZATION"),
                                                                                  kwargs.get("non_constituent_id"))
@@ -112,10 +116,10 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                                     kwargs.get("constituent_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='constituents/constituent_appeal_list')
-    def get_constituent_appeal_list(self, request):
+    @action(detail=False, methods=['get'], url_path='constituents/constituent_appeal_list/(?P<constituent_id>\d+)')
+    def get_constituent_appeal_list(self, request, *args, **kwargs):
         response = self.blackbaud_service.constituent_appeal_list(request.META.get("HTTP_AUTHORIZATION"),
-                                                                  request.data.get("constituent_id"))
+                                                                  kwargs.get("constituent_id"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='constituents/create_attachment')
@@ -146,15 +150,18 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                            payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['delete'], url_path='constituents/delete_constituent_code/(?P<constituent_code_id>\d+)')
+    @action(detail=False, methods=['delete'],
+            url_path='constituents/delete_constituent_code/(?P<constituent_code_id>\d+)')
     def delete_constituent_code(self, request, *args, **kwargs):
-        response = self.blackbaud_service.delete_constituent_code(request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_code_id", None))
+        response = self.blackbaud_service.delete_constituent_code(request.META.get("HTTP_AUTHORIZATION"),
+                                                                  kwargs.get("constituent_code_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_code_details/(?P<constituent_code_id>\d+)')
+    @action(detail=False, methods=['get'],
+            url_path='constituents/get_constituent_code_details/(?P<constituent_code_id>\d+)')
     def get_constituent_code_details(self, request, *args, **kwargs):
         response = self.blackbaud_service.constituent_code_details(request.META.get("HTTP_AUTHORIZATION"),
-                                                                  kwargs.get("constituent_code_id", None))
+                                                                   kwargs.get("constituent_code_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='constituents/get_constituent_code_list')
@@ -162,7 +169,44 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         response = self.blackbaud_service.constituent_code_list(request.META.get("HTTP_AUTHORIZATION"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_code_list_in_constituent/(?P<constituent_id>\d+)')
+    @action(detail=False, methods=['get'],
+            url_path='constituents/get_constituent_code_list_in_constituent/(?P<constituent_id>\d+)')
     def get_constituent_code_list_in_constituent(self, request, *args, **kwargs):
-        response = self.blackbaud_service.constituent_code_list_in_constituent(request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_id"))
+        response = self.blackbaud_service.constituent_code_list_in_constituent(request.META.get("HTTP_AUTHORIZATION"),
+                                                                               kwargs.get("constituent_id"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituents/create_constituent_custom_field')
+    def create_constituent_custom_field(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.constituent_custom_fields(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_custom_field_categories')
+    def get_constituent_custom_field_categories(self, request):
+        response = self.blackbaud_service.constituent_custom_field_categories(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_custom_field_categories_details')
+    def get_constituent_custom_field_categories_details(self, request):
+        response = self.blackbaud_service.constituent_custom_field_categories_details(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_custom_field_categories_values')
+    def get_constituent_custom_field_categories_values(self, request):
+        response = self.blackbaud_service.constituent_custom_field_categories_values(
+            request.META.get("HTTP_AUTHORIZATION"), category_name=request.query_params.get('category_name'))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'],
+            url_path='constituents/create_constituent_custom_field_collection/(?P<constituent_id>\d+)')
+    def create_constituent_custom_collection(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.constituent_custom_field_collection(
+            request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_id"),
+            payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))

@@ -25,3 +25,13 @@ class CreateConstituentsAttachmentsSerializers(serializers.Serializer):
 class CreateConstituentsCodeSerializers(serializers.Serializer):
     constituent_id = serializers.CharField(required=True)
     description = serializers.CharField(required=True)
+
+
+class CreateConstituentsCustomFieldsSerializers(serializers.Serializer):
+    category = serializers.CharField(required=True)
+    comment = serializers.CharField(required=False)
+    parent_id = serializers.CharField(required=True)
+
+
+class CreateConstituentsCustomFieldsCollectionSerializers(serializers.Serializer):
+    category = serializers.CharField(required=True)
