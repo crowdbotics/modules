@@ -93,6 +93,7 @@ export const slice = createSlice({
     [eventDetails.rejected]: (state, action) => {
       if (state.eventDetailApi.loading === "pending") {
         state.eventDetailApi.error = action.error;
+        state.eventDetails = false;
         state.eventDetailApi.loading = "idle";
       }
     },
@@ -111,6 +112,7 @@ export const slice = createSlice({
     [attendeeList.rejected]: (state, action) => {
       if (state.attendeeListApi.loading === "pending") {
         state.attendeeListApi.error = action.error;
+        state.attendeeList = [];
         state.attendeeListApi.loading = "idle";
       }
     }

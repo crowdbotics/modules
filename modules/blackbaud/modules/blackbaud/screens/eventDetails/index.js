@@ -10,6 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { eventDetails } from "../../store";
 import backIcon from "../../assets/backIcon.png";
+import { useIsFocused } from "@react-navigation/native";
 
 const EventDetails = (props) => {
   const dispatch = useDispatch();
@@ -18,13 +19,17 @@ const EventDetails = (props) => {
 
   const { params } = route;
 
+  const isFocused = useIsFocused();
+
   const loading = useSelector((state) => state.Events.eventDetailApi.loading);
   const token = useSelector((state) => state.Events.accessToken);
   const eventDetail = useSelector((state) => state.Events.eventDetails);
 
   useEffect(() => {
-    dispatch(eventDetails({ id: params?.id, token: token }));
-  }, []);
+    if (isFocused) {
+      dispatch(eventDetails({ id: params?.id, token: token }));
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
