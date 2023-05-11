@@ -66,6 +66,10 @@ fs.copyFileSync(
   path.join(cwd, "package.json")
 );
 fs.copyFileSync(
+  path.join(customFiles, "yarn.lock"),
+  path.join(cwd, "yarn.lock")
+);
+fs.copyFileSync(
   path.join(customFiles, ".gitignore"),
   path.join(cwd, ".gitignore")
 );
