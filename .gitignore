@@ -205,6 +205,3 @@ myvenv/
 
 # dist files
 dist/raw
-
-scaffold/template/ios/Pods/*
-!scaffold/template/ios/Pods/Manifest.lock
