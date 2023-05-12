@@ -572,10 +572,15 @@ const resetHEAD = () => {
     encoding: "utf8"
   });
   if (status) {
-    execSync(`rm ${status.replace("\n", " ")}`, {
-      cwd: path.join(userdir),
-      stdio: "inherit"
-    });
+    status
+      .split("\n")
+      .filter((stat) => stat)
+      .forEach((stat) =>
+        spawnSync("rm", [stat], {
+          cwd: path.join(userdir),
+          stdio: "inherit"
+        })
+      );
   }
 };
 
