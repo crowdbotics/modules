@@ -232,3 +232,51 @@ class BlackbaudService(BlackbaudBase):
             return response
         except Exception as e:
             return e
+
+    def constituent_custom_field_list(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/customfields"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_custom_field_list_in_single_constituent(self, access_token, constituent_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/customfields"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_countries(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/countries"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_currencyconfiguration(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/currencyconfiguration"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_address_list(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/addresses"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_education_list(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e

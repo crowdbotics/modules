@@ -210,3 +210,39 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
             request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_id"),
             payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_constituent_custom_field_list')
+    def get_constituent_custom_field_list(self, request):
+        response = self.blackbaud_service.constituent_custom_field_list(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'],
+            url_path='constituents/get_constituent_custom_field_list_in_single_constituent/(?P<constituent_id>\d+)')
+    def get_constituent_custom_field_list_in_single_constituent(self, request, *args, **kwargs):
+        response = self.blackbaud_service.constituent_custom_field_list_in_single_constituent(request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_id"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_countries')
+    def get_constituent_countries(self, request):
+        response = self.blackbaud_service.constituent_countries(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_currencyconfiguration')
+    def get_constituent_currencyconfiguration(self, request):
+        response = self.blackbaud_service.constituent_currencyconfiguration(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_address_list')
+    def get_constituents_address_list(self, request):
+        response = self.blackbaud_service.constituents_address_list(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituents/get_education_list')
+    def get_constituents_education_list(self, request):
+        response = self.blackbaud_service.constituents_education_list(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
