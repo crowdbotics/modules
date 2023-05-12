@@ -565,10 +565,16 @@ const resetHEAD = () => {
     cwd: path.join(userdir),
     stdio: "inherit"
   });
-  execSync("rm $(git status -u --porcelain=v1 | cut -c 4-)", {
+  const status = execSync("git status -u --porcelain=v1 | cut -c 4-", {
     cwd: path.join(userdir),
-    stdio: "inherit"
+    encoding: "utf8"
   });
+  if (status) {
+    execSync(`rm ${status.replace("\n", " ")}`, {
+      cwd: path.join(userdir),
+      stdio: "inherit"
+    });
+  }
 };
 
 const removeDiffs = () => {
