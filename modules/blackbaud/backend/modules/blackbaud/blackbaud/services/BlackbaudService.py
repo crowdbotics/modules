@@ -265,6 +265,126 @@ class BlackbaudService(BlackbaudBase):
         except Exception as e:
             return e
 
+    def constituents_education_list(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_create_document(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/documents"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_create_education(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_delete_education(self, access_token, education_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/{education_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_education_record(self, access_token, education_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/educations/{education_id}"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_create_education_custom_field(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/customfields"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_delete_education_custom_field(self, access_token, custom_field_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/customfields/{custom_field_id}"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_education_custom_field_categories(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/customfields/categories/details"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_custom_field_list_in_education(self, access_token, education_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/{education_id}/customfields"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_education_degrees(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/degrees"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_single_education_list(self, access_token, constituent_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/educations"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_education_schools(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/schools"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_education_statuses(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/statuses"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_education_subjects(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/subjects"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_get_education_types(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/types"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
     def constituents_address_list(self, access_token):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/addresses"
@@ -273,10 +393,66 @@ class BlackbaudService(BlackbaudBase):
         except Exception as e:
             return e
 
-    def constituents_education_list(self, access_token):
+    def constituents_create_address(self, access_token, payload):
         try:
-            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations"
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/addresses"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_get_address_details(self, access_token, address_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/addresses/{address_id}"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_delete_address_details(self, access_token, address_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/addresses/{address_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_get_address_list(self, access_token, constituent_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/addresses"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_get_address_types(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/addresstypes"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_create_aliases(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/aliases"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_delete_alias(self, access_token, alias_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/aliases/{alias_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituents_create_alias_collection(self, access_token, constituent_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/aliascollection"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
             return response
         except Exception as e:
             return e
