@@ -125,7 +125,8 @@ function setupLocalModulesRepo() {
       "add",
       "@babel/preset-typescript",
       "@babel/preset-env",
-      "@babel/preset-react"
+      "@babel/preset-react",
+      "prettier"
     ],
     {
       cwd: path.join(userdir, MODULES_REPO_DIR)
@@ -409,6 +410,21 @@ function updateFiles(slug, oldfile, newfile, type) {
         console.error(B.stdout);
         console.error(B.stderr);
       }
+      spawnSync(
+        "npx",
+        [
+          "prettier",
+          "--parser=babel-ts",
+          "--single-quote",
+          "--write",
+          path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
+          path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
+        ],
+        {
+          cwd: path.join(userdir, MODULES_REPO_DIR),
+          encoding: "utf8"
+        }
+      );
       break;
     }
     case "json": {
@@ -454,6 +470,10 @@ function updateFiles(slug, oldfile, newfile, type) {
     [
       "diff",
       "--no-index",
+      "--ignore-space-change",
+      "--ignore-blank-lines",
+      "--ignore-cr-at-eol",
+      "--ignore-space-at-eol",
       "--",
       path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
       path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
