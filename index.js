@@ -342,18 +342,20 @@ function updateFiles(slug, oldfile, newfile, type) {
     return;
   }
 
-  // file is unchanged from PREVIOUS_VERSION to NEW_VERSION
-  const A = fs.readFileSync(
-    path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
-    "utf8"
-  );
-  const B = fs.readFileSync(
-    path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
-    "utf8"
-  );
-  if (A === B) {
-    valid(oldfile);
-    return;
+  if (type !== "addition") {
+    // file is unchanged from PREVIOUS_VERSION to NEW_VERSION
+    const A = fs.readFileSync(
+      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+      "utf8"
+    );
+    const B = fs.readFileSync(
+      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
+      "utf8"
+    );
+    if (A === B) {
+      valid(oldfile);
+      return;
+    }
   }
 
   switch (type) {
