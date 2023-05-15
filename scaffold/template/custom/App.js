@@ -17,7 +17,7 @@ const Stack = createStackNavigator()
 
 import { GlobalOptionsContext, OptionsContext, getOptions } from "@options"
 
-const getNavigation = (modules, screens, initialRoute) => {
+const getNavigation = (modules, screens, initialRoute, headerShown) => {
   const Navigation = () => {
     const routes = modules.concat(screens).map(mod => {
       const pakage = mod.package
@@ -33,7 +33,7 @@ const getNavigation = (modules, screens, initialRoute) => {
       return <Stack.Screen key={name} name={name} component={Component} />
     })
 
-    const screenOptions = { headerShown: true }
+    const screenOptions = { headerShown: headerShown || false}
 
     return (
       <NavigationContainer>
@@ -68,7 +68,8 @@ const getStore = globalState => {
 
 const App = () => {
   const global = useContext(GlobalOptionsContext)
-  const Navigation = getNavigation(modules, screens, initialRoute)
+  const {headerShown} = global
+  const Navigation = getNavigation(modules, screens, initialRoute, headerShown)
   const store = getStore(global)
 
   let effects = {}
