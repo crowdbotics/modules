@@ -538,3 +538,170 @@ class TestBlackbaudViewSet(APITestCase):
                     kwargs={'constituent_id': invalid_constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
         get_constituent_code_list_in_constituent_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_categories')
+    def test_get_constituent_custom_field_categories(self, get_constituent_custom_field_categories_mock):
+        response = {'data': {'count': 17,
+                             'value': ['GoldenAnniversary', 'BirthDate', '# of Family Members', 'Anniversary',
+                                       'Availability', 'Business Hours', 'Closing Codes', 'Committees',
+                                       'Dietary Preference', 'Inactive', 'Interests', 'Organization Type', 'Origin',
+                                       'Retirement Date', 'Special Mailing Types', 'Staff Manager', 'Number of Pets']},
+                    'status_code': 200}
+        get_constituent_custom_field_categories_mock.return_value = response
+        Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-categories'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_custom_field_categories_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_categories_details')
+    def test_get_constituent_custom_field_categories_details(self,
+                                                             get_constituent_custom_field_categories_details_mock):
+        response = {'data': {'count': 17, 'value': [
+            {'name': 'GoldenAnniversary', 'type': 'FuzzyDate', 'code_table_id': '', 'one_per_record': False},
+            {'name': 'BirthDate', 'type': 'FuzzyDate', 'code_table_id': '', 'one_per_record': False},
+            {'name': '# of Family Members', 'type': 'Number', 'code_table_id': '', 'one_per_record': True},
+            {'name': 'Anniversary', 'type': 'Date', 'code_table_id': '', 'one_per_record': False},
+            {'name': 'Availability', 'type': 'CodeTableEntry', 'code_table_id': '1008', 'one_per_record': True},
+            {'name': 'Business Hours', 'type': 'Text', 'code_table_id': '', 'one_per_record': False},
+            {'name': 'Closing Codes', 'type': 'CodeTableEntry', 'code_table_id': '2', 'one_per_record': False},
+            {'name': 'Committees', 'type': 'CodeTableEntry', 'code_table_id': '1021', 'one_per_record': False},
+            {'name': 'Dietary Preference', 'type': 'CodeTableEntry', 'code_table_id': '1003', 'one_per_record': True},
+            {'name': 'Inactive', 'type': 'CodeTableEntry', 'code_table_id': '1028', 'one_per_record': False},
+            {'name': 'Interests', 'type': 'CodeTableEntry', 'code_table_id': '1023', 'one_per_record': False},
+            {'name': 'Organization Type', 'type': 'CodeTableEntry', 'code_table_id': '1024', 'one_per_record': False},
+            {'name': 'Origin', 'type': 'CodeTableEntry', 'code_table_id': '1002', 'one_per_record': True},
+            {'name': 'Retirement Date', 'type': 'Date', 'code_table_id': '', 'one_per_record': False},
+            {'name': 'Special Mailing Types', 'type': 'CodeTableEntry', 'code_table_id': '1025',
+             'one_per_record': False},
+            {'name': 'Staff Manager', 'type': 'ConstituentId', 'code_table_id': '', 'one_per_record': True},
+            {'name': 'Number of Pets', 'type': 'Number', 'code_table_id': '', 'one_per_record': False}]},
+                    'status_code': 200}
+        get_constituent_custom_field_categories_details_mock.return_value = response
+        Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-categories-details'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_custom_field_categories_details_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_categories_values')
+    def test_get_constituent_custom_field_categories_values(self, get_constituent_custom_field_categories_values_mock):
+        response = {'data': {'count': 1, 'value': ['No summer months']}, 'status_code': 200}
+        get_constituent_custom_field_categories_values_mock.return_value = response
+        data = {
+            "category_name": "Availability"
+        }
+        Response = self.client.get(reverse("blackbaud-get-constituent-custom-field-categories-values"), data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_custom_field_categories_values_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_list')
+    def test_get_constituent_custom_field_list(self, get_constituent_custom_field_list_mock):
+        response = {'data': {'count': 914,
+                             'next_link': 'https://api.sky.blackbaud.com/constituent/v1/constituents/customfields?offset=500',
+                             'value': [{'id': '1', 'category': 'Business Hours', 'comment': 'Weekdays only',
+                                        'date_added': '2020-01-31T13:00:06.146-05:00',
+                                        'date_modified': '2020-01-31T13:30:52.2-05:00', 'parent_id': '281',
+                                        'type': 'Text', 'value': '8 a.m. - 5 p.m.'},
+                                       {'id': '2', 'category': 'Organization Type',
+                                        'date_added': '2020-01-31T13:00:06.146-05:00',
+                                        'date_modified': '2020-01-31T13:30:52.2-05:00', 'parent_id': '281',
+                                        'type': 'CodeTableEntry', 'value': 'Public'},
+                                       {'id': '3', 'category': 'Business Hours', 'comment': 'Customer Service Center',
+                                        'date_added': '2020-01-31T13:00:06.146-05:00',
+                                        'date_modified': '2020-01-31T13:30:52.2-05:00', 'parent_id': '300',
+                                        'type': 'Text', 'value': '7 a.m. - 8 p.m.'}]}, 'status_code': 200}
+        get_constituent_custom_field_list_mock.return_value = response
+        Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-list'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_custom_field_list_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_list_in_single_constituent')
+    def test_get_constituent_custom_field_list_in_single_constituent(self,
+                                                                     get_constituent_custom_field_list_in_single_constituent_mock):
+        response = {'data': {'count': 0, 'value': []}, 'status_code': 200}
+        get_constituent_custom_field_list_in_single_constituent_mock.return_value = response
+        constituent_id = 618879
+        Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-list-in-single-constituent',
+                                           kwargs={'constituent_id': constituent_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_custom_field_list_in_single_constituent_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_list_in_single_constituent')
+    def test_get_constituent_custom_field_list_in_single_constituent_with_invalid_constituent_id(self,
+                                                                                                 get_constituent_custom_field_list_in_single_constituent_mock):
+        response = {'data': [{'error_args': [], 'error_code': 404, 'error_name': 'RequestNotFulfilled',
+                              'message': 'The requested operation could not be fulfilled',
+                              'raw_message': 'The requested operation could not be fulfilled'}], 'status_code': 404}
+        get_constituent_custom_field_list_in_single_constituent_mock.return_value = response
+        invalid_constituent_id = 483
+        Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-list-in-single-constituent',
+                                           kwargs={'constituent_id': invalid_constituent_id}))
+        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        get_constituent_custom_field_list_in_single_constituent_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_countries')
+    def test_get_constituent_countries(self, get_constituent_countries_mock):
+        response = {'data': {'count': 14, 'value': [{'id': '543', 'abbreviation': 'AUS', 'name': 'Australia'},
+                                                    {'id': '542', 'abbreviation': 'CAN', 'name': 'Canada'},
+                                                    {'id': '1704', 'abbreviation': 'GER', 'name': 'Germany'},
+                                                    {'id': '1709', 'abbreviation': 'ITA', 'name': 'Italy'},
+                                                    {'id': '1174', 'abbreviation': 'JAP', 'name': 'Japan'},
+                                                    {'id': '1717', 'abbreviation': 'LUX', 'name': 'Luxembourg'},
+                                                    {'id': '1708', 'abbreviation': 'MEX', 'name': 'Mexico'},
+                                                    {'id': '544', 'abbreviation': 'NZL', 'name': 'New Zealand'},
+                                                    {'id': '1705', 'abbreviation': 'RUS', 'name': 'Russia'},
+                                                    {'id': '1706', 'abbreviation': 'RSA', 'name': 'South Africa'},
+                                                    {'id': '1707', 'abbreviation': 'CHE', 'name': 'Switzerland'},
+                                                    {'id': '5987', 'abbreviation': 'TIM', 'name': 'Tims Country'},
+                                                    {'id': '541', 'abbreviation': 'GBR', 'name': 'United Kingdom'},
+                                                    {'id': '540', 'abbreviation': 'USA', 'name': 'United States'}]},
+                    'status_code': 200}
+        get_constituent_countries_mock.return_value = response
+        Response = self.client.get(reverse('blackbaud-get-constituent-countries'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_countries_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_currencyconfiguration')
+    def test_get_constituent_currencyconfiguration(self, get_constituent_currencyconfiguration_mock):
+        response = {'data': {'country_name': 'United States', 'currency_code': 'USD', 'currency_symbol': '$',
+                             'iso_alpha_2_code': 'US'}, 'status_code': 200}
+        get_constituent_currencyconfiguration_mock.return_value = response
+        Response = self.client.get(reverse('blackbaud-get-constituent-currencyconfiguration'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_currencyconfiguration_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_address_list')
+    def test_get_constituents_address_list(self, get_constituents_address_list_mock):
+        response = {
+            'data': {'count': 61330, 'next_link': 'https://api.sky.blackbaud.com/constituent/v1/addresses?offset=500',
+                     'value': [{'id': '184', 'address_lines': '248 Twin Lane\r\nBuilding #3299', 'city': 'Birmingham',
+                                'constituent_id': '185', 'country': 'United States', 'county': 'Bailey',
+                                'date_added': '1999-05-20T14:52:54-05:00',
+                                'date_modified': '2023-01-08T00:09:10.068-05:00', 'do_not_mail': False,
+                                'formatted_address': '248 Twin Lane\r\nBuilding #3299\r\nBirmingham, AL  35220',
+                                'inactive': False, 'postal_code': '35220', 'preferred': False,
+                                'start': '1994-06-18T00:00:00', 'state': 'AL', 'type': 'Home'}]}, 'status_code': 200}
+        get_constituents_address_list_mock.return_value = response
+        Response = self.client.get(reverse('blackbaud-get-constituents-address-list'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituents_address_list_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_education_list')
+    def test_get_constituents_education_list(self, get_constituents_education_list_mock):
+        response = {
+            'data': {'count': 689, 'next_link': 'https://api.sky.blackbaud.com/constituent/v1/educations?offset=500',
+                     'value': [{'id': '1', 'campus': 'Birmingham', 'class_of': '1997', 'constituent_id': '185',
+                                'date_added': '1999-06-17T09:33:26-04:00', 'date_entered': {'d': 2, 'm': 8, 'y': 1994},
+                                'date_graduated': {'d': 1, 'm': 1, 'y': 1997},
+                                'date_modified': '2004-10-13T15:29:16.6-04:00', 'degree': 'BS', 'gpa': 2.6,
+                                'majors': ['Business'], 'school': 'University of Alabama', 'status': 'Graduated',
+                                'type': 'Four Year College'}, ]}, 'status_code': 200}
+        get_constituents_education_list_mock.return_value = response
+        Response = self.client.get(reverse('blackbaud-get-constituents-education-list'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituents_education_list_mock.assert_called_once()
