@@ -29,6 +29,10 @@ class BlackbaudBase:
 
     def _api_call(self, request_type, url, headers=None, payload=None, data=None, params=None):
         try:
+            if request_type == 'DELETE':
+                response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
+                return {"data": 'Deleted successfully.', "status_code": response.status_code}
+             
             response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
             data = json.loads(response.text)
             return {"data": data, "status_code": response.status_code}
@@ -453,6 +457,114 @@ class BlackbaudService(BlackbaudBase):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/aliascollection"
             response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            return response
+        except Exception as e:
+            return e
+        
+    
+    def event_participant(self, access_token, participant_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_attachment(self, access_token, event_id, attachment_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/attachments/{attachment_id}"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_attachment_tags(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventattachmenttags"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_attachment_list(self, access_token, event_id, attachment_tag=None):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/attachments"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token),
+                                      params={"attachment_tag": attachment_tag})
+            return response
+        except Exception as e:
+            return e
+
+    def event_categories(self, access_token, include_inactive=None):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventcategories"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token),
+                                      params={"include_inactive": include_inactive})
+            return response
+        except Exception as e:
+            return e
+
+    def event_fees(self, access_token, event_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/eventfees"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_participant_options(self, access_token, event_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/eventparticipantoptions"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_participant_donations(self, access_token, participant_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}/donations"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_participant_fee_payments(self, access_token, participant_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}/feepayments"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def event_participant_fees(self, access_token, participant_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}/fees"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def participant_options(self, access_token, participant_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}/participantoptions"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def participant_levels(self, access_token, include_inactive=None):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participationlevels"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token),
+                                      params={"include_inactive": include_inactive})
+            return response
+        except Exception as e:
+            return e
+
+    def delete_event_participant(self, access_token, participant_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
             return response
         except Exception as e:
             return e

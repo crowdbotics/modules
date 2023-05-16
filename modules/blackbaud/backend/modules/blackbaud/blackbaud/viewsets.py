@@ -404,3 +404,173 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         response = self.blackbaud_service.constituents_create_alias_collection(
             request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_id"), payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
+    
+
+    @action(detail=False, methods=['get'], url_path='event/get_participant/(?P<participant_id>\d+)')
+    def get_event_participant(self, request, **kwargs):
+        """
+        To get the Event Participant
+        :headers: "Authorization: Bearer (token)"
+        :body_params: "participant_id"
+        :return: Returns an event  participant details.
+        """
+        response = self.blackbaud_service.event_participant(request.META.get("HTTP_AUTHORIZATION"),
+                                                            kwargs.get("participant_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/get_event_attachment')
+    def get_event_attachment(self, request, **kwargs):
+        """
+        To get the Event Attachment
+        :headers: "Authorization: Bearer (token)"
+        :body_params: "event_id"
+        :body_params: "attachment_id"
+        :return: Returns an event  attachment details.
+        """
+        response = self.blackbaud_service.event_attachment(request.META.get("HTTP_AUTHORIZATION"),
+                                                           request.query_params.get('event_id'),
+                                                           request.query_params.get('attachment_id')
+                                                           )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/get_event_attachment_tags')
+    def get_event_attachment_tags(self, request, **kwargs):
+        """
+        To get the Event Attachment Tags
+        :headers: "Authorization: Bearer (token)"
+        :return: Returns an event  attachment details.
+        """
+        response = self.blackbaud_service.event_attachment_tags(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/(?P<event_id>\d+)/get_event_attachment_list')
+    def get_event_attachment_list(self, request, **kwargs):
+        """
+        To get the Event Attachment List
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "event_id"
+        :query_params: "attachment_tag"
+        :return: Returns a list of attachments for an event.
+        """
+        response = self.blackbaud_service.event_attachment_list(request.META.get("HTTP_AUTHORIZATION"),
+                                                                kwargs.get("event_id", None),
+                                                                request.query_params.get('attachment_tag', None)
+                                                                )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/get_event_categories')
+    def get_event_categories(self, request, **kwargs):
+        """
+        To get the Event Categories List
+        :headers: "Authorization: Bearer (token)"
+        :query_params: "include_inactive"
+        :return: Returns a list of active event categories.
+        """
+        response = self.blackbaud_service.event_categories(request.META.get("HTTP_AUTHORIZATION"),
+                                                           request.query_params.get('include_inactive', None)
+                                                           )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/(?P<event_id>\d+)/get_event_fees')
+    def get_event_fees(self, request, **kwargs):
+        """
+        To get the Event Fee List
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "event_id"
+        :return: Returns a list of fees for an event.
+        """
+        response = self.blackbaud_service.event_fees(request.META.get("HTTP_AUTHORIZATION"),
+                                                     kwargs.get('event_id', None)
+                                                     )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/(?P<event_id>\d+)/get_event_participant_options')
+    def get_event_participant_options(self, request, **kwargs):
+        """
+        To get the Event participant options
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "event_id"
+        :return: Returns the participant options for an event.
+        """
+        response = self.blackbaud_service.event_participant_options(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    kwargs.get('event_id', None)
+                                                                    )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/(?P<participant_id>\d+)/get_event_participant_donation')
+    def get_event_participant_donation(self, request, **kwargs):
+        """
+        To get the Event participant Donation
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "participant_id"
+        :return: Returns the donations for a participant.
+        """
+        response = self.blackbaud_service.event_participant_donations(request.META.get("HTTP_AUTHORIZATION"),
+                                                                      kwargs.get('participant_id', None)
+                                                                      )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/(?P<participant_id>\d+)/get_event_participant_fee_payments')
+    def get_event_participant_fee_payments(self, request, **kwargs):
+        """
+        To get the Event participant Donation
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "participant_id"
+        :return: Returns the donations for a participant.
+        """
+        response = self.blackbaud_service.event_participant_fee_payments(request.META.get("HTTP_AUTHORIZATION"),
+                                                                         kwargs.get('participant_id', None)
+                                                                         )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/(?P<participant_id>\d+)/get_event_participant_fees')
+    def get_event_participant_fees(self, request, **kwargs):
+        """
+        To get the Event participant Donation
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "participant_id"
+        :return: Returns the donations for a participant.
+        """
+        response = self.blackbaud_service.event_participant_fees(request.META.get("HTTP_AUTHORIZATION"),
+                                                                 kwargs.get('participant_id', None)
+                                                                 )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/(?P<participant_id>\d+)/get_participant_options')
+    def get_participant_options(self, request, **kwargs):
+        """
+        To get the Participant Options
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "participant_id"
+        :return: Returns the participant options for a participant.
+        """
+        response = self.blackbaud_service.participant_options(request.META.get("HTTP_AUTHORIZATION"),
+                                                              kwargs.get('participant_id', None)
+                                                              )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/get_participant_levels')
+    def get_participant_levels(self, request, **kwargs):
+        """
+        To get the Event Categories List
+        :headers: "Authorization: Bearer (token)"
+        :query_params: "include_inactive"
+        :return: Returns a list of active event categories.
+        """
+        response = self.blackbaud_service.participant_levels(request.META.get("HTTP_AUTHORIZATION"),
+                                                             request.query_params.get('include_inactive', None)
+                                                             )
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='event/delete_event_participant/(?P<participant_id>\d+)')
+    def delete_event_participant(self, request, *args, **kwargs):
+        """
+        To delete the Event Participant
+        :headers: "Authorization: Bearer (token)"
+        :path_params: "participant_id"
+        :return: Deletes a participant.
+        """
+        response = self.blackbaud_service.delete_event_participant(request.META.get("HTTP_AUTHORIZATION"),
+                                                                   kwargs.get("participant_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
