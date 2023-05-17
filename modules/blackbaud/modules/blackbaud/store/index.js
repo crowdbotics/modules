@@ -1,45 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./api";
 import { Alert } from "react-native";
-
-export const eventList = createAsyncThunk(
-  "events/eventList",
-  async (accessToken) => {
-    try {
-      const response = await api.getEventListing(accessToken);
-      return response.data;
-    } catch (error) {
-      Alert.alert("Error", error.message);
-      throw new Error();
-    }
+export const eventList = createAsyncThunk("events/eventList", async accessToken => {
+  try {
+    const response = await api.getEventListing(accessToken);
+    return response.data;
+  } catch (error) {
+    Alert.alert("Error", error.message);
+    throw new Error();
   }
-);
-
-export const eventDetails = createAsyncThunk(
-  "events/eventDetails",
-  async (data) => {
-    try {
-      const response = await api.getEventDetails(data.token, data.id);
-      return response.data;
-    } catch (error) {
-      Alert.alert("Error", error.message);
-      throw new Error();
-    }
+});
+export const eventDetails = createAsyncThunk("events/eventDetails", async data => {
+  try {
+    const response = await api.getEventDetails(data.token, data.id);
+    return response.data;
+  } catch (error) {
+    Alert.alert("Error", error.message);
+    throw new Error();
   }
-);
-
-export const attendeeList = createAsyncThunk(
-  "events/attendeeList",
-  async (data) => {
-    try {
-      const response = await api.getAttendeeList(data.token, data.id);
-      return response.data;
-    } catch (error) {
-      Alert.alert("Error", error.message);
-      throw new Error();
-    }
+});
+export const attendeeList = createAsyncThunk("events/attendeeList", async data => {
+  try {
+    const response = await api.getAttendeeList(data.token, data.id);
+    return response.data;
+  } catch (error) {
+    Alert.alert("Error", error.message);
+    throw new Error();
   }
-);
+});
 
 export const getAddressList = createAsyncThunk(
   "events/addressList",
@@ -126,6 +114,7 @@ export const getConstituentCustomFieldCategoriesValues = createAsyncThunk(
       const response = await api.getConstituentCustomFieldCategoriesValues(data);
       return response.data;
     } catch (error) {
+      console.log(error.response);
       Alert.alert("Error", error.message);
       throw new Error();
     }
@@ -134,9 +123,9 @@ export const getConstituentCustomFieldCategoriesValues = createAsyncThunk(
 
 export const getConstituentCustomFieldList = createAsyncThunk(
   "constituents/customFieldList",
-  async (data) => {
+  async (token) => {
     try {
-      const response = await api.getConstituentCustomFieldList(data);
+      const response = await api.getConstituentCustomFieldList(token);
       return response.data;
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -257,46 +246,141 @@ export const countriesList = createAsyncThunk(
 );
 
 const initialState = {
-  events: [],
-  api: { loading: "idle", error: null },
-  accessToken: "",
-  eventDetailApi: { loading: "idle", error: null },
-  attendeeListApi: { loading: "idle", error: null },
-  eventDetails: false,
-  attendeeList: [],
-  addressList: [],
-  addressListApi: { loading: "idle", error: null },
-  constituentCodeList: [],
-  constituentCodeListApi: { loading: "idle", error: null },
-  constituentCodeDetail: {},
-  constituentCodeDetailApi: { loading: "idle", error: null },
-  constituentCodeListInConstituent: [],
-  constituentCodeListInConstituentApi: { loading: "idle", error: null },
-  constituentCustomFieldCategories: [],
-  constituentCustomFieldCategoriesApi: { loading: "idle", error: null },
-  constituentCustomFieldCategoriesDetails: [],
-  constituentCustomFieldCategoriesDetailsApi: { loading: "idle", error: null },
-  constituentCustomFieldCategoriesValues: [],
-  constituentCustomFieldCategoriesValuesApi: { loading: "idle", error: null },
-  constituentCustomFieldList: [],
-  constituentCustomFieldListApi: { loading: "idle", error: null },
-  constituentList: [],
-  constituentListApi: { loading: "idle", error: null },
+  eventList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  eventDetails: {
+    entities: {},
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  attendeeList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  accessToken: null,
+  addressList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentCodeList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentCodeDetail: {
+    entities: {},
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentCodeListInConstituent: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentCustomFieldCategories: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentCustomFieldCategoriesDetails: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentCustomFieldCategoriesValues: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentCustomFieldList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  consentChannelsData: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentAppealListData: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentAttachmentListData: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentDetail: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationListData: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  currencyConfigurationData: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  countriesListData: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
   createConstituentApi: { loading: "idle", error: null },
-  consentChannelsData: [],
-  consentChannelsApi: { loading: "idle", error: null },
-  constituentAppealListData: [],
-  constituentAppealListApi: { loading: "idle", error: null },
-  constituentAttachmentListData: [],
-  constituentAttachmentListApi: { loading: "idle", error: null },
-  constituentDetailsData: [],
-  constituentDetailsApi: { loading: "idle", error: null },
-  educationListData: [],
-  educationListApi: { loading: "idle", error: null },
-  currencyConfigurationData: [],
-  currencyConfigurationApi: { loading: "idle", error: null },
-  countriesListData: [],
-  countriesListApi: { loading: "idle", error: null }
 };
 
 export const slice = createSlice({
@@ -306,232 +390,231 @@ export const slice = createSlice({
     saveAccessToken(state, action) {
       state.accessToken = action.payload;
     }
+
   },
   extraReducers: {
-    [eventList.pending]: (state) => {
-      if (state.api.loading === "idle") {
-        state.api.loading = "pending";
-        state.api.error = null;
+    [eventList.pending]: state => {
+      if (state.eventList.api.loading === "idle") {
+        state.eventList.api.loading = "pending";
+        state.eventList.api.error = null;
       }
     },
     [eventList.fulfilled]: (state, action) => {
-      if (state.api.loading === "pending") {
-        state.events = action.payload.value;
-        state.api.loading = "idle";
+      if (state.eventList.api.loading === "pending") {
+        state.eventList.entities = action.payload.value;
+        state.eventList.api.loading = "idle";
       }
     },
     [eventList.rejected]: (state, action) => {
-      if (state.api.loading === "pending") {
-        state.api.error = action.error;
-        state.api.loading = "idle";
+      if (state.eventList.api.loading === "pending") {
+        state.eventList.api.error = action.error;
+        state.eventList.api.loading = "idle";
       }
     },
     [eventDetails.pending]: (state, action) => {
-      if (state.eventDetailApi.loading === "idle") {
-        state.eventDetailApi.loading = "pending";
-        state.eventDetailApi.error = null;
+      if (state.eventDetails.api.loading === "idle") {
+        state.eventDetails.api.loading = "pending";
+        state.eventDetails.api.error = null;
       }
     },
     [eventDetails.fulfilled]: (state, action) => {
-      if (state.eventDetailApi.loading === "pending") {
-        state.eventDetails = action.payload;
-        state.eventDetailApi.loading = "idle";
+      if (state.eventDetails.api.loading === "pending") {
+        state.eventDetails.entities = action.payload;
+        state.eventDetails.api.loading = "idle";
       }
     },
     [eventDetails.rejected]: (state, action) => {
-      if (state.eventDetailApi.loading === "pending") {
-        state.eventDetailApi.error = action.error;
-        state.eventDetails = false;
-        state.eventDetailApi.loading = "idle";
+      if (state.eventDetails.api.loading === "pending") {
+        state.eventDetails.api.error = action.error;
+        state.eventDetails.api.loading = "idle";
       }
     },
     [attendeeList.pending]: (state, action) => {
-      if (state.attendeeListApi.loading === "idle") {
-        state.attendeeListApi.loading = "pending";
-        state.attendeeListApi.error = null;
+      if (state.attendeeList.api.loading === "idle") {
+        state.attendeeList.api.loading = "pending";
+        state.attendeeList.api.error = null;
       }
     },
     [attendeeList.fulfilled]: (state, action) => {
-      if (state.attendeeListApi.loading === "pending") {
-        state.attendeeList = action.payload.value;
-        state.attendeeListApi.loading = "idle";
+      if (state.attendeeList.api.loading === "pending") {
+        state.attendeeList.entities = action.payload.value;
+        state.attendeeList.api.loading = "idle";
       }
     },
     [attendeeList.rejected]: (state, action) => {
-      if (state.attendeeListApi.loading === "pending") {
-        state.attendeeListApi.error = action.error;
-        state.attendeeList = [];
-        state.attendeeListApi.loading = "idle";
+      if (state.attendeeList.api.loading === "pending") {
+        state.attendeeList.api.error = action.error;
+        state.attendeeList.api.loading = "idle";
       }
     },
     [getAddressList.pending]: (state) => {
-      if (state.addressListApi.loading === "idle") {
-        state.addressListApi.loading = "pending";
-        state.addressListApi.error = null;
+      if (state.addressList.api.loading === "idle") {
+        state.addressList.api.loading = "pending";
+        state.addressList.api.error = null;
       }
     },
     [getAddressList.fulfilled]: (state, action) => {
-      if (state.addressListApi.loading === "pending") {
-        state.addressList = action.payload.value;
-        state.addressListApi.loading = "idle";
+      if (state.addressList.api.loading === "pending") {
+        state.addressList.entities = action.payload.value;
+        state.addressList.api.loading = "idle";
       }
     },
     [getAddressList.rejected]: (state, action) => {
-      if (state.addressListApi.loading === "pending") {
-        state.addressListApi.error = action.error;
-        state.addressList = [];
-        state.addressListApi.loading = "idle";
+      if (state.addressList.api.loading === "pending") {
+        state.addressList.api.error = action.error;
+        state.addressList.entities = [];
+        state.addressList.api.loading = "idle";
       }
     },
     [getConstituentCodeList.pending]: (state) => {
-      if (state.constituentCodeListApi.loading === "idle") {
-        state.constituentCodeListApi.loading = "pending";
-        state.constituentCodeListApi.error = null;
+      if (state.constituentCodeList.api.loading === "idle") {
+        state.constituentCodeList.api.loading = "pending";
+        state.constituentCodeList.api.error = null;
       }
     },
     [getConstituentCodeList.fulfilled]: (state, action) => {
-      if (state.constituentCodeListApi.loading === "pending") {
-        state.constituentCodeList = action.payload.value;
-        state.constituentCodeListApi.loading = "idle";
+      if (state.constituentCodeList.api.loading === "pending") {
+        state.constituentCodeList.entities = action.payload.value;
+        state.constituentCodeList.api.loading = "idle";
       }
     },
     [getConstituentCodeList.rejected]: (state, action) => {
-      if (state.constituentCodeListApi.loading === "pending") {
-        state.constituentCodeListApi.error = action.error;
-        state.constituentCodeList = [];
-        state.constituentCodeListApi.loading = "idle";
+      if (state.constituentCodeList.api.loading === "pending") {
+        state.constituentCodeList.api.error = action.error;
+        state.constituentCodeList.entities = [];
+        state.constituentCodeList.api.loading = "idle";
       }
     },
     [getConstituentCodeDetails.pending]: (state) => {
-      if (state.constituentCodeDetailApi.loading === "idle") {
-        state.constituentCodeDetailApi.loading = "pending";
-        state.constituentCodeDetailApi.error = null;
+      if (state.constituentCodeDetail.api.loading === "idle") {
+        state.constituentCodeDetail.api.loading = "pending";
+        state.constituentCodeDetail.api.error = null;
       }
     },
     [getConstituentCodeDetails.fulfilled]: (state, action) => {
-      if (state.constituentCodeDetailApi.loading === "pending") {
-        state.constituentCodeDetail = action.payload
-        state.constituentCodeDetailApi.loading = "idle";
+      if (state.constituentCodeDetail.api.loading === "pending") {
+        state.constituentCodeDetail.entities = action.payload
+        state.constituentCodeDetail.api.loading = "idle";
       }
     },
     [getConstituentCodeDetails.rejected]: (state, action) => {
-      if (state.constituentCodeDetailApi.loading === "pending") {
-        state.constituentCodeDetailApi.error = action.error;
-        state.constituentCodeDetail = {};
-        state.constituentCodeDetailApi.loading = "idle";
+      if (state.constituentCodeDetail.api.loading === "pending") {
+        state.constituentCodeDetail.api.error = action.error;
+        state.constituentCodeDetail.entities = {};
+        state.constituentCodeDetail.api.loading = "idle";
       }
     },
     [getConstituentCodeListInConstituent.pending]: (state) => {
-      if (state.constituentCodeListInConstituentApi.loading === "idle") {
-        state.constituentCodeListInConstituentApi.loading = "pending";
-        state.constituentCodeListInConstituentApi.error = null;
+      if (state.constituentCodeListInConstituent.api.loading === "idle") {
+        state.constituentCodeListInConstituent.api.loading = "pending";
+        state.constituentCodeListInConstituent.api.error = null;
       }
     },
     [getConstituentCodeListInConstituent.fulfilled]: (state, action) => {
-      if (state.constituentCodeListInConstituentApi.loading === "pending") {
-        state.constituentCodeListInConstituent = action.payload.value;
-        state.constituentCodeListInConstituentApi.loading = "idle";
+      if (state.constituentCodeListInConstituent.api.loading === "pending") {
+        state.constituentCodeListInConstituent.entities = action.payload.value;
+        state.constituentCodeListInConstituent.api.loading = "idle";
       }
     },
     [getConstituentCodeListInConstituent.rejected]: (state, action) => {
-      if (state.constituentCodeListInConstituentApi.loading === "pending") {
-        state.constituentCodeListInConstituentApi.error = action.error;
-        state.constituentCodeListInConstituent = [];
-        state.constituentCodeListInConstituentApi.loading = "idle";
+      if (state.constituentCodeListInConstituent.api.loading === "pending") {
+        state.constituentCodeListInConstituent.api.error = action.error;
+        state.constituentCodeListInConstituent.entities = [];
+        state.constituentCodeListInConstituent.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategories.pending]: (state) => {
-      if (state.constituentCustomFieldCategoriesApi.loading === "idle") {
-        state.constituentCustomFieldCategoriesApi.loading = "pending";
-        state.constituentCustomFieldCategoriesApi.error = null;
+      if (state.constituentCustomFieldCategories.api.loading === "idle") {
+        state.constituentCustomFieldCategories.api.loading = "pending";
+        state.constituentCustomFieldCategories.api.error = null;
       }
     },
     [getConstituentCustomFieldCategories.fulfilled]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesApi.loading === "pending") {
-        state.constituentCustomFieldCategories = action.payload.value;
-        state.constituentCustomFieldCategoriesApi.loading = "idle";
+      if (state.constituentCustomFieldCategories.api.loading === "pending") {
+        state.constituentCustomFieldCategories.entities = action.payload.value;
+        state.constituentCustomFieldCategories.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategories.rejected]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesApi.loading === "pending") {
-        state.constituentCustomFieldCategoriesApi.error = action.error;
-        state.constituentCustomFieldCategories = [];
-        state.constituentCustomFieldCategoriesApi.loading = "idle";
+      if (state.constituentCustomFieldCategories.api.loading === "pending") {
+        state.constituentCustomFieldCategories.api.error = action.error;
+        state.constituentCustomFieldCategories.entities = [];
+        state.constituentCustomFieldCategories.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategoriesDetails.pending]: (state) => {
-      if (state.constituentCustomFieldCategoriesDetailsApi.loading === "idle") {
-        state.constituentCustomFieldCategoriesDetailsApi.loading = "pending";
-        state.constituentCustomFieldCategoriesDetailsApi.error = null;
+      if (state.constituentCustomFieldCategoriesDetails.api.loading === "idle") {
+        state.constituentCustomFieldCategoriesDetails.api.loading = "pending";
+        state.constituentCustomFieldCategoriesDetails.api.error = null;
       }
     },
     [getConstituentCustomFieldCategoriesDetails.fulfilled]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesDetailsApi.loading === "pending") {
-        state.constituentCustomFieldCategoriesDetails = action.payload.value;
-        state.constituentCustomFieldCategoriesDetailsApi.loading = "idle";
+      if (state.constituentCustomFieldCategoriesDetails.api.loading === "pending") {
+        state.constituentCustomFieldCategoriesDetails.entities = action.payload.value;
+        state.constituentCustomFieldCategoriesDetails.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategoriesDetails.rejected]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesDetailsApi.loading === "pending") {
-        state.constituentCustomFieldCategoriesDetailsApi.error = action.error;
-        state.constituentCustomFieldCategoriesDetails = [];
-        state.constituentCustomFieldCategoriesDetailsApi.loading = "idle";
+      if (state.constituentCustomFieldCategoriesDetails.api.loading === "pending") {
+        state.constituentCustomFieldCategoriesDetails.api.error = action.error;
+        state.constituentCustomFieldCategoriesDetails.entities = [];
+        state.constituentCustomFieldCategoriesDetails.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategoriesValues.pending]: (state) => {
-      if (state.constituentCustomFieldCategoriesValuesApi.loading === "idle") {
-        state.constituentCustomFieldCategoriesValuesApi.loading = "pending";
-        state.constituentCustomFieldCategoriesValuesApi.error = null;
+      if (state.constituentCustomFieldCategoriesValues.api.loading === "idle") {
+        state.constituentCustomFieldCategoriesValues.api.loading = "pending";
+        state.constituentCustomFieldCategoriesValues.api.error = null;
       }
     },
     [getConstituentCustomFieldCategoriesValues.fulfilled]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesValuesApi.loading === "pending") {
-        state.constituentCustomFieldCategoriesValues = action.payload.value;
-        state.constituentCustomFieldCategoriesValuesApi.loading = "idle";
+      if (state.constituentCustomFieldCategoriesValues.api.loading === "pending") {
+        state.constituentCustomFieldCategoriesValues.entities = action.payload.value;
+        state.constituentCustomFieldCategoriesValues.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategoriesValues.rejected]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesValuesApi.loading === "pending") {
-        state.constituentCustomFieldCategoriesValuesApi.error = action.error;
-        state.constituentCustomFieldCategoriesValues = [];
-        state.constituentCustomFieldCategoriesValuesApi.loading = "idle";
+      if (state.constituentCustomFieldCategoriesValues.api.loading === "pending") {
+        state.constituentCustomFieldCategoriesValues.api.error = action.error;
+        state.constituentCustomFieldCategoriesValues.entities = [];
+        state.constituentCustomFieldCategoriesValues.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldList.pending]: (state) => {
-      if (state.constituentCustomFieldListApi.loading === "idle") {
-        state.constituentCustomFieldListApi.loading = "pending";
-        state.constituentCustomFieldListApi.error = null;
+      if (state.constituentCustomFieldList.api.loading === "idle") {
+        state.constituentCustomFieldList.api.loading = "pending";
+        state.constituentCustomFieldList.api.error = null;
       }
     },
     [getConstituentCustomFieldList.fulfilled]: (state, action) => {
-      if (state.constituentCustomFieldListApi.loading === "pending") {
-        state.constituentCustomFieldList = action.payload.value;
-        state.constituentCustomFieldListApi.loading = "idle";
+      if (state.constituentCustomFieldList.api.loading === "pending") {
+        state.constituentCustomFieldList.entities = action.payload.value;
+        state.constituentCustomFieldList.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldList.rejected]: (state, action) => {
-      if (state.constituentCustomFieldListApi.loading === "pending") {
-        state.constituentCustomFieldListApi.error = action.error;
-        state.constituentCustomFieldList = [];
-        state.constituentCustomFieldListApi.loading = "idle";
+      if (state.constituentCustomFieldList.api.loading === "pending") {
+        state.constituentCustomFieldList.api.error = action.error;
+        state.constituentCustomFieldList.entities = [];
+        state.constituentCustomFieldList.api.loading = "idle";
       }
     },
     [constituentList.fulfilled]: (state, action) => {
-      if (state.constituentListApi.loading === "pending") {
-        state.constituentList = action.payload.value;
-        state.constituentListApi.loading = "idle";
+      if (state.constituentList.api.loading === "pending") {
+        state.constituentList.entities = action.payload.value;
+        state.constituentList.api.loading = "idle";
       }
     },
     [constituentList.rejected]: (state, action) => {
-      if (state.constituentListApi.loading === "pending") {
-        state.constituentListApi.error = action.error;
-        state.constituentListApi.loading = "idle";
+      if (state.constituentList.api.loading === "pending") {
+        state.constituentList.api.error = action.error;
+        state.constituentList.api.loading = "idle";
       }
     },
     [constituentList.pending]: (state, action) => {
-      if (state.constituentListApi.loading === "idle") {
-        state.constituentListApi.loading = "pending";
-        state.constituentListApi.error = null;
+      if (state.constituentList.api.loading === "idle") {
+        state.constituentList.api.loading = "pending";
+        state.constituentList.api.error = null;
       }
     },
 
@@ -554,129 +637,129 @@ export const slice = createSlice({
       }
     },
     [consentChannels.fulfilled]: (state, action) => {
-      if (state.consentChannelsApi.loading === "pending") {
-        state.consentChannelsData = action.payload.value;
-        state.consentChannelsApi.loading = "idle";
+      if (state.consentChannelsData.api.loading === "pending") {
+        state.consentChannelsData.entities = action.payload.value;
+        state.consentChannelsData.api.loading = "idle";
       }
     },
     [consentChannels.rejected]: (state, action) => {
-      if (state.consentChannelsApi.loading === "pending") {
-        state.consentChannelsApi.error = action.error;
-        state.consentChannelsApi.loading = "idle";
+      if (state.consentChannelsData.api.loading === "pending") {
+        state.consentChannelsData.api.error = action.error;
+        state.consentChannelsData.api.loading = "idle";
       }
     },
     [consentChannels.pending]: (state, action) => {
-      if (state.consentChannelsApi.loading === "idle") {
-        state.consentChannelsApi.loading = "pending";
-        state.consentChannelsApi.error = null;
+      if (state.consentChannelsData.api.loading === "idle") {
+        state.consentChannelsData.api.loading = "pending";
+        state.consentChannelsData.api.error = null;
       }
     },
     [constituentAppealList.fulfilled]: (state, action) => {
-      if (state.constituentAppealListApi.loading === "pending") {
-        state.constituentAppealListData = action.payload.value;
-        state.constituentAppealListApi.loading = "idle";
+      if (state.constituentAppealListData.api.loading === "pending") {
+        state.constituentAppealListData.entities = action.payload.value;
+        state.constituentAppealListData.api.loading = "idle";
       }
     },
     [constituentAppealList.rejected]: (state, action) => {
-      if (state.constituentAppealListApi.loading === "pending") {
-        state.constituentAppealListApi.error = action.error;
-        state.constituentAppealListApi.loading = "idle";
+      if (state.constituentAppealListData.api.loading === "pending") {
+        state.constituentAppealListData.api.error = action.error;
+        state.constituentAppealListData.api.loading = "idle";
       }
     },
     [constituentAppealList.pending]: (state, action) => {
-      if (state.constituentAppealListApi.loading === "idle") {
-        state.constituentAppealListApi.loading = "pending";
-        state.constituentAppealListApi.error = null;
+      if (state.constituentAppealListData.api.loading === "idle") {
+        state.constituentAppealListData.api.loading = "pending";
+        state.constituentAppealListData.api.error = null;
       }
     },
     [constituentAttachmentList.fulfilled]: (state, action) => {
-      if (state.constituentAttachmentListApi.loading === "pending") {
-        state.constituentAttachmentListData = action.payload.value;
-        state.constituentAttachmentListApi.loading = "idle";
+      if (state.constituentAttachmentListData.api.loading === "pending") {
+        state.constituentAttachmentListData.entities = action.payload.value;
+        state.constituentAttachmentListData.api.loading = "idle";
       }
     },
     [constituentAttachmentList.rejected]: (state, action) => {
-      if (state.constituentAttachmentListApi.loading === "pending") {
-        state.constituentAttachmentListApi.error = action.error;
-        state.constituentAttachmentListApi.loading = "idle";
+      if (state.constituentAttachmentListData.api.loading === "pending") {
+        state.constituentAttachmentListData.api.error = action.error;
+        state.constituentAttachmentListData.api.loading = "idle";
       }
     },
     [constituentAttachmentList.pending]: (state, action) => {
-      if (state.constituentAttachmentListApi.loading === "idle") {
-        state.constituentAttachmentListApi.loading = "pending";
-        state.constituentAttachmentListApi.error = null;
+      if (state.constituentAttachmentListData.api.loading === "idle") {
+        state.constituentAttachmentListData.api.loading = "pending";
+        state.constituentAttachmentListData.api.error = null;
       }
     },
     [constituentDetailsById.fulfilled]: (state, action) => {
-      if (state.constituentDetailsApi.loading === "pending") {
-        state.constituentDetailsData = action.payload;
-        state.constituentDetailsApi.loading = "idle";
+      if (state.constituentDetail.api.loading === "pending") {
+        state.constituentDetail.entities = action.payload;
+        state.constituentDetail.api.loading = "idle";
       }
     },
     [constituentDetailsById.rejected]: (state, action) => {
-      if (state.constituentDetailsApi.loading === "pending") {
-        state.constituentDetailsApi.error = action.error;
-        state.constituentDetailsApi.loading = "idle";
+      if (state.constituentDetail.api.loading === "pending") {
+        state.constituentDetail.api.error = action.error;
+        state.constituentDetail.api.loading = "idle";
       }
     },
     [constituentDetailsById.pending]: (state, action) => {
-      if (state.constituentDetailsApi.loading === "idle") {
-        state.constituentDetailsApi.loading = "pending";
-        state.constituentDetailsApi.error = null;
+      if (state.constituentDetail.api.loading === "idle") {
+        state.constituentDetail.api.loading = "pending";
+        state.constituentDetail.api.error = null;
       }
     },
     [educationList.fulfilled]: (state, action) => {
-      if (state.educationListApi.loading === "pending") {
-        state.educationListData = action.payload.value;
-        state.educationListApi.loading = "idle";
+      if (state.educationListData.api.loading === "pending") {
+        state.educationListData.entities = action.payload.value;
+        state.educationListData.api.loading = "idle";
       }
     },
     [educationList.rejected]: (state, action) => {
-      if (state.educationListApi.loading === "pending") {
-        state.educationListApi.error = action.error;
-        state.educationListApi.loading = "idle";
+      if (state.educationListData.api.loading === "pending") {
+        state.educationListData.api.error = action.error;
+        state.educationListData.api.loading = "idle";
       }
     },
     [educationList.pending]: (state, action) => {
-      if (state.educationListApi.loading === "idle") {
-        state.educationListApi.loading = "pending";
-        state.educationListApi.error = null;
+      if (state.educationListData.api.loading === "idle") {
+        state.educationListData.api.loading = "pending";
+        state.educationListData.api.error = null;
       }
     },
     [currencyConfiguration.fulfilled]: (state, action) => {
-      if (state.currencyConfigurationApi.loading === "pending") {
-        state.currencyConfigurationData = action.payload;
-        state.currencyConfigurationApi.loading = "idle";
+      if (state.currencyConfigurationData.api.loading === "pending") {
+        state.currencyConfigurationData.entities = action.payload;
+        state.currencyConfigurationData.api.loading = "idle";
       }
     },
     [currencyConfiguration.rejected]: (state, action) => {
-      if (state.currencyConfigurationApi.loading === "pending") {
-        state.currencyConfigurationApi.error = action.error;
-        state.currencyConfigurationApi.loading = "idle";
+      if (state.currencyConfigurationData.api.loading === "pending") {
+        state.currencyConfigurationData.api.error = action.error;
+        state.currencyConfigurationData.api.loading = "idle";
       }
     },
     [currencyConfiguration.pending]: (state, action) => {
-      if (state.currencyConfigurationApi.loading === "idle") {
-        state.currencyConfigurationApi.loading = "pending";
-        state.currencyConfigurationApi.error = null;
+      if (state.currencyConfigurationData.api.loading === "idle") {
+        state.currencyConfigurationData.api.loading = "pending";
+        state.currencyConfigurationData.api.error = null;
       }
     },
     [countriesList.fulfilled]: (state, action) => {
-      if (state.countriesListApi.loading === "pending") {
-        state.countriesListData = action.payload;
-        state.countriesListApi.loading = "idle";
+      if (state.countriesListData.api.loading === "pending") {
+        state.countriesListData.entities = action.payload;
+        state.countriesListData.api.loading = "idle";
       }
     },
     [countriesList.rejected]: (state, action) => {
-      if (state.countriesListApi.loading === "pending") {
-        state.countriesListApi.error = action.error;
-        state.countriesListApi.loading = "idle";
+      if (state.countriesListData.api.loading === "pending") {
+        state.countriesListData.api.error = action.error;
+        state.countriesListData.api.loading = "idle";
       }
     },
     [countriesList.pending]: (state, action) => {
-      if (state.countriesListApi.loading === "idle") {
-        state.countriesListApi.loading = "pending";
-        state.countriesListApi.error = null;
+      if (state.countriesListData.api.loading === "idle") {
+        state.countriesListData.api.loading = "pending";
+        state.countriesListData.api.error = null;
       }
     }
   }

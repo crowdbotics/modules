@@ -1,7 +1,6 @@
 import axios from "axios";
 import { globalOptions } from "../../../options/options";
-
-export const getEventListing = (accessToken) => {
+export const getEventListing = accessToken => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -12,7 +11,6 @@ export const getEventListing = (accessToken) => {
   };
   return axios.request(config);
 };
-
 export const getEventDetails = (accessToken, id) => {
   const config = {
     method: "get",
@@ -25,7 +23,6 @@ export const getEventDetails = (accessToken, id) => {
   };
   return axios.request(config);
 };
-
 export const getAttendeeList = (accessToken, id) => {
   const config = {
     method: "get",
@@ -130,13 +127,13 @@ export const getConstituentCustomFieldCategoriesValues = (data) => {
   return axios.request(config);
 };
 
-export const getConstituentCustomFieldList = (data) => {
+export const getConstituentCustomFieldList = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
     url: `${globalOptions.url}/modules/blackbaud/constituents/get_constituent_custom_field_list/`,
     headers: {
-      Authorization: `Bearer ${data}`,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
     }
   };
