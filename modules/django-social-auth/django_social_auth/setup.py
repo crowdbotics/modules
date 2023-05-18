@@ -16,7 +16,7 @@ setup(
     install_requires=[
         'django-allauth==0.51.0',
         'dj-rest-auth==2.2.5',
-        'djangorestframework==3.14.0'
+        'djangorestframework>=3.12.0'
     ],
     cmdclass={"build": BuildCommand},
 )
