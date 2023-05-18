@@ -1,0 +1,5 @@
+{
+  "title": "Blacbaud login screen",
+  "description": "Screen for blackbaud user authorization",
+  "root": "/screens/blackbaud-login"
+}
