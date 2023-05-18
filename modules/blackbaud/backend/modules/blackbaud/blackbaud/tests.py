@@ -705,3 +705,796 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(reverse('blackbaud-get-constituents-education-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         get_constituents_education_list_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_education_record')
+    def test_get_constituent_education_record(self, get_constituent_education_record_mock):
+        response = {
+            'data': {'count': 689,
+                     'next_link': 'https://api.sky.blackbaud.com/constituent/v1/constituents/educations?offset=500',
+                     'value': [{'id': '1', 'campus': 'Birmingham', 'class_of': '1997', 'constituent_id': '185',
+                                'date_added': '1999-06-17T09:33:26-04:00', 'date_entered': {'d': 2, 'm': 8, 'y': 1994},
+                                'date_graduated': {'d': 1, 'm': 1, 'y': 1997},
+                                'date_modified': '2004-10-13T15:29:16.6-04:00', 'degree': 'BS', 'gpa': 2.6,
+                                'majors': ['Business'], 'school': 'University of Alabama', 'status': 'Graduated',
+                                'type': 'Four Year College'}, ]}, 'status_code': 200}
+        education_id = 600
+        get_constituent_education_record_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-education-record', kwargs={'education_id': education_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_education_record_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_education_custom_field_categories')
+    def test_get_education_custom_field_categories(self, get_education_custom_field_categories_mock):
+        response = {
+            'data': {'count': 4,
+                     'next_link': 'https://api.sky.blackbaud.com/constituent/v1/educations/customfields/categories/details?offset=500',
+                     'value': [{
+                         "name": "Leadership Positions",
+                         "type": "Text",
+                         "one_per_record": "false"
+                     },
+                         {
+                             "name": "Athletics",
+                             "type": "CodeTableEntry",
+                             "code_table_id": "1001",
+                             "one_per_record": "false"
+                         },
+                         {
+                             "name": "Alumni Sponsor",
+                             "type": "ConstituentId",
+                             "one_per_record": "true"
+                         },
+                         {
+                             "name": "Date graduated",
+                             "type": "Date",
+                             "one_per_record": "false"
+                         }, ]}, 'status_code': 200}
+        get_education_custom_field_categories_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-education-custom-field-categories'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_education_custom_field_categories_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_custom_field_list_in_education')
+    def test_get_constituent_custom_field_list_in_education(self, get_constituent_custom_field_list_in_education_mock):
+        education_id = 600
+        response = {
+            'data': {'count': 689,
+                     'next_link': f'https://api.sky.blackbaud.com//constituent/v1/educations/{education_id}/customfields?offset=500',
+                     'value': [{'id': '1', 'campus': 'Birmingham', 'class_of': '1997', 'constituent_id': '185',
+                                'date_added': '1999-06-17T09:33:26-04:00', 'date_entered': {'d': 2, 'm': 8, 'y': 1994},
+                                'date_graduated': {'d': 1, 'm': 1, 'y': 1997},
+                                'date_modified': '2004-10-13T15:29:16.6-04:00', 'degree': 'BS', 'gpa': 2.6,
+                                'majors': ['Business'], 'school': 'University of Alabama', 'status': 'Graduated',
+                                'type': 'Four Year College'}, ]}, 'status_code': 200}
+        get_constituent_custom_field_list_in_education_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-custom-field-list-in-education', kwargs={'education_id': education_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        get_constituent_custom_field_list_in_education_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_education_degrees')
+    def test_get_constituent_education_degrees(self, get_constituent_education_degrees_mock):
+        response = {
+            'data': {'count': 11,
+                     'next_link': 'https://api.sky.blackbaud.com/constituent/v1/educations/degrees?offset=500',
+                     "value": [
+                         "AA",
+                         "AB",
+                         "AS",
+                         "BA",
+                         "BFA",
+                         "BS",
+                         "Duke",
+                         "JD",
+                         "MBA",
+                         "MD",
+                         "MPA"
+                     ]}, 'status_code': 200}
+        get_constituent_education_degrees_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-education-degrees'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_constituent_education_degrees_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_single_education_list')
+    def test_get_education_list_in_constituent(self, get_education_list_in_constituent_mock):
+        constituent_id = 200
+        response = {
+            'data': {'count': 360,
+                     'next_link': f'https://api.sky.blackbaud.com/constituent/v1/constituents/{constituent_id}/educations?offset=500',
+                     'value': [{
+                         "id": "12",
+                         "campus": "Greenville",
+                         "class_of": "2009",
+                         "constituent_id": "280",
+                         "date_entered": {
+                             "m": 8,
+                             "y": 2004
+                         },
+                         "date_graduated": {
+                             "d": 3,
+                             "m": 6,
+                             "y": 2009
+                         },
+                         "degree": "MD",
+                         "gpa": 3.8,
+                         "known_name": "Robby",
+                         "majors": [
+                             "Computer Science"
+                         ],
+                         "minors": [
+                             "History"
+                         ],
+                         "primary": "true",
+                         "school": "University of South Carolina",
+                         "social_organization": "Order of Omega",
+                         "status": "Graduated",
+                         "type": "Four Year College"
+                     }, ]}, 'status_code': 200}
+        get_education_list_in_constituent_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-education-list-in-constituent', kwargs={'constituent_id': constituent_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_education_list_in_constituent_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_education_schools')
+    def test_get_constituent_education_schools(self, get_constituent_education_schools_mock):
+        response = {
+            'data': {'count': 15,
+                     "value": [
+                         "Bates College",
+                         "Berry College",
+                         "Boston College",
+                         "Boston University",
+                         "Bowdoin College",
+                         "California Inst. of Technology",
+                         "Cambridge",
+                         "Carleton College",
+                         "Case Western Reserve",
+                         "Center Preparatory School",
+                         "Clemson",
+                         "Clemson University",
+                         "College of Charleston",
+                         "County Day School",
+                         "Dakota State"
+                     ]}, 'status_code': 200}
+        get_constituent_education_schools_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-education-schools'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_constituent_education_schools_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_education_statuses')
+    def test_get_constituent_education_statuses(self, get_constituent_education_statuses_mock):
+        response = {
+            'data': {'count': 8,
+                     "value": [
+                         "Current Student",
+                         "Dismissed",
+                         "Graduated",
+                         "Internship Program",
+                         "Leave",
+                         "Probation",
+                         "Registered",
+                         "Transferred Out"
+                     ]}, 'status_code': 200}
+        get_constituent_education_statuses_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-education-statuses'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_constituent_education_statuses_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_education_subjects')
+    def test_get_constituent_education_subjects(self, get_constituent_education_subjects_mock):
+        response = {
+            'data': {"count": 16,
+                     "value": [
+                         "Accounting",
+                         "Art",
+                         "Biology",
+                         "Business",
+                         "Chemistry",
+                         "Computer Science",
+                         "Criminal Justice",
+                         "Diet and Nutrition",
+                         "Drama",
+                         "Elementary Education",
+                         "Engineering",
+                         "English Literature",
+                         "Finance",
+                         "History",
+                         "International Business",
+                         "Jewish Studies",
+                         "Law"
+                     ]}, 'status_code': 200}
+        get_constituent_education_subjects_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-education-subjects'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_constituent_education_subjects_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_get_education_types')
+    def test_get_constituent_education_types(self, get_constituent_education_types_mock):
+        response = {
+            'data': {"count": 8,
+                     "value": [
+                         "Community College",
+                         "Excellent",
+                         "Four Year College",
+                         "Graduate School",
+                         "High School",
+                         "Junior College",
+                         "K-12",
+                         "K-5"
+                     ]}, 'status_code': 200}
+        get_constituent_education_types_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-education-types'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_constituent_education_types_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_get_address_details')
+    def test_get_constituent_address_details(self, get_constituent_address_details_mock):
+        response = {
+            'data': {
+                "id": "757",
+                "address_lines": "410 17th Street",
+                "city": "Denver",
+                "constituent_id": "280",
+                "country": "United States",
+                "county": "Denver",
+                "do_not_mail": "false",
+                "end": "2025-03-26T00:00:00Z",
+                "formatted_address": "410 17th Street\r\nDenver, CO  80202-4402",
+                "inactive": "false",
+                "postal_code": "80202-4402",
+                "preferred": "true",
+                "seasonal_end": {
+                    "d": 26,
+                    "m": 8
+                },
+                "seasonal_start": {
+                    "d": 12,
+                    "m": 6
+                },
+                "start": "2003-03-26T00:00:00Z",
+                "state": "CO",
+                "type": "Home"
+
+            }, 'status_code': 200}
+        address_id = 300
+        get_constituent_address_details_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-constituent-address-details', kwargs={"address_id": address_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_constituent_address_details_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_get_address_list')
+    def test_get_address_list_in_constituents(self, get_address_list_in_constituents_mock):
+        constituent_id = 3
+        response = {
+            'data': {
+                "count": 30,
+                'next_link': f'https://api.sky.blackbaud.com/constituent/v1/constituents/{constituent_id}/addresses?offset=10',
+                "value": [
+                    {
+                        "id": "757",
+                        "address_lines": "410 17th Street",
+                        "city": "Denver",
+                        "constituent_id": "280",
+                        "country": "United States",
+                        "county": "Denver",
+                        "do_not_mail": "false",
+                        "end": "2025-03-26T00:00:00Z",
+                        "formatted_address": "410 17th Street\r\nDenver, CO  80202-4402",
+                        "inactive": "false",
+                        "postal_code": "80202-4402",
+                        "preferred": "true",
+                        "seasonal_end": {
+                            "d": 26,
+                            "m": 8
+                        },
+                        "seasonal_start": {
+                            "d": 12,
+                            "m": 6
+                        },
+                        "start": "2003-03-26T00:00:00Z",
+                        "state": "CO",
+                        "type": "Home"
+                    },
+                    {
+                        "id": "411",
+                        "address_lines": "102 Liberty Avenue",
+                        "city": "Chicago",
+                        "constituent_id": "280",
+                        "country": "United States",
+                        "do_not_mail": "false",
+                        "formatted_address": "102 Liberty Avenue\r\nChicago, IL  60610",
+                        "inactive": "false",
+                        "postal_code": "60610",
+                        "preferred": "false",
+                        "start": "1994-03-26T00:00:00Z",
+                        "state": "IL",
+                        "type": "Business"
+                    },
+                ]}, 'status_code': 200}
+        get_address_list_in_constituents_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-address-list-in-constituents', kwargs={"constituent_id": constituent_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_address_list_in_constituents_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_get_address_types')
+    def test_get_address_type_in_constituents(self, get_address_type_in_constituents_mock):
+        response = {
+            'data': {"count": 17,
+                     "value": [
+                         "Billing",
+                         "Business",
+                         "Employment History",
+                         "Former Address",
+                         "Home",
+                         "Invalid",
+                         "Relationship",
+                         "Rental Property",
+                         "Retreat",
+                         "School Residence",
+                         "Shipping",
+                         "Spouse Business",
+                         "Summer Home",
+                         "Time Share",
+                         "Vacation Home",
+                         "Winter Home",
+                         "Work"
+                     ]}, 'status_code': 200}
+        get_address_type_in_constituents_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-address-type-in-constituents'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_address_type_in_constituents_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participant')
+    def test_get_event_participant(self, get_event_participant_mock):
+        response = {
+            'data': {
+                "id": "2",
+                "constituent_id": "34",
+                "event_id": "5",
+                "date_added": "2017-09-15T13:00:00Z",
+                "date_modified": "2017-09-15T13:00:00Z",
+                "host_id": "181",
+                "rsvp_status": "Attending",
+                "attended": "false",
+                "invitation_status": "Invited",
+                "rsvp_date": {
+                    "d": 1,
+                    "m": 1,
+                    "y": 2020
+                },
+                "invitation_date": {
+                    "d": 1,
+                    "m": 1,
+                    "y": 2020
+                },
+                "participation_level": {
+                    "id": "1493",
+                    "name": "Coordinator",
+                    "is_inactive": "false"
+                },
+                "summary_note": "Major donor who invites a lot of people."
+            }, 'status_code': 200}
+        participant_id = 123
+        get_event_participant_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-participant', kwargs={"participant_id": participant_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_participant_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_attachment')
+    def test_get_event_attachment(self, get_event_attachment_mock):
+        response = {
+            'data': {
+                "id": "8d6df4c4-d9ab-45d4-9369-46aa5748a235",
+                "parent_id": "123",
+                "file_size": 24576,
+                "file_url": "http://prodsarnxdocmn002blkbrdo.blob.core.windows.net/blackbauddocumentsvc/tenants/a486g1de-73f5-4a81-a4b1-ff353509fbde/documents/5B094C8B-5961-4E7F-B1FE-F13ECFC6F82E/ActionEvent_Snapshot.jpg?sv=2015-05-17&sr=b&sig=HI0UTKNjiCVB6AtGHBVuCdhgnETbRPYegwb7%2FQyjI%2FU%3D&se=2015-10-15T18%3A25%3A30Z&sp=r",
+                "content_type": "image/jpeg",
+                "thumbnail_uri": "http://prodsarnxdocmn002blkbrdo.blob.core.windows.net/blackbauddocumentsvc/tenants/a486g1de-73f5-4a81-a4b1-ff353509fbde/documents/4DF6B36A-3058-4FA9-ACA5-4BCD08E67ACF/ActionEvent_Snapshot_thumbnail.jpg?sv=2015-05-17&sr=b&sig=HI0UTKNjiCVB6AtGHBVuCdhgnETbRPYegwb7%2FQyjI%2FU%3D&se=2015-10-15T18%3A25%3A30Z&sp=r",
+                "tags": [
+                    "Document"
+                ],
+                "date": "2022-06-29T19:30:00.6557223Z",
+                "name": "Tax_Receipt",
+                "file_id": "8d6df4c4-d9ab-45d4-9369-46aa5748a235",
+                "file_name": "tax_receipt.jpg",
+                "type": "Physical",
+                "thumbnail_id": "08baedaf-b384-4ab2-abc0-3a72a79d3a7a"
+            }, 'status_code': 200}
+        data = {
+            "event_id": "123",
+            "attachment_id": "8d6df4c4-d9ab-45d4-9369-46aa5748a235"
+        }
+        get_event_attachment_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-attachment'), data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_attachment_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_attachment_tags')
+    def test_get_event_attachment_tags(self, get_event_attachment_tags_mock):
+        response = {
+            'data': {
+                "count": 7,
+                "value": [
+                    "Certificate",
+                    "Document",
+                    "Logo",
+                    "PDF",
+                    "Photo",
+                    "Slideshow",
+                    "Spreadsheet"
+                ]
+            }, 'status_code': 200}
+
+        get_event_attachment_tags_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-attachment-tags'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_attachment_tags_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_attachment_list')
+    def test_get_event_attachment_list(self, get_event_attachment_list_mock):
+        response = {
+            'data': {
+                "count": 2,
+                "value": [
+                    {
+                        "id": "8d6df4c4-d9ab-45d4-9369-46aa5748a235",
+                        "parent_id": "123",
+                        "file_size": 24576,
+                        "file_url": "http://prodsarnxdocmn002blkbrdo.blob.core.windows.net/blackbauddocumentsvc/tenants/a486g1de-73f5-4a81-a4b1-ff353509fbde/documents/5B094C8B-5961-4E7F-B1FE-F13ECFC6F82E/ActionEvent_Snapshot.jpg?sv=2015-05-17&sr=b&sig=HI0UTKNjiCVB6AtGHBVuCdhgnETbRPYegwb7%2FQyjI%2FU%3D&se=2015-10-15T18%3A25%3A30Z&sp=r",
+                        "content_type": "image/jpeg",
+                        "thumbnail_uri": "http://prodsarnxdocmn002blkbrdo.blob.core.windows.net/blackbauddocumentsvc/tenants/a486g1de-73f5-4a81-a4b1-ff353509fbde/documents/4DF6B36A-3058-4FA9-ACA5-4BCD08E67ACF/ActionEvent_Snapshot_thumbnail.jpg?sv=2015-05-17&sr=b&sig=HI0UTKNjiCVB6AtGHBVuCdhgnETbRPYegwb7%2FQyjI%2FU%3D&se=2015-10-15T18%3A25%3A30Z&sp=r",
+                        "tags": [
+                            "Document"
+                        ],
+                        "date": "2022-06-29T19:30:00.6557223Z",
+                        "name": "Tax_Receipt",
+                        "file_id": "8d6df4c4-d9ab-45d4-9369-46aa5748a235",
+                        "file_name": "tax_receipt.jpg",
+                        "type": "Physical",
+                        "thumbnail_id": "08baedaf-b384-4ab2-abc0-3a72a79d3a7a"
+                    },
+                    {
+                        "id": "08864163-6e96-4316-9a12-73aaee187055",
+                        "parent_id": "123",
+                        "tags": [
+                            "Photo"
+                        ],
+                        "date": "2022-06-29T19:30:00.6557223Z",
+                        "name": "Logo",
+                        "url": "https://www.example.com/logo.jpg",
+                        "type": "Link"
+                    }
+                ]
+            }, 'status_code': 200}
+
+        event_id = '123'
+        data = {
+            "attachment_tag": "Document"
+        }
+
+        get_event_attachment_list_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-attachment-list', kwargs={"event_id": event_id}), data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_attachment_list_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_categories')
+    def test_get_event_categories(self, get_event_categories_mock):
+        response = {
+            'data': {
+                "count": 12,
+                "value": [
+                    {
+                        "id": "1293",
+                        "name": "Annual Fundraiser",
+                        "inactive": "false"
+                    },
+                    {
+                        "id": "1179",
+                        "name": "Golf Tournament",
+                        "inactive": "false"
+                    },
+                    {
+                        "id": "2906",
+                        "name": "Social",
+                        "inactive": "false"
+                    }
+                ]
+            }, 'status_code': 200}
+
+        get_event_categories_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-categories'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_categories_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_fees')
+    def test_get_event_fees(self, get_event_fees_mock):
+        response = {
+            'data': {
+                "count": 2,
+                "value": [
+                    {
+                        "id": "1",
+                        "name": "Individual",
+                        "event_id": "14",
+                        "cost": 15.0,
+                        "contribution_amount": 10.0,
+                        "number_sold": 10
+                    },
+                    {
+                        "id": "2",
+                        "name": "Couple",
+                        "event_id": "14",
+                        "cost": 20.0,
+                        "contribution_amount": 4.99,
+                        "number_sold": 10
+                    }
+                ]
+            }, 'status_code': 200}
+
+        event_id = '123'
+
+        get_event_fees_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-fees', kwargs={'event_id': event_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_fees_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participant_options')
+    def test_get_event_participant_options(self, get_event_participant_options_mock):
+        response = {
+            'data': {
+                "count": 3,
+                "value": [
+                    {
+                        "id": "f351b298-f5aa-4386-b13f-364622fbdbdd",
+                        "name": "List option",
+                        "input_type": "List",
+                        "multi_select": "false",
+                        "list_options": [
+                            {
+                                "id": "23b71438-4b0b-476b-935a-68e61b3aa015",
+                                "name": "Small",
+                                "sequence": 0
+                            },
+                            {
+                                "id": "00cf35e7-128e-429b-a6bb-a8e5254f3c7b",
+                                "name": "Medium",
+                                "sequence": 1
+                            },
+                            {
+                                "id": "1c58e1dd-6ac6-42a6-9820-1ce594941341",
+                                "name": "Large",
+                                "sequence": 2
+                            }
+                        ],
+                        "added_by_user": "be042830-9ab3-4781-97d0-13298ba0d3c8",
+                        "updated_by_user": "be042830-9ab3-4781-97d0-13298ba0d3c8",
+                        "date_added": "2020-01-15T09:37:33.732Z",
+                        "date_updated": "2020-01-15T09:37:33.732Z",
+                        "version": 1
+                    }
+                ]
+            }, 'status_code': 200}
+
+        event_id = '123'
+
+        get_event_participant_options_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-participant-options', kwargs={'event_id': event_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_participant_options_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participant_donations')
+    def test_get_event_participant_donation(self, get_event_participant_donation_mock):
+        response = {
+            'data': {
+                "count": 2,
+                "value": [
+                    {
+                        "id": "196",
+                        "gift_id": "290"
+                    },
+                    {
+                        "id": "323",
+                        "gift_id": "146"
+                    }
+                ]
+            }, 'status_code': 200}
+
+        participant_id = '123'
+
+        get_event_participant_donation_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-participant-donation', kwargs={'participant_id': participant_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_participant_donation_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participant_fee_payments')
+    def test_get_event_participant_fee_payments(self, get_event_participant_fee_payments_mock):
+        response = {
+            'data': {
+                "count": 12,
+                "value": [
+                    {
+                        "id": "196",
+                        "participant_id": "109",
+                        "gift_id": "290",
+                        "applied_amount": 26.0
+                    },
+                    {
+                        "id": "323",
+                        "participant_id": "109",
+                        "gift_id": "146",
+                        "applied_amount": 10.0
+                    }
+                ]
+            }, 'status_code': 200}
+
+        participant_id = '123'
+
+        get_event_participant_fee_payments_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-participant-fee-payments', kwargs={'participant_id': participant_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_participant_fee_payments_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participant_fees')
+    def test_get_event_participant_fees(self, get_event_participant_fees_mock):
+        response = {
+            'data': {
+                "count": 12,
+                "value": [
+                    {
+                        "id": "196",
+                        "participant_id": "109",
+                        "quantity": 1,
+                        "fee_amount": 30.99,
+                        "tax_receiptable_amount": 25.0,
+                        "date": {
+                            "d": 1,
+                            "m": 1,
+                            "y": 2020
+                        },
+                        "event_fee": {
+                            "id": "17",
+                            "name": "Individual",
+                            "event_id": "9",
+                            "cost": 30.99,
+                            "contribution_amount": 25.0,
+                            "number_sold": 5
+                        }
+                    },
+                ]
+            }, 'status_code': 200}
+
+        participant_id = '123'
+
+        get_event_participant_fees_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-event-participant-fees', kwargs={'participant_id': participant_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_event_participant_fees_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.participant_options')
+    def test_get_participant_options(self, get_participant_options_mock):
+        response = {
+            'data': {
+                "count": 2,
+                "value": [
+                    {
+                        "id": "aa52b48c-4784-4a0f-907b-987454826fd6",
+                        "participant_id": "2",
+                        "event_id": "1",
+                        "event_participant_option_id": "da6c3536-8ba4-42af-9496-f6dabede5a1a",
+                        "option_value": "Chicken dinner",
+                        "added_by_user": "be042830-9ab3-4781-97d0-13298ba0d3c8",
+                        "updated_by_user": "be042830-9ab3-4781-97d0-13298ba0d3c8",
+                        "date_added": "2020-01-21T04:12:54.421Z",
+                        "date_updated": "2020-01-21T04:12:54.421Z"
+                    },
+                ]
+            }, 'status_code': 200}
+
+        participant_id = '123'
+
+        get_participant_options_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-participant-options', kwargs={'participant_id': participant_id}))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_participant_options_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.participant_levels')
+    def test_get_participant_levels(self, get_participant_levels_mock):
+        response = {
+            'data': {
+                "count": 4,
+                "value": [
+                    {
+                        "id": "1772",
+                        "name": "Attendee",
+                        "is_inactive": "false"
+                    },
+                    {
+                        "id": "301",
+                        "name": "Captain",
+                        "is_inactive": "false"
+                    },
+                    {
+                        "id": "1493",
+                        "name": "Coordinator",
+                        "is_inactive": "false"
+                    },
+                    {
+                        "id": "2010",
+                        "name": "Corporate Sponsor",
+                        "is_inactive": "false"
+                    }
+                ]
+            }, 'status_code': 200}
+
+        get_participant_levels_mock.return_value = response
+        Response = self.client.get(
+            reverse('blackbaud-get-participant-levels'))
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        get_participant_levels_mock.assert_called_once()
