@@ -1,0 +1,14 @@
+{
+    "name": "@modules/blackbaud",
+    "version": "1.0.1",
+    "description": "blackbaud Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+    },
+    "x-dependencies": {
+        "react-native-app-auth": "^6.4.3"
+    }
+}
