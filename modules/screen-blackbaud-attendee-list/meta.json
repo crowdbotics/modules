@@ -1,0 +1,5 @@
+{
+  "title": "Attendee list",
+  "description": "Attendee list for blackbaud events",
+  "root": "/screens/blackbaud-attendee-list"
+}
