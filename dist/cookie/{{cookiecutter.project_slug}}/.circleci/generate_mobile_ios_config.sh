@@ -5,6 +5,12 @@ mkdir configs/
 cat << EOF > configs/generated_config.yml
 {% raw -%}
 version: 2.1
+
+parameters:
+  mobile_lane:
+    type: string
+    default: ""
+
 jobs:
   node:
     working_directory: ~/build
@@ -252,12 +258,22 @@ jobs:
 
 workflows:
   version: 2.1
-  node-ios:
+  node-appetize:
+    when: 
+      equal: [ deploy_appetize, << pipeline.parameters.mobile_lane >> ]
     jobs:
       - node
       - appetize:
           requires:
             - node
+      
+  node-ios:
+    when: 
+      or:
+        - equal: [ beta, << pipeline.parameters.mobile_lane >> ]
+        - equal: [ upload_release, << pipeline.parameters.mobile_lane >> ]
+    jobs:
+      - node
       - ios:
           requires:
             - node
