@@ -1,33 +1,42 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./api";
 import { Alert } from "react-native";
-export const eventList = createAsyncThunk("events/eventList", async accessToken => {
-  try {
-    const response = await api.getEventListing(accessToken);
-    return response.data;
-  } catch (error) {
-    Alert.alert("Error", error.message);
-    throw new Error();
+export const eventList = createAsyncThunk(
+  "events/eventList",
+  async (accessToken) => {
+    try {
+      const response = await api.getEventListing(accessToken);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
   }
-});
-export const eventDetails = createAsyncThunk("events/eventDetails", async data => {
-  try {
-    const response = await api.getEventDetails(data.token, data.id);
-    return response.data;
-  } catch (error) {
-    Alert.alert("Error", error.message);
-    throw new Error();
+);
+export const eventDetails = createAsyncThunk(
+  "events/eventDetails",
+  async (data) => {
+    try {
+      const response = await api.getEventDetails(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
   }
-});
-export const attendeeList = createAsyncThunk("events/attendeeList", async data => {
-  try {
-    const response = await api.getAttendeeList(data.token, data.id);
-    return response.data;
-  } catch (error) {
-    Alert.alert("Error", error.message);
-    throw new Error();
+);
+export const attendeeList = createAsyncThunk(
+  "events/attendeeList",
+  async (data) => {
+    try {
+      const response = await api.getAttendeeList(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
   }
-});
+);
 
 export const getAddressList = createAsyncThunk(
   "events/addressList",
@@ -98,7 +107,9 @@ export const getConstituentCustomFieldCategoriesDetails = createAsyncThunk(
   "constituents/customFieldCategoriesDetails",
   async (data) => {
     try {
-      const response = await api.getConstituentCustomFieldCategoriesDetails(data);
+      const response = await api.getConstituentCustomFieldCategoriesDetails(
+        data
+      );
       return response.data;
     } catch (error) {
       Alert.alert("Error", error.message);
@@ -111,10 +122,11 @@ export const getConstituentCustomFieldCategoriesValues = createAsyncThunk(
   "constituents/customFieldCategoriesValues",
   async (data) => {
     try {
-      const response = await api.getConstituentCustomFieldCategoriesValues(data);
+      const response = await api.getConstituentCustomFieldCategoriesValues(
+        data
+      );
       return response.data;
     } catch (error) {
-      console.log(error.response);
       Alert.alert("Error", error.message);
       throw new Error();
     }
@@ -245,6 +257,248 @@ export const countriesList = createAsyncThunk(
   }
 );
 
+export const constituentCustomFieldListSingleConstituent = createAsyncThunk(
+  "constituents/get_constituent_custom_field_list_in_single_constituent",
+  async (data) => {
+    try {
+      const response = await api.getConstituentCustomFieldListSingleConstituent(
+        data
+      );
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const customFieldEducationList = createAsyncThunk(
+  "constituents/get_custom_field_list_in_education",
+  async (data) => {
+    try {
+      const response = await api.getCustomFieldEducationList(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationCustomFieldCategories = createAsyncThunk(
+  "constituents/get_education_custom_field_categories",
+  async (token) => {
+    try {
+      const response = await api.getEducationCustomFieldCategories(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationDegrees = createAsyncThunk(
+  "constituents/get_education_degrees",
+  async (token) => {
+    try {
+      const response = await api.getEducationDegrees(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationConstituentList = createAsyncThunk(
+  "constituents/get_education_list_in_constituent",
+  async (data) => {
+    try {
+      const response = await api.getEducationConstituentList(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationRecordList = createAsyncThunk(
+  "constituents/get_education_record",
+  async (data) => {
+    try {
+      const response = await api.getEducationRecord(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationSchoolsList = createAsyncThunk(
+  "constituents/get_education_schools",
+  async (data) => {
+    try {
+      const response = await api.getEducationsSchools(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationStatusesList = createAsyncThunk(
+  "constituents/get_education_statuses",
+  async (token) => {
+    try {
+      const response = await api.getEducationStatuses(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationSubjectList = createAsyncThunk(
+  "constituents/get_education_subjects",
+  async (token) => {
+    try {
+      const response = await api.getEducationSubject(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const educationTypesList = createAsyncThunk(
+  "constituents/get_education_types",
+  async (token) => {
+    try {
+      const response = await api.getEducationTypes(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const eventAttachmentList = createAsyncThunk(
+  "event/event_id/get_event_attachment_list",
+  async (data) => {
+    try {
+      const response = await api.getEventAttachmentList(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventFees = createAsyncThunk(
+  "event/event_id/get_event_fees",
+  async (data) => {
+    try {
+      const response = await api.getEventFees(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventParticipantOptions = createAsyncThunk(
+  "event/id/get_event_participant_options",
+  async (data) => {
+    try {
+      const response = await api.getEventParticipantOptions(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventParticipantsList = createAsyncThunk(
+  "event/participants_list",
+  async (data) => {
+    try {
+      const response = await api.getEventParticipantsList(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventParticipantsDonation = createAsyncThunk(
+  "event/id/get_event_participant_donation",
+  async (data) => {
+    try {
+      const response = await api.getEventParticipantsDonation(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventParticipantFeePayments = createAsyncThunk(
+  "event/id/get_event_participant_fee_payments",
+  async (data) => {
+    try {
+      const response = await api.getEventParticipantFeePayments(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventParticipantFees = createAsyncThunk(
+  "event/id/get_event_participant_fees",
+  async (data) => {
+    try {
+      const response = await api.getEventParticipantFees(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getParticipantOptions = createAsyncThunk(
+  "event/id/get_participant_options",
+  async (data) => {
+    try {
+      const response = await api.getParticipantOptions(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventAttachment = createAsyncThunk(
+  "event/get_event_attachment",
+  async (data) => {
+    try {
+      const response = await api.getEventAttachment(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getEventAttachmentTags = createAsyncThunk(
+  "event/get_event_attachment_tags",
+  async (token) => {
+    try {
+      const response = await api.getEventAttachmentTags(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
 const initialState = {
   eventList: {
     entities: [],
@@ -267,7 +521,8 @@ const initialState = {
       error: null
     }
   },
-  accessToken: null,
+  accessToken:
+    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjREVjZzVkxIM0FtU1JTbUZqMk04Wm5wWHU3WSIsInR5cCI6IkpXVCJ9.eyJhcHBsaWNhdGlvbmlkIjoiYTA1NmNhNmItYTNhOC00YWM3LWIzMjUtOTk3NjY2MzA2ZTUyIiwiZW52aXJvbm1lbnRpZCI6InAtdm5WQWJEdGZ1MEd5TXFTRG1HLV9xdyIsImVudmlyb25tZW50bmFtZSI6IlNLWSBEZXZlbG9wZXIgQ29ob3J0IEVudmlyb25tZW50IDEiLCJsZWdhbGVudGl0eWlkIjoicC1nVnFyX3lPU2tVcXNFS3RtLVpwSm5BIiwibGVnYWxlbnRpdHluYW1lIjoiU0tZIERldmVsb3BlciBDb2hvcnQiLCJtb2RlIjoiRnVsbCIsInpvbmUiOiJwLXVzYTAxIiwibmFtZWlkIjoiOTVkNGJiYjQtMjI5NS00MzJmLWFhNzctZGQ0ZTdhNWRhOGRjIiwianRpIjoiMGQ3NjZiNGQtOTk4Mi00NGNmLTkwZjAtMjVlYTdmOGQ3NzVlIiwiZXhwIjoxNjg0NDMwMjkxLCJpYXQiOjE2ODQ0MjY2OTEsImlzcyI6Imh0dHBzOi8vb2F1dGgyLnNreS5ibGFja2JhdWQuY29tLyIsImF1ZCI6ImJsYWNrYmF1ZCJ9.KT9PbUfqPCSbFMYx1j6Ru6xEcmZeZN_2cIGxPQ--Dnjji077OH8RCwMVsdYmbLYOhOE4Xi6z_F8HYhJsQL40QX4ZlO4yq3OzjKu-sB0vdliGPK9SByHuFoO1hMzsQgZRaz7gf1PP1m0P3BnHSU4qemSbbJD5LFoo1myDc5ijtdrc2Wy5VC6rMKGeHhbehSx-cQFIXoB8XQbDjxtbimj1KyXZNL2jLvSVRaEsM-XDj45ny6vb6ycckiJiQN8uKg3xRfOPlTS_keKjf_j6f45ThfH4lezYjq6YLfchpkoFGApkNw3ikod7Dbvi4mFer1BuWsFDKEwVrfiLlZelxXFiPg",
   addressList: {
     entities: [],
     api: {
@@ -380,7 +635,147 @@ const initialState = {
       error: null
     }
   },
-  createConstituentApi: { loading: "idle", error: null },
+  constituentCustomFieldListSingleConstituent: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  customFieldEducationList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationCustomFieldCategories: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationDegrees: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationConstituentList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationRecordList: {
+    entities: {},
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationSchoolsList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationStatusesList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationSubjectList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  educationTypesList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  eventAttachmentList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventFees: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventParticipantOptions: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventParticipantsList: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  eventParticipantsDonation: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventParticipantFeePayments: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventParticipantFees: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getParticipantOptions: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventAttachment: {
+    entities: {},
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventAttachmentTags: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  createConstituentApi: { loading: "idle", error: null }
 };
 
 export const slice = createSlice({
@@ -390,10 +785,9 @@ export const slice = createSlice({
     saveAccessToken(state, action) {
       state.accessToken = action.payload;
     }
-
   },
   extraReducers: {
-    [eventList.pending]: state => {
+    [eventList.pending]: (state) => {
       if (state.eventList.api.loading === "idle") {
         state.eventList.api.loading = "pending";
         state.eventList.api.error = null;
@@ -493,7 +887,7 @@ export const slice = createSlice({
     },
     [getConstituentCodeDetails.fulfilled]: (state, action) => {
       if (state.constituentCodeDetail.api.loading === "pending") {
-        state.constituentCodeDetail.entities = action.payload
+        state.constituentCodeDetail.entities = action.payload;
         state.constituentCodeDetail.api.loading = "idle";
       }
     },
@@ -543,19 +937,26 @@ export const slice = createSlice({
       }
     },
     [getConstituentCustomFieldCategoriesDetails.pending]: (state) => {
-      if (state.constituentCustomFieldCategoriesDetails.api.loading === "idle") {
+      if (
+        state.constituentCustomFieldCategoriesDetails.api.loading === "idle"
+      ) {
         state.constituentCustomFieldCategoriesDetails.api.loading = "pending";
         state.constituentCustomFieldCategoriesDetails.api.error = null;
       }
     },
     [getConstituentCustomFieldCategoriesDetails.fulfilled]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesDetails.api.loading === "pending") {
-        state.constituentCustomFieldCategoriesDetails.entities = action.payload.value;
+      if (
+        state.constituentCustomFieldCategoriesDetails.api.loading === "pending"
+      ) {
+        state.constituentCustomFieldCategoriesDetails.entities =
+          action.payload.value;
         state.constituentCustomFieldCategoriesDetails.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategoriesDetails.rejected]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesDetails.api.loading === "pending") {
+      if (
+        state.constituentCustomFieldCategoriesDetails.api.loading === "pending"
+      ) {
         state.constituentCustomFieldCategoriesDetails.api.error = action.error;
         state.constituentCustomFieldCategoriesDetails.entities = [];
         state.constituentCustomFieldCategoriesDetails.api.loading = "idle";
@@ -568,13 +969,18 @@ export const slice = createSlice({
       }
     },
     [getConstituentCustomFieldCategoriesValues.fulfilled]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesValues.api.loading === "pending") {
-        state.constituentCustomFieldCategoriesValues.entities = action.payload.value;
+      if (
+        state.constituentCustomFieldCategoriesValues.api.loading === "pending"
+      ) {
+        state.constituentCustomFieldCategoriesValues.entities =
+          action.payload.value;
         state.constituentCustomFieldCategoriesValues.api.loading = "idle";
       }
     },
     [getConstituentCustomFieldCategoriesValues.rejected]: (state, action) => {
-      if (state.constituentCustomFieldCategoriesValues.api.loading === "pending") {
+      if (
+        state.constituentCustomFieldCategoriesValues.api.loading === "pending"
+      ) {
         state.constituentCustomFieldCategoriesValues.api.error = action.error;
         state.constituentCustomFieldCategoriesValues.entities = [];
         state.constituentCustomFieldCategoriesValues.api.loading = "idle";
@@ -760,6 +1166,363 @@ export const slice = createSlice({
       if (state.countriesListData.api.loading === "idle") {
         state.countriesListData.api.loading = "pending";
         state.countriesListData.api.error = null;
+      }
+    },
+    [constituentCustomFieldListSingleConstituent.fulfilled]: (
+      state,
+      action
+    ) => {
+      if (
+        state.constituentCustomFieldListSingleConstituent.api.loading ===
+        "pending"
+      ) {
+        state.constituentCustomFieldListSingleConstituent.entities =
+          action.payload.value;
+        state.constituentCustomFieldListSingleConstituent.api.loading = "idle";
+      }
+    },
+    [constituentCustomFieldListSingleConstituent.rejected]: (state, action) => {
+      if (
+        state.constituentCustomFieldListSingleConstituent.api.loading ===
+        "pending"
+      ) {
+        state.constituentCustomFieldListSingleConstituent.api.error =
+          action.error;
+        state.constituentCustomFieldListSingleConstituent.api.loading = "idle";
+      }
+    },
+    [constituentCustomFieldListSingleConstituent.pending]: (state, action) => {
+      if (
+        state.constituentCustomFieldListSingleConstituent.api.loading === "idle"
+      ) {
+        state.constituentCustomFieldListSingleConstituent.api.loading =
+          "pending";
+        state.constituentCustomFieldListSingleConstituent.api.error = null;
+      }
+    },
+
+    [customFieldEducationList.fulfilled]: (state, action) => {
+      if (state.customFieldEducationList.api.loading === "pending") {
+        state.customFieldEducationList.entities = action.payload;
+        state.customFieldEducationList.api.loading = "idle";
+      }
+    },
+    [customFieldEducationList.rejected]: (state, action) => {
+      if (state.customFieldEducationList.api.loading === "pending") {
+        state.customFieldEducationList.api.error = action.error;
+        state.customFieldEducationList.api.loading = "idle";
+      }
+    },
+    [customFieldEducationList.pending]: (state, action) => {
+      if (state.customFieldEducationList.api.loading === "idle") {
+        state.customFieldEducationList.api.loading = "pending";
+        state.customFieldEducationList.api.error = null;
+      }
+    },
+    [educationCustomFieldCategories.fulfilled]: (state, action) => {
+      if (state.educationCustomFieldCategories.api.loading === "pending") {
+        state.educationCustomFieldCategories.entities = action.payload.value;
+        state.educationCustomFieldCategories.api.loading = "idle";
+      }
+    },
+    [educationCustomFieldCategories.rejected]: (state, action) => {
+      if (state.educationCustomFieldCategories.api.loading === "pending") {
+        state.educationCustomFieldCategories.api.error = action.error;
+        state.educationCustomFieldCategories.api.loading = "idle";
+      }
+    },
+    [educationCustomFieldCategories.pending]: (state, action) => {
+      if (state.educationCustomFieldCategories.api.loading === "idle") {
+        state.educationCustomFieldCategories.api.loading = "pending";
+        state.educationCustomFieldCategories.api.error = null;
+      }
+    },
+    [educationDegrees.fulfilled]: (state, action) => {
+      if (state.educationDegrees.api.loading === "pending") {
+        state.educationDegrees.entities = action.payload.value;
+        state.educationDegrees.api.loading = "idle";
+      }
+    },
+    [educationDegrees.rejected]: (state, action) => {
+      if (state.educationDegrees.api.loading === "pending") {
+        state.educationDegrees.api.error = action.error;
+        state.educationDegrees.api.loading = "idle";
+      }
+    },
+    [educationDegrees.pending]: (state, action) => {
+      if (state.educationDegrees.api.loading === "idle") {
+        state.educationDegrees.api.loading = "pending";
+        state.educationDegrees.api.error = null;
+      }
+    },
+    [educationConstituentList.fulfilled]: (state, action) => {
+      if (state.educationConstituentList.api.loading === "pending") {
+        state.educationConstituentList.entities = action.payload.value;
+        state.educationConstituentList.api.loading = "idle";
+      }
+    },
+    [educationConstituentList.rejected]: (state, action) => {
+      if (state.educationConstituentList.api.loading === "pending") {
+        state.educationConstituentList.api.error = action.error;
+        state.educationConstituentList.api.loading = "idle";
+      }
+    },
+    [educationConstituentList.pending]: (state, action) => {
+      if (state.educationConstituentList.api.loading === "idle") {
+        state.educationConstituentList.api.loading = "pending";
+        state.educationConstituentList.api.error = null;
+      }
+    },
+    [educationRecordList.fulfilled]: (state, action) => {
+      if (state.educationRecordList.api.loading === "pending") {
+        state.educationRecordList.entities = action.payload;
+        state.educationRecordList.api.loading = "idle";
+      }
+    },
+    [educationRecordList.rejected]: (state, action) => {
+      if (state.educationRecordList.api.loading === "pending") {
+        state.educationRecordList.api.error = action.error;
+        state.educationRecordList.api.loading = "idle";
+      }
+    },
+    [educationRecordList.pending]: (state, action) => {
+      if (state.educationRecordList.api.loading === "idle") {
+        state.educationRecordList.api.loading = "pending";
+        state.educationRecordList.api.error = null;
+      }
+    },
+    [educationSchoolsList.fulfilled]: (state, action) => {
+      if (state.educationSchoolsList.api.loading === "pending") {
+        state.educationSchoolsList.entities = action.payload.value;
+        state.educationSchoolsList.api.loading = "idle";
+      }
+    },
+    [educationSchoolsList.rejected]: (state, action) => {
+      if (state.educationSchoolsList.api.loading === "pending") {
+        state.educationSchoolsList.api.error = action.error;
+        state.educationSchoolsList.api.loading = "idle";
+      }
+    },
+    [educationSchoolsList.pending]: (state, action) => {
+      if (state.educationSchoolsList.api.loading === "idle") {
+        state.educationSchoolsList.api.loading = "pending";
+        state.educationSchoolsList.api.error = null;
+      }
+    },
+    [educationStatusesList.fulfilled]: (state, action) => {
+      if (state.educationStatusesList.api.loading === "pending") {
+        state.educationStatusesList.entities = action.payload.value;
+        state.educationStatusesList.api.loading = "idle";
+      }
+    },
+    [educationStatusesList.rejected]: (state, action) => {
+      if (state.educationStatusesList.api.loading === "pending") {
+        state.educationStatusesList.api.error = action.error;
+        state.educationStatusesList.api.loading = "idle";
+      }
+    },
+    [educationStatusesList.pending]: (state, action) => {
+      if (state.educationStatusesList.api.loading === "idle") {
+        state.educationStatusesList.api.loading = "pending";
+        state.educationStatusesList.api.error = null;
+      }
+    },
+    [educationSubjectList.fulfilled]: (state, action) => {
+      if (state.educationSubjectList.api.loading === "pending") {
+        state.educationSubjectList.entities = action.payload.value;
+        state.educationSubjectList.api.loading = "idle";
+      }
+    },
+    [educationSubjectList.rejected]: (state, action) => {
+      if (state.educationSubjectList.api.loading === "pending") {
+        state.educationSubjectList.api.error = action.error;
+        state.educationSubjectList.api.loading = "idle";
+      }
+    },
+    [educationSubjectList.pending]: (state, action) => {
+      if (state.educationSubjectList.api.loading === "idle") {
+        state.educationSubjectList.api.loading = "pending";
+        state.educationSubjectList.api.error = null;
+      }
+    },
+    [educationTypesList.fulfilled]: (state, action) => {
+      if (state.educationTypesList.api.loading === "pending") {
+        state.educationTypesList.entities = action.payload.value;
+        state.educationTypesList.api.loading = "idle";
+      }
+    },
+    [educationSubjectList.rejected]: (state, action) => {
+      if (state.educationTypesList.api.loading === "pending") {
+        state.educationTypesList.api.error = action.error;
+        state.educationTypesList.api.loading = "idle";
+      }
+    },
+    [educationTypesList.pending]: (state, action) => {
+      if (state.educationTypesList.api.loading === "idle") {
+        state.educationTypesList.api.loading = "pending";
+        state.educationTypesList.api.error = null;
+      }
+    },
+    [eventAttachmentList.fulfilled]: (state, action) => {
+      if (state.eventAttachmentList.api.loading === "pending") {
+        state.eventAttachmentList.entities = action.payload.value;
+        state.eventAttachmentList.api.loading = "idle";
+      }
+    },
+    [eventAttachmentList.rejected]: (state, action) => {
+      if (state.eventAttachmentList.api.loading === "pending") {
+        state.eventAttachmentList.api.error = action.error;
+        state.eventAttachmentList.api.loading = "idle";
+      }
+    },
+    [eventAttachmentList.pending]: (state, action) => {
+      if (state.eventAttachmentList.api.loading === "idle") {
+        state.eventAttachmentList.api.loading = "pending";
+        state.eventAttachmentList.api.error = null;
+      }
+    },
+    [getEventFees.fulfilled]: (state, action) => {
+      if (state.getEventFees.api.loading === "pending") {
+        state.getEventFees.entities = action.payload.value;
+        state.getEventFees.api.loading = "idle";
+      }
+    },
+    [getEventFees.rejected]: (state, action) => {
+      if (state.getEventFees.api.loading === "pending") {
+        state.getEventFees.api.error = action.error;
+        state.getEventFees.api.loading = "idle";
+      }
+    },
+    [getEventFees.pending]: (state, action) => {
+      if (state.getEventFees.api.loading === "idle") {
+        state.getEventFees.api.loading = "pending";
+        state.getEventFees.api.error = null;
+      }
+    },
+    [getEventParticipantOptions.fulfilled]: (state, action) => {
+      if (state.getEventParticipantOptions.api.loading === "pending") {
+        state.getEventParticipantOptions.entities = action.payload.value;
+        state.getEventParticipantOptions.api.loading = "idle";
+      }
+    },
+    [getEventParticipantOptions.rejected]: (state, action) => {
+      if (state.getEventParticipantOptions.api.loading === "pending") {
+        state.getEventParticipantOptions.api.error = action.error;
+        state.getEventParticipantOptions.api.loading = "idle";
+      }
+    },
+    [getEventParticipantOptions.pending]: (state, action) => {
+      if (state.getEventParticipantOptions.api.loading === "idle") {
+        state.getEventParticipantOptions.api.loading = "pending";
+        state.getEventParticipantOptions.api.error = null;
+      }
+    },
+    [getEventParticipantsList.fulfilled]: (state, action) => {
+      if (state.getEventParticipantsList.api.loading === "pending") {
+        state.getEventParticipantsList.entities = action.payload.value;
+        state.getEventParticipantsList.api.loading = "idle";
+      }
+    },
+    [getEventParticipantsList.rejected]: (state, action) => {
+      if (state.getEventParticipantsList.api.loading === "pending") {
+        state.getEventParticipantsList.api.error = action.error;
+        state.getEventParticipantsList.api.loading = "idle";
+      }
+    },
+    [getEventParticipantsList.pending]: (state, action) => {
+      if (state.getEventParticipantsList.api.loading === "idle") {
+        state.getEventParticipantsList.api.loading = "pending";
+        state.getEventParticipantsList.api.error = null;
+      }
+    },
+    [getEventParticipantsDonation.fulfilled]: (state, action) => {
+      if (state.eventParticipantsDonation.api.loading === "pending") {
+        state.eventParticipantsDonation.entities = action.payload.value;
+        state.eventParticipantsDonation.api.loading = "idle";
+      }
+    },
+    [getEventParticipantsDonation.rejected]: (state, action) => {
+      if (state.eventParticipantsDonation.api.loading === "pending") {
+        state.eventParticipantsDonation.api.error = action.error;
+        state.eventParticipantsDonation.api.loading = "idle";
+      }
+    },
+    [getEventParticipantsDonation.pending]: (state, action) => {
+      if (state.eventParticipantsDonation.api.loading === "idle") {
+        state.eventParticipantsDonation.api.loading = "pending";
+        state.eventParticipantsDonation.api.error = null;
+      }
+    },
+    [getEventParticipantFeePayments.fulfilled]: (state, action) => {
+      if (state.getEventParticipantFeePayments.api.loading === "pending") {
+        state.getEventParticipantFeePayments.entities = action.payload.value;
+        state.getEventParticipantFeePayments.api.loading = "idle";
+      }
+    },
+    [getEventParticipantFeePayments.rejected]: (state, action) => {
+      if (state.getEventParticipantFeePayments.api.loading === "pending") {
+        state.getEventParticipantFeePayments.api.error = action.error;
+        state.getEventParticipantFeePayments.api.loading = "idle";
+      }
+    },
+    [getEventParticipantFeePayments.pending]: (state, action) => {
+      if (state.getEventParticipantFeePayments.api.loading === "idle") {
+        state.getEventParticipantFeePayments.api.loading = "pending";
+        state.getEventParticipantFeePayments.api.error = null;
+      }
+    },
+    [getEventParticipantFees.fulfilled]: (state, action) => {
+      if (state.getEventParticipantFees.api.loading === "pending") {
+        state.getEventParticipantFees.entities = action.payload.value;
+        state.getEventParticipantFees.api.loading = "idle";
+      }
+    },
+    [getEventParticipantFees.rejected]: (state, action) => {
+      if (state.getEventParticipantFees.api.loading === "pending") {
+        state.getEventParticipantFees.api.error = action.error;
+        state.getEventParticipantFees.api.loading = "idle";
+      }
+    },
+    [getEventParticipantFees.pending]: (state, action) => {
+      if (state.getEventParticipantFees.api.loading === "idle") {
+        state.getEventParticipantFees.api.loading = "pending";
+        state.getEventParticipantFees.api.error = null;
+      }
+    },
+    [getEventAttachment.fulfilled]: (state, action) => {
+      if (state.getEventAttachment.api.loading === "pending") {
+        state.getEventAttachment.entities = action.payload;
+        state.getEventAttachment.api.loading = "idle";
+      }
+    },
+    [getEventAttachment.rejected]: (state, action) => {
+      if (state.getEventAttachment.api.loading === "pending") {
+        state.getEventAttachment.api.error = action.error;
+        state.getEventAttachment.api.loading = "idle";
+      }
+    },
+    [getEventAttachment.pending]: (state, action) => {
+      if (state.getEventAttachment.api.loading === "idle") {
+        state.getEventAttachment.api.loading = "pending";
+        state.getEventAttachment.api.error = null;
+      }
+    },
+    [getEventAttachmentTags.fulfilled]: (state, action) => {
+      if (state.getEventAttachmentTags.api.loading === "pending") {
+        state.getEventAttachmentTags.entities = action.payload.value;
+        state.getEventAttachmentTags.api.loading = "idle";
+      }
+    },
+    [getEventAttachmentTags.rejected]: (state, action) => {
+      if (state.getEventAttachmentTags.api.loading === "pending") {
+        state.getEventAttachmentTags.api.error = action.error;
+        state.getEventAttachmentTags.api.loading = "idle";
+      }
+    },
+    [getEventAttachmentTags.pending]: (state, action) => {
+      if (state.getEventAttachmentTags.api.loading === "idle") {
+        state.getEventAttachmentTags.api.loading = "pending";
+        state.getEventAttachmentTags.api.error = null;
       }
     }
   }
