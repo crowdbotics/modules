@@ -490,6 +490,43 @@ export const getEventAttachmentTags = createAsyncThunk(
     }
   }
 );
+export const getEventCategories = createAsyncThunk(
+  "event/get_event_categories",
+  async (token) => {
+    try {
+      const response = await api.getEventCategories(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getParticipant = createAsyncThunk(
+  "event/get_participant",
+  async (data) => {
+    try {
+      const response = await api.getParticipant(data);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getParticipantLevels = createAsyncThunk(
+  "event/get_participant_levels",
+  async (token) => {
+    try {
+      const response = await api.getParticipantLevels(token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
 const initialState = {
   eventList: {
     entities: [],
@@ -760,6 +797,27 @@ const initialState = {
   },
   getEventAttachmentTags: {
     entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getEventCategories: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getParticipant: {
+    entities: {},
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getParticipantLevels: {
+    entities: {},
     api: {
       loading: "idle",
       error: null
@@ -1514,6 +1572,60 @@ export const slice = createSlice({
       if (state.getEventAttachmentTags.api.loading === "idle") {
         state.getEventAttachmentTags.api.loading = "pending";
         state.getEventAttachmentTags.api.error = null;
+      }
+    },
+    [getEventCategories.fulfilled]: (state, action) => {
+      if (state.getEventCategories.api.loading === "pending") {
+        state.getEventCategories.entities = action.payload.value;
+        state.getEventCategories.api.loading = "idle";
+      }
+    },
+    [getEventCategories.rejected]: (state, action) => {
+      if (state.getEventCategories.api.loading === "pending") {
+        state.getEventCategories.api.error = action.error;
+        state.getEventCategories.api.loading = "idle";
+      }
+    },
+    [getEventCategories.pending]: (state, action) => {
+      if (state.getEventCategories.api.loading === "idle") {
+        state.getEventCategories.api.loading = "pending";
+        state.getEventCategories.api.error = null;
+      }
+    },
+    [getParticipant.fulfilled]: (state, action) => {
+      if (state.getParticipant.api.loading === "pending") {
+        state.getParticipant.entities = action.payload;
+        state.getParticipant.api.loading = "idle";
+      }
+    },
+    [getParticipant.rejected]: (state, action) => {
+      if (state.getParticipant.api.loading === "pending") {
+        state.getParticipant.api.error = action.error;
+        state.getParticipant.api.loading = "idle";
+      }
+    },
+    [getParticipant.pending]: (state, action) => {
+      if (state.getParticipant.api.loading === "idle") {
+        state.getParticipant.api.loading = "pending";
+        state.getParticipant.api.error = null;
+      }
+    },
+    [getParticipantLevels.fulfilled]: (state, action) => {
+      if (state.getParticipantLevels.api.loading === "pending") {
+        state.getParticipantLevels.entities = action.payload.value;
+        state.getParticipantLevels.api.loading = "idle";
+      }
+    },
+    [getParticipantLevels.rejected]: (state, action) => {
+      if (state.getParticipantLevels.api.loading === "pending") {
+        state.getParticipantLevels.api.error = action.error;
+        state.getParticipantLevels.api.loading = "idle";
+      }
+    },
+    [getParticipantLevels.pending]: (state, action) => {
+      if (state.getParticipantLevels.api.loading === "idle") {
+        state.getParticipantLevels.api.loading = "pending";
+        state.getParticipantLevels.api.error = null;
       }
     }
   }

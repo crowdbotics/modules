@@ -504,6 +504,42 @@ export const getEventAttachmentTags = (accessToken) => {
   };
   return axios.request(config);
 };
+export const getEventCategories = (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${BASE_URL}/modules/blackbaud/event/get_event_categories/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+export const getParticipant = (data) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${BASE_URL}/modules/blackbaud/event/get_participant/${data.id}/`,
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+export const getParticipantLevels = (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${BASE_URL}/modules/blackbaud/event/get_participant_levels/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
 
 export const api = {
   getEventListing,
@@ -545,5 +581,8 @@ export const api = {
   getEventParticipantFees,
   getParticipantOptions,
   getEventAttachment,
-  getEventAttachmentTags
+  getEventAttachmentTags,
+  getEventCategories,
+  getParticipant,
+  getParticipantLevels
 };
