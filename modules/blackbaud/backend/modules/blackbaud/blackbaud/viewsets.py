@@ -365,7 +365,7 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['delete'], url_path='constituents/delete_address_details/(?P<address_id>\d+)')
-    def get_constituent_address_details(self, request, *args, **kwargs):
+    def delete_constituent_address_details(self, request, *args, **kwargs):
         response = self.blackbaud_service.constituents_delete_address_details(
             request.META.get("HTTP_AUTHORIZATION"), kwargs.get("address_id"))
         return Response(data=response.get("data"), status=response.get("status_code"))
@@ -378,7 +378,7 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='constituents/get_address_types')
-    def get_address_list_in_constituents(self, request):
+    def get_address_type_in_constituents(self, request):
         response = self.blackbaud_service.constituents_get_address_types(
             request.META.get("HTTP_AUTHORIZATION"))
         return Response(data=response.get("data"), status=response.get("status_code"))
@@ -404,7 +404,6 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         response = self.blackbaud_service.constituents_create_alias_collection(
             request.META.get("HTTP_AUTHORIZATION"), kwargs.get("constituent_id"), payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
-    
 
     @action(detail=False, methods=['get'], url_path='event/get_participant/(?P<participant_id>\d+)')
     def get_event_participant(self, request, **kwargs):

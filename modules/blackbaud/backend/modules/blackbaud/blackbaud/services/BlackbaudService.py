@@ -32,7 +32,7 @@ class BlackbaudBase:
             if request_type == 'DELETE':
                 response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
                 return {"data": 'Deleted successfully.', "status_code": response.status_code}
-             
+
             response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
             data = json.loads(response.text)
             return {"data": data, "status_code": response.status_code}
@@ -280,7 +280,8 @@ class BlackbaudService(BlackbaudBase):
     def constituent_create_document(self, access_token, payload):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/documents"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
@@ -288,7 +289,8 @@ class BlackbaudService(BlackbaudBase):
     def constituent_create_education(self, access_token, payload):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
@@ -312,7 +314,8 @@ class BlackbaudService(BlackbaudBase):
     def constituent_create_education_custom_field(self, access_token, payload):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/educations/customfields"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
@@ -400,7 +403,8 @@ class BlackbaudService(BlackbaudBase):
     def constituents_create_address(self, access_token, payload):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/addresses"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
@@ -440,7 +444,8 @@ class BlackbaudService(BlackbaudBase):
     def constituents_create_aliases(self, access_token, payload):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/aliases"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
@@ -456,12 +461,12 @@ class BlackbaudService(BlackbaudBase):
     def constituents_create_alias_collection(self, access_token, constituent_id, payload):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/aliascollection"
-            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token), payload=payload)
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
-        
-    
+
     def event_participant(self, access_token, participant_id):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}"
