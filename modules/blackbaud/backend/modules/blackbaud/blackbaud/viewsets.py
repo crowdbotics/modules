@@ -828,3 +828,11 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                                    kwargs.get("participant_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
+
+    @action(detail=False, methods=['get'], url_path='constituent_search_with_email')
+    def constituent_search_with_email(self, request, *args, **kwargs):
+        """
+        """
+        response = self.blackbaud_service.constituent_search_with_email(request.META.get("HTTP_AUTHORIZATION"),
+                                                                        kwargs.get('q', None))
+        return Response(data=response.get("data"), status=response.get("status_code"))

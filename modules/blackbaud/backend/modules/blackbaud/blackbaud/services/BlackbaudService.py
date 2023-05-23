@@ -203,6 +203,15 @@ class BlackbaudService(BlackbaudBase):
         except Exception as e:
             return e
 
+    def constituent_search_with_email(self, access_token, email, payload=None):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/search?search_text={email}&search_field=email_address"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
     def constituent_custom_field_categories(self, access_token):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/customfields/categories"
