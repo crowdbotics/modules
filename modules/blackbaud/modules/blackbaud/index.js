@@ -49,7 +49,8 @@ const BlackbaudSky = ({
         <ImageBackground source={require("./assets/bottomBackground.png")} style={styles.bottomBackground} resizeMode="cover">
           <View style={styles.logoView}>
             <Image source={require("./assets/blackbaudLogo.png")} style={styles.blackbaudLogo} />
-            <View style={styles.infoContainer}> 
+          </View>
+          <View style={styles.infoContainer}> 
               <Text style={styles.infoTitleText}>
                 Blackbaud Sky
               </Text>
@@ -57,8 +58,6 @@ const BlackbaudSky = ({
                 Login to your Blackbaud Sky account
               </Text>
             </View>
-            
-          </View>
           <Pressable style={styles.loginButton} onPress={() => {login()}} >
             {browserRequesting ? <ActivityIndicator size={"large"} color={"#000"} />
             :
@@ -91,11 +90,13 @@ const styles = StyleSheet.create({
     flex: 6,
     width: "100%",
     zIndex: -1,
-    marginBottom: -30
+    marginBottom: -30,
+    minHeight: 200
   },
   blackbaudTopLogo: {
     flex: 2,
     height: 60,
+    minHeight: 60,
     width: "100%"
   },
   logoTopView: {
@@ -122,7 +123,6 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   infoContainer: {
-    marginTop: 20
   },
   infoTitleText: { 
     color: "#000", 
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     textAlign: "center" 
   },
   infoDescText: { 
-    color: "#c9c9c9", 
+    color: "#666", 
     fontSize: 16, 
     textAlign: "center" 
   }
