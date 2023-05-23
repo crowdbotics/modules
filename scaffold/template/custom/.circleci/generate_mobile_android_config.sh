@@ -93,6 +93,13 @@ jobs:
       - run:
           name: Populate EnvFile
           command: env >> .env
+          
+      - run:
+          name: Add my-upload-key.keystore file
+          working_directory: android
+          command:  |
+            cd app
+            echo "$MYAPP_UPLOAD_STORE_FILE" | base64 --decode > my-upload-key.keystore
 
       - run:
           name: Build and upload to appetize.io
