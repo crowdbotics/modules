@@ -33,7 +33,7 @@ const getNavigation = (modules, screens, initialRoute) => {
       return <Stack.Screen key={name} name={name} component={Component} />
     })
 
-    const screenOptions = { headerShown: true }
+    const screenOptions = { headerShown: false }
 
     return (
       <NavigationContainer>
