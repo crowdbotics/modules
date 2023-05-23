@@ -15,9 +15,9 @@ const BlackbaudSky = ({
   } = options;
   const dispatch = useDispatch();
   const config = {
-    issuer,
-    clientId,
-    redirectUrl
+    issuer: issuer,
+    clientId: clientId,
+    redirectUrl: redirectUrl,
   };
   useEffect(() => {
     
