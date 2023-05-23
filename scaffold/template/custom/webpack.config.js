@@ -4,7 +4,7 @@
  *
  * Compiles the following files and directories:
  * - index.js
- * - App.tsx
+ * - App.js
  * - modules
  * - options
  * - screens
@@ -57,7 +57,7 @@ const babelLoaderConfiguration = {
   // Add every directory that needs to be compiled by Babel during the build.
   include: [
     path.resolve(appDirectory, "index.js"),
-    path.resolve(appDirectory, "App.tsx"),
+    path.resolve(appDirectory, "App.js"),
     path.resolve(appDirectory, "modules"),
     path.resolve(appDirectory, "screens"),
     path.resolve(appDirectory, "options"),
