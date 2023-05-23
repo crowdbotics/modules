@@ -47,6 +47,13 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   inject: false
 })
 
+const DevEnvPlugin = new webpack.DefinePlugin({
+  __DEV__: process.env.NODE_ENV !== "production" || true,
+  "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
+})
+
+const JestWorkerPlugin = new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null })
+
 // This is needed for webpack to compile JavaScript.
 // Many OSS React Native packages are not compiled to ES5 before being
 // published. If you depend on uncompiled packages they may cause webpack build
@@ -94,6 +101,7 @@ module.exports = {
     // load any web API polyfills
     // path.resolve(appDirectory, 'polyfills-web.js'),
     // your web-specific entry file
+    "@babel/polyfill",
     path.resolve(appDirectory, "index.js")
   ],
 
@@ -113,7 +121,7 @@ module.exports = {
       typescriptLoaderConfiguration
     ]
   },
-  plugins: [HTMLWebpackPluginConfig],
+  plugins: [HTMLWebpackPluginConfig, DevEnvPlugin, JestWorkerPlugin],
   resolve: {
     alias: {
       "react-native$": "react-native-web",
