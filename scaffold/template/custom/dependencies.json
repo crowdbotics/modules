@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-masked-view/masked-view": "^0.2.9",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
     "@reduxjs/toolkit": "^1.9.5",
