@@ -33,7 +33,7 @@ const getNavigation = (modules, screens, initialRoute, headerShown) => {
       return <Stack.Screen key={name} name={name} component={Component} />
     })
 
-    const screenOptions = { headerShown: headerShown === "true" ? true : false || false}
+    const screenOptions = { headerShown: headerShown || false}
 
     return (
       <NavigationContainer>
