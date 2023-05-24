@@ -33,6 +33,7 @@ class TestBlackbaudViewSet(APITestCase):
         }
         Response = self.client.post(reverse('blackbaud-get-access-token'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         auth_token_mock.assert_called()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.auth_token')
@@ -49,6 +50,7 @@ class TestBlackbaudViewSet(APITestCase):
         }
         Response = self.client.post(reverse('blackbaud-get-access-token'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
         auth_token_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.auth_token')
@@ -65,6 +67,7 @@ class TestBlackbaudViewSet(APITestCase):
         }
         Response = self.client.post(reverse('blackbaud-get-access-token'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
         auth_token_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_list')
@@ -100,6 +103,7 @@ class TestBlackbaudViewSet(APITestCase):
         event_list_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-event-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         event_list_mock.assert_called()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_details')
@@ -133,6 +137,7 @@ class TestBlackbaudViewSet(APITestCase):
         url = reverse('blackbaud-get-event-details', kwargs={'event_id': event_id})
         Response = self.client.get(url)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         event_details_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_details')
@@ -153,6 +158,7 @@ class TestBlackbaudViewSet(APITestCase):
         url = reverse('blackbaud-get-event-details', kwargs={'event_id': invalid_event_id})
         Response = self.client.get(url)
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         event_details_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participants_list')
@@ -196,6 +202,7 @@ class TestBlackbaudViewSet(APITestCase):
         event_id = 32582
         Response = self.client.get(reverse('blackbaud-get-event-participants-list', kwargs={'event_id': event_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         event_participants_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participants_list')
@@ -216,6 +223,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-event-participants-list', kwargs={'event_id': invalid_event_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         event_participants_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.consent_channels')
@@ -228,6 +236,7 @@ class TestBlackbaudViewSet(APITestCase):
         consent_channels_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-consent-channels'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         consent_channels_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_list')
@@ -249,7 +258,57 @@ class TestBlackbaudViewSet(APITestCase):
         constituents_list_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituents-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         constituents_list_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_constituents')
+    def test_create_constituents_with_valid_data(self, create_constituents_mock):
+        response = {'data': {'id': '627253'}, 'status_code': 200}
+        create_constituents_mock.return_value = response
+        data = {
+            "email": {
+                "address": "muhammad.shoaib@gmail.com",
+                "type": "Email"
+            },
+            "first": "Muhammad",
+            "last": "Shoaib",
+            "gender": "Male",
+            "phone": {
+                "number": "843-537-3399",
+                "type": "Home"
+            },
+            "type": "Individual"
+        }
+        Response = self.client.post(reverse('blackbaud-create-constituents'), data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituents_mock.assert_called()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_constituents')
+    def test_create_constituents_with_invalid_data(self, create_constituents_mock):
+        response = {'data': [{'message': "The table 'Phone Types' does not contain an active entry named 'mail'",
+                              'error_name': 'TableEntryNotFound', 'error_code': 1002,
+                              'raw_message': "The table 'Phone Types' does not contain an active entry named 'mail'",
+                              'error_args': []}], 'status_code': 400}
+        create_constituents_mock.return_value = response
+        invalid_data = {
+            "email": {
+                "address": "muhammad.shoaib@gmail.com",
+                "type": "mail"
+            },
+            "first": "Muhammad",
+            "last": "Shoaib",
+            "gender": "ale",
+            "phone": {
+                "number": "43-537-3399",
+                "type": "ome"
+            },
+            "type": "Individual"
+        }
+        Response = self.client.post(reverse('blackbaud-create-constituents'), data=invalid_data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituents_mock.assert_called()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_details_by_id')
     def test_get_constituent_details(self, get_constituent_details_mock):
@@ -275,6 +334,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-details', kwargs={'constituent_id': constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_details_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_details_by_id')
@@ -287,6 +347,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-details', kwargs={'constituent_id': invalid_constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_details_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_appeal_list')
@@ -355,6 +416,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-appeal-list', kwargs={'constituent_id': constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_appeal_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_appeal_list')
@@ -367,6 +429,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-appeal-list', kwargs={'constituent_id': invalid_constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_appeal_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_attachment_list')
@@ -427,6 +490,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-attachment-list', kwargs={'constituent_id': constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_attachment_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_attachment_list')
@@ -439,6 +503,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-attachment-list', kwargs={'constituent_id': invalid_constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_attachment_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_code_details')
@@ -459,6 +524,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-code-details', kwargs={'constituent_code_id': constituent_code_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_code_details_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_code_details')
@@ -481,6 +547,7 @@ class TestBlackbaudViewSet(APITestCase):
             reverse('blackbaud-get-constituent-code-details',
                     kwargs={'constituent_code_id': invalid_constituent_code_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_code_details_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_code_list')
@@ -504,6 +571,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-code-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_code_list_mock.assert_called_once()
 
     @mock.patch(
@@ -522,6 +590,7 @@ class TestBlackbaudViewSet(APITestCase):
             reverse('blackbaud-get-constituent-code-list-in-constituent',
                     kwargs={'constituent_id': constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_code_list_in_constituent_mock.assert_called_once()
 
     @mock.patch(
@@ -537,6 +606,7 @@ class TestBlackbaudViewSet(APITestCase):
             reverse('blackbaud-get-constituent-code-list-in-constituent',
                     kwargs={'constituent_id': invalid_constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_code_list_in_constituent_mock.assert_called_once()
 
     @mock.patch(
@@ -551,6 +621,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_constituent_custom_field_categories_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-categories'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_custom_field_categories_mock.assert_called_once()
 
     @mock.patch(
@@ -580,6 +651,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_constituent_custom_field_categories_details_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-categories-details'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_custom_field_categories_details_mock.assert_called_once()
 
     @mock.patch(
@@ -592,6 +664,7 @@ class TestBlackbaudViewSet(APITestCase):
         }
         Response = self.client.get(reverse("blackbaud-get-constituent-custom-field-categories-values"), data)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_custom_field_categories_values_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_list')
@@ -613,6 +686,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_constituent_custom_field_list_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_custom_field_list_mock.assert_called_once()
 
     @mock.patch(
@@ -625,6 +699,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-list-in-single-constituent',
                                            kwargs={'constituent_id': constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_custom_field_list_in_single_constituent_mock.assert_called_once()
 
     @mock.patch(
@@ -639,6 +714,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(reverse('blackbaud-get-constituent-custom-field-list-in-single-constituent',
                                            kwargs={'constituent_id': invalid_constituent_id}))
         self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_custom_field_list_in_single_constituent_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_countries')
@@ -661,6 +737,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_constituent_countries_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituent-countries'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_countries_mock.assert_called_once()
 
     @mock.patch(
@@ -671,6 +748,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_constituent_currencyconfiguration_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituent-currencyconfiguration'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_currencyconfiguration_mock.assert_called_once()
 
     @mock.patch(
@@ -688,6 +766,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_constituents_address_list_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituents-address-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituents_address_list_mock.assert_called_once()
 
     @mock.patch(
@@ -704,6 +783,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_constituents_education_list_mock.return_value = response
         Response = self.client.get(reverse('blackbaud-get-constituents-education-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituents_education_list_mock.assert_called_once()
 
     @mock.patch(
@@ -723,6 +803,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-education-record', kwargs={'education_id': education_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_education_record_mock.assert_called_once()
 
     @mock.patch(
@@ -756,6 +837,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-education-custom-field-categories'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_education_custom_field_categories_mock.assert_called_once()
 
     @mock.patch(
@@ -775,6 +857,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(
             reverse('blackbaud-get-constituent-custom-field-list-in-education', kwargs={'education_id': education_id}))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
         get_constituent_custom_field_list_in_education_mock.assert_called_once()
 
     @mock.patch(
@@ -1461,6 +1544,186 @@ class TestBlackbaudViewSet(APITestCase):
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
         get_participant_options_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_code')
+    def test_create_constituent_code_with_valid_data(self, create_constituent_code_mock):
+        response = {'data': {'id': '23087'}, 'status_code': 200}
+        create_constituent_code_mock.return_value = response
+        data = {
+            "constituent_id": "618879",
+            "description": "Volunteer"
+        }
+        Response = self.client.post(reverse('blackbaud-create-constituent-code'), data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_code_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_code')
+    def test_create_constituent_code_with_invalid_data(self, create_constituent_code_mock):
+        response = {'data': [
+            {'message': "The table 'Constituent Codes' does not contain an active entry named 'unteer'",
+             'error_name': 'TableEntryNotFound', 'error_code': 400,
+             'raw_message': "The table 'Constituent Codes' does not contain an active entry named 'unteer'",
+             'error_args': []}], 'status_code': 400}
+        create_constituent_code_mock.return_value = response
+        invalid_data = {
+            "constituent_id": "879",
+            "description": "unteer"
+        }
+        Response = self.client.post(reverse('blackbaud-create-constituent-code'), data=invalid_data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_code_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.delete_constituent_code')
+    def test_delete_constituent_code_with_valid_id(self, delete_constituent_code_mock):
+        response = {'data': 'Deleted successfully.', 'status_code': 200}
+        delete_constituent_code_mock.return_value = response
+        constituent_code_id = '23087'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-constituent-code', kwargs={'constituent_code_id': constituent_code_id}),
+            format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        delete_constituent_code_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.delete_constituent_code')
+    def test_delete_constituent_code_with_invalid_id(self, delete_constituent_code_mock):
+        response = {'data': 'Deleted successfully.', 'status_code': 200}
+        delete_constituent_code_mock.return_value = response
+        invalid_constituent_code_id = '2308798743587'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-constituent-code', kwargs={'constituent_code_id': invalid_constituent_code_id}),
+            format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        delete_constituent_code_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_fields')
+    def test_create_constituent_custom_field_with_valid_data(self, create_constituent_custom_field_mock):
+        response = {'data': {'id': '9107'}, 'status_code': 200}
+        create_constituent_custom_field_mock.return_value = response
+        data = {
+            "category": "Anniversary",
+            "parent_id": "280"
+        }
+        Response = self.client.post(reverse('blackbaud-create-constituent-custom-field'), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_custom_field_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_fields')
+    def test_create_constituent_custom_field_with_invalid_category(self, create_constituent_custom_field_mock):
+        response = {'data': [{
+            'message': "The table 'Custom Field Categories' does not contain an active entry named 'NXT Action Direction'",
+            'error_name': 'TableEntryNotFound', 'error_code': 400,
+            'raw_message': "The table 'Custom Field Categories' does not contain an active entry named 'NXT Action Direction'",
+            'error_args': []}], 'status_code': 400}
+        create_constituent_custom_field_mock.return_value = response
+        data = {
+            "category": "NXT Action Direction",
+            "parent_id": "280"
+        }
+        Response = self.client.post(reverse('blackbaud-create-constituent-custom-field'), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_custom_field_mock.assert_called_once()
+
+    @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_fields')
+    def test_create_constituent_custom_field_with_invalid_parent_id(self, create_constituent_custom_field_mock):
+        response = {'data': [{'error_args': [], 'error_code': 404, 'error_name': 'RequestNotFulfilled',
+                              'message': 'The requested operation could not be fulfilled',
+                              'raw_message': 'The requested operation could not be fulfilled'}], 'status_code': 404}
+        create_constituent_custom_field_mock.return_value = response
+        data = {
+            "category": "Anniversary",
+            "parent_id": "28088"
+        }
+        Response = self.client.post(reverse('blackbaud-create-constituent-custom-field'), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_custom_field_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_collection')
+    def test_create_constituent_custom_collection_with_valid_category(self, create_constituent_custom_collection_mock):
+        response = {'data': {'count': 1, 'value': ['9111']}, 'status_code': 200}
+        create_constituent_custom_collection_mock.return_value = response
+        data = [
+            {
+                "category": "GoldenAnniversary"
+            }
+        ]
+        constituent_id = '618879'
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-custom-collection', kwargs={'constituent_id': constituent_id}),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_custom_collection_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_collection')
+    def test_create_constituent_custom_collection_with_invalid_category(self,
+                                                                        create_constituent_custom_collection_mock):
+        response = {'data': [
+            {'message': "The table 'Custom Field Categories' does not contain an active entry named 'nniversary'",
+             'error_name': 'TableEntryNotFound', 'error_code': 400,
+             'raw_message': "The table 'Custom Field Categories' does not contain an active entry named 'nniversary'",
+             'error_args': []}], 'status_code': 400}
+        create_constituent_custom_collection_mock.return_value = response
+        data = [
+            {
+                "category": "nniversary"
+            }
+        ]
+        constituent_id = '618879'
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-custom-collection', kwargs={'constituent_id': constituent_id}),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_custom_collection_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_document')
+    def test_create_document_with_valid_data(self, create_document_mock):
+        response = {'data': {'file_id': '559f9dee-2bef-4134-8092-28e32976e808', 'file_upload_request': {
+            'headers': [{'name': 'x-ms-blob-type', 'value': 'BlockBlob'},
+                        {'name': 'x-ms-version', 'value': '2015-12-11'}], 'method': 'PUT',
+            'url': 'https://s21arnx01doc01blkbsa.blob.core.windows.net/blackbauddocumentsvc/tenants/14aedc04-bf45-43bf-8f7c-b08199425776/documents/559f9dee-2bef-4134-8092-28e32976e808/businesscard.jpg?sv=2018-03-28&sr=b&sig=MOpLMa4fmWdG4cfIneDM4RGbb9RMr1eqrZrEcjY91JE%3D&se=2023-05-24T16%3A40%3A39Z&sp=rw'},
+                             'thumbnail_id': '58be14a9-21be-4059-9aaa-038d4fbff80b', 'thumbnail_upload_request': {
+                'headers': [{'name': 'x-ms-blob-type', 'value': 'BlockBlob'},
+                            {'name': 'x-ms-version', 'value': '2015-12-11'}], 'method': 'PUT',
+                'url': 'https://s21arnx01doc01blkbsa.blob.core.windows.net/blackbauddocumentsvc/tenants/14aedc04-bf45-43bf-8f7c-b08199425776/documents/58be14a9-21be-4059-9aaa-038d4fbff80b/thumbnail_businesscard.jpg?sv=2018-03-28&sr=b&sig=8YYlL6cyFG3wQCSGY51B%2Fjyv9qqLWWUDXf9aEY2OWV0%3D&se=2023-05-24T16%3A40%3A39Z&sp=rw'}},
+                    'status_code': 200}
+        create_document_mock.return_value = response
+        data = {
+            "file_name": "businesscard.jpg",
+            "upload_thumbnail": True
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-document'),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_document_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_document')
+    def test_create_document_with_invalid_data(self, create_document_mock):
+        response = {'data': [{'error_code': 50008, 'error_name': 'DocumentBusinessLogicInvalidArguments', 'message': 'The file type of the document provided is not supported.', 'raw_message': 'The file type of the document provided is not supported.'}], 'status_code': 400}
+        create_document_mock.return_value = response
+        data = {
+            "file_name": "businesscard",
+            "upload_thumbnail": False
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-document'),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_document_mock.inssert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.participant_levels')
