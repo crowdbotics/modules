@@ -8,7 +8,8 @@ from .serializers import CreateConstituentsSerializers, CreateConstituentsAttach
     CreateConstituentsCustomFieldsCollectionSerializers, CreateConstituentDocumentSerializers, \
     CreateConstituentEducationSerializers, CreateConstituentEducationCustomFieldSerializers, \
     CreateConstituentAddressSerializers, CreateConstituentAliasesSerializers, \
-    CreateConstituentAliasesCollectionSerializers
+    CreateConstituentAliasesCollectionSerializers, CreateParticipantsSerializer, CreateEventCategorySerializer, \
+    CreateEventFeeSerializer, CreateEventSerializer
 
 
 class BlackbaudViewSet(viewsets.GenericViewSet):
@@ -32,7 +33,11 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         "create_constituent_education_custom_field": CreateConstituentEducationCustomFieldSerializers,
         "create_constituents_address": CreateConstituentAddressSerializers,
         "create_constituent_aliases": CreateConstituentAliasesSerializers,
-        "create_constituent_alias_collection": CreateConstituentAliasesCollectionSerializers
+        "create_constituent_alias_collection": CreateConstituentAliasesCollectionSerializers,
+        "create_participant_in_event": CreateParticipantsSerializer,
+        "create_category_in_event": CreateEventCategorySerializer,
+        "create_event_fee": CreateEventFeeSerializer,
+        "create_an_event": CreateEventSerializer
     }
 
     def get_serializer_class(self):
@@ -816,18 +821,32 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                              )
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['delete'], url_path='event/delete_event_participant/(?P<participant_id>\d+)')
-    def delete_event_participant(self, request, *args, **kwargs):
+    @action(detail=False, methods=['delete'], url_path='event/delete_participant/(?P<participant_id>\d+)')
+    def delete_participant(self, request, *args, **kwargs):
         """
         To delete the Event Participant \n
         :headers: "Authorization: Bearer (token)" \n
         :path_params: "participant_id" \n
         :return: Deletes a participant.
         """
-        response = self.blackbaud_service.delete_event_participant(request.META.get("HTTP_AUTHORIZATION"),
-                                                                   kwargs.get("participant_id", None))
+        response = self.blackbaud_service.delete_participant(request.META.get("HTTP_AUTHORIZATION"),
+                                                             kwargs.get("participant_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
+    @action(detail=False, methods=['post'], url_path='event/create_event_participant/(?P<event_id>\d+)')
+    def create_participant_in_event(self, request, *args, **kwargs):
+        """
+        To create the Event Participant \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "event_id" \n
+        :return: Deletes a participant.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_event_participants(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    kwargs.get("event_id", None),
+                                                                    payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='constituent_search_with_email')
     def constituent_search_with_email(self, request, *args, **kwargs):
@@ -835,4 +854,101 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         """
         response = self.blackbaud_service.constituent_search_with_email(request.META.get("HTTP_AUTHORIZATION"),
                                                                         kwargs.get('q', None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'],
+            url_path='event/create_event_participant_for_attending_event/(?P<event_id>\d+)')
+    def create_participant_for_attending_event(self, request, *args, **kwargs):
+        """
+        To create the Event Participant for attending event \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "payload" \n
+        :return: created the Event Participant for attending event
+        """
+        constituent_serializer = CreateConstituentsSerializers(data=request.data['constituent'])
+        participant_serializer = CreateParticipantsSerializer(data=request.data['participant'])
+        constituent_serializer.is_valid(raise_exception=True) and participant_serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_participant_for_attending_events(
+            request.META.get("HTTP_AUTHORIZATION"),
+            payload={'constituent_data': constituent_serializer.data, 'participant_data': participant_serializer.data},
+            event_id=kwargs.get("event_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_event')
+    def create_an_event(self, request):
+        """
+        To create the Event \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: created id of event.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_an_event(request.META.get("HTTP_AUTHORIZATION"),
+                                                          payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='event/delete_event/(?P<event_id>\d+)')
+    def delete_an_event(self, request, *args, **kwargs):
+        """
+        To delete the Event Fee \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "event_id" \n
+        :return: deleted event id.
+        """
+        response = self.blackbaud_service.delete_event(request.META.get("HTTP_AUTHORIZATION"),
+                                                       kwargs.get("event_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_event_category')
+    def create_category_in_event(self, request):
+        """
+        To create the Event Participant \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "name" \n
+        :return: created category id of a participant.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_event_category(request.META.get("HTTP_AUTHORIZATION"),
+                                                                payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='event/delete_event_category/(?P<event_category_id>\d+)')
+    def delete_an_event_category(self, request, *args, **kwargs):
+        """
+        To delete the Event category \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "event_category_id" \n
+        :return: delete message.
+        """
+        response = self.blackbaud_service.delete_event_category(request.META.get("HTTP_AUTHORIZATION"),
+                                                       kwargs.get("event_category_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_event_fee/(?P<event_id>\d+)')
+    def create_event_fee(self, request, *args, **kwargs):
+        """
+        To delete the Event Fee \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "event__feeid" \n
+        :return: A delete message.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_event_fee(request.META.get("HTTP_AUTHORIZATION"),
+                                                           kwargs.get("event_id", None),
+                                                           payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='event/delete_event_fee/(?P<fee_id>\d+)')
+    def delete_an_event_fee(self, request, *args, **kwargs):
+        """
+        To delete the Event category \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "event_category_id" \n
+        :return: delete message.
+        """
+        response = self.blackbaud_service.delete_event_fee(request.META.get("HTTP_AUTHORIZATION"),
+                                                       kwargs.get("fee_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))

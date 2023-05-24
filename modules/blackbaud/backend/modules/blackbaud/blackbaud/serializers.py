@@ -2,19 +2,23 @@ from rest_framework import serializers
 
 
 class EmailSerializer(serializers.Serializer):
-    address = serializers.EmailField(required=False)
-    email = serializers.CharField(required=False)
+    address = serializers.EmailField(required=True)
+    type = serializers.CharField(required=True)
 
 
 class PhoneSerializer(serializers.Serializer):
-    number = serializers.CharField(required=False)
-    type = serializers.CharField(required=False)
+    number = serializers.CharField(required=True)
+    type = serializers.CharField(required=True)
 
 
 class CreateConstituentsSerializers(serializers.Serializer):
     type = serializers.CharField(required=True)
-    email = EmailSerializer(required=False)
-    phone = PhoneSerializer(required=False)
+    email = EmailSerializer(required=True, many=False)
+    phone = PhoneSerializer(required=True, many=False)
+    first = serializers.CharField(required=True)
+    last = serializers.CharField(required=True)
+    city = serializers.CharField(required=False, max_length=50)
+    gender = serializers.CharField(required=False)
 
 
 class CreateConstituentsAttachmentsSerializers(serializers.Serializer):
@@ -79,3 +83,49 @@ class CreateConstituentAliasCollectionSerializers(serializers.Serializer):
 
 class CreateConstituentAliasesCollectionSerializers(serializers.Serializer):
     aliases = CreateConstituentAliasCollectionSerializers(required=True, many=True)
+
+
+class CreateParticipantInvitationDateSerializer(serializers.Serializer):
+    d = serializers.CharField(required=False)
+    m = serializers.CharField(required=False)
+    y = serializers.CharField(required=False)
+
+
+class CreateParticipantsSerializer(serializers.Serializer):
+    RSVP_STATUS_CHOICES = (
+        ('attending', 'Attending'),
+        ('canceled', 'Canceled'),
+        ('declined', 'Declined'),
+        ('interested', 'Interested'),
+        ('noResponse', 'NoResponse'),
+        ('notApplicable', 'NotApplicable'),
+        ('waitlisted', 'Waitlisted'),
+    )
+    constituent_id = serializers.CharField(required=False)
+    rsvp_status = serializers.ChoiceField(required=False, choices=RSVP_STATUS_CHOICES)
+    summary_note = serializers.CharField(required=False)
+    invitation_date = CreateParticipantInvitationDateSerializer(required=False, many=False)
+
+
+class EventCategorySerializer(serializers.Serializer):
+    id = serializers.CharField(required=False)
+    name = serializers.CharField(required=False)
+
+
+class CreateEventSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)
+    start_date = serializers.DateField(required=True)
+    start_time = serializers.CharField(required=False)
+    end_time = serializers.CharField(required=False)
+    category = EventCategorySerializer(required=False)
+    description = serializers.CharField(required=False)
+
+
+class CreateEventCategorySerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)
+
+
+class CreateEventFeeSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)
+    cost = serializers.DecimalField(required=True, max_digits=5, decimal_places=2)
+    contribution_amount = serializers.DecimalField(required=True, max_digits=5, decimal_places=2)

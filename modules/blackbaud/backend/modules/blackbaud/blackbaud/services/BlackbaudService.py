@@ -575,9 +575,84 @@ class BlackbaudService(BlackbaudBase):
         except Exception as e:
             return e
 
-    def delete_event_participant(self, access_token, participant_id):
+    def delete_participant(self, access_token, participant_id):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def create_event_participants(self, access_token, event_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/participants"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def create_participant_for_attending_events(self, access_token, payload, event_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload['constituent_data'])
+            constituents_id = response['data']['id']
+            if constituents_id:
+                payload['participant_data']['constituent_id'] = constituents_id
+                url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/participants"
+                new_response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                              payload=payload['participant_data'])
+                return new_response
+        except Exception as e:
+            return e
+
+    def create_event_category(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventcategories"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_event_category(self, access_token, event_category_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventcategories/{event_category_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def create_an_event(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_event(self, access_token, event_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def create_event_fee(self, access_token, event_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/eventfees"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_event_fee(self, access_token, fee_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventfees/{fee_id}"
             response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
             return response
         except Exception as e:
