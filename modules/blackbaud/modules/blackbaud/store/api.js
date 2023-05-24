@@ -39,7 +39,19 @@ export const getAttendeeList = (accessToken, id) => {
   };
   return axios.request(config);
 };
-
+export const addAttendee = (accessToken, payload, eventId) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${BASE_URL}/modules/blackbaud/event/create_event_participant_for_attending_event/${eventId}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    data: payload
+  };
+  return axios.request(config);
+};
 export const getAddressList = (accessToken) => {
   const config = {
     method: "get",
@@ -545,6 +557,7 @@ export const api = {
   getEventListing,
   getEventDetails,
   getAttendeeList,
+  addAttendee,
   getAddressList,
   getConstituentCodeList,
   getConstituentCodeDetails,

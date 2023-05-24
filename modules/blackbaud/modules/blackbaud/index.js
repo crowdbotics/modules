@@ -17,10 +17,10 @@ const BlackbaudSky = ({
   const config = {
     issuer: issuer,
     clientId: clientId,
-    redirectUrl: redirectUrl,
+    redirectUrl: redirectUrl
   };
   useEffect(() => {
-    
+
   }, []);
   const login = async () => {
     setBrowserRequesting(true);
@@ -50,7 +50,7 @@ const BlackbaudSky = ({
           <View style={styles.logoView}>
             <Image source={require("./assets/blackbaudLogo.png")} style={styles.blackbaudLogo} />
           </View>
-          <View style={styles.infoContainer}> 
+          <View style={styles.infoContainer}>
               <Text style={styles.infoTitleText}>
                 Blackbaud Sky
               </Text>
@@ -58,15 +58,15 @@ const BlackbaudSky = ({
                 Login to your Blackbaud Sky account
               </Text>
             </View>
-          <Pressable style={styles.loginButton} onPress={() => {login()}} >
-            {browserRequesting ? <ActivityIndicator size={"large"} color={"#000"} />
-            :
-            <Text style={styles.btnTextColor}>
+          <Pressable style={styles.loginButton} onPress={() => { login(); }} >
+            {browserRequesting
+              ? <ActivityIndicator size={"large"} color={"#000"} />
+              : <Text style={styles.btnTextColor}>
               Login
             </Text>}
           </Pressable>
         </ImageBackground>
-        
+
       </View>;
 };
 
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   bottomBackground: {
     height: 383,
     width: "100%",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   topBackground: {
     flex: 6,
@@ -124,16 +124,16 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
   },
-  infoTitleText: { 
-    color: "#000", 
-    fontSize: 24, 
-    fontWeight: "500", 
-    textAlign: "center" 
+  infoTitleText: {
+    color: "#000",
+    fontSize: 24,
+    fontWeight: "500",
+    textAlign: "center"
   },
-  infoDescText: { 
-    color: "#666", 
-    fontSize: 16, 
-    textAlign: "center" 
+  infoDescText: {
+    color: "#666",
+    fontSize: 16,
+    textAlign: "center"
   }
 });
 
