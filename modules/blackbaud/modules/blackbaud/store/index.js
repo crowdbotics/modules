@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./api";
 import { Alert } from "react-native";
+import { mapErrors } from "../options";
 export const eventList = createAsyncThunk("events/eventList", async accessToken => {
   try {
     const response = await api.getEventListing(accessToken);
@@ -28,7 +29,15 @@ export const attendeeList = createAsyncThunk("events/attendeeList", async data =
     throw new Error();
   }
 });
-
+export const addAttendee = createAsyncThunk("events/addAttendee", async data => {
+  try {
+    const response = await api.addAttendee(data.token, data.payload, data.eventId);
+    return response.data;
+  } catch (error) {
+    Alert.alert("Error", mapErrors(error));
+    throw new Error();
+  }
+});
 export const getAddressList = createAsyncThunk(
   "events/addressList",
   async (accessToken) => {
@@ -549,6 +558,13 @@ const initialState = {
       error: null
     }
   },
+  addAttendee: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
   accessToken: null,
   addressList: {
     entities: [],
@@ -888,6 +904,23 @@ export const slice = createSlice({
       if (state.attendeeList.api.loading === "pending") {
         state.attendeeList.api.error = action.error;
         state.attendeeList.api.loading = "idle";
+      }
+    },
+    [addAttendee.pending]: (state, action) => {
+      if (state.addAttendee.api.loading === "idle") {
+        state.addAttendee.api.loading = "pending";
+        state.addAttendee.api.error = null;
+      }
+    },
+    [addAttendee.fulfilled]: (state, action) => {
+      if (state.addAttendee.api.loading === "pending") {
+        state.addAttendee.api.loading = "idle";
+      }
+    },
+    [addAttendee.rejected]: (state, action) => {
+      if (state.addAttendee.api.loading === "pending") {
+        state.addAttendee.api.error = action.error;
+        state.addAttendee.api.loading = "idle";
       }
     },
     [getAddressList.pending]: (state) => {
