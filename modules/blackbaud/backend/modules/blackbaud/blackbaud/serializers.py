@@ -129,3 +129,65 @@ class CreateEventFeeSerializer(serializers.Serializer):
     name = serializers.CharField(required=True)
     cost = serializers.DecimalField(required=True, max_digits=5, decimal_places=2)
     contribution_amount = serializers.DecimalField(required=True, max_digits=5, decimal_places=2)
+
+
+class GiftCurrencySerializer(serializers.Serializer):
+    value = serializers.IntegerField(required=True)
+
+
+class GiftSplitSerializer(serializers.Serializer):
+    amount = GiftCurrencySerializer(required=True)
+    fund_id = serializers.CharField(required=True)
+
+
+class GiftPaymentSplitSerializer(serializers.Serializer):
+    payment_method = serializers.CharField(required=True)
+
+
+class CreateGiftSerializer(serializers.Serializer):
+    amount = GiftCurrencySerializer(required=True)
+    constituent_id = serializers.CharField(required=True)
+    type = serializers.CharField(required=True)
+    gift_splits = GiftSplitSerializer(required=True, many=True)
+    payments = GiftPaymentSplitSerializer(required=True, many=True)
+
+
+class CreateParticipantDonationSerializer(serializers.Serializer):
+    gift_id = serializers.CharField(required=True)
+
+
+class CreateParticipantFeeSerializer(serializers.Serializer):
+    quantity = serializers.IntegerField()
+    fee_amount = serializers.DecimalField(max_digits=5, decimal_places=2)
+    contribution_amount = serializers.DecimalField(max_digits=5, decimal_places=2)
+    event_fee_id = serializers.IntegerField()
+
+
+class CreateParticipantFeePaymentSerializer(serializers.Serializer):
+    gift_id = serializers.CharField(required=True)
+    applied_amount = serializers.DecimalField(max_digits=5, decimal_places=2)
+
+
+class ListOptionSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    sequence = serializers.IntegerField
+
+
+class CreateEventParticipantOptionSerializer(serializers.Serializer):
+    InputTypeChoices = (
+        ('boolean', 'Boolean'),
+        ('list', 'List'),
+        ('string', 'String')
+    )
+    name = serializers.CharField(required=True)
+    input_type = serializers.ChoiceField(required=True, choices=InputTypeChoices)
+    list_options = ListOptionSerializer(required=False, many=True)
+
+
+class CreateParticipantOptionSerializer(serializers.Serializer):
+    event_participant_option_id = serializers.CharField(required=True)
+    option_value = serializers.CharField(required=True)
+
+
+class CreateParticipantLevelSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True)

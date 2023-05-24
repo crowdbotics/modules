@@ -9,7 +9,9 @@ from .serializers import CreateConstituentsSerializers, CreateConstituentsAttach
     CreateConstituentEducationSerializers, CreateConstituentEducationCustomFieldSerializers, \
     CreateConstituentAddressSerializers, CreateConstituentAliasesSerializers, \
     CreateConstituentAliasesCollectionSerializers, CreateParticipantsSerializer, CreateEventCategorySerializer, \
-    CreateEventFeeSerializer, CreateEventSerializer
+    CreateEventFeeSerializer, CreateEventSerializer, CreateGiftSerializer, CreateParticipantDonationSerializer, \
+    CreateParticipantFeeSerializer, CreateParticipantFeePaymentSerializer, CreateEventParticipantOptionSerializer, \
+    CreateParticipantOptionSerializer, CreateParticipantLevelSerializer
 
 
 class BlackbaudViewSet(viewsets.GenericViewSet):
@@ -37,7 +39,14 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         "create_participant_in_event": CreateParticipantsSerializer,
         "create_category_in_event": CreateEventCategorySerializer,
         "create_event_fee": CreateEventFeeSerializer,
-        "create_an_event": CreateEventSerializer
+        "create_an_event": CreateEventSerializer,
+        "create_gift": CreateGiftSerializer,
+        "create_a_participant_serializer": CreateParticipantDonationSerializer,
+        "create_participant_fee": CreateParticipantFeeSerializer,
+        "create_participant_fee_payment": CreateParticipantFeePaymentSerializer,
+        "create_event_participant_option": CreateEventParticipantOptionSerializer,
+        "create_participant_option": CreateParticipantOptionSerializer,
+        "create_participant_level": CreateParticipantLevelSerializer
     }
 
     def get_serializer_class(self):
@@ -772,10 +781,10 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['get'], url_path='event/(?P<participant_id>\d+)/get_event_participant_fee_payments')
     def get_event_participant_fee_payments(self, request, **kwargs):
         """
-        To get the Event participant Donation \n
+        To get the Event participant fee payments \n
         :headers: "Authorization: Bearer (token)" \n
         :path_params: "participant_id" \n
-        :return: Returns the donations for a participant.
+        :return: Returns the fee payments for a participant.
         """
         response = self.blackbaud_service.event_participant_fee_payments(request.META.get("HTTP_AUTHORIZATION"),
                                                                          kwargs.get('participant_id', None)
@@ -785,10 +794,10 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['get'], url_path='event/(?P<participant_id>\d+)/get_event_participant_fees')
     def get_event_participant_fees(self, request, **kwargs):
         """
-        To get the Event participant Donation \n
+        To get the Event participant fee \n
         :headers: "Authorization: Bearer (token)" \n
         :path_params: "participant_id" \n
-        :return: Returns the donations for a participant.
+        :return: Returns the fee details for a participant.
         """
         response = self.blackbaud_service.event_participant_fees(request.META.get("HTTP_AUTHORIZATION"),
                                                                  kwargs.get('participant_id', None)
@@ -923,7 +932,7 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :return: delete message.
         """
         response = self.blackbaud_service.delete_event_category(request.META.get("HTTP_AUTHORIZATION"),
-                                                       kwargs.get("event_category_id", None))
+                                                                kwargs.get("event_category_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='event/create_event_fee/(?P<event_id>\d+)')
@@ -950,5 +959,197 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :return: delete message.
         """
         response = self.blackbaud_service.delete_event_fee(request.META.get("HTTP_AUTHORIZATION"),
-                                                       kwargs.get("fee_id", None))
+                                                           kwargs.get("fee_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_gift')
+    def create_gift(self, request, *args, **kwargs):
+        """
+        To create the gift soft credits  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: A created gift id.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_gift(request.META.get("HTTP_AUTHORIZATION"),
+                                                      payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='event/delete_gift/(?P<gift_id>\d+)')
+    def delete_gift(self, request, *args, **kwargs):
+        """
+        To delete the Gift \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "gift_id" \n
+        :return: delete gift message.
+        """
+        response = self.blackbaud_service.delete_gift(request.META.get("HTTP_AUTHORIZATION"),
+                                                      kwargs.get("gift_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='event/get_gift_details/(?P<gift_id>\d+)')
+    def get_gift_details(self, request, *args, **kwargs):
+        """
+        To get the Gift details \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "gift_id" \n
+        :return: Return gift details.
+        """
+        response = self.blackbaud_service.get_gift_detail(request.META.get("HTTP_AUTHORIZATION"),
+                                                          kwargs.get("gift_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_participant_donation/(?P<participant_id>\d+)')
+    def create_a_participant_donation(self, request, *args, **kwargs):
+        """
+        To create the participant donation  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about participant donation
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_participant_donation(request.META.get("HTTP_AUTHORIZATION"),
+                                                                      kwargs.get("participant_id", None),
+                                                                      payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'],
+            url_path='event/delete_participant_donation/(?P<participant_donation_id>\d+)')
+    def delete_a_participant_donation(self, request, *args, **kwargs):
+        """
+        To delete the participant donation  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about deleted participant donation
+        """
+        response = self.blackbaud_service.delete_participant_donation(request.META.get("HTTP_AUTHORIZATION"),
+                                                                      kwargs.get("participant_donation_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_participant_fee/(?P<participant_id>\d+)')
+    def create_participant_fee(self, request, *args, **kwargs):
+        """
+        To create the participant fee  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about participant fee
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_participant_fees(request.META.get("HTTP_AUTHORIZATION"),
+                                                                  kwargs.get("participant_id", None),
+                                                                  payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'],
+            url_path='event/delete_participant_fee/(?P<participant_fee_id>\d+)')
+    def delete_a_participant_fee(self, request, *args, **kwargs):
+        """
+        To delete the participant fee  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "participant_fee_id" \n
+        :return: Return Details about deleted participant fee id
+        """
+        response = self.blackbaud_service.delete_participant_fee(request.META.get("HTTP_AUTHORIZATION"),
+                                                                 kwargs.get("participant_fee_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_participant_fee_payment/(?P<participant_id>\d+)')
+    def create_participant_fee_payment(self, request, *args, **kwargs):
+        """
+        To create the participant fee payment  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about participant fee payment
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_participant_fee_payment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                         kwargs.get("participant_id", None),
+                                                                         payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'],
+            url_path='event/delete_participant_fee_payment/(?P<participant_fee_payment_id>\d+)')
+    def delete_a_participant_fee_payment(self, request, *args, **kwargs):
+        """
+        To delete the participant fee  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "participant_fee_id" \n
+        :return: Return Details about deleted participant fee payment message
+        """
+        response = self.blackbaud_service.delete_participant_fee_payment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                         kwargs.get("participant_fee_payment_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_event_participant_option/(?P<event_id>\d+)')
+    def create_event_participant_option(self, request, *args, **kwargs):
+        """
+        To create the event participant option  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about event participant option
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_event_participant_option(request.META.get("HTTP_AUTHORIZATION"),
+                                                                          kwargs.get("event_id", None),
+                                                                          payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'],
+            url_path='event/delete_event_participant_option')
+    def delete_event_participant_option(self, request):
+        """
+        To delete the event participant option  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "option_id" \n
+        :return: Return Details about deleted event participant option message
+        """
+        response = self.blackbaud_service.delete_event_participant_option(request.META.get("HTTP_AUTHORIZATION"),
+                                                                          request.data.get('option_id'))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_participant_option/(?P<participant_id>\d+)')
+    def create_participant_option(self, request, *args, **kwargs):
+        """
+        To create the participant option  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about participant option
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_participant_option(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    kwargs.get("participant_id", None),
+                                                                    payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'],
+            url_path='event/delete_participant_option')
+    def delete_participant_option(self, request):
+        """
+        To delete the participant option  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "option_id" \n
+        :return: Return Details about deleted participant option message
+        """
+        response = self.blackbaud_service.delete_participant_option(request.META.get("HTTP_AUTHORIZATION"),
+                                                                          request.data.get('option_id'))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_participant_level')
+    def create_participant_level(self, request, *args, **kwargs):
+        """
+        To create the participant level  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about participant level
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_participant_level(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
