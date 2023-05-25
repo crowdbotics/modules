@@ -31,7 +31,12 @@ class BlackbaudBase:
         try:
             if request_type == 'DELETE':
                 response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
-                return {"data": 'Deleted successfully.', "status_code": response.status_code}
+                return {"data": 'Deleted successfully.' if response.status_code == 200 else response.text,
+                        "status_code": response.status_code}
+            elif request_type == 'PATCH':
+                response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
+                return {"data": 'Updated successfully.' if response.status_code == 200 else response.text,
+                        "status_code": response.status_code}
 
             response = requests.request(request_type, url, headers=headers, json=payload, data=data, params=params)
             data = json.loads(response.text)
@@ -476,7 +481,7 @@ class BlackbaudService(BlackbaudBase):
         except Exception as e:
             return e
 
-    def event_participant(self, access_token, participant_id):
+    def event_participant_details(self, access_token, participant_id):
         try:
             url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
@@ -597,13 +602,17 @@ class BlackbaudService(BlackbaudBase):
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents"
             response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
                                       payload=payload['constituent_data'])
-            constituents_id = response['data']['id']
-            if constituents_id:
-                payload['participant_data']['constituent_id'] = constituents_id
-                url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/participants"
-                new_response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
-                                              payload=payload['participant_data'])
-                return new_response
+            if response['status_code'] == 200:
+                try:
+                    payload['participant_data']['constituent_id'] = response['data']['id']
+                    url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/participants"
+                    new_response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                                  payload=payload['participant_data'])
+                    return new_response
+                except Exception as e:
+                    return e
+            elif not response['status_code'] == 200:
+                return response
         except Exception as e:
             return e
 
@@ -773,6 +782,203 @@ class BlackbaudService(BlackbaudBase):
             url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participationlevels"
             response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
                                       payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_participant_level(self, access_token, participation_level_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participationlevels/{participation_level_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def create_event_attachment_upload(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventattachmentupload"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def create_event_attachment(self, access_token, event_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/attachments"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def edit_event_participant_details(self, access_token, participant_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participants/{participant_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def edit_event_participant_option(self, access_token, option_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participantoptions/{option_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def edit_event_participant_level(self, access_token, participation_level_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/participationlevels/{participation_level_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def edit_event(self, access_token, event_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def edit_event_category(self, access_token, event_category_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventcategories/{event_category_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def edit_event_fee(self, access_token, fee_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventfees/{fee_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def edit_participant_option(self, access_token, option_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/event/v1/eventparticipantoptions/{option_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_titles(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/titles"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_suffixes(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/suffixes"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def create_constituent_relationships(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/relationships"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_constituent_relationships(self, access_token, relationship_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/relationships/{relationship_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def edit_constituent_relationships(self, access_token, relationship_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/relationships/{relationship_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_relationships_details(self, access_token, relationship_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/relationships/{relationship_id}"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def relationships_list_in_all_constituent(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/relationships"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def relationships_list_in_single_constituent(self, access_token, constituent_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/relationships"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def relationship_types(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/relationshiptypes"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_create_rating(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/ratings"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_constituent_rating(self, access_token, rating_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/ratings/{rating_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def edit_constituent_rating(self, access_token, rating_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/ratings/{rating_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def rating_categories(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/ratings/categories"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
             return response
         except Exception as e:
             return e

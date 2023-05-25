@@ -11,7 +11,11 @@ from .serializers import CreateConstituentsSerializers, CreateConstituentsAttach
     CreateConstituentAliasesCollectionSerializers, CreateParticipantsSerializer, CreateEventCategorySerializer, \
     CreateEventFeeSerializer, CreateEventSerializer, CreateGiftSerializer, CreateParticipantDonationSerializer, \
     CreateParticipantFeeSerializer, CreateParticipantFeePaymentSerializer, CreateEventParticipantOptionSerializer, \
-    CreateParticipantOptionSerializer, CreateParticipantLevelSerializer
+    CreateParticipantOptionSerializer, CreateParticipantLevelSerializer, CreateEventAttachmentUploadSerializer, \
+    CreateEventAttachmentSerializer, EditParticipantsSerializer, EditParticipantOptionSerializer, \
+    EditParticipantLevelSerializer, EditEventSerializer, EventEventCategorySerializer, EditEventFeeSerializer, \
+    EditEventParticipantOptionSerializer, CreateConstituentRelationshipSerializers, \
+    EditConstituentRelationshipSerializers, CreateConstituentRatingSerializers, EditConstituentRatingSerializers
 
 
 class BlackbaudViewSet(viewsets.GenericViewSet):
@@ -46,7 +50,20 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         "create_participant_fee_payment": CreateParticipantFeePaymentSerializer,
         "create_event_participant_option": CreateEventParticipantOptionSerializer,
         "create_participant_option": CreateParticipantOptionSerializer,
-        "create_participant_level": CreateParticipantLevelSerializer
+        "create_participant_level": CreateParticipantLevelSerializer,
+        "create_an_event_attachment_upload": CreateEventAttachmentUploadSerializer,
+        "create_an_event_attachment": CreateEventAttachmentSerializer,
+        "edit_event_participant_detail": EditParticipantsSerializer,
+        "edit_participant_option": EditParticipantOptionSerializer,
+        "edit_participant_level": EditParticipantLevelSerializer,
+        "edit_an_event": EditEventSerializer,
+        "edit_an_event_category": EventEventCategorySerializer,
+        "edit_an_event_fee": EditEventFeeSerializer,
+        "edit_an_event_participant_option": EditEventParticipantOptionSerializer,
+        "create_constituent_relationship": CreateConstituentRelationshipSerializers,
+        "edit_constituent_relationship": EditConstituentRelationshipSerializers,
+        "create_an_constituent_rating": CreateConstituentRatingSerializers,
+        "edit_an_constituent_rating": EditConstituentRatingSerializers
     }
 
     def get_serializer_class(self):
@@ -683,8 +700,8 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :path_params: "participant_id" \n
         :return: Returns an event  participant details.
         """
-        response = self.blackbaud_service.event_participant(request.META.get("HTTP_AUTHORIZATION"),
-                                                            kwargs.get("participant_id", None))
+        response = self.blackbaud_service.event_participant_details(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    kwargs.get("participant_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='event/get_event_attachment')
@@ -860,6 +877,9 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['get'], url_path='constituent_search_with_email')
     def constituent_search_with_email(self, request, *args, **kwargs):
         """
+        To get the constituent search email \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return detail about searched email.
         """
         response = self.blackbaud_service.constituent_search_with_email(request.META.get("HTTP_AUTHORIZATION"),
                                                                         kwargs.get('q', None))
@@ -1137,7 +1157,7 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :return: Return Details about deleted participant option message
         """
         response = self.blackbaud_service.delete_participant_option(request.META.get("HTTP_AUTHORIZATION"),
-                                                                          request.data.get('option_id'))
+                                                                    request.data.get('option_id'))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='event/create_participant_level')
@@ -1151,5 +1171,317 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = self.blackbaud_service.create_participant_level(request.META.get("HTTP_AUTHORIZATION"),
-                                                                    payload=serializer.data)
+                                                                   payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'],
+            url_path='event/delete_participant_level/(?P<participation_level_id>\d+)')
+    def delete_participant_level(self, request, *args, **kwargs):
+        """
+        To delete the participant level  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "option_id" \n
+        :return: Return Details about deleted participant level message
+        """
+        response = self.blackbaud_service.delete_participant_level(request.META.get("HTTP_AUTHORIZATION"),
+                                                                   kwargs.get('participation_level_id'))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_event_attachment_upload')
+    def create_an_event_attachment_upload(self, request, *args, **kwargs):
+        """
+        To create the event attachment upload  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about event attachment upload id
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_event_attachment_upload(request.META.get("HTTP_AUTHORIZATION"),
+                                                                         payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='event/create_event_attachment/(?P<event_id>\d+)')
+    def create_an_event_attachment(self, request, *args, **kwargs):
+        """
+        To create the participant attachment  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about participant attachment
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_event_attachment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                  kwargs.get("event_id", None),
+                                                                  payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='event/edit_participant_details/(?P<participant_id>\d+)')
+    def edit_event_participant_detail(self, request, **kwargs):
+        """
+        To edit the Event Participant \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "participant_id" \n
+        :return: Returns an event participant details.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_event_participant_details(request.META.get("HTTP_AUTHORIZATION"),
+                                                                         kwargs.get("participant_id", None),
+                                                                         payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='event/edit_participant_option')
+    def edit_participant_option(self, request, *args, **kwargs):
+        """
+        To edit the participant option  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about participant option
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_event_participant_option(request.META.get("HTTP_AUTHORIZATION"),
+                                                                        request.data.get('option_id'),
+                                                                        payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='event/edit_participant_level/(?P<participation_level_id>\d+)')
+    def edit_participant_level(self, request, *args, **kwargs):
+        """
+        To Edits the details about a participation level.  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :path_params: "participation_level_id" \n
+        :return: Return Details about participant option
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_event_participant_level(request.META.get("HTTP_AUTHORIZATION"),
+                                                                       kwargs.get('participation_level_id', None),
+                                                                       payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='event/edit_event/(?P<event_id>\d+)')
+    def edit_an_event(self, request, *args, **kwargs):
+        """
+        To Edits the details about a event.  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :path_params: "event_id" \n
+        :return: Return message about edited event
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_event(request.META.get("HTTP_AUTHORIZATION"),
+                                                     kwargs.get('event_id', None),
+                                                     payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='event/edit_event_category/(?P<event_category_id>\d+)')
+    def edit_an_event_category(self, request, *args, **kwargs):
+        """
+        To Edits the details about a event.  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :path_params: "event_id" \n
+        :return: Return message about edited event
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_event_category(request.META.get("HTTP_AUTHORIZATION"),
+                                                              kwargs.get('event_category_id', None),
+                                                              payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='event/edit_event_fee/(?P<fee_id>\d+)')
+    def edit_an_event_fee(self, request, *args, **kwargs):
+        """
+        To Edits the event fee.  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :path_params: "fee_id" \n
+        :return: Return message about edited event fee.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_event_fee(request.META.get("HTTP_AUTHORIZATION"),
+                                                         kwargs.get('fee_id', None),
+                                                         payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='event/edit_event_participant_option')
+    def edit_an_event_participant_option(self, request, *args, **kwargs):
+        """
+        To Edits the event participant option.  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :path_params: "option_id" \n
+        :return: Return message about edited event participant option.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_participant_option(request.META.get("HTTP_AUTHORIZATION"),
+                                                                  request.data.get('option_id', None),
+                                                                  payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_titles')
+    def get_constituent_titles(self, request):
+        """
+        To get the constituent titles \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return detail about constituent titles.
+        """
+        response = self.blackbaud_service.constituent_titles(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_suffixes')
+    def get_constituent_suffixes(self, request):
+        """
+        To get the constituent suffixes \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return detail about constituent suffixes.
+        """
+        response = self.blackbaud_service.constituent_suffixes(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituent/create_relationship')
+    def create_constituent_relationship(self, request, *args, **kwargs):
+        """
+        To create the constituent relationships  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about constituent relationship id
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_constituent_relationships(request.META.get("HTTP_AUTHORIZATION"),
+                                                                           payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='constituent/delete_relationship/(?P<relationship_id>\d+)')
+    def delete_an_constituent_relationship(self, request, *args, **kwargs):
+        """
+        To delete the constituent relationship \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "relationship_id" \n
+        :return: deleted message constituent relationship
+        """
+        response = self.blackbaud_service.delete_constituent_relationships(request.META.get("HTTP_AUTHORIZATION"),
+                                                                           kwargs.get("relationship_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='constituent/edit_relationship/(?P<relationship_id>\d+)')
+    def edit_constituent_relationship(self, request, *args, **kwargs):
+        """
+        To Edits the constituent relationship  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :path_params: "relationship_id" \n
+        :return: Return message about edited constituent relationship.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_constituent_relationships(request.META.get("HTTP_AUTHORIZATION"),
+                                                                         kwargs.get('relationship_id', None),
+                                                                         payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_relationship_details/(?P<relationship_id>\d+)')
+    def get_an_constituent_relationship(self, request, *args, **kwargs):
+        """
+        To get the relationship details \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "relationship_id" \n
+        :return: Return detail about relationship details
+        """
+        response = self.blackbaud_service.constituent_relationships_details(request.META.get("HTTP_AUTHORIZATION"),
+                                                                            kwargs.get("relationship_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_relationship_list_in_all_constituents')
+    def get_relationships_list_in_all_constituent(self, request):
+        """
+        To get the list of relationship in all constituent \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return list about list of relationship in all constituent.
+        """
+        response = self.blackbaud_service.relationships_list_in_all_constituent(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'],
+            url_path='constituent/get_relationship_list_in_single_constituent/(?P<constituent_id>\d+)')
+    def get_relationships_list_in_single_constituent(self, request, *args, **kwargs):
+        """
+        To get the list of relationship in single constituent \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "relationship_id" \n
+        :return: Return detail about list of relationship in single constituent.
+        """
+        response = self.blackbaud_service.relationships_list_in_single_constituent(
+            request.META.get("HTTP_AUTHORIZATION"),
+            kwargs.get("constituent_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_relationship_types')
+    def get_relationship_types(self, request):
+        """
+        To get the list of relationship types \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return list about list of relationship types.
+        """
+        response = self.blackbaud_service.relationship_types(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituent/create_rating')
+    def create_an_constituent_rating(self, request):
+        """
+        To create the constituent rating  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :return: Return Details about constituent rating id
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.constituent_create_rating(request.META.get("HTTP_AUTHORIZATION"),
+                                                                           payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='constituent/delete_rating/(?P<rating_id>\d+)')
+    def delete_an_constituent_rating(self, request, *args, **kwargs):
+        """
+        To delete the constituent rating \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "rating_id" \n
+        :return: deleted message constituent rating
+        """
+        response = self.blackbaud_service.delete_constituent_relationships(request.META.get("HTTP_AUTHORIZATION"),
+                                                                           kwargs.get("rating_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='constituent/update_rating/(?P<rating_id>\d+)')
+    def edit_an_constituent_rating(self, request, *args, **kwargs):
+        """
+        To Edits the constituent rating  \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "payload" \n
+        :path_params: "relationship_id" \n
+        :return: Return message about edited constituent rating.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.edit_constituent_rating(request.META.get("HTTP_AUTHORIZATION"),
+                                                                         kwargs.get('rating_id', None),
+                                                                         payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_rating_categories')
+    def get_rating_categories(self, request):
+        """
+        To get the list of rating categories \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return list about list of rating categories.
+        """
+        response = self.blackbaud_service.rating_categories(request.META.get("HTTP_AUTHORIZATION"))
         return Response(data=response.get("data"), status=response.get("status_code"))

@@ -1160,7 +1160,7 @@ class TestBlackbaudViewSet(APITestCase):
         get_address_type_in_constituents_mock.assert_called_once()
 
     @mock.patch(
-        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participant')
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_participant_details')
     def test_get_event_participant(self, get_event_participant_mock):
         response = {
             'data': {
