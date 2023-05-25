@@ -562,3 +562,47 @@ class CreateConstituentRatingSerializers(serializers.Serializer):
 class EditConstituentRatingSerializers(serializers.Serializer):
     comment = serializers.CharField(required=False)
     date = serializers.DateTimeField(required=False)
+
+
+class UpdateConstituentActionSerializer(serializers.Serializer):
+    DIRECTION_CHOICES = (
+        ('Inbound', 'Inbound'),
+        ('Outbound', 'Outbound'),
+    )
+    category = serializers.CharField(required=False)
+    date = serializers.DateTimeField(required=False)
+    type = serializers.CharField(required=False)
+    status = serializers.CharField(required=False)
+    direction = serializers.ChoiceField(required=False, choices=DIRECTION_CHOICES)
+
+
+class CreateActionAttachmentSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    parent_id = serializers.CharField(required=True)
+    type = serializers.CharField(required=True)
+    url = serializers.CharField(required=True)
+
+
+class UpdateActionAttachmentSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    parent_id = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)
+    url = serializers.CharField(required=False)
+
+
+class CreateConstituentsActionCustomFieldsSerializers(serializers.Serializer):
+    category = serializers.CharField(required=True)
+    comment = serializers.CharField(required=False)
+    parent_id = serializers.CharField(required=True)
+
+class CreateConstituentActionSerializer(serializers.Serializer):
+    DIRECTION_CHOICES = (
+        ('Inbound', 'Inbound'),
+        ('Outbound', 'Outbound'),
+    )
+    category = serializers.CharField(required=True)
+    constituent_id = serializers.CharField(required=True)
+    date = serializers.DateTimeField(required=True)
+    type = serializers.CharField(required=False)
+    status = serializers.CharField(required=False)
+    direction = serializers.ChoiceField(required=False, choices=DIRECTION_CHOICES)

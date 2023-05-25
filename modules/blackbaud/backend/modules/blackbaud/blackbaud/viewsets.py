@@ -3,20 +3,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .services.BlackbaudService import BlackbaudService
-from .serializers import CreateConstituentsSerializers, CreateConstituentsAttachmentsSerializers, \
-    CreateConstituentsCodeSerializers, CreateConstituentsCustomFieldsSerializers, \
-    CreateConstituentsCustomFieldsCollectionSerializers, CreateConstituentDocumentSerializers, \
-    CreateConstituentEducationSerializers, CreateConstituentEducationCustomFieldSerializers, \
-    CreateConstituentAddressSerializers, CreateConstituentAliasesSerializers, \
-    CreateConstituentAliasesCollectionSerializers, CreateParticipantsSerializer, CreateEventCategorySerializer, \
-    CreateEventFeeSerializer, CreateEventSerializer, CreateGiftSerializer, CreateParticipantDonationSerializer, \
-    CreateParticipantFeeSerializer, CreateParticipantFeePaymentSerializer, CreateEventParticipantOptionSerializer, \
-    CreateParticipantOptionSerializer, CreateParticipantLevelSerializer, CreateEventAttachmentUploadSerializer, \
-    CreateEventAttachmentSerializer, EditParticipantsSerializer, EditParticipantOptionSerializer, \
-    EditParticipantLevelSerializer, EditEventSerializer, EventEventCategorySerializer, EditEventFeeSerializer, \
-    EditEventParticipantOptionSerializer, CreateConstituentRelationshipSerializers, \
-    EditConstituentRelationshipSerializers, CreateConstituentRatingSerializers, EditConstituentRatingSerializers
-
+from .serializers import *
 
 class BlackbaudViewSet(viewsets.GenericViewSet):
     blackbaud_service = BlackbaudService(
@@ -63,7 +50,12 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         "create_constituent_relationship": CreateConstituentRelationshipSerializers,
         "edit_constituent_relationship": EditConstituentRelationshipSerializers,
         "create_an_constituent_rating": CreateConstituentRatingSerializers,
-        "edit_an_constituent_rating": EditConstituentRatingSerializers
+        "edit_an_constituent_rating": EditConstituentRatingSerializers,
+        "create_constituent_action": CreateConstituentActionSerializer,
+        "update_constituent_action": UpdateConstituentActionSerializer,
+        "create_constituent_action_attachment": CreateActionAttachmentSerializer,
+        "update_constituent_action_attachment": UpdateActionAttachmentSerializer,
+        "create_constituent_action_custom_field": CreateConstituentsActionCustomFieldsSerializers
     }
 
     def get_serializer_class(self):
@@ -1484,4 +1476,129 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :return: Return list about list of rating categories.
         """
         response = self.blackbaud_service.rating_categories(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+    
+    @action(detail=False, methods=['post'], url_path='constituent/create_constituent_action')
+    def create_constituent_action(self, request):
+        """
+        To Create a constituent action \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params:{"category": "", "constituent_id":"", "date":"", "type":"", "status":"", "direction":""} \n
+        :return: created id of action.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_constituent_action(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'], url_path='constituent/delete_constituent_action/(?P<action_id>\d+)')
+    def delete_constituent_action(self, request, *args, **kwargs):
+        """
+        To delete the constituent action \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "action_id" \n
+        :return: delete message.
+        """
+        response = self.blackbaud_service.delete_constituent_action(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    kwargs.get("action_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["patch"], url_path='constituent/update_constituent_action/(?P<action_id>\d+)')
+    def update_constituent_action(self, request, *args, **kwargs):
+        """
+        To Update a constituent action \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "action_id" \n
+        :body_params:{"category": "", "constituent_id":"", "date":"", "type":"", "status":"", "direction":""} \n
+        :return: update message.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.update_constituent_action(request.META.get("HTTP_AUTHORIZATION"),
+                                                                    kwargs.get("action_id", None),
+                                                                    payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_constituent_action/(?P<action_id>\d+)')
+    def get_constituent_action(self, request, *args, **kwargs):
+        """
+        To get a constituent action \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "action_id" \n
+        :return: specified object.
+        """
+        response = self.blackbaud_service.get_constituent_action(request.META.get("HTTP_AUTHORIZATION"),
+                                                                 kwargs.get("action_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["post"], url_path='constituent/create_action_attachment')
+    def create_constituent_action_attachment(self, request):
+        """
+        To create a constituent action attachment \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: {"name":"","parent_id":"","type":"","url":""} \n
+        :return: created id of action attachment.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.create_constituent_action_attachment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                               payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['delete'],
+            url_path='constituent/delete_constituent_action_attachment')
+    def delete_constituent_action_attachment(self, request):
+        """
+        To delete the constituent action attachment\n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "attachment_id" \n
+        :return: delete message.
+        """
+        response = self.blackbaud_service.delete_constituent_action_attachment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                               request.data.get('attachment_id', None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["patch"],
+            url_path='constituent/update_constituent_action_attachment')
+    def update_constituent_action_attachment(self, request):
+        """
+        To update a constituent action attachment \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "attachment_id" \n
+        :path_params: {"name":"","parent_id":"","type":"","url":""} \n
+        :return: update message.
+        """
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.patch_constituent_action_attachment(request.META.get("HTTP_AUTHORIZATION"),
+                                                                              request.data.get('attachment_id', None),
+                                                                              payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_constituent_action/(?P<action_id>\d+)/attachments')
+    def get_constituent_action(self, request, *args, **kwargs):
+        """
+        To get a constituent action \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "action_id" \n
+        :return: specified object.
+        """
+        response = self.blackbaud_service.get_constituent_action_attachment_list(request.META.get("HTTP_AUTHORIZATION"),
+                                                                                 kwargs.get("action_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['post'], url_path='constituents/create_constituent_action_custom_field')
+    def create_constituent_action_custom_field(self, request):
+        """
+            To create constituent custom field \n
+            :headers: "Authorization: Bearer (token)" \n
+            :body_params: {"category": "", "comment": "", "parent_id"} \n
+            :return: created id of action attachment custom field.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.constituent_action_custom_fields(request.META.get("HTTP_AUTHORIZATION"),
+                                                                           payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))

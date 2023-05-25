@@ -982,3 +982,80 @@ class BlackbaudService(BlackbaudBase):
             return response
         except Exception as e:
             return e
+        
+    def create_constituent_action(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                    payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_constituent_action(self, access_token, action_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/{action_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def update_constituent_action(self, access_token, action_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/{action_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action(self, access_token, action_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/{action_id}"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def create_constituent_action_attachment(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/attachments"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def delete_constituent_action_attachment(self, access_token, attachment_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/attachments/{attachment_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def patch_constituent_action_attachment(self, access_token, attachment_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/attachments/{attachment_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action_attachment_list(self, access_token, action_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/{action_id}/attachments"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_action_custom_fields(self, access_token, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e

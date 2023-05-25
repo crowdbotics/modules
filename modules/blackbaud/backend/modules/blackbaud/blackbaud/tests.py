@@ -1712,7 +1712,10 @@ class TestBlackbaudViewSet(APITestCase):
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_document')
     def test_create_document_with_invalid_data(self, create_document_mock):
-        response = {'data': [{'error_code': 50008, 'error_name': 'DocumentBusinessLogicInvalidArguments', 'message': 'The file type of the document provided is not supported.', 'raw_message': 'The file type of the document provided is not supported.'}], 'status_code': 400}
+        response = {'data': [{'error_code': 50008, 'error_name': 'DocumentBusinessLogicInvalidArguments',
+                              'message': 'The file type of the document provided is not supported.',
+                              'raw_message': 'The file type of the document provided is not supported.'}],
+                    'status_code': 400}
         create_document_mock.return_value = response
         data = {
             "file_name": "businesscard",
@@ -1724,6 +1727,151 @@ class TestBlackbaudViewSet(APITestCase):
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Response.data, response['data'])
         create_document_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_education_custom_field')
+    def test_create_constituent_education_custom_field_with_valid_data(self,
+                                                                       create_constituent_education_custom_field_mock):
+        response = {'data': {'id': '140'}, 'status_code': 200}
+        create_constituent_education_custom_field_mock.return_value = response
+        data = {
+            "category": "Awards",
+            "comment": "Due to graduate in December.",
+            "date": "2022-10-10T00:00:00Z",
+            "parent_id": "128",
+            "value": False
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-education-custom-field'),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_education_custom_field_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_education_custom_field')
+    def test_create_constituent_education_custom_field_with_invalid_data(self,
+                                                                         create_constituent_education_custom_field_mock):
+        response = {'data': [
+            {'message': "The table 'Custom field category' does not contain an active entry named 'GoldenAnniversary'",
+             'error_name': 'TableEntryNotFound', 'error_code': 400,
+             'raw_message': "The table 'Custom field category' does not contain an active entry named 'GoldenAnniversary'",
+             'error_args': []}], 'status_code': 400}
+        create_constituent_education_custom_field_mock.return_value = response
+        invalid_data = {
+            "category": "GoldenAnniversary",
+            "comment": "Due to graduate in December.",
+            "date": "2022-10-10T00:00:00Z",
+            "parent_id": "1283",
+            "value": False
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-education-custom-field'),
+            data=invalid_data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_education_custom_field_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_delete_education_custom_field')
+    def test_delete_constituent_education_custom_field_with_valid_id(self,
+                                                                     delete_constituent_education_custom_field_mock):
+        response = {'data': 'Deleted successfully.', 'status_code': 200}
+        delete_constituent_education_custom_field_mock.return_value = response
+        custom_field_id = '10'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-constituent-education-custom-field', kwargs={'custom_field_id': custom_field_id}),
+            format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        delete_constituent_education_custom_field_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_delete_education_custom_field')
+    def test_delete_constituent_education_custom_field_with_invalid_id(self,
+                                                                       delete_constituent_education_custom_field_mock):
+        response = {
+            'data': '[{"message":"The provided id 128232323342432 is invalid.","error_name":"InvalidRecordIdViolation","error_code":1,"raw_message":"The provided id 128232323342432 is invalid."}]',
+            'status_code': 400}
+        delete_constituent_education_custom_field_mock.return_value = response
+        custom_field_id = '128232323342432'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-constituent-education-custom-field', kwargs={'custom_field_id': custom_field_id}),
+            format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        delete_constituent_education_custom_field_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_address')
+    def test_create_constituents_address_with_valid_data(self,
+                                                         create_constituents_address_mock):
+        response = {'data': {'id': '884947'}, 'status_code': 200}
+        create_constituents_address_mock.return_value = response
+        data = {
+            "address_lines": "410 18th Street",
+            "city": "Denver",
+            "constituent_id": "280",
+            "country": "United States",
+            "county": "Denver",
+            "do_not_mail": False,
+            "end": "2025-03-26T00:00:00Z",
+            "postal_code": "80209-4402",
+            "preferred": True,
+            "seasonal_end": {
+                "m": 8,
+                "d": 26
+            },
+            "seasonal_start": {
+                "m": 6,
+                "d": 12
+            },
+            "start": "2003-03-26T00:00:00Z",
+            "state": "CO",
+            "type": "Home"
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituents-address'), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituents_address_mock.inssert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_address')
+    def test_create_constituents_address_with_invalid_data(self,
+                                                           create_constituents_address_mock):
+        response = {'data': [{'message': "The table 'Address Types' does not contain an active entry named 'Office'",
+                              'error_name': 'TableEntryNotFound', 'error_code': 1001,
+                              'raw_message': "The table 'Address Types' does not contain an active entry named 'Office'",
+                              'error_args': []}], 'status_code': 400}
+        create_constituents_address_mock.return_value = response
+        invalid_data = {
+            "address_lines": "410 18th Street",
+            "city": "new yourk",
+            "constituent_id": "280",
+            "country": "United States",
+            "county": "Denver",
+            "do_not_mail": True,
+            "end": "2025-03-26T00:00:00Z",
+            "postal_code": "80209-4402",
+            "preferred": False,
+            "seasonal_end": {
+                "m": 82,
+                "d": 226
+            },
+            "seasonal_start": {
+                "m": 65,
+                "d": 152
+            },
+            "start": "2003-03-26T00:00:00Z",
+            "state": "COP",
+            "type": "Office"
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituents-address'), data=invalid_data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituents_address_mock.inssert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.participant_levels')
