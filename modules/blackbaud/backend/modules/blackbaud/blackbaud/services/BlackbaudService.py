@@ -208,11 +208,11 @@ class BlackbaudService(BlackbaudBase):
         except Exception as e:
             return e
 
-    def constituent_search_with_email(self, access_token, email, payload=None):
+    def constituent_search(self, access_token, search):
         try:
-            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/search?search_text={email}&search_field=email_address"
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/search"
             response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token),
-                                      payload=payload)
+                                      params={"search_text": search})
             return response
         except Exception as e:
             return e
@@ -982,6 +982,30 @@ class BlackbaudService(BlackbaudBase):
             return response
         except Exception as e:
             return e
+
+    def rating_list_on_single_constituent(self, access_token, constituent_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/ratings"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def rating_source(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/ratings/sources"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def rating_values(self, access_token, category_name):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/ratings/categories/values"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token), params={"category_name": category_name})
+            return response
+        except Exception as e:
+            return e
         
     def create_constituent_action(self, access_token, payload):
         try:
@@ -1056,6 +1080,129 @@ class BlackbaudService(BlackbaudBase):
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields"
             response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
                                       payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_action_list(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_action_list_in_single_constituent(self, access_token, constituent_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/actions"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_action_location(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actionlocations"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_action_status_types(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actionstatustypes"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_action_types(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actiontypes"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_action_edit_address(self, access_token, address_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/addresses/{address_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_edit_aliases(self, access_token, alias_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/aliases/{alias_id}"
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def alias_list_in_single_constituent(self, access_token, constituent_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/{constituent_id}/aliases"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_alias_types(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/aliastypes"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def constituent_attachment_tags(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/attachmenttags"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+        
+    def delete_constituent_action_custom(self, access_token, custom_field_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/{custom_field_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def update_constituent_action_custom_field(self, access_token, custom_field_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/{custom_field_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action_customfields_categories(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/categories"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action_customfields_categories_details(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/categories/details"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action_customfields_list(self, access_token, action_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/{action_id}/customfields"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
             return response
         except Exception as e:
             return e
