@@ -577,10 +577,16 @@ class UpdateConstituentActionSerializer(serializers.Serializer):
 
 
 class CreateActionAttachmentSerializer(serializers.Serializer):
+    TYPE_CHOICES = (
+        ('link', 'Link'),
+        ('physical', 'Physical'),
+    )
     name = serializers.CharField(required=False)
     parent_id = serializers.CharField(required=True)
     type = serializers.CharField(required=True)
-    url = serializers.CharField(required=True)
+    url = serializers.CharField(required=False)
+    file_name = serializers.CharField(required=False)
+    file_id = serializers.CharField(required=False)
 
 
 class UpdateActionAttachmentSerializer(serializers.Serializer):
@@ -595,6 +601,7 @@ class CreateConstituentsActionCustomFieldsSerializers(serializers.Serializer):
     comment = serializers.CharField(required=False)
     parent_id = serializers.CharField(required=True)
 
+
 class CreateConstituentActionSerializer(serializers.Serializer):
     DIRECTION_CHOICES = (
         ('Inbound', 'Inbound'),
@@ -606,3 +613,15 @@ class CreateConstituentActionSerializer(serializers.Serializer):
     type = serializers.CharField(required=False)
     status = serializers.CharField(required=False)
     direction = serializers.ChoiceField(required=False, choices=DIRECTION_CHOICES)
+
+
+class EditConstituentAddressSerializer(serializers.Serializer):
+    country = serializers.CharField(required=False)
+    postal_code = serializers.CharField(required=False, max_length=12)
+    city = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)
+
+
+class EditConstituentAliasesSerializer(serializers.Serializer):
+    name = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)

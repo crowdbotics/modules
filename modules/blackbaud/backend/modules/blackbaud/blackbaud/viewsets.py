@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .services.BlackbaudService import BlackbaudService
 from .serializers import *
 
+
 class BlackbaudViewSet(viewsets.GenericViewSet):
     blackbaud_service = BlackbaudService(
         base_url=os.getenv('BLACKBAUD_BASE_URL', ""),
@@ -55,7 +56,9 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         "update_constituent_action": UpdateConstituentActionSerializer,
         "create_constituent_action_attachment": CreateActionAttachmentSerializer,
         "update_constituent_action_attachment": UpdateActionAttachmentSerializer,
-        "create_constituent_action_custom_field": CreateConstituentsActionCustomFieldsSerializers
+        "create_constituent_action_custom_field": CreateConstituentsActionCustomFieldsSerializers,
+        "edit_an_constituent_address": EditConstituentAddressSerializer,
+        "edit_constituent_aliases": EditConstituentAliasesSerializer
     }
 
     def get_serializer_class(self):
@@ -192,16 +195,17 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                                         payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['delete'], url_path='constituents/delete_attachment/(?P<attachment_id>\d+)')
+    @action(detail=False, methods=['delete'], url_path='constituents/delete_attachment')
     def delete_constituent_attachment(self, request, *args, **kwargs):
         """
             To delete constituent attachment \n
             :headers: "Authorization: Bearer (token)" \n
-            :path_params: "attachment_id" \n
+            :query_params: "attachment_id" \n
             :return: Returns delete constituent attachment id.
         """
         response = self.blackbaud_service.delete_constituent_attachment(request.META.get("HTTP_AUTHORIZATION"),
-                                                                        kwargs.get("attachment_id", None))
+                                                                        attachment_id=request.query_params.get(
+                                                                            "attachment_id", None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='constituents/constituent_attachment_list/(?P<constituent_id>\d+)')
@@ -866,15 +870,15 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
                                                                     payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='constituent_search_with_email')
-    def constituent_search_with_email(self, request, *args, **kwargs):
+    @action(detail=False, methods=['get'], url_path='constituent/search')
+    def constituent_search(self, request):
         """
-        To get the constituent search email \n
+        To get the constituent search \n
         :headers: "Authorization: Bearer (token)" \n
-        :return: Return detail about searched email.
+        :return: Return detail about searched constituents.
         """
-        response = self.blackbaud_service.constituent_search_with_email(request.META.get("HTTP_AUTHORIZATION"),
-                                                                        kwargs.get('q', None))
+        response = self.blackbaud_service.constituent_search(request.META.get("HTTP_AUTHORIZATION"),
+                                                             search=request.query_params.get("search_text"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'],
@@ -1437,7 +1441,7 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = self.blackbaud_service.constituent_create_rating(request.META.get("HTTP_AUTHORIZATION"),
-                                                                           payload=serializer.data)
+                                                                    payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['delete'], url_path='constituent/delete_rating/(?P<rating_id>\d+)')
@@ -1464,8 +1468,8 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = self.blackbaud_service.edit_constituent_rating(request.META.get("HTTP_AUTHORIZATION"),
-                                                                         kwargs.get('rating_id', None),
-                                                                         payload=serializer.data)
+                                                                  kwargs.get('rating_id', None),
+                                                                  payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='constituent/get_rating_categories')
@@ -1477,13 +1481,46 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         """
         response = self.blackbaud_service.rating_categories(request.META.get("HTTP_AUTHORIZATION"))
         return Response(data=response.get("data"), status=response.get("status_code"))
-    
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_rating_values')
+    def get_rating_values(self, request):
+        """
+        To get the list of rating values \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return list about list of rating values.
+        """
+        response = self.blackbaud_service.rating_values(request.META.get("HTTP_AUTHORIZATION"),
+                                                        category_name=request.query_params.get('category_name'))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'],
+            url_path='constituent/get_rating_list_on_single_constituent/(?P<constituent_id>\d+)')
+    def get_rating_list_on_single_constituent(self, request, *args, **kwargs):
+        """
+        To get the list of rating categories on single constituent \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return list about list of rating categories on single constituent.
+        """
+        response = self.blackbaud_service.rating_list_on_single_constituent(request.META.get("HTTP_AUTHORIZATION"),
+                                                                            kwargs.get("constituent_id"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['get'], url_path='constituent/get_rating_sources')
+    def get_rating_sources(self, request, *args, **kwargs):
+        """
+        To get the list of rating sources \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return list about list of rating sources.
+        """
+        response = self.blackbaud_service.rating_source(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
     @action(detail=False, methods=['post'], url_path='constituent/create_constituent_action')
     def create_constituent_action(self, request):
         """
         To Create a constituent action \n
         :headers: "Authorization: Bearer (token)" \n
-        :body_params:{"category": "", "constituent_id":"", "date":"", "type":"", "status":"", "direction":""} \n
+        :body_params:payload \n
         :return: created id of action.
         """
         serializer = self.get_serializer(data=request.data)
@@ -1556,7 +1593,8 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         :return: delete message.
         """
         response = self.blackbaud_service.delete_constituent_action_attachment(request.META.get("HTTP_AUTHORIZATION"),
-                                                                               request.data.get('attachment_id', None))
+                                                                               attachment_id=request.query_params.get(
+                                                                                   'attachment_id', None))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=["patch"],
@@ -1573,7 +1611,8 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = self.blackbaud_service.patch_constituent_action_attachment(request.META.get("HTTP_AUTHORIZATION"),
-                                                                              request.data.get('attachment_id', None),
+                                                                              attachment_id=request.query_params.get(
+                                                                                  'attachment_id', None),
                                                                               payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
@@ -1601,4 +1640,109 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         response = self.blackbaud_service.constituent_action_custom_fields(request.META.get("HTTP_AUTHORIZATION"),
                                                                            payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_constituent_action_list')
+    def get_constituent_action_list(self, request):
+        """
+        To get a constituent action list \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "action_id" \n
+        :return: Return action list objects with details.
+        """
+        response = self.blackbaud_service.constituent_action_list(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_constituent_action_location')
+    def get_constituent_action_location(self, request):
+        """
+        To get a constituent action location \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "action_id" \n
+        :return: Return action list objects with location.
+        """
+        response = self.blackbaud_service.constituent_action_location(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_constituent_action_status_types')
+    def get_constituent_action_status_types(self, request):
+        """
+        To get a constituent action status type \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "action_id" \n
+        :return: Return action list objects with status types.
+        """
+        response = self.blackbaud_service.constituent_action_status_types(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_constituent_action_types')
+    def get_constituent_action_types(self, request):
+        """
+        To get a constituent action type \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return action list objects with types.
+        """
+        response = self.blackbaud_service.constituent_action_types(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=['patch'], url_path='constituents/update_constituent_address/(?P<address_id>\d+)')
+    def edit_an_constituent_address(self, request, *args, **kwargs):
+        """
+            To edit constituent address \n
+            :headers: "Authorization: Bearer (token)" \n
+            :body_params: payload \n
+            :return: Edited id of constituent address.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.constituent_action_edit_address(request.META.get("HTTP_AUTHORIZATION"),
+                                                                          kwargs.get("address_id"),
+                                                                          payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+
+    @action(detail=False, methods=['patch'], url_path='constituent/edit_constituent_aliases/(?P<alias_id>\d+)')
+    def edit_constituent_aliases(self, request, *args, **kwargs):
+        """
+            To edit constituent aliases \n
+            :headers: "Authorization: Bearer (token)" \n
+            :body_params: payload \n
+            :return: Edited message about constituent aliases.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.constituent_edit_aliases(request.META.get("HTTP_AUTHORIZATION"),
+                                                                   kwargs.get('alias_id'),
+                                                                   payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_alias_list_in_single_constituent/(?P<constituent_id>\d+)')
+    def get_alias_list_in_single_constituent(self, request, *args, **kwargs):
+        """
+        To get a alias list in a constituent \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return alias list in a constituent.
+        """
+        response = self.blackbaud_service.alias_list_in_single_constituent(request.META.get("HTTP_AUTHORIZATION"),
+                                                                           kwargs.get("constituent_id"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_alias_types')
+    def get_alias_types(self, request):
+        """
+        To get a alias types \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return list of alias type .
+        """
+        response = self.blackbaud_service.constituent_alias_types(request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"], url_path='constituent/get_attachment_tags')
+    def get_attachment_tags(self, request):
+        """
+        To get a attachment tags \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Return attachment tags.
+        """
+        response = self.blackbaud_service.constituent_attachment_tags(request.META.get("HTTP_AUTHORIZATION"))
         return Response(data=response.get("data"), status=response.get("status_code"))
