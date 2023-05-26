@@ -1165,3 +1165,44 @@ class BlackbaudService(BlackbaudBase):
             return response
         except Exception as e:
             return e
+        
+    def delete_constituent_action_custom(self, access_token, custom_field_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/{custom_field_id}"
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def update_constituent_action_custom_field(self, access_token, custom_field_id, payload):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/{custom_field_id}"
+            response = self._api_call(request_type="PATCH", url=url, headers=self.get_header(access_token),
+                                      payload=payload)
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action_customfields_categories(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/categories"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action_customfields_categories_details(self, access_token):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/customfields/categories/details"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e
+
+    def get_constituent_action_customfields_list(self, access_token, action_id):
+        try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/actions/{action_id}/customfields"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            return response
+        except Exception as e:
+            return e

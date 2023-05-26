@@ -1746,3 +1746,70 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         """
         response = self.blackbaud_service.constituent_attachment_tags(request.META.get("HTTP_AUTHORIZATION"))
         return Response(data=response.get("data"), status=response.get("status_code"))
+    
+    @action(detail=False, methods=['delete'],
+            url_path='constituent/delete_constituent_action_custom_field/(?P<custom_field_id>\d+)')
+    def delete_constituent_action_custom_field(self, request, *args, **kwargs):
+        """
+        To delete the constituent action custom field\n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: "custom_field_id" \n
+        :return: delete message.
+        """
+        response = self.blackbaud_service.delete_constituent_action_custom(request.META.get("HTTP_AUTHORIZATION"),
+                                                                           kwargs.get("custom_field_id", None))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["patch"],
+            url_path='constituent/update_constituent_action_custom_field/(?P<custom_field_id>\d+)')
+    def update_constituent_action_custom_field(self, request, *args, **kwargs):
+        """
+        To Update a constituent action custom field \n
+        :headers: "Authorization: Bearer (token)" \n
+        :path_params: "custom_field_id" \n
+        :body_params: payload \n
+        :return: update message.
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = self.blackbaud_service.update_constituent_action_custom_field(request.META.get("HTTP_AUTHORIZATION"),
+                                                                                 kwargs.get("custom_field_id", None),
+                                                                                 payload=serializer.data)
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"],
+            url_path='constituent/get_constituent_action_customfields_categories')
+    def get_constituent_action_customfields_categories(self, request):
+        """
+        To get a constituent action custom fields categories\n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Details about constituent action custom fields categories.
+        """
+        response = self.blackbaud_service.get_constituent_action_customfields_categories(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"],
+            url_path='constituent/get_constituent_action_customfields_categories_details')
+    def get_constituent_action_customfields_categories(self, request):
+        """
+        To Update a constituent action custom fields categories \n
+        :headers: "Authorization: Bearer (token)" \n
+        :body_params: payload
+        :return: Details of constituent action custom fields categories.
+        """
+        response = self.blackbaud_service.get_constituent_action_customfields_categories_details(
+            request.META.get("HTTP_AUTHORIZATION"))
+        return Response(data=response.get("data"), status=response.get("status_code"))
+
+    @action(detail=False, methods=["get"],
+            url_path='constituent/get_constituent_action_customfields_list/(?P<action_id>\d+)')
+    def get_constituent_action_customfields_list(self, request, *args, **kwargs):
+        """
+        To Update a constituent action custom fields list \n
+        :headers: "Authorization: Bearer (token)" \n
+        :return: Details of constituent action custom fields list.
+        """
+        response = self.blackbaud_service.get_constituent_action_customfields_list(
+            request.META.get("HTTP_AUTHORIZATION"), kwargs.get('action_id', None))
+        return Response(data=response.get("data"), status=response.get("status_code"))

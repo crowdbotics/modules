@@ -625,3 +625,9 @@ class EditConstituentAddressSerializer(serializers.Serializer):
 class EditConstituentAliasesSerializer(serializers.Serializer):
     name = serializers.CharField(required=False)
     type = serializers.CharField(required=False)
+    
+
+class UpdateConstituentsActionCustomFieldsSerializers(serializers.Serializer):
+    category = serializers.CharField(required=False)
+    comment = serializers.CharField(required=False)
+    parent_id = serializers.CharField(required=False)

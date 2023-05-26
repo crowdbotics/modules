@@ -34,7 +34,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.post(reverse('blackbaud-get-access-token'), data=data)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        auth_token_mock.assert_called()
+        auth_token_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.auth_token')
     def test_auth_token_with_invalid_code(self, auth_token_mock):
@@ -104,7 +104,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.get(reverse('blackbaud-get-event-list'))
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        event_list_mock.assert_called()
+        event_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.event_details')
     def test_event_details_with_valid_event_id(self, event_details_mock):
@@ -282,7 +282,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.post(reverse('blackbaud-create-constituents'), data=data, format="json")
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        create_constituents_mock.assert_called()
+        create_constituents_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_constituents')
     def test_create_constituents_with_invalid_data(self, create_constituents_mock):
@@ -308,7 +308,7 @@ class TestBlackbaudViewSet(APITestCase):
         Response = self.client.post(reverse('blackbaud-create-constituents'), data=invalid_data, format="json")
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Response.data, response['data'])
-        create_constituents_mock.assert_called()
+        create_constituents_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_details_by_id')
     def test_get_constituent_details(self, get_constituent_details_mock):
@@ -413,10 +413,11 @@ class TestBlackbaudViewSet(APITestCase):
         }], 'status_code': 200}
         get_constituent_appeal_list_mock.return_value = response
         constituent_id = 619057
-        Response = self.client.get(
-            reverse('blackbaud-get-constituent-appeal-list', kwargs={'constituent_id': constituent_id}))
+        url = reverse('blackbaud-get-constituent-appeal-list', kwargs={'constituent_id': constituent_id})
+        Response = self.client.get(url)
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
+        self.assertEqual(Response.resolver_match.kwargs['constituent_id'], str(constituent_id))
         get_constituent_appeal_list_mock.assert_called_once()
 
     @mock.patch('modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_appeal_list')
@@ -1660,7 +1661,7 @@ class TestBlackbaudViewSet(APITestCase):
             data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        create_constituent_custom_collection_mock.inssert_called_once()
+        create_constituent_custom_collection_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_custom_field_collection')
@@ -1683,7 +1684,7 @@ class TestBlackbaudViewSet(APITestCase):
             data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Response.data, response['data'])
-        create_constituent_custom_collection_mock.inssert_called_once()
+        create_constituent_custom_collection_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_document')
@@ -1707,7 +1708,7 @@ class TestBlackbaudViewSet(APITestCase):
             data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        create_document_mock.inssert_called_once()
+        create_document_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_document')
@@ -1726,7 +1727,7 @@ class TestBlackbaudViewSet(APITestCase):
             data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Response.data, response['data'])
-        create_document_mock.inssert_called_once()
+        create_document_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_education_custom_field')
@@ -1746,7 +1747,7 @@ class TestBlackbaudViewSet(APITestCase):
             data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        create_constituent_education_custom_field_mock.inssert_called_once()
+        create_constituent_education_custom_field_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_create_education_custom_field')
@@ -1770,7 +1771,7 @@ class TestBlackbaudViewSet(APITestCase):
             data=invalid_data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Response.data, response['data'])
-        create_constituent_education_custom_field_mock.inssert_called_once()
+        create_constituent_education_custom_field_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_delete_education_custom_field')
@@ -1784,7 +1785,7 @@ class TestBlackbaudViewSet(APITestCase):
             format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        delete_constituent_education_custom_field_mock.inssert_called_once()
+        delete_constituent_education_custom_field_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_delete_education_custom_field')
@@ -1800,7 +1801,7 @@ class TestBlackbaudViewSet(APITestCase):
             format='json')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Response.data, response['data'])
-        delete_constituent_education_custom_field_mock.inssert_called_once()
+        delete_constituent_education_custom_field_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_address')
@@ -1834,7 +1835,7 @@ class TestBlackbaudViewSet(APITestCase):
             reverse('blackbaud-create-constituents-address'), data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
-        create_constituents_address_mock.inssert_called_once()
+        create_constituents_address_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_address')
@@ -1871,7 +1872,324 @@ class TestBlackbaudViewSet(APITestCase):
             reverse('blackbaud-create-constituents-address'), data=invalid_data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Response.data, response['data'])
-        create_constituents_address_mock.inssert_called_once()
+        create_constituents_address_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_aliases')
+    def test_create_constituent_aliases_with_valid_data(self,
+                                                        create_constituent_aliases_mock):
+        response = {'data': {'id': '653190'}, 'status_code': 200}
+        create_constituent_aliases_mock.return_value = response
+        data = {
+            "constituent_id": "246",
+            "name": "Davis",
+            "type": "Maiden Name"
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-aliases'), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_aliases_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_aliases')
+    def test_create_constituent_aliases_with_invalid_data(self,
+                                                          create_constituent_aliases_mock):
+        response = {'data': [
+            {'message': "The table 'Alias Types' does not contain an active entry named 'Maiden alies Name'",
+             'error_name': 'TableEntryNotFound', 'error_code': 400,
+             'raw_message': "The table 'Alias Types' does not contain an active entry named 'Maiden alies Name'",
+             'error_args': []}], 'status_code': 400}
+        create_constituent_aliases_mock.return_value = response
+        invalid_data = {
+            "constituent_id": "241",
+            "name": "Davies",
+            "type": "Maiden alies Name"
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-aliases'), data=invalid_data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_aliases_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_delete_alias')
+    def test_delete_constituent_aliases_with_valid_id(self,
+                                                      delete_constituent_aliases_mock):
+        response = {'data': 'Deleted successfully.', 'status_code': 200}
+        delete_constituent_aliases_mock.return_value = response
+        alias_id = '653191'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-constituent-aliases', kwargs={"alias_id": alias_id}), format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        delete_constituent_aliases_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_delete_alias')
+    def test_delete_constituent_aliases_with_invalid_id(self,
+                                                        delete_constituent_aliases_mock):
+        response = {'data': 'Deleted successfully.', 'status_code': 200}
+        delete_constituent_aliases_mock.return_value = response
+        invalid_alias_id = '653191894789437'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-constituent-aliases', kwargs={"alias_id": invalid_alias_id}), format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        delete_constituent_aliases_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_alias_collection')
+    def test_create_constituent_alias_collection_with_valid_data(self,
+                                                                 create_constituent_alias_collection_mock):
+        response = {'data': {'count': 2, 'value': ['653194', '653195']}, 'status_code': 200}
+        create_constituent_alias_collection_mock.return_value = response
+        constituent_id = '256'
+        data = {
+            "aliases": [
+                {
+                    "name": "Davis",
+                    "type": "Maiden Name"
+                },
+                {
+                    "name": "Peggy",
+                    "type": "Nickname"
+                }
+            ]
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-alias-collection', kwargs={"constituent_id": constituent_id}),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_alias_collection_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_alias_collection')
+    def test_create_constituent_alias_collection_with_invalid_constituent_id(self,
+                                                                             create_constituent_alias_collection_mock):
+        response = {'data': [{'error_args': [], 'error_code': 404, 'error_name': 'RequestNotFulfilled',
+                              'message': 'The requested operation could not be fulfilled',
+                              'raw_message': 'The requested operation could not be fulfilled'}], 'status_code': 404}
+        create_constituent_alias_collection_mock.return_value = response
+        constituent_id = '2568437893'
+        data = {
+            "aliases": [
+                {
+                    "name": "Davis",
+                    "type": "Maiden Name"
+                },
+                {
+                    "name": "Peggy",
+                    "type": "Nickname"
+                }
+            ]
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-alias-collection', kwargs={"constituent_id": constituent_id}),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_alias_collection_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_alias_collection')
+    def test_create_constituent_alias_collection_with_invalid_data(self,
+                                                                   create_constituent_alias_collection_mock):
+        response = {'data': [
+            {'message': "The table 'Alias Types' does not contain an active entry named 'Maiden Name Nickname'",
+             'error_name': 'TableEntryNotFound', 'error_code': 400,
+             'raw_message': "The table 'Alias Types' does not contain an active entry named 'Maiden Name Nickname'",
+             'error_args': []}], 'status_code': 400}
+        create_constituent_alias_collection_mock.return_value = response
+        constituent_id = '246'
+        data = {
+            "aliases": [
+                {
+                    "name": "Davis Rao",
+                    "type": "Maiden Name Nickname"
+                },
+                {
+                    "name": "Peggy gomeo",
+                    "type": "Nicknamjslkdje"
+                }
+            ]
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-alias-collection', kwargs={"constituent_id": constituent_id}),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_alias_collection_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituents_create_alias_collection')
+    def test_create_constituent_alias_collection_with_both_invalid_data_and_constituent_id(self,
+                                                                                           create_constituent_alias_collection_mock):
+        response = {'data': [
+            {'message': "The table 'Alias Types' does not contain an active entry named 'Maiden Name Nickname'",
+             'error_name': 'TableEntryNotFound', 'error_code': 400,
+             'raw_message': "The table 'Alias Types' does not contain an active entry named 'Maiden Name Nickname'",
+             'error_args': []}], 'status_code': 400}
+        create_constituent_alias_collection_mock.return_value = response
+        constituent_id = '246984897'
+        data = {
+            "aliases": [
+                {
+                    "name": "Davis Rao",
+                    "type": "Maiden Name Nickname"
+                },
+                {
+                    "name": "Peggy gomeo",
+                    "type": "Nicknamjslkdje"
+                }
+            ]
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-constituent-alias-collection', kwargs={"constituent_id": constituent_id}),
+            data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_constituent_alias_collection_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.delete_participant')
+    def test_delete_participant_with_valid_id(self,
+                                              delete_participant_mock):
+        response = {'data': 'Deleted successfully.', 'status_code': 200}
+        delete_participant_mock.return_value = response
+        participant_id = '5992'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-participant', kwargs={"participant_id": participant_id}), format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        delete_participant_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.delete_participant')
+    def test_delete_participant_with_invalid_id(self,
+                                                delete_participant_mock):
+        response = {
+            'data': '[\n  {\n    "message": "The provided Id value \'748273837837328838\' is either not a valid integer, or it is not greater than or equal to 1.",\n    "error_name": "InvalidId",\n    "error_code": 1001,\n    "raw_message": "The provided Id value \'748273837837328838\' is either not a valid integer, or it is not greater than or equal to 1."\n  }\n]',
+            'status_code': 400}
+        delete_participant_mock.return_value = response
+        participant_id = '748273837837328838'
+        Response = self.client.delete(
+            reverse('blackbaud-delete-participant', kwargs={"participant_id": participant_id}), format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        delete_participant_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_event_participants')
+    def test_create_participant_in_event_with_valid_data(self,
+                                                         create_participant_in_event_mock):
+        response = {'data': {'id': '12862'}, 'status_code': 200}
+        create_participant_in_event_mock.return_value = response
+        event_id = '32584'
+        data = {
+            "constituent_id": "283",
+            "rsvp_status": "attending",
+            "invitation_status": "NotApplicable",
+            "invitation_date": {
+                "d": 1,
+                "m": 1,
+                "y": 2020
+            },
+
+            "summary_note": "Major donor who invites a lot of people."
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-participant-in-event', kwargs={"event_id": event_id}), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_in_event_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_event_participants')
+    def test_create_duplicate_participant_in_event_with_same_data(self,
+                                                                  create_participant_in_event_mock):
+        response = {'data': [{
+            'message': 'The contact is already participating on this event. They can only be assigned to the event once.',
+            'error_name': 'CreateParticipantContactAlreadyParticipant', 'error_code': 1033,
+            'raw_message': 'The contact is already participating on this event. They can only be assigned to the event once.'}],
+            'status_code': 400}
+        create_participant_in_event_mock.return_value = response
+        event_id = '32584'
+        data = {
+            "constituent_id": "283",
+            "rsvp_status": "attending",
+            "invitation_status": "NotApplicable",
+            "invitation_date": {
+                "d": 1,
+                "m": 1,
+                "y": 2020
+            },
+
+            "summary_note": "Major donor who invites a lot of people."
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-participant-in-event', kwargs={"event_id": event_id}), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_in_event_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_event_participants')
+    def test_create_participant_in_event_with_invalid_data(self,
+                                                           create_participant_in_event_mock):
+        response = {'data': [{'error_code': 1023, 'error_name': 'CreateParticipantContactNotValid',
+                              'message': 'The contact specified on the participant does not exist.',
+                              'raw_message': 'The contact specified on the participant does not exist.'}],
+                    'status_code': 400}
+        create_participant_in_event_mock.return_value = response
+        event_id = '32584'
+        data = {
+            "constituent_id": "28893",
+            "rsvp_status": "attending",
+            "invitation_status": "NotApplicable",
+            "invitation_date": {
+                "d": 977,
+                "m": 2,
+                "y": 2024
+            },
+
+            "summary_note": "Major donor who invites a lot of people."
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-participant-in-event', kwargs={"event_id": event_id}), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_in_event_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_event_participants')
+    def test_create_participant_in_event_with_invalid_event_id(self,
+                                                               create_participant_in_event_mock):
+        response = {'data': [{
+            'message': "The provided EventId value '3259843984' is either not a valid integer, or it is not greater than or equal to 1.",
+            'error_name': 'InvalidId', 'error_code': 1001,
+            'raw_message': "The provided EventId value '3259843984' is either not a valid integer, or it is not greater than or equal to 1."}],
+            'status_code': 400}
+        create_participant_in_event_mock.return_value = response
+        event_id = '3259843984'
+        data = {
+            "constituent_id": "283",
+            "rsvp_status": "attending",
+            "invitation_status": "NotApplicable",
+            "invitation_date": {
+                "d": 1,
+                "m": 1,
+                "y": 2020
+            },
+
+            "summary_note": "Major donor who invites a lot of people."
+        }
+        Response = self.client.post(
+            reverse('blackbaud-create-participant-in-event', kwargs={"event_id": event_id}), data=data, format='json')
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_in_event_mock.assert_called_once()
 
     @mock.patch(
         'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.participant_levels')
@@ -1909,3 +2227,279 @@ class TestBlackbaudViewSet(APITestCase):
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertEqual(Response.data, response['data'])
         get_participant_levels_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_search')
+    def test_constituent_search(self, constituent_search_mock):
+        response = {'data': {'count': 11, 'value': [
+            {'id': '617370', 'address': '', 'deceased': False, 'email': 'browserstack@fundraiseup.com',
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '280', 'name': 'Caesar Feest'},
+            {'id': '625691', 'address': '2940 Donita Drive\r\nVestavia Hills, AL  35243', 'deceased': False,
+             'email': 'bryant.brock@anedot.com', 'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2807',
+             'name': 'Bryant Brock'},
+            {'id': '625690', 'address': '', 'deceased': False, 'email': 'malik.gagne@example.com',
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2806', 'name': 'Malik Gagné'},
+            {'id': '625699', 'address': '', 'deceased': False, 'email': 'erling.lyssand@example.com',
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2808', 'name': 'Erling Lyssand'},
+            {'id': '625682', 'address': '10727 Domain Drive\r\nAustin, TX  78758', 'deceased': False,
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2800', 'name': 'Nicholas Palaniuk'},
+            {'id': '625683', 'address': '10727 Domain Drive\r\nAustin, TX  78758', 'deceased': False,
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2801', 'name': 'Nicholas Palaniuk'},
+            {'id': '625684', 'address': '10727 Domain Drive\r\nAustin, TX  78758', 'deceased': False,
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2802', 'name': 'Nicholas Palaniuk'},
+            {'id': '625685', 'address': '10727 Domain Drive\r\nAustin, TX  78758', 'deceased': False,
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2803', 'name': 'Nicholas Palaniuk'},
+            {'id': '625686', 'address': '10727 Domain Drive\r\nAustin, TX  78758', 'deceased': False,
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2804', 'name': 'Nicholas Palaniuk'},
+            {'id': '625702', 'address': '', 'deceased': False, 'email': 'brajan.stefanovic@example.com',
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2809', 'name': 'Brajan Stefanovic'},
+            {'id': '625687', 'address': '', 'deceased': False, 'email': 'Kilgore_Trout64@gmail.com',
+             'fundraiser_status': 'None', 'inactive': False, 'lookup_id': '2805', 'name': 'Kilgore X. Trout, Jr.'}]},
+                    'status_code': 200}
+
+        constituent_search_mock.return_value = response
+        data = {
+            "search_text": 280
+        }
+        Response = self.client.get(
+            reverse('blackbaud-constituent-search'), data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        constituent_search_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.constituent_search')
+    def test_constituent_search_with_wrong_search_text(self, constituent_search_mock):
+        response = {'data': {'count': 0, 'value': []}, 'status_code': 200}
+
+        constituent_search_mock.return_value = response
+        data = {
+            "search_text": "28dueh"
+        }
+        Response = self.client.get(
+            reverse('blackbaud-constituent-search'), data)
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        constituent_search_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_participant_for_attending_events')
+    def test_create_participant_for_attending_event(self, create_participant_for_attending_event_mock):
+        response = {'data': {'id': '12864'}, 'status_code': 200}
+
+        create_participant_for_attending_event_mock.return_value = response
+        event_id = "32577"
+        data = {
+            "constituent": {
+                "type": "Individual",
+                "email": {
+                    "address": "cb.shoaib@gmail.com",
+                    "type": "Email"
+                },
+                "first": "CB",
+                "last": "Shoaib",
+                "phone": {
+                    "number": "843-537-3399",
+                    "type": "Home"
+                }
+            },
+            "participant": {}
+        }
+        url = reverse('blackbaud-create-participant-for-attending-event', kwargs={'event_id': event_id})
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_for_attending_event_mock.assert_called_once()
+        self.assertEqual(Response.resolver_match.kwargs['event_id'], str(event_id))
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_participant_for_attending_events')
+    def test_create_participant_for_attending_event_with_invalid_data(self,
+                                                                      create_participant_for_attending_event_mock):
+        response = {'data': [{'message': "The table 'Phone Types' does not contain an active entry named 'phone'",
+                              'error_name': 'TableEntryNotFound', 'error_code': 1002,
+                              'raw_message': "The table 'Phone Types' does not contain an active entry named 'phone'",
+                              'error_args': []}], 'status_code': 400}
+
+        create_participant_for_attending_event_mock.return_value = response
+        event_id = "32577"
+        data = {
+            "constituent": {
+                "type": "Individual",
+                "email": {
+                    "address": "cb.shoaib34@gmail.com",
+                    "type": "phone"
+                },
+                "first": "CB",
+                "last": "Shoaib",
+                "phone": {
+                    "number": "843-537-3399",
+                    "type": "email"
+                }
+            },
+            "participant": {}
+        }
+        url = reverse('blackbaud-create-participant-for-attending-event', kwargs={'event_id': event_id})
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_for_attending_event_mock.assert_called_once()
+        self.assertEqual(Response.resolver_match.kwargs['event_id'], str(event_id))
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_participant_for_attending_events')
+    def test_create_participant_for_attending_event_with_invalid_event_id(self,
+                                                                          create_participant_for_attending_event_mock):
+        response = {'data': [{'error_code': 404, 'error_name': 'ResourceNotFound',
+                              'message': 'The requested resource could not be found.',
+                              'raw_message': 'The requested resource could not be found.'}], 'status_code': 404}
+
+        create_participant_for_attending_event_mock.return_value = response
+        event_id = "325777777"
+        data = {
+            "constituent": {
+                "type": "Individual",
+                "email": {
+                    "address": "cb.shoaib@gmail.com",
+                    "type": "Email"
+                },
+                "first": "CB",
+                "last": "Shoaib",
+                "phone": {
+                    "number": "843-537-3399",
+                    "type": "Home"
+                }
+            },
+            "participant": {}
+        }
+        url = reverse('blackbaud-create-participant-for-attending-event', kwargs={'event_id': event_id})
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_for_attending_event_mock.assert_called_once()
+        self.assertEqual(Response.resolver_match.kwargs['event_id'], str(event_id))
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_participant_for_attending_events')
+    def test_create_participant_for_attending_event_with_both_invalid_data_and_event_id(self,
+                                                                                        create_participant_for_attending_event_mock):
+        response = {'data': [{'message': "The table 'Phone Types' does not contain an active entry named 'phone'",
+                              'error_name': 'TableEntryNotFound', 'error_code': 1002,
+                              'raw_message': "The table 'Phone Types' does not contain an active entry named 'phone'",
+                              'error_args': []}], 'status_code': 400}
+        create_participant_for_attending_event_mock.return_value = response
+        event_id = "32577777"
+        data = {
+            "constituent": {
+                "type": "Individual",
+                "email": {
+                    "address": "cb.shoaib34@gmail.com",
+                    "type": "phone"
+                },
+                "first": "CB",
+                "last": "Shoaib",
+                "phone": {
+                    "number": "843-537-3399",
+                    "type": "email"
+                }
+            },
+            "participant": {}
+        }
+        url = reverse('blackbaud-create-participant-for-attending-event', kwargs={'event_id': event_id})
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        create_participant_for_attending_event_mock.assert_called_once()
+        self.assertEqual(Response.resolver_match.kwargs['event_id'], str(event_id))
+
+    def test_create_participant_for_attending_event_without_constituent_data(self):
+        event_id = "32577"
+        data = {
+            "constituent": {},
+            "participant": {}
+        }
+        url = reverse('blackbaud-create-participant-for-attending-event', kwargs={'event_id': event_id})
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.resolver_match.kwargs['event_id'], str(event_id))
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_an_event')
+    def test_create_an_event_valid_data(self, create_an_event_mock):
+        response = {'data': {'id': '32588'}, 'status_code': 200}
+        create_an_event_mock.return_value = response
+        data = {
+            "name": "Walk-A-Thon",
+            "start_date": "2008-06-26"
+        }
+        url = reverse('blackbaud-create-an-event')
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        self.assertEqual(Response.request['CONTENT_TYPE'], 'application/json')
+        self.assertEqual(Response.request['REQUEST_METHOD'], 'POST')
+        create_an_event_mock.assert_called_once()
+        create_an_event_mock.assert_called_once_with(None, payload=data)
+
+    def test_create_an_event_without_data(self):
+        data = {
+            "name": "",
+            "start_date": ""
+        }
+        url = reverse('blackbaud-create-an-event')
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.request['CONTENT_TYPE'], 'application/json')
+        self.assertEqual(Response.request['REQUEST_METHOD'], 'POST')
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.delete_event')
+    def test_delete_an_event(self, delete_an_event_mock):
+        response = {'data': 'Deleted successfully.', 'status_code': 200}
+        delete_an_event_mock.return_value = response
+        event_id = "32591"
+        url = reverse('blackbaud-delete-an-event', kwargs={"event_id": event_id})
+        Response = self.client.delete(url, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        self.assertEqual(Response.request['REQUEST_METHOD'], 'DELETE')
+        delete_an_event_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.delete_event')
+    def test_delete_an_event_with_invalid_id(self, delete_an_event_mock):
+        response = {
+            'data': '[\n  {\n    "message": "The provided EventId value \'3259111112\' is either not a valid integer, or it is not greater than or equal to 1.",\n    "error_name": "InvalidId",\n    "error_code": 1001,\n    "raw_message": "The provided EventId value \'3259111112\' is either not a valid integer, or it is not greater than or equal to 1."\n  }\n]',
+            'status_code': 400}
+        delete_an_event_mock.return_value = response
+        event_id = "32591"
+        url = reverse('blackbaud-delete-an-event', kwargs={"event_id": event_id})
+        Response = self.client.delete(url, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.data, response['data'])
+        self.assertEqual(Response.request['REQUEST_METHOD'], 'DELETE')
+        delete_an_event_mock.assert_called_once()
+
+    @mock.patch(
+        'modules.blackbaud.blackbaud.services.BlackbaudService.BlackbaudService.create_event_category')
+    def test_create_category_in_event(self, create_category_in_event_mock):
+        response = {'data': {'id': '5994'}, 'status_code': 200}
+        create_category_in_event_mock.return_value = response
+        data = {
+            "name": "Dinner"
+        }
+        url = reverse('blackbaud-create-category-in-event')
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Response.data, response['data'])
+        self.assertEqual(Response.request['REQUEST_METHOD'], 'POST')
+        create_category_in_event_mock.assert_called_once()
+
+    def test_create_category_in_event_with_blank_name(self):
+        data = {
+            "name": ""
+        }
+        url = reverse('blackbaud-create-category-in-event')
+        Response = self.client.post(url, data=data, format="json")
+        self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Response.request['REQUEST_METHOD'], 'POST')
