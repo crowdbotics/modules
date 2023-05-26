@@ -552,6 +552,244 @@ export const getParticipantLevels = (accessToken) => {
   };
   return axios.request(config);
 };
+export const createActionAttachment = (accessToken, payload) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/create_action_attachment/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    data: payload
+  };
+  return axios.request(config);
+};
+export const createConstituentAction = (accessToken, payload) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/create_constituent_action/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    data: payload
+  };
+  return axios.request(config);
+};
+export const createRating = (accessToken, payload) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/create_rating/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    data: payload
+  };
+  return axios.request(config);
+};
+export const createRelationship = (accessToken, payload) => {
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/create_relationship/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    data: payload
+  };
+  return axios.request(config);
+};
+export const deleteConstituentAction = (accessToken, id) => {
+  const config = {
+    method: "delete",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_constituent_action/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+  };
+  return axios.request(config);
+};
+export const deleteConstituentActionAttachment = (accessToken, id) => {
+  const config = {
+    method: "delete",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_constituent_action_attachment/?attachment_id=${id}`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+  };
+  return axios.request(config);
+};
+export const deleteConstituentActionCustomField = (accessToken, id) => {
+  const config = {
+    method: "delete",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_constituent_action_custom_field/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+  };
+  return axios.request(config);
+};
+export const deleteRating = (accessToken, id) => {
+  const config = {
+    method: "delete",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_rating/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+  };
+  return axios.request(config);
+};
+export const deleteRelationship = (accessToken, id) => {
+  const config = {
+    method: "delete",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_relationship/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+  };
+  return axios.request(config);
+};
+export const editRelationship = (accessToken, id, payload) => {
+  const config = {
+    method: "patch",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/edit_relationship/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    data: payload
+  };
+  return axios.request(config);
+};
+export const getConstituentActionAttachments = (accessToken,id) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_constituent_action/${id}/attachments/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+export const getConstituentActionCustomFieldsCategories= (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituents/get_constituent_custom_field_categories/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+
+export const getRatingCategories = (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_rating_categories/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+export const getRelationshipDetails = (accessToken, id) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_details/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+export const getRelationshipListInAllConstituents = (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_list_in_all_constituents/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+
+export const getRelationshipListInSingleConstituent = (accessToken, id) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_list_in_single_constituent/${id}/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+
+export const getRelationshipTypes = (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_types/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+
+export const getSuffixes = (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_suffixes/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
+
+export const getTitles = (accessToken) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${globalOptions.url}/modules/blackbaud/constituent/get_titles/`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    }
+  };
+  return axios.request(config);
+};
 
 export const api = {
   getEventListing,
@@ -597,5 +835,24 @@ export const api = {
   getEventAttachmentTags,
   getEventCategories,
   getParticipant,
-  getParticipantLevels
+  getParticipantLevels,
+  createActionAttachment,
+  createConstituentAction,
+  createRating,
+  createRelationship,
+  deleteConstituentAction,
+  deleteConstituentActionAttachment,
+  deleteConstituentActionCustomField,
+  deleteRating,
+  deleteRelationship,
+  editRelationship,
+  getConstituentActionAttachments,
+  getConstituentActionCustomFieldsCategories,
+  getRatingCategories,
+  getRelationshipDetails,
+  getRelationshipListInAllConstituents,
+  getRelationshipListInSingleConstituent,
+  getRelationshipTypes,
+  getSuffixes,
+  getTitles
 };

@@ -536,6 +536,241 @@ export const getParticipantLevels = createAsyncThunk(
   }
 );
 
+export const createActionAttachment = createAsyncThunk(
+  "event/createActionAttachment",
+  async (data) => {
+    try {
+      const response = await api.createActionAttachment(data.token, data.payload);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const createConstituentAction = createAsyncThunk(
+  "event/createConstituentAction",
+  async (data) => {
+    try {
+      const response = await api.createConstituentAction(data.token, data.payload);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const createRating = createAsyncThunk(
+  "event/createRating",
+  async (data) => {
+    try {
+      const response = await api.createRating(data.token, data.payload);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const createRelationship = createAsyncThunk(
+  "event/createRelationship",
+  async (data) => {
+    try {
+      const response = await api.createRelationship(data.token, data.payload);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const deleteConstituentAction = createAsyncThunk(
+  "event/createRelationship",
+  async (data) => {
+    try {
+      const response = await api.deleteConstituentAction(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const deleteConstituentActionAttachment = createAsyncThunk(
+  "event/deleteConstituentActionAttachment",
+  async (data) => {
+    try {
+      const response = await api.deleteConstituentActionAttachment(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const deleteConstituentActionCustomField = createAsyncThunk(
+  "event/deleteConstituentActionCustomField",
+  async (data) => {
+    try {
+      const response = await api.deleteConstituentActionCustomField(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const deleteRating = createAsyncThunk(
+  "event/deleteRating",
+  async (data) => {
+    try {
+      const response = await api.deleteRating(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
+export const deleteRelationship = createAsyncThunk(
+  "event/deleteRelationship",
+  async (data) => {
+    try {
+      const response = await api.deleteRelationship(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
+export const editRelationship = createAsyncThunk(
+  "event/editRelationship",
+  async (data) => {
+    try {
+      const response = await api.editRelationship(data.token, data.id, data.payload);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getConstituentActionAttachments = createAsyncThunk(
+  "event/getConstituentActionAttachments",
+  async (data) => {
+    try {
+      const response = await api.getConstituentActionAttachments(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
+export const getConstituentActionCustomFieldsCategories = createAsyncThunk(
+  "event/getConstituentActionCustomFieldsCategories",
+  async (data) => {
+    try {
+      const response = await api.getConstituentActionCustomFieldsCategories(data.token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
+export const getRatingCategories = createAsyncThunk(
+  "event/getRatingCategories",
+  async (data) => {
+    try {
+      const response = await api.getRatingCategories(data.token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
+export const getRelationshipDetails = createAsyncThunk(
+  "event/getRelationshipDetails",
+  async (data) => {
+    try {
+      const response = await api.getRelationshipDetails(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getRelationshipListInAllConstituents = createAsyncThunk(
+  "event/getRelationshipListInAllConstituents",
+  async (data) => {
+    try {
+      const response = await api.getRelationshipListInAllConstituents(data.token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getRelationshipListInSingleConstituent = createAsyncThunk(
+  "event/getRelationshipListInSingleConstituent",
+  async (data) => {
+    try {
+      const response = await api.getRelationshipListInSingleConstituent(data.token, data.id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
+export const getRelationshipTypes = createAsyncThunk(
+  "event/getRelationshipTypes",
+  async (data) => {
+    try {
+      const response = await api.getRelationshipTypes(data.token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getSuffixes = createAsyncThunk(
+  "event/getSuffixes",
+  async (data) => {
+    try {
+      const response = await api.getSuffixes(data.token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+export const getTitles = createAsyncThunk(
+  "event/getTitles",
+  async (data) => {
+    try {
+      const response = await api.getTitles(data.token);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", error.message);
+      throw new Error();
+    }
+  }
+);
+
 const initialState = {
   eventList: {
     entities: [],
@@ -839,7 +1074,81 @@ const initialState = {
       error: null
     }
   },
-  createConstituentApi: { loading: "idle", error: null }
+  createConstituentApi: { loading: "idle", error: null },
+  createConstituentApi: { loading: "idle", error: null },
+  createActionAttachmentApi: { loading: "idle", error: null },
+  createConstituentActionApi: { loading: "idle", error: null },
+  createRatingApi: { loading: "idle", error: null },
+  createRelationshipApi: { loading: "idle", error: null },
+  deleteConstituentActionApi: { loading: "idle", error: null },
+  deleteConstituentActionAttachmentApi: { loading: "idle", error: null },
+  deleteConstituentActionCustomFieldApi: { loading: "idle", error: null },
+  deleteRatingApi: { loading: "idle", error: null },
+  deleteRelationshipApi: { loading: "idle", error: null },
+  editRelationshipApi: { loading: "idle", error: null },
+  constituentActionAttachments: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  constituentActionCustomFieldsCategories: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  ratingCategories: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  relationshipDetails: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  relationshipListInAllConstituents: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  relationshipListInSingleConstituent: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  relationshipTypes: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  suffixes: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  titles: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
 };
 
 export const slice = createSlice({
@@ -1660,6 +1969,339 @@ export const slice = createSlice({
         state.getParticipantLevels.api.loading = "pending";
         state.getParticipantLevels.api.error = null;
       }
-    }
+    },
+    [createActionAttachment.fulfilled]: (state) => {
+      if (state.createActionAttachmentApi.loading === "pending") {
+        state.createActionAttachmentApi.loading = "idle";
+      }
+    },
+    [createActionAttachment.rejected]: (state, action) => {
+      if (state.createActionAttachmentApi.loading === "pending") {
+        state.createActionAttachmentApi.error = action.error;
+        state.createActionAttachmentApi.loading = "idle";
+      }
+    },
+    [createActionAttachment.pending]: (state) => {
+      if (state.createActionAttachmentApi.loading === "idle") {
+        state.createActionAttachmentApi.loading = "pending";
+        state.createActionAttachmentApi.error = null;
+      }
+    },
+    [createConstituentAction.fulfilled]: (state) => {
+      if (state.createConstituentActionApi.loading === "pending") {
+        state.createConstituentActionApi.loading = "idle";
+      }
+    },
+    [createConstituentAction.rejected]: (state, action) => {
+      if (state.createConstituentActionApi.loading === "pending") {
+        state.createConstituentActionApi.error = action.error;
+        state.createConstituentActionApi.loading = "idle";
+      }
+    },
+    [createConstituentAction.pending]: (state) => {
+      if (state.createConstituentActionApi.loading === "idle") {
+        state.createConstituentActionApi.loading = "pending";
+        state.createConstituentActionApi.error = null;
+      }
+    },
+    [createRating.fulfilled]: (state) => {
+      if (state.createRatingApi.loading === "pending") {
+        state.createRatingApi.loading = "idle";
+      }
+    },
+    [createRating.rejected]: (state, action) => {
+      if (state.createRatingApi.loading === "pending") {
+        state.createRatingApi.error = action.error;
+        state.createRatingApi.loading = "idle";
+      }
+    },
+    [createRating.pending]: (state) => {
+      if (state.createRatingApi.loading === "idle") {
+        state.createRatingApi.loading = "pending";
+        state.createRatingApi.error = null;
+      }
+    },
+    [createRelationship.fulfilled]: (state) => {
+      if (state.createRelationshipApi.loading === "pending") {
+        state.createRelationshipApi.loading = "idle";
+      }
+    },
+    [createRelationship.rejected]: (state, action) => {
+      if (state.createRelationshipApi.loading === "pending") {
+        state.createRelationshipApi.error = action.error;
+        state.createRelationshipApi.loading = "idle";
+      }
+    },
+    [createRelationship.pending]: (state) => {
+      if (state.createRelationshipApi.loading === "idle") {
+        state.createRelationshipApi.loading = "pending";
+        state.createRelationshipApi.error = null;
+      }
+    },
+    [deleteConstituentAction.fulfilled]: (state) => {
+      if (state.deleteConstituentActionApi.loading === "pending") {
+        state.deleteConstituentActionApi.loading = "idle";
+      }
+    },
+    [deleteConstituentAction.rejected]: (state, action) => {
+      if (state.deleteConstituentActionApi.loading === "pending") {
+        state.deleteConstituentActionApi.error = action.error;
+        state.deleteConstituentActionApi.loading = "idle";
+      }
+    },
+    [deleteConstituentAction.pending]: (state) => {
+      if (state.deleteConstituentActionApi.loading === "idle") {
+        state.deleteConstituentActionApi.loading = "pending";
+        state.deleteConstituentActionApi.error = null;
+      }
+    },
+    [deleteConstituentActionAttachment.fulfilled]: (state) => {
+      if (state.deleteConstituentActionAttachmentApi.loading === "pending") {
+        state.deleteConstituentActionAttachmentApi.loading = "idle";
+      }
+    },
+    [deleteConstituentActionAttachment.rejected]: (state, action) => {
+      if (state.deleteConstituentActionAttachmentApi.loading === "pending") {
+        state.deleteConstituentActionAttachmentApi.error = action.error;
+        state.deleteConstituentActionAttachmentApi.loading = "idle";
+      }
+    },
+    [deleteConstituentActionAttachment.pending]: (state) => {
+      if (state.deleteConstituentActionAttachmentApi.loading === "idle") {
+        state.deleteConstituentActionAttachmentApi.loading = "pending";
+        state.deleteConstituentActionAttachmentApi.error = null;
+      }
+    },
+    [deleteConstituentActionCustomField.fulfilled]: (state) => {
+      if (state.deleteConstituentActionCustomFieldApi.loading === "pending") {
+        state.deleteConstituentActionCustomFieldApi.loading = "idle";
+      }
+    },
+    [deleteConstituentActionCustomField.rejected]: (state, action) => {
+      if (state.deleteConstituentActionCustomFieldApi.loading === "pending") {
+        state.deleteConstituentActionCustomFieldApi.error = action.error;
+        state.deleteConstituentActionCustomFieldApi.loading = "idle";
+      }
+    },
+    [deleteConstituentActionCustomField.pending]: (state) => {
+      if (state.deleteConstituentActionCustomFieldApi.loading === "idle") {
+        state.deleteConstituentActionCustomFieldApi.loading = "pending";
+        state.deleteConstituentActionCustomFieldApi.error = null;
+      }
+    },
+    [deleteRating.fulfilled]: (state) => {
+      if (state.deleteRatingApi.loading === "pending") {
+        state.deleteRatingApi.loading = "idle";
+      }
+    },
+    [deleteRating.rejected]: (state, action) => {
+      if (state.deleteRatingApi.loading === "pending") {
+        state.deleteRatingApi.error = action.error;
+        state.deleteRatingApi.loading = "idle";
+      }
+    },
+    [deleteRating.pending]: (state) => {
+      if (state.deleteRatingApi.loading === "idle") {
+        state.deleteRatingApi.loading = "pending";
+        state.deleteRatingApi.error = null;
+      }
+    },
+    [deleteRelationship.fulfilled]: (state) => {
+      if (state.deleteRelationshipApi.loading === "pending") {
+        state.deleteRelationshipApi.loading = "idle";
+      }
+    },
+    [deleteRelationship.rejected]: (state, action) => {
+      if (state.deleteRelationshipApi.loading === "pending") {
+        state.deleteRelationshipApi.error = action.error;
+        state.deleteRelationshipApi.loading = "idle";
+      }
+    },
+    [deleteRelationship.pending]: (state) => {
+      if (state.deleteRelationshipApi.loading === "idle") {
+        state.deleteRelationshipApi.loading = "pending";
+        state.deleteRelationshipApi.error = null;
+      }
+    },
+    [editRelationship.fulfilled]: (state) => {
+      if (state.editRelationshipApi.loading === "pending") {
+        state.editRelationshipApi.loading = "idle";
+      }
+    },
+    [editRelationship.rejected]: (state, action) => {
+      if (state.editRelationshipApi.loading === "pending") {
+        state.editRelationshipApi.error = action.error;
+        state.editRelationshipApi.loading = "idle";
+      }
+    },
+    [editRelationship.pending]: (state) => {
+      if (state.editRelationshipApi.loading === "idle") {
+        state.editRelationshipApi.loading = "pending";
+        state.editRelationshipApi.error = null;
+      }
+    },
+    [getConstituentActionAttachments.fulfilled]: (state, action) => {
+      if (state.constituentActionAttachments.api.loading === "pending") {
+        state.constituentActionAttachments.entities = action.payload.value;
+        state.constituentActionAttachments.api.loading = "idle";
+      }
+    },
+    [getConstituentActionAttachments.rejected]: (state, action) => {
+      if (state.constituentActionAttachments.api.loading === "pending") {
+        state.constituentActionAttachments.api.error = action.error;
+        state.constituentActionAttachments.api.loading = "idle";
+      }
+    },
+    [getConstituentActionAttachments.pending]: (state, action) => {
+      if (state.constituentActionAttachments.api.loading === "idle") {
+        state.constituentActionAttachments.api.loading = "pending";
+        state.constituentActionAttachments.api.error = null;
+      }
+    },
+    [getConstituentActionCustomFieldsCategories.fulfilled]: (state, action) => {
+      if (state.constituentActionCustomFieldsCategories.api.loading === "pending") {
+        state.constituentActionCustomFieldsCategories.entities = action.payload.value;
+        state.constituentActionCustomFieldsCategories.api.loading = "idle";
+      }
+    },
+    [getConstituentActionCustomFieldsCategories.rejected]: (state, action) => {
+      if (state.constituentActionCustomFieldsCategories.api.loading === "pending") {
+        state.constituentActionCustomFieldsCategories.api.error = action.error;
+        state.constituentActionCustomFieldsCategories.api.loading = "idle";
+      }
+    },
+    [getConstituentActionCustomFieldsCategories.pending]: (state, action) => {
+      if (state.constituentActionCustomFieldsCategories.api.loading === "idle") {
+        state.constituentActionCustomFieldsCategories.api.loading = "pending";
+        state.constituentActionCustomFieldsCategories.api.error = null;
+      }
+    },
+    [getRatingCategories.fulfilled]: (state, action) => {
+      if (state.ratingCategories.api.loading === "pending") {
+        state.ratingCategories.entities = action.payload.value;
+        state.ratingCategories.api.loading = "idle";
+      }
+    },
+    [getRatingCategories.rejected]: (state, action) => {
+      if (state.ratingCategories.api.loading === "pending") {
+        state.ratingCategories.api.error = action.error;
+        state.ratingCategories.api.loading = "idle";
+      }
+    },
+    [getRatingCategories.pending]: (state, action) => {
+      if (state.ratingCategories.api.loading === "idle") {
+        state.ratingCategories.api.loading = "pending";
+        state.ratingCategories.api.error = null;
+      }
+    },
+    [getRelationshipDetails.fulfilled]: (state, action) => {
+      if (state.relationshipDetails.api.loading === "pending") {
+        state.relationshipDetails.entities = action.payload;
+        state.relationshipDetails.api.loading = "idle";
+      }
+    },
+    [getRelationshipDetails.rejected]: (state, action) => {
+      if (state.relationshipDetails.api.loading === "pending") {
+        state.relationshipDetails.api.error = action.error;
+        state.relationshipDetails.api.loading = "idle";
+      }
+    },
+    [getRelationshipDetails.pending]: (state, action) => {
+      if (state.relationshipDetails.api.loading === "idle") {
+        state.relationshipDetails.api.loading = "pending";
+        state.relationshipDetails.api.error = null;
+      }
+    },
+    [getRelationshipListInAllConstituents.fulfilled]: (state, action) => {
+      if (state.relationshipListInAllConstituents.api.loading === "pending") {
+        state.relationshipListInAllConstituents.entities = action.payload.value;
+        state.relationshipListInAllConstituents.api.loading = "idle";
+      }
+    },
+    [getRelationshipListInAllConstituents.rejected]: (state, action) => {
+      if (state.relationshipListInAllConstituents.api.loading === "pending") {
+        state.relationshipListInAllConstituents.api.error = action.error;
+        state.relationshipListInAllConstituents.api.loading = "idle";
+      }
+    },
+    [getRelationshipListInAllConstituents.pending]: (state, action) => {
+      if (state.relationshipListInAllConstituents.api.loading === "idle") {
+        state.relationshipListInAllConstituents.api.loading = "pending";
+        state.relationshipListInAllConstituents.api.error = null;
+      }
+    },
+    [getRelationshipListInSingleConstituent.fulfilled]: (state, action) => {
+      if (state.relationshipListInSingleConstituent.api.loading === "pending") {
+        state.relationshipListInSingleConstituent.entities = action.payload.value;
+        state.relationshipListInSingleConstituent.api.loading = "idle";
+      }
+    },
+    [getRelationshipListInSingleConstituent.rejected]: (state, action) => {
+      if (state.relationshipListInSingleConstituent.api.loading === "pending") {
+        state.relationshipListInSingleConstituent.api.error = action.error;
+        state.relationshipListInSingleConstituent.api.loading = "idle";
+      }
+    },
+    [getRelationshipListInSingleConstituent.pending]: (state, action) => {
+      if (state.relationshipListInSingleConstituent.api.loading === "idle") {
+        state.relationshipListInSingleConstituent.api.loading = "pending";
+        state.relationshipListInSingleConstituent.api.error = null;
+      }
+    },
+    [getRelationshipTypes.fulfilled]: (state, action) => {
+      if (state.relationshipTypes.api.loading === "pending") {
+        state.relationshipTypes.entities = action.payload.value;
+        state.relationshipTypes.api.loading = "idle";
+      }
+    },
+    [getRelationshipTypes.rejected]: (state, action) => {
+      if (state.relationshipTypes.api.loading === "pending") {
+        state.relationshipTypes.api.error = action.error;
+        state.relationshipTypes.api.loading = "idle";
+      }
+    },
+    [getRelationshipTypes.pending]: (state, action) => {
+      if (state.relationshipTypes.api.loading === "idle") {
+        state.relationshipTypes.api.loading = "pending";
+        state.relationshipTypes.api.error = null;
+      }
+    },
+    [getSuffixes.fulfilled]: (state, action) => {
+      if (state.suffixes.api.loading === "pending") {
+        state.suffixes.entities = action.payload.value;
+        state.suffixes.api.loading = "idle";
+      }
+    },
+    [getSuffixes.rejected]: (state, action) => {
+      if (state.suffixes.api.loading === "pending") {
+        state.suffixes.api.error = action.error;
+        state.suffixes.api.loading = "idle";
+      }
+    },
+    [getSuffixes.pending]: (state, action) => {
+      if (state.suffixes.api.loading === "idle") {
+        state.suffixes.api.loading = "pending";
+        state.suffixes.api.error = null;
+      }
+    },
+    [getTitles.fulfilled]: (state, action) => {
+      if (state.titles.api.loading === "pending") {
+        state.titles.entities = action.payload.value;
+        state.titles.api.loading = "idle";
+      }
+    },
+    [getTitles.rejected]: (state, action) => {
+      if (state.titles.api.loading === "pending") {
+        state.titles.api.error = action.error;
+        state.titles.api.loading = "idle";
+      }
+    },
+    [getTitles.pending]: (state, action) => {
+      if (state.titles.api.loading === "idle") {
+        state.titles.api.loading = "pending";
+        state.titles.api.error = null;
+      }
+    },
+    
   }
 });
