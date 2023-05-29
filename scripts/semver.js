@@ -1,8 +1,6 @@
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
 
-const __dirname = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+const __dirname = process.cwd();
 
 const { stdout } = spawnSync(
   "git",

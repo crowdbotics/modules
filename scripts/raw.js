@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 import { execSync } from "child_process";
 import { generateCommand } from "./utils.js";
 

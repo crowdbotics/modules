@@ -1,6 +1,6 @@
 import fs, { existsSync } from "fs";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 import find from "find";
 import { execSync } from "child_process";
 

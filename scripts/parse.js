@@ -1,6 +1,6 @@
 import fs, { existsSync } from "fs";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 import crypto from "crypto";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";

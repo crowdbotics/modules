@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import fse from "fs-extra";
-import config from "./config.js";
+import config from "../config.js";
 import { generateCommand } from "./utils.js";
 import { execSync } from "child_process";
 
