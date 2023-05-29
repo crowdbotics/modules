@@ -556,7 +556,7 @@ export const createActionAttachment = (accessToken, payload) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/create_action_attachment/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/create_action_attachment/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -569,7 +569,7 @@ export const createConstituentAction = (accessToken, payload) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/create_constituent_action/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/create_constituent_action/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -582,7 +582,7 @@ export const createRating = (accessToken, payload) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/create_rating/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/create_rating/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -595,7 +595,7 @@ export const createRelationship = (accessToken, payload) => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/create_relationship/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/create_relationship/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -608,11 +608,11 @@ export const deleteConstituentAction = (accessToken, id) => {
   const config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_constituent_action/${id}/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/delete_constituent_action/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
-    },
+    }
   };
   return axios.request(config);
 };
@@ -620,11 +620,11 @@ export const deleteConstituentActionAttachment = (accessToken, id) => {
   const config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_constituent_action_attachment/?attachment_id=${id}`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/delete_constituent_action_attachment/?attachment_id=${id}`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
-    },
+    }
   };
   return axios.request(config);
 };
@@ -632,11 +632,11 @@ export const deleteConstituentActionCustomField = (accessToken, id) => {
   const config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_constituent_action_custom_field/${id}/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/delete_constituent_action_custom_field/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
-    },
+    }
   };
   return axios.request(config);
 };
@@ -644,11 +644,11 @@ export const deleteRating = (accessToken, id) => {
   const config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_rating/${id}/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/delete_rating/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
-    },
+    }
   };
   return axios.request(config);
 };
@@ -656,11 +656,11 @@ export const deleteRelationship = (accessToken, id) => {
   const config = {
     method: "delete",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/delete_relationship/${id}/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/delete_relationship/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
-    },
+    }
   };
   return axios.request(config);
 };
@@ -668,7 +668,7 @@ export const editRelationship = (accessToken, id, payload) => {
   const config = {
     method: "patch",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/edit_relationship/${id}/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/edit_relationship/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -677,11 +677,11 @@ export const editRelationship = (accessToken, id, payload) => {
   };
   return axios.request(config);
 };
-export const getConstituentActionAttachments = (accessToken,id) => {
+export const getConstituentActionAttachments = (accessToken, id) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_constituent_action/${id}/attachments/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_constituent_action/${id}/attachments/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -689,11 +689,11 @@ export const getConstituentActionAttachments = (accessToken,id) => {
   };
   return axios.request(config);
 };
-export const getConstituentActionCustomFieldsCategories= (accessToken) => {
+export const getConstituentActionCustomFieldsCategories = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituents/get_constituent_custom_field_categories/`,
+    url: `${BASE_URL}/modules/blackbaud/constituents/get_constituent_custom_field_categories/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -706,7 +706,7 @@ export const getRatingCategories = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_rating_categories/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_rating_categories/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -718,7 +718,7 @@ export const getRelationshipDetails = (accessToken, id) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_details/${id}/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_relationship_details/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -730,7 +730,7 @@ export const getRelationshipListInAllConstituents = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_list_in_all_constituents/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_relationship_list_in_all_constituents/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -743,7 +743,7 @@ export const getRelationshipListInSingleConstituent = (accessToken, id) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_list_in_single_constituent/${id}/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_relationship_list_in_single_constituent/${id}/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -756,7 +756,7 @@ export const getRelationshipTypes = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_relationship_types/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_relationship_types/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -769,7 +769,7 @@ export const getSuffixes = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_suffixes/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_suffixes/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
@@ -782,7 +782,7 @@ export const getTitles = (accessToken) => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${globalOptions.url}/modules/blackbaud/constituent/get_titles/`,
+    url: `${BASE_URL}/modules/blackbaud/constituent/get_titles/`,
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"

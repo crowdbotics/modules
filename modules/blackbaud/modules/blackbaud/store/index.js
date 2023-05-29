@@ -1075,7 +1075,6 @@ const initialState = {
     }
   },
   createConstituentApi: { loading: "idle", error: null },
-  createConstituentApi: { loading: "idle", error: null },
   createActionAttachmentApi: { loading: "idle", error: null },
   createConstituentActionApi: { loading: "idle", error: null },
   createRatingApi: { loading: "idle", error: null },
@@ -1148,7 +1147,7 @@ const initialState = {
       loading: "idle",
       error: null
     }
-  },
+  }
 };
 
 export const slice = createSlice({
@@ -2301,7 +2300,7 @@ export const slice = createSlice({
         state.titles.api.loading = "pending";
         state.titles.api.error = null;
       }
-    },
-    
+    }
+
   }
 });
