@@ -1,24 +1,13 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
-import inquirer from "inquirer";
 import { spawnSync, execSync } from "node:child_process";
+
+import inquirer from "inquirer";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
-import { manifest } from "./upgrade-manifest.js";
 
-const COOKIECUTTER_PACKAGE = "cookiecutter==1.7.3";
-const PREVIOUS_VERSION = "1.1.0";
-const PREVIOUS_VERSION_LATEST_SHA = "b89bf7efd2818b69673961d87378321cc6e8afc4";
-const NEW_VERSION = "2.0.0";
-const NEW_VERSION_LATEST_SHA = "upgrade/react-71";
-const MODULES_REPO_ORIGIN = "https://github.com/crowdbotics/modules.git";
-const MODULES_REPO_DIR = "build/crowdbotics";
-const DIFF = "build/diff";
-const TEMPLATE_V1 = "build/v1";
-const TEMPLATE_V2 = "build/v2";
-const CONTEXT_YAML = "build/context.yaml";
-
+import config from "./config.js";
 const userdir = process.cwd();
 
 const section = (msg) => {
@@ -71,20 +60,20 @@ function start() {
   }
 }
 
-function versionCheck() {
+function versionCheck(version) {
   section("Detecting your .crowdbotics.json version");
   const crowdboticsJSON = fs.readFileSync(
-    path.join(userdir, ".crowdbotics.json"),
+    path.join(userdir, config.constants.CROWDBOTICS_FILE),
     "utf8"
   );
-  const { version } = JSON.parse(crowdboticsJSON).scaffold;
+  const userVersion = JSON.parse(crowdboticsJSON).scaffold.version;
 
-  if (version === NEW_VERSION) {
+  if (userVersion === version.nextVersion) {
     invalid("You are already at the latest scaffold version");
-  } else if (version !== PREVIOUS_VERSION) {
-    invalid(`Expected version ${PREVIOUS_VERSION}, got`, version);
+  } else if (userVersion !== version.previousVersion) {
+    invalid(`Expected version ${version.previousVersion}, got`, userVersion);
   } else {
-    valid("Upgradable version detected:", version);
+    valid("Upgradable version detected:", userVersion);
   }
 }
 
@@ -98,26 +87,32 @@ function stashSave() {
   if (saved) valid("Unsaved changes have been stashed");
 }
 
-function setupLocalModulesRepo() {
-  if (fs.existsSync(path.join(userdir, MODULES_REPO_DIR))) {
+function setupLocalModulesRepo(version) {
+  if (fs.existsSync(path.join(userdir, config.upgrade.build.modulesRepoDir))) {
     section("Reusing local clone of modules repo");
     return;
   }
   section("Cloning modules repo");
   spawnSync("mkdir", ["-p", "build"], { cwd: userdir });
-  spawnSync("git", ["init", MODULES_REPO_DIR], { cwd: userdir });
-  spawnSync("git", ["remote", "add", "origin", MODULES_REPO_ORIGIN], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+  spawnSync("git", ["init", config.upgrade.build.modulesRepoDir], {
+    cwd: userdir
   });
+  spawnSync(
+    "git",
+    ["remote", "add", "origin", config.constants.MODULES_REPO_ORIGIN],
+    {
+      cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
+    }
+  );
   spawnSync("git", ["fetch"], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+    cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
   });
-  spawnSync("git", ["checkout", PREVIOUS_VERSION_LATEST_SHA], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+  spawnSync("git", ["checkout", version.previousVersionSHA], {
+    cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
   });
   section("installing npm packages");
   spawnSync("yarn", ["install"], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+    cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
   });
   spawnSync(
     "yarn",
@@ -129,17 +124,21 @@ function setupLocalModulesRepo() {
       "prettier"
     ],
     {
-      cwd: path.join(userdir, MODULES_REPO_DIR)
+      cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
     }
   );
-  spawnSync("mkdir", ["-p", DIFF], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+  spawnSync("mkdir", ["-p", config.upgrade.build.diff], {
+    cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
   });
   section("installing python packages");
-  const install = spawnSync("pipenv", ["install", COOKIECUTTER_PACKAGE], {
-    cwd: path.join(userdir, MODULES_REPO_DIR),
-    encoding: "utf8"
-  });
+  const install = spawnSync(
+    "pipenv",
+    ["install", config.constants.COOKIECUTTER_PACKAGE],
+    {
+      cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
+      encoding: "utf8"
+    }
+  );
   if (install.status) {
     console.error(install.stdout);
     console.error(install.stderr);
@@ -150,11 +149,11 @@ function setupLocalModulesRepo() {
     "git",
     ["add", "Pipfile", "Pipfile.lock", "package.json", "yarn.lock"],
     {
-      cwd: path.join(userdir, MODULES_REPO_DIR)
+      cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
     }
   );
   spawnSync("git", ["commit", "-m", '"update package manager files"'], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+    cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
   });
 }
 
@@ -255,34 +254,46 @@ function getProjectCookiecutterContext() {
   return context;
 }
 
-function setupCookiecutter(context) {
-  section("Generating v1.1.0 template with cookiecutter");
+function setupCookiecutter(context, version) {
+  section(`Generating v${version.previousVersion} template with cookiecutter`);
   const yaml = dump({
     default_context: context
   });
   fs.writeFileSync(
-    path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
+    path.join(
+      userdir,
+      config.upgrade.build.modulesRepoDir,
+      config.upgrade.build.contextYaml
+    ),
     yaml,
     "utf8"
   );
-  spawnSync("git", ["checkout", PREVIOUS_VERSION_LATEST_SHA], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+  spawnSync("git", ["checkout", version.previousVersionSHA], {
+    cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
   });
   const run = spawnSync(
     "pipenv",
     [
       "run",
       "cookiecutter",
-      path.join(userdir, MODULES_REPO_DIR, "dist", "cookie"),
+      path.join(userdir, config.upgrade.build.modulesRepoDir, "dist", "cookie"),
       "--config-file",
-      path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.contextYaml
+      ),
       "--output-dir",
-      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.templatePrevious
+      ),
       "--no-input",
       "--overwrite-if-exists"
     ],
     {
-      cwd: path.join(userdir, MODULES_REPO_DIR),
+      cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
       encoding: "utf8"
     }
   );
@@ -292,25 +303,33 @@ function setupCookiecutter(context) {
     invalid("template creation failed");
   }
 
-  section("Generating v2.0.0 template with cookiecutter");
-  spawnSync("git", ["checkout", NEW_VERSION_LATEST_SHA], {
-    cwd: path.join(userdir, MODULES_REPO_DIR)
+  section(`Generating v${version.nextVersion} template with cookiecutter`);
+  spawnSync("git", ["checkout", version.nextVersionSHA], {
+    cwd: path.join(userdir, config.upgrade.build.modulesRepoDir)
   });
   const run2 = spawnSync(
     "pipenv",
     [
       "run",
       "cookiecutter",
-      path.join(userdir, MODULES_REPO_DIR, "dist", "cookie"),
+      path.join(userdir, config.upgrade.build.modulesRepoDir, "dist", "cookie"),
       "--config-file",
-      path.join(userdir, MODULES_REPO_DIR, CONTEXT_YAML),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.contextYaml
+      ),
       "--output-dir",
-      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.templateNext
+      ),
       "--no-input",
       "--overwrite-if-exists"
     ],
     {
-      cwd: path.join(userdir, MODULES_REPO_DIR),
+      cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
       encoding: "utf8"
     }
   );
@@ -332,7 +351,13 @@ function updateFiles(slug, oldfile, newfile, type) {
       spawnSync("mkdir", ["-p", dir], { cwd: userdir });
     }
     fs.copyFileSync(
-      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.templateNext,
+        slug,
+        newfile
+      ),
       path.join(userdir, newfile)
     );
     spawnSync("git", ["add", path.join(userdir, newfile)], {
@@ -344,13 +369,24 @@ function updateFiles(slug, oldfile, newfile, type) {
   }
 
   if (type !== "addition") {
-    // file is unchanged from PREVIOUS_VERSION to NEW_VERSION
     const A = fs.readFileSync(
-      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.templatePrevious,
+        slug,
+        oldfile
+      ),
       "utf8"
     );
     const B = fs.readFileSync(
-      path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.templateNext,
+        slug,
+        newfile
+      ),
       "utf8"
     );
     if (A === B) {
@@ -366,7 +402,13 @@ function updateFiles(slug, oldfile, newfile, type) {
         spawnSync("mkdir", ["-p", dir], { cwd: userdir });
       }
       fs.copyFileSync(
-        path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, oldfile),
+        path.join(
+          userdir,
+          config.upgrade.build.modulesRepoDir,
+          config.upgrade.build.templateNext,
+          slug,
+          oldfile
+        ),
         path.join(userdir, oldfile)
       );
       spawnSync("git", ["add", path.join(userdir, oldfile)], {
@@ -381,11 +423,16 @@ function updateFiles(slug, oldfile, newfile, type) {
         [
           "babel",
           "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-          `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "A")}`,
+          `--out-file=${path.join(
+            userdir,
+            config.upgrade.build.modulesRepoDir,
+            config.upgrade.build.diff,
+            "A"
+          )}`,
           path.join(userdir, oldfile)
         ],
         {
-          cwd: path.join(userdir, MODULES_REPO_DIR),
+          cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
           encoding: "utf8"
         }
       );
@@ -398,11 +445,22 @@ function updateFiles(slug, oldfile, newfile, type) {
         [
           "babel",
           "--presets=@babel/preset-typescript,@babel/preset-env,@babel/preset-react",
-          `--out-file=${path.join(userdir, MODULES_REPO_DIR, DIFF, "B")}`,
-          path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile)
+          `--out-file=${path.join(
+            userdir,
+            config.upgrade.build.modulesRepoDir,
+            config.upgrade.build.diff,
+            "B"
+          )}`,
+          path.join(
+            userdir,
+            config.upgrade.build.modulesRepoDir,
+            config.upgrade.build.templatePrevious,
+            slug,
+            oldfile
+          )
         ],
         {
-          cwd: path.join(userdir, MODULES_REPO_DIR),
+          cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
           encoding: "utf8"
         }
       );
@@ -417,11 +475,21 @@ function updateFiles(slug, oldfile, newfile, type) {
           "--parser=babel-ts",
           "--single-quote",
           "--write",
-          path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
-          path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
+          path.join(
+            userdir,
+            config.upgrade.build.modulesRepoDir,
+            config.upgrade.build.diff,
+            "A"
+          ),
+          path.join(
+            userdir,
+            config.upgrade.build.modulesRepoDir,
+            config.upgrade.build.diff,
+            "B"
+          )
         ],
         {
-          cwd: path.join(userdir, MODULES_REPO_DIR),
+          cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
           encoding: "utf8"
         }
       );
@@ -429,7 +497,12 @@ function updateFiles(slug, oldfile, newfile, type) {
     }
     case "json": {
       fs.writeFileSync(
-        path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
+        path.join(
+          userdir,
+          config.upgrade.build.modulesRepoDir,
+          config.upgrade.build.diff,
+          "A"
+        ),
         JSON.stringify(
           JSON.parse(fs.readFileSync(path.join(userdir, oldfile), "utf8")),
           null,
@@ -438,11 +511,22 @@ function updateFiles(slug, oldfile, newfile, type) {
         "utf8"
       );
       fs.writeFileSync(
-        path.join(userdir, MODULES_REPO_DIR, DIFF, "B"),
+        path.join(
+          userdir,
+          config.upgrade.build.modulesRepoDir,
+          config.upgrade.build.diff,
+          "B"
+        ),
         JSON.stringify(
           JSON.parse(
             fs.readFileSync(
-              path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+              path.join(
+                userdir,
+                config.upgrade.build.modulesRepoDir,
+                config.upgrade.build.templatePrevious,
+                slug,
+                oldfile
+              ),
               "utf8"
             )
           ),
@@ -456,11 +540,27 @@ function updateFiles(slug, oldfile, newfile, type) {
     default:
       fs.copyFileSync(
         path.join(userdir, oldfile),
-        path.join(userdir, MODULES_REPO_DIR, DIFF, "A")
+        path.join(
+          userdir,
+          config.upgrade.build.modulesRepoDir,
+          config.upgrade.build.diff,
+          "A"
+        )
       );
       fs.copyFileSync(
-        path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
-        path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
+        path.join(
+          userdir,
+          config.upgrade.build.modulesRepoDir,
+          config.upgrade.build.templatePrevious,
+          slug,
+          oldfile
+        ),
+        path.join(
+          userdir,
+          config.upgrade.build.modulesRepoDir,
+          config.upgrade.build.diff,
+          "B"
+        )
       );
       break;
   }
@@ -475,15 +575,31 @@ function updateFiles(slug, oldfile, newfile, type) {
       "--ignore-cr-at-eol",
       "--ignore-space-at-eol",
       "--",
-      path.join(userdir, MODULES_REPO_DIR, DIFF, "A"),
-      path.join(userdir, MODULES_REPO_DIR, DIFF, "B")
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.diff,
+        "A"
+      ),
+      path.join(
+        userdir,
+        config.upgrade.build.modulesRepoDir,
+        config.upgrade.build.diff,
+        "B"
+      )
     ],
     {
-      cwd: path.join(userdir, MODULES_REPO_DIR),
+      cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
       encoding: "utf8"
     }
   );
-  const src = path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V2, slug, newfile);
+  const src = path.join(
+    userdir,
+    config.upgrade.build.modulesRepoDir,
+    config.upgrade.build.templateNext,
+    slug,
+    newfile
+  );
 
   if (git.status) {
     // Create a pristine file
@@ -504,7 +620,13 @@ function updateFiles(slug, oldfile, newfile, type) {
         "--no-index",
         `--output=${diffPath}`,
         "--",
-        path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile),
+        path.join(
+          userdir,
+          config.upgrade.build.modulesRepoDir,
+          config.upgrade.build.templatePrevious,
+          slug,
+          oldfile
+        ),
         path.join(userdir, oldfile)
       ],
       {
@@ -513,7 +635,13 @@ function updateFiles(slug, oldfile, newfile, type) {
       }
     );
     const diffHeader = `# File: ${path.join(userdir, oldfile)}
-# Original: ${path.join(userdir, MODULES_REPO_DIR, TEMPLATE_V1, slug, oldfile)}
+# Original: ${path.join(
+      userdir,
+      config.upgrade.build.modulesRepoDir,
+      config.upgrade.build.templatePrevious,
+      slug,
+      oldfile
+    )}
 #
 # This is a git diff between your local version of the file and the scaffold
 # original. Go over all the changes displayed here and consider which ones
@@ -556,20 +684,32 @@ function finish() {
   process.exit(0);
 }
 
-const upgrade = () => {
-  start();
-  versionCheck();
-  stashSave();
-  setupLocalModulesRepo();
-  const context = getProjectCookiecutterContext();
-  setupCookiecutter(context);
-  section("Check files integrity and upgrade to new versions");
-  manifest.forEach((pair) => {
-    pair.old = pair.old.replace(/\{\{slug\}\}/g, context.project_slug);
-    pair.new = pair.new.replace(/\{\{slug\}\}/g, context.project_slug);
-    updateFiles(context.project_slug, pair.old, pair.new, pair.type);
-  });
-  finish();
+const upgrade = (version) => {
+  const performUpgrade = () => {
+    start();
+    versionCheck(version);
+    stashSave();
+    setupLocalModulesRepo(version);
+    const context = getProjectCookiecutterContext();
+    setupCookiecutter(context, version);
+    section("Check files integrity and upgrade to new versions");
+    import(version.upgradeManifestImport).then((manifest) => {
+      manifest.forEach((pair) => {
+        pair.old = pair.old.replace(
+          config.upgrade.manifest.slugPlaceholderRegex,
+          context.project_slug
+        );
+        pair.new = pair.new.replace(
+          config.upgrade.manifest.slugPlaceholderRegex,
+          context.project_slug
+        );
+        updateFiles(context.project_slug, pair.old, pair.new, pair.type);
+      });
+    });
+    finish();
+  };
+
+  return performUpgrade;
 };
 
 const parse = () => {
@@ -579,7 +719,9 @@ const parse = () => {
 };
 
 const removeCache = () => {
-  fs.rmSync(path.join(userdir, MODULES_REPO_DIR), { recursive: true });
+  fs.rmSync(path.join(userdir, config.upgrade.build.modulesRepoDir), {
+    recursive: true
+  });
 };
 
 const resetHEAD = () => {
@@ -611,14 +753,21 @@ const removeDiffs = () => {
   });
 };
 
-const actions = {
-  Quit: () => process.exit(0),
-  "Upgrade my scaffold": upgrade,
+const versions = config.upgrade.versions.reduce(
+  (acc, version) => ({
+    ...acc,
+    [version.text]: upgrade(version)
+  }),
+  {}
+);
+
+const choices = Object.assign(versions, {
   "Undo all changes": resetHEAD,
   "Remove all diff files": removeDiffs,
+  Quit: () => process.exit(0),
   "Print cookiecutter context (debug)": parse,
   "Clear local cache (debug)": removeCache
-};
+});
 
 inquirer
   .prompt([
@@ -626,17 +775,10 @@ inquirer
       type: "list",
       name: "action",
       message: "What do you want to do?",
-      choices: [
-        "Upgrade my scaffold",
-        "Undo all changes",
-        "Remove all diff files",
-        "Quit",
-        "Print cookiecutter context (debug)",
-        "Clear local cache (debug)"
-      ]
+      choices: Object.keys(choices)
     }
   ])
-  .then((answers) => actions[answers.action]())
+  .then(({ action }) => choices[action]())
   .catch((error) => {
     if (error.isTtyError) {
       // Prompt couldn't be rendered in the current environment
