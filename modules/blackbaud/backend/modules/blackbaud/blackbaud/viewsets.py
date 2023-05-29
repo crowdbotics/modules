@@ -58,7 +58,8 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
         "update_constituent_action_attachment": UpdateActionAttachmentSerializer,
         "create_constituent_action_custom_field": CreateConstituentsActionCustomFieldsSerializers,
         "edit_an_constituent_address": EditConstituentAddressSerializer,
-        "edit_constituent_aliases": EditConstituentAliasesSerializer
+        "edit_constituent_aliases": EditConstituentAliasesSerializer,
+        "update_constituent_action_custom_field":UpdateConstituentsActionCustomFieldsSerializers
     }
 
     def get_serializer_class(self):
@@ -1791,7 +1792,7 @@ class BlackbaudViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["get"],
             url_path='constituent/get_constituent_action_customfields_categories_details')
-    def get_constituent_action_customfields_categories(self, request):
+    def get_constituent_action_customfields_categories_details(self, request):
         """
         To Update a constituent action custom fields categories \n
         :headers: "Authorization: Bearer (token)" \n
