@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 
 const MODULE_TYPE = process.argv.slice(2)[0];
 const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");

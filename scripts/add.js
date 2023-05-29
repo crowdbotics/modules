@@ -1,7 +1,7 @@
 import fs, { existsSync } from "fs";
 import fse from "fs-extra";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 import find from "find";
 import { execSync } from "child_process";
 
