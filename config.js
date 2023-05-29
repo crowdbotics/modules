@@ -7,9 +7,14 @@ const DEMO_NODE_MODULES_DIRECTORY = path.join("demo", "node_modules");
 const DISTRIBUTION_DIRECTORY = path.join("dist");
 const RAW_DISTRIBUTION_DIRECTORY = path.join("dist", "raw");
 const COOKIE_DISTRIBUTION_DIRECTORY = path.join("dist", "cookie");
+const MANIFEST_OUT_DIR = path.join("manifest");
 
 export default {
-  constants: {},
+  constants: {
+    CROWDBOTICS_FILE: ".crowdbotics.json",
+    COOKIECUTTER_PACKAGE: "cookiecutter==1.7.3",
+    MODULES_REPO_ORIGIN: "https://github.com/crowdbotics/modules.git"
+  },
   scaffold: {
     directory: SCAFFOLD_DIRECTORY
   },
@@ -45,12 +50,32 @@ export default {
     placeholderName: "demo"
   },
   upgrade: {
-    manifest: "upgrade-manifest.js",
-    slugPlaceholder: "{{slug}}",
-    ignoreTemplatize: [
-      "ios/fastlane/metadata/review_information/review_demo_password.txt",
-      "ios/fastlane/metadata/review_information/review_demo_user.txt"
+    versions: [
+      {
+        text: "Upgrade my scaffold (1.1.0 -> 2.0.0)",
+        previousVersion: "1.1.0",
+        previousVersionSHA: "b89bf7efd2818b69673961d87378321cc6e8afc4",
+        nextVersion: "2.0.0",
+        nextVersionSHA: "upgrade/react-71",
+        ignoreTemplatize: [
+          "ios/fastlane/metadata/review_information/review_demo_password.txt",
+          "ios/fastlane/metadata/review_information/review_demo_user.txt"
+        ],
+        upgradeManifestImport: "./manifest/110-to-200.js"
+      }
     ],
-    ignoreDirectories: [DJANGO_DEMO_DIRECTORY, DEMO_NODE_MODULES_DIRECTORY]
+    manifest: {
+      slugPlaceholder: "{{slug}}",
+      slugPlaceholderRegex: /\{\{slug\}\}/g,
+      ignoreDirectories: [DJANGO_DEMO_DIRECTORY, DEMO_NODE_MODULES_DIRECTORY],
+      outputDir: MANIFEST_OUT_DIR
+    },
+    build: {
+      modulesRepoDir: "build/crowdbotics",
+      diff: "build/diff",
+      templatePrevious: "build/v1",
+      templateNext: "build/v2",
+      contextYaml: "build/context.yaml"
+    }
   }
 };
