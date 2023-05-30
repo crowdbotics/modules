@@ -24,7 +24,8 @@
     "bootstrap": "npm run raw; npm run cookie; npm run parse; npm run demo",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "yarn run eslint modules scripts",
-    "commit-module": "node scripts/commit-module.js"
+    "commit-module": "node scripts/commit-module.js",
+    "manifest": "node scripts/manifest.js"
   },
   "repository": {
     "type": "git",
