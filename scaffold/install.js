@@ -75,7 +75,6 @@ fs.copyFileSync(
 );
 
 // environment variables files
-fs.copyFileSync(path.join(customFiles, ".env"), path.join(cwd, ".env"));
 fs.copyFileSync(
   path.join(customFiles, ".env.template"),
   path.join(cwd, ".env.template")

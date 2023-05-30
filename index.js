@@ -38,7 +38,7 @@ function start() {
   if (yarn.status) {
     invalid("yarn is not available in your system");
   } else {
-    valid(yarn.stdout);
+    valid("yarn version", yarn.stdout);
   }
   const git = spawnSync("git", ["--version"], {
     cwd: userdir,
@@ -340,13 +340,13 @@ function setupCookiecutter(context, version) {
   }
 }
 
-function updateFiles(slug, oldfile, newfile, type) {
+function updateFiles(slug, file, type) {
   // file doesn't exist in the user repo
   if (
-    !fs.existsSync(path.join(userdir, oldfile)) &&
-    !fs.existsSync(path.join(userdir, newfile))
+    !fs.existsSync(path.join(userdir, file)) &&
+    !fs.existsSync(path.join(userdir, file))
   ) {
-    const dir = path.dirname(newfile);
+    const dir = path.dirname(file);
     if (dir !== ".") {
       spawnSync("mkdir", ["-p", dir], { cwd: userdir });
     }
@@ -356,15 +356,15 @@ function updateFiles(slug, oldfile, newfile, type) {
         config.upgrade.build.modulesRepoDir,
         config.upgrade.build.templateNext,
         slug,
-        newfile
+        file
       ),
-      path.join(userdir, newfile)
+      path.join(userdir, file)
     );
-    spawnSync("git", ["add", path.join(userdir, newfile)], {
+    spawnSync("git", ["add", path.join(userdir, file)], {
       cwd: userdir,
       stdio: "inherit"
     });
-    valid(newfile);
+    valid(file);
     return;
   }
 
@@ -375,7 +375,7 @@ function updateFiles(slug, oldfile, newfile, type) {
         config.upgrade.build.modulesRepoDir,
         config.upgrade.build.templatePrevious,
         slug,
-        oldfile
+        file
       ),
       "utf8"
     );
@@ -385,19 +385,19 @@ function updateFiles(slug, oldfile, newfile, type) {
         config.upgrade.build.modulesRepoDir,
         config.upgrade.build.templateNext,
         slug,
-        newfile
+        file
       ),
       "utf8"
     );
     if (A === B) {
-      valid(oldfile);
+      valid(file);
       return;
     }
   }
 
   switch (type) {
     case "addition": {
-      const dir = path.dirname(oldfile);
+      const dir = path.dirname(file);
       if (dir !== ".") {
         spawnSync("mkdir", ["-p", dir], { cwd: userdir });
       }
@@ -407,11 +407,11 @@ function updateFiles(slug, oldfile, newfile, type) {
           config.upgrade.build.modulesRepoDir,
           config.upgrade.build.templateNext,
           slug,
-          oldfile
+          file
         ),
-        path.join(userdir, oldfile)
+        path.join(userdir, file)
       );
-      spawnSync("git", ["add", path.join(userdir, oldfile)], {
+      spawnSync("git", ["add", path.join(userdir, file)], {
         cwd: userdir,
         stdio: "inherit"
       });
@@ -429,7 +429,7 @@ function updateFiles(slug, oldfile, newfile, type) {
             config.upgrade.build.diff,
             "A"
           )}`,
-          path.join(userdir, oldfile)
+          path.join(userdir, file)
         ],
         {
           cwd: path.join(userdir, config.upgrade.build.modulesRepoDir),
@@ -456,7 +456,7 @@ function updateFiles(slug, oldfile, newfile, type) {
             config.upgrade.build.modulesRepoDir,
             config.upgrade.build.templatePrevious,
             slug,
-            oldfile
+            file
           )
         ],
         {
@@ -504,7 +504,7 @@ function updateFiles(slug, oldfile, newfile, type) {
           "A"
         ),
         JSON.stringify(
-          JSON.parse(fs.readFileSync(path.join(userdir, oldfile), "utf8")),
+          JSON.parse(fs.readFileSync(path.join(userdir, file), "utf8")),
           null,
           2
         ),
@@ -525,7 +525,7 @@ function updateFiles(slug, oldfile, newfile, type) {
                 config.upgrade.build.modulesRepoDir,
                 config.upgrade.build.templatePrevious,
                 slug,
-                oldfile
+                file
               ),
               "utf8"
             )
@@ -539,7 +539,7 @@ function updateFiles(slug, oldfile, newfile, type) {
     }
     default:
       fs.copyFileSync(
-        path.join(userdir, oldfile),
+        path.join(userdir, file),
         path.join(
           userdir,
           config.upgrade.build.modulesRepoDir,
@@ -553,7 +553,7 @@ function updateFiles(slug, oldfile, newfile, type) {
           config.upgrade.build.modulesRepoDir,
           config.upgrade.build.templatePrevious,
           slug,
-          oldfile
+          file
         ),
         path.join(
           userdir,
@@ -598,21 +598,21 @@ function updateFiles(slug, oldfile, newfile, type) {
     config.upgrade.build.modulesRepoDir,
     config.upgrade.build.templateNext,
     slug,
-    newfile
+    file
   );
 
   if (git.status) {
     // Create a pristine file
     const pristine = `${path.basename(
-      newfile,
-      path.extname(newfile)
-    )}.new${path.extname(newfile)}`;
-    const dest = path.join(userdir, path.join(path.dirname(newfile), pristine));
+      file,
+      path.extname(file)
+    )}.new${path.extname(file)}`;
+    const dest = path.join(userdir, path.join(path.dirname(file), pristine));
     fs.copyFileSync(src, dest);
 
     // Create a diff file
-    const diffFile = `${path.basename(newfile)}.diff`;
-    const diffPath = path.join(userdir, path.dirname(newfile), diffFile);
+    const diffFile = `${path.basename(file)}.diff`;
+    const diffPath = path.join(userdir, path.dirname(file), diffFile);
     spawnSync(
       "git",
       [
@@ -625,22 +625,22 @@ function updateFiles(slug, oldfile, newfile, type) {
           config.upgrade.build.modulesRepoDir,
           config.upgrade.build.templatePrevious,
           slug,
-          oldfile
+          file
         ),
-        path.join(userdir, oldfile)
+        path.join(userdir, file)
       ],
       {
         cwd: path.join(userdir),
         encoding: "utf8"
       }
     );
-    const diffHeader = `# File: ${path.join(userdir, oldfile)}
+    const diffHeader = `# File: ${path.join(userdir, file)}
 # Original: ${path.join(
       userdir,
       config.upgrade.build.modulesRepoDir,
       config.upgrade.build.templatePrevious,
       slug,
-      oldfile
+      file
     )}
 #
 # This is a git diff between your local version of the file and the scaffold
@@ -648,24 +648,15 @@ function updateFiles(slug, oldfile, newfile, type) {
 # you would like to bring to the new version of this file:
 # ${pristine}.
 #
-# When you finish replace your ${path.basename(oldfile)} with ${pristine}.\n\n`;
+# When you finish replace your ${path.basename(file)} with ${pristine}.\n\n`;
     const diff = fs.readFileSync(diffPath, "utf8");
     fs.writeFileSync(diffPath, diffHeader.concat(diff));
     warn(
-      `${oldfile} - Failed integrity check. Refer to the new version ${pristine} and it's diff.`
+      `${file} - Failed integrity check. Refer to the new version ${pristine} and it's diff.`
     );
   } else {
-    if (oldfile !== newfile) {
-      spawnSync(
-        "git",
-        ["mv", path.join(userdir, oldfile), path.join(userdir, newfile)],
-        {
-          cwd: path.join(userdir)
-        }
-      );
-    }
-    valid(oldfile);
-    const dest = path.join(userdir, newfile);
+    valid(file);
+    const dest = path.join(userdir, file);
     fs.copyFileSync(src, dest);
     spawnSync("git", ["add", dest], {
       cwd: userdir,
@@ -693,18 +684,21 @@ const upgrade = (version) => {
     const context = getProjectCookiecutterContext();
     setupCookiecutter(context, version);
     section("Check files integrity and upgrade to new versions");
-    import(version.upgradeManifestImport).then((manifest) => {
-      manifest.forEach((pair) => {
-        pair.old = pair.old.replace(
-          config.upgrade.manifest.slugPlaceholderRegex,
-          context.project_slug
-        );
-        pair.new = pair.new.replace(
-          config.upgrade.manifest.slugPlaceholderRegex,
-          context.project_slug
-        );
-        updateFiles(context.project_slug, pair.old, pair.new, pair.type);
-      });
+    const manifest = JSON.parse(
+      fs.readFileSync(
+        path.join(
+          config.upgrade.build.modulesRepoDir,
+          version.upgradeManifestImport
+        ),
+        "utf8"
+      )
+    );
+    manifest.forEach((file) => {
+      file.path = file.path.replace(
+        config.upgrade.manifest.slugPlaceholderRegex,
+        context.project_slug
+      );
+      updateFiles(context.project_slug, file.path, file.type);
     });
     finish();
   };

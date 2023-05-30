@@ -47,7 +47,8 @@ export default {
   demo: {
     directory: DEMO_DIRECTORY,
     backendDirectory: DJANGO_DEMO_DIRECTORY,
-    placeholderName: "demo"
+    placeholderName: "demo",
+    placeholderNameRegex: /demo/g
   },
   upgrade: {
     versions: [
@@ -61,7 +62,7 @@ export default {
           "ios/fastlane/metadata/review_information/review_demo_password.txt",
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
         ],
-        upgradeManifestImport: "./manifest/110-to-200.js"
+        upgradeManifestImport: "./manifest/110-to-200.json"
       }
     ],
     manifest: {
