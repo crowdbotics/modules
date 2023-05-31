@@ -15,7 +15,7 @@ jobs:
   node:
     working_directory: ~/build
     docker:
-      - image: cimg/node:14.19
+      - image: cimg/node:18.16.0
     steps:
       - checkout
 
