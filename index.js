@@ -7,26 +7,8 @@ import inquirer from "inquirer";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
 
-import config from "./config.js";
+import config, { valid, invalid, warn, section } from "./config.js";
 const userdir = process.cwd();
-
-const section = (msg) => {
-  console.log("");
-  console.log(">", msg);
-};
-
-const valid = (...args) => {
-  console.log("\u2705", ...args);
-};
-
-const invalid = (...args) => {
-  console.error("\u274C", ...args);
-  process.exit(1);
-};
-
-const warn = (...args) => {
-  console.log("\u26A0", ...args);
-};
 
 function start() {
   section("Scaffold upgrade started");
