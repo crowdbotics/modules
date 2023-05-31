@@ -133,10 +133,6 @@ platform(:ios) do
 
   desc('Deployment to Appetize')
   lane(:deploy_appetize) do
-    init_app
-
-    build_setup
-
     tmp_path = '/tmp/fastlane_build'
 
     # Not possible to use gym here because it will only create an ipa archive
