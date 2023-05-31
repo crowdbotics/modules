@@ -1,4 +1,4 @@
-# Upgrading the scaffold to v2
+# Upgrading your scaffold version
 
 This document will guide you in upgrading the React Native scaffold of your app from version 1.1.0 to version 2.0.0.
 
@@ -27,7 +27,7 @@ And choose the "Upgrade my scaffold" option:
 ```
 $ npx crowdbotics/modules
 ? What do you want to do? (Use arrow keys)
-❯ Upgrade my scaffold
+❯ Upgrade my scaffold (1.1.0 -> 2.0.0)
   Undo all changes
   Remove all diff files
   Quit

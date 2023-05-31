@@ -1,4 +1,4 @@
-# Autoloading modules
+# @modules
 
 ## Table of contents
 
@@ -16,10 +16,10 @@ We provide a module called "App Menu" that automatically lists available routes:
 
 ```javascript
 function AppMenu({ navigation }) {
-  const routes = useNavigationState((state) =>
-    state.routeNames.filter((name) => name !== "App Menu")
-  );
-  const links = routes.map((route) => {
+  const routes = useNavigationState(state =>
+    state.routeNames.filter(name => name !== "App Menu")
+  )
+  const links = routes.map(route => {
     return (
       <Pressable
         onPress={() => navigation.navigate(route)}
@@ -28,20 +28,20 @@ function AppMenu({ navigation }) {
       >
         <Text style={styles.buttonText}>{route}</Text>
       </Pressable>
-    );
-  });
+    )
+  })
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Routes available ({routes.length})</Text>
       {links}
     </View>
-  );
+  )
 }
 ```
 
 ## Metro config
 
-Our modules and template are written in a way that no user setup is required. We also make use of a babel plugin that allows glob imports from the modules directory.
+Our modules are written in a way that no user setup is required. We also make use of a babel plugin that allows glob imports from the modules directory.
 
 This section explains the mechanisms of this setup.
 
@@ -57,19 +57,19 @@ A good place to start is our `metro.config.js` config:
  * @format
  */
 
-const path = require("path");
+const path = require("path")
 const extraNodeModules = {
-  "@modules": path.resolve(__dirname, "modules"),
-};
-const watchFolders = [path.resolve(__dirname, "modules")];
+  "@modules": path.resolve(__dirname, "modules")
+}
+const watchFolders = [path.resolve(__dirname, "modules")]
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: false,
-      },
-    }),
+        inlineRequires: false
+      }
+    })
   },
   resolver: {
     extraNodeModules: new Proxy(extraNodeModules, {
@@ -77,11 +77,11 @@ module.exports = {
         //redirects dependencies referenced from modules to local node_modules
         name in target
           ? target[name]
-          : path.join(process.cwd(), "node_modules", name),
-    }),
+          : path.join(process.cwd(), "node_modules", name)
+    })
   },
-  watchFolders,
-};
+  watchFolders
+}
 ```
 
 We make use of the Metro's Resolver [extraNodeModules](https://facebook.github.io/metro/docs/configuration/#extranodemodules) option to make use of local `npm` libraries installed into the app's `modules` directory (directory where modules get installed).
@@ -97,39 +97,39 @@ This gives us three main benefits:
 Notice the `@modules` key above, which means that we can import `modules/index.js` like this:
 
 ```javascript
-import { modules } from "@modules";
+import { modules } from "@modules"
 ```
 
 [scaffold/template/modules/index.js](/scaffold/template/modules/index.js)
 
 ```javascript
-import mods from "./*/index.js";
-import { getModules } from "./modules.js";
+import mods from "./*/index.js"
+import { getModules } from "./modules.js"
 
-export const modules = getModules(mods);
-export const initialRoute = modules[0].value.title;
+export const modules = getModules(mods)
+export const initialRoute = modules[0].value.title
 export const slices = modules
-  .filter((mod) => mod.value.slice)
-  .map((mod) => mod.value.slice);
+  .filter(mod => mod.value.slice)
+  .map(mod => mod.value.slice)
 export const reducers = slices.reduce((acc, slice) => {
-  let name = slice.name.charAt(0).toUpperCase() + slice.name.slice(1);
-  acc[name] = slice.reducer;
-  return acc;
-}, {});
+  let name = slice.name.charAt(0).toUpperCase() + slice.name.slice(1)
+  acc[name] = slice.reducer
+  return acc
+}, {})
 export const navigators = modules
-  .filter((mod) => mod.value.navigator)
-  .map((mod) => {
+  .filter(mod => mod.value.navigator)
+  .map(mod => {
     return {
       name: mod.name,
-      value: mod.value.navigator,
-    };
-  });
+      value: mod.value.navigator
+    }
+  })
 export const hooks = modules
-  .filter((mod) => mod.value.hook)
-  .map((mod) => {
+  .filter(mod => mod.value.hook)
+  .map(mod => {
     return {
       name: mod.name,
-      value: mod.value.hook,
-    };
-  });
+      value: mod.value.hook
+    }
+  })
 ```
