@@ -1,3 +1,13 @@
+/**
+ * Produces a manifest(1) file based on the last item in the
+ * `config.upgrade.versions` array. Before using this script make sure to add
+ * a new entry to the config.js file in the root of the repository.
+ *
+ * 1: A manifest file is an exhaustive list of all the files that the scaffold
+ * is made of, generated from scaffolding a demo app and then iterating through
+ * the filesystem. For each file the manifest specifies it's filepath and the
+ * type of file. This manifest file is then used in the users upgrade script.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
