@@ -1,3 +1,9 @@
+/**
+ * Compares the latest master .crowdbotics.json file with the current
+ * .crowdbotics.json file "version" property and ensures it has been
+ * increased. Also checks whether the scaffold package.json matches that
+ * same new version.
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
