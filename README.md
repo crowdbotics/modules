@@ -25,6 +25,8 @@
 - [Modules library](/modules)
 - [Custom React Native template](/scaffold/template/custom)
 - [Documentation](/docs)
+- [Changelog](/CHANGELOG.md)
+- [Scaffold Changelog](/scaffold/CHANGELOG.md)
 
 ## Requirements for contributing
 

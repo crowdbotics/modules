@@ -21,7 +21,7 @@
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
     "template": "node scripts/template.js",
-    "bootstrap": "npm run raw; npm run cookie; npm run parse; npm run demo",
+    "bootstrap": "npm run raw; npm run cookie; npm run parse;",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "yarn run eslint modules scripts",
     "commit-module": "node scripts/commit-module.js",

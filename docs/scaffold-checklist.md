@@ -20,7 +20,12 @@ Then double check your work with those helper scripts checks:
 
 - `yarn run bootstrap` produces no changes besides potential changes in `yarn.lock` resolved versions
 - `yarn run template` produces no changes
-- `yarn run manifest` produces no changes
 - `yarn run semver` check passes
+
+**Important!** Make your new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](/config.js) to include a new `config.upgrade.versions` and then run:
+
+```
+yarn run manifest
+```
 
 Finally make sure to update the scaffold [CHANGELOG](/scaffold/CHANGELOG.md) with human friendly descriptions.

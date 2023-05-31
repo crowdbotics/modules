@@ -1,12 +1,15 @@
 #!/usr/bin/env node
+/**
+ * Scaffold Upgrade tool
+ *
+ * Run it in your app's repository with: npx crowdbotics/modules
+ */
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync, execSync } from "node:child_process";
-
 import inquirer from "inquirer";
 import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
-
 import config, { valid, invalid, warn, section } from "./config.js";
 const userdir = process.cwd();
 

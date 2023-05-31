@@ -1,13 +1,8 @@
-# Resources
+# Further Reading
 
-## Table of contents
+Reading lists, links to Android/iOS documentation, etc.
 
-- [Google](#google)
-- [Apple](#apple)
-
-## Google
-
-## Apple
+## iOS
 
 ### App's Capabilities (Entitlements)
 
