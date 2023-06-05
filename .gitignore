@@ -199,3 +199,6 @@ celerybeat-schedule
 venv/
 ENV/
 myvenv/
+
+# VScode
+.DS_Store

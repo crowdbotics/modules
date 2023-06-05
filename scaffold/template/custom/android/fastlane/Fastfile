@@ -24,12 +24,6 @@ platform(:android) do
     gradle(task: 'test')
   end
 
-  desc('deploy appetize and build')
-  lane(:deploy_and_build) do
-    deploy_appetize()
-    build_aab()
-  end
-
   desc('Submit a new Internal Build')
   lane(:internal) do
     upload = true
@@ -89,7 +83,7 @@ platform(:android) do
     )
   end
 
-  desc('create a new android app bundle build')
+  desc('Create a new Android app bundle build')
   lane(:build_aab) do
     build_version = increment_version_code(
       version_code: ENV["CIRCLE_BUILD_NUM"].to_i
