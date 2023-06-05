@@ -17,7 +17,12 @@ jobs:
             elif [ "$BUILD_TYPE" == "gcp" ]; then
               bash backend/.circleci/generate_gcp_config.sh "backend/"
             fi
-            echo '{ "mobile_lane": "'$MOBILE_LANE'" }' > /home/circleci/parameters.json
+            
+            if [ "$BUILD_TYPE" == "gcp" ]; then
+              echo '{}' > /home/circleci/parameters.json
+            else
+              echo '{ "mobile_lane": "'$MOBILE_LANE'" }' > /home/circleci/parameters.json
+            fi
       - continuation/continue:
           parameters: /home/circleci/parameters.json
           configuration_path: configs/generated_config.yml
