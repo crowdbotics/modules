@@ -598,23 +598,24 @@ class BlackbaudService(BlackbaudBase):
             return e
 
     def create_participant_for_attending_events(self, access_token, payload, event_id):
+        constituents_id = None
+        response = None
         try:
+            url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents/search?search_text={payload['constituent_data']['email']['address']}"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(access_token))
+            constituents_id = response['data']['value'][0]['id']
+        except:
             url = f"{self.BLACKBAUD_BASE_URL}/constituent/v1/constituents"
             response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
                                       payload=payload['constituent_data'])
-            if response['status_code'] == 200:
-                try:
-                    payload['participant_data']['constituent_id'] = response['data']['id']
-                    url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/participants"
-                    new_response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
-                                                  payload=payload['participant_data'])
-                    return new_response
-                except Exception as e:
-                    return e
-            elif not response['status_code'] == 200:
-                return response
-        except Exception as e:
-            return e
+            constituents_id = response['data']['id']
+        finally:
+            if constituents_id:
+                payload['participant_data']['constituent_id'] = constituents_id
+                url = f"{self.BLACKBAUD_BASE_URL}/event/v1/events/{event_id}/participants"
+                response = self._api_call(request_type="POST", url=url, headers=self.get_header(access_token),
+                                          payload=payload['participant_data'])
+            return response
 
     def create_event_category(self, access_token, payload):
         try:
