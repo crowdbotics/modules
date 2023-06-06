@@ -167,7 +167,7 @@ jobs:
 
 workflows:
   version: 2.1
-  setup-build:
+  build-check:
     jobs:
       - node
       - ios:
