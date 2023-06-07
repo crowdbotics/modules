@@ -1,0 +1,10 @@
+{
+  "name": "@store",
+  "version": "1.0.0",
+  "description": "The `store/` directory contains all of your application's state. Inside the store, there are multiple custom directories. Each directory can represent an automatically generated api connector, which are available at Crowdbotics platform Connector tool, and can be added to any project.",
+  "private": true,
+  "main": "index.js",
+  "files": ["*"],
+  "author": "Crowdbotics",
+  "license": "ISC"
+}

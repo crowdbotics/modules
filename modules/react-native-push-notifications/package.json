@@ -1,0 +1,12 @@
+{
+  "name": "@modules/push-notifications",
+  "version": "1.0.0",
+  "description": "Send important messages to users through your app. Customize notifications to be sent on a regular schedule or as needed.",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "x-dependencies": {
+    "react-native-onesignal": "^4.0.3"
+  }
+}

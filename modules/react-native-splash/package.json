@@ -1,0 +1,14 @@
+{
+  "name": "@modules/splash",
+  "version": "1.0.0",
+  "description": "Greet your users with an image or logo.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "react-native-splash-screen" : "3.3.0",
+    "prop-types" : "15.8.1"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}

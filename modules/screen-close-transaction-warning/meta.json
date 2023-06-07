@@ -1,0 +1,6 @@
+{
+    "title": "Close Transaction Warning",
+    "description": "Close Transaction Warning Screen Module",
+    "root": "/screens/close-transaction-warning"
+}
+  

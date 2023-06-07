@@ -1,0 +1,5 @@
+{
+    "title": "Account Settings Screen",
+    "description": "Account Settings screen.",
+    "root": "/screens/account-settings"
+}

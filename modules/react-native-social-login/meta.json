@@ -1,0 +1,5 @@
+{
+  "title": "Social Login",
+  "description": "A login and signup screen with options to connect to social accounts.",
+  "root": "/modules/social-login"
+}

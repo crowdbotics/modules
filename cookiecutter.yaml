@@ -1,0 +1,10 @@
+default_context:
+  project_name: "demo"
+  project_slug: "demo"
+  project_generated_name: "demo"
+  owner_email: "demo@crowdbotics.com"
+  custom_domain: "demo.botics.co"
+  repo_url: "https://github.com/crowdbotics/modules"
+  heroku_dyno_size: "free"
+  heroku_team: ""
+  is_mobile: "y"

@@ -1,0 +1,32 @@
+version: 2.1
+setup: true
+orbs:
+  continuation: circleci/continuation@0.1.0
+jobs:
+  setup:
+    executor: continuation/default
+    steps:
+      - checkout
+      - run: 
+          name: Generate Pipeline generated_config.yml file
+          command: |
+            if [ "$BUILD_TYPE" == "mobile_ios" ]; then
+              bash .circleci/generate_mobile_ios_config.sh
+            elif [ "$BUILD_TYPE" == "mobile_android" ]; then
+              bash .circleci/generate_mobile_android_config.sh
+            elif [ "$BUILD_TYPE" == "gcp" ]; then
+              bash backend/.circleci/generate_gcp_config.sh "backend/"
+            fi
+            
+            if [ "$BUILD_TYPE" == "gcp" ]; then
+              echo '{}' > /home/circleci/parameters.json
+            else
+              echo '{ "mobile_lane": "'$MOBILE_LANE'" }' > /home/circleci/parameters.json
+            fi
+      - continuation/continue:
+          parameters: /home/circleci/parameters.json
+          configuration_path: configs/generated_config.yml
+workflows:
+  setup-workflow:
+    jobs:
+      - setup

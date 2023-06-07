@@ -1,0 +1,50 @@
+{
+  "root": true,
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["plugin:react/recommended", "standard"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "ignorePatterns": [
+    "demo",
+    "dist",
+    "docs",
+    "preview",
+    "scaffold",
+    "node_modules"
+  ],
+  "rules": {
+    "func-call-spacing": ["error", "never"],
+    "quotes": [
+      "error",
+      "double",
+      { "avoidEscape": true, "allowTemplateLiterals": false }
+    ],
+    "space-before-function-paren": [
+      "error",
+      { "anonymous": "always", "named": "never", "asyncArrow": "always" }
+    ],
+    "semi": ["error", "always"],
+    "react/prop-types": [0, {}]
+  },
+  "globals": {
+    "__DEV__": "readonly",
+    "FormData": "readonly",
+    "fetch": "readonly",
+    "alert": "readonly"
+  },
+  "settings": {
+    "react": {
+      "fragment": "Fragment",
+      "version": "17.0.1"
+    }
+  }
+}

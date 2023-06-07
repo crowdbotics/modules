@@ -1,0 +1,15 @@
+{
+  "name": "@modules/maps",
+  "version": "1.0.0",
+  "description": "Add interactive maps to your mobile app to make it easier for users to find your locations.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "react-native-maps": "0.27.1",
+    "react-native-maps-directions": "1.8.0",
+    "react-native-google-places-autocomplete": "2.4.1",
+    "prop-types": "15.8.1"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC"
+}

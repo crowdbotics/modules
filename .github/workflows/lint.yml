@@ -1,0 +1,22 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: "yarn"
+      - run: yarn install
+      - uses: crowdbotics/action-eslint@v2.2.1
+        with:
+          eslint-args: "--config .eslintrc.json --ignore-path=.gitignore --quiet"
+          extensions: "js,jsx,ts,tsx"
+          annotations: true
