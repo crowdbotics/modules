@@ -19,25 +19,25 @@ jobs:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
           paths:
             - node_modules
+      - run:
+          name: Create Demo App
+          command: yarn run demo
       - persist_to_workspace:
           root: ~/build
           paths:
             - node_modules
+            - demo
 
   ios:
     macos:
       xcode: "14.1.0"
     resource_class: macos.x86.medium.gen2
-    working_directory: ~/build
+    working_directory: ~/build/demo
 
     # use a --login shell so our "set Ruby version" command gets picked up for later steps
     shell: /bin/bash --login -o pipefail
 
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - ""
-
       - checkout
 
       - restore_cache:
@@ -112,7 +112,7 @@ jobs:
           path: /tmp/fastlane_build/app.zip
 
   android:
-    working_directory: ~/build
+    working_directory: ~/build/demo
     docker:
       - image: reactnativecommunity/react-native-android:6.2
     resource_class: "medium+"
@@ -124,10 +124,10 @@ jobs:
       - BUILD_THREADS: 2
     steps:
       - checkout:
-          path: ~/build
+          path: ~/build/demo
 
       - attach_workspace:
-          at: ~/build
+          at: ~/build/demo
 
       - restore_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
@@ -154,16 +154,6 @@ jobs:
 
       - store_artifacts:
           path: android/app/build/outputs/bundle/release/app-release.aab
-
-      - run:
-          name: Webhook Success
-          command: bash .circleci/webhook_callback.sh "success"
-          when: on_success
-
-      - run:
-          name: Webhook Failed
-          command: bash .circleci/webhook_callback.sh "failure"
-          when: on_fail
 
 workflows:
   version: 2.1
