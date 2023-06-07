@@ -20,6 +20,9 @@ jobs:
           paths:
             - node_modules
       - run:
+          name: Create demo directory
+          command: pwd && mkdir -p demo
+      - run:
           name: Create Demo App
           command: yarn run demo
       - persist_to_workspace:
