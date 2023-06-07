@@ -1,0 +1,12 @@
+{
+    "title": "Payments",
+    "description": "Payments Module",
+    "root": "/",
+    "schema": {
+      "buttonText": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+  

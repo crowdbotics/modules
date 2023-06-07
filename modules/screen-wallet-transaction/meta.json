@@ -1,0 +1,5 @@
+{
+    "title": "Wallet Transaction Screen",
+    "description": "Wallet Transaction screen",
+    "root": "/screens/wallet-transaction"
+}

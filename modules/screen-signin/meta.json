@@ -1,0 +1,5 @@
+{
+  "title": "Signin",
+  "description": "Signin screen",
+  "root": "/screens/signin"
+}

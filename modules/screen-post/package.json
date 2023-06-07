@@ -1,0 +1,10 @@
+{
+    "name": "@screens/post",
+    "version": "1.0.1",
+    "description": "Post Module",
+    "private": true,
+    "main": "index.js",
+    "files": ["*"],
+    "author": "Crowdbotics",
+    "license": "ISC"
+}

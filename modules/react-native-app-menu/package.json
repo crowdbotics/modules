@@ -1,0 +1,8 @@
+{
+  "name": "@modules/app-menu",
+  "version": "1.0.0",
+  "description": "Module that shows available routes in a menu with links",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics"
+}

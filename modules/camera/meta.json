@@ -1,0 +1,11 @@
+{
+  "title": "Camera",
+  "description": "Camera module",
+  "root": "/",
+  "schema": {
+    "buttonText": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

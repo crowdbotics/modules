@@ -1,0 +1,14 @@
+{
+    "name": "@modules/signature",
+    "version": "1.0.0",
+    "description": "Signature Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {},
+    "x-dependencies": {
+        "react-native-signature-canvas": "4.3.0",
+        "react-native-webview" :"11.17.0"
+    }
+}

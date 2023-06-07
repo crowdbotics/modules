@@ -1,0 +1,6 @@
+{
+    "title": "Transaction Pending",
+    "description": "Transaction Pending Screen Module",
+    "root": "/screens/transaction-pending"
+}
+  

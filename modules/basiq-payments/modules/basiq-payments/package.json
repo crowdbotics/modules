@@ -1,0 +1,15 @@
+{
+    "name": "@modules/basiq-payments",
+    "version": "1.0.1",
+    "description": "Basiq Payments Module, Unlock the potential of Open Finance.",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+       
+    },
+    "x-dependencies": {
+       
+    }
+}

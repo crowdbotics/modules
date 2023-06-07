@@ -1,0 +1,21 @@
+{
+  "name": "@modules/social-login",
+  "version": "1.0.0",
+  "description": "A login and signup screen with options to connect to social accounts.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {},
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {
+    "@react-native-google-signin/google-signin": "^6.0.0",
+    "react-native-fbsdk": "1.1.2",
+    "react-native-keyboard-aware-scroll-view": "^0.9.3",
+    "@invertase/react-native-apple-authentication": "^2.1.0",
+    "@react-navigation/native": "^5.9.2",
+    "@react-navigation/stack": "^5.14.2",
+    "uuid": "^8.3.2",
+    "react-native-get-random-values": "^1.6.0"
+
+  }
+}
