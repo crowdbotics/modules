@@ -3,7 +3,7 @@ jobs:
   node:
     working_directory: ~/build
     docker:
-      - image: cimg/python:3.8-node
+      - image: cimg/python:3.8.13-node
     steps:
       - checkout
       - restore_cache:
@@ -13,7 +13,7 @@ jobs:
       - run: yarn install
       - run:
           name: Install Pipenv dependencies
-          command: pipenv install
+          command: python --version && pipenv install
       - save_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
           paths:
