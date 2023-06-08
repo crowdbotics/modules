@@ -12,8 +12,8 @@ jobs:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
       - run: yarn install
       - run:
-          name: Install Pipenv and dependencies
-          command: sudo apt-get update && sudo apt-get install python3-pip && pip3 install pipenv && pipenv install
+          name: Install Pipenv dependencies
+          command: pipenv install
       - save_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
           paths:
