@@ -12,8 +12,16 @@ jobs:
           key: node-v1-{{ checksum "package.json" }}-{{ arch }}
       - run: yarn install
       - run:
-          name: Install Pipenv and dependencies
-          command: sudo apt-get update && sudo apt-get install python3-pip && pip3 install pipenv && pipenv install
+          name: Install Python and Pipenv
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y software-properties-common
+            sudo add-apt-repository -y ppa:deadsnakes/ppa
+            sudo apt-get update
+            sudo apt-get install -y python3.8
+            curl https://bootstrap.pypa.io/get-pip.py | sudo python3.8
+            pip3 install pipenv
+            pipenv install
       - save_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
           paths:
