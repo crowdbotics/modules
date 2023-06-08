@@ -31,7 +31,6 @@ jobs:
       - persist_to_workspace:
           root: ~/build
           paths:
-            - node_modules
             - demo
 
   ios:
@@ -44,8 +43,6 @@ jobs:
     shell: /bin/bash --login -o pipefail
 
     steps:
-      - checkout
-
       - restore_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
 
@@ -114,9 +111,6 @@ jobs:
           command: bundle exec fastlane create_build
           working_directory: ios
 
-      - store_artifacts:
-          path: /tmp/fastlane_build/app.zip
-
   android:
     working_directory: ~/build/demo
     docker:
@@ -129,12 +123,6 @@ jobs:
       - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+HeapDumpOnOutOfMemoryError"'
       - BUILD_THREADS: 2
     steps:
-      - checkout:
-          path: ~/build/demo
-
-      - attach_workspace:
-          at: ~/build/demo
-
       - restore_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
 
@@ -154,12 +142,6 @@ jobs:
           name: Create Android App Build (aab)
           command: bundle exec fastlane build_aab
           working_directory: android
-
-      - store_artifacts:
-          path: android/app/build/outputs/apk/release/app-release.apk
-
-      - store_artifacts:
-          path: android/app/build/outputs/bundle/release/app-release.aab
 
 workflows:
   version: 2.1
