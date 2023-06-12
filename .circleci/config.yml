@@ -95,7 +95,7 @@ jobs:
 
       - run:
           name: Create Android App Build (aab)
-          command: bundle exec fastlane build_aab
+          command: bundle exec fastlane build_android
           working_directory: android
 
 workflows:
