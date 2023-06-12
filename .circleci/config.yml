@@ -6,10 +6,6 @@ jobs:
       - image: cimg/python:3.8.13-node
     steps:
       - checkout
-      - restore_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
       # get version of node and yarn
       - run:
           name: Get Node and Yarn versions
@@ -20,14 +16,6 @@ jobs:
       - run:
           name: Install Pipenv dependencies
           command: python --version && pipenv install
-      - save_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-          paths:
-            - ~/.cache/yarn
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
       - run:
           name: Create demo directory
           command: pwd && mkdir -p ~/build/demo
@@ -52,31 +40,9 @@ jobs:
       - attach_workspace:
           at: ~/build
 
-      - restore_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-
-      - restore_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-
       # not using a workspace here as Node and Yarn versions
       # differ between our macOS executor image and the Docker containers above
       - run: yarn install
-
-      - save_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-          paths:
-            - ~/.cache/yarn
-
-      - save_cache:
-          key: node-v1-{{ checksum "package.json" }}-{{ arch }}
-          paths:
-            - node_modules
-
-      - restore_cache:
-          keys:
-            - &gem-cache gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}
-            - gem-cache-v1
 
       - run:
           name: Run bundle config and install
@@ -84,16 +50,6 @@ jobs:
             bundle lock --add-platform ruby
             bundle config set --local deployment 'true'
             bundle install
-
-      - save_cache:
-          key: *gem-cache
-          paths:
-            - vendor/bundle
-
-      - restore_cache:
-          key: 1-pods-{{ checksum "ios/Podfile.lock" }}
-          paths:
-            - ios/Pods
 
       - run:
           name: Install MacOS ffi
@@ -105,11 +61,6 @@ jobs:
           command: bundle exec pod install --verbose
           working_directory: ios
           timeout: 1200
-
-      - save_cache:
-          key: 1-pods-{{ checksum "ios/Podfile.lock" }}
-          paths:
-            - ios/Pods
 
       - run:
           name: Populate EnvFile
@@ -135,16 +86,8 @@ jobs:
       - attach_workspace:
           at: ~/build
 
-      - restore_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-
       - run:
           command: bundle install
-
-      - save_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
 
       - run:
           name: Populate EnvFile
