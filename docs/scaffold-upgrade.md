@@ -9,8 +9,20 @@ Before we start please make sure that you meet the requirements:
 - node
 - yarn
 - git
-- python
+- python 3.8 (use [pyenv](https://github.com/pyenv/pyenv) or other solution for managing multiple python versions)
 - pipenv
+
+Please note that the script depends on running `pipenv install` successfully, this means that you should have Python correctly [configured in your PATH](https://cookiecutter.readthedocs.io/en/2.0.2/installation.html#unix-and-macos).
+
+### MacOS specific instructions
+
+Add `~/.local/bin`, and PostgreSQL's bin directory, to your `PATH` variable:
+
+```
+# File: ~/.zshrc
+export PATH=$HOME/.local/bin:$PATH
+export PATH=/library/postgresql/15/bin:$PATH
+```
 
 ## Perfoming the upgrade
 
