@@ -192,6 +192,7 @@ platform(:ios) do
     xcodebuild(
         configuration: 'Release',
         sdk: 'iphonesimulator',
+        scheme: 'demo',
     )
   end
 
