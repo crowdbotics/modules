@@ -186,4 +186,13 @@ platform(:ios) do
 
     response.success?
   end
+
+  desc("Build to Test Dependancies")
+  lane(:build_test_dependancies) do
+    xcodebuild(
+        configuration: 'Release',
+        sdk: 'iphonesimulator',
+    )
+  end
+
 end
