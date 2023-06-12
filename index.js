@@ -20,7 +20,7 @@ function start() {
     cwd: userdir,
     encoding: "utf8"
   });
-  if (yarn.status) {
+  if (yarn.error) {
     invalid("yarn is not available in your system");
   } else {
     valid("yarn version", yarn.stdout);
@@ -29,7 +29,7 @@ function start() {
     cwd: userdir,
     encoding: "utf8"
   });
-  if (git.status) {
+  if (git.error) {
     invalid("git is not available in your system");
   } else {
     valid(git.stdout);
@@ -38,7 +38,7 @@ function start() {
     cwd: userdir,
     encoding: "utf8"
   });
-  if (pipenv.status) {
+  if (pipenv.error) {
     invalid("pipenv is not available in your system");
   } else {
     valid(pipenv.stdout);
@@ -124,7 +124,7 @@ function setupLocalModulesRepo(version) {
       encoding: "utf8"
     }
   );
-  if (install.status) {
+  if (install.error) {
     console.error(install.stdout);
     console.error(install.stderr);
     invalid("cookiecutter installation failed");
@@ -282,7 +282,7 @@ function setupCookiecutter(context, version) {
       encoding: "utf8"
     }
   );
-  if (run.status) {
+  if (run.error) {
     console.error(run.stdout);
     console.error(run.stderr);
     invalid("template creation failed");
@@ -318,7 +318,7 @@ function setupCookiecutter(context, version) {
       encoding: "utf8"
     }
   );
-  if (run2.status) {
+  if (run2.error) {
     console.error(run2.stdout);
     console.error(run2.stderr);
     invalid("template creation failed");
@@ -421,7 +421,7 @@ function updateFiles(slug, file, type) {
           encoding: "utf8"
         }
       );
-      if (A.status) {
+      if (A.error) {
         console.error(A.stdout);
         console.error(A.stderr);
       }
@@ -449,7 +449,7 @@ function updateFiles(slug, file, type) {
           encoding: "utf8"
         }
       );
-      if (B.status) {
+      if (B.error) {
         console.error(B.stdout);
         console.error(B.stderr);
       }
@@ -586,7 +586,7 @@ function updateFiles(slug, file, type) {
     file
   );
 
-  if (git.status) {
+  if (git.error) {
     // Create a pristine file
     const pristine = `${path.basename(
       file,
