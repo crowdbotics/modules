@@ -190,9 +190,10 @@ platform(:ios) do
   desc("Build to Test Dependancies")
   lane(:build_test_dependancies) do
     xcodebuild(
+        workspace: workspace_name,
         configuration: 'Release',
         sdk: 'iphonesimulator',
-        scheme: 'demo',
+        scheme: base_name,
     )
   end
 
