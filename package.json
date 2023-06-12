@@ -8,7 +8,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">16"
+    "node": "16.14.2"
   },
   "scripts": {
     "demo": "node scripts/demo.js",
