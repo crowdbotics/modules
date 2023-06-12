@@ -28,10 +28,8 @@ jobs:
       - run:
           name: Create Demo App
           command: yarn run demo
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - "build/demo"
+      - store_artifacts:
+          path: demo
 
   ios:
     macos:
