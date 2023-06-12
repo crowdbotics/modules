@@ -12,7 +12,7 @@ jobs:
           command: |
             node --version
             yarn --version
-      - run: yarn install
+      - run: yarn cache clean && yarn install
       - run:
           name: Install Pipenv dependencies
           command: python --version && pipenv install
