@@ -1,1 +1,0 @@
-An iOS application built using Crowdbotics.com

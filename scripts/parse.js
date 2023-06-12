@@ -1,6 +1,6 @@
 import fs, { existsSync } from "fs";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 import crypto from "crypto";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
@@ -96,7 +96,7 @@ const parseModules = (dir) => {
 
     // cleanup node_modules
     if (existsSync(path.join(modulePath, "node_modules"))) {
-      fs.rmdirSync(path.join(modulePath, "node_modules"), {
+      fs.rmSync(path.join(modulePath, "node_modules"), {
         recursive: true
       });
     }
