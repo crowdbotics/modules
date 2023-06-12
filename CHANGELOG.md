@@ -8,9 +8,9 @@ Based on [Common Changelog](https://common-changelog.org/).
 
 Introduced upgrade utility for scaffold users - available via `npx crowdbotics/modules`.
 
-Starts an upgrade process that gives the user the option to upgrade his app to any of the scaffold released versions. Validates that the user is currently in a supported version for the option picked.
+Starts an upgrade process that gives the user the option to upgrade their app to any of the scaffold released versions. Validates that the user is currently in a supported version for the option picked.
 
-The script iterates over all scaffold files included in the target release and brings that file onto the user app repository. It is smart enough to not override any file that the user customized since scaffolding his app. For those files where it wasn't possible to override the user's given a diff file and the new version file. With the diff file (and the instructions included in it) the user can then see what customization he did against the original version so that he can then decide which to keep in the new version of the file. See [scaffold-upgrade.md]](/docs/scaffold-upgrade.md).
+The script iterates over all scaffold files included in the target release and brings that file onto the user app repository. It is smart enough to not override any file that the user customized since scaffolding their app. For those files where it wasn't possible to override the user's given a diff file and the new version file. With the diff file (and the instructions included in it) the user can then see what customization he did against the original version so that he can then decide which to keep in the new version of the file. See [scaffold-upgrade.md]](/docs/scaffold-upgrade.md).
 
 New helper scripts for maintainers:
 
