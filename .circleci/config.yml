@@ -28,8 +28,10 @@ jobs:
       - run:
           name: Create Demo App
           command: yarn run demo
-      - store_artifacts:
-          path: demo
+      - persist_to_workspace:
+          root: ~/build
+          paths:
+            - "demo"
 
   ios:
     macos:
@@ -41,6 +43,9 @@ jobs:
     shell: /bin/bash --login -o pipefail
 
     steps:
+      - attach_workspace:
+          at: ~/build/demo
+
       - restore_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
 
@@ -121,6 +126,9 @@ jobs:
       - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+HeapDumpOnOutOfMemoryError"'
       - BUILD_THREADS: 2
     steps:
+      - attach_workspace:
+          at: ~/build/demo
+
       - restore_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
 
