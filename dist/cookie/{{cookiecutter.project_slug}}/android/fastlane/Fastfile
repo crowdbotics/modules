@@ -120,6 +120,11 @@ platform(:android) do
 
     response.success?
   end
+
+    desc('Build Android app')
+    lane(:build_android) do
+        gradle(task: 'assemble', build_type: 'Release')
+    end
 end
 
 def get_last_apk_path
