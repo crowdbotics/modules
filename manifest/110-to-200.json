@@ -524,6 +524,10 @@
     "type": "babel"
   },
   {
+    "path": "modules/README.md",
+    "type": "addition"
+  },
+  {
     "path": "modules/index.js",
     "type": "babel"
   },
