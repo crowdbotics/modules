@@ -24,14 +24,14 @@ jobs:
             - node_modules
       - run:
           name: Create demo directory
-          command: pwd && mkdir -p demo
+          command: pwd && mkdir -p ~/build/demo
       - run:
           name: Create Demo App
           command: yarn run demo
       - persist_to_workspace:
           root: ~/build
           paths:
-            - demo
+            - .
 
   ios:
     macos:
