@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - attach_workspace:
-          at: ~/build/demo
+          at: ~/build
 
       - restore_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
@@ -127,7 +127,7 @@ jobs:
       - BUILD_THREADS: 2
     steps:
       - attach_workspace:
-          at: ~/build/demo
+          at: ~/build
 
       - restore_cache:
           key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
