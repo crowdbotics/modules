@@ -24,7 +24,7 @@
 
 - [Modules library](/modules)
 - [Custom React Native template](/scaffold/template/custom)
-- [Documentation](/docs)
+- [Documentation](https://crowdbotics.github.io/modules/)
 - [Changelog](/CHANGELOG.md)
 - [Scaffold Changelog](/scaffold/CHANGELOG.md)
 
