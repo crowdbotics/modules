@@ -1,28 +1,27 @@
 import path from "path";
 import fs from "fs";
 import fse from "fs-extra";
-import config from "./config.js";
+import config from "../config.js";
 import { generateCommand } from "./utils.js";
 import { execSync } from "child_process";
-
-const template = path.join("file:/", process.cwd(), config.scaffold.directory);
 
 const demoDir = path.join(process.cwd(), config.demo.directory);
 
 if (fs.existsSync(demoDir)) {
-  fs.rmdirSync(demoDir, { recursive: true });
+  fs.rmSync(demoDir, { recursive: true });
 }
 
-const command = generateCommand([
-  "npx react-native",
-  `init ${config.demo.placeholderName}`,
-  `--template ${template}`,
-  `--version ${config.versions.rn}`
+const rnCookieCutterCommand = generateCommand([
+  "pipenv run cookiecutter",
+  "./dist/cookie",
+  "--config-file cookiecutter.yaml",
+  "--no-input"
 ]);
 
-execSync(command);
+execSync(rnCookieCutterCommand, { encoding: "utf8", stdio: "inherit" });
+execSync("yarn install", { cwd: demoDir, enconding: "utf8", stdio: "inherit" });
 
-const cookiecutterCommand = generateCommand([
+const djangoCookieCutterCommand = generateCommand([
   "pipenv run cookiecutter",
   "gh:crowdbotics/django-scaffold",
   "--checkout master",
@@ -31,6 +30,5 @@ const cookiecutterCommand = generateCommand([
   "--no-input"
 ]);
 
-execSync(cookiecutterCommand);
-
+execSync(djangoCookieCutterCommand, { encoding: "utf8", stdio: "inherit" });
 fse.moveSync(path.join(demoDir, "demo"), path.join(demoDir, "backend"));
