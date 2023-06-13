@@ -57,7 +57,7 @@ export default {
         previousVersion: "1.1.0",
         previousVersionSHA: "b89bf7efd2818b69673961d87378321cc6e8afc4",
         nextVersion: "2.0.0",
-        nextVersionSHA: "upgrade/react-71",
+        nextVersionSHA: "13908cdefd87a5e50063303b27c688dae507a34d",
         ignoreTemplatize: [
           "ios/fastlane/metadata/review_information/review_demo_password.txt",
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
