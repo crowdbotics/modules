@@ -28,3 +28,12 @@
 - [Modules Checklist](modules-checklist.md)
 - [Scaffold Checklist](scaffold-checklist.md)
 - [Further Reading](further-reading.md)
+
+## Changelog
+
+- [Changelog](https://github.com/crowdbotics/modules/blob/master/CHANGELOG.md)
+- [React Native Scaffold Changelog](https://github.com/crowdbotics/modules/blob/master/scaffold/CHANGELOG.md)
+
+## Other links
+
+- [Github Repository](https://github.com/crowdbotics/modules)
