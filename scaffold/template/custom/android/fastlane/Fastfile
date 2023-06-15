@@ -11,7 +11,7 @@
 #
 # Opt out of sending fastlane usage metrics
 
-base_name = 'HelloWorld'
+@base_name = 'HelloWorld'
 
 import_from_git(
   url: "git@github.com:crowdbotics/fastlane-config.git", # The URL of the repository to import the Fastfile from.
