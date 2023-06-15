@@ -1,5 +1,5 @@
 {
-  "name": "{{cookiecutter.project_slug}}",
+  "name": "{{cookiecutter.project_dash_slug}}",
   "version": "0.0.1",
   "private": true,
   "scripts": {
