@@ -175,3 +175,5 @@ yarn run manifest
 ```
 
 Produces a manifest file in [manifest](/manifest) based on the last version configured in [config.js](/config.js).
+
+For `nextVersionSHA` use your branch name, and then after your PR gets merged you will have the SHA for the squashed commit. Open a followup PR that changes the next version to that SHA instead. See [#892](https://github.com/crowdbotics/modules/pull/892) as an example.

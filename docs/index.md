@@ -22,9 +22,18 @@
 
 ## Documentation
 
-- [Upgrading your React Native scaffold](/docs/scaffold-upgrade.md)
-- [Authoring Modules](/docs/authoring-modules.md)
-- [Maintainers Commands](/docs/commands.md)
-- [Modules Checklist](/docs/modules-checklist.md)
-- [Scaffold Checklist](/docs/scaffold-checklist.md)
-- [Further Reading](/docs/further-reading.md)
+- [Upgrading your React Native scaffold](scaffold-upgrade.md)
+- [Authoring Modules](authoring-modules.md)
+- [Maintainers Commands](commands.md)
+- [Modules Checklist](modules-checklist.md)
+- [Scaffold Checklist](scaffold-checklist.md)
+- [Further Reading](further-reading.md)
+
+## Changelog
+
+- [Changelog](https://github.com/crowdbotics/modules/blob/master/CHANGELOG.md)
+- [React Native Scaffold Changelog](https://github.com/crowdbotics/modules/blob/master/scaffold/CHANGELOG.md)
+
+## Other links
+
+- [Github Repository](https://github.com/crowdbotics/modules)
