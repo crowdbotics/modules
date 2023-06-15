@@ -11,12 +11,12 @@
 #
 # Opt out of sending fastlane usage metrics
 
-app_name = '{{cookiecutter.project_dash_slug}}-id'
-base_name = '{{cookiecutter.project_slug}}'
-filename = "#{base_name}.xcodeproj"
-workspace_name = "#{base_name}.xcworkspace"
-identifier = "com.crowdbotics.#{app_name}"
-app_privacy_details = "app_privacy_details.json"
+@app_name = '{{cookiecutter.project_dash_slug}}-id'
+@base_name = '{{cookiecutter.project_slug}}'
+@filename = "#{@base_name}.xcodeproj"
+@workspace_name = "#{@base_name}.xcworkspace"
+@identifier = "com.crowdbotics.#{@app_name}"
+@app_privacy_details = "app_privacy_details.json"
 
 import_from_git(
   url: "git@github.com:crowdbotics/fastlane-config.git", # The URL of the repository to import the Fastfile from.
