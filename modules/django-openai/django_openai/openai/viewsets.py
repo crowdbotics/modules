@@ -36,14 +36,14 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.list_models()
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='get_model_detail')
-    def get_model_detail(self, request, *args, **kwargs):
+    @action(detail=False, methods=['get'], url_path='get_model_detail/(?P<model_id>[^/.]+)')
+    def get_model_detail(self, request, model_id):
         """
         To get the models details
-        :query_params: model_id
+        :path_params: model_id
         :return: Returns models details.
         """
-        response = self.openai_service.retrieve_model(model_id=self.request.query_params.get('model_id'))
+        response = self.openai_service.retrieve_model(model_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['get'], url_path='get_engine_list')
@@ -55,14 +55,14 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.list_engine()
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='get_engine_detail')
-    def get_engine_detail(self, request, *args, **kwargs):
+    @action(detail=False, methods=['get'], url_path='get_engine_detail/(?P<engine_id>[^/.]+)')
+    def get_engine_detail(self, request, engine_id):
         """
         To get the engine details'
-        :query_params: engine_id
+        :path_params: engine_id
         :return: Returns models details.
         """
-        response = self.openai_service.retrieve_engine(engine_id=self.request.query_params.get('engine_id'))
+        response = self.openai_service.retrieve_engine(engine_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='create_chat_completion')
