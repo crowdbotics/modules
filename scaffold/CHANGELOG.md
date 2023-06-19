@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.1.0 - 2023-06-19
+
+### Added
+
+- Support for dev builds in the CircleCI pipeline with new lanes in the Fastfiles.
+
 ## 2.1.1 - 2023-06-19
 
 ### Fixed
