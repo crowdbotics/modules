@@ -10,6 +10,12 @@ module.exports = {
         trailingComma: "none",
         arrowParens: "avoid"
       }
+    ],
+    "react-hooks/exhaustive-deps": [
+      "error",
+      {
+        additionalHooks: "(useAnimatedStyle|useDerivedValue|useAnimatedProps)"
+      }
     ]
   }
 }

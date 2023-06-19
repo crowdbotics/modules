@@ -26,7 +26,7 @@ module.exports = {
     })
   },
   resolver: {
-    sourceExts: ["js", "jsx", "ts", "tsx"],
+    sourceExts: ["js", "jsx", "ts", "tsx", "json"],
     extraNodeModules: new Proxy(extraNodeModules, {
       get: (target, name) =>
         //redirects dependencies referenced from extraNodeModules to local node_modules

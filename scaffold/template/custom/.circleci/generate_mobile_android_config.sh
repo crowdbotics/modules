@@ -119,7 +119,7 @@ jobs:
   android:
     working_directory: ~/build
     docker:
-      - image: reactnativecommunity/react-native-android:5.4
+      - image: reactnativecommunity/react-native-android:6.2
     resource_class: "medium+"
     environment:
       - TERM: "dumb"

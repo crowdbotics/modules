@@ -1,7 +1,7 @@
 import fs from "fs";
 import fse from "fs-extra";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 
 const modules = process.argv.slice(2);
 const cwd = process.cwd();
