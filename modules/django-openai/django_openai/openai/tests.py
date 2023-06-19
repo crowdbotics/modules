@@ -189,7 +189,7 @@ class TestOpenAiViewSet(APITestCase):
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_image')
-    def test_create_an_image(self, create_an_image_mock):
+    def test_create_an_image_generations(self, create_an_image_generations_mock):
         response = {'data': {'created': 1686910968, 'data': [{
             'url': 'https://oaidalleapiprodscus.blob.core'
                    '.windows.net/private/org'
@@ -210,49 +210,49 @@ class TestOpenAiViewSet(APITestCase):
                        '%3A01%3A59Z&ske=2023-06-16T21%3A01%3A59Z&sks=b&skv=2021-08-06&sig=t7eAoQ2ffcqhDY'
                        '/Yga9wzQzo1ZevXAi1fcATOlgVHyk%3D'}]},
                     'status_code': 200}
-        create_an_image_mock.return_value = response
+        create_an_image_generations_mock.return_value = response
         data = {
             "prompt": "A cute baby sea otter",
             "n": 2,
             "size": "1024x1024"
         }
-        url = reverse('openai-create-an-image')
+        url = reverse('openai-create-an-image-generations')
         Response = self.client.post(url, data=data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(Response.data, response['data'])
-        create_an_image_mock.assert_called_once()
+        create_an_image_generations_mock.assert_called_once()
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_image')
-    def test_create_an_image_with_invalid_data(self, create_an_image_mock):
+    def test_create_an_image_generations_with_invalid_data(self, create_an_image_generations_mock):
         response = None
-        create_an_image_mock.return_value = response
+        create_an_image_generations_mock.return_value = response
         invalid_data = {
             "size": "1024x1024"
         }
-        url = reverse('openai-create-an-image')
+        url = reverse('openai-create-an-image-generations')
         Response = self.client.post(url, data=invalid_data, format='json')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_transcription')
-    def test_create_an_transcription_with_mp3(self, create_an_transcription_mock):
+    def test_create_an_audio_transcription_with_mp3(self, create_an_audio_transcription_mock):
         response = {'data': {'text': 'Без тебя'}, 'status_code': 200}
-        create_an_transcription_mock.return_value = response
+        create_an_audio_transcription_mock.return_value = response
         audio_data = b'This is a mock audio file data.'
         audio_file = SimpleUploadedFile("audio_file.mp3", audio_data, content_type="audio/mpeg")
         data = {
             "file": audio_file,
             "model": "whisper-1"
         }
-        url = reverse('openai-create-an-transcription')
+        url = reverse('openai-create-an-audio-transcription')
         Response = self.client.post(url, data=data, format='multipart')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(Response.data, response['data'])
-        create_an_transcription_mock.assert_called_once()
+        create_an_audio_transcription_mock.assert_called_once()
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_transcription')
-    def test_create_an_transcription_with_mp4(self, create_an_transcription_mock):
+    def test_create_an_audio_transcription_with_mp4(self, create_an_audio_transcription_mock):
         response = {'data': {'text': 'you you you you'}, 'status_code': 200}
-        create_an_transcription_mock.return_value = response
+        create_an_audio_transcription_mock.return_value = response
         mp4_data = b'This is a mock MP4 file data.'
         mp4_file = SimpleUploadedFile("video_file.mp4", mp4_data, content_type="video/mp4")
 
@@ -260,51 +260,51 @@ class TestOpenAiViewSet(APITestCase):
             "file": mp4_file,
             "model": "whisper-1"
         }
-        url = reverse('openai-create-an-transcription')
+        url = reverse('openai-create-an-audio-transcription')
         Response = self.client.post(url, data=data, format='multipart')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(Response.data, response['data'])
-        create_an_transcription_mock.assert_called_once()
+        create_an_audio_transcription_mock.assert_called_once()
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_transcription')
-    def test_create_an_transcription_with_invalid_file(self, create_an_transcription_mock):
+    def test_create_an_audio_transcription_with_invalid_file(self, create_an_audio_transcription_mock):
         response = {'data': {'error': {'code': None,
                                        'message': "Invalid file format. Supported formats: ['m4a', 'mp3', 'webm', "
                                                   "'mp4', 'mpga', 'wav', 'mpeg']",
                                        'param': None, 'type': 'invalid_request_error'}}, 'status_code': 400}
-        create_an_transcription_mock.return_value = response
+        create_an_audio_transcription_mock.return_value = response
         invalid_data = b'This is a mock .cer file data.'
         invalid_file = SimpleUploadedFile("certificate.cer", invalid_data, content_type="application/x-x509-ca-cert")
         data = {
             "file": invalid_file,
             "model": "whisper-1"
         }
-        url = reverse('openai-create-an-transcription')
+        url = reverse('openai-create-an-audio-transcription')
         Response = self.client.post(url, data=data, format='multipart')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertDictEqual(Response.data, response['data'])
-        create_an_transcription_mock.assert_called_once()
+        create_an_audio_transcription_mock.assert_called_once()
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_translation')
-    def test_create_an_translation_with_mp3(self, create_an_translation_mock):
+    def test_create_an_audio_translation_with_mp3(self, create_an_audio_translation_mock):
         response = {'data': {'text': '♪♪ ♪♪ ♪♪'}, 'status_code': 200}
-        create_an_translation_mock.return_value = response
+        create_an_audio_translation_mock.return_value = response
         audio_data = b'This is a mock audio file data.'
         audio_file = SimpleUploadedFile("audio_file.mp3", audio_data, content_type="audio/mpeg")
         data = {
             "file": audio_file,
             "model": "whisper-1"
         }
-        url = reverse('openai-create-an-translation')
+        url = reverse('openai-create-an-audio-translation')
         Response = self.client.post(url, data=data, format='multipart')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(Response.data, response['data'])
-        create_an_translation_mock.assert_called_once()
+        create_an_audio_translation_mock.assert_called_once()
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_translation')
-    def test_create_an_translation_with_mp4(self, create_an_translation_mock):
+    def test_create_an_audio_translation_with_mp4(self, create_an_audio_translation_mock):
         response = {'data': {'text': 'you you you you'}, 'status_code': 200}
-        create_an_translation_mock.return_value = response
+        create_an_audio_translation_mock.return_value = response
         mp4_data = b'This is a mock MP4 file data.'
         mp4_file = SimpleUploadedFile("video_file.mp4", mp4_data, content_type="video/mp4")
 
@@ -312,30 +312,30 @@ class TestOpenAiViewSet(APITestCase):
             "file": mp4_file,
             "model": "whisper-1"
         }
-        url = reverse('openai-create-an-translation')
+        url = reverse('openai-create-an-audio-translation')
         Response = self.client.post(url, data=data, format='multipart')
         self.assertEqual(Response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(Response.data, response['data'])
-        create_an_translation_mock.assert_called_once()
+        create_an_audio_translation_mock.assert_called_once()
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.create_translation')
-    def test_create_an_translation_with_invalid_file(self, create_an_translation_mock):
+    def test_create_an_audio_translation_with_invalid_file(self, create_an_audio_translation_mock):
         response = {'data': {'error': {'code': None,
                                        'message': "Invalid file format. Supported formats: ['m4a', 'mp3', 'webm', "
                                                   "'mp4', 'mpga', 'wav', 'mpeg']",
                                        'param': None, 'type': 'invalid_request_error'}}, 'status_code': 400}
-        create_an_translation_mock.return_value = response
+        create_an_audio_translation_mock.return_value = response
         invalid_data = b'This is a mock .cer file data.'
         invalid_file = SimpleUploadedFile("certificate.cer", invalid_data, content_type="application/x-x509-ca-cert")
         data = {
             "file": invalid_file,
             "model": "whisper-1"
         }
-        url = reverse('openai-create-an-translation')
+        url = reverse('openai-create-an-audio-translation')
         Response = self.client.post(url, data=data, format='multipart')
         self.assertEqual(Response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertDictEqual(Response.data, response['data'])
-        create_an_translation_mock.assert_called_once()
+        create_an_audio_translation_mock.assert_called_once()
 
     @mock.patch('modules.django_openai.openai.services.OpenAIServices.OpenAIService.retrieve_engine')
     def test_get_engine_detail(self, get_engine_detail_mock):

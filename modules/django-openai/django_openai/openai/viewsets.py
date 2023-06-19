@@ -19,15 +19,15 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         "create_a_chat_completion": CreateChatCompletionSerializer,
         "create_a_completion": CreateCompletionSerializer,
         "create_an_edit": CreateEditsSerializer,
-        "create_an_image": CreateImageSerializer,
-        "create_an_transcription": CreateTranscriptionSerializer,
-        "create_an_translation": CreateTranslationSerializer
+        "create_an_image_generations": CreateImageSerializer,
+        "create_an_audio_translation": CreateTranscriptionSerializer,
+        "create_an_audio_transcription": CreateTranslationSerializer
     }
 
     def get_serializer_class(self):
         return self.allowed_serializer.get(self.action)
 
-    @action(detail=False, methods=['get'], url_path='get_models_list')
+    @action(detail=False, methods=['get'], url_path='models')
     def get_models_list(self, request):
         """
         To get the models list
@@ -36,7 +36,7 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.list_models()
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='get_model_detail/(?P<model_id>[^/.]+)')
+    @action(detail=False, methods=['get'], url_path='models/(?P<model_id>[^/.]+)')
     def get_model_detail(self, request, model_id):
         """
         To get the models details
@@ -46,7 +46,7 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.retrieve_model(model_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='get_engine_list')
+    @action(detail=False, methods=['get'], url_path='engines')
     def get_engine_list(self, request):
         """
         To get the engine list
@@ -55,7 +55,7 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.list_engine()
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='get_engine_detail/(?P<engine_id>[^/.]+)')
+    @action(detail=False, methods=['get'], url_path='engines/(?P<engine_id>[^/.]+)')
     def get_engine_detail(self, request, engine_id):
         """
         To get the engine details'
@@ -65,7 +65,7 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.retrieve_engine(engine_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='create_chat_completion')
+    @action(detail=False, methods=['post'], url_path='chat/completions')
     def create_a_chat_completion(self, request):
         """
         To create a chat completion
@@ -77,7 +77,7 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.create_chat_completion(payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='create_a_completion')
+    @action(detail=False, methods=['post'], url_path='completion')
     def create_a_completion(self, request):
         """
         To create a completion
@@ -89,7 +89,7 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.create_completion(payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='create_an_edit')
+    @action(detail=False, methods=['post'], url_path='edits')
     def create_an_edit(self, request):
         """
         To create an edit
@@ -101,8 +101,8 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.create_edit(payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='create_an_image')
-    def create_an_image(self, request):
+    @action(detail=False, methods=['post'], url_path='images/generations')
+    def create_an_image_generations(self, request):
         """
         To create an edit
         :payload: {"prompt": "", "n": int, "size": ""}
@@ -113,8 +113,8 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.create_image(payload=serializer.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='create_an_transcription')
-    def create_an_transcription(self, request):
+    @action(detail=False, methods=['post'], url_path='audio/transcription')
+    def create_an_audio_transcription(self, request):
         """
         To create a transcription
         :payload: {"file": "", "model": ""}
@@ -125,8 +125,8 @@ class OpenAiViewSet(viewsets.GenericViewSet):
         response = self.openai_service.create_transcription(payload=serializer.validated_data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='create_an_translation')
-    def create_an_translation(self, request):
+    @action(detail=False, methods=['post'], url_path='audio/translation')
+    def create_an_audio_translation(self, request):
         """
         To create a translation
         :payload: {"file": "", "model": ""}
