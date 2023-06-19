@@ -63,6 +63,30 @@ export default {
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
         ],
         upgradeManifestImport: "./manifest/110-to-200.json"
+      },
+      {
+        text: "Upgrade my scaffold (2.0.0 -> 2.1.0)",
+        previousVersion: "2.0.0",
+        previousVersionSHA: "13908cdefd87a5e50063303b27c688dae507a34d",
+        nextVersion: "2.1.0",
+        nextVersionSHA: "03d0e48891aaf96bd0f2653ac1f7b0950f2c6289",
+        ignoreTemplatize: [
+          "ios/fastlane/metadata/review_information/review_demo_password.txt",
+          "ios/fastlane/metadata/review_information/review_demo_user.txt"
+        ],
+        upgradeManifestImport: "./manifest/200-to-210.json"
+      },
+      {
+        text: "Upgrade my scaffold (2.1.0 -> 2.1.1)",
+        previousVersion: "2.1.0",
+        previousVersionSHA: "03d0e48891aaf96bd0f2653ac1f7b0950f2c6289",
+        nextVersion: "2.1.1",
+        nextVersionSHA: "67204d92e9b460edc36099ebdd6c2cd691c48a57",
+        ignoreTemplatize: [
+          "ios/fastlane/metadata/review_information/review_demo_password.txt",
+          "ios/fastlane/metadata/review_information/review_demo_user.txt"
+        ],
+        upgradeManifestImport: "./manifest/210-to-211.json"
       }
     ],
     manifest: {
