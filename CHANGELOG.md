@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 1.1.1 - 2023-06-19
+
+### Fixed
+
+- Prevent changing existing manifests with `yarn run manifest`.
+
 ## 1.1.0 - 2023-05-31
 
 ### Added
