@@ -69,9 +69,8 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, "screens"),
     path.resolve(appDirectory, "options"),
     path.resolve(appDirectory, "store"),
-    path.resolve(appDirectory, "node_modules")
+    path.resolve(appDirectory, "node_modules/react-native-reanimated")
   ],
-  exclude: [path.resolve(appDirectory, "node_modules/@babel")],
   use: {
     loader: "babel-loader",
     options: babelOptions
