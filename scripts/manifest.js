@@ -14,6 +14,13 @@ import { spawnSync } from "node:child_process";
 import config from "../config.js";
 
 const latestUpgrade = config.upgrade.versions.at(-1);
+const forceUpdate = process.argv[2] === "--force";
+const alreadyGenerated = fs.existsSync(path.join(process.cwd(), latestUpgrade.upgradeManifestImport));
+if (alreadyGenerated && !forceUpdate) {
+  console.error("Can't modify existing manifests. Did you add a new version to upgrade.versions in config.js?");
+  console.error("If you really want to force a manifest update use the command flag --force.");
+  process.exit(1);
+}
 const demoDir = path.join(process.cwd(), config.demo.directory);
 const __dirname = process.cwd();
 
