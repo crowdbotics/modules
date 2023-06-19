@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.1.0 - 2023-06-19
+
+### Added
+
+- Support for csrf token to the Django Web build version
+
 ## 2.0.0 - 2023-05-31
 
 _If you are upgrading: please see [scaffold-upgrade.md](/docs/scaffold-upgrade.md)._
