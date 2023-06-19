@@ -2,7 +2,7 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
-## 2.1.0 - 2023-06-19
+## 2.2.0 - 2023-06-19
 
 ### Added
 
