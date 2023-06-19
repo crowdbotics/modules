@@ -1,7 +1,7 @@
 [
   {
     "path": ".bundle/config",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": ".circleci/config.yml",
@@ -41,7 +41,7 @@
   },
   {
     "path": ".node-version",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": ".prettierrc.js",
@@ -73,7 +73,7 @@
   },
   {
     "path": "__tests__/App-test.tsx",
-    "type": "addition"
+    "type": "babel"
   },
   {
     "path": "android/app/build.gradle",
@@ -109,7 +109,7 @@
   },
   {
     "path": "android/app/src/main/res/drawable/rn_edit_text_material.xml",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
@@ -181,7 +181,7 @@
   },
   {
     "path": "android/app/src/release/java/com/{{slug}}/ReactNativeFlipper.java",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "android/build.gradle",
@@ -261,7 +261,7 @@
   },
   {
     "path": "ios/.xcode.env",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "ios/Podfile",
@@ -269,11 +269,11 @@
   },
   {
     "path": "ios/Podfile.lock",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "ios/Pods/Manifest.lock",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "ios/{{slug}}/AppDelegate.h",
@@ -281,7 +281,7 @@
   },
   {
     "path": "ios/{{slug}}/AppDelegate.mm",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "ios/{{slug}}/Images.xcassets/AppIcon.appiconset/Contents.json",
@@ -373,7 +373,7 @@
   },
   {
     "path": "ios/{{slug}}.xcworkspace/contents.xcworkspacedata",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "ios/{{slug}}Tests/Info.plist",
@@ -525,7 +525,7 @@
   },
   {
     "path": "modules/README.md",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "modules/index.js",
@@ -569,35 +569,39 @@
   },
   {
     "path": "screens/welcome/index.js",
-    "type": "addition"
+    "type": "babel"
   },
   {
     "path": "screens/welcome/logo.png",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "screens/welcome/logo@2x.png",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "screens/welcome/logo@3x.png",
-    "type": "addition"
+    "type": "text"
   },
   {
     "path": "screens/welcome/package.json",
-    "type": "addition"
+    "type": "json"
   },
   {
     "path": "screens/welcome/styles.js",
-    "type": "addition"
+    "type": "babel"
   },
   {
     "path": "screens/welcome/styles.web.js",
-    "type": "addition"
+    "type": "babel"
   },
   {
     "path": "store/README.md",
     "type": "text"
+  },
+  {
+    "path": "store/config.js",
+    "type": "addition"
   },
   {
     "path": "store/custom/.keep",
@@ -613,7 +617,7 @@
   },
   {
     "path": "tsconfig.json",
-    "type": "addition"
+    "type": "json"
   },
   {
     "path": "webpack.config.js",
