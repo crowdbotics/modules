@@ -600,6 +600,10 @@
     "type": "text"
   },
   {
+    "path": "store/config.js",
+    "type": "addition"
+  },
+  {
     "path": "store/custom/.keep",
     "type": "text"
   },
