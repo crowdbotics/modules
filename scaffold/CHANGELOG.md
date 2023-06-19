@@ -2,11 +2,17 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.1.1 - 2023-06-19
+
+### Fixed
+
+- Fixed web build issue with node_modules compilation.
+
 ## 2.1.0 - 2023-06-19
 
 ### Added
 
-- Support for csrf token to the Django Web build version
+- Support for csrf token to the Django Web build version.
 
 ## 2.0.0 - 2023-05-31
 
