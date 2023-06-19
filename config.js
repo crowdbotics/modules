@@ -67,7 +67,7 @@ export default {
       {
         text: "Upgrade my scaffold (2.0.0 -> 2.1.0)",
         previousVersion: "2.0.0",
-        previousVersionSHA: "2a211186280210a9dabb104ce9ed021dacec0da7",
+        previousVersionSHA: "13908cdefd87a5e50063303b27c688dae507a34d",
         nextVersion: "2.1.0",
         nextVersionSHA: "PLAT-11568",
         ignoreTemplatize: [
