@@ -12,6 +12,8 @@ module.exports = {
         allowUndefined: true
       }
     ],
-    "import-glob-meta"
+    "import-glob-meta",
+    "@babel/plugin-proposal-export-namespace-from",
+    "react-native-reanimated/plugin"
   ]
 }
