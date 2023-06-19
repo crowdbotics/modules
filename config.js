@@ -81,7 +81,7 @@ export default {
         previousVersion: "2.1.0",
         previousVersionSHA: "03d0e48891aaf96bd0f2653ac1f7b0950f2c6289",
         nextVersion: "2.1.1",
-        nextVersionSHA: "fix/web-build-babel-config",
+        nextVersionSHA: "67204d92e9b460edc36099ebdd6c2cd691c48a57",
         ignoreTemplatize: [
           "ios/fastlane/metadata/review_information/review_demo_password.txt",
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
