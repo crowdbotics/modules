@@ -99,7 +99,7 @@ export default {
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
         ],
         upgradeManifestImport: "./manifest/211-to-220.json"
-      },
+      }
     ],
     manifest: {
       slugPlaceholder: "{{slug}}",
