@@ -3,7 +3,7 @@ jobs:
   node:
     working_directory: ~/build
     docker:
-      - image: cimg/python:3.8.13-node
+      - image: cimg/python:3.8.17-node
     steps:
       - checkout
       # get version of node and yarn
