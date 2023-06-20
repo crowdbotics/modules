@@ -93,7 +93,7 @@ export default {
         previousVersion: "2.1.1",
         previousVersionSHA: "67204d92e9b460edc36099ebdd6c2cd691c48a57",
         nextVersion: "2.2.0",
-        nextVersionSHA: "2.2.0",
+        nextVersionSHA: "99ae211777fe0ae4ae0bd3a601297ad1beb590cb",
         ignoreTemplatize: [
           "ios/fastlane/metadata/review_information/review_demo_password.txt",
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
