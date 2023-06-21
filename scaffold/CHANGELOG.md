@@ -2,6 +2,19 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.2.0 - 2023-06-20
+
+### Added
+
+Introduced the ability to use Fastlane lanes from a shared repository [fastlane-config](https://github.com/crowdbotics/fastlane-config)
+
+- Added 'import_from_git' command to import the Fastfile from an external repository.
+- Added 'FASTLANE_CONFIG_VERSION' environment variable which refers to a tag on the fastlane-config repo.
+
+### Changed
+
+Changed the Fastfile to use instance variables instead of local variables to pass to the inherited lanes.
+
 ## 2.1.1 - 2023-06-19
 
 ### Fixed
