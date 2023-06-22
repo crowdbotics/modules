@@ -68,7 +68,7 @@ jobs:
 
       - run:
           name: Build iOS App
-          command: bundle exec fastlane build_test_dependancies
+          command: bundle exec fastlane build_test_dependencies
           working_directory: ios
 
   android:
