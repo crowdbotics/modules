@@ -20,7 +20,7 @@
 
 import_from_git(
   url: "git@github.com:crowdbotics/fastlane-config.git", # The URL of the repository to import the Fastfile from.
-  branch: "master", # The branch to checkout on the repository.
+  branch: "PLAT-11232-create-validation", # The branch to checkout on the repository.
   path: "ios/Fastfile", # The path of the Fastfile in the repository.
   version: "== #{ENV['FASTLANE_CONFIG_VERSION']}" # The version to checkout on the repository. Optimistic match operator can be used to select the latest version within constraints.
 )
