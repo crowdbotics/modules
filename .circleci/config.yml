@@ -91,7 +91,7 @@ jobs:
           at: ~/build
 
       - run:
-        name: Setup SSH
+          name: Setup SSH
           command: mkdir -p ~/.ssh && chmod 700 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       - run:
