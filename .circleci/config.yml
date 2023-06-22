@@ -41,11 +41,11 @@ jobs:
           at: ~/build
 
       - run:
-        name: Setup SSH
-        command: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          name: Setup SSH
+          command: |
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       # not using a workspace here as Node and Yarn versions
       # differ between our macOS executor image and the Docker containers above
@@ -95,10 +95,10 @@ jobs:
 
       - run:
         name: Setup SSH
-        command: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          command: |
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
       - run:
           command: bundle install
