@@ -142,9 +142,15 @@ function setupLocalModulesRepo(version) {
   });
 }
 
-function getProjectCookiecutterContext() {
+function getProjectCookiecutterContext(version) {
   section("Detecting your project name, slug, and ssh key fingerprint");
-  const context = {};
+  let context = {};
+  if (version.previousVersion !== "1.1.0") {
+    context = JSON.parse(
+      fs.readFileSync(path.join(userdir, ".crowdbotics.json"), "utf8")
+    ).scaffold.cookiecutter_context;
+    return context;
+  }
 
   const options = {
     ignoreAttributes: false
@@ -666,7 +672,7 @@ const upgrade = (version) => {
     versionCheck(version);
     stashSave();
     setupLocalModulesRepo(version);
-    const context = getProjectCookiecutterContext();
+    const context = getProjectCookiecutterContext(version);
     setupCookiecutter(context, version);
     section("Check files integrity and upgrade to new versions");
     const manifest = JSON.parse(
