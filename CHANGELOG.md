@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 1.1.2 - 2023-06-23
+
+### Fixed
+
+- Read cookiecutter context from .crowdbotics.json when the user's version is not 1.1.0.
+
 ## 1.1.1 - 2023-06-19
 
 ### Fixed
