@@ -2,15 +2,6 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
-## 2.3.0 - 2023-06-28
-
-### Added
-
-Added a check that builds the Android app and iOS app for every PR
-
-- Added config.yml file that defines pipeline for CircleCI
-- Bumped Python version from '3.8.13' to '3.8.17'.
-
 ## 2.2.0 - 2023-06-20
 
 ### Added
