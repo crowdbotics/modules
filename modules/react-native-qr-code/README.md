@@ -1,16 +1,16 @@
 # QR code
-Qr code generator is helps user generate qr-code by taking picture and entering text.
 
+Qr code generator is helps user generate qr-code by taking picture and entering text.
 
 ## Installation
 
-
 ### Android configurations
 
-1. On Android you must ask for camera permission. Add following line in `AndroidManifest.xml`.
+1. On Android you must ask for camera permission. Add following lines in `AndroidManifest.xml`.
 
 ```
 <uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.VIBRATE" />
 ```
 
 2. Insert the following line in android/app/build.gradle into defaultConfig section.
@@ -32,7 +32,7 @@ Qr code generator is helps user generate qr-code by taking picture and entering 
 
 ### Update api url in options/options.js
 
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this:
 
 ```
 export const globalOptions = {
@@ -55,15 +55,17 @@ const { title, navigator } = QRCode;
 2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
 
 ```javascript
-import { modules } from '@modules';
-const QRCode = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<QRCode />
+import { modules } from "@modules";
+const QRCode = modules[module_index].value.navigator; //module_index : position of the module in modules folder
+<QRCode />;
 ```
 
 ## Feature
 
 # Qr code scanner
+
 user can scan a qr code
 
 # Qr code generator
+
 user can generate a qr code via backend
