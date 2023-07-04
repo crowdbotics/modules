@@ -75,6 +75,8 @@ public class MainActivity extends ReactActivity {
 #### For New Scaffold `v0.71`
 
 ```c
+#import "RNSplashScreen.h"  //add here
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   // ...other code
@@ -83,7 +85,7 @@ public class MainActivity extends ReactActivity {
   bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions];
 
   [RNSplashScreen show];  // add this
-  return didFinish; // Return didFinish instead of YES
+  return didFinish; // Return didFinish instead of [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 ```
 
