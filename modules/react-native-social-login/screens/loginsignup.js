@@ -21,7 +21,7 @@ import {
   GoogleSignin,
   statusCodes
 } from "@react-native-google-signin/google-signin";
-import { LoginManager, AccessToken } from "react-native-fbsdk";
+import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from "../auth/utils";
 import { appleForAndroid, appleForiOS } from "../auth/apple";
 import {
@@ -268,7 +268,10 @@ export const SignInTab = ({ navigation }) => {
     password: ""
   });
 
-  const { api } = useSelector((state) => state.login);
+  // const { api } = useSelector((state) => state.login);
+  const api = {
+    loading: "idle"
+  };
   const dispatch = useDispatch();
 
   const onSigninPress = async () => {
