@@ -38,23 +38,25 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
     });
   };
 
-  const onStartPress = async (e) => {
+  const onStartPress = async e => {
     setIsAlreadyPlay(true);
     setInProgress(true);
     audioRecorderPlayer.startPlayer(selectedTrack?.path);
     audioRecorderPlayer.setVolume(1.0);
 
-    audioRecorderPlayer.addPlayBackListener(async (e) => {
+    audioRecorderPlayer.addPlayBackListener(async e => {
+      const currentTime = Math.max(0, e.currentPosition);
+      const totalDuration = Math.max(0, e.duration);
+
       if (e.current_position === e.duration) {
         audioRecorderPlayer.stopPlayer();
         setIsAlreadyPlay(false);
       }
-      const percent = Math.round(
-        (Math.floor(e.current_position) / Math.floor(e.duration)) * 100
-      );
+      const percentage = (currentTime / totalDuration) * 100;
+      const roundedPercentage = Math.round(percentage * 100) / 100;
 
       setTimeElapsed(e.current_position);
-      setPercent(percent);
+      setPercent(roundedPercentage);
       setDuration(e.duration);
 
       if (onPlay) {

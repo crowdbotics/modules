@@ -40,6 +40,31 @@ include ':react-native-audio-recorder-player'
 
 ```
 
+### For new scaffold 0.71.7
+
+1. In the `android/build.gradle` add the following line in dependencies.:
+
+```java
+dependencies {
+    
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10" //
+    }
+```
+2. Add `xmlns:tools="http://schemas.android.com/tools"` to the manifest tag
+
+```
+<manifest
+    xmlns:tools="http://schemas.android.com/tools">
+...
+```
+
+3. Add `tools:replace="android:label"` to the application tag
+
+```
+  <application
+        tools:replace="android:label">
+```
+
 
 ### IOS
 1. Using React Native >= 0.61
