@@ -15,7 +15,7 @@
     "x-dependencies": {
         "react-native-vector-icons": "8.1.0",
         "react-native-webview": "^11.17.2",
-        "react-native-zoom-us": "6.6.1",
+        "react-native-zoom-us": "6.16.5",
         "react-native-sha256": "1.4.7",
         "react-native-date-picker": "4.1.5",
         "@react-native-cookies/cookies": "6.0.11",

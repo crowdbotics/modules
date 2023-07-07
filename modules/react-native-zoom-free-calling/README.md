@@ -1,5 +1,18 @@
 # Zoom Free Calling
 
+### Use following versions of `react-native-zoom-us` for New and Old scaffolds:
+```
+Use `react-native-zoom-us`
+`v6.6.1` for Old scaffold `0.64`
+```
+
+```
+Use `react-native-zoom-us`
+`v6.16.5` for New scaffold `0.71.7`
+```
+
+### Android
+
 1. Set pickFirst rules in android/app/build.gradle
 ```
 android {
@@ -21,6 +34,46 @@ public void onCreate() {
     return packages;
 }
 ```
+
+### Extra steps for new scaffold 0.71.7
+
+1. Add these in `AndroidManifest.xml`
+```xml
+// In application tag
+tools:replace="android:usesCleartextTraffic"
+android:usesCleartextTraffic="true"
+
+//In Manifest tag
+ xmlns:tools="http://schemas.android.com/tools"
+```
+
+If your app does not connect to `Metro Server`
+
+Step 1 : create a file in android folder `app/src/debug/res/xml/network_security_config.xml`
+
+Step 2 : add this to `network_security_config.xml`
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+  <!-- deny cleartext traffic for React Native packager ips in release -->
+  <domain-config cleartextTrafficPermitted="true">
+   <domain includeSubdomains="true">localhost</domain>
+   <domain includeSubdomains="true">10.0.2.2</domain>
+   <domain includeSubdomains="true">10.0.3.2</domain>
+  </domain-config>
+</network-security-config>
+```
+
+Step 3 : Apply the config to your AndroidManifest.xml in debug folder
+
+```xml
+<application
+ android:networkSecurityConfig="@xml/network_security_config">
+</application>
+```
+
+
 
 ### iOS
 1. Make sure you have appropriate description in Info.plist:
