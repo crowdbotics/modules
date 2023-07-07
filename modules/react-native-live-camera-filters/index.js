@@ -1,7 +1,7 @@
 import React, { createRef, useState } from "react";
 import { View, TouchableOpacity, Text, PermissionsAndroid, Platform, Alert } from "react-native";
 // @ts-ignore
-import CameraRoll from "@react-native-community/cameraroll";
+import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 // @ts-ignore
 import { FilterCameraView } from "react-native-filter-camera";
