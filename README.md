@@ -36,6 +36,7 @@ The following must be available in your system:
 - [yarn](https://yarnpkg.com/)
 - [python](https://www.python.org/)
 - [pipenv](https://pypi.org/project/pipenv/)
+- [urllib3](https://urllib3.readthedocs.io/en/stable/) without this the project will not run in ```macOS``` environments
 
 Node `v18.16.0` (LTS) recommended.
 
@@ -70,3 +71,7 @@ Create new modules and test/validate your work locally before submitting a PR:
 ```sh
 yarn run parse
 ```
+
+
+### macOS config
+- make sure to have a compatible version of urllib3 with openssl. urllib3 v2.0 or higher is compatible with OpenSSL 1.1.1 or higher
