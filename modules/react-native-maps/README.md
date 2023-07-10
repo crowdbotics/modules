@@ -12,7 +12,7 @@ The following are the key features in scope for this module.
 All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
 Here are the required packages for the module:
 ```
-"react-native-maps": "0.27.1",
+"react-native-maps": "1.7.1",
 "react-native-maps-directions": "1.8.0",
 "react-native-google-places-autocomplete": "2.4.1",
 "prop-types": "15.8.1"
