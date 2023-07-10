@@ -69,6 +69,78 @@ dependencies {
 }
 ```
 
+## IOS Installation for scaffold `0.71.7`
+For react native 0.71 you’ll also need to follow some extra steps to properly initialize Firebase in your project.  
+
+1. Add these two lines under `config = use_native_modules!`
+```powershell
+use_frameworks! :linkage => :static # for Firebase
+  $RNFirebaseAsStaticFramework = true
+```
+2. Comment this line
+```powershell
+:flipper_configuration => flipper_config,
+```
+3. Now add this line above targets
+
+```powershell
+$FirebaseSDKVersion = '10.4.0' # for Firebase
+```
+
+4.Add all the below code after post_install method
+
+```powershell
+installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["GCC_WARN_INHIBIT_ALL_WARNINGS"] = "YES"
+      end
+    end
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["CC"] = "clang"
+        config.build_settings["LD"] = "clang"
+        config.build_settings["CXX"] = "clang++"
+        config.build_settings["LDPLUSPLUS"] = "clang++"
+      end
+    end
+    installer.aggregate_targets.each do |aggregate_target|
+      aggregate_target.user_project.native_targets.each do |target|
+        target.build_configurations.each do |config|
+          config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
+          config.build_settings['EXCLUDED_ARCHS'] = 'i386'
+        end
+      end
+      aggregate_target.user_project.save
+    end
+    installer.pods_project.targets.each do |target|
+      if (target.name.eql?('FBReactNativeSpec'))
+        target.build_phases.each do |build_phase|
+          if (build_phase.respond_to?(:name) && build_phase.name.eql?('[CP-User] Generate Specs'))
+            target.build_phases.move(build_phase, 0)
+          end
+        end
+      end
+    end
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["ENABLE_BITCODE"] = "NO"
+      end
+    end
+  end
+end
+```
+
+5. Then in appDelegate.mm file import this on top.
+```c
+#import <Firebase.h>
+```
+
+6. Then add this line at the start of the didFinishLaunchingWithOptions method.
+```c
+if ([FIRApp defaultApp] == nil) { [FIRApp configure]; }
+```
+7. Now run `pod install`
+
 ## Events
 
 ### Custom Events
