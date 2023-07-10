@@ -11,6 +11,8 @@
 - [Bootstrap](#bootstrap)
 - [Update React Native base template](#update-react-native-base-template)
 - [Lint modules](#lint-modules)
+- [Perform a semver increase check](#perform-a-semver-increase-check)
+- [Generate a scaffold upgrade manifest](#generate-a-scaffold-upgrade-manifest)
 
 ## Generate modules data
 
@@ -23,7 +25,7 @@ Run the command to validate, parse and export the modules source code into a [JS
 Example output:
 
 ```shell
-~/code/github.com/crowdbotics@modules (hotfix/login-screen-export) $ yarn parse
+~/crowdbotics@modules $ yarn parse
 yarn run v1.22.10
 $ node scripts/parse.js
 
@@ -71,7 +73,7 @@ Supported module types:
 yarn run demo
 ```
 
-This command runs `npx react-native init` with [`--template`](https://github.com/react-native-community/cli/tree/master/packages/global-cli#--template) pointing to our own [Custom React Native template](#custom-react-native-template).
+This command runs `npx react-native init` with [`--template`](https://github.com/react-native-community/cli/tree/master/packages/global-cli#--template) pointing to our own [Custom React Native template](/scaffold/template).
 
 ## Install a module
 
@@ -81,7 +83,7 @@ yarn run add [<module_name>]
 
 Installs a list of modules into the demo app, performing the follow operations:
 
-1. Copies the module directory from [react-native](/modules/react-native) into `demo/modules`.
+1. Copies the module directory from [modules](/modules) into `demo/modules`.
 2. Runs `yarn add <module_name>` in the `demo` directory.
 3. Runs `yarn add <dependency>` for every `x-dependencies` in the module `package.json`.
 
@@ -130,7 +132,7 @@ Ouput will be made to [dist/cookie](/dist/cookie).
 yarn run bootstrap
 ```
 
-Runs `demo`, `raw`, `cookie`, and `parse` commands.
+Runs `raw`, `cookie`, and `parse` commands. Ensures that the scaffold dist files have been produced and that the modules pass the checks.
 
 ## Update React Native base template
 
@@ -157,3 +159,21 @@ Run the following command:
 ```
 yarn run commit-module [<module_name>]
 ```
+
+## Perform a semver increase check
+
+```
+yarn run semver
+```
+
+Checks if the scaffold [.crowdbotics.json](/scaffold/template/custom/.crowdbotics.json) version is at an expected value.
+
+## Generate a scaffold upgrade manifest
+
+```
+yarn run manifest
+```
+
+Produces a manifest file in [manifest](/manifest) based on the last version configured in [config.js](/config.js).
+
+For `nextVersionSHA` use your branch name, and then after your PR gets merged you will have the SHA for the squashed commit. Open a followup PR that changes the next version to that SHA instead. See [#892](https://github.com/crowdbotics/modules/pull/892) as an example.
