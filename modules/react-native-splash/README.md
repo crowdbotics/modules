@@ -72,6 +72,8 @@ public class MainActivity extends ReactActivity {
 
 3. Update `AppDelegate.m` with the following additions:
 
+#### For Old Scaffold `v0.64`
+
 ```c
 #import "RNSplashScreen.h"  //add here
 
@@ -81,6 +83,23 @@ public class MainActivity extends ReactActivity {
 
     [RNSplashScreen show];  // add here
     return YES;
+}
+```
+
+#### For New Scaffold `v0.71`
+
+```c
+#import "RNSplashScreen.h"  //add here
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  // ...other code
+
+  // add this line
+  bool didFinish=[super application:application didFinishLaunchingWithOptions:launchOptions];
+
+  [RNSplashScreen show];  // add this
+  return didFinish; // Return didFinish instead of [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 ```
 
