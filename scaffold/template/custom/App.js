@@ -10,16 +10,25 @@ import {
 } from "@reduxjs/toolkit"
 
 import { screens } from "@screens"
-import { modules, reducers, hooks, initialRoute } from "@modules"
+import { modules, reducers, hooks } from "@modules"
 import { connectors } from "@store"
+import {
+  GlobalOptionsContext,
+  OptionsContext,
+  getOptions,
+  getGlobalOptions
+} from "@options"
 
 const Stack = createStackNavigator()
 
-import { GlobalOptionsContext, OptionsContext, getOptions } from "@options"
+const getNavigation = modules => {
+  const globalOptions = getGlobalOptions()
 
-const getNavigation = (modules, screens, initialRoute) => {
+  const initialRoute =
+    globalOptions.initialRoute || (modules[0] && modules[0].value.title)
+
   const Navigation = () => {
-    const routes = modules.concat(screens).map(mod => {
+    const routes = modules.map(mod => {
       const pakage = mod.package
       const name = mod.value.title
       const Navigator = mod.value.navigator
@@ -33,7 +42,7 @@ const getNavigation = (modules, screens, initialRoute) => {
       return <Stack.Screen key={name} name={name} component={Component} />
     })
 
-    const screenOptions = { headerShown: true }
+    const { screenOptions } = globalOptions
 
     return (
       <NavigationContainer>
@@ -68,7 +77,7 @@ const getStore = globalState => {
 
 const App = () => {
   const global = useContext(GlobalOptionsContext)
-  const Navigation = getNavigation(modules, screens, initialRoute)
+  const Navigation = getNavigation(modules.concat(screens))
   const store = getStore(global)
 
   let effects = {}
