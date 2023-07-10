@@ -23,6 +23,7 @@ Then double check your work with those helper scripts checks:
 - `yarn run semver` check passes
 
 **Important!** Make your new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](/config.js) to include a new `config.upgrade.versions` and then run:
+in order to bump the version, we need to modify `package.json` at `scaffold/package.json` and `.crowdbotics.json` at `scaffold/template/custom/.crowdbotics.json`
 
 ```
 yarn run manifest
