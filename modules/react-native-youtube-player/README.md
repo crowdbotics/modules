@@ -40,6 +40,16 @@ const YOUTUBE_API_KEY = "Your youtube api key";
 const VIDEOS_IDS = ["uMK0prafzw0"];
 
 ```
+## For `Android 11` and above
+
+Add these lines in `AndroidManifest.xml`
+
+```xml
+<queries>
+<package android:name="com.google.android.youtube" />
+</queries>
+```
+
 ## Manual Setup
 
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
@@ -62,15 +72,15 @@ const YouTubePlayer = modules[module_index].value.navigator;  //module_index : p
 
 Below is the list of all params that can be passed to the module.
 
-| Name                         | Type       | Description                                                    |
-| -----------------------------|:----------:|:---------------------------------------------------------------|
-| youtubeApiKey                | `string`   | Your youtube api key.                                          |
-| playerSetting                | `object`   | Player configrutations {isReady: false, status: null, quality: null, error: null, isPlaying: true, isLooping: true, currentTime: 0, videosIndex: 0, fullscreen: false, playerWidth: Dimensions.get("window").width }             |
-| videoIds                     | `array`    | List of videos.                                                |
-| forwordTimeDurationInSeconds | `number`   | Seconds to forword video time                                  |
-| backwordTimeDurationInSeconds| `number`   | Seconds to backword video time                                 |
-| isForwordTimeDuration        | `bool`     | Show forword time button                                       |
-| isBackwordTimeDuration       | `bool`     | Show backword time button                                      |
+| Name                          |   Type   | Description                                                                                                                                                                                                          |
+| ----------------------------- | :------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| youtubeApiKey                 | `string` | Your youtube api key.                                                                                                                                                                                                |
+| playerSetting                 | `object` | Player configrutations {isReady: false, status: null, quality: null, error: null, isPlaying: true, isLooping: true, currentTime: 0, videosIndex: 0, fullscreen: false, playerWidth: Dimensions.get("window").width } |
+| videoIds                      | `array`  | List of videos.                                                                                                                                                                                                      |
+| forwordTimeDurationInSeconds  | `number` | Seconds to forword video time                                                                                                                                                                                        |
+| backwordTimeDurationInSeconds | `number` | Seconds to backword video time                                                                                                                                                                                       |
+| isForwordTimeDuration         |  `bool`  | Show forword time button                                                                                                                                                                                             |
+| isBackwordTimeDuration        |  `bool`  | Show backword time button                                                                                                                                                                                            |
 
 ## Module Preview Video
 
