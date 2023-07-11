@@ -5,8 +5,7 @@ import {
   Text,
   ScrollView,
   SafeAreaView,
-  StyleSheet,
-  Platform
+  StyleSheet
 } from "react-native"
 
 const WelcomeScreen = () => {
@@ -26,25 +25,10 @@ const WelcomeScreen = () => {
   )
 }
 
-const containerMobile = {
-  backgroundColor: "#F8F8FC",
-  height: "100%"
-}
-
 const styles = StyleSheet.create({
   container: {
-    ...Platform.select({
-      web: {
-        backgroundColor: "#F8F8FC",
-        minHeight: "100vh"
-      },
-      ios: {
-        ...containerMobile
-      },
-      android: {
-        ...containerMobile
-      }
-    })
+    backgroundColor: "#F8F8FC",
+    height: "100%"
   },
   scrollView: {
     flex: 1,

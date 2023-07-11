@@ -26,6 +26,7 @@ Then double check your work with those helper scripts checks:
 in order to bump the version, we need to modify `package.json` at `scaffold/package.json` and `.crowdbotics.json` at `scaffold/template/custom/.crowdbotics.json`
 
 ```
+pipenv shell
 yarn run manifest
 ```
 

@@ -588,14 +588,6 @@
     "type": "json"
   },
   {
-    "path": "screens/welcome/styles.js",
-    "type": "babel"
-  },
-  {
-    "path": "screens/welcome/styles.web.js",
-    "type": "babel"
-  },
-  {
     "path": "store/README.md",
     "type": "text"
   },
