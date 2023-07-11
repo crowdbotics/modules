@@ -105,7 +105,7 @@ export default {
         previousVersion: "2.2.0",
         previousVersionSHA: "54ea9645723f5c0f38cabb6f443a3701e5f5ae00",
         nextVersion: "2.3.0",
-        nextVersionSHA: "PLAT_11769",
+        nextVersionSHA: "PLAT-11769",
         ignoreTemplatize: [
           "ios/fastlane/metadata/review_information/review_demo_password.txt",
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
