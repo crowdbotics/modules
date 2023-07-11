@@ -6,7 +6,7 @@ Based on [Common Changelog](https://common-changelog.org/).
 
 ### Changed
 
-- update the welcome screen template, style at thecode file
+- update the welcome screen, move styles to the `index.js` file
 - added into the index.html, at the header, some style to support 100% height of all screens
 
 ## 2.2.0 - 2023-06-20
