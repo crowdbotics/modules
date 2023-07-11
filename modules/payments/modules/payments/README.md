@@ -1,5 +1,3 @@
-
-
 # iOS
 making sure the minimal iOS platform is set to 11 in `ios/Podfile` file
 
@@ -18,6 +16,9 @@ Follow these steps to resolve this:
 Open your project via Xcode, go to project -> build settings, find library search paths and remove all swift related entries such as: $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) and $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME).
 Create a new Swift file to the project (File > New > File > Swift), give it any name (e.g. Fix.swift) and create a bridging header when prompted by Xcode.
 
+### For new Scaffold `0.71.7`
+
+Support for react-native version 0.71 was released in stripe sdk `v0.23.3` and above. That requires`Xcode 14.1` or later and is compatible with apps targeting iOS 13 or above. So you need to change the minimum iOS version supported to `13.0`
 
 # Android
 AndroidManifest.xml
@@ -39,6 +40,15 @@ dependencies {
 
 }
 
+### For new Scaffold `0.71.7`
+
+If you get this error
+
+```powershell
+Execution failed for task ':stripe_stripe-react-native:compileDebugKotlin'.
+```
+
+You must specify the `Kotlin` version in “android/build.gradle” to `1.8.0`
 
 # Global configs
 in options/options.js
@@ -52,6 +62,30 @@ export const globalOptions = {
   stripe_secret_key: "sk_test_xxxxxxxx"
 }
 
+# Local configs
+1. in modules/payments/options.js
+
+configure your local options like this
+
+```
+export const localOptions = {
+  merchantName: "Example Inc.",
+  enableGooglePay: true,
+  enableApplePay: true,
+  merchantIdentifier: "merchant.com.crowdbotics.inaday",
+  merchantCountryCode: "US",
+  merchantCurrency: "USD",
+  stripeTestEnv: true,
+  stripePublishKey: "pk_test_xxxxxxxxxx"
+};
+```
+
+2. in modules/payments/api.js
+
+Update the token to make the api call with Authorization
+```
+const token = "Token 676364403988909cde7f501aa2efeaf9ca30d18c";
+```
 # Server
 
 python manage.py runserver 192.168.100.7:8000
