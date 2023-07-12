@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   safeArea: {
     height: "100%"
   },
-  MVfceqLO: {
+  container: {
     flex: 1,
     backgroundColor: "#333333",
     borderRadius: 0,
@@ -29,28 +29,48 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center"
   },
-  consoleResponseSection: {
+  responseSection: {
     flex: 1,
     backgroundColor: "#fff",
     padding: 10,
     margin: 10,
     borderRadius: 5
   },
-  consoleText: {
+  infoHeading: {
+    fontSize: 16,
+    color: "#333333",
+    fontWeight: "bold",
+    paddingRight: 5
+  },
+  infoText: {
     fontSize: 16,
     color: "#333333"
   },
-  DjHOfaku: {
+  title: {
     color: "#fff",
     fontSize: 16
+  },
+  listItem: {
+    padding: 5,
+    marginVertical: 2,
+    borderRadius: 5,
+    backgroundColor: "lightgray"
+  },
+  sectionHeaderTitle: {
+    color: "#000",
+    fontSize: 22
   }
 });
 
 export default {
-  title: "Azure Ad Auth",
-  copy: "Routes available",
   styles: styles,
-  azureTenant: "shahraizali10yahoo.onmicrosoft.com",
-  azureClientId: "37515f77-xxxx-xxxx-xxxx-dcf8496d948c", // see Readme for more info
-  azureRedirectUri: "com.shahrtestdemodev67931://com.shahrtestdemodev67931/android/callback" // see Readme for more info
+  AZURE_AUTH_OPTIONS: {
+    tenant: "",
+    clientId: "",
+    redirectUri: ""
+  },
+  AUTHORIZE_OPTIONS: {
+    prompt: "login",
+    scope: "openid profile User.Read"
+  }
 };
