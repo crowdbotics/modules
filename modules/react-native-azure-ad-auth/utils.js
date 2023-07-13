@@ -1,4 +1,5 @@
-export const ValidateConfig = (...params) => {
+export const validateConfig = (...params) => {
+  // this function identifies if some key is empty
   const emptyKeys = [];
   params.forEach((obj, index) => {
     for (const key in obj) {
@@ -10,6 +11,7 @@ export const ValidateConfig = (...params) => {
   return emptyKeys;
 };
 
-export const ArrayOfObjects = (obj) => {
+export const mapObjectToArray = (obj) => {
+  // this function converts objects into array
   return Object.entries(obj).map(([key, value]) => ({ key, value }));
 };

@@ -6,12 +6,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#333333",
-    borderRadius: 0,
-    color: "#777777"
+    backgroundColor: "#333333"
   },
   header: {
-    backgroundColor: "#fff",
     height: 50,
     justifyContent: "center",
     alignItems: "center",
@@ -19,46 +16,48 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
-    fontWeight: "bold",
     color: "#0F5197"
   },
   button: {
     backgroundColor: "#0F5197",
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
     alignItems: "center"
   },
-  responseSection: {
-    flex: 1,
-    backgroundColor: "#fff",
+  commonPadding: {
     padding: 10,
-    margin: 10,
-    borderRadius: 5
+    margin: 10
+  },
+  backgroundWhite: {
+    backgroundColor: "#fff"
+  },
+  responseSection: {
+    flex: 1
   },
   infoHeading: {
-    fontSize: 16,
-    color: "#333333",
-    fontWeight: "bold",
     paddingRight: 5
   },
-  infoText: {
-    fontSize: 16,
+  fontBold: {
+    fontWeight: "bold"
+  },
+  fontSixteen: {
+    fontSize: 16
+  },
+  infoColor: {
     color: "#333333"
   },
   title: {
-    color: "#fff",
-    fontSize: 16
+    color: "#fff"
   },
   listItem: {
     padding: 5,
     marginVertical: 2,
-    borderRadius: 5,
     backgroundColor: "lightgray"
   },
   sectionHeaderTitle: {
     color: "#000",
     fontSize: 22
+  },
+  commonRadius: {
+    borderRadius: 5
   }
 });
 
