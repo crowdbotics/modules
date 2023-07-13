@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
   logo: {
     height: 180,
     width: 180,
-    backgroundColor: "#ECEEF8",
     padding: 40,
     borderRadius: 30,
     margin: 40
