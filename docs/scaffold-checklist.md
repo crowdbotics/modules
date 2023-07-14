@@ -22,9 +22,13 @@ Then double check your work with those helper scripts checks:
 - `yarn run template` produces no changes
 - `yarn run semver` check passes
 
-**Important!** Make your new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](/config.js) to include a new `config.upgrade.versions` and then run:
+**Important!**
+
+Increase the version of the scaffold in [package.json](/scaffold/package.json) and [.crowdbotics.json](/scaffold/template/custom/.crowdbotics.json).
+Make this new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](/config.js) to include a new `config.upgrade.versions` and then finally run:
 
 ```
+pipenv shell
 yarn run manifest
 ```
 
