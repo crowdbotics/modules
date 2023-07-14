@@ -2,6 +2,13 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.3.0 - 2023-07-10
+
+### Changed
+
+- update the welcome screen, move styles to the `index.js` file
+- added into the index.html, at the header, some style to support 100% height of all screens
+
 ## 2.2.0 - 2023-06-20
 
 ### Added

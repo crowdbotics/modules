@@ -171,6 +171,7 @@ Checks if the scaffold [.crowdbotics.json](/scaffold/template/custom/.crowdbotic
 ## Generate a scaffold upgrade manifest
 
 ```
+pipenv shell
 yarn run manifest
 ```
 
