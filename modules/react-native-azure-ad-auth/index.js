@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { OptionsContext } from "@options";
-import { SafeAreaView, View, Text, TouchableOpacity, Alert, SectionList } from "react-native";
+import { SafeAreaView, View, Text, TouchableOpacity, Alert, SectionList, ActivityIndicator } from "react-native";
 import AzureAuth from "react-native-azure-auth";
 import { mapObjectToArray, validateConfig } from "./utils";
 
@@ -12,6 +12,8 @@ const AzureADAuth = () => {
   // Saving the instance AzureAuth which is coming from "react-native-azure-auth"
   // and futher instances will also save through AzureAuth
   const [azureAuth, setAzureAuth] = useState(null);
+
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     // Validations of the configurations i.e tenant, clientId, redirectUri, prompt and scope
@@ -42,6 +44,7 @@ const AzureADAuth = () => {
 
   const fetchUserInfo = async () => {
     try {
+      setLoader(true);
       // fetch the token
       const token = await authorize();
       // fetch the user information
@@ -57,7 +60,9 @@ const AzureADAuth = () => {
         title: "Token Information",
         data: mapObjectToArray(token)
       }]);
+      setLoader(false);
     } catch (error) {
+      setLoader(false);
       // The error messages will show up if there is any error
       Alert.alert("Error", "error_description" in error ? error.error_description : error.message);
     }
@@ -83,6 +88,7 @@ const AzureADAuth = () => {
           <Text style={[options.styles.title, options.styles.fontSixteen]}>Login with Azure AD</Text>
         </TouchableOpacity>
         <View style={[options.styles.responseSection, options.styles.backgroundWhite, options.styles.commonPadding, options.styles.commonRadius]}>
+          {loader && <ActivityIndicator /> }
           <SectionList
             sections={userInfo}
             renderItem={({ item }) => <FlatListItem item={item}/>}
