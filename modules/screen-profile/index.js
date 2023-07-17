@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  ScrollView,
   Text,
   View,
   StyleSheet,
@@ -15,16 +14,18 @@ const pressed = () => {
 
 const Profile = () => {
   return (
-    <ScrollView>
       <View style={styles.mainContainer}>
+        <View style={styles.mainHeader}>
+          <Image source={require("./assets/back.png")} style={styles.backIcon} />
+        </View>
         <View>
           <View style={styles.headerContainer}>
             <ProfileImage />
-            <Text style={styles.headerText}>Jay Mahanga</Text>
-            <Text style={styles.headerSubText}>jay@gmail.com</Text>
+            <Text style={styles.headerText}>User Name</Text>
+            <Text style={styles.headerSubText}>user@example.com</Text>
           </View>
           <View style={styles.subheaderContainer}>
-            <Text style={styles.subheaderDetailText}>Details</Text>
+            <Text style={styles.subheaderDetailText}>Edit Account</Text>
             <Text style={styles.subheaderRemoveText}>Delete Account</Text>
           </View>
         </View>
@@ -52,7 +53,6 @@ const Profile = () => {
           </Button>
         </View>
       </View>
-    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
@@ -63,6 +63,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: "100%",
     backgroundColor: "#FFF"
+  },
+  mainHeader: {
+    marginTop: 25
+  },
+  backIcon: {
+    height: 20,
+    width: 11.5,
+    marginLeft: 15
   },
   mt15: {
     marginTop: 15
@@ -76,6 +84,7 @@ const styles = StyleSheet.create({
   headerText: {
     marginTop: 15,
     fontSize: 20,
+    color: "#000000",
     fontWeight: "bold"
   },
   headerSubText: {
@@ -86,64 +95,75 @@ const styles = StyleSheet.create({
   },
   subheaderContainer: {
     marginTop: 15,
-    marginBottom: 30,
-    padding: 10,
+    marginBottom: 0,
+    paddingTop: 10,
+    marginHorizontal: 20,
+    paddingBottom: 20,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: "#C4C4C4"
   },
   subheaderDetailText: {
-    fontSize: 16,
-    fontWeight: "bold"
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#4DE1AB"
   },
   subheaderRemoveText: {
     fontSize: 14,
+    fontWeight: "500",
     color: "#FF6848"
   },
   textLabel: {
     fontSize: 14,
     marginLeft: 15,
     marginBottom: 5,
-    fontWeight: "bold"
+    color: "#1F1F1F"
   },
   mainBody: {
-    // height: '60%'
+    marginHorizontal: 10
   },
   btnSave: {
     display: "flex",
     alignSelf: "center",
-    marginTop: 50,
-    width: "80%"
+    width: "80%",
+    marginBottom: 30
   }
 });
 
 export default Profile;
 
 const Button = (props) => {
+  const {
+    onPress,
+    borderWidth,
+    borderColor,
+    height,
+    color,
+    backgroundColor,
+    children
+  } = props;
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">
+    <TouchableHighlight onPress={onPress} underlayColor="#DDDDDD">
       <View
         style={[
           btnStyles.button,
           {
-            backgroundColor: props.backgroundColor
-              ? props.backgroundColor
-              : "#000000",
-            height: props.height ? props.height : 49,
-            borderWidth: props.borderWidth ? props.borderWidth : 0,
-            borderColor: props.borderColor ? props.borderColor : "#000000"
+            backgroundColor: backgroundColor || "#000000",
+            height: height || 49,
+            borderWidth: borderWidth || 0,
+            borderColor: borderColor || "#000000"
           }
         ]}
       >
         <Text
           style={[
             btnStyles.text,
-            { color: props.color ? props.color : "#ffffff" }
+            { color: color || "#ffffff" }
           ]}
         >
-          {props.children}
+          {children}
         </Text>
       </View>
     </TouchableHighlight>
@@ -192,19 +212,26 @@ const profileStyles = StyleSheet.create({
 });
 
 const Input = (props) => {
+  const {
+    placeholder,
+    value,
+    setValue,
+    errorText,
+    editable
+  } = props;
   return (
     <View>
       <TextInput
         style={inputStyles.input}
-        placeholder={props.placeholder}
-        value={props.value}
-        onChangeText={(num) => props.setValue(num)}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={(num) => setValue(num)}
         placeholderTextColor="#ddd"
-        editable={props.editable !== false}
+        editable={editable !== false}
       />
-      {props.errorText
+      {errorText
         ? (
-        <Text style={inputStyles.error}>{props.errorText}</Text>
+        <Text style={inputStyles.error}>{errorText}</Text>
           )
         : null}
     </View>
