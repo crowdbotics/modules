@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, Fragment } from "react";
 import { OptionsContext } from "@options";
-import { SafeAreaView, View, Text, TouchableOpacity, Alert, SectionList, ActivityIndicator } from "react-native";
+import { SafeAreaView, View, Text, TouchableOpacity, Alert, SectionList, ActivityIndicator, Image } from "react-native";
 import AzureAuth from "react-native-azure-auth";
 import { mapObjectToArray, validateConfig } from "./utils";
 
@@ -81,23 +81,38 @@ const AzureADAuth = () => {
   return (
     <SafeAreaView style={options.styles.safeArea}>
       <View style={options.styles.container}>
-        <View style={[options.styles.header, options.styles.backgroundWhite]}>
-          <Text style={[options.styles.headerText, options.styles.fontBold]}>Azure Active Directory</Text>
+        <View style={[options.styles.header, options.styles.backgroundColor, options.styles.alignCenter]}>
+          <Image style={options.styles.logo} source={require("./assets/logo.png")} />
+          <Text style={[options.styles.fontBold, options.styles.title, options.styles.fontSize20]}>Azure Active Directory</Text>
         </View>
-        <TouchableOpacity style={[options.styles.button, options.styles.commonPadding, options.styles.commonRadius]} onPress={fetchUserInfo}>
+        <View style={options.styles.titleContainer}>
+          <Text style={[options.styles.azureTitle, options.styles.fontBold, options.styles.fontSize20]}>Azure AD</Text>
+          <Text style={[options.styles.azureDescription, options.styles.fontSixteen, options.styles.lineHeight18]}>Welcome to Authenticate you with Azure AD</Text>
+        </View>
+        <Image style={options.styles.bannerImage} resizeMode="cover" source={require("./assets/banner.png")} />
+        <TouchableOpacity style={[options.styles.button, options.styles.commonPadding, options.styles.commonRadius, options.styles.alignCenter]} onPress={fetchUserInfo}>
           <Text style={[options.styles.title, options.styles.fontSixteen]}>Login with Azure AD</Text>
         </TouchableOpacity>
-        <View style={[options.styles.responseSection, options.styles.backgroundWhite, options.styles.commonPadding, options.styles.commonRadius]}>
-          {loader && <ActivityIndicator /> }
-          <SectionList
-            sections={userInfo}
-            renderItem={({ item }) => <FlatListItem item={item}/>}
-            renderSectionHeader={({ section: { title } }) => (
-              <Text style={options.styles.sectionHeaderTitle}>{title}</Text>
-            )}
-          />
+        <View style={[options.styles.responseSection, options.styles.backgroundWhite, options.styles.commonPadding, options.styles.commonRadius, options.styles.alignCenter]}>
+          {loader
+            ? <ActivityIndicator />
+            : <Fragment>
+            {
+              userInfo.length === 0 &&
+              <Text style={[options.styles.fontSixteen, options.styles.indicationText, options.styles.lineHeight22, options.styles.textCenter]}>
+                Press on &quot;Login with Azure AD&quot; button to Authenticate and to get User Information
+              </Text>
+            }
+            <SectionList
+              sections={userInfo}
+              renderItem={({ item }) => <FlatListItem item={item} />}
+              renderSectionHeader={({ section: { title } }) => (
+                <Text style={options.styles.sectionHeaderTitle}>{title}</Text>
+              )}
+            />
+          </Fragment>
+          }
         </View>
-
       </View>
     </SafeAreaView>
   );

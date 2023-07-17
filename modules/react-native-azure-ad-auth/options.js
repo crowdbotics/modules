@@ -1,26 +1,61 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+  backgroundColor: {
+    backgroundColor: "#0d7fd8"
+  },
+  logo: {
+    width: 40,
+    height: 40
+  },
+  titleContainer: {
+    paddingLeft: 10,
+    marginVertical: 10
+  },
+  fontSize20: {
+    fontSize: 20
+  },
+  azureTitle: {
+    color: "#0d7fd8"
+  },
+  azureDescription: {
+    color: "#000",
+    fontWeight: "500"
+  },
+  bannerImage: {
+    width: "100%",
+    height: 280
+  },
+  indicationText: {
+    width: 270,
+    marginTop: "10%"
+  },
+  textCenter: {
+    textAlign: "center"
+  },
+  lineHeight22: {
+    lineHeight: 22
+  },
+  lineHeight18: {
+    lineHeight: 18
+  },
   safeArea: {
     height: "100%"
   },
   container: {
-    flex: 1,
-    backgroundColor: "#333333"
+    flex: 1
   },
   header: {
     height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomWidth: 1
+    paddingLeft: 5,
+    flexDirection: "row",
+    justifyContent: "flex-start"
   },
-  headerText: {
-    fontSize: 20,
-    color: "#0F5197"
+  alignCenter: {
+    alignItems: "center"
   },
   button: {
-    backgroundColor: "#0F5197",
-    alignItems: "center"
+    backgroundColor: "#0d7fd8"
   },
   commonPadding: {
     padding: 10,
@@ -57,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 22
   },
   commonRadius: {
-    borderRadius: 5
+    borderRadius: 3
   }
 });
 
