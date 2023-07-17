@@ -13,10 +13,13 @@ class TimeStamp(models.Model):
 
 
 class TwoFactorAuth(TimeStamp):
+    EMAIL = 'email'
+    PHONE_NUMBER = 'phone_number'
+    GOOGLE_AUTHENTICATOR = 'google_authenticator'
     METHOD = (
-        ('email', 'Email'),
-        ('phone_number', 'Phone Number'),
-        ('google_authenticator', 'Google Authenticator')
+        (EMAIL, 'Email'),
+        (PHONE_NUMBER, 'Phone Number'),
+        (GOOGLE_AUTHENTICATOR, 'Google Authenticator')
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user")
@@ -27,3 +30,14 @@ class TwoFactorAuth(TimeStamp):
         return str(self.user)
 
 
+class EnableTwoFactorAuthentication(TimeStamp):
+    METHOD = (
+        ('email', 'Email'),
+        ('phone_number', 'Phone Number'),
+        ('google_authenticator', 'Google Authenticator')
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="enable_user")
+    method = models.CharField(max_length=32, choices=METHOD, default="email")
+
+    def __str__(self):
+        return str(self.user)

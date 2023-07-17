@@ -1,25 +1,13 @@
-from datetime import datetime
-
-import pyotp
-from django.utils.timezone import utc
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from django.conf import settings
-from .models import TwoFactorAuth
-from .serializers import TwoFactorAuthSerializer, OTPVerificationSerializer
-from twilio.rest import Client
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-
-
-def get_time_diff(time_posted):
-    now = datetime.utcnow().replace(tzinfo=utc)
-    timediff = now - time_posted
-    return timediff.total_seconds()
+from .models import EnableTwoFactorAuthentication
+from .serializers import OTPVerificationSerializer, TwoFactorAuthValidationSerializer, \
+    EnableTwoFactorAuthenticationUserSerializer
+from .service.TwoFactorAuthenticationService import TwoFactorAuthenticationService
 
 
 class TwoFactorAuthViewSet(APIView):
@@ -28,51 +16,22 @@ class TwoFactorAuthViewSet(APIView):
 
     def post(self, request, *args, **kwargs):
         """
-        Sends otp code to the given phone number or email address. Verifies wether your email or phone number is registered or not.
+        Sends otp code to the given phone number or email address.
+        Verifies wether your email or phone number is registered or not.
         :param request: Contains an object which have field "method" (email, phone_number).
         """
         try:
-            data = request.data
+            data = self.request.data
             user = request.user
-            otp_code = pyotp.TOTP(settings.TOTP_SECRET).now()
+            EnableTwoFactorAuthentication.objects.get(user=user.id)
             validate_data = {
                 "user": user.id,
-                "code": otp_code,
                 "method": data.get("method")
             }
-            tmp_user = TwoFactorAuth.objects.filter(user=validate_data["user"])
-            if tmp_user.exists():
-                tmp_user.delete()
-
-            auth_serializer = TwoFactorAuthSerializer(data=validate_data)
-            if auth_serializer.is_valid():
-                if validate_data["method"] == "email":
-                    message = Mail(
-                        from_email=settings.EMAIL,
-                        to_emails=user.email,
-                        subject=settings.EMAIL_SUBJECT,
-                        html_content="Your OTP code is {}. Don't share with anyone.".format(
-                            validate_data["code"])
-                    )
-                    auth_serializer.save()
-                    sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
-                    sg.send(message)
-                    return Response({"message": "Verification code has been sent to your Email Address"},
-                                    status=status.HTTP_200_OK)
-                elif validate_data["method"] == "phone_number":
-                    account_sid = settings.ACCOUNT_SID
-                    auth_token = settings.AUTH_TOKEN
-                    auth_serializer.save()
-                    client = Client(account_sid, auth_token)
-                    client.messages.create(
-                        from_=settings.PHONE,
-                        to=str(user.phone_number),
-                        body="Your OTP code is {}. Don't share with anyone.".format(validate_data["code"])
-                    )
-                    return Response({"message": "Verification code has been sent to your Phone number"},
-                                    status=status.HTTP_200_OK)
-            else:
-                return Response(auth_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = TwoFactorAuthValidationSerializer(data=validate_data)
+            serializer.is_valid(raise_exception=True)
+            response = TwoFactorAuthenticationService.send_otp(user=request.user, method=validate_data["method"])
+            return Response(response, status=response.get('status'))
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -83,15 +42,14 @@ class GoogleAuthenticatorViewSet(APIView):
 
     def get(self, request, *args, **kwargs):
         """
-        Google Authenticator will return the QR code link which you can use to register on Google Authenticator App.
+        Google Authenticator will return the QR code link
+        which you can use to register on Google Authenticator App.
         """
         try:
-            user = request.user
-            name = user.email
-            link = pyotp.TOTP(settings.TOTP_SECRET).provisioning_uri(name=name, issuer_name="2FA")
-            return Response({
-                "link": link,
-            }, status=status.HTTP_200_OK)
+            user = self.request.user
+            EnableTwoFactorAuthentication.objects.get(user=user.id)
+            response = TwoFactorAuthenticationService.google_authenticator(user=user)
+            return Response(response)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -106,31 +64,63 @@ class OTPVerificationViewSet(APIView):
         :param request: Contains an object, contains method(email, phone_number, google_authenticator) and code.
         """
         try:
-            data = request.data
+            data = self.request.data
             user = request.user
             validate_data = {
                 "code": data.get("code"),
                 "method": data.get("method")
             }
-            verification_serializer = OTPVerificationSerializer(data=validate_data)
-            if verification_serializer.is_valid():
-                if validate_data["method"] == "google_authenticator":
-                    totp_code = pyotp.TOTP(settings.TOTP_SECRET).now()
-                    if totp_code == validate_data["code"]:
-                        return Response({"message": "Verified"}, status=status.HTTP_200_OK)
-                    else:
-                        return Response({"error": ["Not Verified"]}, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    result = TwoFactorAuth.objects.get(user=user, code=validate_data["code"])
-                    if result:
-                        result.delete()
-                        if get_time_diff(result.created_at) <= settings.OTP_EXPIRATION_TIME:
-                            return Response({"message": "Verified"}, status=status.HTTP_200_OK)
-                        else:
-                            return Response({"error": ["Code expired"]}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response(verification_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = OTPVerificationSerializer(data=validate_data)
+            serializer.is_valid(raise_exception=True)
+            response = TwoFactorAuthenticationService.otp_verification(
+                user=user, otp=validate_data['code'],
+                method=validate_data['method'])
+            if kwargs.get('is_enable'):
+                if response.get('status') == status.HTTP_200_OK:
+                    EnableTwoFactorAuthentication.objects.create(user=user, method=data.get("method"))
+            return Response(response, status=response.get('status'))
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
+class EnableTwoFactorAuthViewSet(APIView):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        """
+           Enable two-factor authentication by using email or phone number.
+           Sends otp code to the given phone number or email address.
+           :param request: Contains an object, contains method(email, phone_number, google_authenticator) and code.
+        """
+        try:
+            data = self.request.data
+            validate_data = {
+                "user": self.request.user.id,
+                "method": data.get("method")
+            }
+            serializer = EnableTwoFactorAuthenticationUserSerializer(data=validate_data)
+            serializer.is_valid(raise_exception=True)
+            response = TwoFactorAuthenticationService.send_otp(
+                user=self.request.user, method=validate_data['method']
+            )
+            return Response(response)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        """
+           Disable two-factor authentication by user id.
+           :param request: Contains a method and user authorization token.
+        """
+        try:
+            user = self.request.user
+            EnableTwoFactorAuthentication.objects.filter(
+                user=user.id
+            ).delete()
+            return Response(
+                {"message": "Two Factor Authentication disable Successfully"},
+                status=status.HTTP_202_ACCEPTED
+            )
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)

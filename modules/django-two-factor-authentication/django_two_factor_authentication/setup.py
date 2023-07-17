@@ -13,6 +13,6 @@ setup(
     name="cb_django_two_factor_authentication",
     version="0.1",
     packages=["two_factor_authentication"],
-    install_requires=["twilio", "sendgrid", "pyotp"],
+    install_requires=["twilio", "sendgrid", "pyotp", "freezegun"],
     cmdclass={"build": BuildCommand},
-) 
+)
