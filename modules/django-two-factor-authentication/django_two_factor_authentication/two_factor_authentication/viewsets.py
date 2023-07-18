@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import EnableTwoFactorAuthentication
+from .models import EnableTwoFactorAuthentication, TwoFactorAuth
 from .serializers import OTPVerificationSerializer, TwoFactorAuthValidationSerializer, \
     EnableTwoFactorAuthenticationUserSerializer
 from .service.TwoFactorAuthenticationService import TwoFactorAuthenticationService
@@ -27,19 +27,21 @@ class TwoFactorAuthViewSet(APIView):
         try:
             data = self.request.data
             user = request.user
-            enabled_user = EnableTwoFactorAuthentication.objects.filter(user=user.id).exists()
+            validate_data = {
+                "user": user.id,
+                "method": data.get("method")
+            }
+            serializer = TwoFactorAuthValidationSerializer(data=validate_data)
+            serializer.is_valid(raise_exception=True)
+            enabled_user = EnableTwoFactorAuthentication.objects.filter(user=user.id,
+                                                                        method=data.get('method')
+                                                                        ).exists()
             if enabled_user:
-                validate_data = {
-                    "user": user.id,
-                    "method": data.get("method")
-                }
-                serializer = TwoFactorAuthValidationSerializer(data=validate_data)
-                serializer.is_valid(raise_exception=True)
                 response = TwoFactorAuthenticationService.send_otp(user=request.user, method=validate_data["method"])
                 return Response(response, status=response.get('status'))
-            else:
-                return Response({"message": "Two factor authentication is not enabled"},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"message": "Two factor authentication is not enabled or You have not selected valid method"},
+                status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -63,9 +65,8 @@ class GoogleAuthenticatorViewSet(APIView):
             if enabled_user:
                 response = TwoFactorAuthenticationService.google_authenticator(user=user)
                 return Response(response, status=response.get('status'))
-            else:
-                return Response({"message": "Two factor authentication is not enabled"},
-                                status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Two factor authentication is not enabled"},
+                            status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -92,13 +93,18 @@ class OTPVerificationViewSet(APIView):
             }
             serializer = OTPVerificationSerializer(data=validate_data)
             serializer.is_valid(raise_exception=True)
-            response = TwoFactorAuthenticationService.otp_verification(
-                user=user, otp=validate_data['code'],
-                method=validate_data['method'])
-            if kwargs.get('is_enable'):
-                if response.get('status') == status.HTTP_200_OK:
-                    EnableTwoFactorAuthentication.objects.create(user=user, method=data.get("method"))
-            return Response(response, status=response.get('status'))
+            two_fa_user = TwoFactorAuth.objects.filter(user=user.id, method=validate_data['method']).exists()
+            if two_fa_user or validate_data['method'] == TwoFactorAuth.GOOGLE_AUTHENTICATOR:
+                response = TwoFactorAuthenticationService.otp_verification(
+                    user=user, otp=validate_data['code'],
+                    method=validate_data['method'])
+                if kwargs.get('enable'):
+                    if response.get('status') == status.HTTP_200_OK:
+                        EnableTwoFactorAuthentication.objects.create(user=user, method=data.get("method"))
+                return Response(response, status=response.get('status'))
+            return Response(
+                {"message": "Two factor authentication is not enabled or No code is available against this method."},
+                status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -124,6 +130,12 @@ class EnableTwoFactorAuthViewSet(APIView):
             }
             serializer = EnableTwoFactorAuthenticationUserSerializer(data=validate_data)
             serializer.is_valid(raise_exception=True)
+            if validate_data['method'] == TwoFactorAuth.GOOGLE_AUTHENTICATOR:
+                response = TwoFactorAuthenticationService.google_authenticator(
+                    user=self.request.user
+                )
+                return Response(response)
+
             response = TwoFactorAuthenticationService.send_otp(
                 user=self.request.user, method=validate_data['method']
             )
@@ -146,4 +158,4 @@ class EnableTwoFactorAuthViewSet(APIView):
                 status=status.HTTP_202_ACCEPTED
             )
         except:
-            return Response({"message": "Two factor authentication in not Enabled"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Two factor authentication is not Enabled"}, status=status.HTTP_400_BAD_REQUEST)

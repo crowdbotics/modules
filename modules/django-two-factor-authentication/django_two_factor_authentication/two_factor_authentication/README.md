@@ -109,7 +109,7 @@ List of api's endpoints with params needed for these apis.
 | `/modules/two-factor-authentication/google/authenticator/qr` <br /> method: `GET` |                                                   -                                                    | Google Authenticator will return the QR code link which you can use to register on Google Authenticator App. |
 | `/modules/two-factor-authentication/enable/2fa` <br /> method: `POST`             |                        object <br /> `{ "method": "email" or "phone_number" }`                         | Enable Two factor authentication and send email, sms or get link to your given method.                       |
 | `/modules/two-factor-authentication/enable/2fa` <br /> method: `DELETE`           |                                                   -                                                    | Use to disable Two Factor authentication.                                                                    |
-| `/modules/two-factor-authentication/verify/otp/is_enable` <br /> method: `POST`   |                            object <br /> `{ "method": "email", "code": ""}`                            | Takes object containing method and code and verify.                                                          |
+| `/modules/two-factor-authentication/verify/otp/enable ` <br /> method: `POST`     |                            object <br /> `{ "method": "email", "code": ""}`                            | Takes object containing method and code and verify which users has enable 2FA.                               |
 
 
 ### Module Specifications

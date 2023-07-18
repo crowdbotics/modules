@@ -1,3 +1,5 @@
+from typing import Dict
+
 import pyotp
 from django.conf import settings
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -11,7 +13,7 @@ from modules.django_two_factor_authentication.two_factor_authentication.utils im
 
 class TwoFactorAuthenticationService:
     @staticmethod
-    def send_otp(user, method):
+    def send_otp(user, method) -> Dict:
         try:
             otp_code = pyotp.TOTP(settings.TOTP_SECRET).now()
             TwoFactorAuth.objects.filter(user=user).delete()
@@ -40,7 +42,7 @@ class TwoFactorAuthenticationService:
             return {"error": e.args, "status": HTTP_400_BAD_REQUEST}
 
     @staticmethod
-    def google_authenticator(user):
+    def google_authenticator(user) -> Dict:
         try:
             link = pyotp.TOTP(settings.TOTP_SECRET).provisioning_uri(name=user.email, issuer_name="2FA")
             return {"link": link, 'status': HTTP_200_OK}
@@ -48,13 +50,13 @@ class TwoFactorAuthenticationService:
             return {"error": e.args, "status": HTTP_400_BAD_REQUEST}
 
     @staticmethod
-    def otp_verification(user, otp, method):
+    def otp_verification(user, otp, method) -> Dict:
         if method == TwoFactorAuth.GOOGLE_AUTHENTICATOR:
             totp_code = pyotp.TOTP(settings.TOTP_SECRET).now()
-            if totp_code == otp:
+            if totp_code == str(otp):
                 return {"message": "Verified", "status": HTTP_200_OK}
             else:
-                return {"error": ["Not Verified"], "status": HTTP_400_BAD_REQUEST}
+                return {"error": ["Code expired"], "status": HTTP_400_BAD_REQUEST}
         else:
             try:
                 result = TwoFactorAuth.objects.get(user=user, code=otp)

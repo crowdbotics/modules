@@ -6,7 +6,7 @@ from .models import TwoFactorAuth, EnableTwoFactorAuthentication
 class OTPVerificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TwoFactorAuth
-        fields = '__all__'
+        fields = ['method', 'code']
         extra_kwargs = {'user': {'required': False}}
 
 
