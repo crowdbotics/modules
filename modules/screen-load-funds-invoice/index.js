@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Text, View, StyleSheet, Image, Pressable } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Pressable,
+  ScrollView
+} from "react-native";
 
 const LoadFundsInvoice = () => {
   // Minimum amount is being set through this variable
@@ -8,10 +15,9 @@ const LoadFundsInvoice = () => {
   // Title of currencies that can be loaded are defined in this array
   const tabTitles = ["Dollar", "Bitcoin", "Euro", "Pound"];
   return (
-    <View style={styles.container}>
-
+    <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.headerView}>
-        <Image source={require("./assets/back.png")} style={styles.backIcon}/>
+        <Image source={require("./assets/back.png")} style={styles.backIcon} />
         <View style={styles.subHeaderView}>
           <Text style={styles.headerTitle}>Load funds</Text>
         </View>
@@ -34,13 +40,9 @@ const LoadFundsInvoice = () => {
         style={styles.tabView}
       />
 
-      <InputToken
-        value={tokenValue}
-        onChange={setTokenValue}
-        step={1}
-      />
+      <InputToken value={tokenValue} onChange={setTokenValue} step={1} />
 
-      <View style={[styles.itemContainer, { height: 60 }]}>
+      <View style={[styles.itemContainer, styles.EbCIrmZw]}>
         <Text style={styles.infoText}>Info</Text>
       </View>
       <View style={styles.itemContainer}>
@@ -58,14 +60,15 @@ const LoadFundsInvoice = () => {
         <Text style={styles.totalText}>${(tokenValue + 3).toFixed(2)}</Text>
       </View>
       <Button buttonText="Load Up" style={styles.button} hideShadow={true} />
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    height: "100%"
   },
   headerView: {
     flexDirection: "row",
@@ -128,26 +131,23 @@ const styles = StyleSheet.create({
     color: "#000"
   },
   button: {
-    flex: 1,
-    justifyContent: "flex-end",
-    marginBottom: 50
+    marginTop: 30,
+    marginBottom: 20
+  },
+  EbCIrmZw: {
+    height: 60
   }
 });
-
 export default LoadFundsInvoice;
 
-const InputToken = (props) => {
-  const {
-    step,
-    onChange,
-    value
-  } = props;
+const InputToken = props => {
+  const { step, onChange, value } = props;
   // This function is used to reduce the amount to be loaded
-  const decrement = (value) => {
+  const decrement = value => {
     return (value -= step);
   };
   // This function is used to increase the amount to be loaded
-  const increment = (value) => {
+  const increment = value => {
     return (value += step);
   };
   return (
@@ -170,6 +170,7 @@ const InputToken = (props) => {
     </View>
   );
 };
+
 const inputTokenStyles = StyleSheet.create({
   container: {
     marginVertical: 10
@@ -193,7 +194,7 @@ const inputTokenStyles = StyleSheet.create({
     resizeMode: "contain"
   }
 });
-const TabView = (props) => {
+const TabView = props => {
   const {
     tabTitles,
     selected,
@@ -222,9 +223,7 @@ const TabView = (props) => {
       {generator.map((item, index) => (
         <Pressable
           onPress={() => (onPress ? onPress(index) : null)}
-          style={
-           [tabColorStyle, tabViewStyles.tabItem]
-          }
+          style={[tabColorStyle, tabViewStyles.tabItem]}
           key={index}
         >
           {icons
@@ -265,7 +264,7 @@ const tabViewStyles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     backgroundColor: "#fff",
-    marginHorizontal: 5,
+    marginHorizontal: 3,
     shadowColor: "#000",
     elevation: 10
   },
@@ -283,7 +282,7 @@ const tabViewStyles = StyleSheet.create({
   }
 });
 
-const Button = (params) => {
+const Button = params => {
   const {
     color,
     textColor,
@@ -293,7 +292,7 @@ const Button = (params) => {
     buttonText,
     children
   } = params;
-   // This variable changes the background color of the pressable button.
+  // This variable changes the background color of the pressable button.
   const backgroundColor = color || "#000";
   // This variable changes the text color of the pressable button.
   const buttonTextColor = textColor || "#fff";
@@ -307,15 +306,10 @@ const Button = (params) => {
   };
   return (
     <View style={[buttonStyles.btnContainer, style]}>
-        <Pressable
-          style={[buttonStyles.btn, btnStyle]}
-          onPress={onPress}
-        >
-          <Text style={[buttonStyles.btnText, btnText]}>
-            {buttonText}
-          </Text>
-          <View style={styles.childrenContainer}>{children}</View>
-        </Pressable>
+      <Pressable style={[buttonStyles.btn, btnStyle]} onPress={onPress}>
+        <Text style={[buttonStyles.btnText, btnText]}>{buttonText}</Text>
+        <View style={styles.childrenContainer}>{children}</View>
+      </Pressable>
     </View>
   );
 };
