@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TouchableHighlight,
   Image,
-  TextInput
+  TextInput,
+  ScrollView
 } from "react-native";
 
 const pressed = () => {
@@ -14,55 +15,62 @@ const pressed = () => {
 
 const Profile = () => {
   return (
-      <View style={styles.mainContainer}>
-        <View style={styles.mainHeader}>
-          <Image source={require("./assets/back.png")} style={styles.backIcon} />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.mainContainer}
+      contentContainerStyle={styles.contentContainerStyle}
+    >
+      <View style={styles.mainHeader}>
+        <Image source={require("./assets/back.png")} style={styles.backIcon} />
+      </View>
+      <View>
+        <View style={styles.headerContainer}>
+          <ProfileImage />
+          <Text style={styles.headerText}>User Name</Text>
+          <Text style={styles.headerSubText}>user@example.com</Text>
         </View>
-        <View>
-          <View style={styles.headerContainer}>
-            <ProfileImage />
-            <Text style={styles.headerText}>User Name</Text>
-            <Text style={styles.headerSubText}>user@example.com</Text>
-          </View>
-          <View style={styles.subheaderContainer}>
-            <Text style={styles.subheaderDetailText}>Edit Account</Text>
-            <Text style={styles.subheaderRemoveText}>Delete Account</Text>
-          </View>
-        </View>
-        <View style={styles.mainBody}>
-          <View style={styles.mt15}>
-            <Text style={styles.textLabel}>Name</Text>
-            <Input placeholder="Name" />
-          </View>
-          <View style={styles.mt15}>
-            <Text style={styles.textLabel}>Email address</Text>
-            <Input placeholder="Email address" />
-          </View>
-          <View style={styles.mt15}>
-            <Text style={styles.textLabel}>Gender</Text>
-            <Input placeholder="Gender" />
-          </View>
-          <View style={styles.mt15}>
-            <Text style={styles.textLabel}>Password</Text>
-            <Input placeholder="Password" />
-          </View>
-        </View>
-        <View style={styles.btnSave}>
-          <Button onPress={pressed} height={49}>
-            Save
-          </Button>
+        <View style={styles.subheaderContainer}>
+          <Text style={styles.subheaderDetailText}>Edit Account</Text>
+          <Text style={styles.subheaderRemoveText}>Delete Account</Text>
         </View>
       </View>
+      <View style={styles.mainBody}>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Name</Text>
+          <Input placeholder="Name" />
+        </View>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Email address</Text>
+          <Input placeholder="Email address" />
+        </View>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Gender</Text>
+          <Input placeholder="Gender" />
+        </View>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Password</Text>
+          <Input placeholder="Password" />
+        </View>
+      </View>
+      <View style={styles.btnSave}>
+        <Button onPress={pressed} height={49}>
+          Save
+        </Button>
+      </View>
+    </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   mainContainer: {
     padding: 10,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
     height: "100%",
     backgroundColor: "#FFF"
+  },
+  contentContainerStyle: {
+    justifyContent: "space-between"
   },
   mainHeader: {
     marginTop: 25
@@ -126,12 +134,12 @@ const styles = StyleSheet.create({
   },
   btnSave: {
     display: "flex",
+    marginTop: 20,
     alignSelf: "center",
     width: "80%",
     marginBottom: 30
   }
 });
-
 export default Profile;
 
 const Button = (props) => {
@@ -160,7 +168,9 @@ const Button = (props) => {
         <Text
           style={[
             btnStyles.text,
-            { color: color || "#ffffff" }
+            {
+              color: color || "#ffffff"
+            }
           ]}
         >
           {children}
@@ -212,13 +222,7 @@ const profileStyles = StyleSheet.create({
 });
 
 const Input = (props) => {
-  const {
-    placeholder,
-    value,
-    setValue,
-    errorText,
-    editable
-  } = props;
+  const { placeholder, value, setValue, errorText, editable } = props;
   return (
     <View>
       <TextInput
@@ -229,11 +233,7 @@ const Input = (props) => {
         placeholderTextColor="#ddd"
         editable={editable !== false}
       />
-      {errorText
-        ? (
-        <Text style={inputStyles.error}>{errorText}</Text>
-          )
-        : null}
+      {errorText ? <Text style={inputStyles.error}>{errorText}</Text> : null}
     </View>
   );
 };
