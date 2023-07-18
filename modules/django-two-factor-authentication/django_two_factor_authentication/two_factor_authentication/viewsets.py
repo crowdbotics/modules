@@ -11,6 +11,10 @@ from .service.TwoFactorAuthenticationService import TwoFactorAuthenticationServi
 
 
 class TwoFactorAuthViewSet(APIView):
+    """
+    TwoFactorAuthViewSet utilizes Twilio and SendGrid services to send OTPs via email
+    and SMS if the user have enabled 2FA service.
+    """
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -23,20 +27,28 @@ class TwoFactorAuthViewSet(APIView):
         try:
             data = self.request.data
             user = request.user
-            EnableTwoFactorAuthentication.objects.get(user=user.id)
-            validate_data = {
-                "user": user.id,
-                "method": data.get("method")
-            }
-            serializer = TwoFactorAuthValidationSerializer(data=validate_data)
-            serializer.is_valid(raise_exception=True)
-            response = TwoFactorAuthenticationService.send_otp(user=request.user, method=validate_data["method"])
-            return Response(response, status=response.get('status'))
+            enabled_user = EnableTwoFactorAuthentication.objects.filter(user=user.id).exists()
+            if enabled_user:
+                validate_data = {
+                    "user": user.id,
+                    "method": data.get("method")
+                }
+                serializer = TwoFactorAuthValidationSerializer(data=validate_data)
+                serializer.is_valid(raise_exception=True)
+                response = TwoFactorAuthenticationService.send_otp(user=request.user, method=validate_data["method"])
+                return Response(response, status=response.get('status'))
+            else:
+                return Response({"message": "Two factor authentication is not enabled"},
+                                status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class GoogleAuthenticatorViewSet(APIView):
+    """
+    GoogleAuthenticatorViewSet generates a QR code link for Google Authenticator
+    and provides a verification code for OTP verification.
+    """
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -47,14 +59,22 @@ class GoogleAuthenticatorViewSet(APIView):
         """
         try:
             user = self.request.user
-            EnableTwoFactorAuthentication.objects.get(user=user.id)
-            response = TwoFactorAuthenticationService.google_authenticator(user=user)
-            return Response(response)
+            enabled_user = EnableTwoFactorAuthentication.objects.filter(user=user.id).exists()
+            if enabled_user:
+                response = TwoFactorAuthenticationService.google_authenticator(user=user)
+                return Response(response, status=response.get('status'))
+            else:
+                return Response({"message": "Two factor authentication is not enabled"},
+                                status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class OTPVerificationViewSet(APIView):
+    """
+    OTPVerificationViewSet is used to validate OTP within the specified expiration time.
+    It returns a validation result indicating whether the user's code has expired or if they have not enabled 2FA.
+    """
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -84,6 +104,9 @@ class OTPVerificationViewSet(APIView):
 
 
 class EnableTwoFactorAuthViewSet(APIView):
+    """
+    EnableTwoFactorAuthViewSet used to enable and disable 2FA services.
+    """
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
@@ -115,12 +138,12 @@ class EnableTwoFactorAuthViewSet(APIView):
         """
         try:
             user = self.request.user
-            EnableTwoFactorAuthentication.objects.filter(
+            EnableTwoFactorAuthentication.objects.get(
                 user=user.id
             ).delete()
             return Response(
                 {"message": "Two Factor Authentication disable Successfully"},
                 status=status.HTTP_202_ACCEPTED
             )
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"message": "Two factor authentication in not Enabled"}, status=status.HTTP_400_BAD_REQUEST)
