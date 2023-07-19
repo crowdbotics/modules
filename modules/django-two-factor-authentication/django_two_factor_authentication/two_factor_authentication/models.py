@@ -22,7 +22,7 @@ class TwoFactorAuth(TimeStamp):
         (GOOGLE_AUTHENTICATOR, 'Google Authenticator')
     )
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_two_factor")
     method = models.CharField(max_length=32, choices=METHOD, default="email")
     code = models.IntegerField()
 

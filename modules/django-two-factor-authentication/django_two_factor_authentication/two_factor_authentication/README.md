@@ -8,6 +8,11 @@ Django Two Factor Authentication module is a backend support for React Native 2F
 4. Send token via email.
 5. Verify unique code sent to the user via SMS or Email.
 
+## Additional Requirements
+To enable 2FA functionality, follow these steps:
+1. Ensure your user API supports both email and phone number signup.
+2. Modify your user model to include a "phone_number" field, which is necessary for the two-factor authentication module.
+3. Utilize the Django PhoneNumberField in your user model to store the phone number securely.
 
 ## Required Dependencies/Packages
 * **twilio**
@@ -102,15 +107,15 @@ PHONE=env.str("PHONE", "")
 ## Api Table
 List of api's endpoints with params needed for these apis.
 
-| Api Name                                                                          |                                                 Param                                                  | Description                                                                                                  |
-|-----------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------|
-| `/modules/two-factor-authentication/send/otp` <br /> method: `POST`               |                                  object <br />`{ "method": "email" }`                                  | Takes an object containing method email, phone_number or google_authenticator                                |
-| `/modules/two-factor-authentication/verify/otp` <br /> method: `POST`             |                            object <br /> `{ "method": "email", "code": ""}`                            | Takes object containing method and code                                                                      |
-| `/modules/two-factor-authentication/google/authenticator/qr` <br /> method: `GET` |                                                   -                                                    | Google Authenticator will return the QR code link which you can use to register on Google Authenticator App. |
-| `/modules/two-factor-authentication/enable/2fa` <br /> method: `POST`             |                        object <br /> `{ "method": "email" or "phone_number" }`                         | Enable Two factor authentication and send email, sms or get link to your given method.                       |
-| `/modules/two-factor-authentication/enable/2fa` <br /> method: `DELETE`           |                                                   -                                                    | Use to disable Two Factor authentication.                                                                    |
-| `/modules/two-factor-authentication/verify/otp/enable ` <br /> method: `POST`     |                            object <br /> `{ "method": "email", "code": ""}`                            | Takes object containing method and code and verify which users has enable 2FA.                               |
-
+| Api Name                                                                          |                          Param                          | Description                                                                                                  |
+|-----------------------------------------------------------------------------------|:-------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------|
+| `/modules/two-factor-authentication/send/otp` <br /> method: `POST`               |          object <br />`{ "method": "email" }`           | Takes an object containing method email, phone_number or google_authenticator                                |
+| `/modules/two-factor-authentication/verify/otp` <br /> method: `POST`             |    object <br /> `{ "method": "email", "code": ""}`     | Takes object containing method and code                                                                      |
+| `/modules/two-factor-authentication/google/authenticator/qr` <br /> method: `GET` |                            -                            | Google Authenticator will return the QR code link which you can use to register on Google Authenticator App. |
+| `/modules/two-factor-authentication/enable/2fa` <br /> method: `POST`             | object <br /> `{ "method": "email" or "phone_number" }` | Enable Two factor authentication and send email, sms or get link to your given method.                       |
+| `/modules/two-factor-authentication/enable/2fa` <br /> method: `DELETE`           |                            -                            | Use to disable Two Factor authentication.                                                                    |
+| `/modules/two-factor-authentication/verify/otp/enable ` <br /> method: `POST`     |    object <br /> `{ "method": "email", "code": ""}`     | Takes object containing method and code and verify which users has enable 2FA.                               |
+| `/modules/two-factor-authentication/enable/2fa ` <br /> method: `GET`             |                            -                            | Return details about user have 2FA is enabled or disabled.                                                   |
 
 ### Module Specifications
 Here is the [Module Specification Document](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.

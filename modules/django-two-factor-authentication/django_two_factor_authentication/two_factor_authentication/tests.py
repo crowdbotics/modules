@@ -1,12 +1,10 @@
 from unittest import mock
 
-import pyotp
 from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 
-from demo import settings
 from .models import TwoFactorAuth, EnableTwoFactorAuthentication
 
 User = get_user_model()
@@ -14,24 +12,23 @@ User = get_user_model()
 
 class TwoFactorAuthenticationTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="john", email="fabelet661@semonir.com",
-                                             phone_number="+447520662353",
-                                             password="john123@")
-        self.enable_two_fa_user = EnableTwoFactorAuthentication.objects.create(user=self.user, method='email')
-        self.user_token = Token.objects.create(user=self.user)
-        self.user_token.save()
+        self.two_fa_user = User.objects.create_user(username="john", email="fabelet661@semonir.com",
+                                                    phone_number="+447520662353",
+                                                    password="john123@")
+        self.enable_two_fa_user = EnableTwoFactorAuthentication.objects.create(user=self.two_fa_user, method='email')
+        self.two_fa_user_token = Token.objects.create(user=self.two_fa_user)
+        self.two_fa_user_token.save()
         self.new_user = User.objects.create_user(username="walker", email="fabelet661@semonir.com",
                                                  phone_number="+447520662353",
                                                  password="john123@")
-        self.enable_two_fa_user = EnableTwoFactorAuthentication.objects.create(user=self.new_user,
-                                                                               method='phone_number')
-        self.new_user_token = Token.objects.create(user=self.new_user)
-        self.new_user_token.save()
-        self.otp_code = pyotp.TOTP(settings.TOTP_SECRET).now()
-        self.factor_user = User.objects.create_user(username="william", phone_number="+447520662353",
+        self.enable_two_fa_new_user = EnableTwoFactorAuthentication.objects.create(user=self.new_user,
+                                                                                   method='phone_number')
+        self.enable_two_fa_new_user_token = Token.objects.create(user=self.new_user)
+        self.enable_two_fa_new_user_token.save()
+        self.simple_user = User.objects.create_user(username="william", phone_number="+447520662353",
                                                     password="william123@")
-        self.two_fa_token = Token.objects.create(user=self.factor_user)
-        self.two_fa_token.save()
+        self.simple_user_token = Token.objects.create(user=self.simple_user)
+        self.simple_user_token.save()
 
     @mock.patch(
         'modules.django_two_factor_authentication.two_factor_authentication.service.TwoFactorAuthenticationService.SendGridAPIClient.send')
@@ -41,16 +38,14 @@ class TwoFactorAuthenticationTestCase(APITestCase):
             "status": 200
         }
         send_otp_with_email_mock.return_value = Response
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_user_token.key)
         url = '/modules/two-factor-authentication/send/otp'
         data = {
             "method": "email"
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.data, {
-            "message": "Verification code has been sent to your Email Address",
-            "status": 200
-        })
+            "message": "Verification code has been sent to your Email Address"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         send_otp_with_email_mock.assert_called_once()
 
@@ -63,35 +58,42 @@ class TwoFactorAuthenticationTestCase(APITestCase):
             "status": 200
         }
         mock_message_create.return_value = Response
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.new_user_token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.enable_two_fa_new_user_token.key)
         url = '/modules/two-factor-authentication/send/otp'
         data = {"method": "phone_number"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.data, {
-            "message": "Verification code has been sent to your Phone number",
-            "status": 200
-        })
+            "message": "Verification code has been sent to your Phone number"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         send_otp_with_phone_number_mock.assert_called_once()
 
-    def test_send_otp_with_wrong_method(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
+    def test_send_otp_with_invalid_method(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_user_token.key)
         url = '/modules/two-factor-authentication/send/otp'
-        data = {"meth": "wrong"}
+        data = {"meth": "email"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_send_otp_without_two_fa_enabled_user(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.simple_user_token.key)
         url = '/modules/two-factor-authentication/send/otp'
         data = {"method": "email"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.data,
-                         {"message": "Two factor authentication is not enabled or You have not selected valid method"})
+                         {"message": "Two factor authentication is not enabled"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_send_otp_with_two_fa_enabled_user_and_invalid_method(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_user_token.key)
+        url = '/modules/two-factor-authentication/send/otp'
+        data = {"method": "phone_number"}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.data,
+                         {"message": "You have not selected valid method"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_send_otp_with_invalid_user(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.simple_user_token.key)
         url = '/modules/two-factor-authentication/send/otp'
         data = {"method": "phone_number"}
         response = self.client.post(url, data, format='json')
@@ -108,41 +110,46 @@ class GoogleAuthenticatorTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="william", email="william24@gmail.com",
                                              phone_number="+14442222333", password="william123@")
+        self.user_enable_two_fa = EnableTwoFactorAuthentication.objects.create(user=self.user,
+                                                                               method='google_authenticator')
         self.user_token = Token.objects.create(user=self.user)
         self.user_token.save()
-        self.otp_code = pyotp.TOTP(settings.TOTP_SECRET).now()
-        TwoFactorAuth.objects.create(user=self.user, method='email', code=self.otp_code)
-        self.enable_two_fa_user = EnableTwoFactorAuthentication.objects.create(user=self.user, method='email')
-        self.factor_user = User.objects.create_user(username="john", phone_number="+447520662393",
+        self.simple_user = User.objects.create_user(username="john", phone_number="+447520662393",
                                                     password="john123@")
-        self.two_fa_token = Token.objects.create(user=self.factor_user)
-        self.two_fa_token.save()
+        self.two_fa_user = TwoFactorAuth.objects.create(user=self.user, method="email", code="112233")
+        self.simple_user_token = Token.objects.create(user=self.simple_user)
+        self.simple_user_token.save()
+        self.test_invalid_user = User.objects.create_user(username="alan_walker", phone_number="+447520662393",
+                                                          password="alan123@")
+        self.enable_two_fa_test_invalid_user = EnableTwoFactorAuthentication.objects.create(user=self.test_invalid_user,
+                                                                                            method='email')
+        self.test_invalid_user_token = Token.objects.create(user=self.test_invalid_user)
+        self.test_invalid_user_token.save()
 
     @mock.patch(
         "modules.django_two_factor_authentication.two_factor_authentication.service.TwoFactorAuthenticationService.TwoFactorAuthenticationService.google_authenticator")
     def test_get_link_with_google_authenticator(self, get_link_with_google_authenticator_mock):
-        Response = {
-            "link": "otpauth://totp/2FA:fabelet661%40semonir.com?secret=3232323232323232&issuer=2FA",
-            "status": 200
-        }
+        Response = {'data': {'link': 'otpauth://totp/2FA:fabelet661%40semonir.com?secret=3232323232323232&issuer=2FA'},
+                    'status': 200}
         get_link_with_google_authenticator_mock.return_value = Response
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
         url = '/modules/two-factor-authentication/google/authenticator/qr'
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(url, format='json')
         get_link_with_google_authenticator_mock.assert_called_once()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_google_auth_link_without_two_fa_enabled_user(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.simple_user_token.key)
         url = '/modules/two-factor-authentication/google/authenticator/qr'
         response = self.client.get(url, format='json')
         self.assertEqual(response.data, {"message": "Two factor authentication is not enabled"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_google_authenticator_link_with_invalid_user(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_token.key)
+    def test_get_google_authenticator_link_by_enabled_two_fa_user_with_invalid_method(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.test_invalid_user_token.key)
         url = '/modules/two-factor-authentication/google/authenticator/qr'
         response = self.client.get(url, format='json')
+        self.assertEqual(response.data, {"message": "You have not selected valid method"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_google_authenticator_link_without_user(self):
@@ -163,19 +170,26 @@ class OTPVerificationTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="john", email="fabelet661@semonir.com", phone_number=+14442222333,
                                              password="john123@")
+        self.user_enable_two_fa = EnableTwoFactorAuthentication.objects.create(user=self.user,
+                                                                               method='google_authenticator')
         self.user_token = Token.objects.create(user=self.user)
         self.user_token.save()
-        self.enable_two_fa_user = EnableTwoFactorAuthentication.objects.create(user=self.user, method='email')
+        self.test_user = User.objects.create_user(username="alan_walker", email="fabelet661@semonir.com",
+                                                  phone_number=+14442222333,
+                                                  password="alan123@")
+        self.user_enable_two_fa = EnableTwoFactorAuthentication.objects.create(user=self.test_user,
+                                                                               method='email')
+        self.test_user_token = Token.objects.create(user=self.test_user)
+        self.test_user_token.save()
         self.new_user = User.objects.create_user(username="devil", email="devil24@gmail.com", password="devil123@")
-        self.otp = pyotp.TOTP(settings.TOTP_SECRET).now()
-        self.two_fa_user = TwoFactorAuth.objects.create(user=self.new_user, method='email', code=self.otp)
+        self.two_fa_user = TwoFactorAuth.objects.create(user=self.new_user, method='email', code=112233)
         self.two_fa_token = Token.objects.create(user=self.new_user)
         self.two_fa_token.save()
 
     @mock.patch(
         "modules.django_two_factor_authentication.two_factor_authentication.service.TwoFactorAuthenticationService.TwoFactorAuthenticationService.otp_verification")
     def test_verify_otp_with_google_authenticator(self, verify_otp_with_google_authenticator_mock):
-        Response = {'message': 'Verified', 'status': 200}
+        Response = {"data": {"message": "Verified"}}
         verify_otp_with_google_authenticator_mock.return_value = Response
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
         url = '/modules/two-factor-authentication/verify/otp'
@@ -184,7 +198,7 @@ class OTPVerificationTestCase(APITestCase):
             "code": 123213
         }
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.data, {'message': 'Verified', 'status': 200})
+        self.assertEqual(response.data, {'message': 'Verified'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         verify_otp_with_google_authenticator_mock.assert_called_once()
 
@@ -196,7 +210,7 @@ class OTPVerificationTestCase(APITestCase):
             "code": 123345
         }
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.data, {'error': ['Code expired'], 'status': 400})
+        self.assertEqual(response.data, {'error': ['Code expired']})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
@@ -209,9 +223,9 @@ class OTPVerificationTestCase(APITestCase):
             "status": 200
         }
         verify_send_email_mock.return_value = Responses
-        Response = {'message': 'Verified'}
+        Response = {"data": {"message": "Verified"}}
         verify_otp_with_email_mock.return_value = Response
-        self.client.login(username='john', password="john123@")
+        self.client.login(username='alan_walker', password="alan123@")
         url = '/modules/two-factor-authentication/send/otp'
         data = {"method": "email"}
         self.client.post(url, data, format='json')
@@ -235,7 +249,7 @@ class OTPVerificationTestCase(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    def test_verify_otp_with_wrong_method(self):
+    def test_verify_otp_with_invalid_method(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
         url = '/modules/two-factor-authentication/verify/otp'
         data = {
@@ -258,7 +272,7 @@ class OTPVerificationTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_token.key)
         url = '/modules/two-factor-authentication/verify/otp/enable'
         data = {
-            "code": self.otp,
+            "code": 112233,
             "method": "email"
         }
         response = self.client.post(url, data, format='json')
@@ -272,8 +286,7 @@ class OTPVerificationTestCase(APITestCase):
             "method": "email"
         }
         response = self.client.post(url, data, format='json')
-        self.assertEqual(response.data, {
-            "message": "Two factor authentication is not enabled or No code is available against this method."})
+        self.assertEqual(response.data, {"message": "Two factor authentication is not enabled"})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
@@ -320,19 +333,15 @@ class EnableTwoFactorAuthTestCase(APITestCase):
         data = {"method": "phone_number"}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.data, {
-            "message": "Verification code has been sent to your Phone number",
-            "status": 200
-        })
+            "message": "Verification code has been sent to your Phone number"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         enable_two_factor_authentication_by_phone_number_mock.assert_called_once()
 
     @mock.patch(
         "modules.django_two_factor_authentication.two_factor_authentication.service.TwoFactorAuthenticationService.TwoFactorAuthenticationService.google_authenticator")
     def test_enable_link_with_google_authenticator(self, enable_link_with_google_authenticator):
-        Response = {
-            "link": "otpauth://totp/2FA:fabelet661%40semonir.com?secret=3232323232323232&issuer=2FA",
-            "status": 200
-        }
+        Response = {'data': {'link': 'otpauth://totp/2FA:fabelet661%40semonir.com?secret=3232323232323232&issuer=2FA'},
+                    'status': 200}
         enable_link_with_google_authenticator.return_value = Response
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
         url = '/modules/two-factor-authentication/enable/2fa'
@@ -370,3 +379,15 @@ class EnableTwoFactorAuthTestCase(APITestCase):
         url = '/modules/two-factor-authentication/enable/2fa'
         response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_get_user_two_factor_authentication_is_enabled(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.two_fa_token.key)
+        url = '/modules/two-factor-authentication/enable/2fa'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_user_two_factor_authentication_is_disable(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user_token.key)
+        url = '/modules/two-factor-authentication/enable/2fa'
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
