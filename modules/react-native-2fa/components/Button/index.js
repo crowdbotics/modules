@@ -2,10 +2,16 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
 
 const Button = (props) => {
+  const {
+    onPress,
+    disabled,
+    children,
+    clicked
+  } = props;
   return (
-    <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
-      <View style={!props.clicked ? styles.button : styles.clicked}>
-        <Text style={styles.text}>{props.children}</Text>
+    <TouchableHighlight onPress={onPress} disabled={disabled} underlayColor='#DDDDDD'>
+      <View style={!clicked ? styles.button : styles.clicked}>
+        <Text style={styles.text}>{children}</Text>
       </View>
     </TouchableHighlight>
   );
@@ -14,7 +20,7 @@ const Button = (props) => {
 const styles = StyleSheet.create({
   button: {
     padding: 10,
-    backgroundColor: "#73A5C6",
+    backgroundColor: "#000",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
