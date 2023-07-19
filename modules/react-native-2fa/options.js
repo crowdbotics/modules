@@ -26,5 +26,5 @@ const token = "";
 
 export default {
   styles: styles,
-  token
+  token: token
 };
