@@ -1,15 +1,13 @@
-from django.urls import path, include
+from dj_rest_auth.registration.views import (
+    SocialAccountListView,
+    SocialAccountDisconnectView,
+)
+from django.urls import path
+
 from .views import (
     FacebookLogin,
     GoogleLogin,
     AppleLogin,
-    FacebookConnect,
-    GoogleConnect,
-    AppleConnect,
-)
-from dj_rest_auth.registration.views import (
-    SocialAccountListView,
-    SocialAccountDisconnectView,
 )
 
 urlpatterns = [

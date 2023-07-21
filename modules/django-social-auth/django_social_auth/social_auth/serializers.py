@@ -1,10 +1,10 @@
-from dj_rest_auth.registration.serializers import SocialLoginSerializer, SocialConnectMixin
-from rest_framework import serializers
-from django.http import HttpRequest
-from django.contrib.auth import get_user_model
-from allauth.socialaccount.providers.oauth2.client import OAuth2Error
+from urllib.error import HTTPError
+
 from allauth.socialaccount.helpers import complete_social_login
-from allauth.account import app_settings as allauth_settings
+from allauth.socialaccount.providers.oauth2.client import OAuth2Error
+from dj_rest_auth.registration.serializers import SocialLoginSerializer, SocialConnectMixin
+from django.http import HttpRequest
+from rest_framework import serializers
 
 
 class CustomAppleSocialLoginSerializer(SocialLoginSerializer):
@@ -79,8 +79,8 @@ class CustomAppleSocialLoginSerializer(SocialLoginSerializer):
                 adapter.access_token_url,
                 self.callback_url,
                 scope,
-                key=app.key,
-                cert=app.cert,
+                # key=app.key,
+                # cert=app.cert,
             )
             token = client.get_access_token(code)
             access_token = token["access_token"]

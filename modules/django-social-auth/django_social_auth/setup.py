@@ -13,6 +13,6 @@ setup(
     name="cb_django_social_auth",
     version="0.1",
     packages=["social_auth"],
-    install_requires=["dj-rest-auth==2.2.5"],
+    install_requires=["dj-rest-auth==2.2.5", "django-allauth==0.51.0", "djangorestframework>=3.12.0"],
     cmdclass={"build": BuildCommand},
 )
