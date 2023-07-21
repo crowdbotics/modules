@@ -78,10 +78,8 @@ class CustomAppleSocialLoginSerializer(SocialLoginSerializer):
                 adapter.access_token_method,
                 adapter.access_token_url,
                 self.callback_url,
-                scope,
-                # key=app.key,
-                # cert=app.cert,
-            )
+                scope
+                )
             token = client.get_access_token(code)
             access_token = token["access_token"]
 
