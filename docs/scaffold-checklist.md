@@ -26,13 +26,14 @@ Double check your work locally with those helper scripts checks:
 
 **Important!**
 
-Increase the version of the scaffold in [package.json](/scaffold/package.json) and [.crowdbotics.json](/scaffold/template/custom/.crowdbotics.json).
-Make this new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](/config.js) to include a new `config.upgrade.versions` and then finally run:
+Increase the version of the scaffold in [package.json](https://github.com/crowdbotics/modules/blob/master/scaffold/package.json) and [.crowdbotics.json](https://github.com/crowdbotics/modules/blob/master/scaffold/custom/.crowdbotics.json).
+
+Make this new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](https://github.com/crowdbotics/modules/blob/master/config.js) to include a new `config.upgrade.versions` and then finally run:
 
 ```
 pipenv shell
 yarn run manifest
 ```
 
-Finally make sure to update the scaffold [CHANGELOG](/scaffold/CHANGELOG.md) with human friendly descriptions.
+Finally make sure to update the scaffold [CHANGELOG](https://github.com/crowdbotics/modules/blob/master/scaffold/CHANGELOG.md) with human friendly descriptions.
 
