@@ -95,6 +95,19 @@ const typescriptLoaderConfiguration = {
   exclude: /node_modules/
 }
 
+const babelExclusionConfiguration = {
+  test: /\.js$/,
+  exclude:
+    /node_modules\/(?!(react-native-elements|react-native-vector-icons)\/).*/,
+  loader: "babel-loader"
+}
+
+const urlLoaderConfiguration = {
+  test: /\.ttf$/,
+  loader: "url-loader",
+  include: path.resolve(__dirname, "node_modules/react-native-vector-icons")
+}
+
 module.exports = {
   entry: [
     // load any web API polyfills
@@ -117,7 +130,9 @@ module.exports = {
     rules: [
       babelLoaderConfiguration,
       imageLoaderConfiguration,
-      typescriptLoaderConfiguration
+      typescriptLoaderConfiguration,
+      babelExclusionConfiguration,
+      urlLoaderConfiguration
     ]
   },
   plugins: [HTMLWebpackPluginConfig, DevEnvPlugin, JestWorkerPlugin],

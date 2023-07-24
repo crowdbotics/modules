@@ -111,6 +111,18 @@ export default {
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
         ],
         upgradeManifestImport: "./manifest/220-to-230.json"
+      },
+      {
+        text: "Upgrade my scaffold (2.3.0 -> 2.4.0)",
+        previousVersion: "2.3.0",
+        previousVersionSHA: "6602a5aca5c44d9b3bcd5c4976116b64af7ba20b",
+        nextVersion: "2.4.0",
+        nextVersionSHA: "PLAT-11650",
+        ignoreTemplatize: [
+          "ios/fastlane/metadata/review_information/review_demo_password.txt",
+          "ios/fastlane/metadata/review_information/review_demo_user.txt"
+        ],
+        upgradeManifestImport: "./manifest/230-to-240.json"
       }
     ],
     manifest: {
