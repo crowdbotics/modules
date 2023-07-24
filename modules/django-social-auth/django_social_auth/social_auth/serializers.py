@@ -80,7 +80,10 @@ class CustomAppleSocialLoginSerializer(SocialLoginSerializer):
                 self.callback_url,
                 scope
                 )
-            token = client.get_access_token(code)
+            try:
+                token = client.get_access_token(code)
+            except OAuth2Error as err:
+                raise serializers.ValidationError(str(err)) from err
             access_token = token["access_token"]
 
         else:
