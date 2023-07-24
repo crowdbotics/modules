@@ -16,8 +16,10 @@ import {
 } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
-import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
 import { slice } from "./auth";
+
+// Screens
+import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
 import { styles } from "./screens/styles";
 import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
@@ -73,24 +75,13 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
                 source={{
                   uri: BACKGROUND_URL
                 }}
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  resizeMode: "cover",
-                  height: "100%",
-                  width: "100%"
-                }}
+                style={styles.backgroundImageStyles}
               >
                 <Image
                   source={{
                     uri: LOGO_URL
                   }}
-                  style={{
-                    width: 155,
-                    height: 155,
-                    alignSelf: "center",
-                    resizeMode: "contain"
-                  }}
+                  style={styles.foregroundImage}
                 />
               </ImageBackground>
             </View>

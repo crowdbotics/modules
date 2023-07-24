@@ -21,7 +21,7 @@ import {
   GoogleSignin,
   statusCodes
 } from "@react-native-google-signin/google-signin";
-import { LoginManager, AccessToken } from "react-native-fbsdk";
+import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 import { GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID } from "../auth/utils";
 import { appleForAndroid, appleForiOS } from "../auth/apple";
 import {
@@ -67,21 +67,15 @@ export const Button = (props) => (
     </View>
   </TouchableOpacity>
 );
-
 // Grouped Social Buttons View
 const SocialButtonsView = (props) => (
   <View>
-    <Text style={{ textAlign: "center", width: "100%", marginVertical: 5 }}>
+    <Text style={styles.orText}>
       - or -
     </Text>
     <Button
       title="Signin with Facebook"
-      viewStyle={{
-        backgroundColor: Color.facebook,
-        borderColor: Color.facebook,
-        marginHorizontal: 5,
-        marginBottom: 2
-      }}
+      viewStyle={styles.facebookButton}
       textStyle={{ color: Color.white }}
       loading={props.loading}
       onPress={props.onFacebookConnect}
@@ -91,19 +85,14 @@ const SocialButtonsView = (props) => (
       size={GoogleSigninButton.Size.Wide}
       color={GoogleSigninButton.Color.Dark}
       disabled={props.loading}
-      style={{ width: "99%", height: 48, marginHorizontal: 2 }}
+      style={styles.googleLoginButton}
     />
     {(Platform.OS === "ios" || appleAuthAndroid.isSupported) && (
       <AppleButton
         onPress={props.onAppleConnect}
         buttonStyle={AppleButton.Style.WHITE_OUTLINE}
         buttonType={AppleButton.Type.SIGN_IN}
-        style={{
-          width: "97%", // You must specify a width
-          height: 44, // You must specify a height
-          marginHorizontal: 5,
-          marginTop: 2
-        }}
+        style={styles.appleButton}
       />
     )}
   </View>
@@ -112,12 +101,14 @@ const SocialButtonsView = (props) => (
 const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
   LoginManager.setLoginBehavior("web_only");
   try {
+    // Scopes for login details
     const fbResult = await LoginManager.logInWithPermissions([
       "public_profile",
       "email"
     ]);
     if (!fbResult.isCancelled) {
       const data = await AccessToken.getCurrentAccessToken();
+      // This action dispatches the api for facebook login which takes FB accessToken in params
       dispatch(facebookLogin({ access_token: data.accessToken }))
         .then(unwrapResult)
         .then((res) => {
@@ -131,14 +122,19 @@ const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
         .catch(err => {
           setErrorResponse(errorResponse => [...errorResponse, err]);
         });
+    } else {
+      if (fbResult.isCancelled) {
+        setErrorResponse(errorResponse => [
+          ...errorResponse,
+          { error: "The user canceled the signin request." }
+        ]);
+      }
     }
   } catch (err) {
-    if (err.code === statusCodes.SIGN_IN_CANCELLED) {
-      setErrorResponse(errorResponse => [
-        ...errorResponse,
-        { error: "The user canceled the signin request." }
-      ]);
-    }
+    setErrorResponse(errorResponse => [
+      ...errorResponse,
+      { error: "Something went wrong" }
+    ]);
   }
 };
 
@@ -148,7 +144,7 @@ const onGoogleConnect = async (
   setErrorResponse
 ) => {
   GoogleSignin.configure({
-    webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server
+    webClientId: GOOGLE_WEB_CLIENT_ID,
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     forceCodeForRefreshToken: false,
     iosClientId: GOOGLE_IOS_CLIENT_ID
@@ -157,6 +153,7 @@ const onGoogleConnect = async (
     await GoogleSignin.hasPlayServices();
     await GoogleSignin.signIn();
     const tokens = await GoogleSignin.getTokens();
+    // This action dispatches the api for google login which takes accessToken in params
     dispatch(googleLogin({ access_token: tokens.accessToken }))
       .then(unwrapResult)
       .then(async res => {
@@ -191,6 +188,7 @@ const onAppleConnect = async (
       android: appleForAndroid
     });
     const result = await signinFunction();
+    // This action dispatches the api for apple login which takes the identity token and accessToken in params
     dispatch(
       appleLogin({
         id_token: result.identityToken,
@@ -221,6 +219,7 @@ export const SignupTab = ({ navigation }) => {
   const [apiError, setApiError] = useState([]);
   const [errorResponse, setErrorResponse] = useState([]);
   const [confirmPassword, setConfirmPassword] = useState("");
+  // Specific validations for email and password
   const [validationError, setValidationError] = useState({
     email: "",
     password: ""
@@ -228,6 +227,12 @@ export const SignupTab = ({ navigation }) => {
 
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
+
+  const emptyStates = () => {
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  };
 
   const onSignupPress = async () => {
     setApiError([]);
@@ -260,9 +265,7 @@ export const SignupTab = ({ navigation }) => {
           "Signup Success",
           "Registration Successful. A confirmation will be sent to your e-mail address."
         );
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
+        emptyStates();
       })
       .catch((err) => { setApiError(apiError => [...apiError, err]); });
   };
@@ -312,7 +315,7 @@ export const SignupTab = ({ navigation }) => {
       {
             apiError.map((value, index) =>
               <View key={index}>
-                <Text style={[styles.error, { paddingHorizontal: 0 }]}>{value[Object.keys(value)[index]].toString()}</Text>
+                <Text style={[styles.error, { paddingHorizontal: 0 }]}>{value[Object.keys(value)[index]]?.toString()}</Text>
               </View>
             )
       }
@@ -324,7 +327,7 @@ export const SignupTab = ({ navigation }) => {
         {
             errorResponse.map((value, index) =>
               <View key={index}>
-                <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+                <Text style={styles.error1}>{value[Object.keys(value)[index]]?.toString()}</Text>
               </View>
             )
         }
@@ -352,10 +355,16 @@ export const SignInTab = ({ navigation }) => {
   const [errorResponse, setErrorResponse] = useState([]);
   const [apiError, setApiError] = useState([]);
   const [password, setPassword] = useState("");
+  // Specific validations for email and password
   const [validationError, setValidationError] = useState({
     email: "",
     password: ""
   });
+
+  const emptyStates = () => {
+    setEmail("");
+    setPassword("");
+  };
 
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
@@ -384,8 +393,7 @@ export const SignInTab = ({ navigation }) => {
           Alert.alert(
             "Login Success",
             "You are Logged In successfully");
-          setEmail("");
-          setPassword("");
+          emptyStates();
           navigation.navigate(HOME_SCREEN_NAME);
         };
       })
@@ -427,7 +435,7 @@ export const SignInTab = ({ navigation }) => {
       {
             apiError.map((value, index) =>
               <View key={index}>
-                <Text style={[styles.error, { paddingHorizontal: 0 }]}>{value[Object.keys(value)[index]].toString()}</Text>
+                <Text style={[styles.error, { paddingHorizontal: 0 }]}>{value[Object.keys(value)[index]]?.toString()}</Text>
               </View>
             )
           }
@@ -437,11 +445,7 @@ export const SignInTab = ({ navigation }) => {
         onPress={onSigninPress}
       />
       <View
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: 10
-        }}
+        style={styles.forgotPasswordView}
       >
         <TouchableOpacity
           activeOpacity={0.7}

@@ -1,8 +1,8 @@
 import axios from "axios";
 import { getGlobalOptions } from "@options";
 
-const gOptions = getGlobalOptions();
-const BASE_URL = gOptions.url;
+const globalOptions = getGlobalOptions();
+const BASE_URL = globalOptions.url;
 
 const authAPI = axios.create({
   baseURL: BASE_URL,

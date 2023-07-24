@@ -212,7 +212,9 @@ Ultimately, you need to follow the [react-native-fbsdk instructions](https://git
 
 3. After creation, go to your app's dashboard and look for an option to set up a social login product to your app. The url should look like this: `https://developers.facebook.com/apps/<your_facebook_app_id>/fb-login/quickstart/`. There, choose the Android option (for your Android app) and iOS option (for your iOS app configuration).
 
-### Android Configuration
+## Android Configuration
+
+### For old scaffold `0.64`
 
 Upon entering the `Android` page on the Facebook login configuration, you can click next/continue for most steps. But you will need to pay attention to the following steps:
 
@@ -258,7 +260,10 @@ After everything, open the file `<your_project_name>/android/app/build.gradle` l
 ...
 ```
 
-### iOS Configuration (Mac and access to XCode Required)
+### For New scaffold `0.71.7`
+For the new scaffold support the library being used for facebook login is changed. So follow `react-native-fbsdk-next` [installation guide.](https://www.npmjs.com/package/react-native-fbsdk-next?activeTab=readme#installation)
+## iOS Configuration (Mac and access to XCode Required)
+### For Old scaffold `0.64` 
 
 Upon entering the `Android` page on the Facebook login configuration, there will be a question `Set up your development environment before using Facebook Login for iOS.`. Answer this by picking the dropdown option for `SDK: Cocoapods`. From there, follow the provided instructions. At this step, you should basically change the file `<your_project_name>/ios/Podfile` and add `pod 'FBSDKLoginKit'` and `pod 'FBSDKCoreKit'` after the last pod command and save. It should look like this:
 
@@ -296,6 +301,9 @@ Finally, open your project again on XCode, find the root folder of the XCode pro
 
 XCode will ask about Bridging Folder, just choose the option `Create Bridging Folder`.
 You are all set up for iOS deployment now!
+
+### For New scaffold `0.71.7`
+For the new scaffold support the library being used for facebook login is changed. So follow `react-native-fbsdk-next` [installation guide.](https://www.npmjs.com/package/react-native-fbsdk-next?activeTab=readme#installation)
 
 ## Configuring Google Login
 

@@ -1,7 +1,12 @@
 // Please, update the values below as instructed in the README.md file.
+
+// Web OAuth client id obtained from google developer console
 export const GOOGLE_WEB_CLIENT_ID = "XXXXXX.apps.googleusercontent.com";
+// iOS OAuth client id obtained from google developer console
 export const GOOGLE_IOS_CLIENT_ID = "YYYYYY.apps.googleusercontent.com";
+// Apple service id obtained from apple developer account.
 export const APPLE_SERVICE_ID = "com.crowdbotics.APP_NAME";
+// URL to redirect to once login is successfull
 export const APPLE_REDIRECT_CALLBACK =
   "https://your-app-here.com/accounts/apple/login/callback/";
 
@@ -26,6 +31,7 @@ const messageMap = {
   }
 };
 
+// This function extracts the exact error message from the whole error object
 export const mapErrorMessage = error => {
   const message = error.message;
   return messageMap[message]
