@@ -1,17 +1,21 @@
-from .serializers import StripeSettingSerializer
-from .models import StripeSetting
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions, status
-from django.contrib.auth.models import User
 import stripe
+from rest_framework import authentication, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from .models import StripeSetting
+from .serializers import StripeSettingSerializer
 from .services.StripeService import StripeService
+
 
 class PaymentSheetView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        """
+        Creates paymentIntent and Ephemeral key for the customer. If no customer exists, first creates one.
+        """
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
@@ -21,15 +25,15 @@ class PaymentSheetView(APIView):
             stripe_profile.save()
         else:
             stripe_cus_id = stripe_profile.stripe_cus_id
-        
+
         cents = request.data.get('cents', 100)
         try:
             query = StripeSetting.objects.get(user_id=self.request.user.id)
             serializer = StripeSettingSerializer(query)
             if serializer.data['is_wallet_connect']:
                 response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents,
-                                                                 serializer.data['application_fee'],
-                                                                 "connected_stripe_account_id")
+                                                                     serializer.data['application_fee'],
+                                                                     "connected_stripe_account_id")
             else:
                 response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents)
         except Exception:
@@ -43,6 +47,9 @@ class GetStripePaymentsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        """
+        Returns array of PaymentIntents for a stripe customer.
+        """
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
@@ -62,6 +69,9 @@ class GetPaymentMethodsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        """
+        Returns a list of PaymentMethods attached to the customer's StripeAccount.
+        """
         user = request.user
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
