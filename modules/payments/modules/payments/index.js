@@ -1,20 +1,30 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Text, View, FlatList } from "react-native";
+import { Text, View, FlatList, StyleSheet } from "react-native";
 import { OptionsContext } from "@options";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { CheckoutScreen } from "./checkout";
-import { fetchPaymentHistory } from "./api";
+import { fetchPaymentHistory, slice } from "./store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 const Payments = () => {
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const { styles, localOptions } = options;
   const [payments, setPayments] = useState([]);
   const [refresh, setRefresh] = useState(true);
   const getPayments = async () => {
     setRefresh(true);
-    const res = await fetchPaymentHistory();
-    setPayments(res);
-    setRefresh(false);
+    await dispatch(fetchPaymentHistory())
+      .then(unwrapResult)
+      .then(res => {
+        setPayments(res.data);
+        setRefresh(false);
+      })
+      .catch(error => {
+        setRefresh(false);
+        console.log(error);
+      });
   };
   const { stripePublishKey, merchantIdentifier } = localOptions;
   useEffect(async () => {
@@ -48,25 +58,36 @@ const Payments = () => {
       >
         <CheckoutScreen />
       </StripeProvider>
-      <View>
-        <Text
-          style={{ marginHorizontal: 15, marginTop: 15, paddingBottom: 10 }}
-        >
-          Payment History
-        </Text>
-        <FlatList
-          data={payments}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          onRefresh={getPayments}
-          refreshing={refresh}
-        />
-      </View>
+      < PaymentsList renderItem={renderItem} payments={payments} getPayments={getPayments} refresh={refresh} />
     </View>
   );
 };
 
 export default {
   title: "Payments",
-  navigator: Payments
+  navigator: Payments,
+  slice
 };
+
+const PaymentsList = ({ renderItem, payments, getPayments, refresh }) => {
+  return (
+    <View>
+      <Text
+        style={paymentStyles.list}
+      >
+        Payment History
+      </Text>
+      <FlatList
+        data={payments}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        onRefresh={getPayments}
+        refreshing={refresh}
+      />
+    </View>
+  );
+};
+
+const paymentStyles = StyleSheet.create({
+  list: { marginHorizontal: 15, marginTop: 15, paddingBottom: 10 }
+});

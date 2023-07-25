@@ -44,13 +44,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: "#016f70"
   },
-  inputField: {
-    padding: 15,
-    borderWidth: 1,
-    fontSize: 18,
-    borderRadius: 8,
-    backgroundColor: "#fff"
-  },
   bold: {
     fontWeight: "600"
   },
@@ -62,6 +55,7 @@ const styles = StyleSheet.create({
   }
 });
 
+const token = "Token user_authentication_token";
 export const localOptions = {
   stripeSecretKey: "sk_test_xxxxxxxxxxx",
   merchantName: "Example Inc.",
@@ -78,5 +72,6 @@ export default {
   title: "App Menu",
   copy: "Routes available",
   styles: styles,
-  localOptions: localOptions
+  localOptions: localOptions,
+  token: token
 };
