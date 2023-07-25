@@ -96,19 +96,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const AZURE_AUTH_OPTIONS = {
-  tenant: "",
-  clientId: "",
-  redirectUri: ""
-};
-
-const AUTHORIZE_OPTIONS = {
-  prompt: "login",
-  scope: "openid profile User.Read"
-};
-
 export default {
   styles: styles,
-  AZURE_AUTH_OPTIONS: AZURE_AUTH_OPTIONS,
-  AUTHORIZE_OPTIONS: AUTHORIZE_OPTIONS
+  AZURE_AUTH_TENANT_OPTIONS: "",
+  AZURE_AUTH_CLIENT_ID_OPTIONS: "",
+  AZURE_AUTH_REDIRECT_URI_OPTIONS: "",
+  AUTHORIZE_PROMPT_OPTIONS: "login",
+  AUTHORIZE_SCOPE_OPTIONS: "openid profile User.Read"
 };

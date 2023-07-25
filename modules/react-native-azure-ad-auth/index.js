@@ -7,6 +7,17 @@ import { mapObjectToArray, validateConfig } from "./utils";
 const AzureADAuth = () => {
   // Configurations Variable contains (styles, AZURE_AUTH_OPTIONS, AUTHORIZE_OPTIONS)
   const options = useContext(OptionsContext);
+  // AzureAuth option Variables
+  const AZURE_AUTH_OPTIONS = {
+    tenant: options.AZURE_AUTH_TENANT_OPTIONS,
+    clientId: options.AZURE_AUTH_CLIENT_ID_OPTIONS,
+    redirectUri: options.AZURE_AUTH_REDIRECT_URI_OPTIONS
+  };
+  // webAuth authorize option Variables
+  const AUTHORIZE_OPTIONS = {
+    prompt: options.AUTHORIZE_PROMPT_OPTIONS,
+    scope: options.AUTHORIZE_SCOPE_OPTIONS
+  };
   // Saving the User and Token Information such as givenName, rawIdToken and accessToken
   const [userInfo, setUserInfo] = useState([]);
   // Saving the instance AzureAuth which is coming from "react-native-azure-auth"
@@ -17,10 +28,10 @@ const AzureADAuth = () => {
 
   useEffect(() => {
     // Validations of the configurations i.e tenant, clientId, redirectUri, prompt and scope
-    const errors = validateConfig(options.AZURE_AUTH_OPTIONS, options.AUTHORIZE_OPTIONS);
+    const errors = validateConfig(AZURE_AUTH_OPTIONS, AUTHORIZE_OPTIONS);
     if (!errors.length) {
       // To initiate the AzureAuth instance and set through the above useState
-      const azureAuth = new AzureAuth(options.AZURE_AUTH_OPTIONS);
+      const azureAuth = new AzureAuth(AZURE_AUTH_OPTIONS);
       setAzureAuth(azureAuth);
     } else {
       // The error messages will show up if there is any error in the configurations
@@ -35,7 +46,7 @@ const AzureADAuth = () => {
   const authorize = () => {
     // To start the authorization process to login into the Azure Directory it will return the token information
     // includes the parameters tenant, clientId, redirectUri
-    return azureAuth.webAuth.authorize(options.AUTHORIZE_OPTIONS);
+    return azureAuth.webAuth.authorize(AUTHORIZE_OPTIONS);
   };
   const msGraphRequest = (payload) => {
     // To retreive the user information and sending token and path as payload
