@@ -2,6 +2,7 @@ import axios from "axios";
 import { getGlobalOptions } from "@options";
 
 const globalOptions = getGlobalOptions();
+// Update the BASE_URL in options.js file of your app
 const BASE_URL = globalOptions.url;
 
 const authAPI = axios.create({

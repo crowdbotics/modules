@@ -125,7 +125,7 @@ Note for developers: you can access the user token through the reducer state (i.
 
 #### Change the login screen destination to your desired screen/module (likely Home screen).
 
-To do that, open the `screens/constants.js` file and edit the `HOME_SCREEN_NAME` value with the desired destination module. For example, if my home screen is called `HomeScreen1234535`, then I should change as follows: `export const HOME_SCREEN_NAME = 'HomeScreen1234535'`. If you desire, you can also update your logo image URL (be mindful that the size of the image should match the original ones for ideal results).
+To do that, open the `utils.js` file and edit the `HOME_SCREEN_NAME` value with the desired destination module. For example, if my home screen is called `HomeScreen1234535`, then I should change as follows: `export const HOME_SCREEN_NAME = 'HomeScreen1234535'`. If you desire, you can also update your logo image URL (be mindful that the size of the image should match the original ones for ideal results).
 
 #### Make sure your backend support SENDGRID for emailing (optional)
 

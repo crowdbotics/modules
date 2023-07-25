@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { mapErrorMessage } from "./utils";
+import { mapErrorMessage } from "../utils";
 import { api } from "./api";
 
 export const loginRequest = createAsyncThunk(

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Image,
   Alert,
@@ -10,19 +10,25 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { styles } from "./styles";
-import { validateEmail, LOGO_URL } from "./constants.js";
+import { validateEmail, LOGO_URL } from "../utils";
 import { resetPassword } from "../auth";
+import { OptionsContext } from "@options";
 
 const PasswordRecover = ({ navigation }) => {
+  const options = useContext(OptionsContext);
+  const { styles } = options;
   const [email, setEmail] = useState("");
+  // State for reset password Api errors
   const [errorResponse, setErrorResponse] = useState([]);
+
+  // This variable fetches the loading and error status from the store
   const { api } = useSelector(state => state.Login);
   const dispatch = useDispatch();
 
+  // Error message will be displayed if user has not entered a valid email
   const handlePasswordReset = () => {
     if (!validateEmail.test(email)) { return Alert.alert("Error", "Please enter a valid email address."); }
-
+    // This action dispatches the reset password api with email as params
     dispatch(resetPassword({ email }))
       .then(unwrapResult)
       .then(() => {
