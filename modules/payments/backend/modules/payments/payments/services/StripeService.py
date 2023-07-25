@@ -8,16 +8,27 @@ class StripeService:
     stripe.api_key = env.str("STRIPE_SECRET_KEY", "")
 
     @classmethod
-    def create_payment_intent_sheet(cls, cus_id, cents):
+    def create_payment_intent_sheet(cls, cus_id, cents, application_fee_amount=0, connected_stripe_account_id=None):
         ephemeralKey = stripe.EphemeralKey.create(
             customer=cus_id,
             stripe_version=env.str("STRIPE_VERSION", '2020-08-27'),
         )
-        paymentIntent = stripe.PaymentIntent.create(
-            amount=cents,
-            currency=env.str("STRIPE_CURRENCY", 'usd'),
-            customer=cus_id
-        )
+        if connected_stripe_account_id and application_fee_amount > 0:
+            paymentIntent = stripe.PaymentIntent.create(
+                amount=cents,
+                currency=env.str("STRIPE_CURRENCY", 'usd'),
+                customer=cus_id,
+                application_fee_amount= int(float(application_fee_amount / 100) * float(cents)),
+                transfer_data={
+                    'destination': connected_stripe_account_id,
+                }
+            )
+        else:
+            paymentIntent = stripe.PaymentIntent.create(
+                amount=cents,
+                currency=env.str("STRIPE_CURRENCY", 'usd'),
+                customer=cus_id
+            )
 
         return {
             "paymentIntent": paymentIntent.client_secret,
