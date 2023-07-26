@@ -22,23 +22,24 @@ Support for react-native version 0.71 was released in stripe sdk `v0.23.3` and a
 
 # Android
 AndroidManifest.xml
+
+```xml
 <application>
-...
 <meta-data
         android:name="com.google.android.gms.wallet.api.enabled"
         android:value="true" />
-...
 </application>
+```
+
 
 
 app/build.gradle
 
-dependencies {
-    ....
-    
+```powershell
+dependencies { 
     implementation 'com.stripe:stripe-android:18.2.0'
-
 }
+```
 
 ### For new Scaffold `0.71.7`
 
@@ -65,26 +66,25 @@ export const globalOptions = {
 # Local configs
 1. in modules/payments/options.js
 
-configure your local options like this
+configure your options like this
 
 ```
-export const localOptions = {
-  merchantName: "Example Inc.",
-  enableGooglePay: true,
-  enableApplePay: true,
-  merchantIdentifier: "merchant.com.crowdbotics.inaday",
-  merchantCountryCode: "US",
-  merchantCurrency: "USD",
-  stripeTestEnv: true,
-  stripePublishKey: "pk_test_xxxxxxxxxx"
-};
+const STRIPE_SECRET_KEY = "sk_test_xxxxxxxxxxx";
+const MERCHANT_NAME = "Example Inc.";
+const ENABLE_GOOGLE_PAY = true;
+const ENABLE_APPLE_PAY = true;
+const MERCHANT_IDENTIFIER = "merchant.com.crowdbotics.inaday";
+const MERCHANT_COUNTRY_CODE = "US";
+const MERCHANT_CURRENCY = "USD";
+const STRIPE_TEST_ENV = true;
+const STRIPE_PUBLISH_KEY = "pk_test_xxxxxxxxxx";
 ```
 
 2. in modules/payments/api.js
 
 Update the token to make the api call with Authorization
 ```
-const token = "Token 676364403988909cde7f501aa2efeaf9ca30d18c";
+const token = "Token ****************************";
 ```
 # Server
 
