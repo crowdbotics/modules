@@ -1,26 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "./api";
+import { Alert } from "react-native";
+import { mapErrors } from "../utils";
 
 export const fetchPaymentSheetParams = createAsyncThunk(
   "payments/fetchPaymentSheetParams",
-  async (payload, { rejectWithValue }) => {
+  async (payload) => {
     try {
       const response = await api.fetchPaymentSheetParams(payload);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      Alert.alert("Error", mapErrors(error));
     }
   }
 );
 
 export const fetchPaymentHistory = createAsyncThunk(
   "payments/fetchPaymentHistory",
-  async (payload, { rejectWithValue }) => {
+  async (payload) => {
     try {
       const response = await api.fetchPaymentHistory(payload);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      Alert.alert("Error", mapErrors(error));
     }
   }
 );
