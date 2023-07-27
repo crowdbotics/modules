@@ -14,9 +14,11 @@ When making scaffold updates, please make sure the following still works:
 - Web deployment (called API in the Dashboard)
 - Web local dev server (`yarn run web`)
 - Web local build (`yarn run web:build`)
-- Studio loads the app and the welcome screen is rendered correctly
+- Studio loads the app and the welcome screen renders correctly
 
-Then double check your work with those helper scripts checks:
+In order to test scaffold updates on Dashboard/Studio create a new Review App and set `REACT_NATIVE_SCAFFOLD_REPO_BRANCH` to the name of your branch.
+
+Double check your work locally with those helper scripts checks:
 
 - `yarn run bootstrap` produces no changes besides potential changes in `yarn.lock` resolved versions
 - `yarn run template` produces no changes
@@ -24,12 +26,14 @@ Then double check your work with those helper scripts checks:
 
 **Important!**
 
-Increase the version of the scaffold in [package.json](/scaffold/package.json) and [.crowdbotics.json](/scaffold/template/custom/.crowdbotics.json).
-Make this new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](/config.js) to include a new `config.upgrade.versions` and then finally run:
+Increase the version of the scaffold in [package.json](https://github.com/crowdbotics/modules/blob/master/scaffold/package.json) and [.crowdbotics.json](https://github.com/crowdbotics/modules/blob/master/scaffold/template/custom/.crowdbotics.json).
+
+Make this new version available in the upgrade tool (npx crowdbotics/modules) by updating [config.js](https://github.com/crowdbotics/modules/blob/master/config.js) to include a new `config.upgrade.versions` and then finally run:
 
 ```
 pipenv shell
 yarn run manifest
 ```
 
-Finally make sure to update the scaffold [CHANGELOG](/scaffold/CHANGELOG.md) with human friendly descriptions.
+Finally make sure to update the scaffold [CHANGELOG](https://github.com/crowdbotics/modules/blob/master/scaffold/CHANGELOG.md) with human friendly descriptions.
+
