@@ -72,7 +72,7 @@ const Profile = () => {
       delete tmpProfileData.profile_image;
     }
     const data = new FormData();
-    delete tmpProfileData.user
+    delete tmpProfileData.user;
     Object.keys(tmpProfileData).forEach((key) => {
       data.append(key, tmpProfileData[key]);
     });
@@ -149,17 +149,19 @@ const Profile = () => {
   const displayErrors = () =>
     Object.keys(errors).map((error, index) => (
       <Fragment key={index}>
-        {errors[error] instanceof Array ? (
-          errors[error].map((obj, index) => (
+        {errors[error] instanceof Array
+          ? (
+              errors[error].map((obj, index) => (
             <Text key={index} style={styles.error}>
               {error}: {obj}
             </Text>
-          ))
-        ) : (
+              ))
+            )
+          : (
           <Text key={index} style={styles.error}>
             {error}: {errors[error]}
           </Text>
-        )}
+            )}
       </Fragment>
     ));
 
@@ -175,13 +177,15 @@ const Profile = () => {
               style={styles.profilePicture}
             />
           </TouchableOpacity>
-          {profileData.first_name ? (
+          {profileData.first_name
+            ? (
             <Text style={styles.name}>
               {profileData.first_name} {profileData.last_name}
             </Text>
-          ) : (
+              )
+            : (
             <Text style={styles.name}>username</Text>
-          )}
+              )}
         </View>
         <View style={styles.separator}>
           <TouchableOpacity onPress={() => setEditProfile(!editProfile)}>
