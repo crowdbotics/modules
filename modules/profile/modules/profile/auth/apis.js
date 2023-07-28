@@ -1,6 +1,5 @@
 // @ts-ignore
 import { getGlobalOptions } from "@options";
-import options from "../options";
 import axios from "axios";
 
 const global = getGlobalOptions();
@@ -10,21 +9,21 @@ const profileAPI = axios.create({
   baseURL: BASE_URL
 });
 
-const adduser = (data) => {
+const adduser = (data, token) => {
   return profileAPI.post("/modules/profile/user-profile/", data, {
-    headers: { Authorization: `Token ${options.user_token}` }
+    headers: { Authorization: `Token ${token}` }
   });
 };
 
-const getUser = () => {
+const getUser = (token) => {
   return profileAPI.get("/modules/profile/user-profile/", {
-    headers: { Authorization: `Token ${options.user_token}` }
+    headers: { Authorization: `Token ${token}` }
   });
 };
 
-const deleteUser = async () => {
+const deleteUser = async (token) => {
   return profileAPI.delete("/modules/profile/user-profile/", {
-    headers: { Authorization: `Token ${options.user_token}` }
+    headers: { Authorization: `Token ${token}` }
   });
 };
 

@@ -1,21 +1,32 @@
-import { unwrapResult } from "@reduxjs/toolkit";
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState, useContext } from "react";
 import {
-  Image, ScrollView, StyleSheet, Text, TouchableOpacity, View
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native";
+import { unwrapResult } from "@reduxjs/toolkit";
 import DocumentPicker from "react-native-document-picker";
 import { useDispatch } from "react-redux";
 import { adduser, deleteUser, getUser, slice } from "./auth";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import Loader from "./components/Loader";
+import { OptionsContext } from "@options";
 
 const Profile = () => {
+  const options = useContext(OptionsContext);
+  const { styles, ACCESS_TOKEN } = options;
+
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [isloading, setIsLoading] = useState(false);
-  const [editProfile, setEditPrfile] = useState(false);
+  // Indicates whether user can edit profile details or not
+  const [editProfile, setEditProfile] = useState(false);
   const [isProfile, setIsProfile] = useState(false);
+  // State to store current and incoming profile details
   const [profileData, setProfileData] = useState({
     first_name: "",
     last_name: "",
@@ -34,7 +45,8 @@ const Profile = () => {
     getProfile();
   }, []);
 
-  const selectFile = async () => {
+  // Select image from device storage
+  const selectProfileImage = async () => {
     try {
       const res = await DocumentPicker.pick({
         type: [DocumentPicker.types.images]
@@ -52,25 +64,26 @@ const Profile = () => {
     }
   };
 
-  const addProfile = async () => {
+  // This function saves the new data to backend via APIs
+  const updateProfile = async () => {
     setIsLoading(true);
     const tmpProfileData = JSON.parse(JSON.stringify(profileData));
     if (!isProfile) {
       delete tmpProfileData.profile_image;
     }
     const data = new FormData();
-    Object.keys(tmpProfileData).forEach(key => {
+    delete tmpProfileData.user
+    Object.keys(tmpProfileData).forEach((key) => {
       data.append(key, tmpProfileData[key]);
     });
-
-    dispatch(adduser(data))
+    dispatch(adduser({ data: data, token: ACCESS_TOKEN }))
       .then(unwrapResult)
-      .then((res) => {
+      .then(() => {
         setIsLoading(false);
-        setEditPrfile(false);
+        setEditProfile(false);
         setIsProfile(false);
         setErrors({});
-        alert("Profile updated successfully");
+        Alert.alert("Success", "Profile updated successfully");
       })
       .catch((err) => {
         setErrors(err);
@@ -78,76 +91,138 @@ const Profile = () => {
       });
   };
 
+  // Fetches the profile details from backend
   const getProfile = async () => {
     setIsLoading(true);
-    dispatch(getUser()).then(unwrapResult).then((res) => {
-      if (res) {
-        setProfileData(res);
-      } else {
-        setEditPrfile(true);
-      }
-      setIsLoading(false);
-    }).catch((err) => {
-      setIsLoading(false);
-      alert(err.detail);
-    });
+    dispatch(getUser({ token: ACCESS_TOKEN }))
+      .then(unwrapResult)
+      .then((res) => {
+        if (res) {
+          setProfileData(res);
+        } else {
+          setEditProfile(true);
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        Alert.alert("Error", err.detail);
+      });
   };
 
   const deleteProfile = async () => {
     setIsLoading(true);
-    dispatch(deleteUser()).then(unwrapResult).then((res) => {
-      setIsLoading(false);
-      setProfileData({
-        first_name: "",
-        last_name: "",
-        phone: "",
-        country: "",
-        city: "",
-        state: "",
-        address1: "",
-        zip_code: "",
-        gender: "",
-        age: null,
-        profile_image: null
-      });
-    })
+    dispatch(deleteUser({ token: ACCESS_TOKEN }))
+      .then(unwrapResult)
+      .then(() => {
+        setIsLoading(false);
+        setProfileData({
+          first_name: "",
+          last_name: "",
+          phone: "",
+          country: "",
+          city: "",
+          state: "",
+          address1: "",
+          zip_code: "",
+          gender: "",
+          age: null,
+          profile_image: null
+        });
+      })
       .catch((err) => {
         setIsLoading(false);
         alert(err.detail);
       });
   };
 
+  const getProfileImage = () => {
+    if (profileData.profile_image) {
+      return typeof profileData.profile_image === "object"
+        ? { uri: profileData.profile_image.uri }
+        : { uri: profileData.profile_image };
+    } else {
+      return require("./assets/profilePicture.png");
+    }
+  };
+
+  const displayErrors = () =>
+    Object.keys(errors).map((error, index) => (
+      <Fragment key={index}>
+        {errors[error] instanceof Array ? (
+          errors[error].map((obj, index) => (
+            <Text key={index} style={styles.error}>
+              {error}: {obj}
+            </Text>
+          ))
+        ) : (
+          <Text key={index} style={styles.error}>
+            {error}: {errors[error]}
+          </Text>
+        )}
+      </Fragment>
+    ));
+
   return (
-    <View style={styles.container}>
-      {isloading && <Loader></Loader>}
+    <View style={styles.mainContainer}>
+      {isloading && <Loader />}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={selectFile}>
-            <Image resizeMode="cover" source={profileData?.profile_image ? { uri: profileData.profile_image.uri } || { uri: profileData.profile_image } : require("./assets/profilePicture.png")} style={styles.profilePicture} />
+          <TouchableOpacity onPress={selectProfileImage}>
+            <Image
+              resizeMode="cover"
+              source={getProfileImage()}
+              style={styles.profilePicture}
+            />
           </TouchableOpacity>
-          {
-            profileData.first_name
-              ? <Text style={styles.name}>{profileData.first_name} {profileData.last_name}</Text>
-              : <Text style={styles.name}>username</Text>
-          }
+          {profileData.first_name ? (
+            <Text style={styles.name}>
+              {profileData.first_name} {profileData.last_name}
+            </Text>
+          ) : (
+            <Text style={styles.name}>username</Text>
+          )}
         </View>
         <View style={styles.separator}>
-          <TouchableOpacity onPress={() => setEditPrfile(!editProfile)}>
-            <Text style={[styles.separatorText, styles.green]}>Edit Account</Text>
+          <TouchableOpacity onPress={() => setEditProfile(!editProfile)}>
+            <Text style={[styles.separatorText, styles.green]}>
+              Edit Profile
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={deleteProfile}>
-            <Text style={[styles.separatorText, styles.red]}>Delete Account</Text>
+            <Text style={[styles.separatorText, styles.red]}>
+              Delete Profile
+            </Text>
           </TouchableOpacity>
         </View>
-        <Input editable={editProfile} text="First Name" value={profileData.first_name} onChange={text => setProfileData({ ...profileData, first_name: text })} />
-        <Input editable={editProfile} text="Last Name" value={profileData.last_name} onChange={text => setProfileData({ ...profileData, last_name: text })} />
-        <Input editable={editProfile} text="Phone" value={profileData.phone?.toString()} onChange={text => setProfileData({ ...profileData, phone: text })} />
+        <Input
+          editable={editProfile}
+          text="First Name"
+          value={profileData.first_name}
+          onChange={(text) =>
+            setProfileData({ ...profileData, first_name: text })
+          }
+        />
+        <Input
+          editable={editProfile}
+          text="Last Name"
+          value={profileData.last_name}
+          onChange={(text) =>
+            setProfileData({ ...profileData, last_name: text })
+          }
+        />
+        <Input
+          editable={editProfile}
+          text="Phone"
+          value={profileData.phone?.toString()}
+          onChange={(text) => setProfileData({ ...profileData, phone: text })}
+        />
         <View style={styles.halfInputs}>
           <Input
             editable={editProfile}
             text="City"
             value={profileData.city}
-            onChange={text => setProfileData({ ...profileData, city: text })}
+            onChange={(text) => setProfileData({ ...profileData, city: text })}
             style={styles.input1}
             containerStyle={styles.inputContainer1}
           />
@@ -155,7 +230,9 @@ const Profile = () => {
             editable={editProfile}
             text="Country"
             value={profileData.country}
-            onChange={text => setProfileData({ ...profileData, country: text })}
+            onChange={(text) =>
+              setProfileData({ ...profileData, country: text })
+            }
             style={styles.input2}
             containerStyle={styles.inputContainer2}
           />
@@ -165,7 +242,9 @@ const Profile = () => {
             editable={editProfile}
             text="Zip Code"
             value={profileData.zip_code}
-            onChange={text => setProfileData({ ...profileData, zip_code: text })}
+            onChange={(text) =>
+              setProfileData({ ...profileData, zip_code: text })
+            }
             style={styles.input1}
             containerStyle={styles.inputContainer1}
           />
@@ -173,7 +252,7 @@ const Profile = () => {
             editable={editProfile}
             text="State"
             value={profileData.state}
-            onChange={text => setProfileData({ ...profileData, state: text })}
+            onChange={(text) => setProfileData({ ...profileData, state: text })}
             style={styles.input2}
             containerStyle={styles.inputContainer2}
           />
@@ -183,7 +262,9 @@ const Profile = () => {
             editable={editProfile}
             text="Gender"
             value={profileData.gender}
-            onChange={text => setProfileData({ ...profileData, gender: text })}
+            onChange={(text) =>
+              setProfileData({ ...profileData, gender: text })
+            }
             style={styles.input1}
             containerStyle={styles.inputContainer1}
           />
@@ -191,128 +272,25 @@ const Profile = () => {
             editable={editProfile}
             text="Age"
             value={profileData.age?.toString()}
-            onChange={text => setProfileData({ ...profileData, age: text })}
+            onChange={(text) => setProfileData({ ...profileData, age: text })}
             style={styles.input2}
             containerStyle={styles.inputContainer2}
           />
         </View>
-        <Input editable={editProfile} text="Address 1" value={profileData.address1} onChange={text => setProfileData({ ...profileData, address1: text })} />
-        {Object.keys(errors).map((error, index) => (
-          <Fragment key={index}>
-            {
-              (errors[error] instanceof Array)
-                ? errors[error].map((obj, index) => (<Text key={index} style={styles.error}>{error}: {obj}</Text>))
-                : <Text key={index} style={styles.error}>{error}: {errors[error]}</Text>
-            }
-          </Fragment>
-        ))
-        }
-
-        <Button buttonText="Update Profile" onPress={addProfile} />
+        <Input
+          editable={editProfile}
+          text="Address 1"
+          value={profileData.address1}
+          onChange={(text) =>
+            setProfileData({ ...profileData, address1: text })
+          }
+        />
+        {displayErrors()}
+        <Button buttonText="Update Profile" onPress={updateProfile} />
       </ScrollView>
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    paddingHorizontal: 20
-  },
-  heading: {
-    fontSize: 20
-  },
-  header: {
-    alignItems: "center"
-  },
-  profilePicture: {
-    width: 80,
-    height: 80,
-    borderRadius: 40
-  },
-  name: {
-    fontSize: 20,
-    marginTop: 10
-  },
-  email: {
-    fontSize: 13,
-    color: "#aaa"
-  },
-  separator: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 10,
-    marginHorizontal: 10,
-    borderBottomColor: "#f2f2f2",
-    borderBottomWidth: 1,
-    marginVertical: 10
-  },
-  separatorText: {
-    fontSize: 14,
-    fontWeight: "bold"
-  },
-  green: {
-    color: "#12D790"
-  },
-  red: {
-    color: "#FF6848"
-  },
-  halfInputs: {
-    flexDirection: "row"
-  },
-  inputContainer1: {
-    flex: 1
-  },
-  inputContainer2: {
-    flex: 1
-  },
-  input1: {
-    borderTopRightRadius: 0,
-    borderBottomRightRadius: 0,
-    borderRightWidth: 0
-  },
-  input2: {
-    borderTopLeftRadius: 0,
-    borderBottomLeftRadius: 0,
-    borderLeftWidth: 0
-  },
-  uploadText: {
-    fontSize: 14,
-    marginLeft: 20,
-    color: "#111112"
-  },
-  uploadLicense: {
-    borderWidth: 1,
-    borderColor: "#e6e6e6",
-    borderRadius: 10,
-    padding: 2,
-    paddingLeft: 20,
-    marginVertical: 10,
-    width: "100%",
-    height: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between"
-  },
-  placeholder: {
-    fontSize: 14,
-    color: "#9B9B9B"
-  },
-  button: {
-    width: 70,
-    height: "100%",
-    backgroundColor: "#EE4137",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    resizeMode: "contain"
-  },
-  error: { color: "#FF5733" }
-});
 
 export default {
   title: "profile",

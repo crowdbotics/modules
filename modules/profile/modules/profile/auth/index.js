@@ -3,36 +3,42 @@ import { api } from "./apis";
 
 export const adduser = createAsyncThunk(
   "profile/adduser",
-  async (payload, { rejectWithValue }) => {
+  async ({ data, token }, { rejectWithValue }) => {
     try {
-      const response = await api.adduser(payload);
+      const response = await api.adduser(data, token);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        "response" in error ? error.response.data : { detail: error.message }
+      );
     }
   }
 );
 
 export const getUser = createAsyncThunk(
   "profile/getUser",
-  async (payload, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await api.getUser();
+      const response = await api.getUser(token);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        "response" in error ? error.response.data : { detail: error.message }
+      );
     }
   }
 );
 
 export const deleteUser = createAsyncThunk(
   "profile/deleteUser",
-  async (payload, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const response = await api.deleteUser();
+      const response = await api.deleteUser(token);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(
+        "response" in error ? error.response.data : { detail: error.message }
+      );
     }
   }
 );
