@@ -13,6 +13,11 @@ setup(
     name="cb_profile",
     version="0.1",
     packages=[],
-    install_requires=["django-countries==7.5", "asgiref==3.6.0", "django-phonenumber-field==4.0.0", "django-phonenumbers"],
+    install_requires=[
+        "django-countries==7.5",
+        "asgiref==3.6.0",
+        "django-phonenumber-field==4.0.0",
+        "django-phonenumbers"
+    ],
     cmdclass={"build": BuildCommand},
 )

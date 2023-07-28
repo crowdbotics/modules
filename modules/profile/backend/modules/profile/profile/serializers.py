@@ -1,10 +1,9 @@
 from django.contrib.auth import get_user_model
 from django_countries.serializers import CountryFieldMixin
-from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
 from .models import Profile
-
 
 User = get_user_model()
 
@@ -17,10 +16,11 @@ class ProfileSerializer(CountryFieldMixin, ModelSerializer):
         model = Profile
         fields = '__all__'
 
-    def validate_age(self, value):
-        if value == "null" or value == "":
+    @staticmethod
+    def validate_age(age):
+        if age == "null" or age == "":
             return None
         try:
-            return int(value)
+            return int(age)
         except ValueError:
-            raise serializers.ValidationError('You must supply an integer or null')
+            raise serializers.ValidationError('Age must be an integer value')

@@ -15,7 +15,7 @@ A 3rd party integration requirements which is:
 - [django-phonenumber-field](https://pypi.org/project/django-phonenumber-field/)
 - [django-phonenumbers](https://pypi.org/project/django-phonenumbers/)
 
-Can be install by following command:
+Can be installed by following command:
 - pip install django-countries==7.5
 - pip install asgiref==3.6.0
 - pip install django-phonenumber-field==4.0.0
