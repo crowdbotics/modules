@@ -1,7 +1,7 @@
 import React from "react";
 import { SafeAreaView, Image, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
-const RollAndResources = () => {
+const RoleAndResources = () => {
   const equipments = [{
     titie: "Mobile",
     image: require("./assets/mobile.png")
@@ -342,4 +342,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default RollAndResources;
+export default RoleAndResources;
