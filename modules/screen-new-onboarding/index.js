@@ -111,40 +111,40 @@ const Untitled16 = () => {
             <TextInput style={styles.textInputStyles} />
           </View>
           <View style={styles.inputColumn}>
-            <Text>First Name</Text>
+            <Text>Last Name</Text>
             <TextInput style={styles.textInputStyles} />
           </View>
         </View>
 
         <View style={styles.inputView}>
           <View style={styles.inputColumn}>
-            <Text>First Name</Text>
+            <Text>Email</Text>
             <TextInput style={styles.textInputStyles} />
           </View>
           <View style={styles.inputColumn}>
-            <Text>First Name</Text>
-            <TextInput style={styles.textInputStyles} />
-          </View>
-        </View>
-
-        <View style={styles.inputView}>
-          <View style={styles.inputColumn}>
-            <Text>First Name</Text>
-            <TextInput style={styles.textInputStyles} />
-          </View>
-          <View style={styles.inputColumn}>
-            <Text>First Name</Text>
+            <Text>Phone number </Text>
             <TextInput style={styles.textInputStyles} />
           </View>
         </View>
 
         <View style={styles.inputView}>
           <View style={styles.inputColumn}>
-            <Text>First Name</Text>
+            <Text>Country</Text>
             <TextInput style={styles.textInputStyles} />
           </View>
           <View style={styles.inputColumn}>
-            <Text>First Name</Text>
+            <Text>Manager</Text>
+            <TextInput style={styles.textInputStyles} />
+          </View>
+        </View>
+
+        <View style={styles.inputView}>
+          <View style={styles.inputColumn}>
+            <Text>Office</Text>
+            <TextInput style={styles.textInputStyles} />
+          </View>
+          <View style={styles.inputColumn}>
+            <Text>Team</Text>
             <TextInput style={styles.textInputStyles} />
           </View>
         </View>
@@ -162,14 +162,9 @@ const Untitled16 = () => {
         </View>
       </ScrollView>
 
-      <View style={{ backgroundColor: "#9765f7", width: "25%" }}>
+      <View style={styles.rightBar}>
         <View
-          style={{
-            justifyContent: "space-between",
-            flexDirection: "row",
-            marginTop: 20,
-            alignItems: "center"
-          }}
+          style={styles.rightBarFirstContainer}
         >
           <Image
             source={require("./assets/rocket.png")}
@@ -191,6 +186,16 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     flexDirection: "row"
+  },
+  rightBarFirstContainer: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    marginTop: 20,
+    alignItems: "center"
+  },
+  rightBar: {
+    backgroundColor: "#9765f7",
+    width: "25%"
   },
   breadcrumbWrapper: {
     width: "100%",
