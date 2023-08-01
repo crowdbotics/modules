@@ -1,4 +1,4 @@
-import {Alert, Platform} from "react-native";
+import { Alert, Platform } from "react-native";
 import * as Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker";
 
