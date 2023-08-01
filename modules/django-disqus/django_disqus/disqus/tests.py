@@ -1,8 +1,9 @@
+from django.contrib.auth import get_user_model
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
-from django.urls import reverse
-from django.contrib.auth import get_user_model
+
 from .models import Comment, LikeOnComment
 from .serializers import CommentSerializer, LikeOnCommentSerializer
 
@@ -14,7 +15,8 @@ class CommentTestCases(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='john', email='john12@gmail.com', password='john123@')
         self.parent_comment = Comment.objects.create(user=self.user, comment='large', item_uuid='shirt')
-        self.comments = Comment.objects.create(user=self.user, comment='small', item_uuid='shirts', parent_comment=self.parent_comment)
+        self.comments = Comment.objects.create(user=self.user, comment='small', item_uuid='shirts',
+                                               parent_comment=self.parent_comment)
         self.comments.save()
         self.user_token = Token.objects.create(user=self.user)
         self.user_token.save()
@@ -68,7 +70,13 @@ class CommentTestCases(APITestCase):
 
     def test_get_list_with_item_param(self):
         url = reverse('comments-list')
-        params = {"item": "shirt"}
+        params = {"item_uuid": "shirt"}
+        response = self.client.get(url, params)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_list_with_item_uuid_and_parent_param(self):
+        url = reverse('comments-list')
+        params = {"item_uuid": "shirt", "parent": self.comments.id}
         response = self.client.get(url, params)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

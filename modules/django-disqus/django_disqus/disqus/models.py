@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
@@ -13,7 +13,7 @@ class BaseModel(models.Model):
 
 
 class Comment(BaseModel):
-    item_uuid = models.CharField(max_length=50)
+    item_uuid = models.CharField(max_length=50)  # item_uuid: this is post id or can be a foreignkey
     comment = models.TextField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     parent_comment = models.ForeignKey("self", on_delete=models.CASCADE,
