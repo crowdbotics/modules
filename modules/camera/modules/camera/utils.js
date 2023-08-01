@@ -1,4 +1,4 @@
-import { Alert, Platform } from "react-native";
+import {Alert, Platform} from "react-native";
 import * as Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker";
 
@@ -91,14 +91,13 @@ export const pickFromCamera = async () => {
     return false;
   } else {
     try {
-      const res = await ImagePicker.openCamera({
+      return await ImagePicker.openCamera({
         width: 300,
         height: 300,
         cropping: true,
         mediaType: "photo",
         includeBase64: true
       });
-      return res;
     } catch (err) {
       console.log("pickFromCamera err", err);
       return false;
