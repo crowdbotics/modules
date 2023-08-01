@@ -66,4 +66,3 @@ export const FAQItem = (props) => {
     </View>
   );
 };
-
