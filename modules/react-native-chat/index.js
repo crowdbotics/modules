@@ -12,7 +12,6 @@ import { MenuProvider } from "react-native-popup-menu";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 
-
 const App = () => {
   const { state, dispatch } = useStore();
   const options = useContext(OptionsContext);
