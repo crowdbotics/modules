@@ -14,7 +14,6 @@ import { Divider } from "react-native-elements";
 import { Images } from "./assets";
 import { FAQItem } from "./FAQItem";
 import { faqList, slice } from "./store";
-import { colors } from "./options";
 
 const FAQ = () => {
   const options = useContext(OptionsContext);
@@ -77,7 +76,7 @@ const FAQ = () => {
   };
 
   const separator = () => {
-    return <Divider color={colors.darkCharcoal} />;
+    return <Divider color={options.colors.darkCharcoal} />;
   };
 
   return (
