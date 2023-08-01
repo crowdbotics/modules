@@ -1,7 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .viewsets import BookingView, BookingPenaltyView, BookingPlanView, BookingDetailView, CreateCartView, CreateBookingView
 
+from .viewsets import BookingView, BookingPenaltyView, BookingPlanView, BookingDetailView, CreateCartView, \
+    CreateBookingView
 
 router = DefaultRouter()
 router.register("booking", BookingView, basename="booking")
@@ -37,7 +38,7 @@ Will take the unique `identity_number` for item, the booking, `type`, `descripti
 urlpatterns = [
     path("", include(router.urls)),
     path("shopify/booking/", CreateCartView.as_view()),
-    
+
 ]
 
 """

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail
 
 
@@ -31,7 +32,6 @@ class BookingDetailSerializer(serializers.ModelSerializer):
 
 
 class BookingCreateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = BookingDetail
         fields = '__all__'

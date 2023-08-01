@@ -41,8 +41,9 @@ class BookingPlan(TimeStamp):
 
 class BookingPenalty(TimeStamp):
     """
-    BookingPenalty model: This model save the information about the charges or penalities that a user will have to pay in case of booking cancellation or refund.
-    It will be saving the title, description and charge against that a user will pay.
+    BookingPenalty model: This model save the information about the charges or penalties that a user will have to pay
+    in case of booking cancellation or refund. It will be saving the title, description and charge against that a
+    user will pay.
     """
     title = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField()
@@ -55,22 +56,24 @@ class BookingPenalty(TimeStamp):
 class BookingDetail(TimeStamp):
     """
     BookingDetail model: The model will be saving the booking details that the user has booked with the booking plan
-    that he/she has selected and penalty charges from BookingPlan Model and BookingPenalty Model. BookingDetails Model consist of:.
+    that he/she has selected and penalty charges from BookingPlan Model and BookingPenalty Model. BookingDetails
+    Model consist of:.
     """
     STATUS = (
         ('pending', 'Pending'),
-        ('accepted',  'Accepted'),
-        ('declined',  'Declined'),
+        ('accepted', 'Accepted'),
+        ('declined', 'Declined'),
         ('delivered', 'Delivered'),
-        ('occupied',  'Occupied'),
-        ('canceled',  'Canceled'),
+        ('occupied', 'Occupied'),
+        ('canceled', 'Canceled'),
         ('not_available', 'Not Available')
     )
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="booking_details")
-    plan = models.ManyToManyField(BookingPlan, related_name="booking_plan")
-    penalty = models.ForeignKey(BookingPenalty, on_delete=models.CASCADE, related_name="booking_penalty", null=True, blank=True)
-    identity_number = models.IntegerField() #this is an optional foreign key for what we are booking
-    type = models.CharField(max_length=100)
+    booking = models.OneToOneField(Booking, on_delete=models.PROTECT, related_name="booking_details")
+    plans = models.ForeignKey(BookingPlan, on_delete=models.CASCADE, related_name="booking_plans")
+    penalty = models.ForeignKey(BookingPenalty, on_delete=models.CASCADE, related_name="booking_penalty", null=True,
+                                blank=True)
+    identity_number = models.IntegerField()  # this is an optional foreign key for what we are booking
+    booking_type = models.CharField(max_length=100)
     description = models.TextField()
     occupancy = models.CharField(max_length=100)
     from_date = models.DateTimeField()
@@ -83,7 +86,8 @@ class BookingDetail(TimeStamp):
 
 class ShopifyBooking(TimeStamp):
     """
-    ShopifyBooking model: The model will save the cart id against a user. This id will be used to access the cart from the shopify.
+    ShopifyBooking model: The model will save the cart id against a user.
+    This id will be used to access the cart from the shopify.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="shopify_cart_user")
     shopify_cart_id = models.CharField(max_length=100)

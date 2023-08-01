@@ -1,15 +1,18 @@
+import os
+
+import requests
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer,\
-    BookingCreateSerializer
+
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
-import requests
-import os
+from .pagination import Pagination
+from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer, \
+    BookingCreateSerializer
 
 
 class BookingView(ModelViewSet):
@@ -17,6 +20,7 @@ class BookingView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = Booking.objects.all()
+    pagination_class = Pagination
 
 
 class BookingPlanView(ModelViewSet):
@@ -24,6 +28,7 @@ class BookingPlanView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = BookingPlan.objects.all()
+    pagination_class = Pagination
 
 
 class BookingPenaltyView(ModelViewSet):
@@ -31,6 +36,7 @@ class BookingPenaltyView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = BookingPenalty.objects.all()
+    pagination_class = Pagination
 
 
 class BookingDetailView(ModelViewSet):
@@ -38,6 +44,7 @@ class BookingDetailView(ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     queryset = BookingDetail.objects.all()
+    pagination_class = Pagination
 
 
 class CreateBookingView(ModelViewSet):
@@ -45,6 +52,7 @@ class CreateBookingView(ModelViewSet):
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     serializer_class = BookingCreateSerializer
     queryset = BookingDetail.objects.all()
+    pagination_class = Pagination
 
 
 class CreateCartView(APIView):
@@ -94,10 +102,12 @@ class CreateCartView(APIView):
                 }
             }
             req = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
-                                headers={"X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
-                                         "Content-Type": "application/json"})
+                                headers={"X-Shopify-Storefront-Access-Token": os.environ.get(
+                                    "SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
+                                    "Content-Type": "application/json"})
             load = req.json()
-            shopify_id = ShopifyBooking.objects.create(user=request.user, shopify_cart_id=load["data"]["cartCreate"]["cart"]["id"])
+            shopify_id = ShopifyBooking.objects.create(user=self.request.user,
+                                                       shopify_cart_id=load["data"]["cartCreate"]["cart"]["id"])
             shopify_id.save()
             return Response(load, status=status.HTTP_200_OK)
         except Exception as e:
@@ -142,7 +152,9 @@ class CreateCartView(APIView):
                 }
             }
             r = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
-                              headers={"X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
-                                       "Content-Type": "application/json"})
+                              headers={
+                                  "X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN",
+                                                                                      ""),
+                                  "Content-Type": "application/json"})
             return Response(json.loads(r.text), status=status.HTTP_200_OK)
         return Response({"error": "cartId is not null"}, status=status.HTTP_400_BAD_REQUEST)

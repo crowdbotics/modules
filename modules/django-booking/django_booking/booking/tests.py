@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
+from rest_framework.test import APITestCase
+
 from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
 
 User = get_user_model()
@@ -13,66 +14,65 @@ class BookingTestCase(APITestCase):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
         self.token.save()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.booking = Booking.objects.create(user=self.user,
-                                              quantity=1, venue="booking for meeting", address="This is address")
+                                              quantity=1, venue="booking for meeting", address="pakistan")
 
     def test_create_booking(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         data = {
             "user": self.user.id,
             "quantity": 1,
             "venue": "booking for test",
             "address": "testing file",
         }
-        response = self.client.post(reverse('booking-list'), data)
-        booking_object = Booking.objects.all().last()
+        response = self.client.post(reverse('booking-list'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['user'], booking_object.user.id)
-        self.assertEqual(response.data['venue'], booking_object.venue)
+        self.assertEqual(response.data['user'], self.user.id)
+        self.assertEqual(response.data['venue'], 'booking for test')
 
-    def test_create_booking_with_un_auth(self):
+    def test_create_booking_without_authorization(self):
         data = {
             "user": self.user,
             "quantity": 1,
             "venue": "booking for test",
             "address": "testing file",
         }
-        self.client.force_authenticate(user=None)
         response = self.client.post(reverse('booking-list'), data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_create_booking_with_empty_data(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         data = {}
         response = self.client.post(reverse('booking-list'), data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_booking_list(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get(reverse('booking-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['id'], Booking.objects.all().first().id)
-        self.assertEqual(response.data[0]['address'], Booking.objects.all().first().address)
+        self.assertEqual(response.data['results'][0]['venue'], 'booking for meeting')
 
     def test_single_booking(self):
-        response = self.client.get(reverse('booking-detail', args=(self.booking.id,)))
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.get(reverse('booking-detail', kwargs={'pk': self.booking.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['address'], 'pakistan')
 
     def test_update_single_booking(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         data = {
             "user": 1,
             "quantity": 1,
             "venue": "booking for test",
-            "address": "testing file",
+            "address": "England",
         }
-        response = self.client.put(reverse('booking-detail', args=(self.booking.id,)), data)
-        booking_object = Booking.objects.get(id=self.booking.id)
+        response = self.client.put(reverse('booking-detail', kwargs={'pk': self.booking.id}), data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['venue'], booking_object.venue)
-        self.assertEqual(response.data['venue'], data['venue'])
-        self.assertEqual(booking_object.venue, data['venue'])
+        self.assertEqual(response.data['address'], 'England')
 
-    def test_str_is_equal_to_user(self):
+    def test_booking_model_str_is_equal_to_username(self):
         """
-        Method `__str__` should be equal to field `user`
+        Method `__str__` should be equal to field `username`
         """
         user = Booking.objects.get(pk=1)
         self.assertEqual(str(user), user.user.username)
@@ -100,7 +100,7 @@ class BookingPlanTestCase(APITestCase):
         self.assertEqual(response.data['plan'], plan_object.plan)
         self.assertEqual(response.data['description'], plan_object.description)
 
-    def test_create_booking_plan_with_un_auth(self):
+    def test_create_booking_plan_without_authorization(self):
         data = {
             "plan": "booking plan",
             "description": "best booking plan",
@@ -118,8 +118,8 @@ class BookingPlanTestCase(APITestCase):
     def test_booking_plan_list(self):
         response = self.client.get(reverse('plans-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['id'], BookingPlan.objects.all().first().id)
-        self.assertEqual(response.data[0]['plan'], BookingPlan.objects.all().first().plan)
+        self.assertEqual(response.data['results'][0]['id'], BookingPlan.objects.all().first().id)
+        self.assertEqual(response.data['results'][0]['plan'], BookingPlan.objects.all().first().plan)
 
     def test_single_booking_plan(self):
         response = self.client.get(reverse('plans-detail', args=(self.booking_plan.id,)))
@@ -138,7 +138,7 @@ class BookingPlanTestCase(APITestCase):
         self.assertEqual(response.data['plan'], data['plan'])
         self.assertEqual(booking_object.plan, data['plan'])
 
-    def test_str_is_equal_to_plan(self):
+    def test_BookingPlan_str_is_equal_to_plan(self):
         """
         Method `__str__` should be equal to field `plan`
         """
@@ -186,8 +186,8 @@ class BookingPenaltyTestCase(APITestCase):
     def test_booking_penalty_list(self):
         response = self.client.get(reverse('penalties-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['id'], BookingPenalty.objects.all().first().id)
-        self.assertEqual(response.data[0]['title'], BookingPenalty.objects.all().first().title)
+        self.assertEqual(response.data['results'][0]['id'], BookingPenalty.objects.all().first().id)
+        self.assertEqual(response.data['results'][0]['title'], BookingPenalty.objects.all().first().title)
 
     def test_single_booking_penalty(self):
         response = self.client.get(reverse('penalties-detail', args=(self.booking_Penalty.id,)))
@@ -216,11 +216,12 @@ class BookingPenaltyTestCase(APITestCase):
 
 class BookingDetailTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username="example", password="Password@123")
+        self.user = User.objects.create_user(username="test_example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
         self.token.save()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
+        self.custom_booking = Booking.objects.create(user=self.user,
+                                                     quantity=2, venue="california room", address="china")
         self.booking = Booking.objects.create(user=self.user,
                                               quantity=1, venue="booking for meeting", address="This is address")
 
@@ -231,25 +232,24 @@ class BookingDetailTestCase(APITestCase):
                                                              description="best booking penalty", charges=445.32)
         self.booking_detail = BookingDetail.objects.create(booking=self.booking,
                                                            penalty=self.booking_Penalty,
+                                                           plans=self.booking_plan,
                                                            identity_number=1,
-                                                           type="best type", description="booking detail",
+                                                           booking_type="personal", description="booking detail",
                                                            occupancy="booking detail", from_date='2006-10-25 14:30:59',
                                                            to_date="2006-10-25 14:30:59",
                                                            status="pending")
-        self.booking_detail.save()
-        self.booking_detail.plan.add(self.booking_plan.id)
 
     def test_create_booking_detail(self):
         data = {
-            "booking": self.booking.id,
-            "plan": self.booking_plan.id, "penalty": self.booking_Penalty.id,
+            "booking": self.custom_booking.id,
+            "plans": self.booking_plan.id, "penalty": self.booking_Penalty.id,
             "identity_number": 1,
-            "type": "best type", "description": "booking detail",
-            "occupancy": "booking detail", "from_date": '2006-10-25 14:30:59',
-            "to_date": "2006-10-25 14:30:59",
+            "booking_type": "best type", "description": "booking detail",
+            "occupancy": "booking detail", "from_date": '2023-10-25 14:30:59',
+            "to_date": "2023-10-26 14:30:59",
             "status": "pending"
         }
-        response = self.client.post(reverse('details-list'), data)
+        response = self.client.post(reverse('details-list'), data, format='json')
         detail_object = BookingDetail.objects.all().last()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data['booking'], detail_object.booking.id)
@@ -257,10 +257,10 @@ class BookingDetailTestCase(APITestCase):
 
     def test_create_booking_detail_with_un_auth(self):
         data = {
-            "booking": self.booking.id,
-            "plan": self.booking_plan.id, "penalty": self.booking_Penalty.id,
+            "booking": self.custom_booking.id,
+            "plans": self.booking_plan.id, "penalty": self.booking_Penalty.id,
             "identity_number": 1,
-            "type": "best type", "description": "booking detail",
+            "booking_type": "best type", "description": "booking detail",
             "occupancy": "booking detail", "from_date": '2006-10-25 14:30:59',
             "to_date": "2006-10-25 14:30:59",
             "status": "pending"
@@ -277,31 +277,32 @@ class BookingDetailTestCase(APITestCase):
     def test_booking_detail_list(self):
         response = self.client.get(reverse('details-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['id'], BookingDetail.objects.all().first().id)
-        self.assertEqual(response.data[0]['status'], BookingDetail.objects.all().first().status)
+        self.assertEqual(response.data['results'][0]['id'], BookingDetail.objects.all().first().id)
+        self.assertEqual(response.data['results'][0]['status'], BookingDetail.objects.all().first().status)
 
     def test_single_booking_detail(self):
-        response = self.client.get(reverse('details-detail', args=(self.booking_detail.id,)))
+        response = self.client.get(reverse('details-detail', kwargs={'pk': self.booking_detail.id}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['booking_type'], 'personal')
 
     def test_update_single_booking_detail(self):
         data = {
-            "booking": self.booking.id,
-            "plan": self.booking_plan.id, "penalty": self.booking_Penalty.id,
+            "booking": self.custom_booking.id,
+            "plans": self.booking_plan.id, "penalty": self.booking_Penalty.id,
             "identity_number": 1,
-            "type": "best type", "description": "booking detail",
+            "booking_type": "best type", "description": "booking detail",
             "occupancy": "booking detail", "from_date": '2006-10-25 14:30:59',
             "to_date": "2006-10-25 14:30:59",
             "status": "pending"
         }
-        response = self.client.put(reverse('details-detail', args=(self.booking_detail.id,)), data)
+        response = self.client.put(reverse('details-detail', kwargs={'pk': self.booking_detail.id}), data)
         detail_object = BookingDetail.objects.get(id=self.booking_detail.id)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['occupancy'], detail_object.occupancy)
         self.assertEqual(response.data['status'], data['status'])
         self.assertEqual(detail_object.status, data['status'])
 
-    def test_str_is_equal_to_identity_number(self):
+    def test_BookingDetail_str_is_equal_to_identity_number(self):
         """
         Method `__str__` should be equal to field `identity_number`
         """
@@ -315,9 +316,10 @@ class CreateBookingTestCase(APITestCase):
         self.token = Token.objects.create(user=self.user)
         self.token.save()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
+        self.custom_booking = Booking.objects.create(user=self.user,
+                                                     quantity=2, venue='hotel romania', address="oman")
         self.booking = Booking.objects.create(user=self.user,
-                                              quantity=1, venue="booking for meeting", address="This is address")
+                                              quantity=1, venue="booking for meeting", address="pakistan")
 
         self.booking_plan = BookingPlan.objects.create(plan="booking plan",
                                                        description="best booking plan", charges=445.32)
@@ -326,20 +328,19 @@ class CreateBookingTestCase(APITestCase):
                                                              description="best booking penalty", charges=445.32)
         self.booking_detail = BookingDetail.objects.create(booking=self.booking,
                                                            penalty=self.booking_Penalty,
+                                                           plans=self.booking_plan,
                                                            identity_number=1,
-                                                           type="best type", description="booking detail",
+                                                           booking_type="professional", description="booking detail",
                                                            occupancy="booking detail", from_date='2006-10-25 14:30:59',
                                                            to_date="2006-10-25 14:30:59",
                                                            status="pending")
-        self.booking_detail.save()
-        self.booking_detail.plan.add(self.booking_plan.id)
 
     def test_create_already_booking_detail(self):
         data = {
-            "booking": self.booking.id,
-            "plan": self.booking_plan.id, "penalty": self.booking_Penalty.id,
+            "booking": self.custom_booking.id,
+            "plans": self.booking_plan.id, "penalty": self.booking_Penalty.id,
             "identity_number": 1,
-            "type": "best type", "description": "booking detail",
+            "booking_type": "best type", "description": "booking detail",
             "occupancy": "booking detail", "from_date": '2006-10-25 14:30:59',
             "to_date": "2006-10-25 14:30:59",
             "status": "pending"
@@ -349,10 +350,10 @@ class CreateBookingTestCase(APITestCase):
 
     def test_create_booking_detail_with_un_auth(self):
         data = {
-            "booking": self.booking.id,
-            "plan": self.booking_plan.id, "penalty": self.booking_Penalty.id,
+            "booking": self.custom_booking.id,
+            "plans": self.booking_plan.id, "penalty": self.booking_Penalty.id,
             "identity_number": 1,
-            "type": "best type", "description": "booking detail",
+            "booking_type": "best type", "description": "booking detail",
             "occupancy": "booking detail", "from_date": '2006-10-25 14:30:59',
             "to_date": "2006-10-25 14:30:59",
             "status": "pending"
@@ -369,8 +370,8 @@ class CreateBookingTestCase(APITestCase):
     def test_booking_detail_list(self):
         response = self.client.get(reverse('create-booking-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['id'], BookingDetail.objects.all().first().id)
-        self.assertEqual(response.data[0]['status'], BookingDetail.objects.all().first().status)
+        self.assertEqual(response.data['results'][0]['id'], BookingDetail.objects.all().first().id)
+        self.assertEqual(response.data['results'][0]['status'], BookingDetail.objects.all().first().status)
 
     def test_single_booking_detail(self):
         response = self.client.get(reverse('create-booking-detail', args=(self.booking_detail.id,)))
@@ -378,10 +379,10 @@ class CreateBookingTestCase(APITestCase):
 
     def test_update_single_booking_detail(self):
         data = {
-            "booking": self.booking.id,
-            "plan": self.booking_plan.id, "penalty": self.booking_Penalty.id,
+            "booking": self.custom_booking.id,
+            "plans": self.booking_plan.id, "penalty": self.booking_Penalty.id,
             "identity_number": 1,
-            "type": "best type", "description": "booking detail",
+            "booking_type": "best type", "description": "booking detail",
             "occupancy": "booking detail", "from_date": '2006-10-25 14:30:59',
             "to_date": "2006-10-25 14:30:59",
             "status": "pending"
@@ -399,12 +400,11 @@ class CreateCartTestCase(APITestCase):
         self.user = User.objects.create_user(username="example", password="Password@123")
         self.token = Token.objects.create(user=self.user)
         self.token.save()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-
         self.shopify_booking = ShopifyBooking.objects.create(user=self.user,
                                                              shopify_cart_id="cart")
 
     def test_create_cart_with_invalid_data(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         data = {
             "lines": [
                 {
@@ -412,23 +412,19 @@ class CreateCartTestCase(APITestCase):
                     "merchandiseId": "gid://shopify/ProductVariant/44073461448998",
                     "attributes": {"key": "address", "value": "Bahawalpur, punjab, pakistan"}
                 },
-                {
-                    "quantity": 1,
-                    "merchandiseId": "gid://shopify/ProductVariant/44078117323046",
-                    "attributes": {"key": "address", "value": "Rahimyar khan, punjab, pakistan"}
-                }
-
             ],
             "attributes": {"key": "address", "value": "Bahawalpur, punjab, pakistan"}
         }
         response = self.client.post('/modules/booking/shopify/booking/', data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_cart_without_data(self):
-        response = self.client.post('/modules/booking/shopify/booking/')
+    def test_create_cart_with_shopify(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        response = self.client.post('/modules/booking/shopify/booking/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_cart(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         params = {
             "cartId": "gid://shopify/Cart/1f049996d99edb9cab92d43e725d28ec"
         }
@@ -436,10 +432,11 @@ class CreateCartTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_cart_without_params(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get('/modules/booking/shopify/booking/')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_str_is_equal_to_shopify_cart_id(self):
+    def test_ShopifyBooking_str_is_equal_to_shopify_cart_id(self):
         """
         Method `__str__` should be equal to field `shopify_cart_id`
         """
