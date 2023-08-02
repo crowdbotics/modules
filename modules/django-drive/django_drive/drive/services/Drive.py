@@ -12,8 +12,10 @@ class DriveService:
         Gives access to the user to access the files and folders of the drive
         """
         try:
-            credentials = Credentials(token=access_token)
-            if credential_file_path:
+            credentials = None
+            if access_token:
+                credentials = Credentials(token=access_token)
+            elif credential_file_path:
                 credentials = service_account.Credentials.from_service_account_file(credential_file_path)
             self.drive_service = discovery.build('drive', 'v3', credentials=credentials)
         except Exception:

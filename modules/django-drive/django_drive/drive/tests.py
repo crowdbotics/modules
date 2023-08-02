@@ -14,6 +14,7 @@ class DriveViewSet(APITestCase):
     def setUp(self):
         self.service_patch = mock.patch("modules.django_drive.drive.services.DriveService.service_account")
         self.service_patch.start()
+        self.client.credentials(HTTP_GOOGLE_DRIVE_AUTHORIZATION='y29.custom_token')
 
     def tearDown(self):
         self.service_patch.stop()

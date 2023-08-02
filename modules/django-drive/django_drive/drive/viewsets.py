@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import CreateFolderSerializer, ShareFileSerializer, UploadFileSerializer
-from .services.DriveService import DriveService
+from .services.Drive import DriveService
 
 
 class DriveViewSet(viewsets.GenericViewSet):
@@ -39,7 +39,7 @@ class DriveViewSet(viewsets.GenericViewSet):
         :return: Returns list of the files and folder from user's Google Drive.
         """
         try:
-            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
+            drive_service = DriveService(access_token=request.META.get('HTTP_GOOGLE_DRIVE_AUTHORIZATION'))
             response = drive_service.get_drive_files(query=request.query_params.get('query', None),
                                                      page_token=request.query_params.get('page_token', None),
                                                      page_size=request.query_params.get('page_size', None))
@@ -56,7 +56,7 @@ class DriveViewSet(viewsets.GenericViewSet):
         :return: Creates the folder and returns folder id.
         """
         try:
-            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
+            drive_service = DriveService(access_token=request.META.get('HTTP_GOOGLE_DRIVE_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             response = drive_service.create_drive_folder(**serializer.data)
@@ -76,7 +76,7 @@ class DriveViewSet(viewsets.GenericViewSet):
         :return: Shares file/folder with the user and returns the shared file/folder detail object
         """
         try:
-            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
+            drive_service = DriveService(access_token=request.META.get('HTTP_GOOGLE_DRIVE_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             response = drive_service.share_drive_file(**serializer.data)
@@ -95,7 +95,7 @@ class DriveViewSet(viewsets.GenericViewSet):
         :return: Uploads the file to the specified folder and returns file id.
         """
         try:
-            drive_service = DriveService(access_token=request.META.get('HTTP_AUTHORIZATION'))
+            drive_service = DriveService(access_token=request.META.get('HTTP_GOOGLE_DRIVE_AUTHORIZATION'))
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             response = drive_service.upload_drive_file(
