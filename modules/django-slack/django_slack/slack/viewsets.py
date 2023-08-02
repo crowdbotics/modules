@@ -1,12 +1,9 @@
-import os
-
-
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .services.SlackService import SlackService
 from .serializers import FileSerializer, MessageSerializer, ChannelSerializer, InviteUserToChannelSerializer
+from .services.SlackService import SlackService
 
 
 class SlackViewSet(viewsets.GenericViewSet):
@@ -69,7 +66,7 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['post'], url_path='create-channel')
     def create_channel(self, request):
-        """ 
+        """
         Create Slack channel with invite multiple users to channel
         User Pass Multiple Emails in CharField using comma separation
 
@@ -88,7 +85,7 @@ class SlackViewSet(viewsets.GenericViewSet):
         """
         Invite multiple users to specific Slack channel
 
-        :body_params str channel_id: id of channel from invite    \n
+        body_params str channel_id: id of channel from invite    \n
         :body_params  str channel_name: name of channel from invite     \n
         :body_params str emails: An emails list separated with ',' to invite users to channel   \n
         :return: An invitation id with details of users that invited to respective channel

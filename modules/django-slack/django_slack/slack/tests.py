@@ -1,13 +1,11 @@
-import os
-import json
-from PIL import Image
-from six import BytesIO
 from unittest import mock
-from django.urls import reverse
-from django.core.files.uploadedfile import SimpleUploadedFile
 
-from rest_framework.test import APITestCase
+from PIL import Image
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APITestCase
+from six import BytesIO
 
 from .serializers import MessageSerializer, FileSerializer, ChannelSerializer, InviteUserToChannelSerializer
 
@@ -31,9 +29,7 @@ class SlackTestCases(APITestCase):
                                           'team': 'T04FVU3NCEB',
                                           'bot_profile': {'id': 'B04G7HC8DUM', 'app_id': 'A04GCUHSBU4',
                                                           'name': 'test-app', 'icons': {
-                                                          'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png',
-                                                          'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png',
-                                                          'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'},
+                                                            'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'},
                                                           'deleted': False, 'updated': 1671695019,
                                                           'team_id': 'T04FVU3NCEB'}}}}
         dict_response = DotDict(responses)
@@ -62,15 +58,18 @@ class SlackTestCases(APITestCase):
                                                    'display_as_bot': False, 'username': '',
                                                    'url_private': 'https://files.slack.com/files-pri/T04GD6S7GRM-F04N7C0SRNC/uploaded_file',
                                                    'url_private_download': 'https://files.slack.com/files-pri/T04GD6S7GRM-F04N7C0SRNC/download/uploaded_file',
-                                                   'media_display_type': 'unknown',
                                                    'thumb_pdf': 'https://files.slack.com/files-tmb/T04GD6S7GRM-F04N7C0SRNC-bcb0231d34/uploaded_file_thumb_pdf.png',
                                                    'thumb_pdf_w': 909, 'thumb_pdf_h': 1286,
                                                    'permalink': 'https://demoworkspace-muv4542.slack.com/files/U04GM5Z6ZU6/F04N7C0SRNC/uploaded_file',
                                                    'permalink_public': 'https://slack-files.com/T04GD6S7GRM-F04N7C0SRNC-11b96dccba',
-                                                   'comments_count': 0, 'is_starred': False, 'shares': {'public': {
-                'C04N6BW0GAU': [{'reply_users': [], 'reply_users_count': 0, 'reply_count': 0, 'ts': '1675249623.451619',
-                                 'channel_name': 'new-tests-channel', 'team_id': 'T04GD6S7GRM',
-                                 'share_user_id': 'U04GM5Z6ZU6'}]}}, 'channels': ['C04N6BW0GAU'], 'groups': [],
+                                                   'shares': {'public': {
+                                                       'C04N6BW0GAU': [
+                                                           {'reply_users': [], 'reply_users_count': 0, 'reply_count': 0,
+                                                            'ts': '1675249623.451619',
+                                                            'channel_name': 'new-tests-channel',
+                                                            'team_id': 'T04GD6S7GRM',
+                                                            'share_user_id': 'U04GM5Z6ZU6'}]}},
+                                                   'channels': ['C04N6BW0GAU'], 'groups': [],
                                                    'ims': [], 'has_more_shares': False, 'has_rich_preview': False,
                                                    'file_access': 'visible'}}}
         dict_response = DotDict(responses)
@@ -141,15 +140,10 @@ class SlackTestCases(APITestCase):
             {'id': 'F04N7C0SRNC', 'created': 1675249623, 'timestamp': 1675249623, 'name': 'Uploaded file',
              'title': 'Uploaded file', 'mimetype': 'application/pdf', 'filetype': 'pdf', 'pretty_type': 'PDF',
              'user': 'U04GM5Z6ZU6', 'user_team': 'T04GD6S7GRM', 'editable': False, 'size': 13264, 'mode': 'hosted',
-             'is_external': False, 'external_type': '', 'is_public': True, 'public_url_shared': False,
-             'display_as_bot': False, 'username': '',
              'url_private': 'https://files.slack.com/files-pri/T04GD6S7GRM-F04N7C0SRNC/uploaded_file',
              'url_private_download': 'https://files.slack.com/files-pri/T04GD6S7GRM-F04N7C0SRNC/download/uploaded_file',
-             'media_display_type': 'unknown',
              'thumb_pdf': 'https://files.slack.com/files-tmb/T04GD6S7GRM-F04N7C0SRNC-bcb0231d34/uploaded_file_thumb_pdf.png',
-             'thumb_pdf_w': 909, 'thumb_pdf_h': 1286,
              'permalink': 'https://demoworkspace-muv4542.slack.com/files/U04GM5Z6ZU6/F04N7C0SRNC/uploaded_file',
-             'permalink_public': 'https://slack-files.com/T04GD6S7GRM-F04N7C0SRNC-11b96dccba', 'is_starred': False,
              'has_rich_preview': False, 'file_access': 'visible', 'media_progress': None}], 'upload': True,
                                                         'user': 'U04GM5Z6ZU6', 'display_as_bot': False,
                                                         'ts': '1675249623.451619', 'blocks': [
@@ -165,8 +159,6 @@ class SlackTestCases(APITestCase):
                                                         'bot_profile': {'id': 'B04GTL78GTV', 'deleted': False,
                                                                         'name': 'Demo App', 'updated': 1672211264,
                                                                         'app_id': 'A04GD6Y3MRV', 'icons': {
-                                                                'image_36': 'https://a.slack-edge.com/80588/img/plugins/app/bot_36.png',
-                                                                'image_48': 'https://a.slack-edge.com/80588/img/plugins/app/bot_48.png',
                                                                 'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'},
                                                                         'team_id': 'T04GD6S7GRM'}},
                                                        {'type': 'message', 'subtype': 'channel_join',
@@ -201,20 +193,12 @@ class SlackTestCases(APITestCase):
              'tz_offset': -28800, 'profile': {'title': '', 'phone': '', 'skype': '', 'real_name': 'Slackbot',
                                               'real_name_normalized': 'Slackbot', 'display_name': 'Slackbot',
                                               'display_name_normalized': 'Slackbot', 'fields': {}, 'status_text': '',
-                                              'status_emoji': '', 'status_emoji_display_info': [],
                                               'status_expiration': 0, 'avatar_hash': 'sv41d8cd98f0',
                                               'always_active': True, 'first_name': 'slackbot', 'last_name': '',
-                                              'image_24': 'https://a.slack-edge.com/80588/img/slackbot_24.png',
-                                              'image_32': 'https://a.slack-edge.com/80588/img/slackbot_32.png',
-                                              'image_48': 'https://a.slack-edge.com/80588/img/slackbot_48.png',
-                                              'image_72': 'https://a.slack-edge.com/80588/img/slackbot_72.png',
-                                              'image_192': 'https://a.slack-edge.com/80588/marketing/img/avatars/slackbot/avatar-slackbot.png',
                                               'image_512': 'https://a.slack-edge.com/80588/img/slackbot_512.png',
                                               'status_text_canonical': '', 'team': 'T04GD6S7GRM'}, 'is_admin': False,
-             'is_owner': False, 'is_primary_owner': False, 'is_restricted': False, 'is_ultra_restricted': False,
-             'is_bot': False, 'is_app_user': False, 'updated': 0, 'is_email_confirmed': False,
              'who_can_share_contact_card': 'EVERYONE'},
-            ], 'cache_ts': 1675254818,
+        ], 'cache_ts': 1675254818,
                      'response_metadata': {'next_cursor': ''}}
         dict_response = DotDict(responses)
         get_users_list_mock.return_value = dict_response

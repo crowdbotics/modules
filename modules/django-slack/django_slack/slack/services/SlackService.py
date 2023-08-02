@@ -1,8 +1,9 @@
 import os
 
-from slack_sdk.errors import SlackApiError
-from slack_sdk import WebClient
 from django.utils.text import slugify
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+
 
 class SlackService:
 
@@ -17,7 +18,6 @@ class SlackService:
         self.invite_limit = os.getenv("INVITE_LIMIT", 1)
         self.iterative_invites = os.getenv("ITERATIVE_INVITES", False)
 
-        
     def send_message(self, message, channel_name):
         try:
             response = self.slack_bot_client.chat_postMessage(text=message, channel=channel_name)
@@ -46,17 +46,16 @@ class SlackService:
             conv_response = self.slack_bot_client.conversations_create(
                 name=channel_name_slug
             )
+            response = None
             if conv_response.status_code == 200:
-                channel_id = conv_response.data.get('channel', {}).get('id', None)
-                if channel_id:
+                if channel_id := conv_response.data.get('channel', {}).get('id', None):
                     response = self.invite_user_to_channel(
-                        channel_id=channel_id, 
+                        channel_id=channel_id,
                         emails=emails.split(',')
                     )
             return response
         except SlackApiError as e:
             return e.response
-
 
     def invite_user_to_channel(self, emails, channel_id=None, channel_name=None):
         try:
@@ -64,11 +63,13 @@ class SlackService:
                 channel_id, status_code = self.get_channel_id(channel_name)
                 if status_code == 404:
                     return channel_id
+            response = None
             if self.iterative_invites:
                 for email in emails:
                     response = self.slack_bot_client.conversations_inviteShared(channel=channel_id, emails=email)
             else:
-                response = self.slack_bot_client.conversations_inviteShared(channel=channel_id, emails=emails[:self.invite_limit])
+                response = self.slack_bot_client.conversations_inviteShared(channel=channel_id,
+                                                                            emails=emails[:self.invite_limit])
             return response
         except SlackApiError as e:
             return e.response
@@ -106,4 +107,3 @@ class SlackService:
             return response
         except SlackApiError as e:
             return e.response
-
