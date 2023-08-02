@@ -29,7 +29,7 @@ class SlackTestCases(APITestCase):
                                           'team': 'T04FVU3NCEB',
                                           'bot_profile': {'id': 'B04G7HC8DUM', 'app_id': 'A04GCUHSBU4',
                                                           'name': 'test-app', 'icons': {
-                                                            'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'},
+                                                  'image_72': 'https://a.slack-edge.com/80588/img/plugins/app/service_72.png'},
                                                           'deleted': False, 'updated': 1671695019,
                                                           'team_id': 'T04FVU3NCEB'}}}}
         dict_response = DotDict(responses)

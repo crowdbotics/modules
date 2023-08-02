@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import FileSerializer, MessageSerializer, ChannelSerializer, InviteUserToChannelSerializer
-from .services.SlackService import SlackService
+from .services.Slack import SlackService
 
 
 class SlackViewSet(viewsets.GenericViewSet):
@@ -85,9 +85,9 @@ class SlackViewSet(viewsets.GenericViewSet):
         """
         Invite multiple users to specific Slack channel
 
-        body_params str channel_id: id of channel from invite    \n
-        :body_params  str channel_name: name of channel from invite     \n
-        :body_params str emails: An emails list separated with ',' to invite users to channel   \n
+        body_params str channel_id: id of channel from invite
+        :body_params  str channel_name: name of channel from invite
+        :body_params str emails: An emails list separated with ',' to invite users to channel
         :return: An invitation id with details of users that invited to respective channel
         """
 

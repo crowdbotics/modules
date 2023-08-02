@@ -5,6 +5,13 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
 
+class DotDict(dict):
+    """dot.notation access to dictionary attributes"""
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
+
+
 class SlackService:
 
     def __init__(self, slack_bot_token=None, slack_admin_token=None):
@@ -62,7 +69,7 @@ class SlackService:
             if channel_id is None and channel_name is not None:
                 channel_id, status_code = self.get_channel_id(channel_name)
                 if status_code == 404:
-                    return channel_id
+                    return DotDict({"data": {"channel_id": channel_id}, "status_code": status_code})
             response = None
             if self.iterative_invites:
                 for email in emails:
