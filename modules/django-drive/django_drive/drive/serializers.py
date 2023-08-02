@@ -20,4 +20,3 @@ class ShareFileSerializer(serializers.Serializer):
     emails = serializers.ListField(
         child=serializers.EmailField()
     )
-

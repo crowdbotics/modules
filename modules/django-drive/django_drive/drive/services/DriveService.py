@@ -1,8 +1,7 @@
-
-from google.oauth2 import service_account
-from googleapiclient import discovery
-from google.oauth2.credentials import Credentials
 import apiclient
+from google.oauth2 import service_account
+from google.oauth2.credentials import Credentials
+from googleapiclient import discovery
 
 
 class DriveService:
@@ -26,7 +25,7 @@ class DriveService:
                 q=query,
                 pageToken=page_token,
                 pageSize=page_size
-                ).execute()
+            ).execute()
             return files
         except Exception:
             raise
@@ -38,13 +37,13 @@ class DriveService:
                 "mimeType": 'application/vnd.google-apps.folder'
             }
             file = self.drive_service.files().create(
-                 body=file_metadata,
-                 fields='id,name,mimeType,webViewLink',
+                body=file_metadata,
+                fields='id,name,mimeType,webViewLink',
             ).execute()
-            
+
             if share_with:
                 self.share_drive_file(file.get('id'), share_with, 'writer', 'user')
-            
+
             return file
         except Exception:
             raise

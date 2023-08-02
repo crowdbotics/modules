@@ -1,11 +1,12 @@
 from unittest import mock
-from six import BytesIO
+
 from PIL import Image
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
-from rest_framework import status
+from six import BytesIO
 
 
 class DriveViewSet(APITestCase):
@@ -30,67 +31,13 @@ class DriveViewSet(APITestCase):
                     'id': '11DbTJ0MwSVBm5E58QvKDpdwfvHyLaUV3',
                     'name': 'new demo folder'
                 },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'application/vnd.google-apps.folder',
-                    'id': '1GWtdRC1HKTi1DI_UxcC9FGQWr6Prsleb',
-                    'name': 'Django s3 file uploader'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'text/x-python',
-                    'id': '18Rkq9Rcl-73pmZHl72I2uEmjqOs8MFLj',
-                    'name': 'tests.py'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'application/vnd.google-apps.folder',
-                    'id': '1i4byEyvW3L_H6T4DciveU0hpZWhyrx1W',
-                    'name': ' Boys Solo'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'image/jpeg',
-                    'id': '1gkW4Oo6XXs07YNksgIwXVHupPulemoyP',
-                    'name': 'IMG_9634.JPG'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'image/jpeg',
-                    'id': '1DKqW0OGU3jirSlAuJ66p0_bopUxehwJp',
-                    'name': 'IMG_9513.JPG'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'image/jpeg',
-                    'id': '1D8_Vwcseg-GcMd3PZdm5AD1q_Q6OktHe',
-                    'name': 'LN1A9245.JPG'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'image/jpeg',
-                    'id': '13hfkpXKK9WVRXr5ADIbTEWdqvd-E3JOJ',
-                    'name': 'LN1A9241.JPG'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'image/jpeg',
-                    'id': '1hjzoGzJpEKAOTv-WKgGxFf67LX9RKtoO',
-                    'name': 'LN1A8466.JPG'
-                },
-                {
-                    'kind': 'drive#file',
-                    'mimeType': 'text/x-python',
-                    'id': '1w6WLZjAqatERR4ehoO797z272YLMAH1y',
-                    'name': 'tests.py'
-                }
             ]
         }
         get_drive_files_mock.return_value = response
         responses = self.client.get(reverse('drive_service-file-list'))
         self.assertEqual(responses.status_code, status.HTTP_200_OK)
         self.assertEqual(responses.data['nextPageToken'], response['nextPageToken'])
-        self.assertEqual(responses.data['files'][3], response['files'][3])
+        self.assertEqual(responses.data['files'][0], response['files'][0])
         self.assertEqual(responses.data, response)
         get_drive_files_mock.assert_called_once()
         get_drive_files_mock.assert_called_once_with(query=None, page_token=None, page_size=None)
@@ -103,13 +50,16 @@ class DriveViewSet(APITestCase):
                                      '-TINJ8ee8AtHPjWUGak_Vr95AzyMTEl4ELICKeCy3VOLSH8HYoF3560DjXtsArqAZm6qNem1'
                                      '-Ew0wktYwsBXr14pzvXH_SoePTg'
                                      '-9VzxTOslOT1ALoDh5aM15VovONt9qDTwqP_DGb7AgdLmcXalBTtsifrGtbuxpU5S8ywbHh7M-0VKNd'
-                                     '', 'kind': 'drive#fileList', 'incompleteSearch': False, 'files': [{'kind': 'drive#file', 'mimeType': 'image/png', 'id': '1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU', 'name': 'Screenshot from 2023-01-16 17-23-53.png'}, {'kind': 'drive#file', 'mimeType': 'image/png', 'id': '1CYAgNsNV82XE4cXdg6ufmuyK3-aG5QyR', 'name': 'Screenshot from 2023-01-11 21-52-16.png'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1W2dosIademgF4PSIQQ0UmvGaMMkSRFwa', 'name': 'demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1wpEhAIoBpi00GHSDG-M_HU0Xr7ATW6xK', 'name': 'demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '10hBRZ5NPnzQRIEyJD5rRW5sW5FHYBdoj', 'name': 'demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '11DbTJ0MwSVBm5E58QvKDpdwfvHyLaUV3', 'name': 'new demo folder'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1GWtdRC1HKTi1DI_UxcC9FGQWr6Prsleb', 'name': 'Django s3 file uploader'}, {'kind': 'drive#file', 'mimeType': 'text/x-python', 'id': '18Rkq9Rcl-73pmZHl72I2uEmjqOs8MFLj', 'name': 'tests.py'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder', 'id': '1i4byEyvW3L_H6T4DciveU0hpZWhyrx1W', 'name': ' Boys Solo'}, {'kind': 'drive#file', 'mimeType': 'image/jpeg', 'id': '1gkW4Oo6XXs07YNksgIwXVHupPulemoyP', 'name': 'IMG_9634.JPG'}]}
+                                     '', 'kind': 'drive#fileList', 'incompleteSearch': False, 'files': [
+            {'kind': 'drive#file', 'mimeType': 'text/x-python', 'id': '18Rkq9Rcl-73pmZHl72I2uEmjqOs8MFLj',
+             'name': 'tests.py'}, {'kind': 'drive#file', 'mimeType': 'application/vnd.google-apps.folder',
+                                   'id': '1i4byEyvW3L_H6T4DciveU0hpZWhyrx1W', 'name': ' Boys Solo'}]}
         get_drive_files_mock.return_value = response
         params = {'page_size': 10}
         responses = self.client.get(reverse('drive_service-file-list'), params)
         self.assertEqual(responses.status_code, status.HTTP_200_OK)
         self.assertEqual(responses.data['nextPageToken'], response['nextPageToken'])
-        self.assertEqual(responses.data['files'][3], response['files'][3])
+        self.assertEqual(responses.data['files'][0], response['files'][0])
         self.assertEqual(responses.data, response)
         get_drive_files_mock.assert_called_once()
         get_drive_files_mock.assert_called_once_with(query=None, page_token=None, page_size='10')
@@ -140,7 +90,8 @@ class DriveViewSet(APITestCase):
         self.assertEqual(responses.data['id'], data['file_id'])
         self.assertEqual(responses.data['name'], response['name'])
         share_drive_file_mock.assert_called_once()
-        share_drive_file_mock.assert_called_once_with(file_id='1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU', role='reader', user_type='user', emails=['demomodule.123@gmail.com'])
+        share_drive_file_mock.assert_called_once_with(file_id='1-i7ozDwi9oWn8X4TJAg71os0tm2HY7QU', role='reader',
+                                                      user_type='user', emails=['demomodule.123@gmail.com'])
 
     @mock.patch('modules.django_drive.drive.services.DriveService.DriveService.share_drive_file')
     def test_share_file_without_file_id(self, share_drive_file_mock):
