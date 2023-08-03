@@ -1,4 +1,8 @@
-// This function extracts the error message from the error object
+/**
+ * Extracts the error message from the error object.
+ * @param  {Object} error - Error object containing the response data.
+ * @returns {string} - Extracted error message.
+ */
 export const mapErrors = (error) => {
   let errorMessage = null;
   const errorsList = error.response.data;
@@ -20,7 +24,11 @@ export const mapErrors = (error) => {
   return errorMessage;
 };
 
-// This function identifies if some key is empty
+/**
+ * Identifies if some key is empty in the provided objects.
+ * @param  {...Object} params - Objects to be checked for empty keys.
+ * @returns {Array} - Array containing the index and key of the empty keys.
+ */
 export const validateConfig = (...params) => {
   const emptyKeys = [];
   params.forEach((obj, index) => {

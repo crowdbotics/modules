@@ -18,12 +18,12 @@ const authAPI = axios.create({
 });
 
 function fetchPaymentSheetParams(amount) {
-  return authAPI.post("/modules/payments/payment_sheet/", {
+  return authAPI.post("/modules/payments/create_payment_intent_sheet/", {
     cents: parseFloat(amount) * 100
   });
 }
 
-function fetchPaymentHistory(payload) {
+function fetchPaymentHistory() {
   return authAPI.get("/modules/payments/get_payments_history/");
 }
 

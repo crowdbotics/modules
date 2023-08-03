@@ -21,10 +21,11 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { validateConfig } from "./utils";
 
+/**
+ * CheckoutScreen component for processing payments
+ * @returns {React.ReactNode}
+ */
 export const CheckoutScreen = () => {
-  const global = getGlobalOptions();
-
-  // continued from above
   const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const {
@@ -37,24 +38,36 @@ export const CheckoutScreen = () => {
     MERCHANT_CURRENCY
   } = options;
 
-  // Transaction amount
+  /**
+   * State for transaction amount
+   */
   const [transactionAmount, setTransactionAmount] = useState({
     amount: "1"
   });
 
-  // This state shows if google pay is ready to be used or not
+  /**
+   * State to track Google Pay initialization status
+   */
   const [googlePayInitialized, setGooglePayInitialized] = useState(false);
+
+  /**
+   * State to handle loading
+   */
   const [loading, setLoading] = useState(false);
 
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const clientSecret = getGlobalOptions().stripeSecretKey;
 
-  const clientSecret = global.stripeSecretKey;
-
+  /**
+   * Display an error alert for amount validation
+   */
   const showAmountError = () => {
     Alert.alert("Error", "Please enter some amount");
   };
 
-  // Fetch paymentIntent, ephemeralKey, customer from backend and initialize stripe payment sheet
+  /**
+   * Initialize the payment sheet with paymentIntent, ephemeralKey, and customer data from the backend
+   */
   const initializePaymentSheet = async () => {
     const errors = validateConfig(
       MERCHANT_NAME,
@@ -64,32 +77,31 @@ export const CheckoutScreen = () => {
     );
     if (!errors.length) {
       setLoading(true);
-      await dispatch(fetchPaymentSheetParams(transactionAmount.amount))
-        .then(unwrapResult)
-        .then(async (res) => {
-          setLoading(false);
-          const { paymentIntent, ephemeralKey, customer } = res;
-          const { error } = await initPaymentSheet({
-            customerId: customer,
-            customerEphemeralKeySecret: ephemeralKey,
-            paymentIntentClientSecret: paymentIntent,
-            merchantDisplayName: MERCHANT_NAME,
-            applePay: false,
-            googlePay: ENABLE_GOOGLE_PAY,
-            merchantCountryCode: MERCHANT_COUNTRY_CODE,
-            testEnv: STRIPE_TEST_ENV // use test environment
-          });
-          if (!error) {
-            setLoading(true);
-          }
-        })
-        .catch(() => {
-          setLoading(false);
+      try {
+        const res = await dispatch(fetchPaymentSheetParams(transactionAmount.amount));
+        const { paymentIntent, ephemeralKey, customer } = unwrapResult(res);
+        const { error } = await initPaymentSheet({
+          customerId: customer,
+          customerEphemeralKeySecret: ephemeralKey,
+          paymentIntentClientSecret: paymentIntent,
+          merchantDisplayName: MERCHANT_NAME,
+          applePay: false,
+          googlePay: ENABLE_GOOGLE_PAY,
+          merchantCountryCode: MERCHANT_COUNTRY_CODE,
+          testEnv: STRIPE_TEST_ENV // use test environment
         });
+        if (!error) {
+          setLoading(false);
+        }
+      } catch (error) {
+        setLoading(false);
+      }
     }
   };
 
-  // Pay Through Credit Card
+  /**
+   * Handle the payment process through Credit Card
+   */
   const openPaymentSheet = async () => {
     if (transactionAmount.amount) {
       await initializePaymentSheet();
@@ -100,7 +112,7 @@ export const CheckoutScreen = () => {
         Alert.alert(`Error code: ${error.code}`, error.message);
       } else {
         setLoading(false);
-        Alert.alert("Success", "Your payment is successfull!");
+        Alert.alert("Success", "Your payment is successful!");
       }
     } else {
       showAmountError();
@@ -121,6 +133,9 @@ export const CheckoutScreen = () => {
       }
     });
 
+  /**
+   * Handle the payment process through Apple Pay
+   */
   const payApple = async () => {
     if (transactionAmount.amount) {
       const errors = validateConfig(MERCHANT_COUNTRY_CODE, MERCHANT_CURRENCY);
@@ -144,27 +159,21 @@ export const CheckoutScreen = () => {
           Alert.alert(error.code, error.message);
         } else {
           /**
-           * This action dispatches the api which fetches the paymentIntent for apple pay
+           * This action dispatches the API which fetches the paymentIntent for apple pay
            * @param  {String} amount Transaction amount
            */
-          await dispatch(fetchPaymentSheetParams(transactionAmount.amount))
-            .then(unwrapResult)
-            .then(async (res) => {
-              const { paymentIntent } = res;
-              const { error: confirmApplePayError } =
-                await confirmApplePayPayment(paymentIntent);
-              if (confirmApplePayError) {
-                Alert.alert(
-                  confirmApplePayError.code,
-                  confirmApplePayError.message
-                );
-              } else {
-                Alert.alert("Success", "Your payment is successfull!");
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+          try {
+            const res = await dispatch(fetchPaymentSheetParams(transactionAmount.amount));
+            const { paymentIntent } = unwrapResult(res);
+            const { error: confirmApplePayError } = await confirmApplePayPayment(paymentIntent);
+            if (confirmApplePayError) {
+              Alert.alert(confirmApplePayError.code, confirmApplePayError.message);
+            } else {
+              Alert.alert("Success", "Your payment is successful!");
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
       }
     } else {
@@ -175,8 +184,10 @@ export const CheckoutScreen = () => {
     // Google Pay related config
     const { initGooglePay } = useGooglePay();
 
-    // Initialize Google Pay with provided credentials
-    const initialize = async () => {
+    /**
+     * Initialize Google Pay with provided credentials
+     */
+    const initializeGooglePay = async () => {
       const { error } = await initGooglePay({
         testEnv: STRIPE_TEST_ENV,
         merchantName: MERCHANT_NAME,
@@ -197,40 +208,37 @@ export const CheckoutScreen = () => {
 
     useEffect(() => {
       if (Platform.OS === "android") {
-        initialize();
+        initializeGooglePay();
       }
     }, [initGooglePay]);
   }
 
-  // This function fetches paymentIntent from backend and displays the Google Pay sheet.
+  /**
+   * Handle the payment process through Google Pay
+   */
   const payGoogle = async () => {
     if (transactionAmount.amount) {
       const errors = validateConfig(MERCHANT_CURRENCY);
       if (!errors.length) {
         setLoading(true);
-        await dispatch(fetchPaymentSheetParams(transactionAmount.amount))
-          .then(unwrapResult)
-          .then(async (res) => {
-            setLoading(false);
-            const { paymentIntent } = res;
-            const { error } = await presentGooglePay({
-              clientSecret: paymentIntent,
-              currencyCode: MERCHANT_CURRENCY
-            });
-
-            if (error) {
-              Alert.alert(error.code, error.message);
-              return;
-            }
-            Alert.alert(
-              "Success",
-              "The SetupIntent was confirmed successfully."
-            );
-          })
-          .catch((error) => {
-            setLoading(false);
-            console.log(error);
+        try {
+          const res = await dispatch(fetchPaymentSheetParams(transactionAmount.amount));
+          setLoading(false);
+          const { paymentIntent } = unwrapResult(res);
+          const { error } = await presentGooglePay({
+            clientSecret: paymentIntent,
+            currencyCode: MERCHANT_CURRENCY
           });
+
+          if (error) {
+            Alert.alert(error.code, error.message);
+            return;
+          }
+          Alert.alert("Success", "The SetupIntent was confirmed successfully.");
+        } catch (error) {
+          setLoading(false);
+          console.log(error);
+        }
       }
     } else {
       showAmountError();
@@ -240,7 +248,7 @@ export const CheckoutScreen = () => {
   return (
     <View>
       <View style={styles.checkoutView}>
-        <Text style={{}}>Amount</Text>
+        <Text>Amount</Text>
         <Input
           placeholder={"Enter Amount"}
           value={transactionAmount}
@@ -281,9 +289,9 @@ export const CheckoutScreen = () => {
 /**
  * Custom Text Input component
  * @param  {String} placeholder Placeholder string for the input
- * @param  {String} value current value of the input
- * @param  {Function} setValue Function used to update the current value of
- * @return {React.ReactNode}
+ * @param  {Object} value current value of the input
+ * @param  {Function} setValue Function used to update the current value of the input
+ * @returns {React.ReactNode}
  */
 const Input = ({ placeholder, value, setValue }) => {
   const options = useContext(OptionsContext);
