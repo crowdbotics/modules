@@ -85,7 +85,7 @@ export const Button = ({
   viewStyle,
   textStyle,
   loadingColor,
-  loadingStyle,
+  loadingStyle
 }) => {
   const options = useContext(OptionsContext);
   const { styles, Color } = options;
@@ -96,14 +96,16 @@ export const Button = ({
       onPress={onPress}
       disabled={loading}
     >
-      {loading ? (
+      {loading
+        ? (
         <ActivityIndicator
-          color={loadingColor ? loadingColor : Color.white}
+          color={loadingColor || Color.white}
           style={loadingStyle}
         />
-      ) : (
+          )
+        : (
         <Text style={[styles.textStyle, textStyle]}>{title}</Text>
-      )}
+          )}
     </TouchableOpacity>
   );
 };
@@ -121,7 +123,7 @@ const SocialButtons = ({
   onFacebookConnect,
   onGoogleConnect,
   onAppleConnect,
-  loading,
+  loading
 }) => {
   const options = useContext(OptionsContext);
   const { styles, Color } = options;
@@ -135,19 +137,19 @@ const SocialButtons = ({
       title="Signin with Facebook"
       viewStyle={styles.facebookButton}
       textStyle={{ color: Color.white }}
-      loading={props.loading}
-      onPress={props.onFacebookConnect}
+      loading={loading}
+      onPress={onFacebookConnect}
     />
     <GoogleSigninButton
-      onPress={props.onGoogleConnect}
+      onPress={onGoogleConnect}
       size={GoogleSigninButton.Size.Wide}
       color={GoogleSigninButton.Color.Dark}
-      disabled={props.loading}
+      disabled={loading}
       style={styles.googleLoginButton}
     />
     {(Platform.OS === "ios" || appleAuthAndroid.isSupported) && (
       <AppleButton
-        onPress={props.onAppleConnect}
+        onPress={onAppleConnect}
         buttonStyle={AppleButton.Style.WHITE_OUTLINE}
         buttonType={AppleButton.Type.SIGN_IN}
         style={styles.appleButton}
@@ -342,7 +344,7 @@ export const SignupTab = ({ navigation }) => {
   // Specific validations for email and password
   const [validationError, setValidationError] = useState({
     email: "",
-    password: "",
+    password: ""
   });
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
@@ -498,7 +500,7 @@ export const SignInTab = ({ navigation }) => {
     GOOGLE_IOS_CLIENT_ID,
     GOOGLE_WEB_CLIENT_ID,
     APPLE_SERVICE_ID,
-    APPLE_REDIRECT_CALLBACK,
+    APPLE_REDIRECT_CALLBACK
   } = options;
 
   const [email, setEmail] = useState("");
@@ -507,7 +509,7 @@ export const SignInTab = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({
     email: "",
-    password: "",
+    password: ""
   });
 
   const emptyStates = () => {
