@@ -35,62 +35,97 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 /**
  * A custom Text Input component
- * @param  {Object} props Contains label, error message and their styles
- * @return {React.ReactNode}
+ * @param {Object} props - Component props
+ * @param {string} props.label - Label for the text input
+ * @param {string} props.labelStyle - Styles for the label
+ * @param {string} props.textInputStyle - Styles for the text input
+ * @param {string} props.error - Error message to display (if any)
+ * @returns {JSX.Element}
  */
-export const TextInputField = (props) => {
+export const TextInputField = ({
+  label,
+  labelStyle,
+  textInputStyle,
+  error,
+  ...props
+}) => {
   const options = useContext(OptionsContext);
   const { styles, Color } = options;
   return (
     <Fragment>
-    <Text style={[styles.inputLabel, props.labelStyle]}>{props.label}</Text>
-    <TextInput
-      autoCapitalize="none"
-      style={[styles.textInput, props.textInputStyle]}
-      placeholderTextColor={Color.steel}
-      underlineColorAndroid={"transparent"}
-      {...props}
-    />
-    {!!props.error && <Text style={styles.inputError}>{props.error}</Text>}
-  </Fragment>
+      <Text style={[styles.inputLabel, labelStyle]}>{label}</Text>
+      <TextInput
+        autoCapitalize="none"
+        style={[styles.textInput, textInputStyle]}
+        placeholderTextColor={Color.steel}
+        underlineColorAndroid={"transparent"}
+        {...props}
+      />
+      {!!error && <Text style={styles.inputError}>{error}</Text>}
+    </Fragment>
   );
 };
 
 /**
  * A custom Button component
- * @param  {Object} props Contains onPress function, loading status, title and their respective styles
- * @return {React.ReactNode}
+ * @param {Object} props - Component props
+ * @param {Function} props.onPress - Function to be executed on button press
+ * @param {boolean} props.loading - Loading status of the button
+ * @param {string} props.title - Button title
+ * @param {Object} props.viewStyle - Styles for the button view
+ * @param {Object} props.textStyle - Styles for the button text
+ * @param {string} props.loadingColor - Color for the loading indicator
+ * @param {Object} props.loadingStyle - Styles for the loading indicator
+ * @returns {JSX.Element}
  */
-export const Button = (props) => {
+export const Button = ({
+  onPress,
+  loading,
+  title,
+  viewStyle,
+  textStyle,
+  loadingColor,
+  loadingStyle,
+}) => {
   const options = useContext(OptionsContext);
   const { styles, Color } = options;
 
   return (
-    <TouchableOpacity style={[styles.viewStyle, props.viewStyle]} onPress={props.onPress} disabled={props.loading}>
-    {props.loading
-      ? (
-      <ActivityIndicator
-        color={props.loadingColor ? props.loadingColor : Color.white}
-        style={props.loadingStyle}
-      />
-        )
-      : (
-      <Text style={[styles.textStyle, props.textStyle]}>
-        {props.title}
-      </Text>
-        )}
-</TouchableOpacity>
+    <TouchableOpacity
+      style={[styles.viewStyle, viewStyle]}
+      onPress={onPress}
+      disabled={loading}
+    >
+      {loading ? (
+        <ActivityIndicator
+          color={loadingColor ? loadingColor : Color.white}
+          style={loadingStyle}
+        />
+      ) : (
+        <Text style={[styles.textStyle, textStyle]}>{title}</Text>
+      )}
+    </TouchableOpacity>
   );
 };
 
 /**
- * A group containing facebook, apple and google login buttons
- * @param  {Object} props Contains onPress function, loading status, and styles for each button
- * @return {React.ReactNode}
+ * A group containing Facebook, Apple, and Google login buttons
+ * @param {Object} props - Component props
+ * @param {Function} props.onFacebookConnect - Function to handle Facebook login
+ * @param {Function} props.onGoogleConnect - Function to handle Google login
+ * @param {Function} props.onAppleConnect - Function to handle Apple login
+ * @param {boolean} props.loading - Loading status of the buttons
+ * @returns {JSX.Element}
  */
-const SocialButtons = (props) => {
+const SocialButtons = ({
+  onFacebookConnect,
+  onGoogleConnect,
+  onAppleConnect,
+  loading,
+}) => {
   const options = useContext(OptionsContext);
   const { styles, Color } = options;
+
   return (
 <Fragment>
     <Text style={styles.orText}>
@@ -124,9 +159,10 @@ const SocialButtons = (props) => {
 
 /**
  * Request and generate Facebook access token and store it in the DB via REST API
- * @param  {Function} dispatch Hook to dispatch actions
- * @param  {Function} navigation Navigation method to navigate through screens
- * @param  {Function} setErrorResponse State to be set with error
+ * @param {Function} dispatch - Hook to dispatch actions
+ * @param {Function} navigation - Navigation method to navigate through screens
+ * @param {Function} setErrorResponse - State to be set with error
+ * @returns {Promise}
  */
 const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
   // The platform to authorize from.That can be either web or Facebook's mobile app
@@ -175,12 +211,12 @@ const onFacebookConnect = async (dispatch, navigation, setErrorResponse) => {
 
 /**
  * Request and generate Google access token and store it in the DB via REST API
- * @param  {Function} dispatch Hook to dispatch actions
- * @param  {Function} navigation Navigation method to navigate through screens
- * @param  {Function} setErrorResponse State to be set with error
- * @param  {String} GOOGLE_WEB_CLIENT_ID Web oAuth client id
- * @param  {String} GOOGLE_IOS_CLIENT_ID iOS oAuth client id
- * @return {Promise}
+ * @param {Function} dispatch - Hook to dispatch actions
+ * @param {Function} navigation - Navigation method to navigate through screens
+ * @param {Function} setErrorResponse - State to be set with error
+ * @param {string} GOOGLE_WEB_CLIENT_ID - Web oAuth client id
+ * @param {string} GOOGLE_IOS_CLIENT_ID - iOS oAuth client id
+ * @returns {Promise}
  */
 const onGoogleConnect = async (
   dispatch,
@@ -236,10 +272,12 @@ const onGoogleConnect = async (
 
 /**
  * Request and generate Apple identity and authorization token and store it in the DB via REST API
- * @param  {Function} dispatch Hook to dispatch actions
- * @param  {Function} navigation Navigation method to navigate through screens
- * @param  {Function} setErrorResponse State to be set with error
- * @param  {String} APPLE_SERVICE_ID Service id for apple login
+ * @param {Function} dispatch - Hook to dispatch actions
+ * @param {Function} navigation - Navigation method to navigate through screens
+ * @param {Function} setErrorResponse - State to be set with error
+ * @param {string} APPLE_SERVICE_ID - Service id for apple login
+ * @param {string} APPLE_REDIRECT_CALLBACK - Redirect callback for apple login
+ * @returns {Promise}
  */
 const onAppleConnect = async (
   dispatch,
@@ -286,6 +324,12 @@ const onAppleConnect = async (
   }
 };
 
+/**
+ * Sign Up Tab component
+ * @param {Object} props - Component props
+ * @param {Function} props.navigation - Navigation method to navigate through screens
+ * @returns {JSX.Element}
+ */
 export const SignupTab = ({ navigation }) => {
   const options = useContext(OptionsContext);
   const { styles, GOOGLE_IOS_CLIENT_ID, GOOGLE_WEB_CLIENT_ID, APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK } = options;
@@ -298,9 +342,8 @@ export const SignupTab = ({ navigation }) => {
   // Specific validations for email and password
   const [validationError, setValidationError] = useState({
     email: "",
-    password: ""
+    password: "",
   });
-  // This variable fetches the loading and error status from the store
   const { api } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
 
@@ -419,32 +462,54 @@ export const SignupTab = ({ navigation }) => {
         }}
         onGoogleConnect={() => {
           setErrorResponse([]);
-          onGoogleConnect(dispatch, navigation, setErrorResponse, GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID);
+          onGoogleConnect(
+            dispatch,
+            navigation,
+            setErrorResponse,
+            GOOGLE_WEB_CLIENT_ID,
+            GOOGLE_IOS_CLIENT_ID
+          );
         }}
         onAppleConnect={() => {
           setErrorResponse([]);
-          onAppleConnect(dispatch, navigation, setErrorResponse, APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK);
+          onAppleConnect(
+            dispatch,
+            navigation,
+            setErrorResponse,
+            APPLE_SERVICE_ID,
+            APPLE_REDIRECT_CALLBACK
+          );
         }}
       />
     </KeyboardAvoidingView>
   );
 };
 
+/**
+ * Sign In Tab component
+ * @param {Object} props - Component props
+ * @param {Function} props.navigation - Navigation method to navigate through screens
+ * @returns {JSX.Element}
+ */
 export const SignInTab = ({ navigation }) => {
   const options = useContext(OptionsContext);
-  const { styles, GOOGLE_IOS_CLIENT_ID, GOOGLE_WEB_CLIENT_ID, APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK } = options;
+  const {
+    styles,
+    GOOGLE_IOS_CLIENT_ID,
+    GOOGLE_WEB_CLIENT_ID,
+    APPLE_SERVICE_ID,
+    APPLE_REDIRECT_CALLBACK,
+  } = options;
 
   const [email, setEmail] = useState("");
   const [errorResponse, setErrorResponse] = useState([]);
   const [apiError, setApiError] = useState([]);
   const [password, setPassword] = useState("");
-  // Specific validations for email and password
   const [validationError, setValidationError] = useState({
     email: "",
-    password: ""
+    password: "",
   });
 
-  // This function empties the text inputs once called
   const emptyStates = () => {
     setEmail("");
     setPassword("");
@@ -487,12 +552,12 @@ export const SignInTab = ({ navigation }) => {
         setApiError(apiError => [...apiError, err]);
       });
   };
-  // This function updates the value of email state once user starts typing
+
   const handleEmailChange = (value) => {
     setEmail(value);
     setValidationError({ ...validationError, email: "" });
   };
-  // This function updates the value of password state once user starts typing
+
   const handlePasswordChange = (value) => {
     setPassword(value);
     setValidationError({ ...validationError, password: "" });
@@ -552,15 +617,26 @@ export const SignInTab = ({ navigation }) => {
         onFacebookConnect={() => {
           setErrorResponse([]);
           onFacebookConnect(dispatch, navigation, setErrorResponse);
-        }
-        }
+        }}
         onGoogleConnect={() => {
           setErrorResponse([]);
-          onGoogleConnect(dispatch, navigation, setErrorResponse, GOOGLE_WEB_CLIENT_ID, GOOGLE_IOS_CLIENT_ID);
+          onGoogleConnect(
+            dispatch,
+            navigation,
+            setErrorResponse,
+            GOOGLE_WEB_CLIENT_ID,
+            GOOGLE_IOS_CLIENT_ID
+          );
         }}
         onAppleConnect={() => {
           setErrorResponse([]);
-          onAppleConnect(dispatch, navigation, setErrorResponse, APPLE_SERVICE_ID, APPLE_REDIRECT_CALLBACK);
+          onAppleConnect(
+            dispatch,
+            navigation,
+            setErrorResponse,
+            APPLE_SERVICE_ID,
+            APPLE_REDIRECT_CALLBACK
+          );
         }}
       />
     </KeyboardAvoidingView>
