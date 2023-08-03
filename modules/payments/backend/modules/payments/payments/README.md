@@ -4,6 +4,9 @@ Django payments module allow user to pay through the stripe payment. It helps us
 ## Features
 1. Save payment details
 2. Creates stripe user details
+3. Get Payments history
+4. Get Payments methods
+5. Create payment intent sheet
 
 ## Required Dependencies/Packages
 * **stripe**
@@ -43,17 +46,18 @@ python manage.py runserver
 Keep your stripe secrete key in `.env` file.
 ```console
 STRIPE_SECRET_KEY='sk_test_xxxxxxx'
+CONNECTED_STRIPE_ACCOUNT_ID='acct_xxxxx'
 ```
 
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
 
-| Api Name                       | Param        | Description                                                    |
-| ------------------------------ |:------------:|:---------------------------------------------------------------|
-| `/modules/payments/get_payments_history/`| -No Params-  | Returns of all the payments done by the users. |
-| `/modules/payments/payment_sheet/`|  object `{amount, cus_id}`  |Takes object containing amount, cus_id and returns an array containing history of all the payments done by the users.             |
-
+| Api Name                       |           Param           | Description                                                                                                           |
+| ------------------------------ |:-------------------------:|:----------------------------------------------------------------------------------------------------------------------|
+| `/modules/payments/get_payments_history/`|        -No Params-        | Returns of all the payments done by the users.                                                                        |
+| `/modules/payments/create_payment_intent_sheet/`| object `{amount, cus_id}` | Takes object containing amount, cus_id and returns an array containing history of all the payments done by the users. |
+| `/modules/payments/get_payments_methods/`|        -No Params-        | Returns an array containing the avaliable payments methods done by the users.                                         |
 
 ### Module Specifications
 Here is the [Module Specification Document](https://docs.google.com/document/d/1dYIXsSBkNeicBd30648KukkU58tH_kSloPf2vf9x1nM/edit?usp=sharing), which provides more information about the module's actual intentions.
