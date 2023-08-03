@@ -16,6 +16,10 @@ import Input from "./components/Input";
 import Loader from "./components/Loader";
 import { OptionsContext } from "@options";
 
+/**
+ * Profile Component for managing user profile details.
+ * @returns {React.ReactNode} - The Profile component
+ */
 const Profile = () => {
   const options = useContext(OptionsContext);
   const { styles, ACCESS_TOKEN } = options;
@@ -45,7 +49,7 @@ const Profile = () => {
     getProfile();
   }, []);
 
-  // Select image from device storage
+  // Select profile image from device storage
   const selectProfileImage = async () => {
     try {
       const res = await DocumentPicker.pick({
@@ -64,7 +68,7 @@ const Profile = () => {
     }
   };
 
-  // This function saves the new data to backend via APIs
+  // Save updated profile data to backend
   const updateProfile = async () => {
     setIsLoading(true);
     const tmpProfileData = JSON.parse(JSON.stringify(profileData));
@@ -91,7 +95,7 @@ const Profile = () => {
       });
   };
 
-  // Fetches the profile details from backend
+  // Fetch user profile details from backend
   const getProfile = async () => {
     setIsLoading(true);
     dispatch(getUser({ token: ACCESS_TOKEN }))
@@ -110,6 +114,7 @@ const Profile = () => {
       });
   };
 
+  // Delete user profile
   const deleteProfile = async () => {
     setIsLoading(true);
     dispatch(deleteUser({ token: ACCESS_TOKEN }))
@@ -136,6 +141,7 @@ const Profile = () => {
       });
   };
 
+  // Get profile image URI
   const getProfileImage = () => {
     if (profileData.profile_image) {
       return typeof profileData.profile_image === "object"
@@ -146,6 +152,7 @@ const Profile = () => {
     }
   };
 
+  // Display errors
   const displayErrors = () =>
     Object.keys(errors).map((error, index) => (
       <Fragment key={index}>
