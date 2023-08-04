@@ -1,3 +1,4 @@
+// This function extracts the exact error message from the error object
 
 export const mapErrors = (error) => {
   let errorMessage = null;
@@ -18,7 +19,6 @@ export const mapErrors = (error) => {
         return `${element}: ${errorsList[element]}`;
       }
     });
-
     errorMessage = message.join("\n");
   } else {
     errorMessage = error.message;

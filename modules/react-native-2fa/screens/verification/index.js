@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { Fragment, useState, useContext } from "react";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useSelector, useDispatch } from "react-redux";
+import { OptionsContext } from "@options";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
@@ -14,7 +15,14 @@ import {
   enableAuthentication
 } from "../../store";
 
+/**
+ * Verification Component.
+ * @returns {React.ReactNode} - The verification component.
+ */
 const Verification = ({ navigation }) => {
+  const options = useContext(OptionsContext);
+  const { styles } = options;
+
   const dispatch = useDispatch();
   const route = useRoute();
   const { method, link, authenticationType } = route.params;
@@ -55,7 +63,7 @@ const Verification = ({ navigation }) => {
         .then(unwrapResult)
         .then(() => {
           navigation.navigate("AuthTypes");
-          Alert.alert("Success", "Two factor authentication has been enabled");
+          Alert.alert("Success", "Two-factor authentication has been enabled");
         })
         .catch((err) => console.log("Error", err));
     } else {
@@ -106,7 +114,7 @@ const Verification = ({ navigation }) => {
   return (
     <Fragment>
       {isLoading && <Loader />}
-      <View style={styles.main}>
+      <View style={styles.mainVerificationView}>
         <View>
           {method === "google_authenticator"
             ? (
@@ -156,35 +164,5 @@ const Verification = ({ navigation }) => {
     </Fragment>
   );
 };
-export default Verification;
 
-const styles = StyleSheet.create({
-  main: {
-    padding: 10,
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    alignContent: "space-between",
-    justifyContent: "space-between"
-  },
-  text: {
-    marginBottom: 5,
-    marginTop: 12,
-    fontWeight: "bold"
-  },
-  textPurple: {
-    color: "#2E5984",
-    fontWeight: "bold"
-  },
-  resend: {
-    paddingTop: 7,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end"
-  },
-  pt15: {
-    paddingTop: 15
-  }
-});
+export default Verification;

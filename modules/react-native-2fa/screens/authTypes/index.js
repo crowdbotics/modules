@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useState, useEffect } from "react";
-import { Text, StyleSheet, View, Alert } from "react-native";
+import { Text, View, Alert } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -16,9 +16,38 @@ import {
   sendVerification
 } from "../../store";
 
+/**
+ * Authentication Types Component.
+ * @param {Object} navigation - React Navigation prop.
+ * @returns {React.ReactNode} - The authentication types component.
+ */
 const AuthTypes = ({ navigation }) => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const options = useContext(OptionsContext);
+  const { styles } = options;
+
+  const [isVerified, setIsVerified] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("None");
+
+  const isLoading = useSelector((state) => {
+    const loadingStates = [
+      state?.Authentication?.sendVerification?.api?.loading,
+      state?.Authentication?.getGoogleAuthenticatorQR?.api?.loading,
+      state?.Authentication?.enableAuthentication?.api?.loading,
+      state?.Authentication?.checkAuthenticationStatus?.api?.loading,
+      state?.Authentication?.disableAuthentication?.api?.loading
+    ];
+    return loadingStates.some((loading) => loading === "pending");
+  });
+
+  const items = [
+    { label: "SMS", value: "phone_number" },
+    { label: "Email", value: "email" },
+    { label: "Google Authenticator", value: "google_authenticator" },
+    { label: "None", value: "None" }
+  ];
 
   useEffect(() => {
     if (isFocused) {
@@ -32,51 +61,6 @@ const AuthTypes = ({ navigation }) => {
         .catch(() => setValue("None"));
     }
   }, [isFocused]);
-
-  // This variables gets the loading status for sendVerification code api
-  const loading = useSelector(
-    (state) => state?.Authentication?.sendVerification?.api?.loading
-  );
-  // This variables gets the loading status for getGoogleAuthenticatorQR code api
-  const googleAuthenticatorLoading = useSelector(
-    (state) => state?.Authentication?.getGoogleAuthenticatorQR?.api?.loading
-  );
-  // This variables gets the loading status for enableAuthentication api
-  const enableAuthenticationLoading = useSelector(
-    (state) => state?.Authentication?.enableAuthentication?.api?.loading
-  );
-
-  // This variables gets the loading status for enableAuthentication api
-  const checkAuthenticationLoading = useSelector(
-    (state) => state?.Authentication?.checkAuthenticationStatus?.api?.loading
-  );
-
-  // This variables gets the loading status for disableAuthentication api
-  const disableAuthenticationLoading = useSelector(
-    (state) => state?.Authentication?.disableAuthentication?.api?.loading
-  );
-
-  const isLoading = !!(
-    loading === "pending" ||
-    googleAuthenticatorLoading === "pending" ||
-    enableAuthenticationLoading === "pending" ||
-    checkAuthenticationLoading === "pending" ||
-    disableAuthenticationLoading === "pending"
-  );
-
-  const options = useContext(OptionsContext);
-
-  const [isVerified, setIsVerified] = useState(false);
-
-  // States for dropdown
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("None");
-  const [items, setItems] = useState([
-    { label: "SMS", value: "phone_number" },
-    { label: "Email", value: "email" },
-    { label: "Google Authenticator", value: "google_authenticator" },
-    { label: "None", value: "None" }
-  ]);
 
   const onApiSuccess = (res, value, type) => {
     navigation.navigate("Verification", {
@@ -118,7 +102,7 @@ const AuthTypes = ({ navigation }) => {
         .catch((err) => console.log("NOT WORKING", err));
     } else {
       // This action dispatches api to get code. It takes verification method as params
-      dispatch(sendVerification({ method: method }))
+      dispatch(sendVerification({ method }))
         .then(unwrapResult)
         .then((res) => {
           onApiSuccess(res, method, false);
@@ -131,7 +115,7 @@ const AuthTypes = ({ navigation }) => {
     <Fragment>
       {isLoading && <Loader />}
       <View style={styles.main}>
-        <Text style={styles.text}>Verification methods</Text>
+        <Text style={styles.verificationText}>Verification methods</Text>
         <Text style={styles.text13}>
           Please select an option for verification from the following:
         </Text>
@@ -150,12 +134,11 @@ const AuthTypes = ({ navigation }) => {
             setOpen={setOpen}
             setValue={setValue}
             onSelectItem={onValueChange}
-            setItems={setItems}
           />
         </View>
 
         {isVerified && (
-          <View style={[options.styles.wp90, options.styles.p5]}>
+          <View style={[styles.wp90, styles.p5]}>
             <Button onPress={() => onHandleMethod(value)}>Send OTP</Button>
           </View>
         )}
@@ -163,38 +146,5 @@ const AuthTypes = ({ navigation }) => {
     </Fragment>
   );
 };
-
-const styles = StyleSheet.create({
-  main: {
-    padding: 10,
-    zIndex: 1
-  },
-  authenticationText: {
-    marginBottom: 10,
-    color: "#000"
-  },
-  dropdownContainer: {
-    marginTop: 30,
-    marginBottom: 40
-  },
-  switchText: {
-    marginRight: 20
-  },
-  switchContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row"
-  },
-  text: {
-    marginBottom: 5,
-    marginTop: 12,
-    fontWeight: "bold",
-    fontSize: 18
-  },
-  text13: {
-    fontSize: 13,
-    marginBottom: 12
-  }
-});
 
 export default AuthTypes;

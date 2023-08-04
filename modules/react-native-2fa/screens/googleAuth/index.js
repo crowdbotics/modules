@@ -1,58 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { Linking, StyleSheet, View } from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { Linking, View } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import QRCode from "react-native-qrcode-svg";
 import Button from "../../components/Button";
+import { OptionsContext } from "@options";
 
+/**
+ * Google Authentication Component.
+ * @returns {React.ReactNode} - The Google authentication component.
+ */
 const GoogleAuth = () => {
+  const options = useContext(OptionsContext);
+  const { styles } = options;
+
   const [link, setLink] = useState(null);
   const route = useRoute();
 
+  /**
+   * Open the provided link using Linking API if supported.
+   */
   const openLink = () => {
-    const supported = Linking.canOpenURL(link);
-    if (supported) {
-      Linking.openURL(link);
+    if (link) {
+      const supported = Linking.canOpenURL(link);
+      if (supported) {
+        Linking.openURL(link);
+      }
     }
   };
 
   useEffect(() => {
     setLink(route.params.link);
-  }, []);
+  }, [route.params.link]);
 
   return (
-    <View style={styles.main}>
-      <View style={styles.pt30}>
+    <View style={styles.qrCodeMain}>
+      <View style={styles.qrCodeContainer}>
         {link && <QRCode value={link} size={150} />}
       </View>
-      <View>
-        <View style={styles.sameDevice}>
-          <Button onPress={openLink}>
-            Set up on same device
-          </Button>
-        </View>
+      <View style={styles.sameDeviceContainer}>
+        <Button onPress={openLink}>Set up on same device</Button>
       </View>
     </View>
   );
 };
-export default GoogleAuth;
 
-const styles = StyleSheet.create({
-  main: {
-    padding: 10,
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column"
-  },
-  sameDevice: {
-    paddingTop: 30,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  pt30: {
-    paddingTop: 30,
-    alignSelf: "center"
-  }
-});
+export default GoogleAuth;
