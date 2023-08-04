@@ -1,30 +1,29 @@
-from django.urls import reverse
-from rest_framework.test import APITestCase
-from rest_framework import status
 from unittest import mock
+
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
 
 
 class VideoUploaderViewSetTests(APITestCase):
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.create_access_token')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_access_token')
     def test_create_access_token(self, create_access_token_mock):
         response = {
-            'data': {'access_token': 'c2ea12984d0781de44b990f610ed4647', 'token_type': 'bearer', 'scope': 'public',
+            'data': {'access_token': 'de477hhr4444de44b990f610ed4647', 'token_type': 'bearer', 'scope': 'public',
                      'app': {'name': 'Demo App', 'uri': '/apps/262269'}}, 'status_code': 200}
         create_access_token_mock.return_value = response
         data = {
             "grant_type": "client_credentials",
-            "scope": ["public"]
+            "scope": ["public", "private"]
         }
         response = self.client.post(reverse('video_uploader_service-create-access-token'), data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         create_access_token_mock.assert_called_once()
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.create_access_token')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_access_token')
     @mock.patch(
         'modules.django_video_uploader.videouploader.viewsets.VideoUploaderViewSet.convert_into_base64')
     def test_create_access_token_with_wrong_client_id(self, convert_into_base64_mock, create_access_token_mock):
@@ -50,19 +49,19 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_channel')
     def test_create_channel(self, create_channel_mock):
         response = {"data": {
-            "uri": "/channels/1829885",
+            "uri": "/channels/6466464",
             "name": "new channel",
             "description": "new channel",
-            "link": "https://vimeo.com/channels/1829885",
+            "link": "https://vimeo.com/channels/6466464",
             "created_time": "2023-01-27T11:38:55+00:00",
             "modified_time": "2023-01-27T11:39:53+00:00",
             "user": {
-                "uri": "/users/193193374",
-                "name": "usman haider",
-                "link": "https://vimeo.com/user193193374",
+                "uri": "/users/646646464",
+                "name": "John alex",
+                "link": "https://vimeo.com/user646646464",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -75,7 +74,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
-                    "uri": "/users/193193374/pictures/82481466",
+                    "uri": "/users/646646464/pictures/82481466",
                     "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
@@ -85,46 +84,6 @@ class VideoUploaderViewSetTests(APITestCase):
                             "height": 30,
                             "link": "https://i.vimeocdn.com/portrait/82481466_30x30"
                         },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_300x300"
-                        },
-                        {
-                            "width": 360,
-                            "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_360x360"
-                        }
                     ],
                     "resource_key": "23b7a8a1f898967546b234909f0ed2aea27adf3f",
                     "default_picture": "false"
@@ -133,80 +92,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193193374/albums",
+                            "uri": "/users/646646464/albums",
                             "options": ["GET"],
                             "total": 0
                         },
                         "appearances": {
-                            "uri": "/users/193193374/appearances",
+                            "uri": "/users/646646464/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193193374/categories",
+                            "uri": "/users/646646464/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193193374/channels",
+                            "uri": "/users/646646464/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193193374/feed",
+                            "uri": "/users/646646464/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193193374/followers",
+                            "uri": "/users/646646464/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193193374/following",
+                            "uri": "/users/646646464/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193193374/groups",
+                            "uri": "/users/646646464/groups",
                             "options": ["GET"],
                             "total": 0
                         },
                         "likes": {
-                            "uri": "/users/193193374/likes",
+                            "uri": "/users/646646464/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193193374/membership/",
+                            "uri": "/users/646646464/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193193374/channels?filter=moderated",
+                            "uri": "/users/646646464/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193193374/portfolios",
+                            "uri": "/users/646646464/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193193374/videos",
+                            "uri": "/users/646646464/videos",
                             "options": ["GET"],
                             "total": 1
                         },
                         "watchlater": {
-                            "uri": "/users/193193374/watchlater",
+                            "uri": "/users/646646464/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193193374/shared/videos",
+                            "uri": "/users/646646464/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193193374/pictures",
+                            "uri": "/users/646646464/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -216,16 +175,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193193374/folders/root",
+                            "uri": "/users/646646464/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193193374/folders",
+                            "uri": "/users/646646464/folders",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193193374/teams",
+                            "uri": "/users/646646464/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -311,42 +270,6 @@ class VideoUploaderViewSetTests(APITestCase):
                         "height": 75,
                         "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
                         "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1920,
-                        "height": 1080,
-                        "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1920x1080&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
@@ -364,7 +287,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "link": "https://i.vimeocdn.com/channel/default_980x250"
                     }
                 ],
-                "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
+                "resource_key": "2d326acc5bef3bfcb11f7c0555cae2de710dd782",
                 "default_picture": True
             },
             "privacy": {"view": "users"},
@@ -372,24 +295,24 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "users": {
-                        "uri": "/channels/1829885/users",
+                        "uri": "/channels/6466464/users",
                         "options": ["GET"],
                         "total": 0
                     },
                     "videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": ["GET"],
                         "total": 0
                     },
                     "privacy_users": {
-                        "uri": "/channels/1829885/privacy/users",
+                        "uri": "/channels/6466464/privacy/users",
                         "options": ["GET", "PUT"],
                         "total": 0
                     }
                 },
                 "interactions": {
                     "add_moderators": {
-                        "uri": "/channels/1829885/moderators",
+                        "uri": "/channels/6466464/moderators",
                         "options": [
                             "DELETE",
                             "GET",
@@ -400,10 +323,10 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added": "false",
                         "added_time": None,
                         "type": None,
-                        "uri": "/users/193193374/channels/1829885"
+                        "uri": "/users/646646464/channels/6466464"
                     },
                     "moderate_videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": [
                             "DELETE",
                             "GET",
@@ -428,7 +351,7 @@ class VideoUploaderViewSetTests(APITestCase):
         create_channel_mock.assert_called_once_with(payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_channel')
     def test_create_channel_with_no_create_scope(self, create_channel_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_channel_mock.return_value = response
@@ -449,45 +372,45 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_channel')
     def test_delete_channel(self, delete_channel_mock):
         response = {"data": {"message": "Item deleted successfully."}, "status_code": 204}
         delete_channel_mock.return_value = response
-        channel_id = 1829885
+        channel_id = 6466464
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_channel_mock.assert_called_once()
-        delete_channel_mock.assert_called_once_with(channel_id='1829885', query_params={})
+        delete_channel_mock.assert_called_once_with(channel_id='6466464', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_channel')
     def test_delete_channel_with_wrong_id(self, delete_channel_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         delete_channel_mock.return_value = response
-        channel_id = 1829885
+        channel_id = 6466464
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_channel_mock.called_once()
-        delete_channel_mock.called_once_with(channel_id='1829885', query_params={})
+        delete_channel_mock.called_once_with(channel_id='6466464', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_channel')
     def test_delete_channel_with_no_delete_scope(self, delete_channel_mock):
         response = {"data": {"error": "The user isn't allowed to perform that action."}, "status_code": 403}
         delete_channel_mock.return_value = response
-        channel_id = 1829885
+        channel_id = 6466464
         response = self.client.delete(reverse('video_uploader_service-delete-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_channel_mock.called_once()
-        delete_channel_mock.called_once_with(channel_id='1829885', query_params={})
+        delete_channel_mock.called_once_with(channel_id='6466464', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_channel')
     def test_update_channel_with_invalid_id(self, update_channel_mock):
         response = {"data": {"message": "Resource not found"},
                     "status_code": 404}
         update_channel_mock.return_value = response
-        channel_id = 1829885
+        channel_id = 6466464
         data = {
             "description": "new channel updated",
             "link": "https://api.com",
@@ -498,22 +421,22 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_channel_mock.called_once()
-        update_channel_mock.called_once_with(channel_id='1829885', payload=data, query_params={})
+        update_channel_mock.called_once_with(channel_id='6466464', payload=data, query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_channel')
     def test_update_channel(self, update_channel_mock):
         response = {"data": {
-            "uri": "/channels/1829885",
+            "uri": "/channels/3555555",
             "name": "new channel",
             "description": "new channel updated",
-            "link": "https://vimeo.com/channels/1829885",
+            "link": "https://vimeo.com/channels/3555555",
             "created_time": "2023-01-27T11:38:55+00:00",
             "modified_time": "2023-01-27T11:39:53+00:00",
             "user": {
-                "uri": "/users/193193374",
-                "name": "usman haider",
-                "link": "https://vimeo.com/user193193374",
+                "uri": "/users/646646464",
+                "name": "John alex",
+                "link": "https://vimeo.com/user646646464",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -526,7 +449,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
-                    "uri": "/users/193193374/pictures/82481466",
+                    "uri": "/users/646646464/pictures/82481466",
                     "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
@@ -535,46 +458,6 @@ class VideoUploaderViewSetTests(APITestCase):
                             "width": 30,
                             "height": 30,
                             "link": "https://i.vimeocdn.com/portrait/82481466_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_300x300"
-                        },
-                        {
-                            "width": 360,
-                            "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_360x360"
                         }
                     ],
                     "resource_key": "23b7a8a1f898967546b234909f0ed2aea27adf3f",
@@ -584,80 +467,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193193374/albums",
+                            "uri": "/users/646646464/albums",
                             "options": ["GET"],
                             "total": 0
                         },
                         "appearances": {
-                            "uri": "/users/193193374/appearances",
+                            "uri": "/users/646646464/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193193374/categories",
+                            "uri": "/users/646646464/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193193374/channels",
+                            "uri": "/users/646646464/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193193374/feed",
+                            "uri": "/users/646646464/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193193374/followers",
+                            "uri": "/users/646646464/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193193374/following",
+                            "uri": "/users/646646464/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193193374/groups",
+                            "uri": "/users/646646464/groups",
                             "options": ["GET"],
                             "total": 0
                         },
                         "likes": {
-                            "uri": "/users/193193374/likes",
+                            "uri": "/users/646646464/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193193374/membership/",
+                            "uri": "/users/646646464/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193193374/channels?filter=moderated",
+                            "uri": "/users/646646464/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193193374/portfolios",
+                            "uri": "/users/646646464/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193193374/videos",
+                            "uri": "/users/646646464/videos",
                             "options": ["GET"],
                             "total": 1
                         },
                         "watchlater": {
-                            "uri": "/users/193193374/watchlater",
+                            "uri": "/users/646646464/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193193374/shared/videos",
+                            "uri": "/users/646646464/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193193374/pictures",
+                            "uri": "/users/646646464/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -667,16 +550,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193193374/folders/root",
+                            "uri": "/users/646646464/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193193374/folders",
+                            "uri": "/users/646646464/folders",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193193374/teams",
+                            "uri": "/users/646646464/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -762,42 +645,6 @@ class VideoUploaderViewSetTests(APITestCase):
                         "height": 75,
                         "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
                         "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1920,
-                        "height": 1080,
-                        "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1920x1080&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
                     }
                 ],
                 "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
@@ -815,7 +662,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "link": "https://i.vimeocdn.com/channel/default_980x250"
                     }
                 ],
-                "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
+                "resource_key": "7637bfefhb474822d326acc5sdfdsf",
                 "default_picture": True
             },
             "privacy": {"view": "users"},
@@ -823,24 +670,24 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "users": {
-                        "uri": "/channels/1829885/users",
+                        "uri": "/channels/6466464/users",
                         "options": ["GET"],
                         "total": 0
                     },
                     "videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": ["GET"],
                         "total": 0
                     },
                     "privacy_users": {
-                        "uri": "/channels/1829885/privacy/users",
+                        "uri": "/channels/6466464/privacy/users",
                         "options": ["GET", "PUT"],
                         "total": 0
                     }
                 },
                 "interactions": {
                     "add_moderators": {
-                        "uri": "/channels/1829885/moderators",
+                        "uri": "/channels/6466464/moderators",
                         "options": [
                             "DELETE",
                             "GET",
@@ -851,10 +698,10 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added": "false",
                         "added_time": None,
                         "type": None,
-                        "uri": "/users/193193374/channels/1829885"
+                        "uri": "/users/646646464/channels/6466464"
                     },
                     "moderate_videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": [
                             "DELETE",
                             "GET",
@@ -863,11 +710,11 @@ class VideoUploaderViewSetTests(APITestCase):
                     }
                 }
             },
-            "resource_key": "5da0f8d9694896dbcc9c3a0e5b1ceae80371cf82"
+            "resource_key": "hfe487rbfddddd33dddd3553fff33"
         },
             "status_code": 200}
         update_channel_mock.return_value = response
-        channel_id = 1829885
+        channel_id = 6466464
         data = {
             "description": "new channel updated",
             "link": "https://api.com",
@@ -878,17 +725,17 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_channel_mock.called_once()
-        update_channel_mock.called_once_with(channel_id='1829885', payload=data, query_params={})
+        update_channel_mock.called_once_with(channel_id='6466464', payload=data, query_params={})
 
     def test_update_channel_with_empty_data(self):
-        channel_id = 1829885
+        channel_id = 6466464
         data = {}
         response = self.client.patch(reverse('video_uploader_service-update-channel', args=(channel_id,)), data=data,
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.channel_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.channel_list')
     def test_channel_list(self, channel_list_mock):
         response = {"data": {
             "total": 1474702,
@@ -900,16 +747,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "first": "/channels?page=1&per_page=1",
                 "last": "/channels?page=1474702&per_page=1"
             },
-            "uri": "/channels/1829885",
+            "uri": "/channels/6466464",
             "name": "new channel",
             "description": "new channel updated",
-            "link": "https://vimeo.com/channels/1829885",
+            "link": "https://vimeo.com/channels/6466464",
             "created_time": "2023-01-27T11:38:55+00:00",
             "modified_time": "2023-01-27T11:39:53+00:00",
             "user": {
-                "uri": "/users/193193374",
-                "name": "usman haider",
-                "link": "https://vimeo.com/user193193374",
+                "uri": "/users/646646464",
+                "name": "John alex",
+                "link": "https://vimeo.com/user646646464",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -922,7 +769,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
-                    "uri": "/users/193193374/pictures/82481466",
+                    "uri": "/users/646646464/pictures/82481466",
                     "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
@@ -931,129 +778,89 @@ class VideoUploaderViewSetTests(APITestCase):
                             "width": 30,
                             "height": 30,
                             "link": "https://i.vimeocdn.com/portrait/82481466_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_300x300"
-                        },
-                        {
-                            "width": 360,
-                            "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_360x360"
                         }
                     ],
-                    "resource_key": "23b7a8a1f898967546b234909f0ed2aea27adf3f",
+                    "resource_key": "46b234909f0ed2aea27adf3f23b7a8a1f8989675",
                     "default_picture": "false"
                 },
                 "websites": [],
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193193374/albums",
+                            "uri": "/users/646646464/albums",
                             "options": ["GET"],
                             "total": 0
                         },
                         "appearances": {
-                            "uri": "/users/193193374/appearances",
+                            "uri": "/users/646646464/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193193374/categories",
+                            "uri": "/users/646646464/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193193374/channels",
+                            "uri": "/users/646646464/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193193374/feed",
+                            "uri": "/users/646646464/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193193374/followers",
+                            "uri": "/users/646646464/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193193374/following",
+                            "uri": "/users/646646464/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193193374/groups",
+                            "uri": "/users/646646464/groups",
                             "options": ["GET"],
                             "total": 0
                         },
                         "likes": {
-                            "uri": "/users/193193374/likes",
+                            "uri": "/users/646646464/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193193374/membership/",
+                            "uri": "/users/646646464/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193193374/channels?filter=moderated",
+                            "uri": "/users/646646464/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193193374/portfolios",
+                            "uri": "/users/646646464/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193193374/videos",
+                            "uri": "/users/646646464/videos",
                             "options": ["GET"],
                             "total": 1
                         },
                         "watchlater": {
-                            "uri": "/users/193193374/watchlater",
+                            "uri": "/users/646646464/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193193374/shared/videos",
+                            "uri": "/users/646646464/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193193374/pictures",
+                            "uri": "/users/646646464/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -1063,16 +870,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193193374/folders/root",
+                            "uri": "/users/646646464/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193193374/folders",
+                            "uri": "/users/646646464/folders",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193193374/teams",
+                            "uri": "/users/646646464/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -1143,7 +950,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "used": 1
                     }
                 },
-                "resource_key": "aa50fecd567506741ffb60d9368cacf12bd9c8dd",
+                "resource_key": "b60d9368cacf12bd9c8ddaa50fecd567506741ff",
                 "account": "free"
             },
             "tags": [],
@@ -1158,45 +965,9 @@ class VideoUploaderViewSetTests(APITestCase):
                         "height": 75,
                         "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
                         "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1920,
-                        "height": 1080,
-                        "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1920x1080&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
                     }
                 ],
-                "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
+                "resource_key": "f6f613fd22352458c1011f6c43a18bb0551d7e84",
                 "default_picture": True
             },
             "header": {
@@ -1211,7 +982,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "link": "https://i.vimeocdn.com/channel/default_980x250"
                     }
                 ],
-                "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
+                "resource_key": "2d326acc5bef3bfcb11f7c0555cae2de710dd782",
                 "default_picture": True
             },
             "privacy": {"view": "users"},
@@ -1219,24 +990,24 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "users": {
-                        "uri": "/channels/1829885/users",
+                        "uri": "/channels/6466464/users",
                         "options": ["GET"],
                         "total": 0
                     },
                     "videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": ["GET"],
                         "total": 0
                     },
                     "privacy_users": {
-                        "uri": "/channels/1829885/privacy/users",
+                        "uri": "/channels/6466464/privacy/users",
                         "options": ["GET", "PUT"],
                         "total": 0
                     }
                 },
                 "interactions": {
                     "add_moderators": {
-                        "uri": "/channels/1829885/moderators",
+                        "uri": "/channels/6466464/moderators",
                         "options": [
                             "DELETE",
                             "GET",
@@ -1247,10 +1018,10 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added": "false",
                         "added_time": None,
                         "type": None,
-                        "uri": "/users/193193374/channels/1829885"
+                        "uri": "/users/646646464/channels/6466464"
                     },
                     "moderate_videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": [
                             "DELETE",
                             "GET",
@@ -1269,19 +1040,19 @@ class VideoUploaderViewSetTests(APITestCase):
         channel_list_mock.called_once_with(query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_channel')
     def test_specific_channel(self, specific_channel_mock):
         response = {"data": {
-            "uri": "/channels/1829885",
+            "uri": "/channels/6466464",
             "name": "new channel",
             "description": "new channel updated",
-            "link": "https://vimeo.com/channels/1829885",
+            "link": "https://vimeo.com/channels/6466464",
             "created_time": "2023-01-27T11:38:55+00:00",
             "modified_time": "2023-01-27T11:39:53+00:00",
             "user": {
-                "uri": "/users/193193374",
-                "name": "usman haider",
-                "link": "https://vimeo.com/user193193374",
+                "uri": "/users/646646464",
+                "name": "John alex",
+                "link": "https://vimeo.com/user646646464",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -1294,51 +1065,11 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
-                    "uri": "/users/193193374/pictures/82481466",
+                    "uri": "/users/646646464/pictures/82481466",
                     "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_300x300"
-                        },
                         {
                             "width": 360,
                             "height": 360,
@@ -1352,80 +1083,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193193374/albums",
+                            "uri": "/users/646646464/albums",
                             "options": ["GET"],
                             "total": 0
                         },
                         "appearances": {
-                            "uri": "/users/193193374/appearances",
+                            "uri": "/users/646646464/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193193374/categories",
+                            "uri": "/users/646646464/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193193374/channels",
+                            "uri": "/users/646646464/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193193374/feed",
+                            "uri": "/users/646646464/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193193374/followers",
+                            "uri": "/users/646646464/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193193374/following",
+                            "uri": "/users/646646464/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193193374/groups",
+                            "uri": "/users/646646464/groups",
                             "options": ["GET"],
                             "total": 0
                         },
                         "likes": {
-                            "uri": "/users/193193374/likes",
+                            "uri": "/users/646646464/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193193374/membership/",
+                            "uri": "/users/646646464/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193193374/channels?filter=moderated",
+                            "uri": "/users/646646464/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193193374/portfolios",
+                            "uri": "/users/646646464/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193193374/videos",
+                            "uri": "/users/646646464/videos",
                             "options": ["GET"],
                             "total": 1
                         },
                         "watchlater": {
-                            "uri": "/users/193193374/watchlater",
+                            "uri": "/users/646646464/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193193374/shared/videos",
+                            "uri": "/users/646646464/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193193374/pictures",
+                            "uri": "/users/646646464/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -1435,16 +1166,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193193374/folders/root",
+                            "uri": "/users/646646464/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193193374/folders",
+                            "uri": "/users/646646464/folders",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193193374/teams",
+                            "uri": "/users/646646464/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -1526,42 +1257,6 @@ class VideoUploaderViewSetTests(APITestCase):
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
                     {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
                         "width": 1920,
                         "height": 1080,
                         "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
@@ -1583,7 +1278,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "link": "https://i.vimeocdn.com/channel/default_980x250"
                     }
                 ],
-                "resource_key": "7c0555cae2de710dd7822d326acc5bef3bfcb11f",
+                "resource_key": "2d326acc5bef3bfcb11f7c0555cae2de710dd782",
                 "default_picture": True
             },
             "privacy": {"view": "users"},
@@ -1591,24 +1286,24 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "users": {
-                        "uri": "/channels/1829885/users",
+                        "uri": "/channels/6466464/users",
                         "options": ["GET"],
                         "total": 0
                     },
                     "videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": ["GET"],
                         "total": 0
                     },
                     "privacy_users": {
-                        "uri": "/channels/1829885/privacy/users",
+                        "uri": "/channels/6466464/privacy/users",
                         "options": ["GET", "PUT"],
                         "total": 0
                     }
                 },
                 "interactions": {
                     "add_moderators": {
-                        "uri": "/channels/1829885/moderators",
+                        "uri": "/channels/6466464/moderators",
                         "options": [
                             "DELETE",
                             "GET",
@@ -1619,10 +1314,10 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added": "false",
                         "added_time": None,
                         "type": None,
-                        "uri": "/users/193193374/channels/1829885"
+                        "uri": "/users/646646464/channels/6466464"
                     },
                     "moderate_videos": {
-                        "uri": "/channels/1829885/videos",
+                        "uri": "/channels/6466464/videos",
                         "options": [
                             "DELETE",
                             "GET",
@@ -1635,25 +1330,25 @@ class VideoUploaderViewSetTests(APITestCase):
         },
             "status_code": 200}
         specific_channel_mock.return_value = response
-        channel_id = 1829885
+        channel_id = 6466464
         response = self.client.get(reverse('video_uploader_service-specific-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_channel_mock.called_once()
-        specific_channel_mock.called_once_with(channel_id='1829885', query_params={})
+        specific_channel_mock.called_once_with(channel_id='6466464', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_channel')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_channel')
     def test_specific_channel_with_wrong_id(self, specific_channel_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         specific_channel_mock.return_value = response
-        channel_id = 1829885
+        channel_id = 6466464
         response = self.client.get(reverse('video_uploader_service-specific-channel', args=(channel_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_channel_mock.called_once()
-        specific_channel_mock.called_once_with(channel_id='1829885', query_params={})
+        specific_channel_mock.called_once_with(channel_id='6466464', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_group')
     def test_create_group_with_no_create_scope(self, create_group_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_group_mock.return_value = response
@@ -1667,13 +1362,13 @@ class VideoUploaderViewSetTests(APITestCase):
         create_group_mock.called_once_with(payload=data)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_group')
     def test_create_group(self, create_group_mock):
         response = {"data": {
-            "uri": "/groups/808729",
+            "uri": "/groups/545454",
             "name": "new group",
             "description": "new group",
-            "link": "https://vimeo.com/groups/808729",
+            "link": "https://vimeo.com/groups/545454",
             "created_time": "2023-01-27T15:18:33+00:00",
             "modified_time": "2023-01-27T15:18:33+00:00",
             "privacy": {
@@ -1689,42 +1384,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
-                    {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
+
                     {
                         "width": 1920,
                         "height": 1080,
@@ -1753,12 +1413,12 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "users": {
-                        "uri": "/groups/808729/users",
+                        "uri": "/groups/545454/users",
                         "options": ["GET"],
                         "total": 1
                     },
                     "videos": {
-                        "uri": "/groups/808729/videos",
+                        "uri": "/groups/545454/videos",
                         "options": ["GET"],
                         "total": 0
                     }
@@ -1769,14 +1429,14 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added_time": "2023-01-27T15:18:33+00:00",
                         "type": "moderator",
                         "title": None,
-                        "uri": "/users/193193374/groups/808729"
+                        "uri": "/users/646646464/groups/545454"
                     }
                 }
             },
             "user": {
-                "uri": "/users/193193374",
-                "name": "usman haider",
-                "link": "https://vimeo.com/user193193374",
+                "uri": "/users/646646464",
+                "name": "John alex",
+                "link": "https://vimeo.com/user646646464",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -1789,51 +1449,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
-                    "uri": "/users/193193374/pictures/82481466",
+                    "uri": "/users/646646464/pictures/82481466",
                     "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
@@ -1847,80 +1468,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193193374/albums",
+                            "uri": "/users/646646464/albums",
                             "options": ["GET"],
                             "total": 0
                         },
                         "appearances": {
-                            "uri": "/users/193193374/appearances",
+                            "uri": "/users/646646464/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193193374/categories",
+                            "uri": "/users/646646464/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193193374/channels",
+                            "uri": "/users/646646464/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193193374/feed",
+                            "uri": "/users/646646464/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193193374/followers",
+                            "uri": "/users/646646464/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193193374/following",
+                            "uri": "/users/646646464/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193193374/groups",
+                            "uri": "/users/646646464/groups",
                             "options": ["GET"],
                             "total": 1
                         },
                         "likes": {
-                            "uri": "/users/193193374/likes",
+                            "uri": "/users/646646464/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193193374/membership/",
+                            "uri": "/users/646646464/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193193374/channels?filter=moderated",
+                            "uri": "/users/646646464/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193193374/portfolios",
+                            "uri": "/users/646646464/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193193374/videos",
+                            "uri": "/users/646646464/videos",
                             "options": ["GET"],
                             "total": 3
                         },
                         "watchlater": {
-                            "uri": "/users/193193374/watchlater",
+                            "uri": "/users/646646464/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193193374/shared/videos",
+                            "uri": "/users/646646464/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193193374/pictures",
+                            "uri": "/users/646646464/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -1930,16 +1551,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193193374/folders/root",
+                            "uri": "/users/646646464/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193193374/folders",
+                            "uri": "/users/646646464/folders",
                             "options": ["GET", "POST"],
                             "total": 2
                         },
                         "teams": {
-                            "uri": "/users/193193374/teams",
+                            "uri": "/users/646646464/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -2031,7 +1652,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.groups_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.groups_list')
     def test_group_list(self, group_list_mock):
         response = {'data': {
             "total": 600464,
@@ -2062,49 +1683,13 @@ class VideoUploaderViewSetTests(APITestCase):
                         "uri": "/videos/149779134/pictures/567891435",
                         "active": True,
                         "type": "custom",
-                        "base_link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d",
+                        "base_link": "https://i.vimeocdn.com/video/545454-asvdw3fedvhgdah3rdeagd33fdf3f3rer3er3er63er",
                         "sizes": [
                             {
                                 "width": 100,
                                 "height": 75,
-                                "link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_100x75?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 200,
-                                "height": 150,
-                                "link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_200x150?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 295,
-                                "height": 166,
-                                "link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_295x166?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 640,
-                                "height": 360,
-                                "link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_640x360?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 960,
-                                "height": 540,
-                                "link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_960x540?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 1280,
-                                "height": 720,
-                                "link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_1280x720?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 1920,
-                                "height": 1080,
-                                "link": "https://i.vimeocdn.com/video/567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_1920x1080?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F567891435-2dfe6692aec622d11592d4ebb9e9c5478eebf2a5bb320bb772d343152c7f2a95-d_1920x1080&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
+                                "link": "https://i.vimeocdn.com/video/545454-asvdw3fedvhgdah3rdeagd33fdf3f3rer3er3er63er_100x75?r=pad",
+                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2F545454-asvdw3fedvhgdah3rdeagd33fdf3f3rer3er3er63er_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
                             }
                         ],
                         "resource_key": "608f7de73f7fe88b783b9c437d8e7800b0689d04",
@@ -2144,14 +1729,14 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "added_time": None,
                                 "type": None,
                                 "title": None,
-                                "uri": "/users/193125162/groups/808731"
+                                "uri": "/users/56789943/groups/808731"
                             }
                         }
                     },
                     "user": {
-                        "uri": "/users/165394170",
+                        "uri": "/users/98989898",
                         "name": "Henrique J. T. Neves",
-                        "link": "https://vimeo.com/user165394170",
+                        "link": "https://vimeo.com/user98989898",
                         "capabilities": {
                             "hasLiveSubscription": "false",
                             "hasEnterpriseLihp": "false",
@@ -2164,7 +1749,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "short_bio": None,
                         "created_time": "2022-02-01T18:58:49+00:00",
                         "pictures": {
-                            "uri": "/users/165394170/pictures/66548956",
+                            "uri": "/users/98989898/pictures/66548956",
                             "active": True,
                             "type": "custom",
                             "base_link": "https://i.vimeocdn.com/portrait/66548956",
@@ -2173,46 +1758,6 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "width": 30,
                                     "height": 30,
                                     "link": "https://i.vimeocdn.com/portrait/66548956_30x30"
-                                },
-                                {
-                                    "width": 72,
-                                    "height": 72,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_72x72"
-                                },
-                                {
-                                    "width": 75,
-                                    "height": 75,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_75x75"
-                                },
-                                {
-                                    "width": 100,
-                                    "height": 100,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_100x100"
-                                },
-                                {
-                                    "width": 144,
-                                    "height": 144,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_144x144"
-                                },
-                                {
-                                    "width": 216,
-                                    "height": 216,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_216x216"
-                                },
-                                {
-                                    "width": 288,
-                                    "height": 288,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_288x288"
-                                },
-                                {
-                                    "width": 300,
-                                    "height": 300,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_300x300"
-                                },
-                                {
-                                    "width": 360,
-                                    "height": 360,
-                                    "link": "https://i.vimeocdn.com/portrait/66548956_360x360"
                                 }
                             ],
                             "resource_key": "a6d6c74676c9338af078b765ca954f3dfc58f003",
@@ -2222,70 +1767,70 @@ class VideoUploaderViewSetTests(APITestCase):
                         "metadata": {
                             "connections": {
                                 "albums": {
-                                    "uri": "/users/165394170/albums",
+                                    "uri": "/users/98989898/albums",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "appearances": {
-                                    "uri": "/users/165394170/appearances",
+                                    "uri": "/users/98989898/appearances",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "channels": {
-                                    "uri": "/users/165394170/channels",
+                                    "uri": "/users/98989898/channels",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "feed": {
-                                    "uri": "/users/165394170/feed",
+                                    "uri": "/users/98989898/feed",
                                     "options": ["GET"]
                                 },
                                 "followers": {
-                                    "uri": "/users/165394170/followers",
+                                    "uri": "/users/98989898/followers",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "following": {
-                                    "uri": "/users/165394170/following",
+                                    "uri": "/users/98989898/following",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "groups": {
-                                    "uri": "/users/165394170/groups",
+                                    "uri": "/users/98989898/groups",
                                     "options": ["GET"],
                                     "total": 1
                                 },
                                 "likes": {
-                                    "uri": "/users/165394170/likes",
+                                    "uri": "/users/98989898/likes",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "membership": {
-                                    "uri": "/users/165394170/membership/",
+                                    "uri": "/users/98989898/membership/",
                                     "options": ["PATCH"]
                                 },
                                 "moderated_channels": {
-                                    "uri": "/users/165394170/channels?filter=moderated",
+                                    "uri": "/users/98989898/channels?filter=moderated",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "portfolios": {
-                                    "uri": "/users/165394170/portfolios",
+                                    "uri": "/users/98989898/portfolios",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "videos": {
-                                    "uri": "/users/165394170/videos",
+                                    "uri": "/users/98989898/videos",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "shared": {
-                                    "uri": "/users/165394170/shared/videos",
+                                    "uri": "/users/98989898/shared/videos",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "pictures": {
-                                    "uri": "/users/165394170/pictures",
+                                    "uri": "/users/98989898/pictures",
                                     "options": [
                                         "GET",
                                         "POST"
@@ -2293,11 +1838,11 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "total": 1
                                 },
                                 "folders_root": {
-                                    "uri": "/users/165394170/folders/root",
+                                    "uri": "/users/98989898/folders/root",
                                     "options": ["GET"]
                                 },
                                 "teams": {
-                                    "uri": "/users/165394170/teams",
+                                    "uri": "/users/98989898/teams",
                                     "options": ["GET"],
                                     "total": 1
                                 }
@@ -2306,7 +1851,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "follow": {
                                     "added": "false",
                                     "added_time": None,
-                                    "uri": "/users/193125162/following/165394170",
+                                    "uri": "/users/56789943/following/98989898",
                                     "options": [
                                         "GET",
                                         "PUT",
@@ -2314,7 +1859,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     ]
                                 },
                                 "block": {
-                                    "uri": "/me/block/165394170",
+                                    "uri": "/me/block/98989898",
                                     "options": [
                                         "PUT",
                                         "DELETE"
@@ -2323,7 +1868,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "added_time": None
                                 },
                                 "report": {
-                                    "uri": "/users/165394170/report",
+                                    "uri": "/users/98989898/report",
                                     "options": ["POST"],
                                     "reason": [
                                         "inappropriate avatar",
@@ -2366,7 +1911,7 @@ class VideoUploaderViewSetTests(APITestCase):
         group_list_mock.assert_called_once_with(query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_group')
     def test_delete_group(self, delete_group_mock):
         response = {'data': {"message": "Item deleted successfully."}, 'status_code': 204}
         delete_group_mock.return_value = response
@@ -2377,7 +1922,7 @@ class VideoUploaderViewSetTests(APITestCase):
         delete_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_group')
     def test_delete_group_with_invalid_id(self, delete_group_mock):
         response = {'data': {"message": "Resource not found"}, 'status_code': 404}
         delete_group_mock.return_value = response
@@ -2388,7 +1933,7 @@ class VideoUploaderViewSetTests(APITestCase):
         delete_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_group')
     def test_delete_group_with_no_delete_scope(self, delete_group_mock):
         response = {'data': {'error': 'Your access token does not have the "delete" scope'}, 'status_code': 403}
         delete_group_mock.return_value = response
@@ -2399,7 +1944,7 @@ class VideoUploaderViewSetTests(APITestCase):
         delete_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_group')
     def test_specific_group_with_invalid_id(self, specific_group_mock):
         response = {'data': {"message": "Resource not found"}, 'status_code': 404}
         specific_group_mock.return_value = response
@@ -2410,13 +1955,13 @@ class VideoUploaderViewSetTests(APITestCase):
         specific_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_group')
     def test_specific_group(self, specific_group_mock):
         response = {'data': {
-            "uri": "/groups/808729",
+            "uri": "/groups/545454",
             "name": "new group",
             "description": "new group",
-            "link": "https://vimeo.com/groups/808729",
+            "link": "https://vimeo.com/groups/545454",
             "created_time": "2023-01-27T15:18:33+00:00",
             "modified_time": "2023-01-27T15:18:33+00:00",
             "privacy": {
@@ -2432,42 +1977,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
-                    {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
+
                     {
                         "width": 1920,
                         "height": 1080,
@@ -2496,12 +2006,12 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "users": {
-                        "uri": "/groups/808729/users",
+                        "uri": "/groups/545454/users",
                         "options": ["GET"],
                         "total": 1
                     },
                     "videos": {
-                        "uri": "/groups/808729/videos",
+                        "uri": "/groups/545454/videos",
                         "options": ["GET"],
                         "total": 0
                     }
@@ -2512,14 +2022,14 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added_time": "2023-01-27T15:18:33+00:00",
                         "type": "moderator",
                         "title": None,
-                        "uri": "/users/193193374/groups/808729"
+                        "uri": "/users/646646464/groups/545454"
                     }
                 }
             },
             "user": {
-                "uri": "/users/193193374",
-                "name": "usman haider",
-                "link": "https://vimeo.com/user193193374",
+                "uri": "/users/646646464",
+                "name": "John alex",
+                "link": "https://vimeo.com/user646646464",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -2532,51 +2042,12 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-25T06:10:46+00:00",
                 "pictures": {
-                    "uri": "/users/193193374/pictures/82481466",
+                    "uri": "/users/646646464/pictures/82481466",
                     "active": True,
                     "type": "custom",
                     "base_link": "https://i.vimeocdn.com/portrait/82481466",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82481466_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
@@ -2590,80 +2061,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193193374/albums",
+                            "uri": "/users/646646464/albums",
                             "options": ["GET"],
                             "total": 0
                         },
                         "appearances": {
-                            "uri": "/users/193193374/appearances",
+                            "uri": "/users/646646464/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193193374/categories",
+                            "uri": "/users/646646464/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193193374/channels",
+                            "uri": "/users/646646464/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193193374/feed",
+                            "uri": "/users/646646464/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193193374/followers",
+                            "uri": "/users/646646464/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193193374/following",
+                            "uri": "/users/646646464/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193193374/groups",
+                            "uri": "/users/646646464/groups",
                             "options": ["GET"],
                             "total": 1
                         },
                         "likes": {
-                            "uri": "/users/193193374/likes",
+                            "uri": "/users/646646464/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193193374/membership/",
+                            "uri": "/users/646646464/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193193374/channels?filter=moderated",
+                            "uri": "/users/646646464/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193193374/portfolios",
+                            "uri": "/users/646646464/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193193374/videos",
+                            "uri": "/users/646646464/videos",
                             "options": ["GET"],
                             "total": 3
                         },
                         "watchlater": {
-                            "uri": "/users/193193374/watchlater",
+                            "uri": "/users/646646464/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193193374/shared/videos",
+                            "uri": "/users/646646464/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193193374/pictures",
+                            "uri": "/users/646646464/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -2673,16 +2144,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193193374/folders/root",
+                            "uri": "/users/646646464/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193193374/folders",
+                            "uri": "/users/646646464/folders",
                             "options": ["GET", "POST"],
                             "total": 2
                         },
                         "teams": {
-                            "uri": "/users/193193374/teams",
+                            "uri": "/users/646646464/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -2766,7 +2237,7 @@ class VideoUploaderViewSetTests(APITestCase):
         specific_group_mock.assert_called_once_with(group_id='808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group(self, add_user_to_group_mock):
         response = {'status_code': 200}
         add_user_to_group_mock.return_value = response
@@ -2778,7 +2249,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group_with_invalid_user_id(self, add_user_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_user_to_group_mock.return_value = response
@@ -2790,7 +2261,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group_with_invalid_group_id(self, add_user_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_user_to_group_mock.return_value = response
@@ -2802,7 +2273,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_user_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_user_to_group')
     def test_add_user_to_group_with_no_add_scope(self, add_user_to_group_mock):
         response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_user_to_group_mock.return_value = response
@@ -2814,7 +2285,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_user_to_group_mock.assert_called_once_with(group_id='808731', user_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group(self, add_video_to_group_mock):
         response = {'status_code': 200}
         add_video_to_group_mock.return_value = response
@@ -2826,7 +2297,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group_with_invalid_group_id(self, add_video_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_group_mock.return_value = response
@@ -2838,7 +2309,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group_with_invalid_video_id(self, add_video_to_group_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_group_mock.return_value = response
@@ -2850,7 +2321,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.add_video_to_group')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_group')
     def test_add_video_to_group_with_no_add_scope(self, add_video_to_group_mock):
         response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_group_mock.return_value = response
@@ -2862,7 +2333,7 @@ class VideoUploaderViewSetTests(APITestCase):
         add_video_to_group_mock.assert_called_once_with(group_id='808731', video_id='19808731', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_showcase')
     def test_create_showcase_with_no_create_scope(self, create_showcase_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_showcase_mock.return_value = response
@@ -2887,20 +2358,20 @@ class VideoUploaderViewSetTests(APITestCase):
         create_showcase_mock.assert_called_once_with(user_id='44367021', payload=data, query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_showcase')
     def test_create_showcase(self, create_showcase_mock):
         response = {"data": {
-            "uri": "/users/193125162/albums/10146228",
+            "uri": "/users/56789943/albums/12345678",
             "name": "Google",
             "description": None,
-            "link": "https://vimeo.com/showcase/10146228",
+            "link": "https://vimeo.com/showcase/12345678",
             "duration": 0,
             "created_time": "2023-01-27T16:43:06+00:00",
             "modified_time": "2023-01-27T16:43:06+00:00",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -2913,55 +2384,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -2971,80 +2402,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": ["GET"],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": ["GET"],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": ["GET"],
                             "total": 1
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -3054,16 +2485,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -3144,42 +2575,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
-                    {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
+
                     {
                         "width": 1920,
                         "height": 1080,
@@ -3205,27 +2601,27 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "videos": {
-                        "uri": "/albums/10146228/videos",
+                        "uri": "/albums/12345678/videos",
                         "options": ["GET"],
                         "total": 0
                     },
                     "available_videos": {
-                        "uri": "/users/193125162/albums/10146228/available_videos",
+                        "uri": "/users/56789943/albums/12345678/available_videos",
                         "options": ["GET"],
                         "total": 1
                     }
                 },
                 "interactions": {
                     "add_custom_thumbnails": {
-                        "uri": "/users/193125162/albums/10146228/custom_thumbnails",
+                        "uri": "/users/56789943/albums/12345678/custom_thumbnails",
                         "options": ["GET", "POST"]
                     },
                     "add_logos": {
-                        "uri": "/users/193125162/albums/10146228/logos",
+                        "uri": "/users/56789943/albums/12345678/logos",
                         "options": ["GET", "POST"]
                     },
                     "add_videos": {
-                        "uri": "/users/193125162/albums/10146228/videos",
+                        "uri": "/users/56789943/albums/12345678/videos",
                         "options": ["GET", "PUT"]
                     }
                 }
@@ -3242,7 +2638,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "roku_provider_name": None,
             "roku_language": None,
             "roku_genres": [""],
-            "share_link": "https://vimeo.com/showcase/10146228",
+            "share_link": "https://vimeo.com/showcase/12345678",
             "hide_upcoming": "false",
             "seo_title": None,
             "seo_description": None,
@@ -3292,7 +2688,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_showcase')
     def test_delete_showcase(self, delete_showcase_mock):
         response = {"data": {"message": "Item deleted successfully."}, 'status_code': 204}
         delete_showcase_mock.return_value = response
@@ -3304,7 +2700,7 @@ class VideoUploaderViewSetTests(APITestCase):
         delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_showcase')
     def test_delete_showcase_with_invalid_id(self, delete_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         delete_showcase_mock.return_value = response
@@ -3316,7 +2712,7 @@ class VideoUploaderViewSetTests(APITestCase):
         delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_showcase')
     def test_delete_showcase_with_no_delete_scope(self, delete_showcase_mock):
         response = {'data': {'error': 'Your access token does not have the "delete" scope'}, 'status_code': 403}
         delete_showcase_mock.return_value = response
@@ -3328,7 +2724,7 @@ class VideoUploaderViewSetTests(APITestCase):
         delete_showcase_mock.assert_called_once_with(user_id='44367021', album_id='47612', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_showcase')
     def test_update_showcase_with_no_edit_scope(self, update_showcase_mock):
         response = {'data': {'error': 'Your access token does not have the "edit" scope'}, 'status_code': 403}
         update_showcase_mock.return_value = response
@@ -3347,30 +2743,30 @@ class VideoUploaderViewSetTests(APITestCase):
             "url": "https://api.com",
             "use_custom_domain": True
         }
-        user_id = 193125162
-        album_id = 10146228
+        user_id = 56789943
+        album_id = 12345678
         response = self.client.patch(reverse('video_uploader_service-update-showcase', args=(user_id, album_id)),
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_showcase_mock.assert_called_once()
-        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data,
+        update_showcase_mock.assert_called_once_with(user_id='56789943', album_id='12345678', payload=data,
                                                      query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_showcase')
     def test_update_showcase(self, update_showcase_mock):
         response = {"data": {
-            "uri": "/users/193125162/albums/10146228",
+            "uri": "/users/56789943/albums/12345678",
             "name": "Google",
             "description": None,
-            "link": "https://vimeo.com/showcase/10146228",
+            "link": "https://vimeo.com/showcase/12345678",
             "duration": 0,
             "created_time": "2023-01-27T16:43:06+00:00",
             "modified_time": "2023-01-27T16:43:06+00:00",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -3383,55 +2779,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -3441,80 +2798,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": ["GET"],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": ["GET"],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": ["GET"],
                             "total": 1
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -3524,16 +2881,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -3614,42 +2971,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
-                    {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
+
                     {
                         "width": 1920,
                         "height": 1080,
@@ -3675,27 +2997,27 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "videos": {
-                        "uri": "/albums/10146228/videos",
+                        "uri": "/albums/12345678/videos",
                         "options": ["GET"],
                         "total": 0
                     },
                     "available_videos": {
-                        "uri": "/users/193125162/albums/10146228/available_videos",
+                        "uri": "/users/56789943/albums/12345678/available_videos",
                         "options": ["GET"],
                         "total": 1
                     }
                 },
                 "interactions": {
                     "add_custom_thumbnails": {
-                        "uri": "/users/193125162/albums/10146228/custom_thumbnails",
+                        "uri": "/users/56789943/albums/12345678/custom_thumbnails",
                         "options": ["GET", "POST"]
                     },
                     "add_logos": {
-                        "uri": "/users/193125162/albums/10146228/logos",
+                        "uri": "/users/56789943/albums/12345678/logos",
                         "options": ["GET", "POST"]
                     },
                     "add_videos": {
-                        "uri": "/users/193125162/albums/10146228/videos",
+                        "uri": "/users/56789943/albums/12345678/videos",
                         "options": ["GET", "PUT"]
                     }
                 }
@@ -3712,7 +3034,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "roku_provider_name": None,
             "roku_language": None,
             "roku_genres": [""],
-            "share_link": "https://vimeo.com/showcase/10146228",
+            "share_link": "https://vimeo.com/showcase/12345678",
             "hide_upcoming": "false",
             "seo_title": None,
             "seo_description": None,
@@ -3738,17 +3060,17 @@ class VideoUploaderViewSetTests(APITestCase):
             "url": "https://api.com",
             "use_custom_domain": True
         }
-        user_id = 193125162
-        album_id = 10146228
+        user_id = 56789943
+        album_id = 12345678
         response = self.client.patch(reverse('video_uploader_service-update-showcase', args=(user_id, album_id)),
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_showcase_mock.assert_called_once()
-        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data,
+        update_showcase_mock.assert_called_once_with(user_id='56789943', album_id='12345678', payload=data,
                                                      query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_showcase')
     def test_update_showcase_with_invalid_id(self, update_showcase_mock):
         response = {"data": {"message": "Resource not found"},
                     'status_code': 404}
@@ -3768,13 +3090,13 @@ class VideoUploaderViewSetTests(APITestCase):
             "url": "https://api.com",
             "use_custom_domain": True
         }
-        user_id = 193125162
-        album_id = 10146228
+        user_id = 56789943
+        album_id = 12345678
         response = self.client.patch(reverse('video_uploader_service-update-showcase', args=(user_id, album_id)),
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_showcase_mock.assert_called_once()
-        update_showcase_mock.assert_called_once_with(user_id='193125162', album_id='10146228', payload=data,
+        update_showcase_mock.assert_called_once_with(user_id='56789943', album_id='12345678', payload=data,
                                                      query_params={})
 
     def test_update_showcase_with_invalid_data(self):
@@ -3793,38 +3115,38 @@ class VideoUploaderViewSetTests(APITestCase):
             "url": "https:/api.com",
             "use_custom_domain": True
         }
-        user_id = 193125162
-        album_id = 10146228
+        user_id = 56789943
+        album_id = 12345678
         response = self.client.patch(reverse('video_uploader_service-update-showcase', args=(user_id, album_id)),
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.showcase_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.showcase_list')
     def test_showcase_list(self, showcase_list_mock):
         response = {"data": {
             "total": 2,
             "page": 1,
             "per_page": 1,
             "paging": {
-                "next": "/users/193125162/albums?page=2&per_page=1",
+                "next": "/users/56789943/albums?page=2&per_page=1",
                 "previous": None,
-                "first": "/users/193125162/albums?page=1&per_page=1",
-                "last": "/users/193125162/albums?page=2&per_page=1"
+                "first": "/users/56789943/albums?page=1&per_page=1",
+                "last": "/users/56789943/albums?page=2&per_page=1"
             },
             "data": [
                 {
-                    "uri": "/users/193125162/albums/10146228",
+                    "uri": "/users/56789943/albums/12345678",
                     "name": "Google",
                     "description": None,
-                    "link": "https://vimeo.com/showcase/10146228",
+                    "link": "https://vimeo.com/showcase/12345678",
                     "duration": 0,
                     "created_time": "2023-01-27T16:43:06+00:00",
                     "modified_time": "2023-01-27T16:43:06+00:00",
                     "user": {
-                        "uri": "/users/193125162",
-                        "name": "Saad Bin Abid",
-                        "link": "https://vimeo.com/user193125162",
+                        "uri": "/users/56789943",
+                        "name": "test user",
+                        "link": "https://vimeo.com/user56789943",
                         "capabilities": {
                             "hasLiveSubscription": "false",
                             "hasEnterpriseLihp": "false",
@@ -3837,55 +3159,16 @@ class VideoUploaderViewSetTests(APITestCase):
                         "short_bio": None,
                         "created_time": "2023-01-24T06:34:04+00:00",
                         "pictures": {
-                            "uri": "/users/193125162/pictures/82436258",
+                            "uri": "/users/56789943/pictures/12345678",
                             "active": True,
                             "type": "custom",
-                            "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                            "base_link": "https://i.vimeocdn.com/portrait/12345678",
                             "sizes": [
-                                {
-                                    "width": 30,
-                                    "height": 30,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                                },
-                                {
-                                    "width": 72,
-                                    "height": 72,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                                },
-                                {
-                                    "width": 75,
-                                    "height": 75,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                                },
-                                {
-                                    "width": 100,
-                                    "height": 100,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                                },
-                                {
-                                    "width": 144,
-                                    "height": 144,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                                },
-                                {
-                                    "width": 216,
-                                    "height": 216,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                                },
-                                {
-                                    "width": 288,
-                                    "height": 288,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                                },
-                                {
-                                    "width": 300,
-                                    "height": 300,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                                },
+
                                 {
                                     "width": 360,
                                     "height": 360,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                                    "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                                 }
                             ],
                             "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -3895,80 +3178,80 @@ class VideoUploaderViewSetTests(APITestCase):
                         "metadata": {
                             "connections": {
                                 "albums": {
-                                    "uri": "/users/193125162/albums",
+                                    "uri": "/users/56789943/albums",
                                     "options": ["GET"],
                                     "total": 2
                                 },
                                 "appearances": {
-                                    "uri": "/users/193125162/appearances",
+                                    "uri": "/users/56789943/appearances",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "categories": {
-                                    "uri": "/users/193125162/categories",
+                                    "uri": "/users/56789943/categories",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "channels": {
-                                    "uri": "/users/193125162/channels",
+                                    "uri": "/users/56789943/channels",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "feed": {
-                                    "uri": "/users/193125162/feed",
+                                    "uri": "/users/56789943/feed",
                                     "options": ["GET"]
                                 },
                                 "followers": {
-                                    "uri": "/users/193125162/followers",
+                                    "uri": "/users/56789943/followers",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "following": {
-                                    "uri": "/users/193125162/following",
+                                    "uri": "/users/56789943/following",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "groups": {
-                                    "uri": "/users/193125162/groups",
+                                    "uri": "/users/56789943/groups",
                                     "options": ["GET"],
                                     "total": 3
                                 },
                                 "likes": {
-                                    "uri": "/users/193125162/likes",
+                                    "uri": "/users/56789943/likes",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "membership": {
-                                    "uri": "/users/193125162/membership/",
+                                    "uri": "/users/56789943/membership/",
                                     "options": ["PATCH"]
                                 },
                                 "moderated_channels": {
-                                    "uri": "/users/193125162/channels?filter=moderated",
+                                    "uri": "/users/56789943/channels?filter=moderated",
                                     "options": ["GET"],
                                     "total": 1
                                 },
                                 "portfolios": {
-                                    "uri": "/users/193125162/portfolios",
+                                    "uri": "/users/56789943/portfolios",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "videos": {
-                                    "uri": "/users/193125162/videos",
+                                    "uri": "/users/56789943/videos",
                                     "options": ["GET"],
                                     "total": 1
                                 },
                                 "watchlater": {
-                                    "uri": "/users/193125162/watchlater",
+                                    "uri": "/users/56789943/watchlater",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "shared": {
-                                    "uri": "/users/193125162/shared/videos",
+                                    "uri": "/users/56789943/shared/videos",
                                     "options": ["GET"],
                                     "total": 0
                                 },
                                 "pictures": {
-                                    "uri": "/users/193125162/pictures",
+                                    "uri": "/users/56789943/pictures",
                                     "options": [
                                         "GET",
                                         "POST"
@@ -3981,11 +3264,11 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "total": 0
                                 },
                                 "folders_root": {
-                                    "uri": "/users/193125162/folders/root",
+                                    "uri": "/users/56789943/folders/root",
                                     "options": ["GET"]
                                 },
                                 "folders": {
-                                    "uri": "/users/193125162/folders",
+                                    "uri": "/users/56789943/folders",
                                     "options": [
                                         "GET",
                                         "POST"
@@ -3993,7 +3276,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "total": 1
                                 },
                                 "teams": {
-                                    "uri": "/users/193125162/teams",
+                                    "uri": "/users/56789943/teams",
                                     "options": ["GET"],
                                     "total": 1
                                 },
@@ -4080,55 +3363,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
                                 "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
                                                          ".vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages"
-                                "%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 200,
-                                "height": 150,
-                                "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
-                                                         ".vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
-                                                         "%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 295,
-                                "height": 166,
-                                "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
-                                                         ".vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
-                                                         "%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 640,
-                                "height": 360,
-                                "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
-                                                         ".vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
-                                "%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 960,
-                                "height": 540,
-                                "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
-                                                         ".vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
-                                "%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 1280,
-                                "height": 720,
-                                "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
-                                                         ".vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
-                                "%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 1920,
-                                "height": 1080,
-                                "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi"
-                                                         ".vimeocdn.com%2Fvideo%2Fdefault_1920x1080&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp"
-                                "%2Fimages%2Fcrawler_play.png"
+                                                         "%2Fcrawler_play.png"
                             }
                         ],
                         "resource_key": "f6c43a18bb0551d7e84f6f613fd22352458c1011",
@@ -4149,27 +3384,27 @@ class VideoUploaderViewSetTests(APITestCase):
                     "metadata": {
                         "connections": {
                             "videos": {
-                                "uri": "/albums/10146228/videos",
+                                "uri": "/albums/12345678/videos",
                                 "options": ["GET"],
                                 "total": 0
                             },
                             "available_videos": {
-                                "uri": "/users/193125162/albums/10146228/available_videos",
+                                "uri": "/users/56789943/albums/12345678/available_videos",
                                 "options": ["GET"],
                                 "total": 1
                             }
                         },
                         "interactions": {
                             "add_custom_thumbnails": {
-                                "uri": "/users/193125162/albums/10146228/custom_thumbnails",
+                                "uri": "/users/56789943/albums/12345678/custom_thumbnails",
                                 "options": ["GET", "POST"]
                             },
                             "add_logos": {
-                                "uri": "/users/193125162/albums/10146228/logos",
+                                "uri": "/users/56789943/albums/12345678/logos",
                                 "options": ["GET", "POST"]
                             },
                             "add_videos": {
-                                "uri": "/users/193125162/albums/10146228/videos",
+                                "uri": "/users/56789943/albums/12345678/videos",
                                 "options": ["GET", "PUT"]
                             }
                         }
@@ -4186,7 +3421,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     "roku_provider_name": None,
                     "roku_language": None,
                     "roku_genres": [""],
-                    "share_link": "https://vimeo.com/showcase/10146228",
+                    "share_link": "https://vimeo.com/showcase/12345678",
                     "hide_upcoming": "false",
                     "seo_title": None,
                     "seo_description": None,
@@ -4199,52 +3434,50 @@ class VideoUploaderViewSetTests(APITestCase):
             ]
         }, 'status_code': 200}
         showcase_list_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         response = self.client.get(reverse('video_uploader_service-showcase-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         showcase_list_mock.assert_called_once()
-        showcase_list_mock.assert_called_once_with(user_id='193125162', query_params={})
+        showcase_list_mock.assert_called_once_with(user_id='56789943', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.showcase_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.showcase_list')
     def test_showcase_list_with_invalid_user_id(self, showcase_list_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         showcase_list_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         response = self.client.get(reverse('video_uploader_service-showcase-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         showcase_list_mock.assert_called_once()
-        showcase_list_mock.assert_called_once_with(user_id='193125162', query_params={})
+        showcase_list_mock.assert_called_once_with(user_id='56789943', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_showcase')
     def test_specific_showcase_with_invalid_user_id(self, specific_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         specific_showcase_mock.return_value = response
         user_id = 93125162
-        album_id = 10146228
+        album_id = 12345678
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_showcase_mock.assert_called_once()
-        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228', query_params={})
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='12345678', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_showcase')
     def test_specific_showcase(self, specific_showcase_mock):
         response = {"data": {
-            "uri": "/users/193125162/albums/10146228",
+            "uri": "/users/56789943/albums/12345678",
             "name": "Google",
             "description": None,
-            "link": "https://vimeo.com/showcase/10146228",
+            "link": "https://vimeo.com/showcase/12345678",
             "duration": 0,
             "created_time": "2023-01-27T16:43:06+00:00",
             "modified_time": "2023-01-27T16:43:06+00:00",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -4257,55 +3490,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -4315,80 +3509,80 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": ["GET"],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": ["GET"],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": ["GET"],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": ["GET"],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": ["GET"]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": ["GET"],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": ["GET"],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": ["GET"],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": ["GET"],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": ["PATCH"]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": ["GET"],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": ["GET"],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": ["GET"],
                             "total": 1
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": ["GET"],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": ["GET"],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
@@ -4398,16 +3592,16 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": ["GET"]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": ["GET", "POST"],
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": ["GET"],
                             "total": 1
                         },
@@ -4489,53 +3683,6 @@ class VideoUploaderViewSetTests(APITestCase):
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
                     {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
-                                                 ".com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
-                                                 ".com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
-                        ".png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
-                                                 ".com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
-                        ".png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
-                                                 ".com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
-                                                 ".png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
-                                                 ".com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
-                        ".png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn"
-                                                 ".com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play"
-                                                 ".png"
-                    },
-                    {
                         "width": 1920,
                         "height": 1080,
                         "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
@@ -4560,27 +3707,27 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "videos": {
-                        "uri": "/albums/10146228/videos",
+                        "uri": "/albums/12345678/videos",
                         "options": ["GET"],
                         "total": 0
                     },
                     "available_videos": {
-                        "uri": "/users/193125162/albums/10146228/available_videos",
+                        "uri": "/users/56789943/albums/12345678/available_videos",
                         "options": ["GET"],
                         "total": 1
                     }
                 },
                 "interactions": {
                     "add_custom_thumbnails": {
-                        "uri": "/users/193125162/albums/10146228/custom_thumbnails",
+                        "uri": "/users/56789943/albums/12345678/custom_thumbnails",
                         "options": ["GET", "POST"]
                     },
                     "add_logos": {
-                        "uri": "/users/193125162/albums/10146228/logos",
+                        "uri": "/users/56789943/albums/12345678/logos",
                         "options": ["GET", "POST"]
                     },
                     "add_videos": {
-                        "uri": "/users/193125162/albums/10146228/videos",
+                        "uri": "/users/56789943/albums/12345678/videos",
                         "options": ["GET", "PUT"]
                     }
                 }
@@ -4597,7 +3744,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "roku_provider_name": None,
             "roku_language": None,
             "roku_genres": [""],
-            "share_link": "https://vimeo.com/showcase/10146228",
+            "share_link": "https://vimeo.com/showcase/12345678",
             "hide_upcoming": "false",
             "seo_title": None,
             "seo_description": None,
@@ -4609,120 +3756,115 @@ class VideoUploaderViewSetTests(APITestCase):
         }, 'status_code': 200}
         specific_showcase_mock.return_value = response
         user_id = 93125162
-        album_id = 10146228
+        album_id = 12345678
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_showcase_mock.assert_called_once()
-        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228', query_params={})
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='12345678', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_showcase')
     def test_specific_showcase_with_invalid_id(self, specific_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         specific_showcase_mock.return_value = response
         user_id = 93125162
-        album_id = 10146228
+        album_id = 12345678
         response = self.client.get(reverse('video_uploader_service-specific-showcase', args=(user_id, album_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_showcase_mock.assert_called_once()
-        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='10146228', query_params={})
+        specific_showcase_mock.assert_called_once_with(user_id='93125162', album_id='12345678', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_video_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
         user_id = 93125162
-        album_id = 10146228
+        album_id = 12345678
         video_id = 79345428
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(video_id='79345428', user_id='93125162', album_id='10146228',
+        add_video_to_showcase_mock.assert_called_once_with(video_id='79345428', user_id='93125162', album_id='12345678',
                                                            query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_user_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
         user_id = 9312516
-        album_id = 10146228
-        video_id = 793454282
+        album_id = 12345678
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(video_id='793454282', user_id='9312516', album_id='10146228',
+        add_video_to_showcase_mock.assert_called_once_with(video_id='987654321', user_id='9312516', album_id='12345678',
                                                            query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_invalid_album_id(self, add_video_to_showcase_mock):
         response = {"data": {"message": "Resource not found"}, 'status_code': 404}
         add_video_to_showcase_mock.return_value = response
         user_id = 93125162
         album_id = 1014622
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282',
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='987654321',
                                                            query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase(self, add_video_to_showcase_mock):
         response = {"data": {"message": "The video was added."}, 'status_code': 204}
         add_video_to_showcase_mock.return_value = response
         user_id = 93125162
         album_id = 1014622
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282',
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='987654321',
                                                            query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_showcase')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_showcase')
     def test_add_video_to_showcase_with_no_add_scope(self, add_video_to_showcase_mock):
         response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_showcase_mock.return_value = response
         user_id = 93125162
         album_id = 1014622
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-showcase', args=(user_id, album_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_showcase_mock.assert_called_once()
-        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='793454282',
+        add_video_to_showcase_mock.assert_called_once_with(user_id='93125162', album_id='1014622', video_id='987654321',
                                                            query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_video')
     def test_create_video(self, create_video_mock):
         response = {"data": {
-            "uri": "/videos/793454282",
+            "uri": "/videos/987654321",
             "name": "Untitled",
             "description": None,
             "type": "video",
-            "link": "https://vimeo.com/793454282",
-            "player_embed_url": "https://player.vimeo.com/video/793454282?h=ed6ba73968",
+            "link": "https://vimeo.com/987654321",
+            "player_embed_url": "https://player.vimeo.com/video/987654321?h=ed6ba73968",
             "duration": 0,
             "width": 400,
             "language": None,
             "height": 300,
             "embed": {
-                "html": "<iframe src=\"https://player.vimeo.com/video/793454282?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
+                "html": "<iframe src=\"https://player.vimeo.com/video/987654321?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
                 "badges": {
                     "hdr": "false",
                     "live": {
@@ -4796,42 +3938,6 @@ class VideoUploaderViewSetTests(APITestCase):
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
                     {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
                         "width": 1920,
                         "height": 1080,
                         "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
@@ -4848,55 +3954,15 @@ class VideoUploaderViewSetTests(APITestCase):
             "categories": [],
             "uploader": {
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -4906,7 +3972,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "comments": {
-                        "uri": "/videos/793454282/comments",
+                        "uri": "/videos/987654321/comments",
                         "options": [
                             "GET",
                             "POST"
@@ -4914,7 +3980,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "credits": {
-                        "uri": "/videos/793454282/credits",
+                        "uri": "/videos/987654321/credits",
                         "options": [
                             "GET",
                             "POST"
@@ -4922,14 +3988,14 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "likes": {
-                        "uri": "/videos/793454282/likes",
+                        "uri": "/videos/987654321/likes",
                         "options": [
                             "GET"
                         ],
                         "total": 0
                     },
                     "pictures": {
-                        "uri": "/videos/793454282/pictures",
+                        "uri": "/videos/987654321/pictures",
                         "options": [
                             "GET",
                             "POST"
@@ -4937,7 +4003,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "texttracks": {
-                        "uri": "/videos/793454282/texttracks",
+                        "uri": "/videos/987654321/texttracks",
                         "options": [
                             "GET",
                             "POST"
@@ -4946,13 +4012,13 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "related": None,
                     "recommendations": {
-                        "uri": "/videos/793454282/recommendations",
+                        "uri": "/videos/987654321/recommendations",
                         "options": [
                             "GET"
                         ]
                     },
                     "albums": {
-                        "uri": "/videos/793454282/albums",
+                        "uri": "/videos/987654321/albums",
                         "options": [
                             "GET",
                             "PATCH"
@@ -4960,21 +4026,21 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "available_albums": {
-                        "uri": "/videos/793454282/available_albums",
+                        "uri": "/videos/987654321/available_albums",
                         "options": [
                             "GET"
                         ],
                         "total": 2
                     },
                     "available_channels": {
-                        "uri": "/videos/793454282/available_channels",
+                        "uri": "/videos/987654321/available_channels",
                         "options": [
                             "GET"
                         ],
                         "total": 1
                     },
                     "versions": {
-                        "uri": "/videos/793454282/versions",
+                        "uri": "/videos/987654321/versions",
                         "options": [
                             "GET"
                         ],
@@ -4984,7 +4050,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "watchlater": {
-                        "uri": "/users/193125162/watchlater/793454282",
+                        "uri": "/users/56789943/watchlater/987654321",
                         "options": [
                             "GET",
                             "PUT",
@@ -4994,7 +4060,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added_time": None
                     },
                     "report": {
-                        "uri": "/videos/793454282/report",
+                        "uri": "/videos/987654321/report",
                         "options": [
                             "POST"
                         ],
@@ -5009,13 +4075,13 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "view_team_members": {
-                        "uri": "/videos/793454282/teammembers",
+                        "uri": "/videos/987654321/teammembers",
                         "options": [
                             "GET"
                         ]
                     },
                     "edit": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -5024,7 +4090,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "edit_content_rating": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -5039,7 +4105,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "edit_privacy": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -5059,26 +4125,26 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "delete": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "can_update_privacy_to_public": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "trim": {
-                        "uri": "/videos/793454282/cliptrim",
+                        "uri": "/videos/987654321/cliptrim",
                         "options": [
                             "GET",
                             "POST"
                         ]
                     },
                     "validate": {
-                        "uri": "/videos/793454282/validate",
+                        "uri": "/videos/987654321/validate",
                         "options": [
                             "PUT"
                         ]
@@ -5087,11 +4153,11 @@ class VideoUploaderViewSetTests(APITestCase):
                 "is_vimeo_create": "false",
                 "is_screen_record": "false"
             },
-            "manage_link": "/manage/videos/793454282",
+            "manage_link": "/manage/videos/987654321",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -5104,55 +4170,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -5162,110 +4189,110 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": [
                                 "GET"
                             ]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": [
                                 "GET"
                             ],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": [
                                 "PATCH"
                             ]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": [
                                 "GET"
                             ],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": [
                                 "GET",
                                 "POST"
@@ -5280,13 +4307,13 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": [
                                 "GET"
                             ]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": [
                                 "GET",
                                 "POST"
@@ -5294,7 +4321,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": [
                                 "GET"
                             ],
@@ -5378,7 +4405,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "last_user_action_event_date": "2023-01-27T18:50:40+00:00",
             "review_page": {
                 "active": True,
-                "link": "https://vimeo.com/user193125162/review/793454282/dbebc4d84a",
+                "link": "https://vimeo.com/user56789943/review/987654321/dbebc4d84a",
                 "is_shareable": True
             },
             "play": {
@@ -5427,54 +4454,54 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_video')
     def test_delete_video(self, delete_video_mock):
         response = {'status_code': 204}
         delete_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_video_mock.assert_called_once()
-        delete_video_mock.assert_called_once_with(video_id='793454282', query_params={})
+        delete_video_mock.assert_called_once_with(video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_video')
     def test_delete_video_with_no_delete_scope(self, delete_video_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         delete_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_video_mock.assert_called_once()
-        delete_video_mock.assert_called_once_with(video_id='793454282', query_params={})
+        delete_video_mock.assert_called_once_with(video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_video')
     def test_delete_video_wit_invalid_id(self, delete_video_mock):
         response = {'status_code': 404}
         delete_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.delete(reverse('video_uploader_service-delete-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_video_mock.assert_called_once()
-        delete_video_mock.assert_called_once_with(video_id='793454282', query_params={})
+        delete_video_mock.assert_called_once_with(video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_video')
     def test_specific_video(self, specific_video_mock):
         response = {"data": {
-            "uri": "/videos/793454282",
+            "uri": "/videos/987654321",
             "name": "Untitled",
             "description": None,
             "type": "video",
-            "link": "https://vimeo.com/793454282",
-            "player_embed_url": "https://player.vimeo.com/video/793454282?h=ed6ba73968",
+            "link": "https://vimeo.com/987654321",
+            "player_embed_url": "https://player.vimeo.com/video/987654321?h=ed6ba73968",
             "duration": 0,
             "width": 400,
             "language": None,
             "height": 300,
             "embed": {
-                "html": "<iframe src=\"https://player.vimeo.com/video/793454282?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
+                "html": "<iframe src=\"https://player.vimeo.com/video/987654321?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
                 "badges": {
                     "hdr": "false",
                     "live": {
@@ -5547,42 +4574,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
-                    {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
+
                     {
                         "width": 1920,
                         "height": 1080,
@@ -5600,55 +4592,16 @@ class VideoUploaderViewSetTests(APITestCase):
             "categories": [],
             "uploader": {
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -5658,7 +4611,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "comments": {
-                        "uri": "/videos/793454282/comments",
+                        "uri": "/videos/987654321/comments",
                         "options": [
                             "GET",
                             "POST"
@@ -5666,7 +4619,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "credits": {
-                        "uri": "/videos/793454282/credits",
+                        "uri": "/videos/987654321/credits",
                         "options": [
                             "GET",
                             "POST"
@@ -5674,14 +4627,14 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "likes": {
-                        "uri": "/videos/793454282/likes",
+                        "uri": "/videos/987654321/likes",
                         "options": [
                             "GET"
                         ],
                         "total": 0
                     },
                     "pictures": {
-                        "uri": "/videos/793454282/pictures",
+                        "uri": "/videos/987654321/pictures",
                         "options": [
                             "GET",
                             "POST"
@@ -5689,7 +4642,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "texttracks": {
-                        "uri": "/videos/793454282/texttracks",
+                        "uri": "/videos/987654321/texttracks",
                         "options": [
                             "GET",
                             "POST"
@@ -5698,13 +4651,13 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "related": None,
                     "recommendations": {
-                        "uri": "/videos/793454282/recommendations",
+                        "uri": "/videos/987654321/recommendations",
                         "options": [
                             "GET"
                         ]
                     },
                     "albums": {
-                        "uri": "/videos/793454282/albums",
+                        "uri": "/videos/987654321/albums",
                         "options": [
                             "GET",
                             "PATCH"
@@ -5712,21 +4665,21 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "available_albums": {
-                        "uri": "/videos/793454282/available_albums",
+                        "uri": "/videos/987654321/available_albums",
                         "options": [
                             "GET"
                         ],
                         "total": 2
                     },
                     "available_channels": {
-                        "uri": "/videos/793454282/available_channels",
+                        "uri": "/videos/987654321/available_channels",
                         "options": [
                             "GET"
                         ],
                         "total": 1
                     },
                     "versions": {
-                        "uri": "/videos/793454282/versions",
+                        "uri": "/videos/987654321/versions",
                         "options": [
                             "GET"
                         ],
@@ -5736,7 +4689,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "watchlater": {
-                        "uri": "/users/193125162/watchlater/793454282",
+                        "uri": "/users/56789943/watchlater/987654321",
                         "options": [
                             "GET",
                             "PUT",
@@ -5746,7 +4699,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added_time": None
                     },
                     "report": {
-                        "uri": "/videos/793454282/report",
+                        "uri": "/videos/987654321/report",
                         "options": [
                             "POST"
                         ],
@@ -5761,13 +4714,13 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "view_team_members": {
-                        "uri": "/videos/793454282/teammembers",
+                        "uri": "/videos/987654321/teammembers",
                         "options": [
                             "GET"
                         ]
                     },
                     "edit": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -5776,7 +4729,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "edit_content_rating": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -5791,7 +4744,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "edit_privacy": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -5811,26 +4764,26 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "delete": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "can_update_privacy_to_public": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "trim": {
-                        "uri": "/videos/793454282/cliptrim",
+                        "uri": "/videos/987654321/cliptrim",
                         "options": [
                             "GET",
                             "POST"
                         ]
                     },
                     "validate": {
-                        "uri": "/videos/793454282/validate",
+                        "uri": "/videos/987654321/validate",
                         "options": [
                             "PUT"
                         ]
@@ -5839,11 +4792,11 @@ class VideoUploaderViewSetTests(APITestCase):
                 "is_vimeo_create": "false",
                 "is_screen_record": "false"
             },
-            "manage_link": "/manage/videos/793454282",
+            "manage_link": "/manage/videos/987654321",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -5856,55 +4809,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -5914,110 +4828,110 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": [
                                 "GET"
                             ]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": [
                                 "GET"
                             ],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": [
                                 "PATCH"
                             ]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": [
                                 "GET"
                             ],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": [
                                 "GET",
                                 "POST"
@@ -6032,13 +4946,13 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": [
                                 "GET"
                             ]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": [
                                 "GET",
                                 "POST"
@@ -6046,7 +4960,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": [
                                 "GET"
                             ],
@@ -6130,7 +5044,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "last_user_action_event_date": "2023-01-27T18:50:40+00:00",
             "review_page": {
                 "active": True,
-                "link": "https://vimeo.com/user193125162/review/793454282/dbebc4d84a",
+                "link": "https://vimeo.com/user56789943/review/987654321/dbebc4d84a",
                 "is_shareable": True
             },
             "play": {
@@ -6159,39 +5073,39 @@ class VideoUploaderViewSetTests(APITestCase):
             "has_audio": "false"
         }, 'status_code': 200}
         specific_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.get(reverse('video_uploader_service-specific-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         specific_video_mock.assert_called_once()
-        specific_video_mock.assert_called_once_with(video_id='793454282', query_params={})
+        specific_video_mock.assert_called_once_with(video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_video')
     def test_specific_video_wit_invalid_id(self, specific_video_mock):
         response = {'status_code': 404}
         specific_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         response = self.client.get(reverse('video_uploader_service-specific-video', args=(video_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         specific_video_mock.assert_called_once()
-        specific_video_mock.assert_called_once_with(video_id='793454282', query_params={})
+        specific_video_mock.assert_called_once_with(video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_video')
     def test_update_video(self, update_video_mock):
         response = {"data": {
-            "uri": "/videos/793454282",
+            "uri": "/videos/987654321",
             "name": "Untitled",
             "description": None,
             "type": "video",
-            "link": "https://vimeo.com/793454282",
-            "player_embed_url": "https://player.vimeo.com/video/793454282?h=ed6ba73968",
+            "link": "https://vimeo.com/987654321",
+            "player_embed_url": "https://player.vimeo.com/video/987654321?h=ed6ba73968",
             "duration": 0,
             "width": 400,
             "language": None,
             "height": 300,
             "embed": {
-                "html": "<iframe src=\"https://player.vimeo.com/video/793454282?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
+                "html": "<iframe src=\"https://player.vimeo.com/video/987654321?h=ed6ba73968&amp;title=0&amp;byline=0&amp;portrait=0&amp;speed=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"Untitled\"></iframe>",
                 "badges": {
                     "hdr": "false",
                     "live": {
@@ -6264,42 +5178,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 "type": "default",
                 "base_link": "https://i.vimeocdn.com/video/default",
                 "sizes": [
-                    {
-                        "width": 100,
-                        "height": 75,
-                        "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 200,
-                        "height": 150,
-                        "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 295,
-                        "height": 166,
-                        "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 640,
-                        "height": 360,
-                        "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 960,
-                        "height": 540,
-                        "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
-                    {
-                        "width": 1280,
-                        "height": 720,
-                        "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                        "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                    },
+
                     {
                         "width": 1920,
                         "height": 1080,
@@ -6317,55 +5196,16 @@ class VideoUploaderViewSetTests(APITestCase):
             "categories": [],
             "uploader": {
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -6375,7 +5215,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "comments": {
-                        "uri": "/videos/793454282/comments",
+                        "uri": "/videos/987654321/comments",
                         "options": [
                             "GET",
                             "POST"
@@ -6383,7 +5223,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "credits": {
-                        "uri": "/videos/793454282/credits",
+                        "uri": "/videos/987654321/credits",
                         "options": [
                             "GET",
                             "POST"
@@ -6391,14 +5231,14 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "likes": {
-                        "uri": "/videos/793454282/likes",
+                        "uri": "/videos/987654321/likes",
                         "options": [
                             "GET"
                         ],
                         "total": 0
                     },
                     "pictures": {
-                        "uri": "/videos/793454282/pictures",
+                        "uri": "/videos/987654321/pictures",
                         "options": [
                             "GET",
                             "POST"
@@ -6406,7 +5246,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "texttracks": {
-                        "uri": "/videos/793454282/texttracks",
+                        "uri": "/videos/987654321/texttracks",
                         "options": [
                             "GET",
                             "POST"
@@ -6415,13 +5255,13 @@ class VideoUploaderViewSetTests(APITestCase):
                     },
                     "related": None,
                     "recommendations": {
-                        "uri": "/videos/793454282/recommendations",
+                        "uri": "/videos/987654321/recommendations",
                         "options": [
                             "GET"
                         ]
                     },
                     "albums": {
-                        "uri": "/videos/793454282/albums",
+                        "uri": "/videos/987654321/albums",
                         "options": [
                             "GET",
                             "PATCH"
@@ -6429,21 +5269,21 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "available_albums": {
-                        "uri": "/videos/793454282/available_albums",
+                        "uri": "/videos/987654321/available_albums",
                         "options": [
                             "GET"
                         ],
                         "total": 2
                     },
                     "available_channels": {
-                        "uri": "/videos/793454282/available_channels",
+                        "uri": "/videos/987654321/available_channels",
                         "options": [
                             "GET"
                         ],
                         "total": 1
                     },
                     "versions": {
-                        "uri": "/videos/793454282/versions",
+                        "uri": "/videos/987654321/versions",
                         "options": [
                             "GET"
                         ],
@@ -6453,7 +5293,7 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "watchlater": {
-                        "uri": "/users/193125162/watchlater/793454282",
+                        "uri": "/users/56789943/watchlater/987654321",
                         "options": [
                             "GET",
                             "PUT",
@@ -6463,7 +5303,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "added_time": None
                     },
                     "report": {
-                        "uri": "/videos/793454282/report",
+                        "uri": "/videos/987654321/report",
                         "options": [
                             "POST"
                         ],
@@ -6478,13 +5318,13 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "view_team_members": {
-                        "uri": "/videos/793454282/teammembers",
+                        "uri": "/videos/987654321/teammembers",
                         "options": [
                             "GET"
                         ]
                     },
                     "edit": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -6493,7 +5333,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "edit_content_rating": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -6508,7 +5348,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "edit_privacy": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ],
@@ -6528,26 +5368,26 @@ class VideoUploaderViewSetTests(APITestCase):
                         ]
                     },
                     "delete": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "can_update_privacy_to_public": {
-                        "uri": "/videos/793454282",
+                        "uri": "/videos/987654321",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "trim": {
-                        "uri": "/videos/793454282/cliptrim",
+                        "uri": "/videos/987654321/cliptrim",
                         "options": [
                             "GET",
                             "POST"
                         ]
                     },
                     "validate": {
-                        "uri": "/videos/793454282/validate",
+                        "uri": "/videos/987654321/validate",
                         "options": [
                             "PUT"
                         ]
@@ -6556,11 +5396,11 @@ class VideoUploaderViewSetTests(APITestCase):
                 "is_vimeo_create": "false",
                 "is_screen_record": "false"
             },
-            "manage_link": "/manage/videos/793454282",
+            "manage_link": "/manage/videos/987654321",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -6573,55 +5413,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -6631,110 +5432,110 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": [
                                 "GET"
                             ]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": [
                                 "GET"
                             ],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": [
                                 "PATCH"
                             ]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": [
                                 "GET"
                             ],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": [
                                 "GET",
                                 "POST"
@@ -6749,13 +5550,13 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": [
                                 "GET"
                             ]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": [
                                 "GET",
                                 "POST"
@@ -6763,7 +5564,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 1
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": [
                                 "GET"
                             ],
@@ -6847,7 +5648,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "last_user_action_event_date": "2023-01-27T18:50:40+00:00",
             "review_page": {
                 "active": True,
-                "link": "https://vimeo.com/user193125162/review/793454282/dbebc4d84a",
+                "link": "https://vimeo.com/user56789943/review/987654321/dbebc4d84a",
                 "is_shareable": True
             },
             "play": {
@@ -6876,7 +5677,7 @@ class VideoUploaderViewSetTests(APITestCase):
             "has_audio": "false"
         }, 'status_code': 200}
         update_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         data = {
             "description": "string",
             "embedded": {
@@ -6924,14 +5725,14 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_video_mock.assert_called_once()
-        update_video_mock.assert_called_once_with(video_id='793454282', payload=data, query_params={})
+        update_video_mock.assert_called_once_with(video_id='987654321', payload=data, query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_video')
     def test_update_video_wit_invalid_id(self, update_video_mock):
         response = {'status_code': 404}
         update_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         data = {
             "description": "string",
             "embedded": {
@@ -6979,10 +5780,10 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_video_mock.assert_called_once()
-        update_video_mock.assert_called_once_with(video_id='793454282', payload=data, query_params={})
+        update_video_mock.assert_called_once_with(video_id='987654321', payload=data, query_params={})
 
     def test_update_video_wit_invalid_data(self):
-        video_id = 793454282
+        video_id = 987654321
         data = {
             "description": 23,
             "embedded": {
@@ -7031,11 +5832,11 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_video')
     def test_update_video_with_no_edit_scope(self, update_video_mock):
         response = {'data': {'error': 'Your access token does not have the "edit" scope'}, 'status_code': 403}
         update_video_mock.return_value = response
-        video_id = 793454282
+        video_id = 987654321
         data = {
             "description": "string",
             "embedded": {
@@ -7083,10 +5884,10 @@ class VideoUploaderViewSetTests(APITestCase):
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_video_mock.assert_called_once()
-        update_video_mock.assert_called_once_with(video_id='793454282', payload=data, query_params={})
+        update_video_mock.assert_called_once_with(video_id='987654321', payload=data, query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.user_video_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.user_video_list')
     def test_user_video_list(self, user_video_list_mock):
         response = {"data": {
             "total": 2,
@@ -7095,23 +5896,23 @@ class VideoUploaderViewSetTests(APITestCase):
             "paging": {
                 "next": None,
                 "previous": None,
-                "first": "/users/193125162/videos?page=1",
-                "last": "/users/193125162/videos?page=1"
+                "first": "/users/56789943/videos?page=1",
+                "last": "/users/56789943/videos?page=1"
             },
             "data": [
                 {
-                    "uri": "/videos/793501641",
+                    "uri": "/videos/987654321",
                     "name": "string",
                     "description": "string",
                     "type": "video",
-                    "link": "https://vimeo.com/793501641",
-                    "player_embed_url": "https://player.vimeo.com/video/793501641?h=ff0f65aba9",
+                    "link": "https://vimeo.com/987654321",
+                    "player_embed_url": "https://player.vimeo.com/video/987654321?h=ff0f65aba9",
                     "duration": 0,
                     "width": 400,
                     "language": None,
                     "height": 300,
                     "embed": {
-                        "html": "<iframe src=\"https://player.vimeo.com/video/793501641?h=ff0f65aba9&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"string\"></iframe>",
+                        "html": "<iframe src=\"https://player.vimeo.com/video/987654321?h=ff0f65aba9&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=262102\" width=\"400\" height=\"300\" frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen title=\"string\"></iframe>",
                         "badges": {
                             "hdr": "false",
                             "live": {
@@ -7185,42 +5986,6 @@ class VideoUploaderViewSetTests(APITestCase):
                         "base_link": "https://i.vimeocdn.com/video/default",
                         "sizes": [
                             {
-                                "width": 100,
-                                "height": 75,
-                                "link": "https://i.vimeocdn.com/video/default_100x75?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_100x75&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 200,
-                                "height": 150,
-                                "link": "https://i.vimeocdn.com/video/default_200x150?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_200x150&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 295,
-                                "height": 166,
-                                "link": "https://i.vimeocdn.com/video/default_295x166?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_295x166&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 640,
-                                "height": 360,
-                                "link": "https://i.vimeocdn.com/video/default_640x360?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_640x360&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 960,
-                                "height": 540,
-                                "link": "https://i.vimeocdn.com/video/default_960x540?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_960x540&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
-                                "width": 1280,
-                                "height": 720,
-                                "link": "https://i.vimeocdn.com/video/default_1280x720?r=pad",
-                                "link_with_play_button": "https://i.vimeocdn.com/filter/overlay?src0=https%3A%2F%2Fi.vimeocdn.com%2Fvideo%2Fdefault_1280x720&src1=http%3A%2F%2Ff.vimeocdn.com%2Fp%2Fimages%2Fcrawler_play.png"
-                            },
-                            {
                                 "width": 1920,
                                 "height": 1080,
                                 "link": "https://i.vimeocdn.com/video/default_1920x1080?r=pad",
@@ -7237,55 +6002,15 @@ class VideoUploaderViewSetTests(APITestCase):
                     "categories": [],
                     "uploader": {
                         "pictures": {
-                            "uri": "/users/193125162/pictures/82436258",
+                            "uri": "/users/56789943/pictures/12345678",
                             "active": True,
                             "type": "custom",
-                            "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                            "base_link": "https://i.vimeocdn.com/portrait/12345678",
                             "sizes": [
-                                {
-                                    "width": 30,
-                                    "height": 30,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                                },
-                                {
-                                    "width": 72,
-                                    "height": 72,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                                },
-                                {
-                                    "width": 75,
-                                    "height": 75,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                                },
-                                {
-                                    "width": 100,
-                                    "height": 100,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                                },
-                                {
-                                    "width": 144,
-                                    "height": 144,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                                },
-                                {
-                                    "width": 216,
-                                    "height": 216,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                                },
-                                {
-                                    "width": 288,
-                                    "height": 288,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                                },
-                                {
-                                    "width": 300,
-                                    "height": 300,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                                },
                                 {
                                     "width": 360,
                                     "height": 360,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                                    "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                                 }
                             ],
                             "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -7295,7 +6020,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     "metadata": {
                         "connections": {
                             "comments": {
-                                "uri": "/videos/793501641/comments",
+                                "uri": "/videos/987654321/comments",
                                 "options": [
                                     "GET",
                                     "POST"
@@ -7303,7 +6028,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "total": 0
                             },
                             "credits": {
-                                "uri": "/videos/793501641/credits",
+                                "uri": "/videos/987654321/credits",
                                 "options": [
                                     "GET",
                                     "POST"
@@ -7311,14 +6036,14 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "total": 0
                             },
                             "likes": {
-                                "uri": "/videos/793501641/likes",
+                                "uri": "/videos/987654321/likes",
                                 "options": [
                                     "GET"
                                 ],
                                 "total": 0
                             },
                             "pictures": {
-                                "uri": "/videos/793501641/pictures",
+                                "uri": "/videos/987654321/pictures",
                                 "options": [
                                     "GET",
                                     "POST"
@@ -7326,7 +6051,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "total": 0
                             },
                             "texttracks": {
-                                "uri": "/videos/793501641/texttracks",
+                                "uri": "/videos/987654321/texttracks",
                                 "options": [
                                     "GET",
                                     "POST"
@@ -7334,19 +6059,19 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "total": 0
                             },
                             "related": {
-                                "uri": "/users/193125162/videos?offset=1",
+                                "uri": "/users/56789943/videos?offset=1",
                                 "options": [
                                     "GET"
                                 ]
                             },
                             "recommendations": {
-                                "uri": "/videos/793501641/recommendations",
+                                "uri": "/videos/987654321/recommendations",
                                 "options": [
                                     "GET"
                                 ]
                             },
                             "albums": {
-                                "uri": "/videos/793501641/albums",
+                                "uri": "/videos/987654321/albums",
                                 "options": [
                                     "GET",
                                     "PATCH"
@@ -7354,21 +6079,21 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "total": 0
                             },
                             "available_albums": {
-                                "uri": "/videos/793501641/available_albums",
+                                "uri": "/videos/987654321/available_albums",
                                 "options": [
                                     "GET"
                                 ],
                                 "total": 2
                             },
                             "available_channels": {
-                                "uri": "/videos/793501641/available_channels",
+                                "uri": "/videos/987654321/available_channels",
                                 "options": [
                                     "GET"
                                 ],
                                 "total": 1
                             },
                             "versions": {
-                                "uri": "/videos/793501641/versions",
+                                "uri": "/videos/987654321/versions",
                                 "options": [
                                     "GET"
                                 ],
@@ -7378,7 +6103,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "interactions": {
                             "watchlater": {
-                                "uri": "/users/193125162/watchlater/793501641",
+                                "uri": "/users/56789943/watchlater/987654321",
                                 "options": [
                                     "GET",
                                     "PUT",
@@ -7388,7 +6113,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "added_time": None
                             },
                             "report": {
-                                "uri": "/videos/793501641/report",
+                                "uri": "/videos/987654321/report",
                                 "options": [
                                     "POST"
                                 ],
@@ -7403,13 +6128,13 @@ class VideoUploaderViewSetTests(APITestCase):
                                 ]
                             },
                             "view_team_members": {
-                                "uri": "/videos/793501641/teammembers",
+                                "uri": "/videos/987654321/teammembers",
                                 "options": [
                                     "GET"
                                 ]
                             },
                             "edit": {
-                                "uri": "/videos/793501641",
+                                "uri": "/videos/987654321",
                                 "options": [
                                     "PATCH"
                                 ],
@@ -7418,7 +6143,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 ]
                             },
                             "edit_content_rating": {
-                                "uri": "/videos/793501641",
+                                "uri": "/videos/987654321",
                                 "options": [
                                     "PATCH"
                                 ],
@@ -7433,7 +6158,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 ]
                             },
                             "edit_privacy": {
-                                "uri": "/videos/793501641",
+                                "uri": "/videos/987654321",
                                 "options": [
                                     "PATCH"
                                 ],
@@ -7453,26 +6178,26 @@ class VideoUploaderViewSetTests(APITestCase):
                                 ]
                             },
                             "delete": {
-                                "uri": "/videos/793501641",
+                                "uri": "/videos/987654321",
                                 "options": [
                                     "DELETE"
                                 ]
                             },
                             "can_update_privacy_to_public": {
-                                "uri": "/videos/793501641",
+                                "uri": "/videos/987654321",
                                 "options": [
                                     "PATCH"
                                 ]
                             },
                             "trim": {
-                                "uri": "/videos/793501641/cliptrim",
+                                "uri": "/videos/987654321/cliptrim",
                                 "options": [
                                     "GET",
                                     "POST"
                                 ]
                             },
                             "validate": {
-                                "uri": "/videos/793501641/validate",
+                                "uri": "/videos/987654321/validate",
                                 "options": [
                                     "PUT"
                                 ]
@@ -7481,11 +6206,11 @@ class VideoUploaderViewSetTests(APITestCase):
                         "is_vimeo_create": "false",
                         "is_screen_record": "false"
                     },
-                    "manage_link": "/manage/videos/793501641",
+                    "manage_link": "/manage/videos/987654321",
                     "user": {
-                        "uri": "/users/193125162",
-                        "name": "Saad Bin Abid",
-                        "link": "https://vimeo.com/user193125162",
+                        "uri": "/users/56789943",
+                        "name": "test user",
+                        "link": "https://vimeo.com/user56789943",
                         "capabilities": {
                             "hasLiveSubscription": "false",
                             "hasEnterpriseLihp": "false",
@@ -7498,55 +6223,16 @@ class VideoUploaderViewSetTests(APITestCase):
                         "short_bio": None,
                         "created_time": "2023-01-24T06:34:04+00:00",
                         "pictures": {
-                            "uri": "/users/193125162/pictures/82436258",
+                            "uri": "/users/56789943/pictures/12345678",
                             "active": True,
                             "type": "custom",
-                            "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                            "base_link": "https://i.vimeocdn.com/portrait/12345678",
                             "sizes": [
-                                {
-                                    "width": 30,
-                                    "height": 30,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                                },
-                                {
-                                    "width": 72,
-                                    "height": 72,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                                },
-                                {
-                                    "width": 75,
-                                    "height": 75,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                                },
-                                {
-                                    "width": 100,
-                                    "height": 100,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                                },
-                                {
-                                    "width": 144,
-                                    "height": 144,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                                },
-                                {
-                                    "width": 216,
-                                    "height": 216,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                                },
-                                {
-                                    "width": 288,
-                                    "height": 288,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                                },
-                                {
-                                    "width": 300,
-                                    "height": 300,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                                },
+
                                 {
                                     "width": 360,
                                     "height": 360,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                                    "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                                 }
                             ],
                             "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -7556,110 +6242,110 @@ class VideoUploaderViewSetTests(APITestCase):
                         "metadata": {
                             "connections": {
                                 "albums": {
-                                    "uri": "/users/193125162/albums",
+                                    "uri": "/users/56789943/albums",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 2
                                 },
                                 "appearances": {
-                                    "uri": "/users/193125162/appearances",
+                                    "uri": "/users/56789943/appearances",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "categories": {
-                                    "uri": "/users/193125162/categories",
+                                    "uri": "/users/56789943/categories",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "channels": {
-                                    "uri": "/users/193125162/channels",
+                                    "uri": "/users/56789943/channels",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "feed": {
-                                    "uri": "/users/193125162/feed",
+                                    "uri": "/users/56789943/feed",
                                     "options": [
                                         "GET"
                                     ]
                                 },
                                 "followers": {
-                                    "uri": "/users/193125162/followers",
+                                    "uri": "/users/56789943/followers",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "following": {
-                                    "uri": "/users/193125162/following",
+                                    "uri": "/users/56789943/following",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "groups": {
-                                    "uri": "/users/193125162/groups",
+                                    "uri": "/users/56789943/groups",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 3
                                 },
                                 "likes": {
-                                    "uri": "/users/193125162/likes",
+                                    "uri": "/users/56789943/likes",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "membership": {
-                                    "uri": "/users/193125162/membership/",
+                                    "uri": "/users/56789943/membership/",
                                     "options": [
                                         "PATCH"
                                     ]
                                 },
                                 "moderated_channels": {
-                                    "uri": "/users/193125162/channels?filter=moderated",
+                                    "uri": "/users/56789943/channels?filter=moderated",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 1
                                 },
                                 "portfolios": {
-                                    "uri": "/users/193125162/portfolios",
+                                    "uri": "/users/56789943/portfolios",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "videos": {
-                                    "uri": "/users/193125162/videos",
+                                    "uri": "/users/56789943/videos",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 2
                                 },
                                 "watchlater": {
-                                    "uri": "/users/193125162/watchlater",
+                                    "uri": "/users/56789943/watchlater",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "shared": {
-                                    "uri": "/users/193125162/shared/videos",
+                                    "uri": "/users/56789943/shared/videos",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "pictures": {
-                                    "uri": "/users/193125162/pictures",
+                                    "uri": "/users/56789943/pictures",
                                     "options": [
                                         "GET",
                                         "POST"
@@ -7674,13 +6360,13 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "total": 0
                                 },
                                 "folders_root": {
-                                    "uri": "/users/193125162/folders/root",
+                                    "uri": "/users/56789943/folders/root",
                                     "options": [
                                         "GET"
                                     ]
                                 },
                                 "folders": {
-                                    "uri": "/users/193125162/folders",
+                                    "uri": "/users/56789943/folders",
                                     "options": [
                                         "GET",
                                         "POST"
@@ -7688,7 +6374,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "total": 4
                                 },
                                 "teams": {
-                                    "uri": "/users/193125162/teams",
+                                    "uri": "/users/56789943/teams",
                                     "options": [
                                         "GET"
                                     ],
@@ -7772,7 +6458,7 @@ class VideoUploaderViewSetTests(APITestCase):
                     "last_user_action_event_date": "2023-01-27T21:48:42+00:00",
                     "review_page": {
                         "active": True,
-                        "link": "https://vimeo.com/user193125162/review/793501641/ab06e70235",
+                        "link": "https://vimeo.com/user56789943/review/987654321/ab06e70235",
                         "is_shareable": True
                     },
                     "play": {
@@ -7803,97 +6489,97 @@ class VideoUploaderViewSetTests(APITestCase):
             ]
         }, 'status_code': 200}
         user_video_list_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         response = self.client.get(reverse('video_uploader_service-user-video-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         user_video_list_mock.assert_called_once()
-        user_video_list_mock.assert_called_once_with(user_id='193125162', query_params={})
+        user_video_list_mock.assert_called_once_with(user_id='56789943', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.user_video_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.user_video_list')
     def test_user_video_list_with_invalid_user_id(self, user_video_list_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         user_video_list_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         response = self.client.get(reverse('video_uploader_service-user-video-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         user_video_list_mock.assert_called_once()
-        user_video_list_mock.assert_called_once_with(user_id='193125162', query_params={})
+        user_video_list_mock.assert_called_once_with(user_id='56789943', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.like_video')
     def test_like_video_with_invalid_user_id(self, like_video_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         like_video_mock.return_value = response
-        user_id = 193125162
-        video_id = 793501641
+        user_id = 56789943
+        video_id = 987654321
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         like_video_mock.assert_called_once()
-        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
+        like_video_mock.assert_called_once_with(user_id='56789943', video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.like_video')
     def test_like_video(self, like_video_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 204}
         like_video_mock.return_value = response
-        user_id = 193125162
-        video_id = 793501641
+        user_id = 56789943
+        video_id = 987654321
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         like_video_mock.assert_called_once()
-        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
+        like_video_mock.assert_called_once_with(user_id='56789943', video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.like_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.like_video')
     def test_like_video_with_no_like_scope(self, like_video_mock):
         response = {'data': {'error': 'Your access token does not have the "like" scope'}, 'status_code': 403}
         like_video_mock.return_value = response
-        user_id = 193125162
-        video_id = 793501641
+        user_id = 56789943
+        video_id = 987654321
         response = self.client.put(reverse('video_uploader_service-like-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         like_video_mock.assert_called_once()
-        like_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
+        like_video_mock.assert_called_once_with(user_id='56789943', video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.unlike_video')
     def test_unlike_video_with_invalid_user_id(self, unlike_video_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         unlike_video_mock.return_value = response
         user_id = 19312516
-        video_id = 793501641
+        video_id = 987654321
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         unlike_video_mock.assert_called_once()
-        unlike_video_mock.assert_called_once_with(user_id='19312516', video_id='793501641', query_params={})
+        unlike_video_mock.assert_called_once_with(user_id='19312516', video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.unlike_video')
     def test_unlike_video(self, unlike_video_mock):
         response = {"status_code": 204}
         unlike_video_mock.return_value = response
-        user_id = 193125162
-        video_id = 793501641
+        user_id = 56789943
+        video_id = 987654321
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         unlike_video_mock.assert_called_once()
-        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
+        unlike_video_mock.assert_called_once_with(user_id='56789943', video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.unlike_video')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.unlike_video')
     def test_unlike_video_with_no_unlike_scope(self, unlike_video_mock):
         response = {'data': {'error': 'Your access token does not have the "unlike" scope'}, 'status_code': 403}
         unlike_video_mock.return_value = response
-        user_id = 193125162
-        video_id = 793501641
+        user_id = 56789943
+        video_id = 987654321
         response = self.client.delete(reverse('video_uploader_service-unlike-video', args=(user_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         unlike_video_mock.assert_called_once()
-        unlike_video_mock.assert_called_once_with(user_id='193125162', video_id='793501641', query_params={})
+        unlike_video_mock.assert_called_once_with(user_id='56789943', video_id='987654321', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_folder')
     def test_create_folder(self, create_folder_mock):
         response = {"data": {
             "created_time": "2023-01-27T23:01:24+00:00",
@@ -7904,15 +6590,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 "view": "nobody"
             },
             "resource_key": "715b8c49dd3a1a0a9301b9f37bf6b1e097af401b",
-            "uri": "/users/193125162/projects/14724344",
+            "uri": "/users/56789943/projects/14724344",
             "link": None,
             "pinned_on": None,
             "is_pinned": "false",
             "is_private_to_user": "false",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -7925,55 +6611,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -7983,110 +6629,110 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": [
                                 "GET"
                             ]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": [
                                 "GET"
                             ],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": [
                                 "PATCH"
                             ]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": [
                                 "GET"
                             ],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": [
                                 "GET",
                                 "POST"
@@ -8101,13 +6747,13 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": [
                                 "GET"
                             ]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": [
                                 "GET",
                                 "POST"
@@ -8115,7 +6761,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 5
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": [
                                 "GET"
                             ],
@@ -8199,14 +6845,14 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "items": {
-                        "uri": "/users/193125162/projects/14724344/items",
+                        "uri": "/users/56789943/projects/14724344/items",
                         "options": [
                             "GET"
                         ],
                         "total": 0
                     },
                     "videos": {
-                        "uri": "/users/193125162/projects/14724344/videos",
+                        "uri": "/users/56789943/projects/14724344/videos",
                         "options": [
                             "GET",
                             "DELETE",
@@ -8215,7 +6861,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "folders": {
-                        "uri": "/users/193125162/projects/14724344/items",
+                        "uri": "/users/56789943/projects/14724344/items",
                         "options": [
                             "GET",
                             "DELETE",
@@ -8227,49 +6873,49 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "edit": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "move_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "upload_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "POST"
                         ]
                     },
                     "view": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "GET"
                         ]
                     },
                     "edit_settings": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "delete": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "delete_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "add_subfolder": {
-                        "uri": "/user/193125162/projects",
+                        "uri": "/user/56789943/projects",
                         "options": [
                             "POST"
                         ],
@@ -8285,7 +6931,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             {
                                 "name": "parent_folder_uri",
                                 "required": True,
-                                "value": "/users/193125162/projects/14724344"
+                                "value": "/users/56789943/projects/14724344"
                             }
                         ]
                     }
@@ -8293,7 +6939,7 @@ class VideoUploaderViewSetTests(APITestCase):
             }
         }, "status_code": 201}
         create_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         data = {
             "name": "new folder"
         }
@@ -8301,14 +6947,14 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         create_folder_mock.assert_called_once()
-        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data, query_params={})
+        create_folder_mock.assert_called_once_with(user_id='56789943', payload=data, query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_folder')
     def test_create_folder_with_invalid_user_id(self, create_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         create_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         data = {
             "name": "new folder"
         }
@@ -8316,14 +6962,14 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         create_folder_mock.assert_called_once()
-        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data, query_params={})
+        create_folder_mock.assert_called_once_with(user_id='56789943', payload=data, query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.create_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.create_folder')
     def test_create_folder_with_no_create_scope(self, create_folder_mock):
         response = {'data': {'error': 'Your access token does not have the "create" scope'}, 'status_code': 403}
         create_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         data = {
             "name": "new folder"
         }
@@ -8331,65 +6977,65 @@ class VideoUploaderViewSetTests(APITestCase):
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         create_folder_mock.assert_called_once()
-        create_folder_mock.assert_called_once_with(user_id='193125162', payload=data, query_params={})
+        create_folder_mock.assert_called_once_with(user_id='56789943', payload=data, query_params={})
 
     def test_create_folder_without_data(self):
-        user_id = 193125162
+        user_id = 56789943
         data = {}
         response = self.client.post(reverse('video_uploader_service-create-folder', args=(user_id,)), data=data,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_folder')
     def test_delete_folder_with_invalid_id(self, delete_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         delete_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
+        delete_folder_mock.assert_called_once_with(user_id='56789943', project_id='14724344', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_folder')
     def test_delete_folder_with_invalid_user_id(self, delete_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         delete_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
+        delete_folder_mock.assert_called_once_with(user_id='56789943', project_id='14724344', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_folder')
     def test_delete_folder(self, delete_folder_mock):
         response = {"data": {"message": "Item deleted successfully."}, "status_code": 204}
         delete_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
+        delete_folder_mock.assert_called_once_with(user_id='56789943', project_id='14724344', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.delete_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.delete_folder')
     def test_delete_folder_with_no_delete_scope(self, delete_folder_mock):
         response = {'data': {'error': 'Your access token does not have the "delete" scope'}, 'status_code': 403}
         delete_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         response = self.client.delete(reverse('video_uploader_service-delete-folder', args=(user_id, folder_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         delete_folder_mock.assert_called_once()
-        delete_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', query_params={})
+        delete_folder_mock.assert_called_once_with(user_id='56789943', project_id='14724344', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_folder')
     def test_update_folder(self, update_folder_mock):
         response = {"data": {
             "created_time": "2023-01-27T23:01:24+00:00",
@@ -8400,15 +7046,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 "view": "nobody"
             },
             "resource_key": "715b8c49dd3a1a0a9301b9f37bf6b1e097af401b",
-            "uri": "/users/193125162/projects/14724344",
+            "uri": "/users/56789943/projects/14724344",
             "link": None,
             "pinned_on": None,
             "is_pinned": "false",
             "is_private_to_user": "false",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -8421,55 +7067,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -8479,110 +7086,110 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": [
                                 "GET"
                             ]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": [
                                 "GET"
                             ],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": [
                                 "PATCH"
                             ]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": [
                                 "GET"
                             ],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": [
                                 "GET",
                                 "POST"
@@ -8597,13 +7204,13 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": [
                                 "GET"
                             ]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": [
                                 "GET",
                                 "POST"
@@ -8611,7 +7218,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 5
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": [
                                 "GET"
                             ],
@@ -8695,14 +7302,14 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "items": {
-                        "uri": "/users/193125162/projects/14724344/items",
+                        "uri": "/users/56789943/projects/14724344/items",
                         "options": [
                             "GET"
                         ],
                         "total": 0
                     },
                     "videos": {
-                        "uri": "/users/193125162/projects/14724344/videos",
+                        "uri": "/users/56789943/projects/14724344/videos",
                         "options": [
                             "GET",
                             "DELETE",
@@ -8711,7 +7318,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "folders": {
-                        "uri": "/users/193125162/projects/14724344/items",
+                        "uri": "/users/56789943/projects/14724344/items",
                         "options": [
                             "GET",
                             "DELETE",
@@ -8723,49 +7330,49 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "edit": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "move_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "upload_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "POST"
                         ]
                     },
                     "view": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "GET"
                         ]
                     },
                     "edit_settings": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "delete": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "delete_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "add_subfolder": {
-                        "uri": "/user/193125162/projects",
+                        "uri": "/user/56789943/projects",
                         "options": [
                             "POST"
                         ],
@@ -8781,7 +7388,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             {
                                 "name": "parent_folder_uri",
                                 "required": True,
-                                "value": "/users/193125162/projects/14724344"
+                                "value": "/users/56789943/projects/14724344"
                             }
                         ]
                     }
@@ -8789,7 +7396,7 @@ class VideoUploaderViewSetTests(APITestCase):
             }
         }, "status_code": 200}
         update_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         data = {
             "name": "new collection 2023"
@@ -8798,15 +7405,15 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         update_folder_mock.assert_called_once()
-        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data,
+        update_folder_mock.assert_called_once_with(user_id='56789943', project_id='14724344', payload=data,
                                                    query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_folder')
     def test_update_folder_with_invalid_id(self, update_folder_mock):
         response = {"data": {}, "status_code": 404}
         update_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         data = {
             "name": "new collection 2023"
@@ -8815,15 +7422,15 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         update_folder_mock.assert_called_once()
-        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data,
+        update_folder_mock.assert_called_once_with(user_id='56789943', project_id='14724344', payload=data,
                                                    query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.update_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.update_folder')
     def test_update_folder_with_no_edit_scope(self, update_folder_mock):
         response = {'data': {'error': 'Your access token does not have the "edit" scope'}, 'status_code': 403}
         update_folder_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         data = {
             "name": "new collection 2023"
@@ -8832,11 +7439,11 @@ class VideoUploaderViewSetTests(APITestCase):
                                      data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         update_folder_mock.assert_called_once()
-        update_folder_mock.assert_called_once_with(user_id='193125162', project_id='14724344', payload=data,
+        update_folder_mock.assert_called_once_with(user_id='56789943', project_id='14724344', payload=data,
                                                    query_params={})
 
     def test_update_folder_with_invalid_data(self):
-        user_id = 193125162
+        user_id = 56789943
         folder_id = 14724344
         data = {
             "name": "string",
@@ -8847,7 +7454,7 @@ class VideoUploaderViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.folder_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.folder_list')
     def test_folder_list_with_invalid_user_id(self, folder_list_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         folder_list_mock.return_value = response
@@ -8858,7 +7465,7 @@ class VideoUploaderViewSetTests(APITestCase):
         folder_list_mock.assert_called_once_with(user_id='19312516', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.folder_list')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.folder_list')
     def test_folder_list(self, folder_list_mock):
         response = {"data": {
             "total": 6,
@@ -8867,8 +7474,8 @@ class VideoUploaderViewSetTests(APITestCase):
             "paging": {
                 "next": None,
                 "previous": None,
-                "first": "/users/193125162/projects?page=1",
-                "last": "/users/193125162/projects?page=1"
+                "first": "/users/56789943/projects?page=1",
+                "last": "/users/56789943/projects?page=1"
             },
             "data": [
                 {
@@ -8880,15 +7487,15 @@ class VideoUploaderViewSetTests(APITestCase):
                         "view": "nobody"
                     },
                     "resource_key": "c0b1c5a19037f84e7258b367d763b20740584d26",
-                    "uri": "/users/193125162/projects/14722366",
+                    "uri": "/users/56789943/projects/14722366",
                     "link": None,
                     "pinned_on": None,
                     "is_pinned": "false",
                     "is_private_to_user": "false",
                     "user": {
-                        "uri": "/users/193125162",
-                        "name": "Saad Bin Abid",
-                        "link": "https://vimeo.com/user193125162",
+                        "uri": "/users/56789943",
+                        "name": "test user",
+                        "link": "https://vimeo.com/user56789943",
                         "capabilities": {
                             "hasLiveSubscription": "false",
                             "hasEnterpriseLihp": "false",
@@ -8901,55 +7508,16 @@ class VideoUploaderViewSetTests(APITestCase):
                         "short_bio": None,
                         "created_time": "2023-01-24T06:34:04+00:00",
                         "pictures": {
-                            "uri": "/users/193125162/pictures/82436258",
+                            "uri": "/users/56789943/pictures/12345678",
                             "active": True,
                             "type": "custom",
-                            "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                            "base_link": "https://i.vimeocdn.com/portrait/12345678",
                             "sizes": [
-                                {
-                                    "width": 30,
-                                    "height": 30,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                                },
-                                {
-                                    "width": 72,
-                                    "height": 72,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                                },
-                                {
-                                    "width": 75,
-                                    "height": 75,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                                },
-                                {
-                                    "width": 100,
-                                    "height": 100,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                                },
-                                {
-                                    "width": 144,
-                                    "height": 144,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                                },
-                                {
-                                    "width": 216,
-                                    "height": 216,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                                },
-                                {
-                                    "width": 288,
-                                    "height": 288,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                                },
-                                {
-                                    "width": 300,
-                                    "height": 300,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                                },
+
                                 {
                                     "width": 360,
                                     "height": 360,
-                                    "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                                    "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                                 }
                             ],
                             "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -8959,110 +7527,110 @@ class VideoUploaderViewSetTests(APITestCase):
                         "metadata": {
                             "connections": {
                                 "albums": {
-                                    "uri": "/users/193125162/albums",
+                                    "uri": "/users/56789943/albums",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 2
                                 },
                                 "appearances": {
-                                    "uri": "/users/193125162/appearances",
+                                    "uri": "/users/56789943/appearances",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "categories": {
-                                    "uri": "/users/193125162/categories",
+                                    "uri": "/users/56789943/categories",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "channels": {
-                                    "uri": "/users/193125162/channels",
+                                    "uri": "/users/56789943/channels",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "feed": {
-                                    "uri": "/users/193125162/feed",
+                                    "uri": "/users/56789943/feed",
                                     "options": [
                                         "GET"
                                     ]
                                 },
                                 "followers": {
-                                    "uri": "/users/193125162/followers",
+                                    "uri": "/users/56789943/followers",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "following": {
-                                    "uri": "/users/193125162/following",
+                                    "uri": "/users/56789943/following",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "groups": {
-                                    "uri": "/users/193125162/groups",
+                                    "uri": "/users/56789943/groups",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 3
                                 },
                                 "likes": {
-                                    "uri": "/users/193125162/likes",
+                                    "uri": "/users/56789943/likes",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "membership": {
-                                    "uri": "/users/193125162/membership/",
+                                    "uri": "/users/56789943/membership/",
                                     "options": [
                                         "PATCH"
                                     ]
                                 },
                                 "moderated_channels": {
-                                    "uri": "/users/193125162/channels?filter=moderated",
+                                    "uri": "/users/56789943/channels?filter=moderated",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 1
                                 },
                                 "portfolios": {
-                                    "uri": "/users/193125162/portfolios",
+                                    "uri": "/users/56789943/portfolios",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "videos": {
-                                    "uri": "/users/193125162/videos",
+                                    "uri": "/users/56789943/videos",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 2
                                 },
                                 "watchlater": {
-                                    "uri": "/users/193125162/watchlater",
+                                    "uri": "/users/56789943/watchlater",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "shared": {
-                                    "uri": "/users/193125162/shared/videos",
+                                    "uri": "/users/56789943/shared/videos",
                                     "options": [
                                         "GET"
                                     ],
                                     "total": 0
                                 },
                                 "pictures": {
-                                    "uri": "/users/193125162/pictures",
+                                    "uri": "/users/56789943/pictures",
                                     "options": [
                                         "GET",
                                         "POST"
@@ -9077,13 +7645,13 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "total": 0
                                 },
                                 "folders_root": {
-                                    "uri": "/users/193125162/folders/root",
+                                    "uri": "/users/56789943/folders/root",
                                     "options": [
                                         "GET"
                                     ]
                                 },
                                 "folders": {
-                                    "uri": "/users/193125162/folders",
+                                    "uri": "/users/56789943/folders",
                                     "options": [
                                         "GET",
                                         "POST"
@@ -9091,7 +7659,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     "total": 6
                                 },
                                 "teams": {
-                                    "uri": "/users/193125162/teams",
+                                    "uri": "/users/56789943/teams",
                                     "options": [
                                         "GET"
                                     ],
@@ -9175,14 +7743,14 @@ class VideoUploaderViewSetTests(APITestCase):
                     "metadata": {
                         "connections": {
                             "items": {
-                                "uri": "/users/193125162/projects/14722366/items",
+                                "uri": "/users/56789943/projects/14722366/items",
                                 "options": [
                                     "GET"
                                 ],
                                 "total": 1
                             },
                             "videos": {
-                                "uri": "/users/193125162/projects/14722366/videos",
+                                "uri": "/users/56789943/projects/14722366/videos",
                                 "options": [
                                     "GET",
                                     "DELETE",
@@ -9191,7 +7759,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                 "total": 1
                             },
                             "folders": {
-                                "uri": "/users/193125162/projects/14722366/items",
+                                "uri": "/users/56789943/projects/14722366/items",
                                 "options": [
                                     "GET",
                                     "DELETE",
@@ -9203,49 +7771,49 @@ class VideoUploaderViewSetTests(APITestCase):
                         },
                         "interactions": {
                             "edit": {
-                                "uri": "/users/193125162/projects/14722366",
+                                "uri": "/users/56789943/projects/14722366",
                                 "options": [
                                     "PATCH"
                                 ]
                             },
                             "move_video": {
-                                "uri": "/users/193125162/projects/14722366",
+                                "uri": "/users/56789943/projects/14722366",
                                 "options": [
                                     "PATCH"
                                 ]
                             },
                             "upload_video": {
-                                "uri": "/users/193125162/projects/14722366",
+                                "uri": "/users/56789943/projects/14722366",
                                 "options": [
                                     "POST"
                                 ]
                             },
                             "view": {
-                                "uri": "/users/193125162/projects/14722366",
+                                "uri": "/users/56789943/projects/14722366",
                                 "options": [
                                     "GET"
                                 ]
                             },
                             "edit_settings": {
-                                "uri": "/users/193125162/projects/14722366",
+                                "uri": "/users/56789943/projects/14722366",
                                 "options": [
                                     "PATCH"
                                 ]
                             },
                             "delete": {
-                                "uri": "/users/193125162/projects/14722366",
+                                "uri": "/users/56789943/projects/14722366",
                                 "options": [
                                     "DELETE"
                                 ]
                             },
                             "delete_video": {
-                                "uri": "/users/193125162/projects/14722366",
+                                "uri": "/users/56789943/projects/14722366",
                                 "options": [
                                     "DELETE"
                                 ]
                             },
                             "add_subfolder": {
-                                "uri": "/user/193125162/projects",
+                                "uri": "/user/56789943/projects",
                                 "options": [
                                     "POST"
                                 ],
@@ -9261,7 +7829,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                     {
                                         "name": "parent_folder_uri",
                                         "required": True,
-                                        "value": "/users/193125162/projects/14722366"
+                                        "value": "/users/56789943/projects/14722366"
                                     }
                                 ]
                             }
@@ -9271,14 +7839,14 @@ class VideoUploaderViewSetTests(APITestCase):
             ]
         }, "status_code": 200}
         folder_list_mock.return_value = response
-        user_id = 193125162
+        user_id = 56789943
         response = self.client.get(reverse('video_uploader_service-folder-list', args=(user_id,)))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         folder_list_mock.assert_called_once()
-        folder_list_mock.assert_called_once_with(user_id='193125162', query_params={})
+        folder_list_mock.assert_called_once_with(user_id='56789943', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_folder')
     def test_specific_folder_with_invalid_user_id(self, specific_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         specific_folder_mock.return_value = response
@@ -9291,7 +7859,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                                      query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_folder')
     def test_specific_folder_with_invalid_folder_id(self, specific_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         specific_folder_mock.return_value = response
@@ -9304,7 +7872,7 @@ class VideoUploaderViewSetTests(APITestCase):
                                                      query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService.specific_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.specific_folder')
     def test_specific_folder(self, specific_folder_mock):
         response = {"data": {
             "created_time": "2023-01-27T23:01:24+00:00",
@@ -9315,15 +7883,15 @@ class VideoUploaderViewSetTests(APITestCase):
                 "view": "nobody"
             },
             "resource_key": "715b8c49dd3a1a0a9301b9f37bf6b1e097af401b",
-            "uri": "/users/193125162/projects/14724344",
+            "uri": "/users/56789943/projects/14724344",
             "link": None,
             "pinned_on": None,
             "is_pinned": "false",
             "is_private_to_user": "false",
             "user": {
-                "uri": "/users/193125162",
-                "name": "Saad Bin Abid",
-                "link": "https://vimeo.com/user193125162",
+                "uri": "/users/56789943",
+                "name": "test user",
+                "link": "https://vimeo.com/user56789943",
                 "capabilities": {
                     "hasLiveSubscription": "false",
                     "hasEnterpriseLihp": "false",
@@ -9336,55 +7904,16 @@ class VideoUploaderViewSetTests(APITestCase):
                 "short_bio": None,
                 "created_time": "2023-01-24T06:34:04+00:00",
                 "pictures": {
-                    "uri": "/users/193125162/pictures/82436258",
+                    "uri": "/users/56789943/pictures/12345678",
                     "active": True,
                     "type": "custom",
-                    "base_link": "https://i.vimeocdn.com/portrait/82436258",
+                    "base_link": "https://i.vimeocdn.com/portrait/12345678",
                     "sizes": [
-                        {
-                            "width": 30,
-                            "height": 30,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_30x30"
-                        },
-                        {
-                            "width": 72,
-                            "height": 72,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_72x72"
-                        },
-                        {
-                            "width": 75,
-                            "height": 75,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_75x75"
-                        },
-                        {
-                            "width": 100,
-                            "height": 100,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_100x100"
-                        },
-                        {
-                            "width": 144,
-                            "height": 144,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_144x144"
-                        },
-                        {
-                            "width": 216,
-                            "height": 216,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_216x216"
-                        },
-                        {
-                            "width": 288,
-                            "height": 288,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_288x288"
-                        },
-                        {
-                            "width": 300,
-                            "height": 300,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_300x300"
-                        },
+
                         {
                             "width": 360,
                             "height": 360,
-                            "link": "https://i.vimeocdn.com/portrait/82436258_360x360"
+                            "link": "https://i.vimeocdn.com/portrait/12345678_360x360"
                         }
                     ],
                     "resource_key": "a72e52d68f861840c903170313586611527e4906",
@@ -9394,110 +7923,110 @@ class VideoUploaderViewSetTests(APITestCase):
                 "metadata": {
                     "connections": {
                         "albums": {
-                            "uri": "/users/193125162/albums",
+                            "uri": "/users/56789943/albums",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "appearances": {
-                            "uri": "/users/193125162/appearances",
+                            "uri": "/users/56789943/appearances",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "categories": {
-                            "uri": "/users/193125162/categories",
+                            "uri": "/users/56789943/categories",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "channels": {
-                            "uri": "/users/193125162/channels",
+                            "uri": "/users/56789943/channels",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "feed": {
-                            "uri": "/users/193125162/feed",
+                            "uri": "/users/56789943/feed",
                             "options": [
                                 "GET"
                             ]
                         },
                         "followers": {
-                            "uri": "/users/193125162/followers",
+                            "uri": "/users/56789943/followers",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "following": {
-                            "uri": "/users/193125162/following",
+                            "uri": "/users/56789943/following",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "groups": {
-                            "uri": "/users/193125162/groups",
+                            "uri": "/users/56789943/groups",
                             "options": [
                                 "GET"
                             ],
                             "total": 3
                         },
                         "likes": {
-                            "uri": "/users/193125162/likes",
+                            "uri": "/users/56789943/likes",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "membership": {
-                            "uri": "/users/193125162/membership/",
+                            "uri": "/users/56789943/membership/",
                             "options": [
                                 "PATCH"
                             ]
                         },
                         "moderated_channels": {
-                            "uri": "/users/193125162/channels?filter=moderated",
+                            "uri": "/users/56789943/channels?filter=moderated",
                             "options": [
                                 "GET"
                             ],
                             "total": 1
                         },
                         "portfolios": {
-                            "uri": "/users/193125162/portfolios",
+                            "uri": "/users/56789943/portfolios",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "videos": {
-                            "uri": "/users/193125162/videos",
+                            "uri": "/users/56789943/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 2
                         },
                         "watchlater": {
-                            "uri": "/users/193125162/watchlater",
+                            "uri": "/users/56789943/watchlater",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "shared": {
-                            "uri": "/users/193125162/shared/videos",
+                            "uri": "/users/56789943/shared/videos",
                             "options": [
                                 "GET"
                             ],
                             "total": 0
                         },
                         "pictures": {
-                            "uri": "/users/193125162/pictures",
+                            "uri": "/users/56789943/pictures",
                             "options": [
                                 "GET",
                                 "POST"
@@ -9512,13 +8041,13 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 0
                         },
                         "folders_root": {
-                            "uri": "/users/193125162/folders/root",
+                            "uri": "/users/56789943/folders/root",
                             "options": [
                                 "GET"
                             ]
                         },
                         "folders": {
-                            "uri": "/users/193125162/folders",
+                            "uri": "/users/56789943/folders",
                             "options": [
                                 "GET",
                                 "POST"
@@ -9526,7 +8055,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             "total": 5
                         },
                         "teams": {
-                            "uri": "/users/193125162/teams",
+                            "uri": "/users/56789943/teams",
                             "options": [
                                 "GET"
                             ],
@@ -9610,14 +8139,14 @@ class VideoUploaderViewSetTests(APITestCase):
             "metadata": {
                 "connections": {
                     "items": {
-                        "uri": "/users/193125162/projects/14724344/items",
+                        "uri": "/users/56789943/projects/14724344/items",
                         "options": [
                             "GET"
                         ],
                         "total": 0
                     },
                     "videos": {
-                        "uri": "/users/193125162/projects/14724344/videos",
+                        "uri": "/users/56789943/projects/14724344/videos",
                         "options": [
                             "GET",
                             "DELETE",
@@ -9626,7 +8155,7 @@ class VideoUploaderViewSetTests(APITestCase):
                         "total": 0
                     },
                     "folders": {
-                        "uri": "/users/193125162/projects/14724344/items",
+                        "uri": "/users/56789943/projects/14724344/items",
                         "options": [
                             "GET",
                             "DELETE",
@@ -9638,49 +8167,49 @@ class VideoUploaderViewSetTests(APITestCase):
                 },
                 "interactions": {
                     "edit": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "move_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "upload_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "POST"
                         ]
                     },
                     "view": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "GET"
                         ]
                     },
                     "edit_settings": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "PATCH"
                         ]
                     },
                     "delete": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "delete_video": {
-                        "uri": "/users/193125162/projects/14724344",
+                        "uri": "/users/56789943/projects/14724344",
                         "options": [
                             "DELETE"
                         ]
                     },
                     "add_subfolder": {
-                        "uri": "/user/193125162/projects",
+                        "uri": "/user/56789943/projects",
                         "options": [
                             "POST"
                         ],
@@ -9696,7 +8225,7 @@ class VideoUploaderViewSetTests(APITestCase):
                             {
                                 "name": "parent_folder_uri",
                                 "required": True,
-                                "value": "/users/193125162/projects/14724344"
+                                "value": "/users/56789943/projects/14724344"
                             }
                         ]
                     }
@@ -9712,81 +8241,76 @@ class VideoUploaderViewSetTests(APITestCase):
         specific_folder_mock.assert_called_once_with(user_id='19312516', project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_user_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
         user_id = 19312516
         folder_id = 14722366
-        video_id = 793501641
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516', project_id='14722366'
+        add_video_to_folder_mock.assert_called_once_with(video_id='987654321', user_id='19312516', project_id='14722366'
                                                          , query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_folder_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
         user_id = 19312516
         folder_id = 14722366
-        video_id = 793501641
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+        add_video_to_folder_mock.assert_called_once_with(video_id='987654321', user_id='19312516',
                                                          project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_invalid_video_id(self, add_video_to_folder_mock):
         response = {"data": {"message": "Resource not found"}, "status_code": 404}
         add_video_to_folder_mock.return_value = response
         user_id = 19312516
         folder_id = 14722366
-        video_id = 793501641
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+        add_video_to_folder_mock.assert_called_once_with(video_id='987654321', user_id='19312516',
                                                          project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder(self, add_video_to_folder_mock):
         response = {"data": {"message": "The video was added"}, "status_code": 204}
         add_video_to_folder_mock.return_value = response
         user_id = 19312516
         folder_id = 14722366
-        video_id = 793501641
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+        add_video_to_folder_mock.assert_called_once_with(video_id='987654321', user_id='19312516',
                                                          project_id='14722366', query_params={})
 
     @mock.patch(
-        'modules.django_video_uploader.videouploader.services.VideoUploaderService.VideoUploaderService'
-        '.add_video_to_folder')
+        'modules.django_video_uploader.videouploader.services.videouploader.VideoUploaderService.add_video_to_folder')
     def test_add_video_to_folder_with_no_add_scope(self, add_video_to_folder_mock):
         response = {'data': {'error': 'Your access token does not have the "add" scope'}, 'status_code': 403}
         add_video_to_folder_mock.return_value = response
         user_id = 19312516
         folder_id = 14722366
-        video_id = 793501641
+        video_id = 987654321
         response = self.client.put(
             reverse('video_uploader_service-add-video-to-folder', args=(user_id, folder_id, video_id)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         add_video_to_folder_mock.assert_called_once()
-        add_video_to_folder_mock.assert_called_once_with(video_id='793501641', user_id='19312516',
+        add_video_to_folder_mock.assert_called_once_with(video_id='987654321', user_id='19312516',
                                                          project_id='14722366', query_params={})

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class VideoUploaderConfig(AppConfig):
-    name = 'VideoUploader'
+    name = 'modules.django_video_uploader.videouploader'
