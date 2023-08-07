@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
 
+class TokenSerializer(serializers.Serializer):
+    redirect_uri = serializers.CharField()
+    code = serializers.CharField()
+    grant_type = serializers.CharField()
+
+
 class RemoveInviteesSerializer(serializers.Serializer):
     emails = serializers.ListSerializer(child=serializers.EmailField())
 
@@ -24,5 +30,3 @@ class CreateWebhookSubscriptionSerializer(serializers.Serializer):
     user = serializers.URLField(required=False)
     scope = serializers.CharField()
     signing_key = serializers.CharField(required=False)
-
-

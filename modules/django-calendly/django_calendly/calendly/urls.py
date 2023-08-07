@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .viewsets import CalendlyViewSet
 
 router = DefaultRouter()
-router.register("service", CalendlyViewSet, basename="calendly_service")
+router.register("", CalendlyViewSet, basename="calendly_service")
 
 urlpatterns = [
     path("", include(router.urls)),
