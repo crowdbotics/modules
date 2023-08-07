@@ -1,24 +1,24 @@
-import React, { useState, useCallback } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList
-} from "react-native"; // @ts-ignore
+import React, { useState, useEffect, useContext } from "react";
+import { Text, View, TouchableOpacity, FlatList } from "react-native"; // @ts-ignore
 
 import CalendarStrip from "react-native-calendar-strip";
 import Loader from "../components/Loader"; // @ts-ignore
 import { getAppointmentByDate } from "../store";
 import { useDispatch } from "react-redux";
-import { useFocusEffect } from "@react-navigation/native";
 import AppointmentModal from "../components/AppointmentDetailModal"; // @ts-ignore
-
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import moment from "moment";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { OptionsContext } from "@options";
 
+/**
+ * Component to display appointments for a specific date.
+ * @param {Object} navigation - Navigation object provided by React Navigation.
+ * @returns {JSX.Element} - The rendered Appointment component.
+ */
 const Appointment = ({ navigation }) => {
+  const { styles } = useContext(OptionsContext);
+
   const [isLoading, setIsLoading] = useState(false);
   const [modalItem, setModalItem] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,59 +27,70 @@ const Appointment = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-  useFocusEffect(
-    useCallback(() => {
-      getAllAppointment();
-    }, [filterDate])
-  );
+  useEffect(() => {
+    // Fetch appointments when screen loads and when filterDate changes.
+    getAllAppointment();
+  }, [filterDate]);
 
   const getAllAppointment = async () => {
-    setIsLoading(true); // access token with calendar scope
-
-    const tokens = await GoogleSignin.getTokens();
+    setIsLoading(true);
+    // access google authorization token with calendar scope
+    const googleAuthorizationToken = await GoogleSignin.getTokens();
     await dispatch(
       getAppointmentByDate({
-        accessToken: tokens.accessToken,
+        accessToken: googleAuthorizationToken.accessToken,
         maxResults: 100,
         datetime: filterDate
       })
     )
       .then(unwrapResult)
-      .then(res => {
+      .then((res) => {
         __DEV__ && console.log(res);
         setFilteredAppointments(res.items);
         setIsLoading(false);
       })
-      .catch(error => {
-        console.log(error);
+      .catch((error) => {
+        __DEV__ && console.log(error);
         setIsLoading(false);
       });
   };
 
-  const modalHandler = item => {
+  const toggleModal = (item) => {
     setModalItem(item);
     setModalVisible(true);
   };
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => modalHandler(item)}>
-      <View style={styles.appointmentItem}>
-        <Text style={styles.listText}>
-          {"start" in item
-            ? moment(new Date(item.start.dateTime)).format("h:mm A")
-            : ""}
-        </Text>
-        <View style={[styles.card]}>
-          <Text numberOfLines={1} style={styles.eWkmXrRh}>
-            {item.summary}
+  /**
+   * Render a single item in the appointment list.
+   * @param {Object} param0 - The item to be rendered along with the toggleModal function.
+   * @param {Object} param0.item - The appointment item data.
+   * @param {function} param0.toggleModal - The function to toggle the modal with the item data as a parameter.
+   * @returns {JSX.Element} - The rendered appointment item component.
+   */
+  const renderItem = ({ item }) => {
+    const formatTime = (dateTime) => {
+      // Format the start dateTime to "h:mm A" format (e.g., 9:00 AM).
+      return moment(new Date(dateTime)).format("h:mm A");
+    };
+
+    return (
+      <TouchableOpacity onPress={() => toggleModal(item)}>
+        <View style={styles.appointmentItem}>
+          <Text style={styles.listText}>
+            {"start" in item ? formatTime(item.start.dateTime) : ""}
           </Text>
+          <View style={styles.card}>
+            <Text numberOfLines={1} style={styles.eWkmXrRh}>
+              {item.summary}
+            </Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.appointmentListContainer}>
       {isLoading && <Loader />}
       <View style={styles.calendarTextContainer}>
         <Text style={styles.calendarText}>Calendar</Text>
@@ -92,7 +103,7 @@ const Appointment = ({ navigation }) => {
           highlightColor: "#E6E6E6"
         }}
         style={styles.vFIpjHzC}
-        onDateSelected={date => setFilterDate(new Date(date).toISOString())}
+        onDateSelected={(date) => setFilterDate(new Date(date).toISOString())}
       />
       <View>
         <View style={styles.viewAll}>
@@ -105,7 +116,7 @@ const Appointment = ({ navigation }) => {
       <FlatList
         data={filteredAppointments?.length && filteredAppointments}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
       />
       {modalVisible && (
         <AppointmentModal
@@ -118,57 +129,4 @@ const Appointment = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    height: "100%",
-    width: "100%"
-  },
-  calendarText: {
-    fontSize: 14,
-    color: "#1E2022"
-  },
-  calendarTextContainer: {
-    marginTop: 20,
-    marginLeft: 14
-  },
-  listText: {
-    fontSize: 14,
-    color: "#1E2022"
-  },
-  viewAll: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 20,
-    marginBottom: 10,
-    marginHorizontal: 14
-  },
-  appointmentItem: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    marginVertical: 10
-  },
-  card: {
-    backgroundColor: "#FCF1D6",
-    borderRadius: 10,
-    width: "80%",
-    height: 50,
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10
-  },
-  eWkmXrRh: {
-    fontSize: 16
-  },
-  vFIpjHzC: {
-    height: 100,
-    paddingBottom: 10
-  }
-});
 export default Appointment;

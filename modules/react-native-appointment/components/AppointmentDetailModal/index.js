@@ -1,16 +1,49 @@
+import React, { Fragment, useContext } from "react";
 import moment from "moment";
-import React, { Fragment } from "react";
-import { Modal, StyleSheet, View, Text, ScrollView, TouchableOpacity, Linking, Alert } from "react-native";
+import {
+  Modal,
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Linking,
+  Alert
+} from "react-native";
 import Button from "../Button";
+import { OptionsContext } from "@options";
 
-const AppointmentModal = ({
-  modalItem,
-  setModalVisible,
-  modalVisible
-}) => {
-  const handleOpenLink = async link => {
+/**
+ * A modal component for displaying appointment details.
+ *
+ * @param {object} modalItem - The appointment object to display.
+ * @param {function} setModalVisible - Function to control the modal visibility.
+ * @param {boolean} modalVisible - Indicates if the modal is visible.
+ * @returns {JSX.Element} A JSX element representing the appointment details modal.
+ */
+const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
+  const { styles } = useContext(OptionsContext);
+
+  const {
+    summary,
+    status,
+    location,
+    description,
+    hangoutLink,
+    htmlLink,
+    start,
+    end,
+    attendees,
+    organizer,
+    attachments
+  } = modalItem;
+
+  /**
+   * Opens a URL in the browser or shows an alert if the URL is unsupported.
+   *
+   * @param {string} link - The URL to open.
+   */
+  const handleOpenLink = async (link) => {
     const supported = await Linking.canOpenURL(link);
-
     if (supported) {
       Linking.openURL(link);
     } else {
@@ -18,158 +51,130 @@ const AppointmentModal = ({
     }
   };
 
-  const extractDomain = email => {
+  /**
+   * Extracts the domain from an email address.
+   *
+   * @param {string} email - The email address.
+   * @returns {string} The domain part of the email address.
+   */
+  const extractDomain = (email) => {
     return email.split("@").pop();
   };
 
-  const ParticipantsFromFirm = modalItem => {
-    const domain = extractDomain(modalItem?.organizer?.email);
-    const clientParticipants = modalItem?.attendees?.filter(attendee => extractDomain(attendee.email) !== domain);
-    return <Fragment>
+  /**
+   * Renders the list of participants from the same firm and clients.
+   *
+   * @returns {JSX.Element} A JSX element representing the participant list.
+   */
+  const ParticipantsFromFirm = () => {
+    if (!organizer || !attendees) {
+      return null; // Add a check to handle missing or undefined data
+    }
+
+    const domain = extractDomain(organizer.email);
+    const clientParticipants = attendees.filter(
+      (attendee) => extractDomain(attendee.email) !== domain
+    );
+
+    return (
+      <Fragment>
         <Text style={styles.text}>Firm Participants:</Text>
         <View style={styles.attendee}>
-          <Text style={styles.attendeeText}>{modalItem?.organizer?.email} (organizer)</Text>
+          <Text style={styles.attendeeText}>{organizer.email} (organizer)</Text>
         </View>
-        {modalItem?.attendees?.map((attendee, index) => extractDomain(attendee.email) === domain && !attendee.organizer && <View style={styles.attendee} key={index}>
-              <Text style={styles.attendeeText}>{attendee.email}</Text>
-            </View>)}
-        {clientParticipants?.length > 0 && (<>
-          <Text style={[styles.text, styles.mt]}>Client Participants:</Text>
-          {clientParticipants?.map((attendee, index) =>
-          <View style={styles.attendee} key={index}>
-            <Text style={styles.attendeeText}>{attendee.email}</Text>
-          </View>)}
-          <Button height={24} onPress={() => setModalVisible(false)} style={styles.hide}>
-            Enrich Contacts
-          </Button>
-        </>)}
-
-      </Fragment>;
+        {attendees.map((attendee) => {
+          if (extractDomain(attendee.email) === domain && !attendee.organizer) {
+            return (
+              <View style={styles.attendee} key={attendee.email}>
+                <Text style={styles.attendeeText}>{attendee.email}</Text>
+              </View>
+            );
+          } else {
+            return null;
+          }
+        })}
+        {clientParticipants.length > 0 && (
+          <>
+            <Text style={[styles.text, styles.mt]}>Client Participants:</Text>
+            {clientParticipants.map((attendee) => (
+              <View style={styles.attendee} key={attendee.email}>
+                <Text style={styles.attendeeText}>{attendee.email}</Text>
+              </View>
+            ))}
+            <Button
+              height={24}
+              onPress={() => setModalVisible(false)}
+              style={styles.hideButton}
+            >
+              Enrich Contacts
+            </Button>
+          </>
+        )}
+      </Fragment>
+    );
   };
 
-  return <Modal animationType="slide" transparent={true} visible={modalVisible}>
+  return (
+    <Modal animationType="slide" transparent={true} visible={modalVisible}>
       <View style={styles.modalContainer}>
         <Text style={styles.modalHeaderText}>Appointment details</Text>
         <ScrollView>
-          <Text style={styles.modalText}>Title: {modalItem.summary}</Text>
-          <Text style={styles.modalText}>Status: {modalItem.status}</Text>
-          <Text style={styles.modalText}>Location: {modalItem.location}</Text>
-          <TouchableOpacity onPress={() => handleOpenLink(modalItem.description)}>
-            <Text style={styles.modalText}>Description: <Text>{modalItem.description}</Text></Text>
+          <Text style={styles.modalText}>Title: {summary}</Text>
+          <Text style={styles.modalText}>Status: {status}</Text>
+          <Text style={styles.modalText}>Location: {location}</Text>
+          <TouchableOpacity onPress={() => handleOpenLink(description)}>
+            <Text style={styles.modalText}>
+              Description: <Text>{description}</Text>
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleOpenLink(modalItem.hangoutLink)}>
-            <Text style={styles.modalText}>Meeting: <Text style={styles.textDecorationLine}>{modalItem.hangoutLink}</Text></Text>
+          <TouchableOpacity onPress={() => handleOpenLink(hangoutLink)}>
+            <Text style={styles.modalText}>
+              Meeting:{" "}
+              <Text style={styles.textDecorationLine}>{hangoutLink}</Text>
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleOpenLink(modalItem.htmlLink)}>
-            <Text style={styles.modalText}>Calendar: <Text style={styles.textDecorationLine}>{modalItem.htmlLink}</Text></Text>
+          <TouchableOpacity onPress={() => handleOpenLink(htmlLink)}>
+            <Text style={styles.modalText}>
+              Calendar:{" "}
+              <Text style={styles.textDecorationLine}>{htmlLink}</Text>
+            </Text>
           </TouchableOpacity>
-          <Text style={styles.modalText}>Start time: {"start" in modalItem ? moment(new Date(modalItem.start.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
-          <Text style={styles.modalText}>End time: {"end" in modalItem ? moment(new Date(modalItem.end.dateTime)).format("YYYY-MM-DD HH:mm A") : ""}</Text>
-          <View style={styles.attendeeContainer}>
-            {ParticipantsFromFirm(modalItem)}
-
-          </View>
-          {modalItem?.attachments &&
+          <Text style={styles.modalText}>
+            Start time:{" "}
+            {"start" in modalItem
+              ? moment(new Date(start.dateTime)).format("YYYY-MM-DD HH:mm A")
+              : ""}
+          </Text>
+          <Text style={styles.modalText}>
+            End time:{" "}
+            {"end" in modalItem
+              ? moment(new Date(end.dateTime)).format("YYYY-MM-DD HH:mm A")
+              : ""}
+          </Text>
+          <View style={styles.attendeeContainer}>{ParticipantsFromFirm()}</View>
+          {attachments && (
             <View style={styles.attendeeContainer}>
               <Text>Attachments:</Text>
-              <TouchableOpacity onPress={() => handleOpenLink(modalItem?.attachments[0]?.fileUrl)}>
-                <Text>{modalItem?.attachments[0]?.fileUrl}</Text>
+              <TouchableOpacity
+                onPress={() => handleOpenLink(attachments[0]?.fileUrl)}
+              >
+                <Text>{attachments[0]?.fileUrl}</Text>
               </TouchableOpacity>
             </View>
-          }
+          )}
         </ScrollView>
         <View style={styles.modalActionButton}>
-          <Button height={40} onPress={() => setModalVisible(false)} style={styles.hide}>
+          <Button
+            height={40}
+            onPress={() => setModalVisible(false)}
+            style={styles.hideButton}
+          >
             Cancel
           </Button>
         </View>
       </View>
-    </Modal>;
+    </Modal>
+  );
 };
 
-const styles = StyleSheet.create({
-  modalContainer: {
-    minHeight: "50%",
-    maxHeight: "85%",
-    width: "95%",
-    alignSelf: "center",
-    backgroundColor: "#FFF",
-    display: "flex",
-    justifyContent: "center",
-    marginTop: "15%",
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: "gray",
-    elevation: 15
-  },
-  hide: {
-    marginTop: "30%",
-    alignSelf: "center"
-  },
-  modalText: {
-    fontSize: 16,
-    padding: 15,
-    marginVertical: 4,
-    borderWidth: 1,
-    borderColor: "#CCCCCC",
-    borderRadius: 4,
-    borderLeftWidth: 5,
-    borderLeftColor: "#000"
-  },
-  attendeeContainer: {
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    marginVertical: 4,
-    borderWidth: 1,
-    borderColor: "#CCCCCC",
-    borderRadius: 4,
-    borderLeftWidth: 5,
-    borderLeftColor: "#000"
-  },
-  modalHeaderText: {
-    fontSize: 18,
-    paddingVertical: 5,
-    marginBottom: 10,
-    fontWeight: "700",
-    alignSelf: "center",
-    borderBottomWidth: 2,
-    borderColor: "#CCCCCC"
-  },
-  modalActionButton: {
-    marginTop: 20,
-    width: 100,
-    alignSelf: "flex-end"
-  },
-  attendee: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start"
-  },
-  attendeeText: {
-    paddingVertical: 5,
-    backgroundColor: "#F5F5F5",
-    paddingHorizontal: 10,
-    marginBottom: 5,
-    marginRight: 5,
-    borderRadius: 7
-  },
-  organizer: {
-    color: "#3bae61",
-    fontSize: 12
-  },
-  mt: {
-    marginTop: 5
-  },
-  text: {
-    marginBottom: 5
-  },
-  noAttendee: {
-    textAlign: "center",
-    fontSize: 12,
-    color: "#a59b9b"
-  },
-  textDecorationLine: {
-    textDecorationLine: "underline"
-  }
-});
 export default AppointmentModal;
