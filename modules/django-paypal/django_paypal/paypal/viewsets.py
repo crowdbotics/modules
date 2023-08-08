@@ -1,10 +1,8 @@
-import os
-
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .services.PaypalService import PaypalService
+from .services.paypal import PaypalService
 
 
 class PaypalViewSet(viewsets.GenericViewSet):
@@ -13,12 +11,15 @@ class PaypalViewSet(viewsets.GenericViewSet):
     authenticate in PayPal Service Class and provide following functionality:
     - create_order: Creates an order
     - get_order_details : Shows details for an order, by ID.
-    - authorize_payment_for_order: Authorizes payment for an order. To successfully authorize payment for an order, the buyer must first approve the order.
-    - capture_payment_for_order: Captures payment for an order. To successfully capture payment for an order, the buyer must first approve the order.
+    - authorize_payment_for_order: Authorizes payment for an order.
+    To successfully authorize payment for an order, the buyer must first approve the order.
+    - capture_payment_for_order: Captures payment for an order.
+    To successfully capture payment for an order, the buyer must first approve the order.
     - get_authorized_payment: Shows details for an authorized payment, by ID.
     - capture_authorized_payment: Captures an authorized payment, by ID.
     - get_captured_payment: Shows details for a captured payment, by ID.
-    - refund_capture_payment: Refunds a captured payment, by ID. For a full refund, include an empty payload in the JSON request body.
+    - refund_capture_payment: Refunds a captured payment, by ID.
+    For a full refund, include an empty payload in the JSON request body.
     - get_refund_details: Shows details for a refund, by ID.
     - create_product: Creates a product.
     - get_product_details: Shows details for a product, by ID.
@@ -31,28 +32,42 @@ class PaypalViewSet(viewsets.GenericViewSet):
     - suspend_subscription: Suspends the subscription.
     - activate_subscription: Activates the subscription.
     - cancel_subscription: Cancels the subscription.
-    - capture_authorized_payment_on_subscription: Captures an authorized payment from the subscriber on the subscription.
+    - capture_authorized_payment_on_subscription: Captures an authorized payment from the
+    subscriber on the subscription.
     - generate_invoice_number: Generates the next invoice number that is available to the merchant
-    - create_draft_invoice: Creates a draft invoice. To move the invoice from a draft to payable state, you must send the invoice.
+    - create_draft_invoice: Creates a draft invoice. To move the invoice from a
+    draft to payable state, you must send the invoice.
     - get_invoice_details: Shows details for an invoice, by ID.
     - send_invoice: Sends or schedules an invoice, by ID, to be sent to a customer.
-    - list_disputes: Lists disputes with a summary set of details, which shows the dispute_id, reason, status, dispute_state, dispute_life_cycle_stage, dispute_channel, dispute_amount, create_time and update_time fields.
+    - list_disputes: Lists disputes with a summary set of details, which shows
+    the dispute_id, reason, status, dispute_state, dispute_life_cycle_stage, dispute_channel,
+    dispute_amount, create_time and update_time fields.
     - get_dispute_details : Shows details for a dispute, by ID.
-    - accept_clam: Accepts liability for a claim, by ID. When you accept liability for a claim, the dispute closes in the customer’s favor and PayPal automatically refunds money to the customer from the merchant's account
+    - accept_clam: Accepts liability for a claim, by ID. When you accept liability for a claim, the dispute closes in
+    the customer’s favor and PayPal automatically refunds money to the customer from the merchant's account
     - create_web_hook: Subscribes your webhook listener to events.
     """
-    paypal_service = PaypalService(
-        base_url=os.getenv('PAYPAL_BASE_URL', ""),
-        client_id=os.getenv('PAYPAL_CLIENT_ID', ""),
-        client_secrets=os.getenv('PAYPAL_CLIENT_SECRETS', "")
-    )
+    paypal_service = PaypalService()
+
+    @action(detail=True, methods=['post'], url_path='confirm-order')
+    def confirm_order(self, request, pk):
+        """
+        create_order: Creates an order
+        :body_params: For details about request body(intent, purchased_unit, amount, ....) visit serializers or
+        the given link https://developer.paypal.com/docs/api/orders/v2/#orders_create
+        :return : Order ID and details
+        """
+
+        data = request.data
+        response = self.paypal_service.confirm_order(order_id=pk, card_data=data)
+        return Response(data=response, status=response.get("status_code"))
 
     @action(detail=False, methods=['post'], url_path='create-order')
     def create_order(self, request):
         """
         create_order: Creates an order
-        :body_params: For details about request body(intent, purchased_unit, amount, ....) visit serializers or the given link below
-        https://developer.paypal.com/docs/api/orders/v2/#orders_create
+        :body_params: For details about request body(intent, purchased_unit, amount, ....) visit serializers or
+        the given link https://developer.paypal.com/docs/api/orders/v2/#orders_create
         :return : Order ID and details
         """
 
@@ -162,8 +177,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_product(self, request):
         """
         Create a product
-        :body_params : For details about request body(name, descripton, category, ...) visit serializers or the given link below
-        https://developer.paypal.com/docs/api/catalog-products/v1/#products_create
+        :body_params : For details about request body(name, description, category, ...) visit serializers or
+        the given link https://developer.paypal.com/docs/api/catalog-products/v1/#products_create
         :return : Created product with ID and details
         """
 
@@ -232,8 +247,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_subscription(self, request):
         """
         Creates a subscription.
-        :body_params : For details about request body(plan_id, start_time, shipping_amount, ...) visit serializers or the given link below
-        https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_create
+        :body_params : For details about request body(plan_id, start_time, shipping_amount, ...) visit serializers or
+        the given link https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_create
         :return : Created subscription with ID and details
         """
         subscription_data = request.data
@@ -289,8 +304,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def capture_authorized_payment_on_subscription(self, request, pk):
         """
         Captures an authorized payment from the subscriber on the subscription.
-        :body_params : For details about request body(note, capture_type, amount, ...) visit serializers or the given link below
-        https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_capture
+        :body_params : For details about request body(note, capture_type, amount, ...) visit serializers or
+        the given link https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_capture
         :path_param str pk: Subscription ID (required)
         :return : 202 accepted
         """
@@ -314,8 +329,8 @@ class PaypalViewSet(viewsets.GenericViewSet):
     def create_draft_invoice(self, request):
         """
         Creates a draft invoice. To move the invoice from a draft to payable state, you must send the invoice
-        :body_params : For details about request body(detail, business, amount,...) visit serializers or the given link below
-        https://developer.paypal.com/docs/api/invoicing/v2/#invoices_create
+        :body_params : For details about request body(detail, business, amount,...) visit serializers or
+        the given link https://developer.paypal.com/docs/api/invoicing/v2/#invoices_create
         :return : Created draft invoice with ID and details
         """
 
