@@ -13,8 +13,10 @@ import { reSizeImage } from "../../Utils/common";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
 import Header from "../../Components/Header";
+import { useNavigation } from "@react-navigation/native";
 
-const Shadows = ({ navigation }) => {
+const Shadows = () => {
+  const navigation = useNavigation();
   const options = useContext(OptionsContext);
   const dispatch = useDispatch();
   const state = useSelector(state => state.uri);
