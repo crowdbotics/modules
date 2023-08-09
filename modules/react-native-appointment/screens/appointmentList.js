@@ -5,13 +5,14 @@ import CalendarStrip from "react-native-calendar-strip";
 import { getAppointmentByDate } from "../api";
 import Loader from "../components/Loader";
 // @ts-ignore
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AppointmentModal from "../components/AppointmentDetailModal";
 // @ts-ignore
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import moment from "moment";
 
-const Appointment = ({ navigation }) => {
+const Appointment = () => {
+  const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [modalItem, setModalItem] = useState("");
   const [modalVisible, setModalVisible] = useState(false);

@@ -7,10 +7,12 @@ import Button from "../components/Button";
 import { createAppointment } from "../api";
 import Loader from "../components/Loader";
 import moment from "moment";
+import { useNavigation } from "@react-navigation/native";
 // @ts-ignore
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
-const CreateAppointment = ({ route, navigation }) => {
+const CreateAppointment = ({ route }) => {
+  const navigation = useNavigation();
   const options = useContext(OptionsContext);
   const { duration, selectedDate } = route.params;
   const [title, setTitle] = useState("");
