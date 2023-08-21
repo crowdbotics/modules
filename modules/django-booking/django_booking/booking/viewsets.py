@@ -1,18 +1,15 @@
-import os
-
-import requests
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.utils import json
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Booking, BookingPlan, BookingPenalty, BookingDetail, ShopifyBooking
+from .models import Booking, BookingPlan, BookingPenalty, BookingDetail
 from .pagination import Pagination
 from .serializers import BookingSerializer, BookingPenaltySerializer, BookingDetailSerializer, BookingPlanSerializer, \
     BookingCreateSerializer
+from .services.shopify import ShopifyService
 
 
 class BookingView(ModelViewSet):
@@ -58,60 +55,17 @@ class CreateBookingView(ModelViewSet):
 class CreateCartView(APIView):
     authentication_classes = [TokenAuthentication, SessionAuthentication]
     permission_classes = [IsAuthenticated]
+    shopify_service = ShopifyService()
 
     def post(self, request, *args, **kwargs):
         """
         Using cartCreate mutation to create a new cart and add a line item to the cart.
-        In the input, include the product variant ID (merchandiseId), include the line item quantity (quantity) and any attributes (attributes) associated with the product/booking.
+        In the input, include the product variant ID (merchandiseId), include the line item quantity (quantity)
+        and any attributes (attributes) associated with the product/booking.
         """
-        try:
-            query = """mutation cartCreate($lines: [CartLineInput!]!) {
-                cartCreate(
-                    input: {
-                    lines: $lines
-                    }
-                ) {
-                    cart {
-                    id
-                    createdAt
-                    updatedAt
-                    lines(first: 1) {
-                        edges {
-                        node {
-                            id
-                            merchandise {
-                            ... on ProductVariant {
-                                id
-                            }
-                            }
-                        }
-                        }
-                    }
-                    attributes {
-                        key
-                        value
-                        }
-                    }
-                 }
-                }"""
+        response = self.shopify_service.create_cart(user=self.request.user, lines=request.data.get("lines", []))
 
-            payload = {
-                "query": query,
-                "variables": {
-                    "lines": request.data.get("lines", [])
-                }
-            }
-            req = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
-                                headers={"X-Shopify-Storefront-Access-Token": os.environ.get(
-                                    "SHOPIFY_STOREFRONT_ACCESS_TOKEN", ""),
-                                    "Content-Type": "application/json"})
-            load = req.json()
-            shopify_id = ShopifyBooking.objects.create(user=self.request.user,
-                                                       shopify_cart_id=load["data"]["cartCreate"]["cart"]["id"])
-            shopify_id.save()
-            return Response(load, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=response.get("data"), status=response.get("status_code"))
 
     def get(self, request, *args, **kwargs):
         """
@@ -119,42 +73,6 @@ class CreateCartView(APIView):
         In the query, supplying the cart ID as input."""
         cartId = self.request.query_params.get('cartId', None)
         if cartId is not None:
-            query = """query cart($cartId: ID!){
-              cart(
-                id: $cartId
-              ) {
-                id
-                createdAt
-                updatedAt
-                lines(first: 2) {
-                  edges {
-                    node {
-                      id
-                      quantity
-                      merchandise {
-                        ... on ProductVariant {
-                          id
-                        }
-                      }
-                    attributes {
-                        key
-                        value
-                      }
-                    }
-                  }
-                }
-              }
-            }"""
-            payload = {
-                "query": query,
-                "variables": {
-                    "cartId": cartId
-                }
-            }
-            r = requests.post(os.environ.get("SHOPIFY_STORE_URL", "") + '/api/2022-10/graphql.json/', json=payload,
-                              headers={
-                                  "X-Shopify-Storefront-Access-Token": os.environ.get("SHOPIFY_STOREFRONT_ACCESS_TOKEN",
-                                                                                      ""),
-                                  "Content-Type": "application/json"})
-            return Response(json.loads(r.text), status=status.HTTP_200_OK)
+            response = self.shopify_service.get_cart_details(cart_id=cartId)
+            return Response(data=response.get("data"), status=response.get("status_code"))
         return Response({"error": "cartId is not null"}, status=status.HTTP_400_BAD_REQUEST)
