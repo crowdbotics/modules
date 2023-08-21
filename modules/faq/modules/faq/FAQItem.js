@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch } from "react-redux";
 import { Images } from "./assets";
-import { colors } from "./options";
+import { OptionsContext } from "@options";
 import { slice } from "./store";
 
 export const FAQItem = (props) => {
+  const options = useContext(OptionsContext);
   const { question, answer, isExpanded, prefixQuestion, prefixAnswer, id } =
     props;
   const dispatch = useDispatch();
@@ -13,6 +14,28 @@ export const FAQItem = (props) => {
   const _onClick = () => {
     dispatch(slice.actions.updateItem(id));
   };
+
+  const styles = StyleSheet.create({
+    container: { marginTop: 20, paddingHorizontal: 20 },
+    questionContainer: {
+      flexDirection: "row",
+      justifyContent: "space-between"
+    },
+    questionText: {
+      fontWeight: "500",
+      fontSize: 16,
+      lineHeight: 28,
+      color: options.colors.ivoryBlack
+    },
+    answerText: {
+      fontWeight: "400",
+      fontSize: 12,
+      lineHeight: 20,
+      color: options.colors.ivoryBlack,
+      marginBottom: 20
+    },
+    icon: { width: 14, height: 20, marginTop: 5 }
+  });
 
   return (
     <View style={styles.container}>
@@ -43,25 +66,3 @@ export const FAQItem = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: { marginTop: 20, paddingHorizontal: 20 },
-  questionContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between"
-  },
-  questionText: {
-    fontWeight: "500",
-    fontSize: 16,
-    lineHeight: 28,
-    color: colors.ivoryBlack
-  },
-  answerText: {
-    fontWeight: "400",
-    fontSize: 12,
-    lineHeight: 20,
-    color: colors.ivoryBlack,
-    marginBottom: 20
-  },
-  icon: { width: 14, height: 20, marginTop: 5 }
-});
