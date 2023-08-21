@@ -6,7 +6,7 @@ import RemotePushController from "./utils";
 import { OptionsContext } from "@options";
 import Notifications from "./flatlist";
 
-const PushNotifications = ({ navigation }) => {
+const PushNotifications = () => {
   const options = useContext(OptionsContext);
   const { senderID, authToken, styles } = options;
 

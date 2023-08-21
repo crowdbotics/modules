@@ -7,7 +7,7 @@ const BASE_URL = global.url;
 const REDIRECT_URI = "https://www.crowdbotics.com/";
 const CLIENT_ID = "";
 const CLIENT_SECRET = "";
-const WEBHOOK_URL = `${BASE_URL}/webhook/`; // http://localhost:8000/webhook/
+const WEBHOOK_URL = BASE_URL + "/webhook/"; // http://localhost:8000/webhook/
 const WEBHOOK_TAG = "cb-module";
 
 export default {
