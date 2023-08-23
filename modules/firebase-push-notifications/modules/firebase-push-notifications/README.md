@@ -1,25 +1,42 @@
 # FCM Module
-Using FCM module, you can notify a client app that new email or other data is available to sync. You can send notification messages to drive user re-engagement.
+
+Using FCM module, you can notify a client app that a new email or other data is available to sync. You can send notification messages to drive user re-engagement.
+
+Features included:
+- User is able to receive notifications from Firebase.
+- User is able to increase Message Visibility
+- User is able to view the list of received notifications
+- User is able to push alerts to remind users
 
 ## Features
-User is able to receive notifications from Firebase.
-User is able to increase Message Visibility
-User is able to view the list of received notifications  
-User is able to push alerts to remind users
 
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [x] This module can be configured with module options.
+- [x] This module requires manual Android setup.
+- [x] This module requires manual iOS setup.
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
-Here are the required packages for the module:
+## Module Options
+
+### Global Configs
+
+Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this:
+
 ```
-    "@react-native-firebase/app": "^18.3.0",
-    "@react-native-firebase/messaging": "^18.3.0",
-	"react-native-device-info": "^8.1.3"
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+}
 ```
-and run this command.
-  ```
-  yarn install
-  ```
+
+### Local Configs
+
+In modules/fcm/options.js update the authToken:
+```
+const authToken = "Your Authorization token";
+const userID = 1;
+```
 
 ## Configurations for Android
 1. On the Firebase console, add a new Android application and enter your projects details. The "Android package name" must match your local projects package name which can be found inside of the manifest tag within the /android/app/src/main/AndroidManifest.xml file within your project.
@@ -32,12 +49,12 @@ and run this command.
 ```gradle
 buildscript {
     repositories {
-   
+
     google()  // Google's Maven repository
   }
   dependencies {
     classpath 'com.google.gms:google-services:4.3.10'
-   
+
   }
 }
   allprojects {
@@ -71,7 +88,7 @@ Next the "Background Modes" capability needs to be enabled, along with both the 
 Click on the "+ Capabilities" button. <br />
 Search for "Background Modes".
 
-4. ### Configure Firebase with iOS credentials 
+4. ### Configure Firebase with iOS credentials
 
 To allow Firebase on iOS to use the credentials, the Firebase iOS SDK must be configured during the bootstrap phase of your application.
 
@@ -94,8 +111,7 @@ Within your existing didFinishLaunchingWithOptions method, add the following to 
 }
 ```
 
-## For new Scafflold `0.71.7`
-### In Podfile
+### Podfile
  Add these two lines under ` config = use_native_modules!`
 
  ```powershell
@@ -111,7 +127,7 @@ Now add this line above `target 'RNFBTests' do`
  $FirebaseSDKVersion = '10.4.0'
 ```
 
-At last add all the below code at the bottom 
+At last add all the below code at the bottom
 
 ```powershell
   installer.pods_project.targets.each do |target|
@@ -119,7 +135,7 @@ At last add all the below code at the bottom
         config.build_settings["GCC_WARN_INHIBIT_ALL_WARNINGS"] = "YES"
       end
     end
-    
+
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
         config.build_settings["CC"] = "clang"
@@ -128,7 +144,7 @@ At last add all the below code at the bottom
         config.build_settings["LDPLUSPLUS"] = "clang++"
       end
     end
-    
+
     installer.aggregate_targets.each do |aggregate_target|
       aggregate_target.user_project.native_targets.each do |target|
         target.build_configurations.each do |config|
@@ -147,7 +163,7 @@ At last add all the below code at the bottom
         end
       end
     end
-    
+
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
         config.build_settings["ENABLE_BITCODE"] = "NO"
@@ -156,65 +172,6 @@ At last add all the below code at the bottom
   end
 end
 ```
-
-## For old scaffold `0.64`
-
-Open the file ./ios/Podfile and add this line inside your targets (right after the line calling the react native Podfile function to get the native modules config):
-
-```powershell
-use_frameworks! :linkage => :static
-```
-
-To use Static Frameworks on iOS, you also need to manually enable this for the project with the following global to your /ios/Podfile file:
-
-```powershell
-# right after `use_frameworks! :linkage => :static`
-$RNFirebaseAsStaticFramework = true
-```
-
-
-## Image support in iOS
-
-Follow this documentation for image support in notifications.
-
-https://rnfirebase.io/messaging/ios-notification-images
-
-If you get error at installing pods after creating notification service extension in new scaffold, add this line in the new target
-
-```powershell
-  use_frameworks! :linkage => :static 
-```
-
-
-
-## Global Configs
-
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
-
-```
-export const globalOptions = {
-    ...
-  url: "https://my-app.botics.co",
-   ...
-}
-```
-
-## Local Configs
-in modules/fcm/options.js update the authToken
-
-```
-const authToken = "Your Authorization token";
-const userID = 1;
-```
-## API Calling Methods
-All the api calling methods reside in `api.js` file.
-
-* **registerDeviceInfoAPI**
-`registerDeviceInfoAPI` method takes an object containing `userID`,`authToken`, `registration_id`, `type`, `name`, `active`, `device_id`, `cloud_message_type` and adds device in the database.
-
-* **fetchNotifications**
-`fetchNotifications` method takes user's `authToken` and returns list of notifications against that user.
-
 
 ## Manual Setup
 1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
@@ -232,11 +189,16 @@ const PushNotifications = modules[module_index].value.navigator;  //module_index
 
 <PushNotifications />;
 ```
+
+## API Details
+
+All the api calling methods reside in `api.js` file.
+
+* **registerDeviceInfoAPI**
+`registerDeviceInfoAPI` method takes an object containing `userID`,`authToken`, `registration_id`, `type`, `name`, `active`, `device_id`, `cloud_message_type` and adds device in the database.
+
+* **fetchNotifications**
+`fetchNotifications` method takes user's `authToken` and returns list of notifications against that user.
+
 ## Module Specifications
 Here is the [Module Specification Document](https://docs.google.com/document/d/1DI90lngd8ZnKauMngxZQZHaUDNY_2ZKS0IVT91K0XcE/edit?usp=sharing), which provides more information about the module's actual intentions.
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
