@@ -22,11 +22,11 @@ Live camera filters module enables the user to apply filters in real time on the
 
 ## ## Features
 
-[ ] This module includes environment variables.
-[X] This module requires manual configurations.
-[ ] This module can be configured with module options.
-[x] This module requires manual Android setup.
-[ ] This module requires manual iOS setup.
+ - [ ] This module includes environment variables.
+ - [X] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
 
 ## ## 3rd party setup
 
