@@ -19,16 +19,13 @@ class AppointmentTestCase(APITestCase):
             username='service', email='projohn@doe.com', password='Pass@123')
         self.meeting = MeetingInformation.objects.create(service_provider=self.service_user, meeting_type="message",
                                                          meeting_type_detail="for sick", fees=22.0)
-        self.meeting.save()
         self.appointment = Appointment.objects.get_or_create(service_provider=self.service_user, client=self.client_user,
                                                         selected_date="2023-01-20", start_time="10:51:00",
                                                         end_time="11:51:00", email="john123@doe.com", age=21,
                                                         name='john', gender="male", add_note="dr john",
                                                         appointment_type__in=[self.meeting.id])
         self.service_token = Token.objects.create(user=self.service_user)
-        self.service_token.save()
         self.client_token = Token.objects.create(user=self.client_user)
-        self.client_token.save()
 
     def test_create_appointment(self):
         url = reverse('appointment-list')
