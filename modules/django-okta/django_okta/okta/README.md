@@ -1,5 +1,27 @@
 # Okta
 
+
+## Okta ODIC (OpenID Connect) App Setup
+1. Create an account on [Okta](https://www.okta.com/free-trial/).
+2. Click on `Application` tab from the sidebar.
+3. Click on `Create App Integration` button.
+4. Select `OIDC - OpenID Connect` as Sign-in method and `Native Application` as your Application type.Click `Next` button.
+5. Enter app name, choose `Authorization Code` and `Refresh Token` from **Grant Type** section.
+6. Provide `Sign-in redirect URIs` and `Sign-out redirect URIs`.
+7. Select `Allow everyone in your organization to access` from **Assignments** section, and click **Save** button.
+8. Assign the app to the users by clicking on `Assignments` tab. These will be able to access your app.
+
+
+## Okta SAML 2.0 App Setup
+1. Click on `Application` tab from the sidebar.
+2. Click on `Create App Integration` button.
+3. Select `Sign-in method` as Sign-in method and click **Next** button.
+4. Enter app name and click **Next** button.
+5. Enter `Single sign on URL` and `Audience URI (SP Entity ID)` in **SAML Settings** section and click **Next** button. 
+6. Choose `I'm an Okta customer adding an internal app` radio button and check `This is an internal app that we have created` checkbox. Click **Finish** button.
+7. Assign the app to the users by clicking on `Assignments` tab. These will be able to access your app.
+
+
 ## Update Settings
 In `settings.py` add the following:
 
@@ -31,6 +53,7 @@ List of api's endpoints with params needed for these apis.
 | ----------|:------------:|:---------------------------------------------------------------|
 | `login/` | object `{username, password}` | Takes object containing username and password of the user.|
 | `logout/` | object `{stateToken: ""}` | To logout a user, pass the state token assigned to the user.|
+| `okta-callback/` |               -               | Called after the authentication confirmed from the okta.     |
 | `create-user/` | `user_object` | See details bellow|
 
 ### * **user_object**
