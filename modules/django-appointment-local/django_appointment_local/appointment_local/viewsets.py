@@ -2,10 +2,10 @@ from datetime import date
 
 from django.db.models import Q
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
-from .models import Appointment, MeetingInformation
-from .serializers import AppointmentSerializer, MeetingInformationSerializer
+from .models import Appointment, MeetingInformation, AppointmentSession
+from .serializers import AppointmentSerializer, MeetingInformationSerializer, AppointmentSessionSerializer
 
 
 class MeetingInformationViewSet(viewsets.ModelViewSet):
@@ -21,7 +21,7 @@ class MeetingInformationViewSet(viewsets.ModelViewSet):
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     """
-       Appointment module provide CRUD (Create, Read, Update, Delete) operations for appointments
+       AppointmentViewSet provide CRUD (Create, Read, Update, Delete) operations for appointments
        between clients and service providers, with validation to ensure appointments are for today or future
        dates.
        body_params: "service_provider", "client", "selected_date", "session", "start_time", "end_time", "name"
@@ -35,3 +35,13 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         today = date.today()
         user = self.request.user
         return self.queryset.filter(Q(service_provider=user) | Q(client=user) | Q(selected_date__gte=today))
+
+
+class AppointmentSessionViewSet(viewsets.ModelViewSet):
+    """
+    AppointmentSessionViewSet module provide CRUD (Create, Read, Update, Delete) operations for appointments
+    body_params: "type" include("Morning", "Afternoon", "Evening", "Night") 
+    """
+    queryset = AppointmentSession.objects.all()
+    serializer_class = AppointmentSessionSerializer
+    permission_classes = [IsAuthenticated]

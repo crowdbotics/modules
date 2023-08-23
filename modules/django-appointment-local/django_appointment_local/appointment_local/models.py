@@ -31,6 +31,13 @@ class MeetingInformation(TimeStamp):
         return self.meeting_type
 
 
+class AppointmentSession(TimeStamp):
+    type = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.type
+
+
 class Appointment(TimeStamp):
     """
      Appointment Model:
@@ -40,12 +47,6 @@ class Appointment(TimeStamp):
      The model will save the appointment date, start_time, end_time, cost for the appointment, discount on that
      appointment and additional fee.
     """
-    SESSION_CHOICES = [
-        ('Morning', 'Morning'),
-        ('Afternoon', 'Afternoon'),
-        ('Evening', 'Evening'),
-        ('Night', 'Night'),
-    ]
     GENDER_CHOICES = [
         ('Male', 'Male'),
         ('Female', 'Female')
@@ -53,7 +54,7 @@ class Appointment(TimeStamp):
     service_provider = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointment_service_provider")
     client = models.ForeignKey(User, on_delete=models.CASCADE, related_name="appointment_client")
     selected_date = models.DateField()
-    session = models.CharField(max_length=9, choices=SESSION_CHOICES, default="Morning")
+    session = models.ForeignKey(AppointmentSession, on_delete=models.DO_NOTHING, related_name="session_appointment")
     start_time = models.TimeField()
     end_time = models.TimeField()
     is_available = models.BooleanField(default=False)

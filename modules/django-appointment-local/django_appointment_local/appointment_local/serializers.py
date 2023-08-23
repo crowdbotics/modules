@@ -1,12 +1,19 @@
 from django.db.models import Q
 from rest_framework import serializers
 
-from .models import Appointment, MeetingInformation
+from .models import Appointment, MeetingInformation, AppointmentSession
 
 
 class MeetingInformationSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeetingInformation
+        fields = '__all__'
+        read_only_fields = ('id',)
+
+
+class AppointmentSessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AppointmentSession
         fields = '__all__'
         read_only_fields = ('id',)
 

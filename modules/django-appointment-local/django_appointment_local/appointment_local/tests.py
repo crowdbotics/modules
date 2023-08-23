@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase, APIRequestFactory, force_authenticate
 
-from .models import MeetingInformation, Appointment
+from .models import MeetingInformation, Appointment, AppointmentSession
 from .serializers import AppointmentSerializer, MeetingInformationSerializer
 from .viewsets import AppointmentViewSet
 
@@ -100,14 +100,17 @@ class AppointmentTestCases(APITestCase):
             username='service', email='projohn@doe.com', password='Pass@123')
         self.meeting = MeetingInformation.objects.create(service_provider=self.service_user, meeting_type="message",
                                                          meeting_type_detail="for sick", fees=22.0)
+        self.session = AppointmentSession.objects.create(type="Morning")
+        self.session.save()
         self.appointment = Appointment.objects.get_or_create(service_provider=self.service_user,
                                                              client=self.client_user,
-                                                             selected_date=date.today(), start_time="10:51:00",
+                                                             selected_date=date.today(), start_time="10:51:00", session=self.session,
                                                              end_time="11:51:00", email="john123@doe.com", age=21,
                                                              name='john', gender="male", add_note="dr john",
                                                              appointment_type__in=[self.meeting.id])
         self.service_token = Token.objects.create(user=self.service_user)
         self.client_token = Token.objects.create(user=self.client_user)
+        self.session = AppointmentSession.objects.create(type="Morning")
 
     def test_create_appointment(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.service_token.key)
@@ -116,7 +119,7 @@ class AppointmentTestCases(APITestCase):
             "service_provider": self.service_user.id,
             "client": self.client_user.id,
             "selected_date": date.today(),
-            "session": "Evening",
+            "session": self.session.id,
             "start_time": "05:51:00",
             "end_time": "6:51:00",
             "name": "john-doe",
@@ -138,7 +141,7 @@ class AppointmentTestCases(APITestCase):
             "service_provider": self.service_user.id,
             "client": self.client_user.id,
             "selected_date": date.today(),
-            "session": "Morning",
+            "session": self.session.id,
             "start_time": "10:51:00",
             "end_time": "11:51:00",
             "name": "john-doe",
@@ -198,7 +201,7 @@ class AppointmentTestCases(APITestCase):
             "service_provider": self.service_user.id,
             "client": self.client_user.id,
             "selected_date": "2023-01-20",
-            "session": "Morning",
+            "session": self.session.id,
             "start_time": "09:30:00",
             "end_time": "10:30:00",
             "name": "david-doe",
@@ -219,3 +222,48 @@ class AppointmentTestCases(APITestCase):
         """
         appointment = Appointment.objects.get(pk=1)
         self.assertEqual(str(appointment), appointment.name)
+
+
+class AppointmentSessionTestCase(APITestCase):
+    def setUp(self):
+        self.session_user = User.objects.create_user(
+            username='session_user', email='prohn@doe.com', password='Pass@123')
+        self.session_user_token = Token.objects.create(user=self.session_user)
+        self.session_user_token.save()
+        self.session = AppointmentSession.objects.create(type="Morning")
+
+    def test_create_appointment_session(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.session_user_token.key)
+        url = reverse('appointment_session-list')
+        data = {
+            "type": "Evening"
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.data['type'], "Evening")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_get_appointment_session_list(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.session_user_token.key)
+        url = reverse('appointment_session-list')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_appointment_session(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.session_user_token.key)
+        url = reverse('appointment_session-detail', kwargs={'pk': self.session.id})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.data['type'], "Morning")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_delete_appointment_session(self):
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.session_user_token.key)
+        url = reverse('appointment_session-detail', kwargs={'pk': self.session.id})
+        response = self.client.delete(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_str_is_equal_to_appointment_session_type(self):
+        """
+        Method `__str__` should be equal to field `type`
+        """
+        appointment_session = AppointmentSession.objects.get(pk=1)
+        self.assertEqual(str(appointment_session), appointment_session.type)

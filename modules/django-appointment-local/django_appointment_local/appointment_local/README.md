@@ -1,30 +1,40 @@
 # Appointment local
+
 Appointment local will allow user to create and save appointments locally on a database
 
 ## Features
+
 1. Ability to create an appointment
 2. Ability to show appointments in the calendar
 3. Ability to edit and delete an appointment
 4. Ability to remind the user of the appointment
-5. Ability to search appointments 
-6. Ability to view appointment attendees who will show up/attend the meeting/event including the meeting/event organizer
+5. Ability to search appointments
+6. Ability to create, update, get, and delete an appointment session type
+7. Ability to view appointment attendees who will show up/attend the meeting/event including the meeting/event organizer
 
 ## Instructions to run project
+
 1.Make Migration
+
 ```
 python manage.py makemigrations
 
 ```
+
 2. Migrate
+
 ```
 python manage.py migrate
 ```
+
 3. Run server
+
 ```
 python manage.py runserver
 ```
 
 ## Api Table
+
 List of api's endpoints with params needed for these apis.
 
 | Api Name                                                         |                                            Param                                             | Description                                                                                                                                                                              |
@@ -41,19 +51,26 @@ List of api's endpoints with params needed for these apis.
 | `/modules/appointment-local/appointment/{id}/` `PUT`             |           path_param `{id}` body_params [Appointment Object](#appointment-object)            | Returns full updated detail of specific appointment.                                                                                                                                     |
 | `/modules/appointment-local/appointment/{id}/` `PATCH`           |           path_param `{id}` body_params [Appointment Object](#appointment-object)            | Returns patch updated detail of specific appointments.                                                                                                                                   |
 | `/modules/appointment-local/appointment/{id}/` `DELETE`          |                                      path_param `{id}`                                       | Delete specific appointment. Returns No content.                                                                                                                                         |
-
+| `/modules/appointment-local/appointment_session/` `POST`         |                                      body_params `type`                                      | See details about created appointment session.                                                                                                                                           |
+| `/modules/appointment-local/appointment_session/{id}/` `GET`     |                                      path_param `{id}`                                       | Returns detail of specific appointment session.                                                                                                                                          |
+| `/modules/appointment-local/appointment_session/{id}/` `PUT`     |                             path_param `{id}` body_params `type`                             | Returns full updated detail of specific appointment session.                                                                                                                             |
+| `/modules/appointment-local/appointment_session/{id}/` `PATCH`   |                             path_param `{id}` body_params `type`                             | Returns patch updated detail of specific appointment session.                                                                                                                            |
+| `/modules/appointment-local/appointment_session/{id}/` `DELETE`  |                                      path_param `{id}`                                       | Delete specific appointment session and returns No content.                                                                                                                              |
 
 ### Appointment Object
 
-Appointment Object consist of the SESSION_DAY details if a user is creating a meeting in morning or afternoon, evening or night. Detail of the client details like, name, email, age, gender and notes, the appointment date, start_time, end_time, cost for the appointment, discount on that appointment and additional fee.
+Appointment Object consist of the SESSION_DAY details if a user is creating a meeting in morning or afternoon, evening
+or night. Detail of the client details like, name, email, age, gender and notes, the appointment date, start_time,
+end_time, cost for the appointment, discount on that appointment and additional fee.
 
 Here is the example of an appointment object.
+
 ```console
 {
     service_provider: 1,            // Id of the service-provider whom with appointment will be created.
     client: 3                       // Id of the User who is creating the appointment
     selected_date: '2022-10-20',    // Date on which meeting is scheduled.
-    session: 'Morning',             // Session for the appointment if user wants to meet service_provider in morning, afternoon or evening.
+    session: 1 ,                    // Id of Session for the appointment if user wants to meet service_provider in morning, afternoon or evening.
     start_time: "10:00:00"          // Time on which appointment/meeting will start.
     end_time : "11:00:00"           // Time on which appointment/meeting will end
     name: "John"                    // Name of the client whom for appointment is being created.
@@ -71,9 +88,13 @@ Here is the example of an appointment object.
 ```
 
 ## Module Specifications
-Here is the [Module Specification Document](https://docs.google.com/document/d/1oOjHadHw4fUA9JxfIykAqEhAeokcCRqgDkcQjyUkUJk/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+Here is
+the [Module Specification Document](https://docs.google.com/document/d/1oOjHadHw4fUA9JxfIykAqEhAeokcCRqgDkcQjyUkUJk/edit?usp=sharing),
+which provides more information about the module's actual intentions.
 
 ## Postman Collection for Module APi Endpoints
+
 Here is a collection of all the api endpoints for the module.
 [Appointment Local Postman Collection](https://drive.google.com/file/d/19x0jpCL-JeAa-eFYrKuc5gRavu662-w-/view?usp=share_link)
 
