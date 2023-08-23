@@ -13,6 +13,9 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 3. Run server
+```
+python manage.py runserver
+```
 
 ## Api Table
 List of api's endpoints with params needed for these apis.
