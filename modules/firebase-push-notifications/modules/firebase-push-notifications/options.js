@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 const authToken = "";
 const senderID = "";
-const userID = ""
+const userID = "";
 
 const styles = StyleSheet.create({
   container: { flex: 1 },

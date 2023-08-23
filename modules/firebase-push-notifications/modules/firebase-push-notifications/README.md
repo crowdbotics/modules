@@ -162,19 +162,53 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 5. In ios/Podfile, At the top add:
 
 ```
+require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-require_relative '../node_modules/react-native/scripts/react_native_pods' 
-```
-and then add the following lines:
 
-```
+platform :ios, '12.4'
+install! 'cocoapods', :disable_input_output_paths => true
+install! 'cocoapods', :deterministic_uuids => false
+
+
+target 'demo' do
+  config = use_native_modules!
+
+  use_react_native!(
+    :path => config[:reactNativePath],
+    # to enable hermes on iOS, change `false` to `true` and then install pods
+    :hermes_enabled => false
+  )
+
+  use_frameworks! :linkage => :static
 
   pod 'Firebase/Core'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Analytics'
+  pod 'Firebase/Messaging'
 
-  pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
+  target 'demoTests' do
+    inherit! :complete
+    # Pods for testing
+  end
+
+  # Enables Flipper.
+  #
+  # Note that if you have use_frameworks! enabled, Flipper will not work and
+  # you should disable the next line.
+  # use_flipper!()
+
+  post_install do |installer|
+    react_native_post_install(installer)
+    installer.pods_project.targets.each do |target|
+     
+      if (target.name&.eql?('FBReactNativeSpec'))
+        target.build_phases.each do |build_phase|
+          if (build_phase.respond_to?(:name) && build_phase.name.eql?('[CP-User] Generate Specs'))
+            target.build_phases.move(build_phase, 0)
+          end
+        end
+      end
+    end
+  end
+end
   
 ```
 
@@ -197,6 +231,7 @@ in modules/fcm/options.js update the senderId and authToken
 ```
 const authToken = "Your Authorization token";
 const senderID = "FCM Sender ID ";
+const userID = 1;
 ```
 
 
