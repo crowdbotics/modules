@@ -1,6 +1,5 @@
 # Okta
 
-
 ## Okta ODIC (OpenID Connect) App Setup
 1. Create an account on [Okta](https://www.okta.com/free-trial/).
 2. Click on `Application` tab from the sidebar.
@@ -10,6 +9,29 @@
 6. Provide `Sign-in redirect URIs` and `Sign-out redirect URIs`.
 7. Select `Allow everyone in your organization to access` from **Assignments** section, and click **Save** button.
 8. Assign the app to the users by clicking on `Assignments` tab. These will be able to access your app.
+
+
+### Okta React Native for ODIC (OpenID Connect) App
+Install [Okta React Native](https://www.npmjs.com/package/@okta/okta-react-native/v/2.6.0) package. Use `createConfig` method to configure the client successfully.
+
+```javascript
+import { createConfig } from '@okta/okta-react-native';
+
+await createConfig({
+  issuer: "https://{yourOktaDomain}/oauth2/default", // Optional
+  clientId: "{clientId}",
+  redirectUri: "{redirectUri}",
+  endSessionRedirectUri: "{endSessionRedirectUri}",
+  discoveryUri: "https://{yourOktaDomain}",
+  scopes: ["openid", "profile", "offline_access"],
+  requireHardwareBackedKeyStore: true, // Optional
+  androidChromeTabColor: "#FF00AA", // Optional
+  browserMatchAll: true, // Optional
+  httpConnectionTimeout: 15, // Optional
+  httpReadTimeout: 10, // Optional
+});
+```
+This method will create a configured client on the native modules. Resolves true if successfully configures a client.
 
 
 ## Okta SAML 2.0 App Setup
@@ -22,6 +44,15 @@
 7. Assign the app to the users by clicking on `Assignments` tab. These will be able to access your app.
 
 
+## Enable Sign-On authentication
+You must enable sign-on authentication to to get stateToken to logout your user.
+1. On dashboard, In sidebar under the **Security** tab click `Multifactor`. A list of **Factor Types** will appear. Activate any of the **Factor Types**.
+2. Click on **Factor Enrollment** tab. In **Default Policy** section `Factor Type` that was activated previously will appear here. click on `Edit` button and set that **Factor Types** `required`. Click **Save** button.
+3. In sidebar under the **Security** tab click `Authentication`.
+4. On **Authentication** page click `Sign-On` tab. Click on **Add rule** button.
+5. Enter `Rule name`, set `Multifactor authentication (MFA) is` radio button to required. Select `When signing in with a new device cookie` radio button. Lastly, check `Select "Don't prompt me again for MFA" by default` checkbox and click **Create rule** button.
+
+
 ## Update Settings
 In `settings.py` add the following:
 
@@ -30,6 +61,7 @@ MIDDLEWARE += ['modules.django_okta.okta.custom_middleware.OktaTokenValidator']
 OKTA_BASE_URL = "https://{your_Okta_domain}/api/v1"
 OKTA_API_TOKEN = "Token created on Okta"
 ```
+
 
 ## Migration
 Run the following command to get migrations
