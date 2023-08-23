@@ -1,4 +1,4 @@
-## django-files backend configuration and information
+## Django Files backend configuration and information
 
 ## Module description
 
@@ -20,9 +20,9 @@ The following are the critical features in scope for this module.
 ## Features
 
 - [x] This module includes migrations.
-[ ] This module includes environment variables.
-[ ] This module requires manual configurations.
-[ ] This module can be configured with module options.
+- [ ] This module includes environment variables.
+- [ ] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
 ## Environment variables
 
