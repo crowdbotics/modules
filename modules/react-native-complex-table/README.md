@@ -8,8 +8,14 @@ Module has a table with search and sorting functionality. COntent of the table c
 3. Sort the content of the table in descending order
 4. Sort the content of the table in ascending alphabetically
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+## Required Dependencies
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
+Keep the below packages in project's `package.json` file.
+```
+   "react-native-dropdown-picker": "^5.4.4",
+   "react-hook-form": "^7.43.2"
+```
+RUn the command to install dependencies:
   ```
   yarn install
   ```
