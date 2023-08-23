@@ -20,6 +20,11 @@ class DownloadFileSerializer(serializers.Serializer):
     file_name = serializers.CharField(required=True)
 
 
+class DeleteFileSerializer(serializers.Serializer):
+    bucket = serializers.CharField(required=True)
+    file_name = serializers.CharField(required=True)
+
+
 class PresignedUrlFileSerializer(serializers.Serializer):
     file_name = serializers.CharField(required=True)
     bucket = serializers.CharField(required=True)

@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_aws",
+    name="cb_django_s3_file_uploader",
     version="0.1",
-    packages=["aws"],
+    packages=["s3-file-uploader"],
     install_requires=["boto3"],
     cmdclass={"build": BuildCommand},
 )
