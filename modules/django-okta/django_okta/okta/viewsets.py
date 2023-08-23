@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.response import Response
 import requests
 
+from modules.django_okta.okta.custom_decorator import verification_required
 from modules.django_okta.okta.models import Okta
 
 
@@ -38,6 +39,7 @@ class OktaViewSet(APIView):
 
 class OktaCancelViewSet(APIView):
 
+	@verification_required
 	def post(self, request, *args, **kwargs):
 		try:
 			r = requests.post(settings.OKTA_BASE_URL + "/authn/cancel", json=request.data)
