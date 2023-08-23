@@ -21,7 +21,7 @@ class MeetingInformationViewSet(viewsets.ModelViewSet):
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     """
-       AppointmentViewSet provide CRUD (Create, Read, Update, Delete) operations for appointments
+       AppointmentViewSet  provide CRUD (Create, Read, Update, Delete) operations for appointments
        between clients and service providers, with validation to ensure appointments are for today or future
        dates.
        body_params: "service_provider", "client", "selected_date", "session", "start_time", "end_time", "name"
@@ -40,7 +40,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 class AppointmentSessionViewSet(viewsets.ModelViewSet):
     """
     AppointmentSessionViewSet module provide CRUD (Create, Read, Update, Delete) operations for appointments
-    body_params: "type" include("Morning", "Afternoon", "Evening", "Night") 
+    body_params: "type" include("Morning", "Afternoon", "Evening", "Night")
     """
     queryset = AppointmentSession.objects.all()
     serializer_class = AppointmentSessionSerializer

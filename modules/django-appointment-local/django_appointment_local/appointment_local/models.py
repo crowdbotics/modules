@@ -21,6 +21,7 @@ class MeetingInformation(TimeStamp):
         ('Message', 'Messaging'),
         ('Voice', 'Voice Call'),
         ('Video', 'Video Call'),
+        ('Onsite', 'Onsite'),
     ]
     service_provider = models.ForeignKey(User, on_delete=models.CASCADE, related_name="service_provider_fee_info")
     meeting_type = models.CharField(max_length=10, choices=MEETING_TYPE_CHOICES, default="Message")
@@ -59,10 +60,11 @@ class Appointment(TimeStamp):
     end_time = models.TimeField()
     is_available = models.BooleanField(default=False)
     name = models.CharField(max_length=40)
+    address = models.CharField(max_length=256, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
-    age = models.PositiveIntegerField()
+    age = models.PositiveIntegerField(null=True, blank=True)
     gender = models.CharField(max_length=7, choices=GENDER_CHOICES, default="Male")
-    add_note = models.TextField()
+    add_note = models.TextField(null=True, blank=True)
     appointment_cost = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     additional_fee = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
     sub_total = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)

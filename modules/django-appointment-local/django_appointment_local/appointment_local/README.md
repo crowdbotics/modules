@@ -76,6 +76,7 @@ Here is the example of an appointment object.
     name: "John"                    // Name of the client whom for appointment is being created.
     email: "john@boun.com"          // email of the client
     age : 28                        // Age of the client
+    address : USA                   // Address of the meeting
     gender: 'Male'                  // Gender of the client
     add_note: 'client notes'        // Notes from the client. If client has some details/notes for the service_provider can add here.
     appointment_cost: 60.00         // Cost that client has to py for the appointment

@@ -104,9 +104,11 @@ class AppointmentTestCases(APITestCase):
         self.session.save()
         self.appointment = Appointment.objects.get_or_create(service_provider=self.service_user,
                                                              client=self.client_user,
-                                                             selected_date=date.today(), start_time="10:51:00", session=self.session,
+                                                             selected_date=date.today(), start_time="10:51:00",
+                                                             session=self.session,
                                                              end_time="11:51:00", email="john123@doe.com", age=21,
                                                              name='john', gender="male", add_note="dr john",
+                                                             address="address",
                                                              appointment_type__in=[self.meeting.id])
         self.service_token = Token.objects.create(user=self.service_user)
         self.client_token = Token.objects.create(user=self.client_user)
@@ -125,12 +127,13 @@ class AppointmentTestCases(APITestCase):
             "name": "john-doe",
             "email": "john@doe.com",
             "age": "21",
+            "address": "address",
             "gender": "Male",
             "add_note": "appointment for discussion",
             "appointment_type": [self.meeting.id],
         }
         response = self.client.post(url, data=data, format="json")
-        self.assertEqual(len(response.data), 21)
+        self.assertEqual(len(response.data), 22)
         self.assertEqual(response.data['name'], 'john-doe')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -207,12 +210,13 @@ class AppointmentTestCases(APITestCase):
             "name": "david-doe",
             "email": "john@doe.com",
             "age": "22",
+            "address": "address",
             "gender": "Male",
             "add_note": "appointment for regular checkup",
             "appointment_type": [self.meeting.id],
         }
         response = self.client.put(url, data=data, format="json")
-        self.assertEqual(len(response.data), 21)
+        self.assertEqual(len(response.data), 22)
         self.assertEqual(response.data['add_note'], 'appointment for regular checkup')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
