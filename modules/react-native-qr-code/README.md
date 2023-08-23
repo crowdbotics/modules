@@ -7,7 +7,8 @@ This module allows the user to generate qr-code by entering text and read a qr-c
 - Generate a qr code by entering custom text
 - Scan qr code through camera.
 
-![Module preview](https://github.com/crowdbotics/modules/blob/master/modules/react-native-qr-code/preview.png?raw=true)
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/7605b2a5-8ec5-46d2-99b8-dba56ff39e92)
+
 
 ## ## Features
 
