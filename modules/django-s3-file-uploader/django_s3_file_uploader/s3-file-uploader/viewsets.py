@@ -20,9 +20,9 @@ class S3ViewSet(viewsets.GenericViewSet):
         - create_presigned_url: The method generates presigned url for the file/object that grants a user temporary access to an S3 object.
     """
     s3_service = S3Service(
-        region=os.getenv('S3_REGION', ""),
-        access_key=os.getenv('S3_ACCESS_KEY', ""),
-        access_secret=os.getenv('S3_ACCESS_SECRET')
+        region=os.getenv('AWS_STORAGE_REGION', ""),
+        access_key=os.getenv('AWS_ACCESS_KEY_ID', ""),
+        access_secret=os.getenv('AWS_SECRET_ACCESS_KEY')
     )
 
     allowed_serializers = {
