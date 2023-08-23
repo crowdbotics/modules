@@ -1,13 +1,23 @@
 # Okta
 
+## Module description
+
 By using this module user can sign in to multiple apps at once.
 
-## Features
-
+Features included:
 1. Sign in through social accounts
 2. Sing in to connected apps at once
 
-## Okta ODIC (OpenID Connect) App Setup
+## Features
+
+- [x] This module includes migrations.
+- [x] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
+
+## 3rd party setup
+
+### Okta ODIC (OpenID Connect) App Setup
 
 1. Create an account on [Okta](https://www.okta.com/free-trial/).
 2. Click on `Application` tab from the sidebar.
@@ -21,10 +31,9 @@ By using this module user can sign in to multiple apps at once.
 
 ### Okta React Native for ODIC (OpenID Connect) App
 
-Install [Okta React Native](https://www.npmjs.com/package/@okta/okta-react-native/v/2.6.0) package. Use `createConfig`
-method to configure the client successfully.
+Install [Okta React Native](https://www.npmjs.com/package/@okta/okta-react-native/v/2.6.0) package. Use `createConfig` method to configure the client successfully.
 
-## Okta SAML 2.0 App Setup
+### Okta SAML 2.0 App Setup
 
 1. Click on `Application` tab from the sidebar.
 2. Click on `Create App Integration` button.
@@ -35,7 +44,7 @@ method to configure the client successfully.
    check `This is an internal app that we have created` checkbox. Click **Finish** button.
 7. Assign the app to the users by clicking on `Assignments` tab. These will be able to access your app.
 
-## Enable Sign-On authentication
+### Enable Sign-On authentication
 
 You must enable sign-on authentication to to get stateToken to logout your user.
 
@@ -49,11 +58,9 @@ You must enable sign-on authentication to to get stateToken to logout your user.
    Select `When signing in with a new device cookie` radio button. Lastly,
    check `Select "Don't prompt me again for MFA" by default` checkbox and click **Create rule** button.
 
-## Create Google as Social Identity Provider.
+### Create Google as Social Identity Provider.
 
-Okta integrates with many Identity Providers. Select an Identity Provider card to
-add [social login](https://developer.okta.com/docs/guides/identity-providers/#enterprise-identity-providers) to your
-app.
+Okta integrates with many Identity Providers. Select an Identity Provider card to add [social login](https://developer.okta.com/docs/guides/identity-providers/#enterprise-identity-providers) to your app.
 
 **Create an app at the Identity Provide**
 
@@ -73,7 +80,7 @@ app.
 4. Paste the `client ID` and `Secret ID` that you obtained from the Google Developers Console.
 5. Leave the scopes defaults. and click the `Finish` button.
 6. Hit the following url in the browser with your keys.
-   `https://{YourOktaDomain}.okta.com/oauth2/v1/authorize?idp={IdP_ID}&client_id={App_Client_ID}&response_type=id_token token&response_mode=fragment&scope=openid%20profile%20email&redirect_uri={sign_in redirect url}&state=WM6D&nonce=YsG76jo`
+   `https://{YOUR_OTKA_DOMAIN_HERE}.okta.com/oauth2/v1/authorize?idp={IDP_ID_HERE}&client_id={APP_CLIENT_ID_HERE}&response_type=id_token token&response_mode=fragment&scope=openid%20profile%20email&redirect_uri={sign_in redirect url}&state=WM6D&nonce=YsG76jo`
 7. After successful authentication, the you will be redirected to the redirect URI that you specified, along with
    an `#id_token` and `#access_token`.
 
@@ -86,23 +93,8 @@ OKTA_BASE_URL = "https://{your_Okta_domain}/api/v1"
 OKTA_API_TOKEN = "Token created on Okta"
 ```
 
-## Migration
 
-Run the following command to get migrations
-
-```console
-python manage.py makemigrations
-python manage.py migrate
-
-```
-
-Start the server by running the following command :
-
-```console
-python manage.py runserver
-```
-
-## Api Table
+## API Details
 
 List of api's endpoints with params needed for these apis.
 
@@ -113,44 +105,32 @@ List of api's endpoints with params needed for these apis.
 | `okta-callback/` |             -             | Called after the authentication confirmed from the okta.     |
 | `create-user/`   |       `user_object`       | See **user_object** bellow.                                  |
 
-###     * **signin_object**
+### Signin Object
 
 **signin_object** has some extra options to get `stateToken` which will be used to sign out the user.
 
 ```javascript
 {
     username: "john6551@doe.com",
-        password
-:
-    "john123",
-        options
-:
-    {
+    password : "john123",
+    options: {
         multiOptionalFactorEnroll: false,
-            warnBeforePasswordExpired
-    :
-        true
+        warnBeforePasswordExpired: true
     }
 }
 ```
 
-###     * **user_object**
+### User Object
 
-User object contains the user details that is going to be added. this `user_object` will look something like this:
+**User object** contains the user details that is going to be added. this `user_object` will look something like this:
 
 ```javascript
 {
     profile: {
         firstName: "DemoTemp",
-            lastName
-    :
-        "Brock",
-            email
-    :
-        "pixedon897@mliok.com",
-            login
-    :
-        "pixedon897@mliok.com"
+        lastName: "Brock",
+        email: "pixedon897@mliok.com",
+        login: "pixedon897@mliok.com"
     }
     credentials: {
         password : {
@@ -158,9 +138,7 @@ User object contains the user details that is going to be added. this `user_obje
         }
         recovery_question: {
             question: "what is you father name",
-                answer
-        :
-            "Annie Oakley"
+            answer: "Annie Oakley"
         }
     }
 }
@@ -190,13 +168,4 @@ This method will create a configured client on the native modules. Resolves true
 
 Here is
 the [Module Specification Document](https://docs.google.com/document/d/196x2hd5SVwGvG2KhJdDCZ2o4ksPlKpQNpF6JRHVA4gM/edit?usp=sharing),
-which provides more information about the module's actual intentions.
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+which provides more information about the module's features.
