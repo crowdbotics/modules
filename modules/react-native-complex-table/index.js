@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, Alert } from "react-native";
 import { styles } from "./styles";
 import options from "./options";
 import { Input } from "./components/TextInput";
@@ -14,7 +14,7 @@ const ComplexTable = () => {
   useEffect(() => {
     if (query.length > 0) {
       setInitialData(
-        tableData.filter(item =>
+        tableData.filter((item) =>
           item.name.toLowerCase().includes(query.toLowerCase())
         )
       );
@@ -27,20 +27,23 @@ const ComplexTable = () => {
     let sortedArr = [];
     switch (sort) {
       case "ascending":
-        setInitialData(tableData);
+        sortedArr = tableData.sort(function (a, b) {
+          return a.ID - b.ID;
+        });
+        setInitialData(sortedArr);
         break;
       case "descending":
-        initialData.forEach(element => {
+        tableData.forEach((element) => {
           sortedArr.unshift(element);
         });
         setInitialData(sortedArr);
         break;
       case "alphabatic":
-        sortedArr = initialData.sort((a, b) => a.name.localeCompare(b.name));
+        sortedArr = tableData.sort((a, b) => a.name.localeCompare(b.name));
         setInitialData(sortedArr);
         break;
       default:
-        console.log("Something went wrong");
+        Alert.alert("Error: ", "Issue in sorting table content.");
     }
   }, [sort]);
 

@@ -19,7 +19,7 @@ export const DropDown = ({ setSort }) => {
         defaultValue=""
         control={control}
         render={({ field: { onChange, value } }) => (
-          <View style={styles.dropdownGender}>
+          <View style={styles.dropdownSort}>
             <DropDownPicker
               style={styles.dropdown}
               open={genderOpen}
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   placeholderStyles: {
     color: "grey"
   },
-  dropdownGender: {
+  dropdownSort: {
     marginBottom: 15
   },
   dropdown: {
