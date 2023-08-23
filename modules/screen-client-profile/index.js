@@ -1,11 +1,21 @@
-import { View, Text, StyleSheet, Image, ScrollView, TextInput, Pressable, Switch, ImageBackground } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TextInput,
+  Pressable,
+  Switch,
+  ImageBackground
+} from "react-native";
 import React, { useState } from "react";
 
 const ClientProfile = ({ navigation }) => {
   const [isEnabled, setIsEnabled] = useState(true);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [isEnabled1, setIsEnabled1] = useState(true);
-  const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
   const data = [
     {
       id: 1,
@@ -15,118 +25,142 @@ const ClientProfile = ({ navigation }) => {
       designation: "Doctor",
       experience: "5+ Year Experience",
       image:
-                "https://raw.githubusercontent.com/crowdbotics/modules/master/modules/screen-explore-list/assets/eventImage-lg.png"
+        "https://raw.githubusercontent.com/crowdbotics/modules/master/modules/screen-explore-list/assets/eventImage-lg.png"
     }
   ];
 
   return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.headerContainer}>
-                    <View style={styles.walletCard}>
-                        <View style={styles.walletInner}>
-                            <View style={styles.imgContainer}>
-                                <ImageBackground source={require("./assets/profile.png")} resizeMode="cover" style={styles.backImage}>
-                                    <Image source={require("./assets/online.png")} style={styles.image} />
-                                </ImageBackground>
-                            </View>
-                            <View style={styles.walletCarder}>
-                                <Text style={styles.eventName}>{data[0].title}</Text>
-                                <View style={styles.leftSection}>
-                                    <Image source={require("./assets/phone.png")} style={styles.phone} />
-                                    <Image source={require("./assets/message.png")} style={styles.phone} />
-                                    <Image source={require("./assets/bell.png")} style={styles.phone} />
-                                    <Image source={require("./assets/sound.png")} style={styles.phone} />
-                                </View>
-                            </View>
-                        </View>
-
-                    </View>
-                    <View style={styles.scheduledContainer}>
-                        <Text style={styles.dateTitle}>Next appointment</Text>
-                        <View style={styles.alignContent}>
-                            <Text style={styles.time}>Date:  Thu, 23</Text>
-                            <Text style={styles.time}>Time: 12:00 AM</Text>
-                        </View>
-                    </View>
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <View style={styles.walletCard}>
+            <View style={styles.walletInner}>
+              <View style={styles.imgContainer}>
+                <ImageBackground
+                  source={require("./assets/profile.png")}
+                  resizeMode="cover"
+                  style={styles.backImage}
+                >
+                  <Image
+                    source={require("./assets/online.png")}
+                    style={styles.image}
+                  />
+                </ImageBackground>
+              </View>
+              <View style={styles.walletCarder}>
+                <Text style={styles.eventName}>{data[0].title}</Text>
+                <View style={styles.leftSection}>
+                  <Image
+                    source={require("./assets/phone.png")}
+                    style={styles.phone}
+                  />
+                  <Image
+                    source={require("./assets/message.png")}
+                    style={styles.phone}
+                  />
+                  <Image
+                    source={require("./assets/bell.png")}
+                    style={styles.phone}
+                  />
+                  <Image
+                    source={require("./assets/sound.png")}
+                    style={styles.phone}
+                  />
                 </View>
-
-                <View style={styles.cardInfo}>
-                    <View style={[styles.headingContainer, { paddingHorizontal: 5 }]}>
-                        <Text style={styles.title}>My appointments</Text>
-                        <Text style={styles.subTitle}>View now</Text>
-                    </View>
-
-                    <Text style={styles.subHeading}>Profile details</Text>
-                    <Text style={styles.mr10}>Full Name</Text>
-                    <View style={styles.InputBox}>
-                        <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                    </View>
-                    <Text style={styles.mr10}>Email address</Text>
-                    <View style={styles.InputBox}>
-                        <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                    </View>
-                    <View style={styles.feeContainer}>
-                        <View>
-                            <Text style={[styles.mr10, { marginLeft: 15 }]}>Age</Text>
-                            <View style={styles.feeSection}>
-                                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={[styles.mr10, { marginLeft: 15 }]}>Gender</Text>
-                            <View style={styles.feeSection}>
-                                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                            </View>
-                        </View>
-                    </View>
-                    <Text style={styles.mr10}>Add notes</Text>
-                    <View style={styles.textInput}>
-                        <Input placeholder="Enter" multiline={true} />
-                    </View>
-                    <Text style={[styles.subHeading, { marginBottom: 5, marginTop: 25 }]}>System request access</Text>
-                    <View style={styles.sectionContainer}>
-                        <View style={styles.switchContainer}>
-                            <Text style={styles.label}>Notifications</Text>
-                            <Switch
-                                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
-                                thumbColor={isEnabled ? "#000" : "#000"}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={isEnabled}
-                            />
-                        </View>
-                        <View style={styles.switchContainer1}>
-                            <Text style={styles.label}>Messaging</Text>
-                            <Switch
-                                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
-                                thumbColor={isEnabled1 ? "#000" : "#000"}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch1}
-                                value={isEnabled1}
-                            />
-                        </View>
-                    </View>
-
-                </View>
-            </ScrollView>
-            <View style={styles.footer}>
-                <Footer
-                    images={[
-                      // @ts-ignore
-                      require("./assets/home.png"),
-                      // @ts-ignore
-                      require("./assets/calender.png"),
-                      // @ts-ignore
-                      require("./assets/search.png"),
-                      // @ts-ignore
-                      require("./assets/user.png")
-                    ]}
-                    routes={["homeScreen", "orderStatusScreen", "searchScreen", "accountScreen"]}
-                    navigation={navigation}
-                />
+              </View>
             </View>
+          </View>
+          <View style={styles.scheduledContainer}>
+            <Text style={styles.dateTitle}>Next appointment</Text>
+            <View style={styles.alignContent}>
+              <Text style={styles.time}>Date: Thu, 23</Text>
+              <Text style={styles.time}>Time: 12:00 AM</Text>
+            </View>
+          </View>
         </View>
+
+        <View style={styles.cardInfo}>
+          <View style={[styles.headingContainer, { paddingHorizontal: 5 }]}>
+            <Text style={styles.title}>My appointments</Text>
+            <Text style={styles.subTitle}>View now</Text>
+          </View>
+
+          <Text style={styles.subHeading}>Profile details</Text>
+          <Text style={styles.mr10}>Full Name</Text>
+          <View style={styles.InputBox}>
+            <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+          </View>
+          <Text style={styles.mr10}>Email address</Text>
+          <View style={styles.InputBox}>
+            <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+          </View>
+          <View style={styles.feeContainer}>
+            <View>
+              <Text style={[styles.mr10, { marginLeft: 15 }]}>Age</Text>
+              <View style={styles.feeSection}>
+                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+              </View>
+            </View>
+            <View>
+              <Text style={[styles.mr10, { marginLeft: 15 }]}>Gender</Text>
+              <View style={styles.feeSection}>
+                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+              </View>
+            </View>
+          </View>
+          <Text style={styles.mr10}>Add notes</Text>
+          <View style={styles.textInput}>
+            <Input placeholder="Enter" multiline={true} />
+          </View>
+          <Text style={[styles.subHeading, { marginBottom: 5, marginTop: 25 }]}>
+            System request access
+          </Text>
+          <View style={styles.sectionContainer}>
+            <View style={styles.switchContainer}>
+              <Text style={styles.label}>Notifications</Text>
+              <Switch
+                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
+                thumbColor={isEnabled ? "#000" : "#000"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
+            <View style={styles.switchContainer1}>
+              <Text style={styles.label}>Messaging</Text>
+              <Switch
+                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
+                thumbColor={isEnabled1 ? "#000" : "#000"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch1}
+                value={isEnabled1}
+              />
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+      <View style={styles.footer}>
+        <Footer
+          images={[
+            // @ts-ignore
+            require("./assets/home.png"),
+            // @ts-ignore
+            require("./assets/calender.png"),
+            // @ts-ignore
+            require("./assets/search.png"),
+            // @ts-ignore
+            require("./assets/user.png")
+          ]}
+          routes={[
+            "homeScreen",
+            "orderStatusScreen",
+            "searchScreen",
+            "accountScreen"
+          ]}
+          navigation={navigation}
+        />
+      </View>
+    </View>
   );
 };
 
@@ -192,7 +226,14 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "flex-end"
   },
-  image: { resizeMode: "contain", height: 12, width: 12, marginLeft: 10, marginRight: -5, marginBottom: -3 },
+  image: {
+    resizeMode: "contain",
+    height: 12,
+    width: 12,
+    marginLeft: 10,
+    marginRight: -5,
+    marginBottom: -3
+  },
   leftSection: {
     alignSelf: "flex-start",
     flexDirection: "row",
@@ -230,20 +271,54 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  alignContent: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 10 },
+  alignContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingRight: 10
+  },
   cardInfo: {
     paddingHorizontal: 10,
     backgroundColor: "#fff",
     marginBottom: 60
   },
-  subHeading: { fontSize: 16, fontWeight: "bold", marginLeft: 5, marginTop: 10, marginBottom: 20, color: "#2D2D2D" },
+  subHeading: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 5,
+    marginTop: 10,
+    marginBottom: 20,
+    color: "#2D2D2D"
+  },
   mr10: {
     marginLeft: 15,
     marginBottom: 10
   },
-  InputBox: { paddingHorizontal: 10, borderColor: "#C4C4C4", marginHorizontal: 5, borderWidth: 1, borderRadius: 10, marginBottom: 10, backgroundColor: "#f7f7f7" },
-  textInput: { borderWidth: 1, borderRadius: 10, borderColor: "#C4C4C4", paddingHorizontal: 5, height: 140, marginHorizontal: 5, backgroundColor: "#f7f7f7" },
-  feeContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 5, marginBottom: 10 },
+  InputBox: {
+    paddingHorizontal: 10,
+    borderColor: "#C4C4C4",
+    marginHorizontal: 5,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginBottom: 10,
+    backgroundColor: "#f7f7f7"
+  },
+  textInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#C4C4C4",
+    paddingHorizontal: 5,
+    height: 140,
+    marginHorizontal: 5,
+    backgroundColor: "#f7f7f7"
+  },
+  feeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 5,
+    marginBottom: 10
+  },
   feeSection: {
     justifyContent: "center",
     alignItems: "flex-start",
@@ -283,19 +358,19 @@ const styles = StyleSheet.create({
 
 const Input = (props) => {
   return (
-        <View style={styles.container}>
-            <TextInput
-                style={inputStyles.input}
-                placeholder={props.placeholder}
-                value={props.value}
-                onChangeText={(num) => props.setValue(num)}
-                placeholderTextColor='#000'
-                multiline={props.multiline}
-                numberOfLines={props.multiline ? 10 : null}
-                editable={props.editable !== false}
-                borderWidth={props.borderWidth}
-            />
-        </View>
+    <View style={styles.container}>
+      <TextInput
+        style={inputStyles.input}
+        placeholder={props.placeholder}
+        value={props.value}
+        onChangeText={(num) => props.setValue(num)}
+        placeholderTextColor="#000"
+        multiline={props.multiline}
+        numberOfLines={props.multiline ? 10 : null}
+        editable={props.editable !== false}
+        borderWidth={props.borderWidth}
+      />
+    </View>
   );
 };
 
@@ -314,18 +389,19 @@ const inputStyles = StyleSheet.create({
   }
 });
 
-const Footer = props => {
+const Footer = (props) => {
   return (
-        <View style={[footerStyles.footer]}>
-            {props.images.map((image, index) => (
-                <Pressable style={footerStyles.footerItem} key={index} onPress={() => props.navigation.navigate(props.routes[index])}>
-                    <Image
-                        style={footerStyles.footerImage}
-                        source={image}
-                    />
-                </Pressable>
-            ))}
-        </View>
+    <View style={[footerStyles.footer]}>
+      {props.images.map((image, index) => (
+        <Pressable
+          style={footerStyles.footerItem}
+          key={index}
+          onPress={() => props.navigation.navigate(props.routes[index])}
+        >
+          <Image style={footerStyles.footerImage} source={image} />
+        </Pressable>
+      ))}
+    </View>
   );
 };
 
@@ -343,7 +419,7 @@ const footerStyles = StyleSheet.create({
       height: 12
     },
     shadowOpacity: 0.58,
-    shadowRadius: 16.00,
+    shadowRadius: 16.0,
 
     elevation: 24
   },
