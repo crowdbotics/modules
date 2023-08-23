@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_appointment_local",
     version="0.1",
-    packages=["appointment-local"],
+    packages=["appointment_local"],
     install_requires=[],
     cmdclass={"build": BuildCommand},
 ) 
