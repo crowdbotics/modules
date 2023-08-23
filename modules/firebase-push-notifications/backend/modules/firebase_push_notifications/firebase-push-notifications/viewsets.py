@@ -1,5 +1,4 @@
 import os
-
 import firebase_admin
 from django.db.models import OuterRef, Exists
 from fcm_django.models import FCMDevice
@@ -11,10 +10,14 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Notification, UserNotification
-from .serializers import FCMDeviceSerializer, FCMNotificationSerializer, UserNotificationSerializer, \
-    UserNotificationValidationSerializer
+from .serializers import (
+    FCMDeviceSerializer,
+    FCMNotificationSerializer,
+    UserNotificationSerializer,
+    UserNotificationValidationSerializer,
+)
 
-cred = credentials.Certificate(os.getenv('FCM_SERVICE_FILE_PATH', ''))
+cred = credentials.Certificate(os.getenv("FCM_SERVICE_FILE_PATH", ""))
 firebase_admin.initialize_app(cred)
 
 
@@ -24,7 +27,11 @@ class UserFCMDeviceAdd(CreateAPIView):
     ensuring that duplicate registrations are avoided and the validity of the registration ID is verified.
     body_params: "name", "user", "device_id", "type", "registration_token"
     """
-    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+
+    authentication_classes = [
+        authentication.TokenAuthentication,
+        authentication.SessionAuthentication,
+    ]
     permission_classes = [permissions.IsAuthenticated]
     queryset = FCMDevice.objects.all()
     serializer_class = FCMDeviceSerializer
@@ -34,13 +41,15 @@ class UserFCMDeviceAdd(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         try:
-            registration_id = request.data.get('registration_id')
-            user_device = self.queryset.filter(user=request.user, registration_id=registration_id)
+            registration_id = request.data.get("registration_id")
+            user_device = self.queryset.filter(
+                user=request.user, registration_id=registration_id
+            )
             if user_device:
-                return Response({
-                    'success': True,
-                    'message': 'Device Already Exist'
-                }, status=status.HTTP_200_OK)
+                return Response(
+                    {"success": True, "message": "Device Already Exist"},
+                    status=status.HTTP_200_OK,
+                )
             self.queryset.filter(registration_id=registration_id).delete()
             return super(UserFCMDeviceAdd, self).create(request, *args, **kwargs)
         except Exception as e:
@@ -53,20 +62,24 @@ class NotificationViewSet(ModelViewSet):
     details about sent notifications.
     body_params: "sender", "receiver", "title", "message", "image".
     """
-    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+
+    authentication_classes = [
+        authentication.TokenAuthentication,
+        authentication.SessionAuthentication,
+    ]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = FCMNotificationSerializer
     queryset = Notification.objects.all()
 
     def get_queryset(self):
         queryset = self.queryset.order_by("-created")
-        queryset = queryset.filter(
-            receiver=self.request.user
-        ).annotate(
+        queryset = queryset.filter(receiver=self.request.user).annotate(
             is_seen=Exists(
                 UserNotification.objects.filter(
-                    user=self.request.user, notification_id=OuterRef('pk')
-                ).order_by().values('notification_id')
+                    user=self.request.user, notification_id=OuterRef("pk")
+                )
+                .order_by()
+                .values("notification_id")
             )
         )
         return queryset
@@ -78,7 +91,11 @@ class UserNotificationViewSet(ModelViewSet):
     details about sent notifications.
     body_params: "sender", "receiver", "title", "message", "image".
     """
-    authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
+
+    authentication_classes = [
+        authentication.TokenAuthentication,
+        authentication.SessionAuthentication,
+    ]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserNotificationSerializer
     queryset = UserNotification.objects.all()
@@ -87,16 +104,25 @@ class UserNotificationViewSet(ModelViewSet):
         notification_id = request.data.get("notification")
 
         try:
-            validation_serializer = UserNotificationValidationSerializer(data={"notification": notification_id})
+            validation_serializer = UserNotificationValidationSerializer(
+                data={"notification": notification_id}
+            )
             validation_serializer.is_valid(raise_exception=True)
-            all_ready_notification = UserNotification.objects.filter(notification=notification_id)
+            all_ready_notification = UserNotification.objects.filter(
+                notification=notification_id
+            )
             if all_ready_notification:
-                return Response({"message": "all ready seen "}, status=status.HTTP_200_OK)
+                return Response(
+                    {"message": "all ready seen "}, status=status.HTTP_200_OK
+                )
             notification = Notification.objects.filter(id=notification_id).first()
             serializer = UserNotificationSerializer(
-                data={"user": self.request.user.id, "notification": notification.id})
+                data={"user": self.request.user.id, "notification": notification.id}
+            )
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response({"message": "Created Successfully"}, status=status.HTTP_201_CREATED)
+            return Response(
+                {"message": "Created Successfully"}, status=status.HTTP_201_CREATED
+            )
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)

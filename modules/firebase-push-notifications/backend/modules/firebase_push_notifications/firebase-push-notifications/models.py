@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -8,10 +7,20 @@ User = get_user_model()
 
 
 class Notification(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sender_notification", null=True,
-                               blank=True)
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="send_notification", null=True,
-                                 blank=True)
+    sender = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="sender_notification",
+        null=True,
+        blank=True,
+    )
+    receiver = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="send_notification",
+        null=True,
+        blank=True,
+    )
     title = models.CharField(max_length=200)
     message = models.TextField()
     image = models.ImageField(upload_to="notification/images", null=True, blank=True)
@@ -22,8 +31,12 @@ class Notification(models.Model):
 
 
 class UserNotification(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_notification")
-    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name="notification_user")
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_notification"
+    )
+    notification = models.ForeignKey(
+        Notification, on_delete=models.CASCADE, related_name="notification_user"
+    )
 
     def __str__(self):
         return str(self.user)
@@ -33,7 +46,14 @@ class UserNotification(models.Model):
 def send_notification(sender, instance, created, **kwargs):
     if created:
         from fcm_django.models import FCMDevice
-        from firebase_admin.messaging import Message, Notification, APNSConfig, APNSPayload, Aps
+        from firebase_admin.messaging import (
+            Message,
+            Notification,
+            APNSConfig,
+            APNSPayload,
+            Aps,
+        )
+
         if instance.receiver:
             fcm_devices = FCMDevice.objects.filter(user_id=instance.receiver)
         else:
@@ -44,7 +64,12 @@ def send_notification(sender, instance, created, **kwargs):
         if fcm_devices:
             for fcm_device in fcm_devices:
                 message = Message(
-                    notification=Notification(title=instance.title, body=instance.message, image=image))
+                    notification=Notification(
+                        title=instance.title, body=instance.message, image=image
+                    )
+                )
                 if fcm_device.type == "ios":
-                    message.apns = APNSConfig(payload=APNSPayload(aps=Aps(sound='default')))
+                    message.apns = APNSConfig(
+                        payload=APNSPayload(aps=Aps(sound="default"))
+                    )
                 fcm_device.send_message(message)
