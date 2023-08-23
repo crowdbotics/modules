@@ -70,18 +70,18 @@ Here is the example of an appointment object.
 }
 ```
 
-### Module Specifications
+## Module Specifications
 Here is the [Module Specification Document](https://docs.google.com/document/d/1oOjHadHw4fUA9JxfIykAqEhAeokcCRqgDkcQjyUkUJk/edit?usp=sharing), which provides more information about the module's actual intentions.
 
-### Postman Collection for Module APi Endpoints
+## Postman Collection for Module APi Endpoints
 Here is a collection of all the api endpoints for the module.
 [Appointment Local Postman Collection](https://drive.google.com/file/d/19x0jpCL-JeAa-eFYrKuc5gRavu662-w-/view?usp=share_link)
 
-### Contributing
+## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 Please make sure to update tests as appropriate.
 
-### License
+## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
