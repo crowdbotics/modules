@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import { View, Text, Image, NativeEventEmitter, StyleSheet } from "react-native";
-// @ts-ignore
+
 import ZoomUs, { ZoomEmitter } from "react-native-zoom-us";
-// @ts-ignore
+
 import { WebView } from "react-native-webview";
 import { API_URL, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, makeId, parseQueryString, parseStartDate } from "./utils";
-// @ts-ignore
+
 import DialogInput from "react-native-dialog-input";
 import Button from "./components/Button";
 import MeetingScheduleModal from "./components/MeetingScheduleModal";
-// @ts-ignore
+
 import CookieManager from "@react-native-cookies/cookies";
 import ScheduleMeetingList from "./components/ScheduleMeetingList";
-// @ts-ignore
+
 import { sha256 } from "react-native-sha256";
 import { OptionsContext } from "@options";
 

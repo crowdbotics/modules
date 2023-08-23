@@ -6,7 +6,7 @@ const GroupChatScreen = (params) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>Group chat</Text>
         <Text style={styles.saveText}>Save</Text>
@@ -14,11 +14,11 @@ const GroupChatScreen = (params) => {
       <View style={styles.centerSection}>
         <View style={styles.imgContainer2}>
           <Image source={require(
-            // @ts-ignore
+
             "./assets/edit.png")} style={styles.editImg} />
         </View>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/plus.png")} style={styles.heartImg} />
       </View>
       <View style={styles.tabView}>
@@ -45,7 +45,7 @@ const GroupChatScreen = (params) => {
       <View style={styles.chooseContainer}>
         <TextInput placeholder="Enter" placeholderTextColor={"#000"}></TextInput>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/search.png")} style={styles.filterImg} />
       </View>
       <View style={styles.walletCard}>
@@ -60,7 +60,7 @@ const GroupChatScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/box.png")} style={styles.dotsImg} />
         </View>
       </View>
@@ -76,7 +76,7 @@ const GroupChatScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/checkbox.png")} style={styles.dotsImg} />
         </View>
       </View>
@@ -92,7 +92,7 @@ const GroupChatScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/box.png")} style={styles.dotsImg} />
         </View>
       </View>

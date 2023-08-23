@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import "react-native-gesture-handler";
 import Pubnub from "pubnub";
-// @ts-ignore
+
 import { PubNubProvider } from "pubnub-react";
 import Navigator from "./Navigator";
 import { useStore, uuid } from "./Store";

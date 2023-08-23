@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Button from "../../Components/Button";
-// @ts-ignore
+
 import { launchImageLibrary } from "react-native-image-picker";
 import { useDispatch } from "react-redux";
 import { setImageUri } from "../../Store";
