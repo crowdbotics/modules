@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
-// @ts-ignore
+
 import CalendarStrip from "react-native-calendar-strip";
 import { getAppointmentByDate } from "../api";
 import Loader from "../components/Loader";
-// @ts-ignore
+
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AppointmentModal from "../components/AppointmentDetailModal";
-// @ts-ignore
+
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import moment from "moment";
 

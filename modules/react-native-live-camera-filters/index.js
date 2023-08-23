@@ -1,9 +1,9 @@
 import React, { createRef, useState, useContext } from "react";
 import { View, TouchableOpacity, Text, PermissionsAndroid, Platform, Alert } from "react-native";
-// @ts-ignore
+
 import CameraRoll from "@react-native-community/cameraroll";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-// @ts-ignore
+
 import { FilterCameraView } from "react-native-filter-camera";
 import * as script from "./utils";
 import { OptionsContext } from "@options";

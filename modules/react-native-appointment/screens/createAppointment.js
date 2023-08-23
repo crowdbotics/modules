@@ -1,14 +1,14 @@
 import React, { useState, useContext } from "react";
 import { Text, View, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
 import Input from "../components/InputText";
-// @ts-ignore
+
 import { OptionsContext } from "@options";
 import Button from "../components/Button";
 import { createAppointment } from "../api";
 import Loader from "../components/Loader";
 import moment from "moment";
 import { useNavigation } from "@react-navigation/native";
-// @ts-ignore
+
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 const CreateAppointment = ({ route }) => {

@@ -1,7 +1,7 @@
-// @ts-ignore
+
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-// @ts-ignore
+
 import { Surface } from "gl-react-native";
 import Button from "../../Components/Button";
 import ShadowBlurs from "../../Components/ShadowBlur";
