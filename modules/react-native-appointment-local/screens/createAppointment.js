@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import {
   Text,
   View,
-  StyleSheet,
   ScrollView,
   SafeAreaView,
   TouchableOpacity,
@@ -23,28 +22,27 @@ import {
 import { unwrapResult } from "@reduxjs/toolkit";
 import DropDownPicker from "react-native-dropdown-picker";
 import moment from "moment";
-import { checkLoading } from "../utils";
+import { checkLoading, getEndTime, timeSlots } from "../utils";
 
 const CreateAppointment = ({ route, navigation }) => {
   const dispatch = useDispatch();
+  // Get loading status for create appointment api from store
   const { api: createAppointmentLoading } = useSelector(
     (state) => state.Appointments.createAppointment
   );
-
+  // Get available sessions for appointment
   const { entities: sessionEntities, api: getSessionsLoading } = useSelector(
     (state) => state.Appointments.getAppointmentSessions
   );
+  // Get available appointment types for appointment
   const { entities: appointmentTypeEntities, api: getAppointmentTypesLoading } =
     useSelector((state) => state.Appointments.getAppointmentTypes);
-
+  // Get available service providers for appointment
   const { entities: serviceProviderEntities, api: serviceProviderLoading } =
     useSelector((state) => state.Appointments.getServiceProviders);
 
   const options = useContext(OptionsContext);
-
-  const { ACCESS_TOKEN } = options;
-
-  const tokenPayload = { token: ACCESS_TOKEN };
+  const { ACCESS_TOKEN, USER_ID, styles } = options;
 
   const { duration, selectedDate } = route.params;
 
@@ -54,8 +52,7 @@ const CreateAppointment = ({ route, navigation }) => {
     getAppointmentTypesLoading,
     serviceProviderLoading
   );
-    console.log("ISLOADING",isLoading)
-    
+
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
@@ -73,15 +70,14 @@ const CreateAppointment = ({ route, navigation }) => {
   const [serviceProvider, setServiceProvider] = useState(false);
 
   useEffect(() => {
+    const tokenPayload = { token: ACCESS_TOKEN };
     dispatch(getAppointmentSessions(tokenPayload));
     dispatch(getAppointmentTypes(tokenPayload));
     dispatch(getServiceProviders(tokenPayload));
   }, []);
 
-  const selectTimeSlot = (item) => {
-    setTimeSlot(item);
-  };
-  const pressHandler = async () => {
+  // Dispatches create appointment API on button press
+  const onCreateAppointment = async () => {
     dispatch(
       createAppointment({
         data: {
@@ -89,13 +85,13 @@ const CreateAppointment = ({ route, navigation }) => {
           add_note: description,
           selected_date: moment(selectedDate).format("YYYY-MM-DD"),
           start_time: timeSlot,
-          end_time: getEndTime(),
+          end_time: getEndTime(timeSlot, duration),
           duration: duration,
           address: location,
           session: appointmentSession,
           appointment_type: appointmentType,
           service_provider: serviceProvider,
-          client: 1
+          client: USER_ID
         },
         token: ACCESS_TOKEN
       })
@@ -104,29 +100,16 @@ const CreateAppointment = ({ route, navigation }) => {
       .then(() => {
         Alert.alert("Success", "Appointment is successfully created!");
         navigation.replace("Home");
+      }).catch((err) => {
+        __DEV__ && console.log(err);
       });
-  };
-
-  const getEndTime = () => {
-    // Parse the time strings into Moment.js duration objects
-    const duration1 = moment.duration(timeSlot);
-    const duration2 = moment.duration(duration);
-
-    // Add the durations together
-    const totalDuration = duration1.add(duration2);
-
-    // Get the total time in "HH:mm:ss" format
-    const totalTime = moment
-      .utc(totalDuration.asMilliseconds())
-      .format("HH:mm:ss");
-    return totalTime;
   };
 
   return (
     <SafeAreaView>
       <ScrollView>
         {isLoading && <Loader />}
-        <View style={styles.container}>
+        <View style={styles.createAppointmentContainer}>
           <View style={styles.head}>
             <View style={styles.headItems}>
               <Text style={styles.headerComponents}>{selectedDate}</Text>
@@ -202,9 +185,9 @@ const CreateAppointment = ({ route, navigation }) => {
             />
           </View>
 
-          <Text style={{ marginVertical: 20, fontSize: 14 }}>Time Slot</Text>
-          <View style={styles.list}>
-            {options.timeSlots.map((item, index) => (
+          <Text style={styles.timeSlotText}>Time Slot</Text>
+          <View style={styles.timeSlotList}>
+            {timeSlots.map((item, index) => (
               <TouchableOpacity
                 style={[
                   styles.items,
@@ -212,7 +195,7 @@ const CreateAppointment = ({ route, navigation }) => {
                     backgroundColor: timeSlot === item ? "#000" : "#FFF"
                   }
                 ]}
-                onPress={() => selectTimeSlot(item)}
+                onPress={() => setTimeSlot(item)}
                 key={index}
               >
                 <Text
@@ -225,51 +208,13 @@ const CreateAppointment = ({ route, navigation }) => {
               </TouchableOpacity>
             ))}
           </View>
-          <View style={styles.button}>
-            <Button onPress={pressHandler}>Create Appointment</Button>
+          <View style={styles.createAppointmentButton}>
+            <Button onPress={onCreateAppointment}>Create Appointment</Button>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  container: { height: "100%", padding: 10 },
-  dropdown: {
-    borderColor: "#C4C4C4",
-    height: 53
-  },
-  head: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 20,
-    paddingHorizontal: 17,
-    borderColor: "#F0F2F7",
-    borderBottomWidth: 1,
-    borderTopWidth: 1
-  },
-  headItems: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  headerComponents: { fontSize: 22, color: "#313633" },
-  headerText: { fontSize: 14, color: "#7C7C7C", marginTop: 8 },
-  mt15: { marginTop: 15 },
-  mb10: { marginBottom: 10, fontSize: 14, marginLeft: 10 },
-  items: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#D8D8D8",
-    width: 90,
-    height: 30,
-    margin: 7,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  list: { display: "flex", flexDirection: "row", flexWrap: "wrap" },
-  button: { padding: 15 }
-});
+
 export default CreateAppointment;

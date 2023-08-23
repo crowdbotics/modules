@@ -10,7 +10,6 @@ export const createAppointment = createAsyncThunk(
       const response = await api.createAppointment(data, token);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -22,10 +21,8 @@ export const getAppointment = createAsyncThunk(
   async ({ token }) => {
     try {
       const response = await api.getAppointment(token);
-      console.log("RESPONSEEE", response);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -37,10 +34,8 @@ export const deleteAppointment = createAsyncThunk(
   async ({ id, token }) => {
     try {
       const response = await api.deleteAppointment(id, token);
-      console.log("RESPONSEEE", response);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -54,7 +49,6 @@ export const getAppointmentSessions = createAsyncThunk(
       const response = await api.getAppointmentSessions(token);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -68,7 +62,6 @@ export const getAppointmentTypes = createAsyncThunk(
       const response = await api.getAppointmentTypes(token);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -80,10 +73,8 @@ export const getServiceProviders = createAsyncThunk(
   async ({ token }) => {
     try {
       const response = await api.getServiceProviders(token);
-      console.log("RESPONSEEE", response);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -233,7 +224,6 @@ export const slice = createSlice({
         state.getAppointmentTypes.api.loading = "idle";
       }
     },
-
     [getServiceProviders.pending]: (state) => {
       if (state.getServiceProviders.api.loading === "idle") {
         state.getServiceProviders.api.loading = "pending";

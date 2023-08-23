@@ -5,7 +5,7 @@ import { OptionsContext } from "@options";
 const Loader = () => {
   const options = useContext(OptionsContext);
   const styles = options;
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.loaderContainer}>

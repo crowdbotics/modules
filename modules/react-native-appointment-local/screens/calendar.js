@@ -1,7 +1,6 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import {
   View,
-  StyleSheet,
   Text,
   ScrollView,
   SafeAreaView,
@@ -12,16 +11,21 @@ import { CalendarList } from "react-native-calendars";
 import { OptionsContext } from "@options";
 import DropDownPicker from "react-native-dropdown-picker";
 import Button from "../components/Button";
+import { availableTimeSlots, timeSlots } from "../utils";
 
 const Calendar = ({ navigation }) => {
   const options = useContext(OptionsContext);
-  const today = new Date();
+  const { styles } = options;
+
+  const today = useRef(new Date());
+  // Open state for duration dropdown
   const [open, setOpen] = useState(false);
   const [duration, setDuration] = useState("00:30:00");
+  // Marked dates on calendar
   const [markedDates, setMarkedDates] = useState({
-    selectedDate: today.toDateString(),
+    selectedDate: today.current.toDateString(),
     markedDates: {
-      [today.toDateString()]: {
+      [today.current.toDateString()]: {
         selected: true,
         color: "#00B0BF",
         textColor: "#FFFFFF"
@@ -29,14 +33,7 @@ const Calendar = ({ navigation }) => {
     }
   });
   const [timeSlot, setTimeSlot] = useState("");
-  const [items, setItems] = useState([
-    { label: "30 min", value: "00:30:00" },
-    { label: "1 hour", value: "01:00:00" },
-    { label: "1 hour 30 min", value: "01:30:00" },
-    { label: "2 hour", value: "02:00:00" },
-    { label: "2 hour 30 min", value: "02:30:00" },
-    { label: "3 hour", value: "03:00:00" }
-  ]);
+  const [items, setItems] = useState(availableTimeSlots);
 
   const daySelector = (day) => {
     const markedDates = {};
@@ -47,10 +44,6 @@ const Calendar = ({ navigation }) => {
     });
   };
 
-  const selectTimeSlot = (item) => {
-    setTimeSlot(item);
-  };
-
   const navigateToScreen = () => {
     if (timeSlot) {
       navigation.navigate("AppointmentForm", {
@@ -59,7 +52,7 @@ const Calendar = ({ navigation }) => {
         selectedDate: markedDates.selectedDate
       });
     } else {
-      Alert.alert("Error", "Please select a time slot")
+      Alert.alert("Error", "Please select a time slot");
     }
   };
 
@@ -68,7 +61,7 @@ const Calendar = ({ navigation }) => {
       <ScrollView>
         <View style={styles.ph10}>
           <CalendarList
-            minDate={today.toDateString()}
+            minDate={today.current.toDateString()}
             horizontal={true}
             pagingEnabled={true}
             calendarWidth={370}
@@ -77,7 +70,7 @@ const Calendar = ({ navigation }) => {
           />
           <Text style={styles.timeSlot}>Time Slot</Text>
           <View style={styles.list}>
-            {options.timeSlots.map((item, index) => (
+            {timeSlots.map((item, index) => (
               <TouchableOpacity
                 style={[
                   styles.items,
@@ -85,7 +78,7 @@ const Calendar = ({ navigation }) => {
                     backgroundColor: timeSlot === item ? "#000" : "#FFF"
                   }
                 ]}
-                onPress={() => selectTimeSlot(item)}
+                onPress={() => setTimeSlot(item)}
                 key={index}
               >
                 <Text
@@ -110,7 +103,7 @@ const Calendar = ({ navigation }) => {
               style={styles.dropdown}
             />
           </View>
-          <View style={styles.button}>
+          <View style={styles.NextButton}>
             <Button onPress={navigateToScreen}>Next</Button>
           </View>
         </View>
@@ -118,44 +111,5 @@ const Calendar = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  items: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#D8D8D8",
-    width: 90,
-    height: 30,
-    margin: 7,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  list: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap"
-  },
-  mt15: {
-    marginTop: 15
-  },
-  mb10: {
-    marginBottom: 10,
-    fontSize: 14,
-    marginLeft: 10
-  },
-  button: {
-    padding: 30
-  },
-  ph10: {
-    paddingHorizontal: 15
-  },
-  timeSlot: {
-    marginVertical: 10,
-    fontSize: 14,
-    marginLeft: 10
-  },
-  dropdown: {
-    borderColor: "#C4C4C4",
-    height: 53
-  }
-});
+
 export default Calendar;

@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect, useContext } from "react";
-import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
+import { Text, View, TouchableOpacity, FlatList } from "react-native";
 // @ts-ignore
 import CalendarStrip from "react-native-calendar-strip";
 import Loader from "../components/Loader";
 import { useFocusEffect } from "@react-navigation/native";
-import { dateFunc } from "../utils";
+import { formatDate } from "../utils";
 import AppointmentModal from "../components/AppointmentDetailModal";
 import { useDispatch } from "react-redux";
 import { getAppointment } from "../store";
@@ -12,71 +12,81 @@ import { OptionsContext } from "@options";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const Appointment = ({ navigation }) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
+  const { styles, ACCESS_TOKEN } = options;
 
+  // Saves all the appointments
   const [appointmentList, setAppointmentList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [modalItem, setModalItem] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
+  const [appointmentDetails, setAppointmentDetails] = useState("");
+  const [isModalVisible, setModalVisible] = useState(false);
+  // Date selected from calendar
   const [filterDate, setFilterDate] = useState("");
+  // Filtered appointments according to their dates
   const [filteredAppointments, setFilteredAppointments] = useState([]);
 
+  // Fetches all the created appointments from backend
   useFocusEffect(
     useCallback(() => {
       setIsLoading(true);
       dispatch(
         getAppointment({
-          token: options?.ACCESS_TOKEN
+          token: ACCESS_TOKEN
         })
-      ).then(unwrapResult)
-      .then((res) => {
-        console.log("res", res)
-        setAppointmentList(res);
-        setFilteredAppointments(res);
-        setIsLoading(false);
-      });
+      )
+        .then(unwrapResult)
+        .then((res) => {
+          setAppointmentList(res);
+          setFilteredAppointments(res);
+          setIsLoading(false);
+        });
     }, [])
   );
 
+  // Handles appointment filteration according to the selected date
   useEffect(() => {
     if (filterDate) {
-      const appointmentFilter = appointmentList.filter(item => {
-        return item.selected_date === filterDate;
-      });
+      const appointmentFilter = appointmentList.filter(
+        item => item.selected_date === filterDate
+      );
       setFilteredAppointments(appointmentFilter);
     } else {
       setFilteredAppointments(appointmentList);
     }
   }, [filterDate]);
 
-  const modalHandler = (item) => {
-    setModalItem(item);
+  const modalHandler = item => {
+    setAppointmentDetails(item);
     setModalVisible(true);
   };
 
+  // Appointment component which shows its title and start time
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => modalHandler(item)}>
       <View style={styles.appointmentItem}>
         <Text style={styles.listText}>{item.start_time}</Text>
-        <View style={styles.card}>
-          <Text style={{ fontSize: 16 }}>{item.name}</Text>
+        <View style={styles.appointmentNameCard}>
+          <Text style={styles.appointmentName}>{item.name}</Text>
         </View>
       </View>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
+    <View style={styles.appointmentListContainer}>
       {isLoading && <Loader />}
       <View style={styles.calendarTextContainer}>
         <Text style={styles.calendarText}>Calendar</Text>
       </View>
       <CalendarStrip
-        daySelectionAnimation={{ type: "background", duration: 10, highlightColor: "#E6E6E6" }}
-        style={{ height: 100, paddingBottom: 10 }}
-        onDateSelected={(date) => setFilterDate(dateFunc(new Date(date)))}
+        daySelectionAnimation={{
+          type: "background",
+          duration: 10,
+          highlightColor: "#E6E6E6"
+        }}
+        style={styles.calendarStrip}
+        onDateSelected={(date) => setFilterDate(formatDate(new Date(date)))}
       />
       <View>
         <View style={styles.viewAll}>
@@ -89,58 +99,15 @@ const Appointment = ({ navigation }) => {
       <FlatList
         data={filteredAppointments.length && filteredAppointments}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
       />
-      <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible}/>
-
+      <AppointmentModal
+        setModalVisible={setModalVisible}
+        modalItem={appointmentDetails}
+        modalVisible={isModalVisible}
+      />
     </View>
   );
 };
-const styles = StyleSheet.create({
 
-  container: {
-    padding: 10,
-    height: "100%",
-    width: "100%"
-  },
-  calendarText: {
-    fontSize: 14,
-    color: "#1E2022"
-  },
-  calendarTextContainer: {
-    marginTop: 20,
-    marginLeft: 14
-  },
-  listText: {
-    fontSize: 14,
-    color: "#1E2022"
-  },
-  viewAll: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 20,
-    marginBottom: 10,
-    marginHorizontal: 14
-  },
-  appointmentItem: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    marginVertical: 10
-  },
-  card: {
-    backgroundColor: "#DADADA",
-    borderRadius: 10,
-    width: "80%",
-    height: 50,
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10
-  }
-});
 export default Appointment;

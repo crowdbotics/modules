@@ -1,31 +1,42 @@
 import React, { useState, useEffect, Fragment, useContext } from "react";
-import { View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  ScrollView,
+  Image,
+  TouchableOpacity
+} from "react-native";
 // @ts-ignore
 import deleteIcon from "../deleteIcon.png";
 import Input from "../components/InputText";
 import Loader from "../components/Loader";
 import AppointmentModal from "../components/AppointmentDetailModal";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getAppointment, deleteAppointment } from "../store";
 import { OptionsContext } from "@options";
 import { unwrapResult } from "@reduxjs/toolkit";
 
 const Appointments = () => {
-  const dispatch = useDispatch()
-  const { entities, api } = useSelector((state) => state.Appointments.getAppointment);
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
-  const { ACCESS_TOKEN } = options;
-  console.log("ENTITIES", entities)
+  const { ACCESS_TOKEN, styles } = options;
+
   const [appointmentList, setAppointmentList] = useState([]);
+  // Filtered list according to their name
   const [filterAppointmentList, setFilterAppointmentList] = useState([]);
+  // Search text entered
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalItem, setModalItem] = useState("");
+  const [appointmentDetails, setAppointmentDetails] = useState("");
 
+  // Handles appointment search according to their names
   useEffect(() => {
-    if (search !== "") {
-      const filteredAppointments = appointmentList.filter(item => item.title.toLowerCase().includes(search.toLowerCase()));
+    if (search) {
+      const filteredAppointments = appointmentList.filter((item) =>
+        item.name?.toLowerCase().includes(search.toLowerCase())
+      );
       setFilterAppointmentList(filteredAppointments);
     } else {
       setFilterAppointmentList(appointmentList);
@@ -33,165 +44,87 @@ const Appointments = () => {
   }, [search]);
 
   useEffect(() => {
-   fetchAppointments()
+    fetchAppointments();
   }, []);
 
+  // Fetches all the created appointments from backend
   const fetchAppointments = () => {
+    setIsLoading(true);
     dispatch(
       getAppointment({
         token: ACCESS_TOKEN
       })
-    ).then(unwrapResult)
-    .then((res) => {
-      setAppointmentList(res);
-      setFilterAppointmentList(res);
-    });
-  }
+    )
+      .then(unwrapResult)
+      .then((res) => {
+        setIsLoading(false);
+        setAppointmentList(res);
+        setFilterAppointmentList(res);
+      })
+      .catch(() => setIsLoading(false));
+  };
 
-  const deleteHandler = async (id) => {
-    // setIsLoading(true);
-    // await deleteAppointment(id).then((res) => getAppointment())
-    //   .then(res => res.json()
-    //     .then(res => setFilterAppointmentList(res)))
-    //   .catch(error => console.log(error));
-
-    // setIsLoading(false);
-    console.log("IDDD", id)
-
+  // Deletes a specific appointment and fetches the new list.
+  const onDeleteAppointment = async (id) => {
     dispatch(
       deleteAppointment({
-        id: id,
+        id,
         token: ACCESS_TOKEN
       })
-    ).then(unwrapResult)
-    .then(() => {
-      // setFilterAppointmentList(res);
-      fetchAppointments()
-    });
-    
+    )
+      .then(unwrapResult)
+      .then(() => fetchAppointments());
   };
+
+  // Opens and passes the appointment data to the modal
   const modalHandler = (item) => {
-    setModalItem(item);
+    setAppointmentDetails(item);
     setModalVisible(true);
   };
 
   return (
     <SafeAreaView style={styles.main}>
       <ScrollView>
-        <View style={styles.container}>
+        <View style={styles.appointmentDetailContainer}>
           {isLoading && <Loader />}
           <View style={styles.mv10}>
             <Text style={styles.mb10}>Search</Text>
-            <Input
-              placeholder='Search'
-              setValue={setSearch}
-              value={search}
-            />
+            <Input placeholder="Search" setValue={setSearch} value={search} />
           </View>
-          {!isLoading && filterAppointmentList.map((item, index) => {
-            return (
-              <TouchableOpacity onPress={() => modalHandler(item)} style={styles.item} key={item.id}>
+          {!isLoading &&
+            filterAppointmentList.map((item) => (
+              <TouchableOpacity
+                onPress={() => modalHandler(item)}
+                style={styles.item}
+                key={item.id}
+              >
                 <Fragment>
-                  <View style={styles.box}></View>
+                  <View style={styles.box} />
                   <View>
-                    <Text style={styles.title}>{item.title}</Text>
-                    <Text style={styles.date}>{`${item.selected_date}, ${item.time_slot}`}</Text>
+                    <Text style={styles.title}>{item.name}</Text>
+                    <Text
+                      style={styles.date}
+                    >{`${item.selected_date}, ${item.start_time}`}</Text>
                   </View>
                   <View style={styles.delete}>
-                    <TouchableOpacity onPress={() => deleteHandler(item.id)}>
+                    <TouchableOpacity onPress={() => onDeleteAppointment(item.id)}>
                       <View style={styles.deleteButton}>
-                        <Image
-                          source={deleteIcon}
-                          style={styles.deleteIcon}
-                        />
+                        <Image source={deleteIcon} style={styles.deleteIcon} />
                       </View>
                     </TouchableOpacity>
                   </View>
                 </Fragment>
               </TouchableOpacity>
-            );
-          })}
-          <View>
-            <AppointmentModal setModalVisible={setModalVisible} modalItem={modalItem} modalVisible={modalVisible}/>
-          </View>
-
+            ))}
+          <AppointmentModal
+            setModalVisible={setModalVisible}
+            modalItem={appointmentDetails}
+            modalVisible={modalVisible}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  main: {
-    backgroundColor: "#F1F1F1",
-    height: "100%"
-  },
-  container: {
-    backgroundColor: "#F1F1F1",
-    height: "100%",
-    paddingHorizontal: 10
-  },
-  item: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingLeft: 10,
-    backgroundColor: "white",
-    borderRadius: 10,
-    height: 106,
-    marginBottom: 15
-  },
-  card: {
-    backgroundColor: "#DADADA",
-    borderRadius: 10,
-    width: "80%",
-    height: 50,
-    textAlign: "center",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10
-  },
-  box: {
-    height: 80,
-    width: 80,
-    borderRadius: 10,
-    backgroundColor: "#FCF1D6"
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: "#1E2022"
-  },
-  date: {
-    fontSize: 14,
-    fontWeight: "400",
-    color: "#77838F"
-  },
-  delete: {
-    height: 106,
-    width: 60,
-    borderRadius: 10
-  },
-  deleteButton: {
-    height: "100%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#EA4335",
-    borderRadius: 10
-  },
-  mv10: {
-    marginVertical: 10
-  },
-  mb10: {
-    marginBottom: 10,
-    fontSize: 14,
-    marginLeft: 10
-  },
-  deleteIcon: {
-    height: 17,
-    width: 17
-  }
-});
+
 export default Appointments;

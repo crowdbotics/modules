@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { View, Text, TextInput } from "react-native";
 import { OptionsContext } from "@options";
 
@@ -13,9 +13,8 @@ import { OptionsContext } from "@options";
  * @return {React.ReactNode}
  */
 const Input = (props) => {
-
   const options = useContext(OptionsContext);
-  const {styles} = options
+  const { styles } = options;
   const {
     placeholder,
     value,
@@ -31,7 +30,7 @@ const Input = (props) => {
         style={styles.input}
         placeholder={placeholder}
         value={value}
-        onChangeText={(val) => setValue(val)}
+        onChangeText={val => setValue(val)}
         placeholderTextColor='#ddd'
         multiline={multiline}
         numberOfLines={multiline ? 10 : null}

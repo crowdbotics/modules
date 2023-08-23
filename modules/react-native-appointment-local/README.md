@@ -37,7 +37,7 @@ RUn the command to install dependencies:
   ```
 
 ## API Calling Methods
-All the api calling methods reside in `api/index.js` file.
+All the api calling methods reside in `store/index.js` file.
 
 * **createAppointment**
 `createAppointment` method takes an object containing details about the appointment. Creates new appointment against the provided data.

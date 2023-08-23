@@ -77,7 +77,6 @@ export const getServiceProviders = (token) => {
   return axios.request(config);
 };
 
-
 export const api = {
   createAppointment,
   getAppointment,

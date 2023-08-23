@@ -1,23 +1,28 @@
-import React from "react";
-import { StyleSheet, useWindowDimensions } from "react-native";
+import React, { useContext, useState } from "react";
+import { useWindowDimensions } from "react-native";
 // @ts-ignore
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import AppointmentList from "./appointmentList";
 import Calendar from "./calendar";
+import { OptionsContext } from "@options";
 
 const Home = (props) => {
+  const options = useContext(OptionsContext);
+  const { styles } = options;
+
   const layout = useWindowDimensions();
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
+  const [index, setIndex] = useState(0);
+  // Tab routes
+  const [routes] = useState([
     { key: "AppointmentList", title: "Create an Appointment" },
     { key: "Calendar", title: "Calendar" }
 
   ]);
 
+  // Renders all the available tabs
   const renderScene = SceneMap({
     AppointmentList: () => <AppointmentList navigation={props.navigation} />,
     Calendar: () => <Calendar navigation={props.navigation} />
-
   });
 
   const renderTabBar = props => (
@@ -31,7 +36,6 @@ const Home = (props) => {
   );
 
   return (
-
     <TabView
       navigationState={{ index, routes }}
       renderScene={renderScene}
@@ -42,18 +46,5 @@ const Home = (props) => {
 
   );
 };
-const styles = StyleSheet.create({
-  tab: {
-    backgroundColor: "#F1F1F1",
-    height: 48,
-    borderRadius: 10,
-    marginLeft: 10,
-    marginRight: 10,
-    marginVertical: 10
-  },
-  indicator: { backgroundColor: "#FFFFFF", borderRadius: 10, height: 37, shadowColor: "#000", elevation: 5 },
-  indicatorContainer: { height: 37, marginTop: 6 },
-  label: { color: "#000000", fontSize: 14, textTransform: "capitalize", width: "100%" }
 
-});
 export default Home;
