@@ -1,6 +1,13 @@
 # Appointment local
+Appointment local will allow user to create and save appointments locally on a database
 
-Create Appointment table 
+## Features
+1. Ability to create an appointment
+2. Ability to show appointments in the calendar
+3. Ability to edit and delete an appointment
+4. Ability to remind the user of the appointment
+5. Ability to search appointments 
+6. Ability to view appointment attendees who will show up/attend the meeting/event including the meeting/event organizer
 
 ## Instructions to run project
 1.Make Migration
@@ -62,3 +69,19 @@ Here is the example of an appointment object.
     appointment_type:[0,2]          // Id's for the type of appointment (Message, Call, Video).
 }
 ```
+
+### Module Specifications
+Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1oOjHadHw4fUA9JxfIykAqEhAeokcCRqgDkcQjyUkUJk/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+### Postman Collection for Module APi Endpoints
+Here is a collection of all the api endpoints for the module.
+[Two Factor Authentication Postman Collection](https://drive.google.com/file/d/1R-m8h6wODbENoABT2Pe2151xjMMtP91V/view?usp=share_link)
+
+### Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+### License
+
+[MIT](https://choosealicense.com/licenses/mit/)
