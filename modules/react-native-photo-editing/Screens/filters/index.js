@@ -2,7 +2,6 @@
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 
-
 import { Surface } from "gl-react-native";
 
 import ImageFilters from "react-native-gl-image-filters";

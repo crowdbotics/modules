@@ -18,7 +18,6 @@ function MyTabs({ tabList = [], headerShown = false, tabBarShowLabel = true, tab
     }
   };
 
-  
   useEffect(async () => {
     if (tabList.length !== 0) {
       const tabLength = tabList.length;

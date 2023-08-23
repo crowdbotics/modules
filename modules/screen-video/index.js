@@ -6,31 +6,31 @@ const VideoScreen = () => {
         <View style={styles.container}>
           <View style={styles.header}>
               <Image source={require(
-                
+
                 "./assets/back.png")} />
           </View>
           <View style={styles.logoContainer}>
               <Image source={require(
-                
+
                 "./assets/logo.png")} />
           </View>
         <View>
           <View style={styles.slide}>
             <Image style={styles.slideImg} source={require(
-              
+
               "./assets/slide.png")} />
           </View>
           <View style={styles.reloadIcons}>
             <Image source={require(
-            
+
               "./assets/reload.png")} />
             <Image source={require(
-            
+
               "./assets/pause.png")} />
           </View>
           <View style={styles.slider}>
             <Image style={styles.sliderImg} source={require(
-            
+
               "./assets/slider.png")} />
           </View>
           <View style={styles.reloadIcons}>
@@ -39,19 +39,19 @@ const VideoScreen = () => {
           </View>
           <View style={styles.playArea}>
             <Image source={require(
-              
+
               "./assets/save.png")} />
               <Image style={styles.reverseIcon} source={require(
-              
+
                 "./assets/reverse.png")} />
               <Image style={styles.stopIcon} source={require(
-              
+
                 "./assets/stop.png")} />
               <Image style={styles.forwardIcon} source={require(
-              
+
                 "./assets/forward.png")} />
               <Image source={require(
-              
+
                 "./assets/download.png")} />
           </View>
         </View>

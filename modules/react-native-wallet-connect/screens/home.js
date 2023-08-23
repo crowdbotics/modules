@@ -9,12 +9,10 @@ import Button from "../components/Button";
 
 import refreshIcon from "../assets/refresh-icon.png";
 
-
 import LinearGradient from "react-native-linear-gradient";
 
 import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 import CurrencyModal from "../components/CurrencyModal";
-
 
 import walletIcon from "../assets/wallet.png";
 

@@ -2,7 +2,6 @@ import React from "react";
 
 import { createStackNavigator } from "@react-navigation/stack";
 
-
 import TypeForm from "../screen/Typeform.js";
 import TypeformWebhook from "../screen/TypeformWebhook";
 import Responses from "../screen/Responses.js";
