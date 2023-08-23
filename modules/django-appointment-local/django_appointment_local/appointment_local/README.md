@@ -2,8 +2,7 @@
 
 Appointment local will allow user to create and save appointments locally on a database
 
-## Features
-
+Features included:
 1. Ability to create an appointment
 2. Ability to show appointments in the calendar
 3. Ability to edit and delete an appointment
@@ -12,28 +11,14 @@ Appointment local will allow user to create and save appointments locally on a d
 6. Ability to create, update, get, and delete an appointment session type
 7. Ability to view appointment attendees who will show up/attend the meeting/event including the meeting/event organizer
 
-## Instructions to run project
+## Features
 
-1.Make Migration
+- [x] This module includes migrations.
+- [ ] This module includes environment variables.
+- [ ] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
-```
-python manage.py makemigrations
-
-```
-
-2. Migrate
-
-```
-python manage.py migrate
-```
-
-3. Run server
-
-```
-python manage.py runserver
-```
-
-## Api Table
+## API Details
 
 List of api's endpoints with params needed for these apis.
 
@@ -98,12 +83,3 @@ which provides more information about the module's actual intentions.
 
 Here is a collection of all the api endpoints for the module.
 [Appointment Local Postman Collection](https://drive.google.com/file/d/19x0jpCL-JeAa-eFYrKuc5gRavu662-w-/view?usp=share_link)
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
