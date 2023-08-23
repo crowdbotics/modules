@@ -6,5 +6,5 @@ from .viewsets import OktaViewSet
 router = routers.DefaultRouter()
 router.register("", OktaViewSet, basename="okta")
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

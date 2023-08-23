@@ -7,7 +7,7 @@ class OktaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Okta
         fields = [
-            'oktaID',
+            "oktaID",
             "stateToken",
             "expiresAt",
             "created_at",
