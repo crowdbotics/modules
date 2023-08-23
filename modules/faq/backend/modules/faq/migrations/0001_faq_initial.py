@@ -4,26 +4,38 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Faq',
+            name="Faq",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Created')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Updated')),
-                ('question', models.TextField(blank=True)),
-                ('answer', models.TextField(blank=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('sequence', models.PositiveIntegerField(blank=True, default=1)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(auto_now_add=True, verbose_name="Created"),
+                ),
+                (
+                    "updated_at",
+                    models.DateTimeField(auto_now=True, verbose_name="Updated"),
+                ),
+                ("question", models.TextField(blank=True)),
+                ("answer", models.TextField(blank=True)),
+                ("is_active", models.BooleanField(default=True)),
+                ("sequence", models.PositiveIntegerField(blank=True, default=1)),
             ],
             options={
-                'ordering': ['sequence', '-updated_at'],
+                "ordering": ["sequence", "-updated_at"],
             },
         ),
     ]

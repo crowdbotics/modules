@@ -3,17 +3,18 @@ import boto3
 
 
 class S3Service:
-
     def __init__(self, region, access_key, access_secret):
         """
         Before using Boto3, you need to set up authentication credentials for AWS account using S3_ACCESS_KEY, and S3_ACCESS_SECRET for user.
         You can either choose an existing user or create a new one.
         """
         try:
-            self.s3_client = boto3.client('s3',
-                                          region_name=region,
-                                          aws_access_key_id=access_key,
-                                          aws_secret_access_key=access_secret)
+            self.s3_client = boto3.client(
+                "s3",
+                region_name=region,
+                aws_access_key_id=access_key,
+                aws_secret_access_key=access_secret,
+            )
         except Exception:
             raise
 
@@ -48,8 +49,8 @@ class S3Service:
         """
         try:
             response = self.s3_client.delete_bucket(
-               ExpectedBucketOwner=owner_id,
-               Bucket=bucket_name,
+                ExpectedBucketOwner=owner_id,
+                Bucket=bucket_name,
             )
             return response
         except Exception:
@@ -78,7 +79,9 @@ class S3Service:
         :return: True if file was uploaded, else False
         """
         try:
-            self.s3_client.download_file(bucket, file_name, f"{path_to_save_file}/{file_name}")
+            self.s3_client.download_file(
+                bucket, file_name, f"{path_to_save_file}/{file_name}"
+            )
             url = f"{path_to_save_file}/{file_name}"
             return url
         except Exception:
@@ -103,12 +106,14 @@ class S3Service:
         :param bucket: name of the bucket
         :param file_name: Name of the file in s3 bucket
         :param expiration: Time in seconds for the presigned URL to remain valid
-        :return: Presigned URL as string. If error, returns None. 
+        :return: Presigned URL as string. If error, returns None.
         """
         try:
-            response = self.s3_client.generate_presigned_url('get_object',
-                                                             Params={'Bucket': bucket, 'Key': file_name},
-                                                             ExpiresIn=expiration)
+            response = self.s3_client.generate_presigned_url(
+                "get_object",
+                Params={"Bucket": bucket, "Key": file_name},
+                ExpiresIn=expiration,
+            )
             return response
         except Exception:
             raise

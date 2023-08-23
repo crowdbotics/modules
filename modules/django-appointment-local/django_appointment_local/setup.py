@@ -15,4 +15,4 @@ setup(
     packages=["appointment_local"],
     install_requires=[],
     cmdclass={"build": BuildCommand},
-) 
+)

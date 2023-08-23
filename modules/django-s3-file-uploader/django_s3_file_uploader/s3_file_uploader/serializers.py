@@ -9,7 +9,7 @@ class CreateBucketSerializer(serializers.Serializer):
 class UploadFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UploadedFile
-        fields = '__all__'
+        fields = "__all__"
 
 
 class DownloadFileSerializer(serializers.Serializer):
