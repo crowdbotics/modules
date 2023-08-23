@@ -73,8 +73,7 @@ const Profile = ({ navigation }) => {
         <View style={styles.headingContainer}>
           <TabView tabTitles={["Appointments", "Biography"]} selected={0} />
           <Image
-            source={require(// @ts-ignore
-              "./assets/notification.png")}
+            source={require("./assets/notification.png")}
             style={styles.notification}
           />
         </View>
@@ -405,8 +404,7 @@ const AppointmentDetails = ({ setModalVisible }) => {
           <Text style={appointmentStyles.title}>Patient name</Text>
           <Pressable onPress={() => setModalVisible(false)}>
             <Image
-              source={require(// @ts-ignore
-                "./assets/close.png")}
+              source={require("./assets/close.png")}
               style={appointmentStyles.image}
             />
           </Pressable>

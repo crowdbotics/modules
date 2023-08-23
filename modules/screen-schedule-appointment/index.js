@@ -1,14 +1,22 @@
-import { View, Text, StyleSheet, Image, ScrollView, TextInput, Pressable, Switch } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  TextInput,
+  Pressable,
+  Switch
+} from "react-native";
 import React, { useState } from "react";
 
 const ScheduleAppointment = ({ navigation }) => {
   const [isEnabled, setIsEnabled] = useState(true);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const [isEnabled1, setIsEnabled1] = useState(false);
-  const toggleSwitch1 = () => setIsEnabled1(previousState => !previousState);
+  const toggleSwitch1 = () => setIsEnabled1((previousState) => !previousState);
   const [isEnabled2, setIsEnabled2] = useState(false);
-  const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
-  // @ts-ignore
+  const toggleSwitch2 = () => setIsEnabled2((previousState) => !previousState);
   const fees = [
     {
       id: 1,
@@ -34,206 +42,207 @@ const ScheduleAppointment = ({ navigation }) => {
   ];
 
   return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.header}>
-                    <Pressable>
-                        <Image
-                            // @ts-ignore
-                            source={require("./assets/back.png")}
-                            style={styles.message}
-                        />
-                    </Pressable>
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.header}>
+          <Pressable>
+            <Image
+              source={require("./assets/back.png")}
+              style={styles.message}
+            />
+          </Pressable>
 
-                    <Text style={[styles.headingText]}>Appointment</Text>
-                    <Text />
-                </View>
-                <View style={styles.topWrapper}>
-                    <View style={styles.topContainer}>
-                        <Image source={require(
-                          // @ts-ignore
-                          "./assets/prev.png")} style={styles.prev} />
-                        <Text style={styles.dateText}>June 2022</Text>
-                        <Image source={require(
-                          // @ts-ignore
-                          "./assets/next.png")} style={styles.prev} />
-                    </View>
-                    <View style={[styles.inner, { marginVertical: 20, paddingHorizontal: 10 }]}>
-                        <View style={styles.dateContainer}>
-                            <Text style={styles.month}>Mon</Text>
-                            <Text>20</Text>
-                        </View>
-                        <View style={styles.dateContainer}>
-                            <Text style={styles.month}>Mon</Text>
-                            <Text>20</Text>
-                        </View>
-                        <View style={styles.dateContainer}>
-                            <Text style={styles.month}>Mon</Text>
-                            <Text>20</Text>
-                        </View>
-                        <View style={[styles.dateContainer, { backgroundColor: "#12D790" }]}>
-                            <Text style={[styles.month, styles.color]}>Mon</Text>
-                            <Text style={styles.color}>20</Text>
-                        </View>
-                        <View style={styles.dateContainer}>
-                            <Text style={styles.month}>Mon</Text>
-                            <Text>20</Text>
-                        </View>
-                        <View style={styles.dateContainer}>
-                            <Text style={styles.month}>Mon</Text>
-                            <Text>20</Text>
-                        </View>
-                        <View style={styles.dateContainer}>
-                            <Text style={styles.month}>Mon</Text>
-                            <Text>20</Text>
-                        </View>
-                    </View>
-                </View>
-
-                <View style={styles.tabContainer}>
-                    <Text style={styles.heading}>
-                        Available slots
-                    </Text>
-
-                    <View style={styles.tabView}>
-                        <TabView tabTitles={["Morning", "Afternoon"]} selected={0} />
-                        <View style={{ marginLeft: 10 }}>
-                            <View style={[styles.tabView, { marginBottom: 2 }]}>
-                                <Image source={require(
-                                  // @ts-ignore
-                                  "./assets/uncheck.png")} style={styles.prev1} />
-                                <Text style={styles.text}>Not available</Text>
-                            </View>
-                            <View style={styles.tabView}>
-                                <Image source={require(
-                                  // @ts-ignore
-                                  "./assets/check.png")} style={styles.prev1} />
-                                <Text style={styles.text}>Available</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-                <View style={[styles.midSection]}>
-                    <View style={[styles.inner, { marginVertical: 10 }]}>
-                        <View style={[styles.dateContainer, styles.border]}>
-                            <Text style={styles.textColor}>12:00</Text>
-                        </View>
-                        <View style={[styles.dateContainer, styles.border]}>
-                            <Text style={styles.textColor}>11:00</Text>
-                        </View>
-                        <View style={[styles.dateContainer, styles.border]}>
-                            <Text style={styles.textColor}>10:00</Text>
-                        </View>
-                        <View style={[styles.dateContainer, styles.selected]}>
-                            <Text style={styles.textColor}>09:00</Text>
-                        </View>
-                    </View>
-
-                    <Text style={[styles.subHeading, styles.subheading2]}>
-                        Fees Information:
-                    </Text>
-                    {
-                        fees.map((fee, index) =>
-                            <View style={styles.walletCard} key={index}>
-                                <View style={styles.walletInner}>
-                                    <View style={styles.imgContainer}>
-                                        <Image source={fee.image} style={styles.image} />
-                                    </View>
-                                    <View style={styles.walletCarder}>
-                                        <Text style={styles.eventName}>{fee.title}</Text>
-                                        <Text style={styles.experience}>{fee.description}</Text>
-                                    </View>
-                                </View>
-                                <View style={styles.leftSection}>
-                                    <Text style={styles.price}>${fee.charge}</Text>
-                                </View>
-                            </View>
-                        )
-                    }
-
-                </View>
-
-                <View style={styles.cardInfo}>
-                    <Text style={styles.subHeading}>Profile Details</Text>
-                    <Text style={styles.mr10}>Full Name</Text>
-                    <View style={styles.InputBox}>
-                        <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                    </View>
-                    <Text style={styles.mr10}>Email address</Text>
-                    <View style={styles.InputBox}>
-                        <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                    </View>
-                    <View style={styles.feeContainer}>
-                        <View>
-                            <Text style={[styles.mr10, { marginLeft: 15 }]}>Age</Text>
-                            <View style={styles.feeSection}>
-                                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={[styles.mr10, { marginLeft: 15 }]}>Gender</Text>
-                            <View style={styles.feeSection}>
-                                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
-                            </View>
-                        </View>
-                    </View>
-                    <Text style={styles.mr10}>Add notes</Text>
-                    <View style={styles.textInput}>
-                        <Input placeholder="Enter" multiline={true} />
-                    </View>
-                    <Text style={[styles.subHeading, { marginBottom: 5, marginTop: 25 }]}>Request access</Text>
-                    <View style={styles.sectionContainer}>
-                        <View style={styles.switchContainer}>
-                            <Text style={styles.label}>Voice call</Text>
-                            <Switch
-                                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
-                                thumbColor={isEnabled ? "#000" : "#000"}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch}
-                                value={isEnabled}
-                            />
-                        </View>
-                        <View style={styles.switchContainer1}>
-                            <Text style={styles.label}>Messaging</Text>
-                            <Switch
-                                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
-                                thumbColor={isEnabled1 ? "#000" : "#000"}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch1}
-                                value={isEnabled1}
-                            />
-                        </View>
-                        <View style={styles.switchContainer1}>
-                            <Text style={styles.label}>Video call</Text>
-                            <Switch
-                                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
-                                thumbColor={isEnabled2 ? "#000" : "#000"}
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={toggleSwitch2}
-                                value={isEnabled2}
-                            />
-                        </View>
-                    </View>
-                </View>
-
-            </ScrollView>
-            <View style={styles.footer}>
-                <Footer
-                    images={[
-                      // @ts-ignore
-                      require("./assets/home.png"),
-                      // @ts-ignore
-                      require("./assets/calender.png"),
-                      // @ts-ignore
-                      require("./assets/search.png"),
-                      // @ts-ignore
-                      require("./assets/user.png")
-                    ]}
-                    routes={["homeScreen", "orderStatusScreen", "searchScreen", "accountScreen"]}
-                    navigation={navigation}
-                />
-            </View>
+          <Text style={[styles.headingText]}>Appointment</Text>
+          <Text />
         </View>
+        <View style={styles.topWrapper}>
+          <View style={styles.topContainer}>
+            <Image source={require("./assets/prev.png")} style={styles.prev} />
+            <Text style={styles.dateText}>June 2022</Text>
+            <Image source={require("./assets/next.png")} style={styles.prev} />
+          </View>
+          <View
+            style={[
+              styles.inner,
+              { marginVertical: 20, paddingHorizontal: 10 }
+            ]}
+          >
+            <View style={styles.dateContainer}>
+              <Text style={styles.month}>Mon</Text>
+              <Text>20</Text>
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.month}>Mon</Text>
+              <Text>20</Text>
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.month}>Mon</Text>
+              <Text>20</Text>
+            </View>
+            <View
+              style={[styles.dateContainer, { backgroundColor: "#12D790" }]}
+            >
+              <Text style={[styles.month, styles.color]}>Mon</Text>
+              <Text style={styles.color}>20</Text>
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.month}>Mon</Text>
+              <Text>20</Text>
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.month}>Mon</Text>
+              <Text>20</Text>
+            </View>
+            <View style={styles.dateContainer}>
+              <Text style={styles.month}>Mon</Text>
+              <Text>20</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.tabContainer}>
+          <Text style={styles.heading}>Available slots</Text>
+
+          <View style={styles.tabView}>
+            <TabView tabTitles={["Morning", "Afternoon"]} selected={0} />
+            <View style={{ marginLeft: 10 }}>
+              <View style={[styles.tabView, { marginBottom: 2 }]}>
+                <Image
+                  source={require("./assets/uncheck.png")}
+                  style={styles.prev1}
+                />
+                <Text style={styles.text}>Not available</Text>
+              </View>
+              <View style={styles.tabView}>
+                <Image
+                  source={require("./assets/check.png")}
+                  style={styles.prev1}
+                />
+                <Text style={styles.text}>Available</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+        <View style={[styles.midSection]}>
+          <View style={[styles.inner, { marginVertical: 10 }]}>
+            <View style={[styles.dateContainer, styles.border]}>
+              <Text style={styles.textColor}>12:00</Text>
+            </View>
+            <View style={[styles.dateContainer, styles.border]}>
+              <Text style={styles.textColor}>11:00</Text>
+            </View>
+            <View style={[styles.dateContainer, styles.border]}>
+              <Text style={styles.textColor}>10:00</Text>
+            </View>
+            <View style={[styles.dateContainer, styles.selected]}>
+              <Text style={styles.textColor}>09:00</Text>
+            </View>
+          </View>
+
+          <Text style={[styles.subHeading, styles.subheading2]}>
+            Fees Information:
+          </Text>
+          {fees.map((fee, index) => (
+            <View style={styles.walletCard} key={index}>
+              <View style={styles.walletInner}>
+                <View style={styles.imgContainer}>
+                  <Image source={fee.image} style={styles.image} />
+                </View>
+                <View style={styles.walletCarder}>
+                  <Text style={styles.eventName}>{fee.title}</Text>
+                  <Text style={styles.experience}>{fee.description}</Text>
+                </View>
+              </View>
+              <View style={styles.leftSection}>
+                <Text style={styles.price}>${fee.charge}</Text>
+              </View>
+            </View>
+          ))}
+        </View>
+
+        <View style={styles.cardInfo}>
+          <Text style={styles.subHeading}>Profile Details</Text>
+          <Text style={styles.mr10}>Full Name</Text>
+          <View style={styles.InputBox}>
+            <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+          </View>
+          <Text style={styles.mr10}>Email address</Text>
+          <View style={styles.InputBox}>
+            <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+          </View>
+          <View style={styles.feeContainer}>
+            <View>
+              <Text style={[styles.mr10, { marginLeft: 15 }]}>Age</Text>
+              <View style={styles.feeSection}>
+                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+              </View>
+            </View>
+            <View>
+              <Text style={[styles.mr10, { marginLeft: 15 }]}>Gender</Text>
+              <View style={styles.feeSection}>
+                <TextInput placeholder="Enter" placeholderTextColor={"#000"} />
+              </View>
+            </View>
+          </View>
+          <Text style={styles.mr10}>Add notes</Text>
+          <View style={styles.textInput}>
+            <Input placeholder="Enter" multiline={true} />
+          </View>
+          <Text style={[styles.subHeading, { marginBottom: 5, marginTop: 25 }]}>
+            Request access
+          </Text>
+          <View style={styles.sectionContainer}>
+            <View style={styles.switchContainer}>
+              <Text style={styles.label}>Voice call</Text>
+              <Switch
+                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
+                thumbColor={isEnabled ? "#000" : "#000"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch}
+                value={isEnabled}
+              />
+            </View>
+            <View style={styles.switchContainer1}>
+              <Text style={styles.label}>Messaging</Text>
+              <Switch
+                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
+                thumbColor={isEnabled1 ? "#000" : "#000"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch1}
+                value={isEnabled1}
+              />
+            </View>
+            <View style={styles.switchContainer1}>
+              <Text style={styles.label}>Video call</Text>
+              <Switch
+                trackColor={{ false: "#E5E5E5", true: "#12D790" }}
+                thumbColor={isEnabled2 ? "#000" : "#000"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={toggleSwitch2}
+                value={isEnabled2}
+              />
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+      <View style={styles.footer}>
+        <Footer
+          images={[
+            require("./assets/home.png"),
+            require("./assets/calender.png"),
+            require("./assets/search.png"),
+            require("./assets/user.png")
+          ]}
+          routes={[
+            "homeScreen",
+            "orderStatusScreen",
+            "searchScreen",
+            "accountScreen"
+          ]}
+          navigation={navigation}
+        />
+      </View>
+    </View>
   );
 };
 
@@ -248,14 +257,43 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginBottom: 60
   },
-  subHeading: { fontSize: 16, fontWeight: "bold", marginLeft: 10, marginTop: 10, marginBottom: 20, color: "#2D2D2D" },
+  subHeading: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 10,
+    marginTop: 10,
+    marginBottom: 20,
+    color: "#2D2D2D"
+  },
   mr10: {
     marginLeft: 25,
     marginBottom: 10
   },
-  InputBox: { paddingHorizontal: 10, borderColor: "#C4C4C4", borderWidth: 1, marginHorizontal: 10, borderRadius: 10, marginBottom: 10, backgroundColor: "#f7f7f7" },
-  textInput: { borderWidth: 1, borderRadius: 10, borderColor: "#C4C4C4", paddingHorizontal: 5, height: 140, marginHorizontal: 10, backgroundColor: "#f7f7f7" },
-  feeContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 10, marginBottom: 10 },
+  InputBox: {
+    paddingHorizontal: 10,
+    borderColor: "#C4C4C4",
+    borderWidth: 1,
+    marginHorizontal: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    backgroundColor: "#f7f7f7"
+  },
+  textInput: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#C4C4C4",
+    paddingHorizontal: 5,
+    height: 140,
+    marginHorizontal: 10,
+    backgroundColor: "#f7f7f7"
+  },
+  feeContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    marginBottom: 10
+  },
   feeSection: {
     justifyContent: "center",
     alignItems: "flex-start",
@@ -290,7 +328,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
-
   },
   topContainer: {
     flexDirection: "row",
@@ -320,10 +357,14 @@ const styles = StyleSheet.create({
   topWrapper: { backgroundColor: "#fff", paddingHorizontal: 10 },
   color: { color: "#fff" },
   prev1: {
-    height: 12, width: 12, resizeMode: "contain"
+    height: 12,
+    width: 12,
+    resizeMode: "contain"
   },
   prev: {
-    height: 16, width: 16, resizeMode: "contain"
+    height: 16,
+    width: 16,
+    resizeMode: "contain"
   },
   message: { width: 18, height: 18, resizeMode: "contain" },
   headingText: { color: "#1E2022", fontWeight: "bold", fontSize: 18 },
@@ -340,7 +381,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center"
   },
-  heading: { fontSize: 16, color: "#2D2D2D", paddingLeft: 20, fontWeight: "bold", marginTop: 10, marginBottom: 5 },
+  heading: {
+    fontSize: 16,
+    color: "#2D2D2D",
+    paddingLeft: 20,
+    fontWeight: "bold",
+    marginTop: 10,
+    marginBottom: 5
+  },
   tabContainer: { marginVertical: 10 },
   tabView: {
     flexDirection: "row",
@@ -348,10 +396,19 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   text: { fontSize: 12, color: "#7C7C7C", marginLeft: 10 },
-  midSection: { backgroundColor: "#FFF", paddingHorizontal: 20, paddingVertical: 10, marginBottom: 15 },
+  midSection: {
+    backgroundColor: "#FFF",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginBottom: 15
+  },
   textColor: { color: "#000", fontSize: 16, paddingHorizontal: 7 },
   border: { borderColor: "#12D790", borderWidth: 1 },
-  selected: { borderColor: "#12D790", borderWidth: 1, backgroundColor: "#12D790" },
+  selected: {
+    borderColor: "#12D790",
+    borderWidth: 1,
+    backgroundColor: "#12D790"
+  },
   image: { height: 48, width: 59, resizeMode: "contain" },
   walletCard: {
     backgroundColor: "#fff",
@@ -387,7 +444,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginLeft: 10
   },
-  attending: { color: "#ACAEAF", fontSize: 14, marginLeft: 10, fontWeight: "bold" },
+  attending: {
+    color: "#ACAEAF",
+    fontSize: 14,
+    marginLeft: 10,
+    fontWeight: "bold"
+  },
   imgContainer: {
     height: 48,
     width: 59,
@@ -405,25 +467,30 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   price: { color: "#FC4B6F", fontSize: 18, fontWeight: "bold" },
-  subheading2: { color: "#354259", fontSize: 15, marginBottom: 0, fontWeight: "400", marginLeft: 0 }
+  subheading2: {
+    color: "#354259",
+    fontSize: 15,
+    marginBottom: 0,
+    fontWeight: "400",
+    marginLeft: 0
+  }
 });
 
 const Input = (props) => {
   return (
-        <View style={styles.container}>
-            <TextInput
-                style={inputStyles.input}
-                placeholder={props.placeholder}
-                value={props.value}
-                onChangeText={(num) => props.setValue(num)}
-                placeholderTextColor='#000'
-                multiline={props.multiline}
-                numberOfLines={props.multiline ? 10 : null}
-                editable={props.editable !== false}
-                // @ts-ignore
-                borderWidth={props.borderWidth}
-            />
-        </View>
+    <View style={styles.container}>
+      <TextInput
+        style={inputStyles.input}
+        placeholder={props.placeholder}
+        value={props.value}
+        onChangeText={(num) => props.setValue(num)}
+        placeholderTextColor="#000"
+        multiline={props.multiline}
+        numberOfLines={props.multiline ? 10 : null}
+        editable={props.editable !== false}
+        borderWidth={props.borderWidth}
+      />
+    </View>
   );
 };
 
@@ -442,18 +509,19 @@ const inputStyles = StyleSheet.create({
   }
 });
 
-const Footer = props => {
+const Footer = (props) => {
   return (
-        <View style={[footerStyles.footer]}>
-            {props.images.map((image, index) => (
-                <Pressable style={footerStyles.footerItem} key={index} onPress={() => props.navigation.navigate(props.routes[index])}>
-                    <Image
-                        style={footerStyles.footerImage}
-                        source={image}
-                    />
-                </Pressable>
-            ))}
-        </View>
+    <View style={[footerStyles.footer]}>
+      {props.images.map((image, index) => (
+        <Pressable
+          style={footerStyles.footerItem}
+          key={index}
+          onPress={() => props.navigation.navigate(props.routes[index])}
+        >
+          <Image style={footerStyles.footerImage} source={image} />
+        </Pressable>
+      ))}
+    </View>
   );
 };
 
@@ -471,7 +539,7 @@ const footerStyles = StyleSheet.create({
       height: 12
     },
     shadowOpacity: 0.58,
-    shadowRadius: 16.00,
+    shadowRadius: 16.0,
 
     elevation: 24
   },
@@ -494,20 +562,22 @@ const footerStyles = StyleSheet.create({
 
 const TabView = ({ tabTitles, selected }) => {
   return (
-        <View style={tabViewStyles.paletteContainer}>
-            {tabTitles.map((title, index) => (
-                <View
-                    style={
-                        index === selected
-                          ? tabViewStyles.selected
-                          : tabViewStyles.unSelected
-                    }
-                    key={index}
-                >
-                    <Text style={{ color: index === selected ? "#000" : "#7C7C7C" }}>{title}</Text>
-                </View>
-            ))}
+    <View style={tabViewStyles.paletteContainer}>
+      {tabTitles.map((title, index) => (
+        <View
+          style={
+            index === selected
+              ? tabViewStyles.selected
+              : tabViewStyles.unSelected
+          }
+          key={index}
+        >
+          <Text style={{ color: index === selected ? "#000" : "#7C7C7C" }}>
+            {title}
+          </Text>
         </View>
+      ))}
+    </View>
   );
 };
 
