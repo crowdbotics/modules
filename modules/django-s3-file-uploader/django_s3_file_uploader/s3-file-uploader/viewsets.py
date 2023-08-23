@@ -3,7 +3,7 @@ import os
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
+from .models import UploadedFile
 from .serializers import (CreateBucketSerializer, DeleteBucketSerializer, UploadFileSerializer, DownloadFileSerializer, DeleteFileSerializer, PresignedUrlFileSerializer)
 from .services.S3Service import S3Service
 
@@ -114,7 +114,7 @@ class S3ViewSet(viewsets.GenericViewSet):
             user_id = request.data.get("user_id")
             bucket = request.data.get("bucket")
             file_name = request.data.get("file_name")
-            delete_file = UploadFile.objects.filter(user_id=user_id, bucket=bucket, file_name=file_name)
+            delete_file = UploadedFile.objects.filter(user_id=user_id, bucket=bucket, file_name=file_name)
             delete_file.delete()
             serializer = self.get_serializer(data=delete_file)
             serializer.is_valid()

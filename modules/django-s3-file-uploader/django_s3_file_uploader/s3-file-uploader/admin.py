@@ -1,4 +1,4 @@
-from .models import UploadFile
+from .models import UploadedFile
 from django.contrib import admin
 
-admin.site.register(UploadFile)
+admin.site.register(UploadedFile)
