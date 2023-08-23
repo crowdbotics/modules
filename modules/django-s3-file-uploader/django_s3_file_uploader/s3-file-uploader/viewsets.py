@@ -63,7 +63,6 @@ class S3ViewSet(viewsets.GenericViewSet):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             response = self.s3_service.delete_s3_bucket(**serializer.data)
-            print("response: ", response)
             return Response(response, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
