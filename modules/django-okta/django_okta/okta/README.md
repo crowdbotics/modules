@@ -1,4 +1,10 @@
 # Okta
+By using this module user can sign in to multiple apps at once. 
+
+## Features
+1. Sign in through social accounts
+2. Sing in to connected apps at once
+
 
 ## Okta ODIC (OpenID Connect) App Setup
 1. Create an account on [Okta](https://www.okta.com/free-trial/).
@@ -139,3 +145,16 @@ await createConfig({
 });
 ```
 This method will create a configured client on the native modules. Resolves true if successfully configures a client.
+
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/196x2hd5SVwGvG2KhJdDCZ2o4ksPlKpQNpF6JRHVA4gM/edit?usp=sharing), which provides more information about the module's actual intentions.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
