@@ -5,7 +5,6 @@ import { OptionsContext } from "@options";
 import Notifications from "./flatlist";
 
 const PushNotifications = () => {
-  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const { authToken, userID, styles } = options;
 

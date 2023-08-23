@@ -5,6 +5,10 @@ const authToken = "";
 // User's id from backend
 const userID = "";
 
+// Source link for the dummy immage
+const dummyImageLink =
+  "https://img.freepik.com/premium-vector/message-app-icon-paper-cut-style-social-media-icons_505135-255.jpg?w=100";
+
 const styles = StyleSheet.create({
   container: { flex: 1 },
   walletCard: {
@@ -52,7 +56,12 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   image: { height: 70, width: 70, borderRadius: 10 },
-  listStyle: { marginHorizontal: 15, marginTop: 15, paddingBottom: 10, fontWeight: "bold" },
+  listStyle: {
+    marginHorizontal: 15,
+    marginTop: 15,
+    paddingBottom: 10,
+    fontWeight: "bold"
+  },
   view: {
     fontSize: 12,
     color: "#6e7075",
@@ -66,11 +75,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 10
   }
-
 });
 
 export default {
   authToken: authToken,
   userID: userID,
-  styles: styles
+  styles: styles,
+  dummyImageLink: dummyImageLink
 };
