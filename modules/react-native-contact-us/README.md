@@ -4,8 +4,8 @@
 
 This module will be used by users for contacting the customer support or app owner
 
-- User can contact the admin
-- User can write an email directly to the admin
+- User can contact the admin by filling the contact form.
+- User can also send an email directly to admin through device's mail app.
 
 ![Module preview](preview.png)
 
@@ -33,7 +33,7 @@ Dependencies used:
 
 ### Global Configs
 
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+Update the options/options.js file with your app's backend url. 
 
 ```javascript
 export const globalOptions = {
