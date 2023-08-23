@@ -1,6 +1,18 @@
 # Complex Table Module
 
-Module has a table with search and sorting functionality.
+Module has a table with search and sorting functionality. COntent of the table can be sorted in ascending, descending and alphabetic order. User can search the record of of the table by entering query in search input.
+
+## Features
+1. Search records in the table
+2. Sort the content of the table in ascending order
+3. Sort the content of the table in descending order
+4. Sort the content of the table in ascending alphabetically
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
+  ```
+  yarn install
+  ```
 
 ## Manual Setup
 
