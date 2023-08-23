@@ -119,8 +119,14 @@ project(':react-native-push-notification').projectDir = file('../node_modules/re
 #import <UserNotifications/UNUserNotificationCenter.h>
 ```
 Then, add the 'UNUserNotificationCenterDelegate' to protocols:
+### For Old scaffold `0.64`
 ```
 @interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, UNUserNotificationCenterDelegate>
+```
+
+### For New scaffold `0.71.7`
+```c
+@interface AppDelegate : RCTAppDelegate <UNUserNotificationCenterDelegate>
 ```
 
 3. Update AppDelegate.m, At the top of the file:
