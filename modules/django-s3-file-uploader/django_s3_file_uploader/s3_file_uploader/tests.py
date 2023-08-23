@@ -11,7 +11,8 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class S3ViewSetTest(APITestCase):
+class S3ViewSetTestCases(APITestCase):
+
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.list_s3_buckets')
     def test_bucket_list(self, list_s3_buckets_mock):
         response = {
@@ -45,12 +46,12 @@ class S3ViewSetTest(APITestCase):
             }
         }
         list_s3_buckets_mock.return_value = response
-        Response = self.client.get(reverse('s3_service-bucket-list'))
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response)
-        self.assertEqual(Response.data['ResponseMetadata']['RequestId'], response['ResponseMetadata']['RequestId'])
-        self.assertEqual(Response.data['Buckets'][0]['CreationDate'], response['Buckets'][0]['CreationDate'])
-        self.assertEqual(Response.data['Owner']['DisplayName'], response['Owner']['DisplayName'])
+        responses = self.client.get(reverse('s3_service-bucket-list'))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response)
+        self.assertEqual(responses.data['ResponseMetadata']['RequestId'], response['ResponseMetadata']['RequestId'])
+        self.assertEqual(responses.data['Buckets'][0]['CreationDate'], response['Buckets'][0]['CreationDate'])
+        self.assertEqual(responses.data['Owner']['DisplayName'], response['Owner']['DisplayName'])
         list_s3_buckets_mock.assert_called_once()
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.list_s3_buckets')
@@ -58,6 +59,7 @@ class S3ViewSetTest(APITestCase):
         list_s3_buckets_mock.side_effect = Exception()
         with self.assertRaises(Exception):
             self.client.get(reverse('s3_service-bucket-list'))
+            list_s3_buckets_mock.assert_called_once()
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.create_s3_bucket')
     def test_create_bucket(self, create_s3_bucket_mock):
@@ -75,50 +77,26 @@ class S3ViewSetTest(APITestCase):
         }
         create_s3_bucket_mock.return_value = response
         data = {
-            "bucket": "confidential-album-156"
+            "bucket_name": "confidential-album-156"
         }
-        Response = self.client.post(reverse('s3_service-create-bucket'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Response.data, response)
-        self.assertEqual(Response.data['ResponseMetadata']['RequestId'], response['ResponseMetadata']['RequestId'])
-        self.assertEqual(Response.data['Location'], response['Location'])
+        responses = self.client.post(reverse('s3_service-create-bucket'), data=data)
+        self.assertEqual(responses.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(responses.data, response)
+        self.assertEqual(responses.data['ResponseMetadata']['RequestId'], response['ResponseMetadata']['RequestId'])
+        self.assertEqual(responses.data['Location'], response['Location'])
         create_s3_bucket_mock.assert_called_once()
-
-    @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.create_s3_bucket')
-    def test_create_bucket_with_wrong_bucket(self, create_s3_bucket_mock):
-        response = {
-            'ResponseMetadata': {
-                'RequestId': 'NZGJNXNFT8C1BDK1',
-                'HostId': '6/xVDxG47YFa3td+FajKZ+X3sndVDBYRtaUJo0r3OplflkpPdC9KFEMG+SE2SuqOL/itVM9SS6Q=',
-                'HTTPStatusCode': 200,
-                'HTTPHeaders': {
-                    'x-amz-id-2': '6/xVDxG47YFa3td+FajKZ+X3sndVDBYRtaUJo0r3OplflkpPdC9KFEMG+SE2SuqOL/itVM9SS6Q=',
-                    'x-amz-request-id': 'NZGJNXNFT8C1BDK1',
-                    'date': 'Mon, 16 Jan 2023 12:35:45 GMT',
-                    'location': '/confiden',
-                    'server': 'AmazonS3',
-                    'content-length': '0'
-                },
-                'RetryAttempts': 0
-            },
-            'Location': '/confiden'
-        }
-        create_s3_bucket_mock.return_value = response
-        data = {
-            "bucket": "confiden"
-        }
-        Response = self.client.post(reverse('s3_service-create-bucket'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Response.data, response)
-        self.assertEqual(Response.data['ResponseMetadata']['RequestId'], response['ResponseMetadata']['RequestId'])
-        self.assertEqual(Response.data['Location'], response['Location'])
-        create_s3_bucket_mock.assert_called_once()
+        create_s3_bucket_mock.assert_called_once_with(bucket_name="confidential-album-156")
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.create_s3_bucket')
     def test_create_bucket_with_exception(self, create_s3_bucket_mock):
         create_s3_bucket_mock.side_effect = Exception()
         with self.assertRaises(Exception):
-            self.client.post(reverse('s3_service-create-bucket'))
+            data = {
+                "bucket_name": "confidential-album-156"
+            }
+            self.client.post(reverse('s3_service-create-bucket'), data=data)
+            create_s3_bucket_mock.assert_called_once()
+            create_s3_bucket_mock.assert_called_once_with(bucket_name="confidential-album-156")
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.delete_s3_bucket')
     def test_delete_bucket(self, delete_s3_bucket_mock):
@@ -137,20 +115,23 @@ class S3ViewSetTest(APITestCase):
             }
         }
         delete_s3_bucket_mock.return_value = response
-        data = {
-            "bucket": "confidential-album-156",
-            "owner_id": "195161589692"
-        }
-        Response = self.client.delete(reverse('s3_service-delete-bucket'), data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response)
+        owner_id = "efb8e13f84e4ff693f01ded22cf16a5325949677613eada32a98e8b9df347620"
+        bucket_name = "enigmatix"
+        responses = self.client.delete(reverse('s3_service-delete-bucket', args=(owner_id, bucket_name)))
+        self.assertEqual(responses.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(responses.data, response)
         delete_s3_bucket_mock.assert_called_once()
+        delete_s3_bucket_mock.assert_called_once_with(owner_id=owner_id, bucket_name=bucket_name)
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.delete_s3_bucket')
     def test_delete_bucket_with_exception(self, delete_s3_bucket_mock):
         delete_s3_bucket_mock.side_effect = Exception()
         with self.assertRaises(Exception):
-            self.client.delete(reverse('s3_service-delete-bucket'))
+            owner_id = "efb8e13f84e4ff693f01ded22cf16a5325949677613eada32a98e8b9df347620"
+            bucket_name = "enigmatix"
+            self.client.delete(reverse('s3_service-delete-bucket', args=(owner_id, bucket_name)))
+            delete_s3_bucket_mock.assert_called_once()
+            delete_s3_bucket_mock.assert_called_once_with(owner_id=owner_id, bucket_name=bucket_name)
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.upload_s3_file')
     def test_upload_file(self, upload_s3_file_mock):
@@ -163,53 +144,88 @@ class S3ViewSetTest(APITestCase):
             "bucket": "confidential-album-156",
             "user_id": adminuser.id
         }
-        Response = self.client.post(reverse('s3_service-upload-file'), data=data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
-        self.assertEqual(Response.data, response)
+        responses = self.client.post(reverse('s3_service-upload-file'), data=data)
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
+        self.assertEqual(responses.data, response)
         upload_s3_file_mock.assert_called_once()
+        upload_s3_file_mock.assert_called_once_with(file=b'file_content',
+                                                    bucket="confidential-album-156",
+                                                    file_name="Screenshot from 2023-01-09 14-01-53.png")
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.upload_s3_file')
     def test_upload_file_with_exception(self, upload_s3_file_mock):
         upload_s3_file_mock.side_effect = Exception()
         with self.assertRaises(Exception):
-            self.client.post(reverse('s3_service-upload-file'))
+            f = SimpleUploadedFile("Screenshot from 2023-01-09 14-01-53.png", b"file_content")
+            adminuser = User.objects.create_user('admin', 'admin@test.com', 'pass')
+            data = {
+                "file": f,
+                "bucket": "confidential-album-156",
+                "user_id": adminuser.id
+            }
+            self.client.post(reverse('s3_service-upload-file'), data=data)
+            upload_s3_file_mock.assert_called_once()
+            upload_s3_file_mock.assert_called_once_with(file=b'file_content',
+                                                        bucket="confidential-album-156",
+                                                        file_name="Screenshot from 2023-01-09 14-01-53.png")
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.download_s3_file')
     def test_download_file(self, download_s3_file_mock):
-        response = '/home/cb-enigmatix/Projects/modules/demo/backend/staticfiles/Screenshot from 2023-01-10 16-14-55.png'
+        response = '/home/cb-enigmatix/Projects/modules/demo/backend/staticfiles/' \
+                   'Screenshot from 2023-01-10 16-14-55.png'
         download_s3_file_mock.return_value = response
-        data = {
-            "file_name": "Screenshot from 2023-01-09 14-01-53.png",
-            "bucket": "confidential-album-156"
-        }
-        Response = self.client.get(reverse('s3_service-download-file'), data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        file_name = "Screenshot from 2023-01-09 14-01-53.png"
+        bucket_name = "enigmatix"
+        responses = self.client.get(reverse('s3_service-download-file', args=(bucket_name, file_name)))
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
         download_s3_file_mock.assert_called_once()
+        download_s3_file_mock.assert_called_once_with(bucket="enigmatix",
+                                                      file_name="Screenshot from 2023-01-09 14-01-53.png",
+                                                      path_to_save_file="/home/cb-enigmatix/Projects/modules/demo/"
+                                                                        "backend/staticfiles")
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.download_s3_file')
     def test_download_file_with_wrong_exception(self, download_s3_file_mock):
         download_s3_file_mock.side_effect = Exception()
         with self.assertRaises(Exception):
-            self.client.get(reverse('s3_service-download-file'))
+            file_name = "Screenshot from 2023-01-09 14-01-53.png"
+            bucket_name = "enigmatix"
+            self.client.get(reverse('s3_service-download-file', args=(bucket_name, file_name)))
+            download_s3_file_mock.assert_called_once()
+            download_s3_file_mock.assert_called_once_with(bucket="enigmatix",
+                                                          file_name="Screenshot from 2023-01-09 14-01-53.png",
+                                                          path_to_save_file="/home/cb-enigmatix/Projects/modules/demo/"
+                                                                            "backend/staticfiles")
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.create_presigned_s3_url')
     def test_create_presigned_url(self, create_presigned_s3_url_mock):
-        response = 'https://confidential-album-156.s3.amazonaws.com/Screenshot%20from%202023-01-10%2016-14-55.png?AWSAccessKeyId=AKIAS24EJQ66HS6CXFPW&Signature=1TAN760PJQkUTEp%2BRl6MIirObUI%3D&Expires=1673882736'
+        response = 'https://confidential-album-156.s3.amazonaws.com/Screenshot%20from%202023-01-10%2016-14-55.png' \
+                   '?AWSAccessKeyId=AKIAS24EJQ66HS6CXFPW&Signature=1TAN760PJQkUTEp%2BRl6MIirObUI%3D&Expires=1673882736'
         create_presigned_s3_url_mock.return_value = response
         data = {
             "file_name": "Screenshot from 2023-01-09 14-01-53.png",
             "bucket": "confidential-album-156",
             "expiration": '4000'
         }
-        Response = self.client.get(reverse('s3_service-create-presigned-url'), data)
-        self.assertEqual(Response.status_code, status.HTTP_200_OK)
+        responses = self.client.post(reverse('s3_service-create-presigned-url'), data=data, format='json')
+        self.assertEqual(responses.status_code, status.HTTP_200_OK)
         create_presigned_s3_url_mock.assert_called_once()
+        create_presigned_s3_url_mock.assert_called_once_with(file_name="Screenshot from 2023-01-09 14-01-53.png",
+                                                             bucket="confidential-album-156", expiration=4000)
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.create_presigned_s3_url')
     def test_create_presigned_url_with_exception(self, create_presigned_s3_url_mock):
         create_presigned_s3_url_mock.side_effect = Exception()
         with self.assertRaises(Exception):
-            self.client.get(reverse('s3_service-create-presigned-url'))
+            data = {
+                "file_name": "Screenshot from 2023-01-09 14-01-53.png",
+                "bucket": "confidential-album-156",
+                "expiration": '4000'
+            }
+            self.client.post(reverse('s3_service-create-presigned-url'), data=data, format='json')
+            create_presigned_s3_url_mock.assert_called_once()
+            create_presigned_s3_url_mock.assert_called_once_with(file_name="Screenshot from 2023-01-09 14-01-53.png",
+                                                                 bucket="confidential-album-156", expiration=3600)
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.delete_s3_file')
     def test_delete_file(self, delete_s3_file_mock):
@@ -220,20 +236,26 @@ class S3ViewSetTest(APITestCase):
                 'x-amz-request-id': 'V4HM8N4EF5KKWXQD', 'date': 'Mon, 16 Jan 2023 14:28:52 GMT', 'server': 'AmazonS3'},
                                          'RetryAttempts': 0}}
         delete_s3_file_mock.return_value = response
-        data = {
-            "user_id": 6,
-            "bucket": "confidential-album-156",
-            "file_name": "Screenshot from 2023-01-10 16-14-55.png"
-        }
-        Response = self.client.delete(reverse('s3_service-delete-file'), data)
-        self.assertEqual(Response.status_code, status.HTTP_204_NO_CONTENT)
+        user_id = 6
+        bucket_name = "confidential-album-156"
+        file_name = "Screenshot from 2023-01-10 16-14-55.png"
+        responses = self.client.delete(reverse('s3_service-delete-file', args=(user_id, bucket_name, file_name)))
+        self.assertEqual(responses.status_code, status.HTTP_204_NO_CONTENT)
         delete_s3_file_mock.assert_called_once()
+        delete_s3_file_mock.assert_called_once_with(bucket="confidential-album-156",
+                                                    file_name="Screenshot from 2023-01-10 16-14-55.png")
 
     @mock.patch('modules.django_s3_file_uploader.s3_file_uploader.services.S3Service.S3Service.delete_s3_file')
     def test_delete_file_with_wrong_exception(self, delete_s3_file_mock):
         delete_s3_file_mock.side_effect = Exception()
         with self.assertRaises(Exception):
-            self.client.delete(reverse('s3_service-delete-file'))
+            user_id = 6
+            bucket_name = "confidential-album-156"
+            file_name = "Screenshot from 2023-01-10 16-14-55.png"
+            self.client.delete(reverse('s3_service-delete-file', args=(user_id, bucket_name, file_name)))
+            delete_s3_file_mock.assert_called_once()
+            delete_s3_file_mock.assert_called_once_with(user_id=6, bucket_name="confidential-album-156",
+                                                        file_name="Screenshot from 2023-01-10 16-14-55.png")
 
     def test_str_uploaded_file_title(self):
         """

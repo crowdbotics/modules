@@ -27,29 +27,29 @@ class S3Service:
         except Exception:
             raise
 
-    def create_s3_bucket(self, bucket):
+    def create_s3_bucket(self, bucket_name):
         """
         Create an S3 bucket in a specified region
-        :param bucket: Bucket to create
+        :param bucket_name: Bucket to create
         :return: Creates a new s3 bucket
         """
         try:
-            response = self.s3_client.create_bucket(Bucket=bucket)
+            response = self.s3_client.create_bucket(Bucket=bucket_name)
             return response
         except Exception:
             raise
 
-    def delete_s3_bucket(self, bucket, owner_id):
+    def delete_s3_bucket(self, owner_id, bucket_name):
         """
         Deletes an S3 bucket
-        :param bucket:  to create
+        :param bucket_name:  to create
         :param owner_id: Owner of the bucket
         :return: Deletes an existing s3 bucket
         """
         try:
             response = self.s3_client.delete_bucket(
-                Bucket=bucket,
-                ExpectedBucketOwner=owner_id
+               ExpectedBucketOwner=owner_id,
+               Bucket=bucket_name,
             )
             return response
         except Exception:
@@ -87,7 +87,7 @@ class S3Service:
     def delete_s3_file(self, bucket, file_name):
         """
         Deletes a file from an S3 bucket
-        :param bucket:  Bucket where file exists
+        :param bucket: Bucket where file exists
         :param file_name: File to be deleted
         :return: Deletes a file from an S3 bucket returns no content
         """
@@ -99,10 +99,10 @@ class S3Service:
 
     def create_presigned_s3_url(self, file_name, bucket, expiration=3600):
         """
-        Generate a presigned URL to grant a user temporary access to an S3 object.
-        :query_param bucket: name of the bucket
-        :query_param file_name: Name of the file in s3 bucket
-        :query_param expiration: Time in seconds for the presigned URL to remain valid
+        Generate a presigned URL to grant a user temporary access to an S3 object
+        :param bucket: name of the bucket
+        :param file_name: Name of the file in s3 bucket
+        :param expiration: Time in seconds for the presigned URL to remain valid
         :return: Presigned URL as string. If error, returns None. 
         """
         try:
