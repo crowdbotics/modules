@@ -1,13 +1,13 @@
 {
   "name": "@modules/appointment-local",
   "version": "1.0.1",
-  "description": "Appointment-local Module",
+  "description": "Appointment Local module",
   "private": true,
   "main": "index.js",
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {
-    "react-native-dropdown-picker": "5.3.0",
+    "react-native-dropdown-picker": "5.3.0"
   },
   "x-dependencies": {
     "react-native-pager-view": "5.4.15",
