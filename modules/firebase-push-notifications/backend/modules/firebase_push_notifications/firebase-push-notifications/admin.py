@@ -1,14 +1,13 @@
 from django.contrib import admin
-
-from .models import *
+from .models import Notification, UserNotification
 
 
 class NotificationAdmin(admin.ModelAdmin):
-    list_display = ["id", 'sender', 'receiver', 'title', 'message']
+    list_display = ["id", "sender", "receiver", "title", "message"]
 
 
 class UserNotificationAdmin(admin.ModelAdmin):
-    list_display = ["id", 'user', 'notification']
+    list_display = ["id", "user", "notification"]
 
 
 admin.site.register(Notification, NotificationAdmin)
