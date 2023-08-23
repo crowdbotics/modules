@@ -1,16 +1,17 @@
 from rest_framework import serializers
 from fcm_django.models import FCMDevice
+from push_notifications.models import GCMDevice
 
 from .models import Notification, UserNotification
 
 
 class FCMDeviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FCMDevice
+        model = GCMDevice
         fields = '__all__'
 
 
-class NotificationSerializer(serializers.ModelSerializer):
+class FCMNotificationSerializer(serializers.ModelSerializer):
     is_seen = serializers.SerializerMethodField(read_only=True)
 
     class Meta:

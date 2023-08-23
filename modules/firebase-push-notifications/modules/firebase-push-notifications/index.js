@@ -8,10 +8,10 @@ import Notifications from "./flatlist";
 
 const PushNotifications = () => {
   const options = useContext(OptionsContext);
-  const { senderID, authToken, styles } = options;
+  const { senderID, authToken, userID, styles } = options;
 
   useEffect(() => {
-    RemotePushController(senderID, authToken);
+    RemotePushController(senderID, authToken, userID);
   }, []);
 
   return (

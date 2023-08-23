@@ -20,7 +20,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=200)),
                 ('message', models.TextField()),
-                ('image', models.FileField(blank=True, null=True, upload_to='notification')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('receiver', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='send_notification', to=settings.AUTH_USER_MODEL)),
                 ('sender', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='sender_notification', to=settings.AUTH_USER_MODEL)),

@@ -1,7 +1,8 @@
 import { StyleSheet } from "react-native";
 
-const authToken = "Your Authentication token";
-const senderID = "FCM Sender ID";
+const authToken = "";
+const senderID = "";
+const userID = ""
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -70,5 +71,6 @@ const styles = StyleSheet.create({
 export default {
   authToken: authToken,
   senderID: senderID,
+  userID: userID,
   styles: styles
 };

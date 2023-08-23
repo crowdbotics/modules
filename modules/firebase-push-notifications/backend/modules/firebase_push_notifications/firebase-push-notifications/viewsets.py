@@ -21,7 +21,7 @@ class UserFCMDeviceAdd(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         registration_id = request.data.get('registration_id')
-        user_device = FCMDevice.objects.filter(user=request.user, registration_id=registration_id)
+        user_device = GCMDevice.objects.filter(user=request.user, registration_id=registration_id)
         if user_device:
             return Response({
                 'success': True,
@@ -34,12 +34,12 @@ class UserFCMDeviceAdd(CreateAPIView):
 class NotificationViewSet(ModelViewSet):
     authentication_classes = [authentication.TokenAuthentication, authentication.SessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
-    serializer_class = NotificationSerializer
+    serializer_class = FCMNotificationSerializer
     queryset = Notification.objects.all()
 
     def get_queryset(self):
         queryset = self.queryset.order_by("-created")
-        queryset = queryset.filter(Q(receiver_id=self.request.user) | Q(receiver_id=None))
+        queryset = queryset.filter(receiver_id=self.request.user)
         return queryset
 
 
