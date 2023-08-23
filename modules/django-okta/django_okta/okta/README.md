@@ -14,26 +14,6 @@
 ### Okta React Native for ODIC (OpenID Connect) App
 Install [Okta React Native](https://www.npmjs.com/package/@okta/okta-react-native/v/2.6.0) package. Use `createConfig` method to configure the client successfully.
 
-```javascript
-import { createConfig } from '@okta/okta-react-native';
-
-await createConfig({
-  issuer: "https://{yourOktaDomain}/oauth2/default", // Optional
-  clientId: "{clientId}",
-  redirectUri: "{redirectUri}",
-  endSessionRedirectUri: "{endSessionRedirectUri}",
-  discoveryUri: "https://{yourOktaDomain}",
-  scopes: ["openid", "profile", "offline_access"],
-  requireHardwareBackedKeyStore: true, // Optional
-  androidChromeTabColor: "#FF00AA", // Optional
-  browserMatchAll: true, // Optional
-  httpConnectionTimeout: 15, // Optional
-  httpReadTimeout: 10, // Optional
-});
-```
-This method will create a configured client on the native modules. Resolves true if successfully configures a client.
-
-
 ## Okta SAML 2.0 App Setup
 1. Click on `Application` tab from the sidebar.
 2. Click on `Create App Integration` button.
@@ -51,6 +31,16 @@ You must enable sign-on authentication to to get stateToken to logout your user.
 3. In sidebar under the **Security** tab click `Authentication`.
 4. On **Authentication** page click `Sign-On` tab. Click on **Add rule** button.
 5. Enter `Rule name`, set `Multifactor authentication (MFA) is` radio button to required. Select `When signing in with a new device cookie` radio button. Lastly, check `Select "Don't prompt me again for MFA" by default` checkbox and click **Create rule** button.
+
+
+## Add Social Logins as Identity Provider
+Okta integrates with many Identity Providers. Select an Identity Provider card to add [social login](https://developer.okta.com/docs/guides/identity-providers/#enterprise-identity-providers) to your app.
+1. In sidebar under the **Security** tab click `Identity Providers`.
+2. Click on `Add identity provider` button. Select any of the provider from the available list.
+3. Complete the `General settings` and click the `Finish` button.
+4. Back on `Identity Providers` page select the tab `Routing rules` and set the routing rules by for each **identity provider** by clicking on `Add Routing Rule`.
+5. Configure the routing rule and click `Create rule`.
+6. These identity providers can be embedded in [Okta Sign-in widget](https://developer.okta.com/docs/guides/social-login/google/main/#add-the-identity-provider-to-the-embedded-okta-sign-in-widget) and custom [Okta-hosted sign-in](https://developer.okta.com/docs/guides/social-login/google/main/#add-the-identity-provider-to-the-custom-okta-hosted-sign-in-page) page.
 
 
 ## Update Settings
@@ -119,3 +109,22 @@ User object contains the user details that is going to be added. this `user_obje
   }
 }
 ```
+
+```javascript
+import { createConfig } from '@okta/okta-react-native';
+
+await createConfig({
+  issuer: "https://{yourOktaDomain}/oauth2/default", // Optional
+  clientId: "{clientId}",
+  redirectUri: "{redirectUri}",
+  endSessionRedirectUri: "{endSessionRedirectUri}",
+  discoveryUri: "https://{yourOktaDomain}",
+  scopes: ["openid", "profile", "offline_access"],
+  requireHardwareBackedKeyStore: true, // Optional
+  androidChromeTabColor: "#FF00AA", // Optional
+  browserMatchAll: true, // Optional
+  httpConnectionTimeout: 15, // Optional
+  httpReadTimeout: 10, // Optional
+});
+```
+This method will create a configured client on the native modules. Resolves true if successfully configures a client.
