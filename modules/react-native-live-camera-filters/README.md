@@ -18,7 +18,8 @@ Live camera filters module enables the user to apply filters in real time on the
 4. Ability to to switch flash on/off.
 5. Ability to save the picture.
 
-![module preview 1](https://github.com/crowdbotics/modules/blob/master/modules/react-native-live-camera-filters/preview.png?raw=true)
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/3b62d6ee-af98-475b-876b-5b78c66cb036)
+
 
 ## ## Features
 
