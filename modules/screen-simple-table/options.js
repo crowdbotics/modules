@@ -1,7 +1,7 @@
+const header = ["F.Name", "L.Name", "Age", "Gender"]; // Header column names
 
-const header = ["F.Name", "L.Name", "Age", "Gender"]; // Header coloumn names
-
-const tableData = [ // Data to be displyed in the table
+// Data to be displayed in the table
+const tableData = [
   {
     first_name: "John",
     last_name: "Wick",
@@ -39,6 +39,7 @@ const tableData = [ // Data to be displyed in the table
     age: 23
   }
 ];
+
 export default {
   headers: header,
   tableData: tableData
