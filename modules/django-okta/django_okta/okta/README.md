@@ -33,14 +33,25 @@ You must enable sign-on authentication to to get stateToken to logout your user.
 5. Enter `Rule name`, set `Multifactor authentication (MFA) is` radio button to required. Select `When signing in with a new device cookie` radio button. Lastly, check `Select "Don't prompt me again for MFA" by default` checkbox and click **Create rule** button.
 
 
-## Add Social Logins as Identity Provider
+## Create Google as Social Identity Provider.
 Okta integrates with many Identity Providers. Select an Identity Provider card to add [social login](https://developer.okta.com/docs/guides/identity-providers/#enterprise-identity-providers) to your app.
+
+**Create an app at the Identity Provide**
+1. Make sure that you can access the [Google Developers Console](https://console.developers.google.com/).
+2. Create a Google project using these [instructions](https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin).
+3. In the `Authorized redirect URIs` section of the creation wizard, click `ADD URI` to add the Okta redirect URI for your app integration.
+4. Paste your redirect URI into the text box.
+5. Save the client_Id and Client_secret for later use. 
+
+**Create the Identity Provider in Okta**
 1. In sidebar under the **Security** tab click `Identity Providers`.
-2. Click on `Add identity provider` button. Select any of the provider from the available list.
-3. Complete the `General settings` and click the `Finish` button.
-4. Back on `Identity Providers` page select the tab `Routing rules` and set the routing rules by for each **identity provider** by clicking on `Add Routing Rule`.
-5. Configure the routing rule and click `Create rule`.
-6. These identity providers can be embedded in [Okta Sign-in widget](https://developer.okta.com/docs/guides/social-login/google/main/#add-the-identity-provider-to-the-embedded-okta-sign-in-widget) and custom [Okta-hosted sign-in](https://developer.okta.com/docs/guides/social-login/google/main/#add-the-identity-provider-to-the-custom-okta-hosted-sign-in-page) page.
+2. Click on `Add identity provider` button. Select any `Google` from the available list and click `Next` button.
+3. Enter a name for the Identity Provider configuration.
+4. Paste the `client ID` and `Secret ID` that you obtained from the Google Developers Console.
+5. Leave the scopes defaults. and click the `Finish` button. 
+6. Hit the following url in the browser with your keys.
+`https://{YourOktaDomain}.okta.com/oauth2/v1/authorize?idp={IdP_ID}&client_id={App_Client_ID}&response_type=id_token token&response_mode=fragment&scope=openid%20profile%20email&redirect_uri={sign_in redirect url}&state=WM6D&nonce=YsG76jo`
+7. After successful authentication, the you will be redirected to the redirect URI that you specified, along with an `#id_token` and `#access_token`.
 
 
 ## Update Settings
