@@ -11,24 +11,18 @@ class FCMDeviceSerializer(serializers.ModelSerializer):
 
 
 class FCMNotificationSerializer(serializers.ModelSerializer):
-    is_seen = serializers.SerializerMethodField(read_only=True)
+    is_seen = serializers.BooleanField(default=False, read_only=True)
 
     class Meta:
         model = Notification
         fields = "__all__"
-
-    def get_is_seen(self, obj):
-        is_seen = False
-        try:
-            user_id = self.context.get('request').user
-            UserNotification.objects.get(notification_id=obj.id, user_id=user_id)
-            is_seen = True
-        except UserNotification.DoesNotExist:
-            pass
-        return is_seen
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserNotification
         fields = "__all__"
+
+
+class UserNotificationValidationSerializer(serializers.Serializer):
+    notification = serializers.IntegerField(required=True, allow_null=False)

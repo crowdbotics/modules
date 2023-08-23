@@ -18,7 +18,7 @@ class Notification(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.sender)
+        return str(self.title)
 
 
 class UserNotification(models.Model):
@@ -44,7 +44,7 @@ def send_notification(sender, instance, created, **kwargs):
         if fcm_devices:
             for fcm_device in fcm_devices:
                 message = Message(
-                        notification=Notification(title=instance.title, body=instance.message, image=image))
+                    notification=Notification(title=instance.title, body=instance.message, image=image))
                 if fcm_device.type == "ios":
                     message.apns = APNSConfig(payload=APNSPayload(aps=Aps(sound='default')))
                 fcm_device.send_message(message)

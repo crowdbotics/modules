@@ -7,5 +7,9 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display = ["id", 'sender', 'receiver', 'title', 'message']
 
 
+class UserNotificationAdmin(admin.ModelAdmin):
+    list_display = ["id", 'user', 'notification']
+
+
 admin.site.register(Notification, NotificationAdmin)
-admin.site.register(UserNotification)
+admin.site.register(UserNotification, UserNotificationAdmin)

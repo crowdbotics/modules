@@ -1,6 +1,7 @@
 import os
 
 import firebase_admin
+from django.db.models import OuterRef, Exists
 from fcm_django.models import FCMDevice
 from firebase_admin import credentials
 from rest_framework import authentication, permissions
@@ -10,7 +11,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Notification, UserNotification
-from .serializers import FCMDeviceSerializer, FCMNotificationSerializer, UserNotificationSerializer
+from .serializers import FCMDeviceSerializer, FCMNotificationSerializer, UserNotificationSerializer, \
+    UserNotificationValidationSerializer
 
 cred = credentials.Certificate(os.getenv('FCM_SERVICE_FILE_PATH', ''))
 firebase_admin.initialize_app(cred)
@@ -58,7 +60,15 @@ class NotificationViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset.order_by("-created")
-        queryset = queryset.filter(receiver_id=self.request.user)
+        queryset = queryset.filter(
+            receiver=self.request.user
+        ).annotate(
+            is_seen=Exists(
+                UserNotification.objects.filter(
+                    user=self.request.user, notification_id=OuterRef('pk')
+                ).order_by().values('notification_id')
+            )
+        )
         return queryset
 
 
@@ -75,13 +85,18 @@ class UserNotificationViewSet(ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         notification_id = request.data.get("notification")
-        all_ready_notification = UserNotification.objects.filter(notification=notification_id)
 
         try:
+            validation_serializer = UserNotificationValidationSerializer(data={"notification": notification_id})
+            validation_serializer.is_valid(raise_exception=True)
+            all_ready_notification = UserNotification.objects.filter(notification=notification_id)
             if all_ready_notification:
-                return Response("all ready seen ", status=status.HTTP_200_OK)
+                return Response({"message": "all ready seen "}, status=status.HTTP_200_OK)
             notification = Notification.objects.filter(id=notification_id).first()
-            UserNotification.objects.create(user=self.request.user, notification=notification)
-            return Response("Created Successfully", status=status.HTTP_201_CREATED)
+            serializer = UserNotificationSerializer(
+                data={"user": self.request.user.id, "notification": notification.id})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response({"message": "Created Successfully"}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
