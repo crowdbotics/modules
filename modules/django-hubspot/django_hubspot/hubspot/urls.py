@@ -9,5 +9,4 @@ router.register("service", HubspotViewSet, basename="hubspot_service")
 
 urlpatterns = [
     path("", include(router.urls)),
-    
 ]
