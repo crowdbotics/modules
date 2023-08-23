@@ -46,3 +46,12 @@ class OktaCancelViewSet(APIView):
 			return Response(json.loads(r.text), status=status.HTTP_200_OK)
 		except Exception as e:
 			return Response(e.args[0], status=status.HTTP_400_BAD_REQUEST)
+
+
+class OktaCallbackViewSet(APIView):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            return Response({"SAMLResponse": request.data["SAMLResponse"]}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(e.args[0], status=status.HTTP_400_BAD_REQUEST)
