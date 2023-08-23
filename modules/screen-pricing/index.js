@@ -10,135 +10,98 @@ import {
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const PricingScreen = () => {
+  const pricingPlans = [
+    {
+      id: 1,
+      title: "Basic",
+      icon: "balloon",
+      price: {
+        dollors: 3,
+        centes: 99
+      },
+      features: {
+        1: "Unlimited links",
+        2: "Analytic support",
+        3: "Chat Support",
+        4: "Unlimited Users"
+      }
+    },
+    {
+      id: 2,
+      title: "Advanced",
+      icon: "airballoon",
+      price: {
+        dollors: 6,
+        centes: 99
+      },
+      features: {
+        1: "Unlimited links",
+        2: "Analytic support",
+        3: "Chat Support",
+        4: "Optimized Hashtag"
+      }
+    },
+    {
+      id: 3,
+      title: "Bussiness",
+      icon: "airballoon-outline",
+      price: {
+        dollors: 9,
+        centes: 99
+      },
+      features: {
+        1: "Unlimited links",
+        2: "Analytic support",
+        3: "Chat Support",
+        4: "Optimized Hashtag",
+        5: "Periority Support",
+        6: "Custom Integration"
+      }
+    }
+  ];
+
   return (
     <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={[styles.subContainer]}>
-          <Text style={styles.personalText}>Personal</Text>
-          <View style={styles.mainIconView}>
-            <MaterialCommunityIcons
-              style={styles.mainIcon}
-              name="balloon"
-              color="blue"
-              size={100}
-            />
-          </View>
-          <View style={styles.services}>
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>1 User</Text>
-            </View>
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="close" style={styles.iconClose} />
-              <Text style={styles.Text}>Plugins Features</Text>
-            </View>
-
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>Unlimited Space</Text>
-            </View>
-
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>24/7 Support</Text>
-            </View>
-          </View>
-          <View style={styles.priceBox}>
-            <Text style={styles.dollarSign}>$</Text>
-            <Text style={styles.Price}>3</Text>
-            <Text style={styles.Cents}>99</Text>
-          </View>
-          <Text style={styles.monthlyText}>monthly</Text>
-          <TouchableOpacity title="Get Started" style={styles.getStarted}>
-            <Text style={styles.getStartedText}>Get Started</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View>
-        <View style={[styles.subContainer]}>
-          <Text style={styles.personalText}>Advanced</Text>
-          <View style={styles.mainIconView}>
-            <MaterialCommunityIcons
-              style={styles.mainIcon}
-              name="airballoon"
-              color="blue"
-              size={100}
-            />
-          </View>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>2 User</Text>
-            </View>
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="close" style={styles.iconClose} />
-              <Text style={styles.Text}>Plugins Features</Text>
-            </View>
-
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>Unlimited Space</Text>
-            </View>
-
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>24/7 Support</Text>
+      {pricingPlans.map((plan, index) => {
+        const objLength = Object.keys(plan?.features).length;
+        return (
+          <View style={styles.mainContainer} key={index}>
+            <View style={[styles.subContainer]}>
+              <Text style={styles.personalText}>{plan?.title}</Text>
+              <View style={styles.mainIconView}>
+                <MaterialCommunityIcons
+                  style={styles.mainIcon}
+                  name={plan?.icon}
+                  color="blue"
+                  size={100}
+                />
+              </View>
+              <View style={styles.services}>
+                {Array.apply(plan?.features, Array(objLength)).map((v, i) => (
+                  <View style={styles.Box} key={i}>
+                    <MaterialCommunityIcons
+                      name="check"
+                      style={styles.iconCheck}
+                    />
+                    <Text style={styles.Text}>
+                      {Object.values(plan?.features)[i]}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              <View style={styles.priceBox}>
+                <Text style={styles.dollarSign}>$</Text>
+                <Text style={styles.Price}>{plan?.price?.dollors}</Text>
+                <Text style={styles.Cents}>{plan?.price?.centes}</Text>
+              </View>
+              <Text style={styles.monthlyText}>monthly</Text>
+              <TouchableOpacity title="Get Started" style={styles.getStarted}>
+                <Text style={styles.getStartedText}>Get Started</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.priceBox}>
-            <Text style={styles.dollarSign}>$</Text>
-            <Text style={styles.Price}>6</Text>
-            <Text style={styles.Cents}>99</Text>
-          </View>
-          <Text style={styles.monthlyText}>monthly</Text>
-          <TouchableOpacity title="Get Started" style={styles.getStarted}>
-            <Text style={styles.getStartedText}>Get Started</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View>
-        <View style={[styles.subContainer]}>
-          <Text style={styles.personalText}>Business</Text>
-          <View style={styles.mainIconView}>
-            <MaterialCommunityIcons
-              style={styles.mainIcon}
-              name="airballoon-outline"
-              color="blue"
-              size={100}
-            />
-          </View>
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>3 User</Text>
-            </View>
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="close" style={styles.iconClose} />
-              <Text style={styles.Text}>Plugins Features</Text>
-            </View>
-
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>Unlimited Space</Text>
-            </View>
-
-            <View style={styles.Box}>
-              <MaterialCommunityIcons name="check" style={styles.iconCheck} />
-              <Text style={styles.Text}>24/7 Support</Text>
-            </View>
-          </View>
-          <View style={styles.priceBox}>
-            <Text style={styles.dollarSign}>$</Text>
-            <Text style={styles.Price}>9</Text>
-            <Text style={styles.Cents}>99</Text>
-          </View>
-          <Text style={styles.monthlyText}>monthly</Text>
-          <TouchableOpacity title="Get Started" style={styles.getStarted}>
-            <Text style={styles.getStartedText}>Get Started</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        );
+      })}
     </ScrollView>
   );
 };
@@ -159,11 +122,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginVertical: 10,
     alignSelf: "center"
-  },
-
-  main: {
-    backgroundColor: "#f1f1f1",
-    width: "100%"
   },
 
   Text: {
@@ -202,10 +160,6 @@ const styles = StyleSheet.create({
     marginTop: 14
   },
 
-  iconClose: {
-    color: "red",
-    fontSize: 27
-  },
   iconCheck: {
     color: "blue",
     fontSize: 27
