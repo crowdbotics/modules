@@ -71,11 +71,11 @@ Here is the example of an appointment object.
 ```
 
 ### Module Specifications
-Here is the m[Module Specification DOcument](https://docs.google.com/document/d/1oOjHadHw4fUA9JxfIykAqEhAeokcCRqgDkcQjyUkUJk/edit?usp=sharing), which provides more information about the module's actual intentions.
+Here is the [Module Specification Document](https://docs.google.com/document/d/1oOjHadHw4fUA9JxfIykAqEhAeokcCRqgDkcQjyUkUJk/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ### Postman Collection for Module APi Endpoints
 Here is a collection of all the api endpoints for the module.
-[Two Factor Authentication Postman Collection](https://drive.google.com/file/d/1R-m8h6wODbENoABT2Pe2151xjMMtP91V/view?usp=share_link)
+[Appointment Local Postman Collection](https://drive.google.com/file/d/19x0jpCL-JeAa-eFYrKuc5gRavu662-w-/view?usp=share_link)
 
 ### Contributing
 
