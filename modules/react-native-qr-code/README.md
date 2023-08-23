@@ -11,11 +11,11 @@ This module allows the user to generate qr-code by entering text and read a qr-c
 
 ## ## Features
 
-[ ] This module includes environment variables.
-[x] This module requires manual configurations.
-[ ] This module can be configured with module options.
-[x] This module requires manual Android setup.
-[x] This module requires manual iOS setup.
+ - [ ] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [x] This module requires manual iOS setup.
 
 ## ## 3rd party setup
 
