@@ -38,7 +38,7 @@ Dependencies used:
 
 ### Global Configs
 
-Update the ``options/options.js`` file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this:
+Update the ``options/options.js`` file with your app's backend url.
 ```
 export const globalOptions = {
     ...
