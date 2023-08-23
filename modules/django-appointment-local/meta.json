@@ -1,11 +1,5 @@
 {
   "title": "Appointment-local",
   "description": "Appointment-local Module",
-  "root": "/backend/modules",
-  "schema": {
-    "buttonText": {
-      "type": "string",
-      "minLength": 1
-    }
-  }
+  "root": "/backend/modules"
 }
