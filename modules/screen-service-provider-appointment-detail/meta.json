@@ -1,6 +1,5 @@
 {
-    "title": "service-provider Profile and Appointment detail screen",
-    "description": "Schedule service-provider Profile Screen Module",
-    "root": "/screens/schedule-service-provider-Profile"
+  "title": "Service Provider Appointment ",
+  "description": "Service Provider Appointment screen module",
+  "root": "/screens/service-provider-appointment-detail"
 }
-  

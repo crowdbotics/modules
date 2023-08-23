@@ -1,10 +1,10 @@
 {
-	"name": "@screens/schedule-service-provider-Profile",
-	"version": "1.0.0",
-	"description": "",
-	"private": true,
-	"main": "index.js",
-	"files": [ "*" ],
-	"author": "Crowdbotics",
-	"license": "ISC"
+  "name": "@screens/service-provider-appointment-detail",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.js",
+  "files": ["*"],
+  "author": "Crowdbotics",
+  "license": "ISC"
 }
