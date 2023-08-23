@@ -1,4 +1,5 @@
 from django.db import models
+
 from users.models import User
 
 
@@ -12,10 +13,10 @@ class TimeStamp(models.Model):
 
 class MeetingInformation(TimeStamp):
     """
-     MeetingInformation Model: This model will save the details about the type of the appointment a user is going to
-      avail.
-     Will save the meeting type, description of the meeting type and fee against that meeting type."""
-
+     MeetingInformation Model:
+     This model will save appointment details for the user's selected type of meeting service.
+     Save meeting types along with their descriptions and associated fees.
+     """
     MEETING_TYPE_CHOICES = [
         ('Message', 'Messaging'),
         ('Voice', 'Voice Call'),
@@ -32,11 +33,12 @@ class MeetingInformation(TimeStamp):
 
 class Appointment(TimeStamp):
     """
-     Appointment Model: This model will save the details of newly created appointment.
+     Appointment Model:
+     This model will save the details of newly created appointment.
      It will save the SESSION details if a user is creating a meeting in morning or afternoon, evening or night.
      Detail of the client details like, name, email, age, gender and notes.
      The model will save the appointment date, start_time, end_time, cost for the appointment, discount on that
-      appointment and additional fee.
+     appointment and additional fee.
     """
     SESSION_CHOICES = [
         ('Morning', 'Morning'),

@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import MeetingInformation, Appointment
 
 # Register your models here.
