@@ -1,19 +1,29 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Text, View, FlatList, Image } from "react-native";
 import { OptionsContext } from "@options";
-import { fetchNotifications } from "./api";
+import { fetchNotifications } from "./store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
 
 const Notifications = () => {
   const options = useContext(OptionsContext);
   const { authToken, styles } = options;
   const [messages, setMessages] = useState([]);
   const [refresh, setRefresh] = useState(true);
+  const dispatch = useDispatch();
 
   const getNotifications = async () => {
     setRefresh(true);
-    const res = await fetchNotifications(authToken);
-    setMessages(res);
-    setRefresh(false);
+    dispatch(fetchNotifications(authToken))
+      .then(unwrapResult)
+      .then(res => {
+        setMessages(res);
+        setRefresh(false);
+      })
+      .catch(e => {
+        console.log(e);
+        setRefresh(false);
+      });
   };
 
   useEffect(() => {
