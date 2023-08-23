@@ -63,4 +63,4 @@ List of api's endpoints with params needed for these apis.
 | `/modules/firebase-push-notifications/device/fcm/`|  object `{name: "", registration_id: "", type, device_id: ""}`  |Adds a new android device against the provided details.|
 
 ## Module Specifications
-Here is the [Module Specification Document](https://docs.google.com/document/d/1DI90lngd8ZnKauMngxZQZHaUDNY_2ZKS0IVT91K0XcE/edit?usp=sharing), which provides more information about the module's actual intentions.
+Here is the [Module Specification Document](https://docs.google.com/document/d/1DI90lngd8ZnKauMngxZQZHaUDNY_2ZKS0IVT91K0XcE/edit?usp=sharing), which provides more information about the module's features.

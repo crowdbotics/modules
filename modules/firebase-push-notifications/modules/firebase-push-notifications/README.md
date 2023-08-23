@@ -201,4 +201,4 @@ All the api calling methods reside in `api.js` file.
 `fetchNotifications` method takes user's `authToken` and returns list of notifications against that user.
 
 ## Module Specifications
-Here is the [Module Specification Document](https://docs.google.com/document/d/1DI90lngd8ZnKauMngxZQZHaUDNY_2ZKS0IVT91K0XcE/edit?usp=sharing), which provides more information about the module's actual intentions.
+Here is the [Module Specification Document](https://docs.google.com/document/d/1DI90lngd8ZnKauMngxZQZHaUDNY_2ZKS0IVT91K0XcE/edit?usp=sharing), which provides more information about the module's features.
