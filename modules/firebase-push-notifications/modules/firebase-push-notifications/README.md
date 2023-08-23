@@ -12,8 +12,8 @@ User is able to push alerts to remind users
 All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
 Here are the required packages for the module:
 ```
-  "@react-native-community/push-notification-ios": "^1.10.1",
-	"react-native-push-notification": "^8.1.1",
+    "@react-native-firebase/app": "^18.3.0",
+    "@react-native-firebase/messaging": "^18.3.0",
 	"react-native-device-info": "^8.1.3"
 ```
 and run this command.
@@ -29,7 +29,7 @@ and run this command.
 
 
 3. Add the google-services plugin inside of your /android/build.gradle file:
-```
+```gradle
 buildscript {
     repositories {
    
@@ -47,184 +47,99 @@ buildscript {
 }
 ```
 
-4. Execute the plugin by adding the following lines of code to your /android/app/build.gradle file:
+4. Execute the plugin by adding the following line of code to your /android/app/build.gradle file:
 
-```
+```gradle
 apply plugin: 'com.google.gms.google-services'
-dependencies {
-  implementation platform('com.google.firebase:firebase-bom:30.1.0')
-  implementation 'com.google.firebase:firebase-analytics'
-  implementation project(':react-native-push-notification')
-}
 ```
-
-5. In android/settings.gradle add following lines:
-
-```
-include ':react-native-push-notification'
-project(':react-native-push-notification').projectDir = file('../node_modules/react-native-push-notification/android')
-```
-
-6. Add in /android/app/src/main/AndroidManifest.xml file within your project.
-
-```
-<uses-permission android:name="android.permission.VIBRATE" />
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-<application ...>
-
- <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
-                    android:value="false"/>
-        <!-- Change the resource name to your App's accent color - or any other color you want -->
-        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
-                    android:resource="@color/white"/> <!-- or @android:color/{name} to use a standard color -->
-
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        ...
-</application>
-```
-
-7. Add following in android/app/src/main/res/values/colors.xml (Create the file if it doesn't exist).
-
-```
-<resources>
-    <color name="white">#FFF</color>
-</resources>
-```
-
 
 ## Configurations for IOS
 
 1.  On the Firebase console, add a new IOS application and enter your projects details. Download `GoogleService-Info.plist`  file from firebase google console and move your file into the root of your Xcode project.
 
-2. Update AppDelegate.h. At the top of the file:
+2. ### Enable Push Notifications
 
-```
-#import <UserNotifications/UNUserNotificationCenter.h>
-```
-Then, add the 'UNUserNotificationCenterDelegate' to protocols:
-### For Old scaffold `0.64`
-```
-@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, UNUserNotificationCenterDelegate>
-```
+Next the "Push Notifications" capability needs to be added to the project. This can be done via the "Capability" option on the "Signing & Capabilities" tab:
 
-### For New scaffold `0.71.7`
+ Click on the "+ Capabilities" button.<br />
+ Search for "Push Notifications".
+
+3. ### Enable Background Modes
+
+Next the "Background Modes" capability needs to be enabled, along with both the "Background fetch" and "Remote notifications" sub-modes. This can be added via the "Capability" option on the "Signing & Capabilities" tab:
+
+Click on the "+ Capabilities" button. <br />
+Search for "Background Modes".
+
+4. ### Configure Firebase with iOS credentials 
+
+To allow Firebase on iOS to use the credentials, the Firebase iOS SDK must be configured during the bootstrap phase of your application.
+
+To do this, open your `/ios/{projectName}/AppDelegate.mm` file (or `AppDelegate.m`if on older react-native), and add the following:
+
+At the top of the file, import the Firebase SDK right after `'#import "AppDelegate.h"'`:
+
 ```c
-@interface AppDelegate : RCTAppDelegate <UNUserNotificationCenterDelegate>
+#import <Firebase.h>
 ```
 
-3. Update AppDelegate.m, At the top of the file:
+Within your existing didFinishLaunchingWithOptions method, add the following to the top of the method:
 
-```
-#import <UserNotifications/UserNotifications.h>
-#import <RNCPushNotificationIOS.h>
-```
-Then, add the following lines:
-
-```
-// Required for the register event.
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
- [RNCPushNotificationIOS didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-// Required for the notification event. You must call the completion handler after handling the remote notification.
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-  [RNCPushNotificationIOS didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
-}
-// Required for the registrationError event.
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
- [RNCPushNotificationIOS didFailToRegisterForRemoteNotificationsWithError:error];
-}
-// Required for localNotification event
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center
-didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)(void))completionHandler
-{
-  [RNCPushNotificationIOS didReceiveNotificationResponse:response];
+```c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  // Add me --- \/
+  if ([FIRApp defaultApp] == nil) { [FIRApp configure]; }
+  // Add me --- /\
+  // ...
 }
 ```
 
-4. And then in your AppDelegate implementation, add the following:
+## For new Scafflold `0.71.7`
+### In Podfile
+ Add these two lines under ` config = use_native_modules!`
 
-```
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  ...
-  // Define UNUserNotificationCenter
-  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-  center.delegate = self;
-
-  return YES;
-}
-
-//Called when a notification is delivered to a foreground app.
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
-{
-  completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
-}
-```
-
-
-5. In ios/Podfile, At the top add:
-
-```
-require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-
-platform :ios, '12.4'
-install! 'cocoapods', :disable_input_output_paths => true
-install! 'cocoapods', :deterministic_uuids => false
-
-
-target 'demo' do
-  config = use_native_modules!
-
-  use_react_native!(
-    :path => config[:reactNativePath],
-    # to enable hermes on iOS, change `false` to `true` and then install pods
-    :hermes_enabled => false
-  )
-
+ ```powershell
   use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
+ ```
 
-  pod 'Firebase/Core'
-  pod 'Firebase/Messaging'
+ disable this line<br/> `# :flipper_configuration => flipper_config,`
 
-  target 'demoTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+Now add this line above `target 'RNFBTests' do`
 
-  # Enables Flipper.
-  #
-  # Note that if you have use_frameworks! enabled, Flipper will not work and
-  # you should disable the next line.
-  # use_flipper!()
+```powershell
+ $FirebaseSDKVersion = '10.4.0'
+```
 
-  post_install do |installer|
-    react_native_post_install(installer)
+At last add all the below code at the bottom 
+
+```powershell
+  installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["GCC_WARN_INHIBIT_ALL_WARNINGS"] = "YES"
+      end
+    end
+    
     installer.pods_project.targets.each do |target|
-     
-      if (target.name&.eql?('FBReactNativeSpec'))
+      target.build_configurations.each do |config|
+        config.build_settings["CC"] = "clang"
+        config.build_settings["LD"] = "clang"
+        config.build_settings["CXX"] = "clang++"
+        config.build_settings["LDPLUSPLUS"] = "clang++"
+      end
+    end
+    
+    installer.aggregate_targets.each do |aggregate_target|
+      aggregate_target.user_project.native_targets.each do |target|
+        target.build_configurations.each do |config|
+          config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
+          config.build_settings['EXCLUDED_ARCHS'] = 'i386'
+        end
+      end
+      aggregate_target.user_project.save
+    end
+    installer.pods_project.targets.each do |target|
+      if (target.name.eql?('FBReactNativeSpec'))
         target.build_phases.each do |build_phase|
           if (build_phase.respond_to?(:name) && build_phase.name.eql?('[CP-User] Generate Specs'))
             target.build_phases.move(build_phase, 0)
@@ -232,10 +147,44 @@ target 'demo' do
         end
       end
     end
+    
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["ENABLE_BITCODE"] = "NO"
+      end
+    end
   end
 end
-  
 ```
+
+## For old scaffold `0.64`
+
+Open the file ./ios/Podfile and add this line inside your targets (right after the line calling the react native Podfile function to get the native modules config):
+
+```powershell
+use_frameworks! :linkage => :static
+```
+
+To use Static Frameworks on iOS, you also need to manually enable this for the project with the following global to your /ios/Podfile file:
+
+```powershell
+# right after `use_frameworks! :linkage => :static`
+$RNFirebaseAsStaticFramework = true
+```
+
+
+## Image support in iOS
+
+Follow this documentation for image support in notifications.
+
+https://rnfirebase.io/messaging/ios-notification-images
+
+If you get error at installing pods after creating notification service extension in new scaffold, add this line in the new target
+
+```powershell
+  use_frameworks! :linkage => :static 
+```
+
 
 
 ## Global Configs
@@ -251,11 +200,10 @@ export const globalOptions = {
 ```
 
 ## Local Configs
-in modules/fcm/options.js update the senderId and authToken
+in modules/fcm/options.js update the authToken
 
 ```
 const authToken = "Your Authorization token";
-const senderID = "FCM Sender ID ";
 const userID = 1;
 ```
 ## API Calling Methods

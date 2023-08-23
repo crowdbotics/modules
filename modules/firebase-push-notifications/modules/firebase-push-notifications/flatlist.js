@@ -1,29 +1,20 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Text, View, FlatList, Image } from "react-native";
 import { OptionsContext } from "@options";
-import { fetchNotifications } from "./store";
-import { unwrapResult } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import { fetchNotifications } from "./api";
 
 const Notifications = () => {
   const options = useContext(OptionsContext);
   const { authToken, styles } = options;
   const [messages, setMessages] = useState([]);
   const [refresh, setRefresh] = useState(true);
-  const dispatch = useDispatch();
 
   const getNotifications = async () => {
     setRefresh(true);
-    dispatch(fetchNotifications(authToken))
-      .then(unwrapResult)
-      .then(res => {
-        setMessages(res);
-        setRefresh(false);
-      })
-      .catch(e => {
-        console.log(e);
-        setRefresh(false);
-      });
+    // Api to fetch recent list of notifications
+    const res = await fetchNotifications(authToken);
+    setMessages(res);
+    setRefresh(false);
   };
 
   useEffect(() => {
@@ -32,8 +23,8 @@ const Notifications = () => {
 
   const renderItem = ({ item }) => {
     const date = item?.created;
-    const arr1 = date.split("T");
-    const time = arr1[1].split(".");
+    const arr = date.split("T");
+    const time = arr[1].split(".");
     return (
             <View style={styles.walletCard}>
                 <View style={styles.walletInner}>
@@ -49,7 +40,7 @@ const Notifications = () => {
                     </View>
                 </View>
                 <View style={styles.leftSection}>
-                    <Text style={styles.view}>Date: {arr1[0]}</Text>
+                    <Text style={styles.view}>Date: {arr[0]}</Text>
                     <Text style={styles.reject}>Time: {time[0]}</Text>
                 </View>
             </View>

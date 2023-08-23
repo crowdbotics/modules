@@ -1,7 +1,8 @@
 import { StyleSheet } from "react-native";
 
+// User's accessToken
 const authToken = "";
-const senderID = "";
+// User's id from backend
 const userID = "";
 
 const styles = StyleSheet.create({
@@ -70,7 +71,6 @@ const styles = StyleSheet.create({
 
 export default {
   authToken: authToken,
-  senderID: senderID,
   userID: userID,
   styles: styles
 };
