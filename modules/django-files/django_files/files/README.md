@@ -19,7 +19,7 @@ The following are the critical features in scope for this module.
 
 ## Features
 
-[x] This module includes migrations.
+- [x] This module includes migrations.
 [ ] This module includes environment variables.
 [ ] This module requires manual configurations.
 [ ] This module can be configured with module options.
