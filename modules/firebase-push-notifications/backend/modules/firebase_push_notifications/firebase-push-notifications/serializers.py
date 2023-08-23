@@ -7,7 +7,7 @@ from .models import Notification, UserNotification
 class FCMDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = FCMDevice
-        fields = '__all__'
+        fields = "__all__"
 
 
 class FCMNotificationSerializer(serializers.ModelSerializer):

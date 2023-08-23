@@ -13,7 +13,7 @@ utc = pytz.UTC
 def verification_required(view_func):
     @functools.wraps(view_func)
     def wrapper(request, *args, **kwargs):
-        token = request.request.META.get('HTTP_OKTA_TOKEN', None)
+        token = request.request.META.get("HTTP_OKTA_TOKEN", None)
         if token is None:
             return Response(
                 {"message": '"okta-token" header is missing'},

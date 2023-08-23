@@ -4,20 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Okta',
+            name="Okta",
             fields=[
-                ('oktaID', models.CharField(max_length=100, primary_key=True, serialize=False, unique=True)),
-                ('stateToken', models.CharField(max_length=256)),
-                ('expiresAt', models.DateTimeField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True, null=True)),
+                (
+                    "oktaID",
+                    models.CharField(
+                        max_length=100, primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("stateToken", models.CharField(max_length=256)),
+                ("expiresAt", models.DateTimeField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True, null=True)),
             ],
         ),
     ]
