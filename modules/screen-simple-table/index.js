@@ -6,6 +6,19 @@ import options from "./options";
 const SimpleTable = () => {
   const { headers, tableData } = options;
 
+  const Item = ({ item }) => {
+    const objLength = Object.keys(item).length;
+    return (
+      <View style={[styles.tableRow]}>
+        {Array.apply(item, Array(objLength)).map((v, i) => (
+          <Text style={styles.hText} key={i}>
+            {Object.values(item)[i]}
+          </Text>
+        ))}
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -17,18 +30,9 @@ const SimpleTable = () => {
       </View>
       <FlatList
         data={tableData}
-        renderItem={({ item }) => {
-          const objLength = Object.keys(item).length;
-          return (
-            <View style={[styles.tableRow]}>
-              {Array.apply(item, Array(objLength)).map((v, i) => (
-                <Text style={styles.hText} key={i}>{Object.values(item)[i]}</Text>
-              ))}
-            </View>
-          );
-        }}
+        renderItem={Item}
         numColumns={1}
-        keyExtractor={(item, index) => index}
+        keyExtractor={(_, index) => index}
       />
     </SafeAreaView>
   );
