@@ -1,7 +1,8 @@
-# Files Module - Backend
+## django-files backend configuration and information
 
-This module contains all needed resources to get the Files component for React
-Native mobile client.
+## Module description
+
+This module contains all needed resources to get the Files component for React Native mobile client.
 
 - This module uses file storage. You should enable S3 support
   in your Crowdbotics app in order to get it working properly.
@@ -9,39 +10,35 @@ Native mobile client.
   in order to preserve the extension: "data:[filename.ext];base64,"
   (i.e. "data:my_diapos.ppt;base64,{BASE64_ENCODED-CONTENT}")
 
-## Scope Features
-
 The following are the critical features in scope for this module.
 
-1. Ability to upload the file.
-2. Ability to get the uploaded file.
-3. Ability to update the uploaded file.
-4. Ability to delete the uploaded file.
+- Ability to upload the file.
+- Ability to get the uploaded file.
+- Ability to update the uploaded file.
+- Ability to delete the uploaded file.
 
-## Setup
+## Features
 
-Run the following command for migrations:
+[x] This module includes migrations.
+[ ] This module includes environment variables.
+[ ] This module requires manual configurations.
+[ ] This module can be configured with module options.
 
-```
-python manage.py makemigrations
-``` 
+## Environment variables
 
-Run the following command to run migrations:
+No Environment variables needed.
 
-```
-python manage.py migrate
+## 3rd party setup
 
-```
+No third-party account creation needed.
 
-Start the server by running the following command :
+## Dependencies
 
-```
-python manage.py runserver
-```
+No Dependencies used.
 
-## Api Table
+## API details
 
-List of api's endpoints with params needed for these apis.
+API Endpoints and Required Parameters List.
 
 | Api Name                                 |                   Param                    | Description                                                  |
 |------------------------------------------|:------------------------------------------:|:-------------------------------------------------------------|
@@ -50,11 +47,3 @@ List of api's endpoints with params needed for these apis.
 | `/modules/files/uploads/{id}/` `{GET}`   |      `path_params: uploaded_file_id`       | Takes file id and return a specific file details.            |
 | `/modules/files/uploads/{id}` `{DELETE}` |      `path_params: uploaded_file_id`       | Delete the file.                                             |
 
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
