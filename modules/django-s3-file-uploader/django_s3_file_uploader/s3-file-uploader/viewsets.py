@@ -71,8 +71,6 @@ class S3ViewSet(viewsets.GenericViewSet):
     @action(detail=False, methods=['post'], url_path='file/upload')
     def upload_file(self, request):
         try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
             file = request.FILES['file']
             file_binary = file.read()
             response = self.s3_service.upload_s3_file(
@@ -80,7 +78,11 @@ class S3ViewSet(viewsets.GenericViewSet):
                 bucket=request.data.get('bucket'),
                 file_name=file.name
             )
-            return Response(response, status=status.HTTP_200_OK)
+            temp_dict = {"bucket": request.data.get('bucket'), "file_name": file.name, "user_id": request.data.get("user_id")}
+            serializer = self.get_serializer(data=temp_dict)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(response, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
