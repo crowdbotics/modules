@@ -10,7 +10,7 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_appointment_local",
+    name="cb_appointment_local",
     version="0.1",
     packages=["appointment-local"],
     install_requires=[],
