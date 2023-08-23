@@ -57,7 +57,6 @@ You must enable sign-on authentication to to get stateToken to logout your user.
 In `settings.py` add the following:
 
 ```py
-MIDDLEWARE += ['modules.django_okta.okta.custom_middleware.OktaTokenValidator']
 OKTA_BASE_URL = "https://{your_Okta_domain}/api/v1"
 OKTA_API_TOKEN = "Token created on Okta"
 ```
@@ -83,10 +82,25 @@ List of api's endpoints with params needed for these apis.
 
 | Api Name                       | Param        | Description                                                    |
 | ----------|:------------:|:---------------------------------------------------------------|
-| `login/` | object `{username, password}` | Takes object containing username and password of the user.|
+| `login/` | `signin_object` | See **signin_object** below.|
 | `logout/` | object `{stateToken: ""}` | To logout a user, pass the state token assigned to the user.|
 | `okta-callback/` |               -               | Called after the authentication confirmed from the okta.     |
-| `create-user/` | `user_object` | See details bellow|
+| `create-user/` | `user_object` | See **user_object** bellow.|
+
+
+### * **signin_object**
+ **signin_object** has some extra options to get `stateToken` which will be used to sign out the user.
+ 
+```javascript
+{
+  username: "john6551@doe.com",
+  password: "john123",
+  options: {
+    multiOptionalFactorEnroll: false,
+    warnBeforePasswordExpired: true
+  }
+}
+```
 
 ### * **user_object**
 User object contains the user details that is going to be added. this `user_object` will look something like this:
