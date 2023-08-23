@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, FlatList, Text } from "react-native";
 import { styles } from "./styles";
 
-
 const SimpleTable = () => {
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
-    let items = Array.apply(null, Array(10)).map((v, i) => {
+    const items = Array.apply(null, Array(10)).map((v, i) => {
       return {
         id: i,
         first_name: "dummy",
@@ -44,4 +43,3 @@ const SimpleTable = () => {
   );
 };
 export default SimpleTable;
-

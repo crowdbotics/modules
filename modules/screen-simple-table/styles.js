@@ -37,6 +37,6 @@ export const styles = StyleSheet.create({
     borderRightColor: "#EA8FEA",
     borderRightWidth: 1,
     justifyContent: "space-between",
-    alignItems: "center",
-  },
+    alignItems: "center"
+  }
 });
