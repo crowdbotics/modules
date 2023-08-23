@@ -3,16 +3,16 @@ Appointment local module will enable new appointments to be created and saved lo
 
 ## Features
 
-# Create appointment
+### Create appointment
 User can create an appointment
 
-# Delete appointment
+### Delete appointment
 User can delete an appointment
 
-# View list of appointments
+### View list of appointments
 user can view list of appointments
 
-# Search an appointment
+### Search an appointment
 User can search appointments
 
 ## Required Dependencies
