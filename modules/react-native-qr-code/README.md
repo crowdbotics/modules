@@ -2,10 +2,10 @@
 
 ## Module description
 
-This module alows the user to generate qr-code by entering text and read a qr-code by taking a picture through device's camera.
+This module allows the user to generate qr-code by entering text and read a qr-code by taking a picture through device's camera.
 
-- Generate a unique qr code by entering custom text
-- Scan any qr code through camera.
+- Generate a qr code by entering custom text
+- Scan qr code through camera.
 
 ![Module preview](preview.png)
 
