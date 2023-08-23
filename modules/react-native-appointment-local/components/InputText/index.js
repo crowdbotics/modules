@@ -1,45 +1,45 @@
-import React from "react";
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import React, {useContext} from "react";
+import { View, Text, TextInput } from "react-native";
+import { OptionsContext } from "@options";
 
+/**
+ * Custom Text Input component
+ * @param  {String} placeholder Placeholder for the text input
+ * @param  {String} value Current and default value of the text input
+ * @param  {Function} setValue Function to update the value of text input
+ * @param  {Boolean} multiline This shows if user can write text in multiline or not
+ * @param  {Boolean} editable This shows if user can write in the input or not
+ * @param  {String} errorText The error message to be displayed below the input.
+ * @return {React.ReactNode}
+ */
 const Input = (props) => {
+
+  const options = useContext(OptionsContext);
+  const {styles} = options
+  const {
+    placeholder,
+    value,
+    setValue,
+    multiline,
+    editable,
+    errorText
+  } = props;
+
   return (
-    <View style={styles.container}>
+    <View style={styles.inputContainer}>
       <TextInput
         style={styles.input}
-        placeholder={props.placeholder}
-        value={props.value}
-        onChangeText={(num) => props.setValue(num)}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={(val) => setValue(val)}
         placeholderTextColor='#ddd'
-        multiline={props.multiline}
-        numberOfLines={props.multiline ? 10 : null}
-        editable={props.editable !== false}
+        multiline={multiline}
+        numberOfLines={multiline ? 10 : null}
+        editable={editable !== false}
       />
-      {props.errorText ? <Text style={styles.error}>{props.errorText}</Text> : null}
+      {errorText && <Text style={styles.error}>{errorText}</Text>}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderWidth: 1,
-    borderColor: "#C4C4C4",
-    backgroundColor: "#fff"
-  },
-  input: {
-    backgroundColor: "#fff",
-    height: 53,
-    color: "#000",
-    borderRadius: 10,
-    fontSize: 14
-  },
-  error: {
-    fontSize: 13,
-    color: "#FA060D",
-    paddingTop: 8
-  }
-});
 export default Input;

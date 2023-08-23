@@ -1,30 +1,40 @@
 
-import React from "react";
-import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
+import React, {useContext} from "react";
+import { View, Text, TouchableHighlight } from "react-native";
+import { OptionsContext } from "@options";
 
+/**
+ * Custom button component
+ * @param  {Function} onPress Function to be called when button is pressed
+ * @param  {Boolean} disabled State which shows if the button is disabled or not 
+ * @param  {String} backgroundColor Hex code for background color of button
+ * @param  {Number} height Height fot the button
+ * @param  {String} color Hex code for text color
+ * @param  {String} children Title of the button
+ * @return {Promise}
+ */
 const Button = (props) => {
+  const options = useContext(OptionsContext);
+  const {styles} = options
+  const {
+    onPress,
+    disabled,
+    backgroundColor,
+    height,
+    color,
+    children
+  } = props;
+
   return (
-    <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
+    <TouchableHighlight onPress={onPress} disabled={disabled} underlayColor='#DDDDDD'>
       <View style={[styles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-        height: props.height ? props.height : 49
+        backgroundColor: backgroundColor ? backgroundColor : "#000000",
+        height: height ? height : 49
       }]}>
-        <Text style={[styles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+        <Text style={[styles.buttonText, { color: color ? color : "#ffffff" }]}>{children}</Text>
       </View>
     </TouchableHighlight>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 15
-  }
-});
 export default Button;

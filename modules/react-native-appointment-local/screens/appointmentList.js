@@ -1,14 +1,21 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import { Text, View, StyleSheet, TouchableOpacity, FlatList } from "react-native";
 // @ts-ignore
 import CalendarStrip from "react-native-calendar-strip";
-import { getAppointment } from "../api";
 import Loader from "../components/Loader";
 import { useFocusEffect } from "@react-navigation/native";
 import { dateFunc } from "../utils";
 import AppointmentModal from "../components/AppointmentDetailModal";
+import { useDispatch } from "react-redux";
+import { getAppointment } from "../store";
+import { OptionsContext } from "@options";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const Appointment = ({ navigation }) => {
+
+  const dispatch = useDispatch()
+  const options = useContext(OptionsContext);
+
   const [appointmentList, setAppointmentList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [modalItem, setModalItem] = useState("");
@@ -19,12 +26,15 @@ const Appointment = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       setIsLoading(true);
-      getAppointment().then(res => res.json()).then(res => {
+      dispatch(
+        getAppointment({
+          token: options?.ACCESS_TOKEN
+        })
+      ).then(unwrapResult)
+      .then((res) => {
+        console.log("res", res)
         setAppointmentList(res);
         setFilteredAppointments(res);
-        setIsLoading(false);
-      }).catch(error => {
-        console.log(error);
         setIsLoading(false);
       });
     }, [])
@@ -49,9 +59,9 @@ const Appointment = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => modalHandler(item)}>
       <View style={styles.appointmentItem}>
-        <Text style={styles.listText}>{item.time_slot}</Text>
+        <Text style={styles.listText}>{item.start_time}</Text>
         <View style={styles.card}>
-          <Text style={{ fontSize: 16 }}>{item.title}</Text>
+          <Text style={{ fontSize: 16 }}>{item.name}</Text>
         </View>
       </View>
     </TouchableOpacity>

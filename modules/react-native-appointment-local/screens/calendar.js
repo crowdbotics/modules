@@ -1,5 +1,13 @@
 import React, { useState, useContext } from "react";
-import { View, StyleSheet, Text, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert
+} from "react-native";
 import { CalendarList } from "react-native-calendars";
 import { OptionsContext } from "@options";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -13,7 +21,11 @@ const Calendar = ({ navigation }) => {
   const [markedDates, setMarkedDates] = useState({
     selectedDate: today.toDateString(),
     markedDates: {
-      [today.toDateString()]: { selected: true, color: "#00B0BF", textColor: "#FFFFFF" }
+      [today.toDateString()]: {
+        selected: true,
+        color: "#00B0BF",
+        textColor: "#FFFFFF"
+      }
     }
   });
   const [timeSlot, setTimeSlot] = useState("");
@@ -39,6 +51,18 @@ const Calendar = ({ navigation }) => {
     setTimeSlot(item);
   };
 
+  const navigateToScreen = () => {
+    if (timeSlot) {
+      navigation.navigate("AppointmentForm", {
+        duration: duration,
+        timeSlot: timeSlot,
+        selectedDate: markedDates.selectedDate
+      });
+    } else {
+      Alert.alert("Error", "Please select a time slot")
+    }
+  };
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -50,17 +74,27 @@ const Calendar = ({ navigation }) => {
             calendarWidth={370}
             onDayPress={daySelector}
             markedDates={markedDates.markedDates}
-
           />
           <Text style={styles.timeSlot}>Time Slot</Text>
           <View style={styles.list}>
-            { options.timeSlots.map((item, index) => (
-              <TouchableOpacity style={[styles.items, {
-                backgroundColor: (timeSlot === item ? "#000" : "#FFF")
-              }]} onPress={() => selectTimeSlot(item)} key={index}>
-                <Text style={{
-                  color: (timeSlot === item ? "#FFF" : "#000")
-                }}>{item}</Text>
+            {options.timeSlots.map((item, index) => (
+              <TouchableOpacity
+                style={[
+                  styles.items,
+                  {
+                    backgroundColor: timeSlot === item ? "#000" : "#FFF"
+                  }
+                ]}
+                onPress={() => selectTimeSlot(item)}
+                key={index}
+              >
+                <Text
+                  style={{
+                    color: timeSlot === item ? "#FFF" : "#000"
+                  }}
+                >
+                  {item}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -77,11 +111,7 @@ const Calendar = ({ navigation }) => {
             />
           </View>
           <View style={styles.button}>
-            <Button onPress={() => navigation.navigate("AppointmentForm", {
-              duration: duration,
-              timeSlot: timeSlot,
-              selectedDate: markedDates.selectedDate
-            })}>Next</Button>
+            <Button onPress={navigateToScreen}>Next</Button>
           </View>
         </View>
       </ScrollView>

@@ -1,6 +1,7 @@
 import React from "react";
 import Navigator from "./Navigator";
 import { LogBox } from "react-native";
+import { slice } from "./store";
 
 const Appointment = () => {
   LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
@@ -12,5 +13,6 @@ const Appointment = () => {
 
 export default {
   title: "Appointment",
-  navigator: Appointment
+  navigator: Appointment,
+  slice: slice
 };

@@ -1,13 +1,21 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect, Fragment, useContext } from "react";
 import { View, Text, SafeAreaView, ScrollView, Image, StyleSheet, TouchableOpacity } from "react-native";
 // @ts-ignore
 import deleteIcon from "../deleteIcon.png";
-import { deleteAppointment, getAppointment } from "../api";
 import Input from "../components/InputText";
 import Loader from "../components/Loader";
 import AppointmentModal from "../components/AppointmentDetailModal";
+import { useSelector, useDispatch } from "react-redux";
+import { getAppointment, deleteAppointment } from "../store";
+import { OptionsContext } from "@options";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const Appointments = () => {
+  const dispatch = useDispatch()
+  const { entities, api } = useSelector((state) => state.Appointments.getAppointment);
+  const options = useContext(OptionsContext);
+  const { ACCESS_TOKEN } = options;
+  console.log("ENTITIES", entities)
   const [appointmentList, setAppointmentList] = useState([]);
   const [filterAppointmentList, setFilterAppointmentList] = useState([]);
   const [search, setSearch] = useState("");
@@ -25,25 +33,42 @@ const Appointments = () => {
   }, [search]);
 
   useEffect(() => {
-    setIsLoading(true);
-    getAppointment().then(res => res.json()).then(res => {
-      setAppointmentList(res);
-      setFilterAppointmentList(res);
-      setIsLoading(false);
-    }).catch(error => {
-      console.log(error);
-      setIsLoading(false);
-    });
+   fetchAppointments()
   }, []);
 
-  const deleteHandler = async (id) => {
-    setIsLoading(true);
-    await deleteAppointment(id).then((res) => getAppointment())
-      .then(res => res.json()
-        .then(res => setFilterAppointmentList(res)))
-      .catch(error => console.log(error));
+  const fetchAppointments = () => {
+    dispatch(
+      getAppointment({
+        token: ACCESS_TOKEN
+      })
+    ).then(unwrapResult)
+    .then((res) => {
+      setAppointmentList(res);
+      setFilterAppointmentList(res);
+    });
+  }
 
-    setIsLoading(false);
+  const deleteHandler = async (id) => {
+    // setIsLoading(true);
+    // await deleteAppointment(id).then((res) => getAppointment())
+    //   .then(res => res.json()
+    //     .then(res => setFilterAppointmentList(res)))
+    //   .catch(error => console.log(error));
+
+    // setIsLoading(false);
+    console.log("IDDD", id)
+
+    dispatch(
+      deleteAppointment({
+        id: id,
+        token: ACCESS_TOKEN
+      })
+    ).then(unwrapResult)
+    .then(() => {
+      // setFilterAppointmentList(res);
+      fetchAppointments()
+    });
+    
   };
   const modalHandler = (item) => {
     setModalItem(item);
