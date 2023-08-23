@@ -1,13 +1,12 @@
 import React from "react";
 import { Text, StyleSheet, View, Image, TextInput, ScrollView, TouchableHighlight } from "react-native";
 
-
 const Minting2Screen = (params) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          
+
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>NFT</Text>
         <Text />
@@ -50,24 +49,24 @@ const Minting2Screen = (params) => {
         <View style={styles.box}>
           <View style={styles.imageBox}>
             <Image source={require(
-              
+
               "./assets/edit.png")} style={styles.edit} />
           </View>
           <Image source={require(
-            
+
             "./assets/fullscreen.png")} style={styles.vector} />
         </View>
       </View>
       <View style={styles.ratingContainer}>
         <View style={styles.subRatings}>
           <Image source={require(
-            
+
             "./assets/heart.png")} style={styles.heart} />
           <Text style={styles.ratingText}>2216</Text>
         </View>
         <View style={styles.subRatings}>
           <Image source={require(
-            
+
             "./assets/copy.png")} style={styles.copy} />
           <Text style={styles.ratingText}>2216</Text>
         </View>
@@ -81,7 +80,7 @@ const Minting2Screen = (params) => {
           <View style={styles.typeSection}>
             <Text style={[styles.cost, { color: "#ADB1B2" }]}>$ vs ETH</Text>
             <Image source={require(
-              
+
               "./assets/eth.png")} style={styles.eth} />
           </View>
           <Text style={styles.ethCost}>2.75 ETH</Text>
@@ -96,11 +95,11 @@ const Minting2Screen = (params) => {
       <Text style={styles.mt10}>Amount of bid</Text>
       <View style={[styles.chooseContainer, { justifyContent: "space-evenly" }]}>
         <Image source={require(
-          
+
           "./assets/minus.png")} style={styles.priceImg} />
         <TextInput placeholder='2.75 ETH' placeholderTextColor="#000" style={styles.inputPrice} />
         <Image source={require(
-          
+
           "./assets/plus.png")} style={styles.priceImg} />
       </View>
       <View style={styles.bidContainer}>
@@ -376,7 +375,6 @@ const styles = StyleSheet.create({
     marginVertical: 10
   }
 });
-
 
 const Button = (props) => {
   return (

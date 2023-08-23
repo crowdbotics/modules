@@ -34,7 +34,7 @@ export default function Filter({ selectFilter }) {
   const pressFilter = (settings) => {
     selectFilter(settings);
   };
-  
+
   const ItemRender = ({ name, index, settings }) => (
     <TouchableNativeFeedback onPress={() => pressFilter(settings)}>
       <View style={[styleSheet.item, { backgroundColor: colors[index % colors.length] }]} >

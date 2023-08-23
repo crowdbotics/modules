@@ -16,7 +16,7 @@ const WithdrawMoney = () => {
       <View style={styles.statusContainer}>
         <View style={styles.imgContainer2}>
           <Image source={require(
-            
+
             "./assets/edit.png")} style={styles.editImg} />
         </View>
         <View style={styles.description}>
@@ -35,7 +35,7 @@ const WithdrawMoney = () => {
           </View>
         </View>
         <Image source={require(
-          
+
           "./assets/down.png")} style={styles.down} />
       </View>
       <Text style={styles.title}>Enter amount</Text>
