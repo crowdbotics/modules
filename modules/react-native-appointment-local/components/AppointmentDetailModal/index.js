@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { Modal, View, Text } from "react-native";
 import Button from "../Button";
 import { OptionsContext } from "@options";
-import moment from "moment";
+import { getDuration } from "../../utils";
 
 /**
  * Modal component to show appointment details
@@ -12,18 +12,14 @@ import moment from "moment";
  * @return {React.ReactNode}
  */
 const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
+  const appointmentDuration = useMemo(
+    () => getDuration(modalItem?.start_time, modalItem?.end_time),
+    [modalItem?.end_time, modalItem?.start_time]
+  );
+
   const options = useContext(OptionsContext);
   const { styles } = options;
   const { name, address } = modalItem;
-
-  const getDuration = () =>
-    moment
-      .utc(
-        moment(modalItem?.end_time, "HH:mm:ss").diff(
-          moment(modalItem?.start_time, "HH:mm:ss")
-        )
-      )
-      .format("HH:mm:ss");
 
   return (
     <Modal animationType="slide" transparent={true} visible={modalVisible}>
@@ -32,7 +28,7 @@ const AppointmentModal = ({ modalItem, setModalVisible, modalVisible }) => {
         <Text style={styles.modalText}>Title: {name}</Text>
         <Text style={styles.modalText}>Location: {address}</Text>
         <Text style={styles.modalText}>
-          Duration: {getDuration().toString()}
+          Duration: {appointmentDuration?.toString()}
         </Text>
         <Text style={styles.modalText}>Description: {modalItem?.add_note}</Text>
         <View style={styles.modalActionButton}>

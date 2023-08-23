@@ -41,7 +41,8 @@ export const mapErrors = (error) => {
 };
 
 // This function checks if any of its params is in loading state
-export const checkLoading = (...params) => params.some((param) => param.loading === "pending");
+export const checkLoading = (...params) =>
+  params.some((param) => param.loading === "pending");
 
 // This function gets the ending time of the appointment by getting its start time and total duration in params
 export const getEndTime = (startTime, duration) => {
@@ -60,6 +61,12 @@ export const getEndTime = (startTime, duration) => {
     return totalTime;
   }
 };
+
+// This function calculates the duration between start and end time passed through params
+export const getDuration = (startTime, endTime) =>
+  moment
+    .utc(moment(endTime, "HH:mm:ss").diff(moment(startTime, "HH:mm:ss")))
+    .format("HH:mm:ss");
 
 export const availableTimeSlots = [
   { label: "30 min", value: "00:30:00" },

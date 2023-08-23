@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useMemo } from "react";
 import {
   Text,
   View,
@@ -187,26 +187,28 @@ const CreateAppointment = ({ route, navigation }) => {
 
           <Text style={styles.timeSlotText}>Time Slot</Text>
           <View style={styles.timeSlotList}>
-            {timeSlots.map((item, index) => (
-              <TouchableOpacity
-                style={[
-                  styles.items,
-                  {
-                    backgroundColor: timeSlot === item ? "#000" : "#FFF"
-                  }
-                ]}
-                onPress={() => setTimeSlot(item)}
-                key={index}
-              >
-                <Text
-                  style={{
-                    color: timeSlot === item ? "#FFF" : "#000"
-                  }}
+            {useMemo(() => {
+              return timeSlots.map((item, index) => (
+                <TouchableOpacity
+                  style={[
+                    styles.items,
+                    {
+                      backgroundColor: timeSlot === item ? "#000" : "#FFF"
+                    }
+                  ]}
+                  onPress={() => setTimeSlot(item)}
+                  key={index}
                 >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={{
+                      color: timeSlot === item ? "#FFF" : "#000"
+                    }}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ));
+            }, [timeSlot])}
           </View>
           <View style={styles.createAppointmentButton}>
             <Button onPress={onCreateAppointment}>Create Appointment</Button>

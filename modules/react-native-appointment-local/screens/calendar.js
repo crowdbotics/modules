@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useMemo } from "react";
 import {
   View,
   Text,
@@ -70,26 +70,28 @@ const Calendar = ({ navigation }) => {
           />
           <Text style={styles.timeSlot}>Time Slot</Text>
           <View style={styles.list}>
-            {timeSlots.map((item, index) => (
-              <TouchableOpacity
-                style={[
-                  styles.items,
-                  {
-                    backgroundColor: timeSlot === item ? "#000" : "#FFF"
-                  }
-                ]}
-                onPress={() => setTimeSlot(item)}
-                key={index}
-              >
-                <Text
-                  style={{
-                    color: timeSlot === item ? "#FFF" : "#000"
-                  }}
+            {useMemo(() => {
+              return timeSlots.map((item, index) => (
+                <TouchableOpacity
+                  style={[
+                    styles.items,
+                    {
+                      backgroundColor: timeSlot === item ? "#000" : "#FFF"
+                    }
+                  ]}
+                  onPress={() => setTimeSlot(item)}
+                  key={index}
                 >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={{
+                      color: timeSlot === item ? "#FFF" : "#000"
+                    }}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ));
+            }, [timeSlot])}
           </View>
           <View style={styles.mt15}>
             <Text style={styles.mb10}>Duration</Text>

@@ -40,7 +40,8 @@ const Appointment = ({ navigation }) => {
           setAppointmentList(res);
           setFilteredAppointments(res);
           setIsLoading(false);
-        });
+        })
+        .catch((err) => __DEV__ && console.log(err));
     }, [])
   );
 
