@@ -7,7 +7,9 @@ This module will be used by users for contacting the customer support or app own
 - User can contact the admin by filling the contact form.
 - User can also send an email directly to admin through device's mail app.
 
-![Module preview](https://github.com/crowdbotics/modules/blob/master/modules/react-native-contact-us/preview.png?raw=true)
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/919a7871-511c-4e81-9b54-5e5d4a67781c)
+
+
 
 ## ## Features
 
