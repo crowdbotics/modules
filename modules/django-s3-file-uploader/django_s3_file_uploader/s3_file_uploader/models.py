@@ -13,10 +13,11 @@ class BaseModel(models.Model):
 
 
 class UploadedFile(BaseModel):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="upload_user")
+    user_id = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="upload_user"
+    )
     file_name = models.CharField(max_length=100, null=True, blank=True)
     bucket = models.CharField(max_length=205)
 
     def __str__(self):
         return self.file_name
-
