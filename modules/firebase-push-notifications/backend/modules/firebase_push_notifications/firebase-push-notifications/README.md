@@ -9,17 +9,13 @@ User is able to push alerts to remind users
 
 
 ## Required Dependencies/Packages
-***django-push-notifications***
-The django-push-notifications REST API allows you Send push notifications to mobile devices through GCM, APNS or WNS and to WebPush (Chrome, Firefox and Opera) in Django.
-. Install it by running the command:
-```console
-pip install django-push-notifications
-```
-***fcm_django***
-fcm_django Send push notifications to mobile devices & browsers through FCM in Django.
-Install the package using this command:
+***fcm_django and firebase-admin***
+The fcm_django Send push notifications to mobile devices & browsers through FCM in Django.
+The Firebase Admin Python SDK enables server-side to integrate Firebase into their services and applications.
+Install the packages by using the following commands:
 ```console
 pip install fcm_django
+pip install firebase-admin
 ```
 ***Note***: Keep the packages/dependencies in `Pipfile`. So that when backend is deployed our module requirements are complete.
 
@@ -28,7 +24,7 @@ pip install fcm_django
 
 1. Add following in your project's settings.py file.
 
-```py
+```
 
 FCM_DJANGO_SETTINGS = {"FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "Your FCM Server Key")}
 
@@ -36,23 +32,29 @@ FCM_DJANGO_SETTINGS = {"FCM_SERVER_KEY": env.str("FCM_SERVER_KEY", "Your FCM Ser
 
 2. In settings.py file, add
 
-```py
+```
 THIRD_PARTY_APPS = [
 ...
 'fcm_django',
-'push_notifications',
 ...
 ]
 ```
 
 3. Add following at the end in your project's settings.py file.
 
-```py
+```
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+```
+
+## Environment Variables
+
+```.env
+"FCM_SERVER_KEY"
+"FCM_SERVICE_FILE_PATH" (Navigate to your Firebase project settings in the Firebase Console, then proceed to the Service Account section and click on 'Generate a new private key')
 ```
 
 ## Installations

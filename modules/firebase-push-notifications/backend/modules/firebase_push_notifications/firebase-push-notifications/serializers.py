@@ -1,13 +1,12 @@
-from rest_framework import serializers
 from fcm_django.models import FCMDevice
-from push_notifications.models import GCMDevice
+from rest_framework import serializers
 
 from .models import Notification, UserNotification
 
 
 class FCMDeviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GCMDevice
+        model = FCMDevice
         fields = '__all__'
 
 
@@ -18,11 +17,9 @@ class FCMNotificationSerializer(serializers.ModelSerializer):
         model = Notification
         fields = "__all__"
 
-
     def get_is_seen(self, obj):
         is_seen = False
         try:
-            # user_id = obj.send_to
             user_id = self.context.get('request').user
             UserNotification.objects.get(notification_id=obj.id, user_id=user_id)
             is_seen = True
@@ -32,7 +29,6 @@ class FCMNotificationSerializer(serializers.ModelSerializer):
 
 
 class UserNotificationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = UserNotification
         fields = "__all__"
