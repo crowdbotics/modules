@@ -142,7 +142,7 @@ const MyCalendar = ({ navigation }) => {
   );
 };
 
-export default MyCalender;
+export default MyCalendar;
 
 const styles = StyleSheet.create({
   container: {
