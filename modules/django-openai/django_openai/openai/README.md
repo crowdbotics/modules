@@ -18,14 +18,14 @@ The following are the key features in scope for this module.
 
 ## ## Features
 
-[ ] This module includes migrations.
-[x] This module includes environment variables.
-[ ] This module requires manual configurations.
-[ ] This module can be configured with module options.
+- [ ] This module includes migrations.
+- [x] This module includes environment variables.
+- [ ] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
 
 ## ## Environment variables
-```py
+```dotenv
 OPENAI_API_KEY="<openai-api-key>"
 ```
 
