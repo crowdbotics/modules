@@ -1,6 +1,25 @@
 # FCM Module
 Using FCM module, you can notify a client app that new email or other data is available to sync. You can send notification messages to drive user re-engagement.
 
+## Features
+User is able to receive notifications from Firebase.
+User is able to increase Message Visibility
+User is able to view the list of received notifications  
+User is able to push alerts to remind users
+
+
+## Install Required Dependencies/Packages
+All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
+Here are the required packages for the module:
+```
+  "@react-native-community/push-notification-ios": "^1.10.1",
+	"react-native-push-notification": "^8.1.1",
+	"react-native-device-info": "^8.1.3"
+```
+and run this command.
+  ```
+  yarn install
+  ```
 
 ## Configurations for Android
 1. On the Firebase console, add a new Android application and enter your projects details. The "Android package name" must match your local projects package name which can be found inside of the manifest tag within the /android/app/src/main/AndroidManifest.xml file within your project.
@@ -233,8 +252,37 @@ const authToken = "Your Authorization token";
 const senderID = "FCM Sender ID ";
 const userID = 1;
 ```
+## API Calling Methods
+All the api calling methods reside in `api.js` file.
 
+* **registerDeviceInfoAPI**
+`registerDeviceInfoAPI` method takes an object containing `userID`,`authToken`, `registration_id`, `type`, `name`, `active`, `device_id`, `cloud_message_type` and adds device in the database.
+
+* **fetchNotifications**
+`fetchNotifications` method takes user's `authToken` and returns list of notifications against that user.
+
+
+## Manual Setup
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+```javascript
+import PushNotifications from "@modules/firebase-push-notifications";
+
+const { title, navigator } = PushNotifications;
+```
+2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
+
+```javascript
+import { modules } from '@modules';
+
+const PushNotifications = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+
+<PushNotifications />;
+```
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1DI90lngd8ZnKauMngxZQZHaUDNY_2ZKS0IVT91K0XcE/edit?usp=sharing), which provides more information about the module's actual intentions.
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change. Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
