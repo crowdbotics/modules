@@ -11,11 +11,11 @@ This module will be used by users for contacting the customer support or app own
 
 ## ## Features
 
-[x] This module includes environment variables.
-[ ] This module requires manual configurations.
-[x] This module can be configured with module options.
-[ ] This module requires manual Android setup.
-[ ] This module requires manual iOS setup.
+ - [x] This module includes environment variables.
+ - [ ] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
 
 ## ## 3rd party setup
 
