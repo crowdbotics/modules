@@ -1,5 +1,5 @@
 import React from "react";
-// @ts-ignore
+
 import { createStackNavigator } from "@react-navigation/stack";
 import ContactForm from "../screens/ContactForm";
 import ContactUs from "../screens/ContactUs";

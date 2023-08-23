@@ -1,9 +1,9 @@
-// @ts-ignore
+
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-// @ts-ignore
+
 import { Surface } from "gl-react-native";
-// @ts-ignore
+
 import ImageFilters from "react-native-gl-image-filters";
 import Tabs from "../../Components/Tabs";
 import { OptionsContext } from "@options";

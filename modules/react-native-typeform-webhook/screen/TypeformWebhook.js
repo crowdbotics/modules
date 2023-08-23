@@ -5,7 +5,7 @@ import {
   StyleSheet
 } from "react-native";
 
-// @ts-ignore
+
 import { WebView } from "react-native-webview";
 import { OptionsContext } from "@options";
 import { createWebHook, getForms } from "../api";

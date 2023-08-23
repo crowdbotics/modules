@@ -17,7 +17,7 @@ const TransactionsFilterList = () => {
         <View style={styles.statusContainer}>
           <View style={styles.imgContainer2}>
             <Image source={require(
-              // @ts-ignore
+              
               "./assets/edit.png")} style={styles.editImg} />
           </View>
           <View style={styles.description}>
@@ -31,17 +31,17 @@ const TransactionsFilterList = () => {
         <View style={styles.chooseContainer}>
           <TextInput placeholder="Enter" placeholderTextColor="#000" />
           <Image source={require(
-            // @ts-ignore
+            
             "./assets/search.png")} style={styles.search} />
         </View>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/file.png")} style={styles.file} />
       </View>
 
       <View style={styles.dateContainer}>
       <Image source={require(
-        // @ts-ignore
+        
         "./assets/cross.png")} style={styles.cross} />
         <View style={styles.feeContainer}>
           <View>
@@ -49,7 +49,7 @@ const TransactionsFilterList = () => {
             <View style={styles.feeSection}>
               <TextInput placeholder="Enter" placeholderTextColor="#000"/>
               <Image source={require(
-                // @ts-ignore
+                
                 "./assets/calender.png")} style={styles.calender} />
             </View>
           </View>
@@ -58,7 +58,7 @@ const TransactionsFilterList = () => {
             <View style={styles.feeSection}>
             <TextInput placeholder="Enter" placeholderTextColor="#000"/>
               <Image source={require(
-                // @ts-ignore
+                
                 "./assets/calender.png")} style={styles.calender} />
             </View>
           </View>
@@ -67,7 +67,7 @@ const TransactionsFilterList = () => {
         <View style={[styles.chooseContainer, styles.searchTo]}>
           <Text>All</Text>
           <Image source={require(
-            // @ts-ignore
+            
             "./assets/down.png")} style={styles.down} />
         </View>
       </View>

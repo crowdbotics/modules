@@ -7,14 +7,14 @@ const UploadDocuments = (params) => {
       <View style={styles.headerContainer}>
        <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>Upload documents</Text>
         <Text />
       </View>
       <View style={styles.uploadContainer}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/light-upload.png")} style={styles.uploadImg} />
         </View>
       </View>
@@ -23,14 +23,14 @@ const UploadDocuments = (params) => {
       <View style={styles.chooseContainer}>
       <Text>Upload</Text>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/upload.png")} style={styles.filterImg} />
       </View>
       <Text style={styles.mr10}>Document back</Text>
       <View style={styles.chooseContainer}>
         <Text>Upload</Text>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/upload.png")} style={styles.filterImg} />
       </View>
       <View style={styles.buttonBottom}>
@@ -40,7 +40,7 @@ const UploadDocuments = (params) => {
       <View style={styles.skipSection}>
 <Text style={styles.skipText}>Skip for now</Text>
 <Image source={require(
-  // @ts-ignore
+  
   "./assets/skip.png")} style={styles.skipImg}/>
       </View>
     </SafeAreaView>

@@ -38,7 +38,7 @@ const TipDriver = () => {
         <View style={styles.centerSection}>
       <View style={styles.imgContainer2}>
           <Image source={require(
-            // @ts-ignore
+            
             "./assets/edit.png")} style={styles.editImg} />
         </View>
         </View>

@@ -6,7 +6,7 @@ const DocumentsScreen = (params) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>Documents</Text>
         <Text />
@@ -34,7 +34,7 @@ const DocumentsScreen = (params) => {
             <Text style={styles.text}>Title of the document</Text>
             <Text style={styles.text}>23/06/2022</Text>
             <Image source={require(
-              // @ts-ignore
+              
               "./assets/upload.png")} style={styles.downloadImg} />
           </View>
         </View>
@@ -52,7 +52,7 @@ const DocumentsScreen = (params) => {
             <Text style={styles.text}>Title of the document</Text>
             <Text style={styles.text}>23/06/2022</Text>
             <Image source={require(
-              // @ts-ignore
+              
               "./assets/upload.png")} style={styles.downloadImg} />
           </View>
         </View>
@@ -70,7 +70,7 @@ const DocumentsScreen = (params) => {
             <Text style={styles.text}>Title of the document</Text>
             <Text style={styles.text}>23/06/2022</Text>
             <Image source={require(
-              // @ts-ignore
+              
               "./assets/upload.png")} style={styles.downloadImg} />
           </View>
         </View>
@@ -88,7 +88,7 @@ const DocumentsScreen = (params) => {
             <Text style={styles.text}>Title of the document</Text>
             <Text style={styles.text}>23/06/2022</Text>
             <Image source={require(
-              // @ts-ignore
+              
               "./assets/upload.png")} style={styles.downloadImg} />
           </View>
         </View>

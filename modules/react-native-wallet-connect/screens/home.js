@@ -1,21 +1,21 @@
 import React, { useEffect, useState, Fragment } from "react";
-// @ts-ignore
+
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import { Text, View, TouchableOpacity, StyleSheet, Image } from "react-native";
-// @ts-ignore
+
 import { useFocusEffect } from "@react-navigation/native";
 import { getBalance, globalConnector, setGlobalConnector, switchMetamask } from "../utils";
 import Button from "../components/Button";
-// @ts-ignore
+
 import refreshIcon from "../assets/refresh-icon.png";
 
-// @ts-ignore
+
 import LinearGradient from "react-native-linear-gradient";
-// @ts-ignore
+
 import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 import CurrencyModal from "../components/CurrencyModal";
 
-// @ts-ignore
+
 import walletIcon from "../assets/wallet.png";
 
 const Home = (props) => {

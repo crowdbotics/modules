@@ -6,7 +6,7 @@ const FavoritesScreen = (params) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>Favorites</Text>
         <Text />
@@ -30,10 +30,10 @@ const FavoritesScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/dots.png")} style={styles.dotsImg} />
           <Image source={require(
-          // @ts-ignore
+          
             "./assets/heart.png")} style={styles.heartImg} />
         </View>
       </View>
@@ -50,10 +50,10 @@ const FavoritesScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/dots.png")} style={styles.dotsImg} />
           <Image source={require(
-          // @ts-ignore
+          
             "./assets/heart.png")} style={styles.heartImg} />
         </View>
       </View>
@@ -70,10 +70,10 @@ const FavoritesScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/dots.png")} style={styles.dotsImg} />
           <Image source={require(
-          // @ts-ignore
+          
             "./assets/heart.png")} style={styles.heartImg} />
         </View>
       </View>
@@ -90,10 +90,10 @@ const FavoritesScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/dots.png")} style={styles.dotsImg} />
           <Image source={require(
-          // @ts-ignore
+          
             "./assets/heart.png")} style={styles.heartImg} />
         </View>
       </View>
@@ -110,10 +110,10 @@ const FavoritesScreen = (params) => {
         </View>
         <View style={styles.leftSection}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/dots.png")} style={styles.dotsImg} />
           <Image source={require(
-          // @ts-ignore
+          
             "./assets/heart.png")} style={styles.heartImg} />
         </View>
       </View>

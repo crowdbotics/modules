@@ -7,14 +7,14 @@ const UploadCovidVaccineProof = (params) => {
       <View style={styles.headerContainer}>
         <View style={styles.header}>
           <Image source={require(
-            // @ts-ignore
+            
             "./assets/back.png")} style={styles.back} />
           <Text style={styles.heading}>Covid Vaccine Proof</Text>
           <Text />
         </View>
         <View style={styles.uploadContainer}>
           <Image source={require(
-            // @ts-ignore
+            
             "./assets/shield.png")} style={styles.uploadImg} />
         </View>
       </View>
@@ -45,13 +45,13 @@ const UploadCovidVaccineProof = (params) => {
       <View style={styles.certificateContainer}>
         <Text>Certificate</Text>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/plus.png")} style={styles.plusImg} />
       </View>
       <View style={styles.chooseContainer}>
         <Text>Upload</Text>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/upload.png")} style={styles.filterImg} />
       </View>
       <View style={styles.buttonBottom}>
@@ -60,7 +60,7 @@ const UploadCovidVaccineProof = (params) => {
       <View style={styles.skipSection}>
         <Text style={{ fontSize: 16 }}>Skip for now</Text>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/skip.png")} style={styles.skipImg} />
       </View>
     </ScrollView>

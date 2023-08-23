@@ -6,7 +6,7 @@ const MyJobsCandidateViewActiveJobsScreen = (params) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+          
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>My Jobs</Text>
         <Text />

@@ -1,9 +1,9 @@
 import React, { useEffect, useState, Fragment, useContext } from "react";
-// @ts-ignore
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import PropTypes from "prop-types";
 import { View, Text, StyleSheet } from "react-native";
-// @ts-ignore
+
 import { OptionsContext } from "@options";
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +18,7 @@ function MyTabs({ tabList = [], headerShown = false, tabBarShowLabel = true, tab
     }
   };
 
-  // @ts-ignore
+  
   useEffect(async () => {
     if (tabList.length !== 0) {
       const tabLength = tabList.length;

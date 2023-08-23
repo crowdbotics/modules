@@ -6,31 +6,31 @@ const VideoScreen = () => {
         <View style={styles.container}>
           <View style={styles.header}>
               <Image source={require(
-                // @ts-ignore
+                
                 "./assets/back.png")} />
           </View>
           <View style={styles.logoContainer}>
               <Image source={require(
-                // @ts-ignore
+                
                 "./assets/logo.png")} />
           </View>
         <View>
           <View style={styles.slide}>
             <Image style={styles.slideImg} source={require(
-              // @ts-ignore
+              
               "./assets/slide.png")} />
           </View>
           <View style={styles.reloadIcons}>
             <Image source={require(
-            // @ts-ignore
+            
               "./assets/reload.png")} />
             <Image source={require(
-            // @ts-ignore
+            
               "./assets/pause.png")} />
           </View>
           <View style={styles.slider}>
             <Image style={styles.sliderImg} source={require(
-            // @ts-ignore
+            
               "./assets/slider.png")} />
           </View>
           <View style={styles.reloadIcons}>
@@ -39,19 +39,19 @@ const VideoScreen = () => {
           </View>
           <View style={styles.playArea}>
             <Image source={require(
-              // @ts-ignore
+              
               "./assets/save.png")} />
               <Image style={styles.reverseIcon} source={require(
-              // @ts-ignore
+              
                 "./assets/reverse.png")} />
               <Image style={styles.stopIcon} source={require(
-              // @ts-ignore
+              
                 "./assets/stop.png")} />
               <Image style={styles.forwardIcon} source={require(
-              // @ts-ignore
+              
                 "./assets/forward.png")} />
               <Image source={require(
-              // @ts-ignore
+              
                 "./assets/download.png")} />
           </View>
         </View>

@@ -1,4 +1,4 @@
-// @ts-ignore
+
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 

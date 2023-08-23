@@ -7,7 +7,7 @@ import { sendVerification, getUser, verify2FA, verifyCode } from "../../api";
 import Loader from "../../components/Loader";
 import { OptionsContext } from "@options";
 
-// @ts-ignore
+
 import { useFocusEffect } from "@react-navigation/native";
 
 const Verification = (props) => {

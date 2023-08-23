@@ -1,16 +1,16 @@
-// @ts-ignore
+
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-// @ts-ignore
-// @ts-ignore
+
+
 import { Surface } from "gl-react-native";
-// @ts-ignore
+
 import ImageFilters from "react-native-gl-image-filters";
 import Filter from "../../Components/Filters";
 import Tabs from "../../Components/Tabs";
 import { OptionsContext } from "@options";
 import { reSizeImage } from "../../Utils/common";
-// @ts-ignore
+
 import Button from "../../Components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";

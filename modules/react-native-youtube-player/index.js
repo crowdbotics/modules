@@ -3,11 +3,11 @@ import {
   PixelRatio, ScrollView, Text, TouchableOpacity, View
 } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
-// @ts-ignore
+
 import { OptionsContext } from "@options";
-// @ts-ignore
+
 import PropTypes from "prop-types";
-// @ts-ignore
+
 import YouTube from "react-native-youtube";
 
 const Player = ({ youtubeApiKey, playerSetting, videoIds, isForwordTimeDuration = true, forwordTimeDurationInSeconds = 5, isBackwordTimeDuration = true, backwordTimeDurationInSeconds = 5 }) => {

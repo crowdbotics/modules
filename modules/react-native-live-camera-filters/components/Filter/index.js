@@ -1,21 +1,21 @@
 import React from "react";
 import { View, StyleSheet, FlatList, Text, TouchableNativeFeedback, Image } from "react-native";
 import { FILTERS } from "../../options";
-// @ts-ignore
+
 import Warm from "../../assets/warm1.jpg";
-// @ts-ignore
+
 import classic from "../../assets/classic1.jpg";
-// @ts-ignore
+
 import vintage from "../../assets/vintage1.jpg";
-// @ts-ignore
+
 import sharp from "../../assets/sharp1.jpg";
-// @ts-ignore
+
 import negative from "../../assets/negative1.jpg";
-// @ts-ignore
+
 import sepia from "../../assets/sepia1.jpg";
-// @ts-ignore
+
 import cool from "../../assets/cool1.jpg";
-// @ts-ignore
+
 import bright from "../../assets/bright1.jpg";
 
 export default function Filter({ selectFilter }) {
@@ -34,7 +34,7 @@ export default function Filter({ selectFilter }) {
   const pressFilter = (settings) => {
     selectFilter(settings);
   };
-  // @ts-ignore
+  
   const ItemRender = ({ name, index, settings }) => (
     <TouchableNativeFeedback onPress={() => pressFilter(settings)}>
       <View style={[styleSheet.item, { backgroundColor: colors[index % colors.length] }]} >
