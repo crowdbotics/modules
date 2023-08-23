@@ -22,9 +22,11 @@ class DownloadFileSerializer(serializers.Serializer):
     file_name = serializers.CharField(required=True)
 
 
-class DeleteFileSerializer(serializers.Serializer):
-    bucket = serializers.CharField(required=True)
-    file_name = serializers.CharField(required=True)
+class DeleteFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UploadFile
+        fields = '__all__'
+
 
 
 class PresignedUrlFileSerializer(serializers.Serializer):
