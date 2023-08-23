@@ -11,6 +11,10 @@ class TimeStamp(models.Model):
 
 
 class MeetingInformation(TimeStamp):
+    """
+     MeetingInformation Model: This model will save the details about the type of the appointment a user is going to avail.
+     Will save the meeting type, description of the meeting type and fee against that meeting type."""
+
     MEETING_TYPE = [
         ('message', 'Messaging'),
         ('voice', 'Voice Call'),
@@ -26,6 +30,12 @@ class MeetingInformation(TimeStamp):
 
 
 class Appointment(TimeStamp):
+    """
+     Appointment Model: This model will save the details of newly created appointment.
+     It will save the SESSION_DAY details if a user is creating an meeting in morning or afternoon, evening or night.
+     Detail of the client details like, name, email, age, gender and notes.
+     The model will save the appointment date, start_time, end_time, cost for the appointment, discount on that appointment and additional fee.
+    """
     SESSION_DAY = [
         ('morning', 'Morning'),
         ('afternoon', 'Afternoon'),
