@@ -1,10 +1,10 @@
 import functools
-import json
+from datetime import datetime as dt
 
 import pytz
 from rest_framework import status
 from rest_framework.response import Response
-from datetime import datetime as dt
+
 from modules.django_okta.okta.models import Okta
 
 utc = pytz.UTC
