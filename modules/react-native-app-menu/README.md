@@ -19,7 +19,7 @@ Include preview screenshots or videos here.
 
 ## ## 3rd party setup
 
-No 3rd party account creation required.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/32264a06-6cfe-4d2f-8982-482f2e260d84)
 
 ## Dependencies
 
