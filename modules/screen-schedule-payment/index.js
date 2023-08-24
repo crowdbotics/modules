@@ -1,5 +1,12 @@
-// @ts-ignore
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  TextInput
+} from "react-native";
 import React, { useState } from "react";
 
 const SchedulePayment = ({ navigation }) => {
@@ -16,166 +23,184 @@ const SchedulePayment = ({ navigation }) => {
       designation: "Doctor",
       experience: "5+ Year Experience",
       image:
-                "https://raw.githubusercontent.com/crowdbotics/modules/master/modules/screen-explore-list/assets/eventImage-lg.png"
+        "https://raw.githubusercontent.com/crowdbotics/modules/master/modules/screen-explore-list/assets/eventImage-lg.png"
     }
   ];
 
   return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.headerContainer}>
-                    <View style={styles.walletCard}>
-                        <View style={styles.walletInner}>
-                            <View style={styles.imgContainer}>
-                                <Image source={{ uri: "etrwet" }} style={styles.image} />
-                            </View>
-                            <View style={styles.walletCarder}>
-                                <Text style={styles.eventName}>{data[0].title}</Text>
-                                <Text style={styles.eventType}>{data[0].specialty} </Text>
-                                <Text style={styles.experience}>{data[0].experience} </Text>
-                                <View style={styles.ratingContainer}>
-                                    <Image source={require(
-                                      // @ts-ignore
-                                      "./assets/rating.png")} style={styles.image} />
-                                    <Text style={styles.attending}>(16 reviews)</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={styles.leftSection}>
-                            <Image source={require(
-                              // @ts-ignore
-                              "./assets/phone.png")} style={styles.phone} />
-                            <Image source={require(
-                              // @ts-ignore
-                              "./assets/message.png")} style={styles.phone} />
-                        </View>
-                    </View>
-                    <View style={styles.scheduledContainer}>
-                        <Text style={styles.dateTitle}>Appointment time</Text>
-                        <View style={styles.alignContent}>
-                            <Text style={styles.time}>Date:  Thu, 23</Text>
-                            <Text style={styles.time}>Time: 12:00 AM</Text>
-                        </View>
-                    </View>
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <View style={styles.walletCard}>
+            <View style={styles.walletInner}>
+              <View style={styles.imgContainer}>
+                <Image source={{ uri: "etrwet" }} style={styles.image} />
+              </View>
+              <View style={styles.walletCarder}>
+                <Text style={styles.eventName}>{data[0].title}</Text>
+                <Text style={styles.eventType}>{data[0].specialty} </Text>
+                <Text style={styles.experience}>{data[0].experience} </Text>
+                <View style={styles.ratingContainer}>
+                  <Image
+                    source={require(// @ts-ignore
+                    "./assets/rating.png")}
+                    style={styles.image}
+                  />
+                  <Text style={styles.attending}>(16 reviews)</Text>
                 </View>
-
-                <View style={styles.amountContainer}>
-                    <View style={[styles.scheduledContainer, { marginBottom: 15 }]}>
-                        <Text style={[styles.dateTitle, styles.appTime]}>Appointment cost</Text>
-                        <View style={[styles.alignContent]}>
-                            <Text style={[styles.time, styles.appcategory]}>Cardiology appointment </Text>
-                            <Text style={[styles.amount]}>$50</Text>
-                        </View>
-                    </View>
-                    <View style={[styles.scheduledContainer, styles.border]}>
-                        <Text style={[styles.dateTitle, styles.appTime]}>Voice Call</Text>
-                        <View style={[styles.alignContent]}>
-                            <Text style={[styles.time, styles.appcategory]}>Additional fees</Text>
-                            <Text style={[styles.amount, { fontSize: 18 }]}>$10</Text>
-                        </View>
-                    </View>
-                    <View style={styles.chooseContainer}>
-                        <View style={styles.promoContainer}>
-                            <Image source={require(
-                              // @ts-ignore
-                              "./assets/promo.png")} style={styles.promo} />
-                            <Text>Use Promo Code</Text>
-                        </View>
-
-                        <Image source={require(
-                          // @ts-ignore
-                          "./assets/next.png")} style={styles.nextImg} />
-                    </View>
-                </View>
-
-                <View style={[styles.headingContainer, { marginVertical: 7 }]}>
-                    <Text style={styles.total}>Total</Text>
-                    <Text style={styles.totalAmount}>$60</Text>
-                </View>
-
-                <View style={styles.cardInfo}>
-                    <View style={[styles.headingContainer, { paddingHorizontal: 15 }]}>
-                        <Text style={styles.title}>Payment option</Text>
-                        <Text style={styles.subTitle}>Add new</Text>
-                    </View>
-                    <Image
-                        // @ts-ignore
-                        source={require("./assets/Card-large.png")}
-                        style={styles.card}
-                    />
-                    <Image
-                        // @ts-ignore
-                        source={require("./assets/3Dots.png")}
-                        style={styles.threeDots}
-                    />
-                    <View style={styles.inputs}>
-                        <View style={styles.inputContainer}>
-                            <View style={styles.deleteCardContainer}>
-                                <Text style={styles.inputText}>Card Number</Text>
-                                <Image
-                                    // @ts-ignore
-                                    source={require("./assets/deleteIcon.png")}
-                                    style={styles.deleteIcon}
-                                />
-                            </View>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(text) => setCardNumber(text)}
-                                value={cardNumber}
-                                placeholder="1234 5678 9012 3456"
-                                placeholderTextColor="#9B9B9B"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                            />
-                        </View>
-                        <View style={styles.halfInputs}>
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.inputText}>Expiration Date</Text>
-                                <TextInput
-                                    style={[styles.input, styles.input1]}
-                                    onChangeText={(text) => setCardExpiry(text)}
-                                    value={cardExpiry}
-                                    placeholder="10/24"
-                                    placeholderTextColor="#9B9B9B"
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                />
-                            </View>
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.inputText}>CVV</Text>
-                                <TextInput
-                                    style={[styles.input, styles.input2]}
-                                    onChangeText={(text) => setCvv(text)}
-                                    value={cvv}
-                                    placeholder="374"
-                                    placeholderTextColor="#9B9B9B"
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.inputText}>Card Holder Name</Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(text) => setName(text)}
-                                value={name}
-                                placeholder="Username"
-                                placeholderTextColor="#9B9B9B"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.buttonBottom}>
-                        <Button
-                            onPress={() => navigation.navigate("login", { route: "SignUpScreen" })}
-                            buttonText="Pay now"
-                        />
-                    </View>
-                </View>
-            </ScrollView>
+              </View>
+            </View>
+            <View style={styles.leftSection}>
+              <Image
+                source={require(// @ts-ignore
+                "./assets/phone.png")}
+                style={styles.phone}
+              />
+              <Image
+                source={require(// @ts-ignore
+                "./assets/message.png")}
+                style={styles.phone}
+              />
+            </View>
+          </View>
+          <View style={styles.scheduledContainer}>
+            <Text style={styles.dateTitle}>Appointment time</Text>
+            <View style={styles.alignContent}>
+              <Text style={styles.time}>Date: Thu, 23</Text>
+              <Text style={styles.time}>Time: 12:00 AM</Text>
+            </View>
+          </View>
         </View>
+
+        <View style={styles.amountContainer}>
+          <View style={[styles.scheduledContainer, { marginBottom: 15 }]}>
+            <Text style={[styles.dateTitle, styles.appTime]}>
+              Appointment cost
+            </Text>
+            <View style={[styles.alignContent]}>
+              <Text style={[styles.time, styles.appcategory]}>
+                Cardiology appointment{" "}
+              </Text>
+              <Text style={[styles.amount]}>$50</Text>
+            </View>
+          </View>
+          <View style={[styles.scheduledContainer, styles.border]}>
+            <Text style={[styles.dateTitle, styles.appTime]}>Voice Call</Text>
+            <View style={[styles.alignContent]}>
+              <Text style={[styles.time, styles.appcategory]}>
+                Additional fees
+              </Text>
+              <Text style={[styles.amount, { fontSize: 18 }]}>$10</Text>
+            </View>
+          </View>
+          <View style={styles.chooseContainer}>
+            <View style={styles.promoContainer}>
+              <Image
+                source={require(// @ts-ignore
+                "./assets/promo.png")}
+                style={styles.promo}
+              />
+              <Text>Use Promo Code</Text>
+            </View>
+
+            <Image
+              source={require(// @ts-ignore
+              "./assets/next.png")}
+              style={styles.nextImg}
+            />
+          </View>
+        </View>
+
+        <View style={[styles.headingContainer, { marginVertical: 7 }]}>
+          <Text style={styles.total}>Total</Text>
+          <Text style={styles.totalAmount}>$60</Text>
+        </View>
+
+        <View style={styles.cardInfo}>
+          <View style={[styles.headingContainer, { paddingHorizontal: 15 }]}>
+            <Text style={styles.title}>Payment option</Text>
+            <Text style={styles.subTitle}>Add new</Text>
+          </View>
+          <Image
+            // @ts-ignore
+            source={require("./assets/Card-large.png")}
+            style={styles.card}
+          />
+          <Image
+            // @ts-ignore
+            source={require("./assets/3Dots.png")}
+            style={styles.threeDots}
+          />
+          <View style={styles.inputs}>
+            <View style={styles.inputContainer}>
+              <View style={styles.deleteCardContainer}>
+                <Text style={styles.inputText}>Card Number</Text>
+                <Image
+                  // @ts-ignore
+                  source={require("./assets/deleteIcon.png")}
+                  style={styles.deleteIcon}
+                />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => setCardNumber(text)}
+                value={cardNumber}
+                placeholder="1234 5678 9012 3456"
+                placeholderTextColor="#9B9B9B"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+            <View style={styles.halfInputs}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Expiration Date</Text>
+                <TextInput
+                  style={[styles.input, styles.input1]}
+                  onChangeText={(text) => setCardExpiry(text)}
+                  value={cardExpiry}
+                  placeholder="10/24"
+                  placeholderTextColor="#9B9B9B"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>CVV</Text>
+                <TextInput
+                  style={[styles.input, styles.input2]}
+                  onChangeText={(text) => setCvv(text)}
+                  value={cvv}
+                  placeholder="374"
+                  placeholderTextColor="#9B9B9B"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputText}>Card Holder Name</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => setName(text)}
+                value={name}
+                placeholder="Username"
+                placeholderTextColor="#9B9B9B"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+          </View>
+          <View style={styles.buttonBottom}>
+            <Button
+              onPress={() =>
+                navigation.navigate("login", { route: "SignUpScreen" })
+              }
+              buttonText="Pay now"
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -234,7 +259,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10
   },
-  attending: { color: "#ACAEAF", fontSize: 14, marginLeft: 10, fontWeight: "bold" },
+  attending: {
+    color: "#ACAEAF",
+    fontSize: 14,
+    marginLeft: 10,
+    fontWeight: "bold"
+  },
   imgContainer: {
     height: 80,
     width: 95,
@@ -243,7 +273,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#dadada",
     borderRadius: 10
   },
-  image: { resizeMode: "stretch", height: 10, width: 60, marginLeft: 10, marginRight: -5 },
+  image: {
+    resizeMode: "stretch",
+    height: 10,
+    width: 60,
+    marginLeft: 10,
+    marginRight: -5
+  },
   ratingContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -284,12 +320,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-  alignContent: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingRight: 10 },
-  amountContainer: { backgroundColor: "#fff", paddingTop: 15, paddingBottom: 20, marginTop: 15 },
+  alignContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingRight: 10
+  },
+  amountContainer: {
+    backgroundColor: "#fff",
+    paddingTop: 15,
+    paddingBottom: 20,
+    marginTop: 15
+  },
   appTime: { fontSize: 14, fontWeight: "400", color: "#000" },
   appcategory: { fontSize: 12, fontWeight: "400" },
   amount: { fontSize: 30, fontWeight: "bold", color: "#000", marginTop: -20 },
-  border: { borderBottomColor: "#F2F2F2", borderBottomWidth: 1, borderTopColor: "#F2F2F2", borderTopWidth: 1, paddingTop: 10, paddingBottom: 2 },
+  border: {
+    borderBottomColor: "#F2F2F2",
+    borderBottomWidth: 1,
+    borderTopColor: "#F2F2F2",
+    borderTopWidth: 1,
+    paddingTop: 10,
+    paddingBottom: 2
+  },
   chooseContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -331,7 +384,6 @@ const styles = StyleSheet.create({
     height: 8,
     width: 19,
     resizeMode: "contain"
-
   },
   deleteCardContainer: {
     flexDirection: "row",
@@ -388,25 +440,34 @@ const styles = StyleSheet.create({
 
 const Button = (props) => {
   return (
-        <TouchableOpacity onPress={props.onPress}
-            // @ts-ignore
-            underlayColor="#DDDDDD">
-            <View
-                style={[
-                  btnStyles.button,
-                  {
-                    backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-                    height: props.height ? props.height : 49,
-                    borderWidth: props.borderWidth ? props.borderWidth : 0,
-                    borderColor: props.borderColor ? props.borderColor : "#000000"
-                  }
-                ]}
-            >
-                <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>
-                    {props.buttonText}
-                </Text>
-            </View>
-        </TouchableOpacity>
+    <TouchableOpacity
+      onPress={props.onPress}
+      // @ts-ignore
+      underlayColor="#DDDDDD"
+    >
+      <View
+        style={[
+          btnStyles.button,
+          {
+            backgroundColor: props.backgroundColor
+              ? props.backgroundColor
+              : "#000000",
+            height: props.height ? props.height : 49,
+            borderWidth: props.borderWidth ? props.borderWidth : 0,
+            borderColor: props.borderColor ? props.borderColor : "#000000"
+          }
+        ]}
+      >
+        <Text
+          style={[
+            btnStyles.text,
+            { color: props.color ? props.color : "#ffffff" }
+          ]}
+        >
+          {props.buttonText}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
