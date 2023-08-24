@@ -2,7 +2,9 @@ import requests
 
 
 class HubspotBase:
-    def __init__(self, base_url, grant_type, redirect_url, client_id, client_secret, access_token):
+    def __init__(
+        self, base_url, grant_type, redirect_url, client_id, client_secret, access_token
+    ):
         self.HUBSPOT_BASE_URL = base_url
         self.HUBSPOT_GRANT_TYPE = grant_type
         self.HUBSPOT_REDIRECT_URL = redirect_url

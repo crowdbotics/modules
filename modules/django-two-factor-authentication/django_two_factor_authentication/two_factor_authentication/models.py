@@ -13,7 +13,8 @@ class TwoFactorAuth(models.Model):
 
 
 class Verify(models.Model):
-    phone_number = models.ForeignKey(TwoFactorAuth, on_delete=models.SET_NULL, null=True, blank=True)
+    phone_number = models.ForeignKey(
+        TwoFactorAuth, on_delete=models.SET_NULL, null=True, blank=True
+    )
     email = models.EmailField(max_length=255, null=True, blank=True)
     code = models.IntegerField(null=True, blank=True)
-

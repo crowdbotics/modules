@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import SearchBar from "../Components/SearchBar";
 import { ChannelType, useStore } from "../Store";
-// @ts-ignore
+
 import { usePubNub } from "pubnub-react";
 import Circle from "../Components/Circle";
 import Loader from "../Components/loader";

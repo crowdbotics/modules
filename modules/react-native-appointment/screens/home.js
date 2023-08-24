@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";
-// @ts-ignore
+
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import AppointmentList from "./appointmentList";
 import Calendar from "./calendar";
