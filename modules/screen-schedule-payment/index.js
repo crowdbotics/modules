@@ -43,7 +43,7 @@ const SchedulePayment = ({ navigation }) => {
                 <View style={styles.ratingContainer}>
                   <Image
                     source={require(// @ts-ignore
-                    "./assets/rating.png")}
+                      "./assets/rating.png")}
                     style={styles.image}
                   />
                   <Text style={styles.attending}>(16 reviews)</Text>
@@ -53,12 +53,12 @@ const SchedulePayment = ({ navigation }) => {
             <View style={styles.leftSection}>
               <Image
                 source={require(// @ts-ignore
-                "./assets/phone.png")}
+                  "./assets/phone.png")}
                 style={styles.phone}
               />
               <Image
                 source={require(// @ts-ignore
-                "./assets/message.png")}
+                  "./assets/message.png")}
                 style={styles.phone}
               />
             </View>
@@ -97,7 +97,7 @@ const SchedulePayment = ({ navigation }) => {
             <View style={styles.promoContainer}>
               <Image
                 source={require(// @ts-ignore
-                "./assets/promo.png")}
+                  "./assets/promo.png")}
                 style={styles.promo}
               />
               <Text>Use Promo Code</Text>
@@ -105,7 +105,7 @@ const SchedulePayment = ({ navigation }) => {
 
             <Image
               source={require(// @ts-ignore
-              "./assets/next.png")}
+                "./assets/next.png")}
               style={styles.nextImg}
             />
           </View>
