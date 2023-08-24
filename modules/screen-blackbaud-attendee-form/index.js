@@ -1,18 +1,25 @@
-import React, {useEffect, useState} from "react";
-import { ScrollView, StyleSheet, View, TextInput, Text, Pressable } from "react-native";
-import { useDispatch, useSelector } from "react-redux"
-import { useIsFocused } from "@react-navigation/native"
-import { attendeeList } from "../../modules/blackbaud/store"
+import React, { useEffect, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  TextInput,
+  Text,
+  Pressable
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
+import { attendeeList } from "../../modules/blackbaud/store";
 
-const AttendeeForm = props => {
-  const dispatch = useDispatch()
-  const { route } = props
-  const { params } = route
-  const isFocused = useIsFocused()
-  const token = useSelector(state => state.Events.accessToken)
+const AttendeeForm = (props) => {
+  const dispatch = useDispatch();
+  const { route } = props;
+  const { params } = route;
+  const isFocused = useIsFocused();
+  const token = useSelector((state) => state.Events.accessToken);
   const { entities: attendees } = useSelector(
-    state => state.Events.attendeeList
-  )
+    (state) => state.Events.attendeeList
+  );
   useEffect(() => {
     if (isFocused) {
       dispatch(
@@ -20,67 +27,84 @@ const AttendeeForm = props => {
           id: params?.eventId,
           token: token
         })
-      )
+      );
     }
-  }, [isFocused])
+  }, [isFocused]);
 
-  const [selectedAttendee, setSelectedAttendee] = useState(null)
+  const [selectedAttendee, setSelectedAttendee] = useState(null);
 
   const selectAttendee = (id) => {
     // toggle selection
     if (selectedAttendee === id) {
-      setSelectedAttendee(null)
+      setSelectedAttendee(null);
+    } else {
+      setSelectedAttendee(id);
     }
-    else {
-      setSelectedAttendee(id)
-    }
-  }
+  };
 
-  return <View style={styles.container}>
+  return (
+    <View style={styles.container}>
       <ScrollView>
         <Text style={styles.title}>Attendee Form</Text>
         <View style={styles.attendeeForm}>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Name *</Text>
-            <TextInput placeholder="Please type your response" style={styles.formInput} />
+            <TextInput
+              placeholder="Please type your response"
+              style={styles.formInput}
+            />
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Email *</Text>
-            <TextInput placeholder="Please type your response" style={styles.formInput} />
+            <TextInput
+              placeholder="Please type your response"
+              style={styles.formInput}
+            />
           </View>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Status (dropdown) *</Text>
-            <TextInput placeholder="Please type your response" style={styles.formInput} />
+            <TextInput
+              placeholder="Please type your response"
+              style={styles.formInput}
+            />
           </View>
           <View style={styles.inputGroup}>
-          {attendees.length > 0 && (<><Text style={styles.attendingWith}>Attending with</Text>
-              <View style={styles.inputGroup}>
-                {attendees?.map((item, index) => {
-                  return <Text key={index} style={[
-                        styles.formInput,
-                       {
-                        backgroundColor: selectedAttendee === item.id ? "#075a7c" : "#fff",
-                        color: selectedAttendee === item.id ? "#fff" : "#000"
-                      }
-                  ]} onPress={() => selectAttendee(item.id)} >
-                      {item.name} - {item.email}
-                    </Text>;
-                }
-                )}
-              </View></>)
-            }
+            {attendees.length > 0 && (
+              <>
+                <Text style={styles.attendingWith}>Attending with</Text>
+                <View style={styles.inputGroup}>
+                  {attendees?.map((item, index) => {
+                    return (
+                      <Text
+                        key={index}
+                        style={[
+                          styles.formInput,
+                          {
+                            backgroundColor:
+                              selectedAttendee === item.id ? "#075a7c" : "#fff",
+                            color:
+                              selectedAttendee === item.id ? "#fff" : "#000"
+                          }
+                        ]}
+                        onPress={() => selectAttendee(item.id)}
+                      >
+                        {item.name} - {item.email}
+                      </Text>
+                    );
+                  })}
+                </View>
+              </>
+            )}
           </View>
           <View style={styles.buttonGroup}>
-            <Pressable style={styles.loginButton} onPress={() => {}} >
-              <Text style={styles.textColor}>
-                Submit
-              </Text>
+            <Pressable style={styles.loginButton} onPress={() => {}}>
+              <Text style={styles.textColor}>Submit</Text>
             </Pressable>
-
           </View>
         </View>
       </ScrollView>
-    </View>;
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -139,7 +163,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#212327",
-    marginLeft: 15,
+    marginLeft: 15
   }
 });
 export default AttendeeForm;
