@@ -1,6 +1,8 @@
 from datetime import datetime
-from django.db import models
+
 import jsonfield
+from django.db import models
+
 
 
 class FormDefinition(models.Model):
