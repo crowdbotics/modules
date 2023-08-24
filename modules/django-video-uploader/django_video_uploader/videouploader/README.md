@@ -1,78 +1,67 @@
-## Crowdbotics Video Uploader (Vimeo) Component - Backend
+## Django Video Uploader (Vimeo) backend configuration and information
 
-This module contains all needed resources to get the Video Uploader component for React
-Native mobile client. The Vimeo API includes a full set of features for uploading and managing video files. you can
-access all the amazing upload capabilities of `vimeo.com`.
+## Module description
+
+Vimeo API includes a full set of features for uploading and managing video files. you can
+access all the amazing upload capabilities at `vimeo.com`.
+
+The following are the scope features for this module.
+
+- Module perform various operations in the system, such as video management, folder organization, showcase creation,
+  group administration, and channel handling.
+
+- For videos, which can create, retrieve, list, edit, delete, and engage with them through likes or dislikes.
+
+- Folders enhance organization, which can create, access details/lists, edit, delete, and add videos for structured
+  content.
+
+- Showcases highlight content, which can create, edit, retrieve details/lists, update, delete, and add videos.
+
+- Groups support collaboration can create, access details/lists, update settings, delete, and manage users and videos
+  efficiently
+
+- Lastly, Channels facilitate content distribution which can create, access details/lists, update settings, or delete
+  for a streamlined platform.
 
 ## Features
 
-1. Create a video
-2. Get a specific video
-3. Get the list of videos
-4. Edit an existing video
-5. Delete an existing video
-6. Like and unlike video
-7. Create a new folder
-8. Get folder details and list
-9. Edit folder
-10. Delete a specific folder
-11. Add videos to folder
-12. Create a new showcase
-13. Edit showcase
-14. Get showcase detail list
-15. Update an existing showcase
-16. Delete a specific showcase
-17. Add videos to showcase
-18. Create groups
-19. Get group details and list
-20. Update group
-21. Delete group
-22. Add users and videos to group
-23. Create channels
-24. Get channel details and list
-25. Update channel
-26. Delete an existing channel
+- [ ] This module includes migrations.
+- [x] This module includes environment variables.
+- [ ] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
-### Setup App on Vimeo ang get credentials
+## Environment variables
 
-1. Login to [Vimeo Developer account](https://developer.vimeo.com/)
-2. click on the ` + Create an app` button in the top-right corner of the page.
-3. Enter the `name`, `description` of your app and click `Create app` button.
-4. On your app page you will be able to see the `Client identifier` and `Client secrets` which can be used to get
-   the `access_token` to authenticate the API calls.
-5. To get the personal `access_token` to authenticate api calls, check the radio button `Authenticated(you)` to and
-   select the scopes of the token. Click the `Generate` button. Token will be generated with the selected scopes. This
-   token will be a `bearer` token.
-   ![Vimeo](https://user-images.githubusercontent.com/76822297/227928463-93aa27ec-2cf4-463f-9fbb-fdc6f82a0bd5.png)
+Following are the `.env` variables which are required:
 
-### Setup Environment Variables
-
-In your `.env` file update the following:
-
-```
-VIDEO_UPLOADER_BASE_URL=https://api.vimeo.com
-VIDEO_UPLOADER_ACCESS_TOKEN=your vimeo app personal access_token
-VIDEO_UPLOADER_CLIENT_ID=Your App's Client identifier
-VIDEO_UPLOADER_CLIENT_SECRET=Your App's Client secret
+```dotenv
+VIDEO_UPLOADER_BASE_URL="https://api.vimeo.com"
+VIDEO_UPLOADER_ACCESS_TOKEN="your vimeo app personal access_token"
+VIDEO_UPLOADER_CLIENT_ID="Your App's Client identifier"
+VIDEO_UPLOADER_CLIENT_SECRET="Your App's Client secret"
 ```
 
-## Installations
+## ## 3rd party setup
 
-1. Run migrations
+Follow these steps to create a required TypeForm account:
 
-```
-python manage.py migrate
-```
+- Login to [Vimeo Developer account](https://developer.vimeo.com/)
+- click on the ` + Create an app` button in the top-right corner of the page.
+- Enter the `name`, `description` of your app and click `Create app` button.
+- On your app page you will be able to see the `Client identifier` and `Client secrets` which can be used to get
+  the `access_token` to authenticate the API calls.
+- To get the personal `access_token` to authenticate api calls, check the radio button `Authenticated(you)` to and
+  select the scopes of the token. Click the `Generate` button. Token will be generated with the selected scopes. This
+  token will be a `bearer` token.
+  ![Vimeo](https://user-images.githubusercontent.com/76822297/227928463-93aa27ec-2cf4-463f-9fbb-fdc6f82a0bd5.png)
 
-2. Run the server
+## Dependencies
 
-```
-python manage.py runserver
-```
+No Dependencies used.
 
-### Api Table
+## API details
 
-List of api endpoints with params needed for these apis.
+API Endpoints and Required Parameters List.
 
 |                                                Api Name                                                |                                                                     Params                                                                      | Description                                                                                                                                                                                                                                                 |
 |:------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -109,19 +98,5 @@ List of api endpoints with params needed for these apis.
 |                   `/modules/videouploader/service/{video_id}/video/update/` `PATCH`                    |                                           params `{name, description, approach, size, redirect_url}`                                            | Creates a new video with the provided approach.                                                                                                                                                                                                             |
 
 **Note**
-Some of the Apis working will be limited if using with vimeo free trial.
+Certain APIs have limited functionality when used during a Vimeo free trial.
 
-## Module Specifications
-
-Here is
-the [Module Specification Document](https://docs.google.com/document/d/1SMV-SVuyNENi71y_3nYJu4W1PT4kqeiA9r0qRFOvPSk/edit?usp=sharing),
-which provides more information about the module's actual intentions.
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
