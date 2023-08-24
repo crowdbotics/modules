@@ -177,9 +177,11 @@ export default LocationSearch;
 const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
-      {props.text ? (
+      {props.text
+        ? (
         <Text style={inputStyles.inputText}>{props.text}</Text>
-      ) : null}
+          )
+        : null}
 
       <TextInput
         style={[
@@ -200,17 +202,21 @@ const Input = (props) => {
         backgroundColor={props.backgroundColor}
         secureTextEntry={props.secureTextEntry}
       />
-      {props.errorText ? (
+      {props.errorText
+        ? (
         <Text style={inputStyles.error}>{props.errorText}</Text>
-      ) : null}
-      {props.icon ? (
+          )
+        : null}
+      {props.icon
+        ? (
         <Image
           source={props.icon}
           style={
             props.text ? inputStyles.iconWithText : inputStyles.iconWithoutText
           }
         />
-      ) : null}
+          )
+        : null}
       <View style={styles.children}>{props.children}</View>
     </View>
   );
