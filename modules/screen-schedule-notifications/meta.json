@@ -1,0 +1,5 @@
+{
+    "title": "Schedule Notifications",
+    "description": "Schedule Notifications screen.",
+    "root": "/screens/schedule-notifications"
+}
