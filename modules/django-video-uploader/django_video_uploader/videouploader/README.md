@@ -27,7 +27,7 @@ The following are the scope features for this module.
 
 - [ ] This module includes migrations.
 - [x] This module includes environment variables.
-- [ ] This module requires manual configurations.
+- [x] This module requires manual configurations.
 - [ ] This module can be configured with module options.
 
 ## Environment variables
@@ -43,7 +43,7 @@ VIDEO_UPLOADER_CLIENT_SECRET="Your App's Client secret"
 
 ## ## 3rd party setup
 
-Follow these steps to create a required TypeForm account:
+Follow these steps to create a required Vimeo account:
 
 - Login to [Vimeo Developer account](https://developer.vimeo.com/)
 - click on the ` + Create an app` button in the top-right corner of the page.
