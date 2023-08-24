@@ -11,8 +11,7 @@ Appointment is a React Native based module. This module will enable new appointm
 - Search appointments.
 - List of the people who will show up/attend the meeting/event including the meeting/event organizer
 
-
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/14791585-3a64-4852-89f5-9a2ff22df4a3)
 
 ## ## Features
 
