@@ -12,7 +12,8 @@ import {
   useNavigationBuilder,
   TabRouter,
   TabActions,
-  createNavigatorFactory
+  createNavigatorFactory,
+  useNavigation
 } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -22,7 +23,8 @@ import { styles } from "./screens/styles";
 import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
-const LoginTabBar = ({ navigation, state, descriptors }) => {
+const LoginTabBar = ({ state, descriptors }) => {
+  const navigation = useNavigation();
   const currentTab = state.routes[state.index];
   return (
     <View style={styles.tabStyle}>
