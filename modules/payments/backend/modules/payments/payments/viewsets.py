@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 import stripe
 from .services.StripeService import StripeService
 
+
 class PaymentSheetView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -14,12 +15,12 @@ class PaymentSheetView(APIView):
         stripe_profile = user.stripe_profile
         if not stripe_profile.stripe_cus_id:
             customer = stripe.Customer.create(email=user.email)
-            stripe_cus_id = customer['id']
+            stripe_cus_id = customer["id"]
             stripe_profile.stripe_cus_id = stripe_cus_id
             stripe_profile.save()
         else:
             stripe_cus_id = stripe_profile.stripe_cus_id
-        cents = request.data.get('cents', 100)
+        cents = request.data.get("cents", 100)
         response = StripeService.create_payment_intent_sheet(stripe_cus_id, cents)
         return Response(response, status=status.HTTP_200_OK)
 
@@ -36,10 +37,7 @@ class GetStripePaymentsView(APIView):
         else:
             stripe_cus_id = stripe_profile.stripe_cus_id
         history = StripeService.get_payments_history(stripe_cus_id)
-        response = {
-            "success": True,
-            "data": history
-        }
+        response = {"success": True, "data": history}
         return Response(response, status=status.HTTP_200_OK)
 
 
@@ -55,8 +53,5 @@ class GetPaymentMethodsView(APIView):
         else:
             stripe_cus_id = stripe_profile.stripe_cus_id
         history = StripeService.get_payments_methods(stripe_cus_id)
-        response = {
-            "success": True,
-            "data": history
-        }
+        response = {"success": True, "data": history}
         return Response(response, status=status.HTTP_200_OK)
