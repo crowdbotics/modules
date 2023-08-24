@@ -30,7 +30,7 @@ const LocationSearch = () => {
               value={useMyLocation}
               onValueChange={() => setUseMyLocation(!useMyLocation)}
               trackColor={{ false: "#e5e5e5", true: "#e5e5e5" }}
-              thumbColor={useMyLocation ? "#000" : "#000"}
+              thumbColor={"#000"}
               style={styles.switch}
             />
           </View>
@@ -174,14 +174,12 @@ const styles = StyleSheet.create({
 
 export default LocationSearch;
 
-const Input = props => {
+const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
-      {props.text
-        ? (
+      {props.text ? (
         <Text style={inputStyles.inputText}>{props.text}</Text>
-          )
-        : null}
+      ) : null}
 
       <TextInput
         style={[
@@ -202,21 +200,17 @@ const Input = props => {
         backgroundColor={props.backgroundColor}
         secureTextEntry={props.secureTextEntry}
       />
-      {props.errorText
-        ? (
+      {props.errorText ? (
         <Text style={inputStyles.error}>{props.errorText}</Text>
-          )
-        : null}
-      {props.icon
-        ? (
+      ) : null}
+      {props.icon ? (
         <Image
           source={props.icon}
           style={
             props.text ? inputStyles.iconWithText : inputStyles.iconWithoutText
           }
         />
-          )
-        : null}
+      ) : null}
       <View style={styles.children}>{props.children}</View>
     </View>
   );
@@ -265,13 +259,14 @@ const inputStyles = StyleSheet.create({
   children: {}
 });
 
-const Checkbox = props => {
+const Checkbox = (props) => {
   return (
     <Pressable
       onPress={() => {
         props.setValue(!props.value);
       }}
-      style={[checkboxStyles.container, props.style]}>
+      style={[checkboxStyles.container, props.style]}
+    >
       <Image
         source={
           props.value
@@ -294,7 +289,7 @@ const checkboxStyles = StyleSheet.create({
     width: "100%"
   }
 });
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.backgroundColor || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -310,7 +305,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
