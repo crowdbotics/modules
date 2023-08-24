@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -8,28 +8,28 @@ import {
   TextInput,
   FlatList,
   Pressable
-} from "react-native"
-import { eventList } from "../../modules/blackbaud/store"
-import { useDispatch, useSelector } from "react-redux"
+} from "react-native";
+import { eventList } from "../../modules/blackbaud/store";
+import { useDispatch, useSelector } from "react-redux";
 
 const EventListing = ({ navigation }) => {
-  const dispatch = useDispatch()
-  const { entities: events } = useSelector(state => state.Events.eventList)
-  const loading = useSelector(state => state.Events.eventList.api.loading)
-  const token = useSelector(state => state.Events.accessToken)
+  const dispatch = useDispatch();
+  const { entities: events } = useSelector(state => state.Events.eventList);
+  const loading = useSelector(state => state.Events.eventList.api.loading);
+  const token = useSelector(state => state.Events.accessToken);
   useEffect(() => {
-    dispatch(eventList(token))
-  }, [])
-  const [searchText, setSearchText] = useState("")
+    dispatch(eventList(token));
+  }, []);
+  const [searchText, setSearchText] = useState("");
   function searchEvents() {
     const filteredObjs = events?.filter(obj => {
-      const str = JSON.stringify(obj).toLowerCase()
-      return str.includes(searchText.toLowerCase())
-    })
-    return filteredObjs
+      const str = JSON.stringify(obj).toLowerCase();
+      return str.includes(searchText.toLowerCase());
+    });
+    return filteredObjs;
   }
 
-  const eventsToMap = searchText ? searchEvents() : events
+  const eventsToMap = searchText ? searchEvents() : events;
 
   const Item = item => {
     return (
@@ -74,26 +74,28 @@ const EventListing = ({ navigation }) => {
           </Pressable>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Event Listing</Text>
-      {loading === "pending" ? (
+      {loading === "pending"
+        ? (
         <ActivityIndicator
           size={"large"}
           color={"#065171"}
           style={styles.QYGilPoi}
         />
-      ) : (
+          )
+        : (
         <TextInput
           placeholder="Search..."
           style={styles.formInput}
           onChangeText={setSearchText}
           placeholderTextColor={"grey"}
         />
-      )}
+          )}
 
       <FlatList
         data={eventsToMap}
@@ -101,8 +103,8 @@ const EventListing = ({ navigation }) => {
         keyExtractor={item => item.id}
       />
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -239,5 +241,5 @@ const styles = StyleSheet.create({
     color: "#212327",
     fontSize: 16
   }
-})
-export default EventListing
+});
+export default EventListing;
