@@ -12,7 +12,7 @@ Image Gallery is a React-native based module for accessing and displaying images
  - Display photos and videos in different ranges:
  - Filter photos and videos by their creation time:
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/3277be3a-9a3a-4862-9f79-e8cc2adecc2e)
 
 ## ## Features
 
