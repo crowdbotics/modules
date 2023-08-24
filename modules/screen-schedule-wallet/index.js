@@ -21,7 +21,7 @@ const ScheduleWallet = ({ navigation }) => {
         <View style={styles.topHeader}>
           <ImageBackground
             source={require(// @ts-ignore
-            "./assets/background.png")}
+              "./assets/background.png")}
             resizeMode="cover"
             style={styles.backgroundImage}
           >
