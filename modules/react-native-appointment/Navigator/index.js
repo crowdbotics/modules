@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React from "react"; // @ts-ignore
+=======
+import React from "react";
+>>>>>>> b269e35560fe01d720368946727f95d27d0827a9
 
 import { createStackNavigator } from "@react-navigation/stack";
 import CreateAppointment from "../screens/createAppointment";

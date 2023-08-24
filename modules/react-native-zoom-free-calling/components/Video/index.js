@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
-// @ts-ignore
+
 import { RadioButton } from "react-native-paper";
 
 const Video = ({ meetingSchedule, setMeetingSchedule }) => {

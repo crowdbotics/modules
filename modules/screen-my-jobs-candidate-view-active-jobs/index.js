@@ -6,7 +6,7 @@ const MyJobsCandidateViewActiveJobsScreen = (params) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>My Jobs</Text>
         <Text />
@@ -26,7 +26,7 @@ const MyJobsCandidateViewActiveJobsScreen = (params) => {
       <View style={styles.chooseContainer}>
         <TextInput placeholder="Enter" placeholderTextColor={"#000"}/>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/filter.png")} style={styles.filterImg} />
       </View>
       <Text style={styles.subHeading}>List of active jobs</Text>
