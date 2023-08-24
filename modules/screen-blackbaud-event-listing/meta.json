@@ -1,0 +1,5 @@
+{
+  "title": "Blackbaud event listing screen",
+  "description": "Screens for blackbaud events list",
+  "root": "/screens/event-listing"
+}
