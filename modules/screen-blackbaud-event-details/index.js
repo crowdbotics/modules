@@ -54,14 +54,14 @@ const EventDetails = props => {
       </View>
 
       <View style={styles.actionContainer}>
-        <Pressable style={styles.lightLoginButton} onPress={() => navigation.navigate("AttendeeList", {
+        <Pressable style={styles.lightLoginButton} onPress={() => navigation.navigate("blackbaudAttendeeList", {
           id: params?.id
         })}>
           <Text style={styles.lightTextColor}>
             Attendee list
           </Text>
         </Pressable>
-        <Pressable style={styles.darkLoginButton} onPress={() => navigation.navigate("AttendeeForm")}>
+        <Pressable style={styles.darkLoginButton} onPress={() => navigation.navigate("blackbaudAttendeeForm")}>
           <Text style={styles.darkTextColor}>
             Add Attendee
           </Text>
