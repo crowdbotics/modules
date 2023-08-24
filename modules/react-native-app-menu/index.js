@@ -53,7 +53,7 @@ function GlobalOptions({ options }) {
     return (
       <View style={options.styles.text} key={key}>
         <Text style={options.styles.boldText}>{key}</Text>
-        <Text>{typeof val === "string" ? val : JSON.stringify(val)}</Text>
+        <Text>{JSON.stringify(val)}</Text>
       </View>
     );
   });

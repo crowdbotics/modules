@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Pressable } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import Input from "../Input";
 import { timezones } from "../../timezones";
-// @ts-ignore
+
 import DatePicker from "react-native-date-picker";
 
 const MeetingTime = ({
