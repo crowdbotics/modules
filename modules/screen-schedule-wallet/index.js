@@ -16,123 +16,124 @@ const ScheduleWallet = ({ navigation }) => {
   const [cvv, setCvv] = useState("");
   const [name, setName] = useState("");
   return (
-        <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.topHeader}>
-                    <ImageBackground source={require(
-                      // @ts-ignore
-                      "./assets/background.png")} resizeMode="cover" style={styles.backgroundImage}>
-                        <Image
-                            // @ts-ignore
-                            source={require("./assets/back.png")}
-                            style={styles.back}
-                        />
-                        <Text style={styles.heading}>
-                            Payment
-                        </Text>
-                        <TabView tabTitles={["Cards", "Add"]} selected={0} />
-                        <View style={styles.subheadingContainer}>
-                            <Text style={styles.subheading}>
-                                Card details
-                            </Text>
-                            <Text style={styles.subheading}>
-                                Update
-                            </Text>
-                        </View>
-                    </ImageBackground>
-
-                </View>
-
-                <View style={styles.cardInfo}>
-                    <Image
-                        // @ts-ignore
-                        source={require("./assets/Card-large.png")}
-                        style={styles.card}
-                    />
-                    <Image
-                        // @ts-ignore
-                        source={require("./assets/3Dots.png")}
-                        style={styles.threeDots}
-                    />
-                    <View style={styles.inputs}>
-                        <View style={styles.inputContainer}>
-                            <View style={styles.deleteCardContainer}>
-                                <Text style={styles.inputText}>Card Number</Text>
-                                <Image
-                                    // @ts-ignore
-                                    source={require("./assets/deleteIcon.png")}
-                                    style={styles.deleteIcon}
-                                />
-                            </View>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(text) => setCardNumber(text)}
-                                value={cardNumber}
-                                placeholder="1234 5678 9012 3456"
-                                placeholderTextColor="#9B9B9B"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                            />
-                        </View>
-                        <View style={styles.halfInputs}>
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.inputText}>Expiration Date</Text>
-                                <TextInput
-                                    style={[styles.input, styles.input1]}
-                                    onChangeText={(text) => setCardExpiry(text)}
-                                    value={cardExpiry}
-                                    placeholder="10/24"
-                                    placeholderTextColor="#9B9B9B"
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                />
-                            </View>
-                            <View style={styles.inputContainer}>
-                                <Text style={styles.inputText}>CVV</Text>
-                                <TextInput
-                                    style={[styles.input, styles.input2]}
-                                    onChangeText={(text) => setCvv(text)}
-                                    value={cvv}
-                                    placeholder="374"
-                                    placeholderTextColor="#9B9B9B"
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                />
-                            </View>
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.inputText}>Card Holder Name</Text>
-                            <TextInput
-                                style={styles.input}
-                                onChangeText={(text) => setName(text)}
-                                value={name}
-                                placeholder="Username"
-                                placeholderTextColor="#9B9B9B"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                            />
-                        </View>
-                    </View>
-                </View>
-                {/* <Button buttonText={"Withdraw money"} /> */}
-            </ScrollView>
-            <View style={styles.footer}>
-                <Footer
-                    images={[
-                      // @ts-ignore
-                      require("./assets/home.png"),
-                      // @ts-ignore
-                      require("./assets/calender.png"),
-                      // @ts-ignore
-                      require("./assets/search.png"),
-                      // @ts-ignore
-                      require("./assets/user.png")
-                    ]}
-                    routes={["homeScreen", "orderStatusScreen", "searchScreen", "accountScreen"]}
-                    navigation={navigation}
-                />
+    <View style={styles.container}>
+      <ScrollView>
+        <View style={styles.topHeader}>
+          <ImageBackground
+            source={require(// @ts-ignore
+            "./assets/background.png")}
+            resizeMode="cover"
+            style={styles.backgroundImage}
+          >
+            <Image
+              // @ts-ignore
+              source={require("./assets/back.png")}
+              style={styles.back}
+            />
+            <Text style={styles.heading}>Payment</Text>
+            <TabView tabTitles={["Cards", "Add"]} selected={0} />
+            <View style={styles.subheadingContainer}>
+              <Text style={styles.subheading}>Card details</Text>
+              <Text style={styles.subheading}>Update</Text>
             </View>
+          </ImageBackground>
         </View>
+
+        <View style={styles.cardInfo}>
+          <Image
+            // @ts-ignore
+            source={require("./assets/Card-large.png")}
+            style={styles.card}
+          />
+          <Image
+            // @ts-ignore
+            source={require("./assets/3Dots.png")}
+            style={styles.threeDots}
+          />
+          <View style={styles.inputs}>
+            <View style={styles.inputContainer}>
+              <View style={styles.deleteCardContainer}>
+                <Text style={styles.inputText}>Card Number</Text>
+                <Image
+                  // @ts-ignore
+                  source={require("./assets/deleteIcon.png")}
+                  style={styles.deleteIcon}
+                />
+              </View>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => setCardNumber(text)}
+                value={cardNumber}
+                placeholder="1234 5678 9012 3456"
+                placeholderTextColor="#9B9B9B"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+            <View style={styles.halfInputs}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>Expiration Date</Text>
+                <TextInput
+                  style={[styles.input, styles.input1]}
+                  onChangeText={(text) => setCardExpiry(text)}
+                  value={cardExpiry}
+                  placeholder="10/24"
+                  placeholderTextColor="#9B9B9B"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Text style={styles.inputText}>CVV</Text>
+                <TextInput
+                  style={[styles.input, styles.input2]}
+                  onChangeText={(text) => setCvv(text)}
+                  value={cvv}
+                  placeholder="374"
+                  placeholderTextColor="#9B9B9B"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+              </View>
+            </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputText}>Card Holder Name</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={(text) => setName(text)}
+                value={name}
+                placeholder="Username"
+                placeholderTextColor="#9B9B9B"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+            </View>
+          </View>
+        </View>
+        {/* <Button buttonText={"Withdraw money"} /> */}
+      </ScrollView>
+      <View style={styles.footer}>
+        <Footer
+          images={[
+            // @ts-ignore
+            require("./assets/home.png"),
+            // @ts-ignore
+            require("./assets/calender.png"),
+            // @ts-ignore
+            require("./assets/search.png"),
+            // @ts-ignore
+            require("./assets/user.png")
+          ]}
+          routes={[
+            "homeScreen",
+            "orderStatusScreen",
+            "searchScreen",
+            "accountScreen"
+          ]}
+          navigation={navigation}
+        />
+      </View>
+    </View>
   );
 };
 
@@ -144,7 +145,6 @@ const styles = StyleSheet.create({
   cardInfo: {
     padding: 20,
     paddingBottom: 70
-
   },
   card: {
     alignSelf: "center",
@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
     height: 8,
     width: 19,
     resizeMode: "contain"
-
   },
   deleteCardContainer: {
     flexDirection: "row",
@@ -224,37 +223,49 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column"
-
   },
-  subheadingContainer: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 },
+  subheadingContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 20
+  },
   subheading: { fontSize: 16, color: "#FFFFFF", paddingVertical: 20 },
   heading: { fontSize: 16, color: "#FFFFFF", paddingLeft: 20, marginTop: 10 },
   backgroundImage: {
     width: 438.55 - 70,
     height: 383.73 - 170,
     resizeMode: "cover" // or 'stretch',
-
   },
-  back: { height: 18, width: 18, resizeMode: "contain", marginTop: 15, marginBottom: 10, marginLeft: 10 }
+  back: {
+    height: 18,
+    width: 18,
+    resizeMode: "contain",
+    marginTop: 15,
+    marginBottom: 10,
+    marginLeft: 10
+  }
 });
 export default ScheduleWallet;
 
 const TabView = ({ tabTitles, selected }) => {
   return (
-        <View style={tabViewStyles.paletteContainer}>
-            {tabTitles.map((title, index) => (
-                <View
-                    style={
-                        index === selected
-                          ? tabViewStyles.selected
-                          : tabViewStyles.unSelected
-                    }
-                    key={index}
-                >
-                    <Text style={{ color: index === selected ? "#fff" : "" }}>{title}</Text>
-                </View>
-            ))}
+    <View style={tabViewStyles.paletteContainer}>
+      {tabTitles.map((title, index) => (
+        <View
+          style={
+            index === selected
+              ? tabViewStyles.selected
+              : tabViewStyles.unSelected
+          }
+          key={index}
+        >
+          <Text style={{ color: index === selected ? "#fff" : "" }}>
+            {title}
+          </Text>
         </View>
+      ))}
+    </View>
   );
 };
 
@@ -290,18 +301,19 @@ const tabViewStyles = StyleSheet.create({
   }
 });
 
-const Footer = props => {
+const Footer = (props) => {
   return (
-        <View style={[footerStyles.footer]}>
-            {props.images.map((image, index) => (
-                <Pressable style={footerStyles.footerItem} key={index} onPress={() => props.navigation.navigate(props.routes[index])}>
-                    <Image
-                        style={footerStyles.footerImage}
-                        source={image}
-                    />
-                </Pressable>
-            ))}
-        </View>
+    <View style={[footerStyles.footer]}>
+      {props.images.map((image, index) => (
+        <Pressable
+          style={footerStyles.footerItem}
+          key={index}
+          onPress={() => props.navigation.navigate(props.routes[index])}
+        >
+          <Image style={footerStyles.footerImage} source={image} />
+        </Pressable>
+      ))}
+    </View>
   );
 };
 
@@ -319,7 +331,7 @@ const footerStyles = StyleSheet.create({
       height: 12
     },
     shadowOpacity: 0.58,
-    shadowRadius: 16.00,
+    shadowRadius: 16.0,
 
     elevation: 24
   },
