@@ -57,7 +57,7 @@ const EventListing = ({
 
       <View style={styles.itemActionContainer}>
 
-        <Pressable style={styles.loginButton} onPress={() => navigation.navigate("EventDetails", {
+        <Pressable style={styles.loginButton} onPress={() => navigation.navigate("blackbaudEventDetails", {
           id: item?.data?.id
         })} >
           <Text style={styles.textColor}>
