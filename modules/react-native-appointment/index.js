@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment, useContext } from "react";
 import Navigator from "./Navigator";
 import { LogBox } from "react-native";
-// @ts-ignore
+
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { OptionsContext } from "@options";
 

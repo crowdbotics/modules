@@ -1,12 +1,55 @@
-# Typeform Webhook
+# Typeform Webhook React native specs
+
+## Module description
+
+Typeform Webhook module receives data from typeform webhook. Also displays the typeform answers submitted against any typeform.
+
+This module's features include:
+- View all forms from Typeform
+- Create and update webhook
+- Open a typeform and submit its response. 
+- View responses
+
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/a9f72dd7-7cc8-4840-ae5a-606446a301a3)
 
 
-## Global Configs
-### Update api url in options/options.js
+## ## Features
 
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+- [x] This module includes environment variables.
+- [ ] This module requires manual configurations.
+- [x] This module can be configured with module options.
+- [ ] This module requires manual Android setup.
+- [ ] This module requires manual iOS setup.
 
-```
+## ## 3rd party setup
+
+1. Login to [Typeform Webhook](https://www.typeform.com/signup/) site to create your Typeform Webhook Account.
+2. From dashboard click on Create Typeform.
+3. Select your type of typeform webhook.
+4. Add content in it by cliking `+` icon from top left corner.
+5. Then click on publish.
+6. Your typeform webhook will create.
+7. After that click on the `connect` from top mid menu bar.
+8. Then Click on `Add a Webhook`.
+9. Add your webhook endpoint URL and save it.
+10. Save the `secret_key` for later use.
+
+## Dependencies
+
+Dependencies used:
+- react-native-base64  - https://www.npmjs.com/package/react-native-base64
+- @react-navigation/native  - https://www.npmjs.com/package/@react-navigation/native
+- @react-navigation/native-stack  - https://www.npmjs.com/package/@react-navigation/native-stack
+- react-native-screens  - https://www.npmjs.com/package/react-native-screens
+- react-native-typeform-embed   - https://www.npmjs.com/package/react-native-typeform-embed 
+- react-native-webview  - https://www.npmjs.com/package/react-native-webview
+
+## ## Module Options
+
+### Global Configs
+
+Update the ``options/options.js`` file with your app's backend url.
+```javascript
 export const globalOptions = {
     ...
   url: "https://my-app.botics.co",
@@ -14,10 +57,11 @@ export const globalOptions = {
 }
 ```
 
-## Local Configs
-In modules/typeform-webhook/options.js, update the following:
+### Local Configs
 
-```
+In `modules/typeform-webhook/options.js`, update the following:
+
+```javascript
 const REDIRECT_URI = "";
 const CLIENT_ID = "";
 const CLIENT_SECRET = "";
@@ -25,38 +69,11 @@ const WEBHOOK_URL = "";
 const WEBHOOK_TAG = "";
 
 ```
-## Manual Setup
 
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+### Android setup
 
-```javascript
-import TypeformWebhooks from "@modules/typeform-webhook";
+No android setup required.
 
-const { title, navigator } = TypeformWebhooks;
-```
+### iOS setup
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
-
-```javascript
-import { modules } from '@modules';
-const TypeformWebhooks = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<TypeformWebhooks />
-```
-## Features
-
-## Retrieve forms from Typeform
-User can view all forms from Typeform
-
-## Create and update webhook
-user can create and update webhook
-
-## Open a form and respond
-User can open a form and respond 
-
-## View responses
-User can view responses
-
-
-
-https://user-images.githubusercontent.com/76822297/176876521-bbdc9367-7c39-4138-af66-68ed7d841a72.mp4
-
+No iOS setup required.

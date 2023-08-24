@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, FlatList } from "react-native";
-// @ts-ignore
+
 import deleteIcon from "../deleteIcon.png";
 import { deleteAppointment, getAllAppointments } from "../api";
 import Input from "../components/InputText";
 import Loader from "../components/Loader";
 import AppointmentModal from "../components/AppointmentDetailModal";
-// @ts-ignore
+
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import moment from "moment";
 
