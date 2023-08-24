@@ -1,0 +1,127 @@
+version: 2.1
+jobs:
+  node:
+    working_directory: ~/build
+    docker:
+      - image: cimg/python:3.8.17-node
+    steps:
+      - checkout
+      # get version of node and yarn
+      - run:
+          name: Get Node and Yarn versions
+          command: |
+            node --version
+            yarn --version
+      - run: yarn cache clean && yarn install
+      - run:
+          name: Install Pipenv dependencies
+          command: python --version && pipenv install
+      - run:
+          name: Create demo directory
+          command: pwd && mkdir -p ~/build/demo
+      - run:
+          name: Create Demo App
+          command: yarn run demo
+      - persist_to_workspace:
+          root: ~/build
+          paths:
+            - "demo"
+
+  ios:
+    macos:
+      xcode: "14.1.0"
+    resource_class: macos.x86.medium.gen2
+    working_directory: ~/build/demo
+
+    # use a --login shell so our "set Ruby version" command gets picked up for later steps
+    shell: /bin/bash --login -o pipefail
+
+    steps:
+      - attach_workspace:
+          at: ~/build
+
+      - run:
+          name: Setup SSH
+          command: mkdir -p ~/.ssh && chmod 700 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
+      - run:
+          name: set FASTLANE_CONFIG_VERSION variable
+          command: export FASTLANE_CONFIG_VERSION=1.0.0
+
+      # not using a workspace here as Node and Yarn versions
+      # differ between our macOS executor image and the Docker containers above
+      - run: yarn install
+
+      - run:
+          name: Run bundle config and install
+          command: |
+            bundle lock --add-platform ruby
+            bundle config set --local deployment 'true'
+            bundle install
+
+      - run:
+          name: Install MacOS ffi
+          command: gem inst ffi -v '1.15.1' -- --disable-system-libffi
+          working_directory: ios
+
+      - run:
+          name: Update CocaPods dependencies
+          command: bundle exec pod install --verbose
+          working_directory: ios
+          timeout: 1200
+
+      - run:
+          name: Populate EnvFile
+          command: env >> .env
+
+      - run:
+          name: Build iOS App
+          command: bundle exec fastlane build_test_dependencies
+          working_directory: ios
+
+  android:
+    working_directory: ~/build/demo
+    docker:
+      - image: reactnativecommunity/react-native-android:6.2
+    resource_class: "medium+"
+    environment:
+      - TERM: "dumb"
+      - ADB_INSTALL_TIMEOUT: 10
+      - _JAVA_OPTIONS: "-XX:+UnlockExperimentalVMOptions -XX:+UseContainerSupport"
+      - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+HeapDumpOnOutOfMemoryError"'
+      - BUILD_THREADS: 2
+    steps:
+      - attach_workspace:
+          at: ~/build
+
+      - run:
+          name: Setup SSH
+          command: mkdir -p ~/.ssh && chmod 700 ~/.ssh && ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+
+      - run:
+          name: set FASTLANE_CONFIG_VERSION variable
+          command: export FASTLANE_CONFIG_VERSION=1.0.0
+
+      - run:
+          command: bundle install
+
+      - run:
+          name: Populate EnvFile
+          command: env >> .env
+
+      - run:
+          name: Create Android App Build (aab)
+          command: bundle exec fastlane build_android
+          working_directory: android
+
+workflows:
+  version: 2.1
+  build-validation:
+    jobs:
+      - node
+      - ios:
+          requires:
+            - node
+      - android:
+          requires:
+            - node

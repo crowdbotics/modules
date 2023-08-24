@@ -7,33 +7,58 @@ import jsonfield.fields
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='FormDefinition',
+            name="FormDefinition",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('form_id', models.CharField(max_length=20)),
-                ('definition_id', models.CharField(max_length=20, unique=True)),
-                ('type', models.CharField(max_length=50)),
-                ('title', models.CharField(max_length=200)),
-                ('choices', jsonfield.fields.JSONField(default=dict)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("form_id", models.CharField(max_length=20)),
+                ("definition_id", models.CharField(max_length=20, unique=True)),
+                ("type", models.CharField(max_length=50)),
+                ("title", models.CharField(max_length=200)),
+                ("choices", jsonfield.fields.JSONField(default=dict)),
             ],
         ),
         migrations.CreateModel(
-            name='FormAnswers',
+            name="FormAnswers",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('token', models.CharField(max_length=50)),
-                ('type', models.CharField(max_length=50)),
-                ('answer', models.CharField(max_length=200)),
-                ('submitted_at', models.DateTimeField(blank=True, default=datetime.datetime.now)),
-                ('form_definition_id', models.ForeignKey(db_column='definition_id', on_delete=django.db.models.deletion.CASCADE, to='typeform_webhook.FormDefinition', to_field='definition_id')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("token", models.CharField(max_length=50)),
+                ("type", models.CharField(max_length=50)),
+                ("answer", models.CharField(max_length=200)),
+                (
+                    "submitted_at",
+                    models.DateTimeField(blank=True, default=datetime.datetime.now),
+                ),
+                (
+                    "form_definition_id",
+                    models.ForeignKey(
+                        db_column="definition_id",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="typeform_webhook.FormDefinition",
+                        to_field="definition_id",
+                    ),
+                ),
             ],
         ),
     ]

@@ -15,4 +15,4 @@ setup(
     packages=["contact_us"],
     install_requires=["sendgrid"],
     cmdclass={"build": BuildCommand},
-)  
+)

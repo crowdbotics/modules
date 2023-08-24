@@ -1,5 +1,5 @@
 import options from "../options";
-// @ts-ignore
+
 import { getGlobalOptions } from "@options";
 
 const global = getGlobalOptions();
