@@ -1,0 +1,5 @@
+{
+  "title": "PDF Viewer module",
+  "description": "PDF Viewer is a React Native based module that allows both Android and iOS users to display or preview PDF files.",
+  "root": "/modules/pdfviewer"
+}
