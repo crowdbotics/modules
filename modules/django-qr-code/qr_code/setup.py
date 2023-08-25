@@ -15,4 +15,4 @@ setup(
     packages=["qr_code"],
     install_requires=["qrcode"],
     cmdclass={"build": BuildCommand},
-) 
+)

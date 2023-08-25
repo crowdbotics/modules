@@ -2,6 +2,13 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.4.0 - 2023-07-17
+
+### Changed
+
+- added support for react-native-paper in scaffold
+
+
 ## 2.3.0 - 2023-07-10
 
 ### Changed

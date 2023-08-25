@@ -5,67 +5,133 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Company',
+            name="Company",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(blank=True, max_length=100, null=True)),
-                ('phone', models.CharField(blank=True, max_length=100, null=True)),
-                ('website', models.CharField(blank=True, max_length=100, null=True)),
-                ('revenue', models.CharField(blank=True, max_length=100, null=True)),
-                ('revenueRange', models.CharField(blank=True, max_length=100, null=True)),
-                ('employeeCount', models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=100, null=True)),
+                ("phone", models.CharField(blank=True, max_length=100, null=True)),
+                ("website", models.CharField(blank=True, max_length=100, null=True)),
+                ("revenue", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "revenueRange",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
+                (
+                    "employeeCount",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Company',
+                "verbose_name_plural": "Company",
             },
         ),
         migrations.CreateModel(
-            name='Person',
+            name="Person",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('firstName', models.CharField(blank=True, max_length=100)),
-                ('middleName', models.CharField(blank=True, max_length=100, null=True)),
-                ('lastName', models.CharField(blank=True, max_length=100, null=True)),
-                ('email', models.CharField(blank=True, max_length=100, null=True)),
-                ('phone', models.CharField(blank=True, max_length=100, null=True)),
-                ('jobtitle', models.CharField(blank=True, max_length=100, null=True)),
-                ('company', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='zoominfo.Company')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("firstName", models.CharField(blank=True, max_length=100)),
+                ("middleName", models.CharField(blank=True, max_length=100, null=True)),
+                ("lastName", models.CharField(blank=True, max_length=100, null=True)),
+                ("email", models.CharField(blank=True, max_length=100, null=True)),
+                ("phone", models.CharField(blank=True, max_length=100, null=True)),
+                ("jobtitle", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "company",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="zoominfo.Company",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Person',
+                "verbose_name_plural": "Person",
             },
         ),
         migrations.CreateModel(
-            name='SocialMedia',
+            name="SocialMedia",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('type', models.CharField(blank=True, max_length=100, null=True)),
-                ('url', models.URLField(blank=True, null=True)),
-                ('person', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='zoominfo.Person')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("type", models.CharField(blank=True, max_length=100, null=True)),
+                ("url", models.URLField(blank=True, null=True)),
+                (
+                    "person",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="zoominfo.Person",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'SocialMedia',
+                "verbose_name_plural": "SocialMedia",
             },
         ),
         migrations.CreateModel(
-            name='Education',
+            name="Education",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('school', models.CharField(blank=True, max_length=100, null=True)),
-                ('educationDegree', models.CharField(blank=True, max_length=100, null=True)),
-                ('areaOfStudy', models.CharField(blank=True, max_length=100, null=True)),
-                ('person', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='zoominfo.Person')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("school", models.CharField(blank=True, max_length=100, null=True)),
+                (
+                    "educationDegree",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
+                (
+                    "areaOfStudy",
+                    models.CharField(blank=True, max_length=100, null=True),
+                ),
+                (
+                    "person",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="zoominfo.Person",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Education',
+                "verbose_name_plural": "Education",
             },
         ),
     ]

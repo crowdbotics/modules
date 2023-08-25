@@ -13,8 +13,10 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { styles, textInputStyles } from "./styles";
 import { validateEmail, LOGO_URL } from "./constants.js";
 import { resetPassword } from "../auth";
+import { useNavigation } from "@react-navigation/native";
 
-const PasswordRecover = ({ navigation }) => {
+const PasswordRecover = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const { api } = useSelector(state => state.login);
   const dispatch = useDispatch();

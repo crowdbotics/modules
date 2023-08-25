@@ -1,1 +1,1 @@
-default_app_config ="modules.faq.apps.FaqConfig"
+default_app_config = "modules.faq.apps.FaqConfig"

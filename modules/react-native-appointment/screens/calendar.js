@@ -4,8 +4,10 @@ import { CalendarList } from "react-native-calendars";
 import { OptionsContext } from "@options";
 import DropDownPicker from "react-native-dropdown-picker";
 import Button from "../components/Button";
+import { useNavigation } from "@react-navigation/native";
 
-const Calendar = ({ navigation }) => {
+const Calendar = () => {
+  const navigation = useNavigation();
   const options = useContext(OptionsContext);
   const today = new Date();
   const [open, setOpen] = useState(false);
