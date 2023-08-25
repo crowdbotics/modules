@@ -1,7 +1,7 @@
 import React from "react";
-// @ts-ignore
+
 import WalletConnectProvider from "@walletconnect/react-native-dapp";
-// @ts-ignore
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogBox, Platform } from "react-native";
 import App from "./app";

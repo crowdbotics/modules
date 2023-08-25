@@ -1,6 +1,6 @@
 import React from "react";
 import { useWindowDimensions, StyleSheet } from "react-native";
-// @ts-ignore
+
 import { TabView, TabBar, SceneMap } from "react-native-tab-view";
 import ReceiveTransaction from "./receiveTransaction";
 import SendTransaction from "./sendTransaction";

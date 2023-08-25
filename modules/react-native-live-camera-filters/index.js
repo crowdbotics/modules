@@ -1,16 +1,17 @@
-import React, { createRef, useState } from "react";
+import React, { createRef, useState, useContext } from "react";
 import { View, TouchableOpacity, Text, PermissionsAndroid, Platform, Alert } from "react-native";
-// @ts-ignore
+
 import CameraRoll from "@react-native-community/cameraroll";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-// @ts-ignore
+
 import { FilterCameraView } from "react-native-filter-camera";
 import * as script from "./utils";
-import { styles } from "./options";
+import { OptionsContext } from "@options";
 import Filter from "./components/Filter";
 import Loader from "./components/Loader";
 
 export const App = () => {
+  const options = useContext(OptionsContext);
   const [switchFlash, setSwitchFlash] = useState(false);
   const [switchCamera, setSwitchCamera] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,25 +67,25 @@ export const App = () => {
   };
 
   return (
-    <View style={styles.cameraContainer}>
-      <FilterCameraView ref={cameraRef} onPictureTaken={onPictureTaken} style={styles.cameraContainer} />
-      <View style={styles.filterContainer}>
+    <View style={options.styles.cameraContainer}>
+      <FilterCameraView ref={cameraRef} onPictureTaken={onPictureTaken} style={options.styles.cameraContainer} />
+      <View style={options.styles.filterContainer}>
         {isLoading && <Loader />}
-        <View style={styles.cameraUIView}>
+        <View style={options.styles.cameraUIView}>
           <TouchableOpacity
-            style={styles.menuButton}
+            style={options.styles.menuButton}
             onPress={switchCameraDirection}
           >
             <Text style={{ color: "white" }}>{switchCamera ? <Icon name="camera-rear-variant" size={25} color="#fff" /> : <Icon name="camera-front-variant" size={25} color="#fff" />}</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.menuButton}
+            style={options.styles.menuButton}
             onPress={handleTakePicture}
           >
             <Text style={{ color: "white" }}><Icon name="camera-iris" size={50} color="#fff" /></Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.menuButton}
+            style={options.styles.menuButton}
             onPress={switchFlashLight}
           >
             <Text style={{ color: "white" }}>{switchFlash ? <Icon name="flash" size={25} color="#fff" /> : <Icon name="flash-off" size={25} color="#fff" />}</Text>

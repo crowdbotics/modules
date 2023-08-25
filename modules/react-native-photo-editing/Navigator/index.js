@@ -1,5 +1,5 @@
 import React from "react";
-// @ts-ignore
+
 import { createStackNavigator } from "@react-navigation/stack";
 import Crop from "../Screens/crop";
 import Filters from "../Screens/filters";
