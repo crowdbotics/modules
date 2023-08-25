@@ -32,7 +32,6 @@ import {
   appleLogin
 } from "../auth";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useNavigation } from "@react-navigation/native";
 
 /**
  * A custom Text Input component

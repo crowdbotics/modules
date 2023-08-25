@@ -1,26 +1,26 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from "react";
 import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
   Text,
   View
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { eventDetails } from "../../modules/blackbaud/store"
-import { useIsFocused } from "@react-navigation/native"
-import { ScrollView } from "react-native-gesture-handler"
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { eventDetails } from "../../modules/blackbaud/store";
+import { useIsFocused } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 const EventDetails = props => {
-  const dispatch = useDispatch()
-  const { navigation, route } = props
-  const { params } = route
-  const isFocused = useIsFocused()
-  const loading = useSelector(state => state.Events.eventDetails.api.loading)
-  const token = useSelector(state => state.Events.accessToken)
+  const dispatch = useDispatch();
+  const { navigation, route } = props;
+  const { params } = route;
+  const isFocused = useIsFocused();
+  const loading = useSelector(state => state.Events.eventDetails.api.loading);
+  const token = useSelector(state => state.Events.accessToken);
   const { entities: eventDetail } = useSelector(
     state => state.Events.eventDetails
-  )
+  );
   useEffect(() => {
     if (isFocused) {
       dispatch(
@@ -28,9 +28,9 @@ const EventDetails = props => {
           id: params?.id,
           token: token
         })
-      )
+      );
     }
-  }, [isFocused])
+  }, [isFocused]);
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}>Event Details</Text>
@@ -87,7 +87,7 @@ const EventDetails = props => {
             </Pressable>
             <Pressable
               style={styles.darkLoginButton}
-              onPress={() => navigation.navigate("blackbaudAttendeeForm",{
+              onPress={() => navigation.navigate("blackbaudAttendeeForm", {
                 eventId: params?.id
               })}
             >
@@ -97,8 +97,8 @@ const EventDetails = props => {
         </View>
       }
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   textStyle: {
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   loaderView: {
-    justifyContent: "center",
+    justifyContent: "center"
   },
   VpSsivdK: {
     marginTop: 35
@@ -193,5 +193,5 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16
   }
-})
-export default EventDetails
+});
+export default EventDetails;
