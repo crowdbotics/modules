@@ -1,93 +1,35 @@
-# Django Two Factor Authentication
-Django Two Factor Authentication module is a backend support for React Native 2FA Module, which will implement a two-factor authentication flow, which will prompt for username/email and password and then a time-based generated code. User is granted access to a application only after successfully presenting evidence to an authentication.
+## Django Two Factor Authentication backend configuration and information
+
+## Module description
+
+Django Two Factor Authentication module which will implement a two-factor authentication flow, which will prompt for username/email and password and then a time-based generated code. User is granted access to a application only after successfully presenting evidence to an authentication.
+
+The Features of this module are following:
+
+- User can enable 2FA service with email, phone number and google authenticator.
+- User can disable 2FA service.
+- Send the user a unique token via SMS text message, normally a 5-10 digit code.
+- Send token via email.
+- Verify unique code sent to the user via SMS or Email.
+
+#### Requirements
+
+To enable 2FA functionality, follow these steps:
+
+- Ensure your user API supports both email and phone number signup.
+- Modify your user model to include a "phone_number" field, which is necessary for the two-factor authentication module.
+- Utilize the Django PhoneNumberField in your user model to store the phone number securely.
 
 ## Features
-1. User can enable 2FA service with email, phone number and google authenticator.
-2. User can disable 2FA service.
-3. Send the user a unique token via SMS text message, normally a 5-10 digit code.
-4. Send token via email.
-5. Verify unique code sent to the user via SMS or Email.
 
-## Additional Requirements
-To enable 2FA functionality, follow these steps:
-1. Ensure your user API supports both email and phone number signup.
-2. Modify your user model to include a "phone_number" field, which is necessary for the two-factor authentication module.
-3. Utilize the Django PhoneNumberField in your user model to store the phone number securely.
+- [x] This module includes migrations.
+- [x] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
-## Required Dependencies/Packages
-* **twilio**
+## Environment variables
 
-The Twilio REST API allows you to query and manage meta-data about your account, phone numbers, usage, and access tokens. It makes it easy to send and receive SMS and MMS messages as well as query meta-data about text messages.
-Install it by running the command:
-```console
-pip install twilio
-```
-
-* **sendgrid**
-
-SendGrid delivers your transactional and marketing emails through the world's largest cloud-based email delivery platform.
-Install the package using this command:
-```console
-pip install sendgrid
-```
-***Note***: Keep the packages/dependencies in `Pipfile`. So that when backend is deployed our module requirements are complete.
-
-## Module Credentials/Keys
-We need to setup twillio ans sendgrid accounts to get the required creds to make module work.
-
-### Setting up Twillio account
-1. Login in to [twillio](https://www.twilio.com/login) site.
-2. On the twillio dashboard you will find your `Account SID` and `Auth Token`, save them for letter use.
-
-![Twillio](https://user-images.githubusercontent.com/76822297/227456078-ddba88d4-e9bf-4207-af06-94fe34d895fd.png)
-
-
-### Setting up Sendgrid account
-1. Login in to [SendGrid](https://signup.sendgrid.com/) site.
-2. Create a new sender by clicking `Create New Sender` Button.
-3. Enter all the sender details and save.
-4. In the left side-bar, under `Email API` select `Integration Guide`.
-5. Choose `SMTP Relay` as your setup method.
-6. Enter the name of your secret key and enter `Create` button.
-7. Copy the following things for later use:
-
-    ```
-    SendGrid API Key: SG.xxxxxxxxxxxxxxxxxxxxxxxxxx
-    Server:	smtp.sendgrid.net
-    Ports: 25, 587	(for unencrypted/TLS connections) 465	(for SSL connections)
-    Username:	apikey
-    Password: SG.xxxxxxxxxxxxxxxxxxxxxx
-    ```
- ![SendgridKEys](https://user-images.githubusercontent.com/76822297/227455983-9d1e7191-52ee-4c52-8052-c4bf68a64f38.png)
-
-
-
-## Installations
-
-1. To send SMS and Email install python packages specified in `setup.py`. Move into `modules/django_two_factor_authentication` and run following command: 
-
-```py
-"python -m pip install ."
-```
-
-2. Make migrations
-```
-python manage.py makemigrations
-```
-
-3. Run migrations
-```
-python manage.py migrate
-```
-
-4. Run the server
-```
-python manage.py runserver
-```
-
-## Configurations Keys
-settings.py
-```
+```.py
 SENDGRID_API_KEY = env.str("SENDGRID_API_KEY", "")
 ACCOUNT_SID = env.str("ACCOUNT_SID", "")
 AUTH_TOKEN = env.str("AUTH_TOKEN", "")
@@ -104,8 +46,52 @@ EMAIL=env.str("EMAIL", "")
 PHONE=env.str("PHONE", "")
 ```
 
-## Api Table
-List of api's endpoints with params needed for these apis.
+## 3rd party setup
+
+Twilio and Sendgrid accounts need to be setup:
+
+`Twillio account`
+
+- Login in to [twillio](https://www.twilio.com/login) site.
+- On the twillio dashboard you will find your `Account SID` and `Auth Token`, save them for letter use.
+
+![Twillio](https://user-images.githubusercontent.com/76822297/227456078-ddba88d4-e9bf-4207-af06-94fe34d895fd.png)
+
+`Sendgrid Account`
+
+- Login in to [SendGrid](https://signup.sendgrid.com/) site.
+- Create a new sender by clicking `Create New Sender` Button.
+- Enter all the sender details and save.
+- In the left side-bar, under `Email API` select `Integration Guide`.
+- Choose `SMTP Relay` as your setup method.
+- Enter the name of your secret key and enter `Create` button.
+- Copy the following things for later use:
+
+    ```
+    SendGrid API Key: SG.xxxxxxxxxxxxxxxxxxxxxxxxxx
+    Server:	smtp.sendgrid.net
+    Ports: 25, 587	(for unencrypted/TLS connections) 465	(for SSL connections)
+    Username:	apikey
+    Password: SG.xxxxxxxxxxxxxxxxxxxxxx
+    ```
+
+![SendgridKEys](https://user-images.githubusercontent.com/76822297/227455983-9d1e7191-52ee-4c52-8052-c4bf68a64f38.png)
+
+## Dependencies
+
+[Twilio](https://github.com/twilio/twilio-python/blob/main/README.md)\
+[Sendgrid](https://github.com/sendgrid/sendgrid-python/blob/main/README.md)\
+[PYOTP](https://github.com/jpf/pyotp/blob/master/README.markdown)\
+[Freezegun](https://github.com/spulec/freezegun/blob/master/README.rst)
+
+Dependencies used:
+
+[twilio](https://pypi.org/project/twilio/)\
+[sendgrid](https://pypi.org/project/sendgrid/)\
+[pyotp](https://pypi.org/project/pyotp/)\
+[freezegun](https://pypi.org/project/freezegun/)
+
+## API details
 
 | Api Name                                                                          |                          Param                          | Description                                                                                                  |
 |-----------------------------------------------------------------------------------|:-------------------------------------------------------:|--------------------------------------------------------------------------------------------------------------|
@@ -117,14 +103,3 @@ List of api's endpoints with params needed for these apis.
 | `/modules/two-factor-authentication/verify/otp/enable ` <br /> method: `POST`     |    object <br /> `{ "method": "email", "code": ""}`     | Takes object containing method and code and verify which users has enable 2FA.                               |
 | `/modules/two-factor-authentication/enable/2fa ` <br /> method: `GET`             |                            -                            | Return details about user have 2FA is enabled or disabled.                                                   |
 
-### Module Specifications
-Here is the [Module Specification Document](https://docs.google.com/document/d/1b0jb2yn19mH8lJ7vD-YiCDS4M0PUvt4Lnw3kc12D1pM/edit?usp=sharing), which provides more information about the module's actual intentions.
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
