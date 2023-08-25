@@ -1,0 +1,14 @@
+{
+  "name": "@modules/complex-table",
+  "version": "1.0.0",
+  "description": "Complex Table Module.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "react-native-dropdown-picker": "^5.4.4",
+    "react-hook-form": "^7.43.2"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}

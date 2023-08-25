@@ -9,9 +9,7 @@ class FileListSerializer(serializers.Serializer):
 
 class CreateFolderSerializer(serializers.Serializer):
     folder_name = serializers.CharField(required=True)
-    share_with = serializers.ListField(
-        child=serializers.EmailField()
-    )
+    share_with = serializers.ListField(child=serializers.EmailField())
 
 
 class UploadFileSerializer(serializers.Serializer):
@@ -23,8 +21,4 @@ class ShareFileSerializer(serializers.Serializer):
     file_id = serializers.CharField(required=True)
     role = serializers.CharField(required=True)
     user_type = serializers.CharField(required=True)
-    emails = serializers.ListField(
-        child=serializers.EmailField()
-    )
-
-
+    emails = serializers.ListField(child=serializers.EmailField())

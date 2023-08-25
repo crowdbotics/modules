@@ -20,7 +20,7 @@
 yarn run parse
 ```
 
-Run the command to validate, parse and export the modules source code into a [JSON file](/dist/modules.json).
+Run the command to validate, parse and export the modules source code into a JSON file.
 
 Example output:
 
@@ -73,7 +73,7 @@ Supported module types:
 yarn run demo
 ```
 
-This command runs `npx react-native init` with [`--template`](https://github.com/react-native-community/cli/tree/master/packages/global-cli#--template) pointing to our own [Custom React Native template](/scaffold/template).
+This command runs `npx react-native init` with [`--template`](https://github.com/react-native-community/cli/tree/master/packages/global-cli#--template) pointing to our own [Custom React Native template](https://github.com/crowdbotics/modules/blob/master/scaffold/template).
 
 ## Install a module
 
@@ -83,7 +83,7 @@ yarn run add [<module_name>]
 
 Installs a list of modules into the demo app, performing the follow operations:
 
-1. Copies the module directory from [modules](/modules) into `demo/modules`.
+1. Copies the module directory from [modules](https://github.com/crowdbotics/modules/blob/master/modules) into `demo/modules`.
 2. Runs `yarn add <module_name>` in the `demo` directory.
 3. Runs `yarn add <dependency>` for every `x-dependencies` in the module `package.json`.
 
@@ -166,14 +166,15 @@ yarn run commit-module [<module_name>]
 yarn run semver
 ```
 
-Checks if the scaffold [.crowdbotics.json](/scaffold/template/custom/.crowdbotics.json) version is at an expected value.
+Checks if the scaffold [.crowdbotics.json](https://github.com/crowdbotics/modules/blob/master/scaffold/template/custom/.crowdbotics.json) version is at an expected value.
 
 ## Generate a scaffold upgrade manifest
 
 ```
+pipenv shell
 yarn run manifest
 ```
 
-Produces a manifest file in [manifest](/manifest) based on the last version configured in [config.js](/config.js).
+Produces a manifest file in [manifest](https://github.com/crowdbotics/modules/blob/master/manifest) based on the last version configured in [config.js](https://github.com/crowdbotics/modules/blob/master/config.js).
 
 For `nextVersionSHA` use your branch name, and then after your PR gets merged you will have the SHA for the squashed commit. Open a followup PR that changes the next version to that SHA instead. See [#892](https://github.com/crowdbotics/modules/pull/892) as an example.
