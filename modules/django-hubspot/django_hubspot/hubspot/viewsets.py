@@ -9,27 +9,27 @@ from .services.HubspotService import HubspotService
 
 class HubspotViewSet(viewsets.GenericViewSet):
     hubspot_service = HubspotService(
-        base_url=os.getenv('HUBSPOT_BASE_URL', "https://api.hubapi.com"),
-        grant_type=os.getenv('HUBSPOT_GRANT_TYPE', "authorization_code"),
-        redirect_url=os.getenv('HUBSPOT_REDIRECT_URL', ""),
-        client_id=os.getenv('HUBSPOT_CLIENT_ID', ""),
-        client_secret=os.getenv('HUBSPOT_CLIENT_SECRET', ""),
-        access_token=os.getenv('HUBSPOT_ACCESS_TOKEN', ""),
+        base_url=os.getenv("HUBSPOT_BASE_URL", "https://api.hubapi.com"),
+        grant_type=os.getenv("HUBSPOT_GRANT_TYPE", "authorization_code"),
+        redirect_url=os.getenv("HUBSPOT_REDIRECT_URL", ""),
+        client_id=os.getenv("HUBSPOT_CLIENT_ID", ""),
+        client_secret=os.getenv("HUBSPOT_CLIENT_SECRET", ""),
+        access_token=os.getenv("HUBSPOT_ACCESS_TOKEN", ""),
     )
 
-    @action(detail=False, methods=['post'], url_path='access/token')
+    @action(detail=False, methods=["post"], url_path="access/token")
     def get_token(self, request):
         """
         To get the access token
         :return: Returns access_token, refresh_token and expires_in.
         """
-        response = self.hubspot_service.auth_token(request.data.get('code'))
+        response = self.hubspot_service.auth_token(request.data.get("code"))
         data = response.get("data")
-        if 'access_token' in data:
-            self.hubspot_service.access_token = data['access_token']
+        if "access_token" in data:
+            self.hubspot_service.access_token = data["access_token"]
         return Response(data=data, status=response.get("status_code"))
-        
-    @action(detail=False, methods=['get'], url_path='deals/list')
+
+    @action(detail=False, methods=["get"], url_path="deals/list")
     def deals_list(self, request):
         """
         To get all the deals'
@@ -38,7 +38,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         response = self.hubspot_service.deals_list()
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='deals/create')
+    @action(detail=False, methods=["post"], url_path="deals/create")
     def create_deal(self, request):
         """
         To create a deal
@@ -54,33 +54,33 @@ class HubspotViewSet(viewsets.GenericViewSet):
         """
         response = self.hubspot_service.create_deal(request.data.get("deal"))
         if "associations" in request.data:
-            emails = request.data.get('associations', {}).get("emails")
+            emails = request.data.get("associations", {}).get("emails")
             deal_id = response.get("data").get("id")
             self.hubspot_service.create_deal_contact_association(emails, deal_id)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['delete'], url_path='deals/remove')
+    @action(detail=False, methods=["delete"], url_path="deals/remove")
     def remove_deal(self, request):
         """
         To delete a deal
         :param str dealId:  HubSpot deal id to delete the deal.
-        :return: Removes the deal from hubspot and returns no content.      
+        :return: Removes the deal from hubspot and returns no content.
         """
-        response = self.hubspot_service.remove_deal(request.data.get('dealId'))
+        response = self.hubspot_service.remove_deal(request.data.get("dealId"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='deals/single')
+    @action(detail=False, methods=["get"], url_path="deals/single")
     def single_deal(self, request):
         """
         To retrieve a deal
         :param str dealId:  HubSpot deal id to retrieve the deal.
-        :return: Returns a deal object with properties.       
+        :return: Returns a deal object with properties.
         """
-        response = self.hubspot_service.single_deal(request.data.get('dealId'))
+        response = self.hubspot_service.single_deal(request.data.get("dealId"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
     # deal associations
-    @action(detail=False, methods=['post'], url_path='deals/associations/create')
+    @action(detail=False, methods=["post"], url_path="deals/associations/create")
     def create_deal_association(self, request):
         """
         To create a deal association
@@ -90,25 +90,23 @@ class HubspotViewSet(viewsets.GenericViewSet):
         associationType
         :return: Returns a newly created deal association.
         """
-        deal_id = request.data.get('dealId')
-        emails = request.data.get('emails')
+        deal_id = request.data.get("dealId")
+        emails = request.data.get("emails")
         response = self.hubspot_service.create_deal_contact_association(emails, deal_id)
-        resp = {
-            "result": "success" if response else "failure"
-        }
+        resp = {"result": "success" if response else "failure"}
         return Response(data=resp, status=200)
 
-    @action(detail=False, methods=['get'], url_path='tickets/list')
+    @action(detail=False, methods=["get"], url_path="tickets/list")
     def ticket_list(self, request):
         """
         To get all the tickets'
         :return: Returns a list of HobSpot tickets.
         """
-     
+
         response = self.hubspot_service.ticket_list()
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='tickets/create')
+    @action(detail=False, methods=["post"], url_path="tickets/create")
     def create_ticket(self, request):
         """
         To create a ticket
@@ -125,27 +123,27 @@ class HubspotViewSet(viewsets.GenericViewSet):
         response = self.hubspot_service.create_ticket(request.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['delete'], url_path='tickets/remove')
+    @action(detail=False, methods=["delete"], url_path="tickets/remove")
     def remove_ticket(self, request):
         """
         To delete a ticket
         :param str ticketId:  HubSpot ticket id to delete the ticket.
-        :return: Removes the ticket from hubspot and returns no content.      
+        :return: Removes the ticket from hubspot and returns no content.
         """
-        response = self.hubspot_service.remove_ticket(request.data.get('ticketId'))
+        response = self.hubspot_service.remove_ticket(request.data.get("ticketId"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='tickets/single')
+    @action(detail=False, methods=["get"], url_path="tickets/single")
     def single_ticket(self, request):
         """
         To retrieve a ticket
         :param str ticketId:  HubSpot ticket id to retrieve the ticket.
-        :return: Returns a ticket object containing ticket detail.       
+        :return: Returns a ticket object containing ticket detail.
         """
-        response = self.hubspot_service.single_ticket(request.data.get('ticketId'))
+        response = self.hubspot_service.single_ticket(request.data.get("ticketId"))
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['put'], url_path='ticket/associations/create')
+    @action(detail=False, methods=["put"], url_path="ticket/associations/create")
     def create_ticket_association(self, request):
         """
         To associate the ticket with other CRM objects
@@ -165,7 +163,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         response = self.hubspot_service.create_ticket_association(request.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='ticket/associations/list')
+    @action(detail=False, methods=["get"], url_path="ticket/associations/list")
     def ticket_association_list(self, request):
         """
         To get a ticket associated with other CRM objects
@@ -176,7 +174,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         response = self.hubspot_service.ticket_association_list(request.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='contact/deals/list')
+    @action(detail=False, methods=["get"], url_path="contact/deals/list")
     def contact_deals_association_list(self, request):
         """
         To get a contact associated with other HubSpot deals
@@ -186,7 +184,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         response = self.hubspot_service.contact_deals_association_list(request.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['get'], url_path='meeting/contacts/list')
+    @action(detail=False, methods=["get"], url_path="meeting/contacts/list")
     def meeting_contacts_association_list(self, request):
         """
         To get a meeting associated with other HubSpot contacts.
@@ -196,7 +194,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         response = self.hubspot_service.meeting_contact_association_list(request.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='events/create')
+    @action(detail=False, methods=["post"], url_path="events/create")
     def create_event(self, request):
         """
         To create an event
@@ -217,7 +215,7 @@ class HubspotViewSet(viewsets.GenericViewSet):
         response = self.hubspot_service.create_event(request.data)
         return Response(data=response.get("data"), status=response.get("status_code"))
 
-    @action(detail=False, methods=['post'], url_path='webhook')
+    @action(detail=False, methods=["post"], url_path="webhook")
     def webhook(self, request):
         """
         This method will be used while creating a webhook. This method will be called every time when your

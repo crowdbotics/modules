@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Dimensions, TouchableOpacity, Image } from "react-native";
 import { styles, autoCompleteStyles } from "./styles";
 import Icon from "react-native-vector-icons/FontAwesome5";
-// @ts-ignore
+
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
 import MapView, { Marker } from "react-native-maps";

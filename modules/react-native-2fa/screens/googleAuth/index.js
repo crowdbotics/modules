@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Text, StyleSheet, View, Linking } from "react-native";
 import Loader from "../../components/Loader";
 import { getCode } from "../../api";
-// @ts-ignore
+
 import QRCode from "react-native-qrcode-svg";
 import { OptionsContext } from "@options";
 import Button from "../../components/Button";
