@@ -12,7 +12,8 @@ Two Factor Authentication module, will implement a two-factor authentication flo
  - Scan google authenticator qr code.
  - Resend code.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/90d09b9d-5ff5-456f-bcab-902b745bdc78)
+
 
 ## ## Features
 
