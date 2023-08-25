@@ -1,5 +1,5 @@
 import React from "react";
-// @ts-ignore
+
 import { createStackNavigator } from "@react-navigation/stack";
 import Home from "../screens/home";
 import SendTransaction from "../screens/sendTransaction";

@@ -1,187 +1,26 @@
 # FCM Module
-Using FCM module, you can notify a client app that new email or other data is available to sync. You can send notification messages to drive user re-engagement.
 
+Using FCM module, you can notify a client app that a new email or other data is available to sync. You can send notification messages to drive user re-engagement.
 
-## Configurations for Android
-1. On the Firebase console, add a new Android application and enter your projects details. The "Android package name" must match your local projects package name which can be found inside of the manifest tag within the /android/app/src/main/AndroidManifest.xml file within your project.
+Features included:
+- User is able to receive notifications from Firebase.
+- User is able to increase Message Visibility
+- User is able to view the list of received notifications
+- User is able to push alerts to remind users
 
+## Features
 
-2. Download the google-services.json file and place it inside of your project at the following location: /android/app/google-services.json.
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [x] This module can be configured with module options.
+- [x] This module requires manual Android setup.
+- [x] This module requires manual iOS setup.
 
+## Module Options
 
-3. Add the google-services plugin inside of your /android/build.gradle file:
-```
-buildscript {
-    repositories {
-   
-    google()  // Google's Maven repository
-  }
-  dependencies {
-    classpath 'com.google.gms:google-services:4.3.10'
-   
-  }
-}
-  allprojects {
-  repositories {
-    google()  // Google's Maven repository
-  }
-}
-```
+### Global Configs
 
-4. Execute the plugin by adding the following lines of code to your /android/app/build.gradle file:
-
-```
-apply plugin: 'com.google.gms.google-services'
-dependencies {
-  implementation platform('com.google.firebase:firebase-bom:30.1.0')
-  implementation 'com.google.firebase:firebase-analytics'
-  implementation project(':react-native-push-notification')
-}
-```
-
-5. In android/settings.gradle add following lines:
-
-```
-include ':react-native-push-notification'
-project(':react-native-push-notification').projectDir = file('../node_modules/react-native-push-notification/android')
-```
-
-6. Add in /android/app/src/main/AndroidManifest.xml file within your project.
-
-```
-<uses-permission android:name="android.permission.VIBRATE" />
-<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
-<application ...>
-
- <meta-data  android:name="com.dieam.reactnativepushnotification.notification_foreground"
-                    android:value="false"/>
-        <!-- Change the resource name to your App's accent color - or any other color you want -->
-        <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
-                    android:resource="@color/white"/> <!-- or @android:color/{name} to use a standard color -->
-
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher" />
-        <receiver android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        ...
-</application>
-```
-
-7. Add following in android/app/src/main/res/values/colors.xml (Create the file if it doesn't exist).
-
-```
-<resources>
-    <color name="white">#FFF</color>
-</resources>
-```
-
-
-## Configurations for IOS
-
-1.  On the Firebase console, add a new IOS application and enter your projects details. Download `GoogleService-Info.plist`  file from firebase google console and move your file into the root of your Xcode project.
-
-2. Update AppDelegate.h. At the top of the file:
-
-```
-#import <UserNotifications/UNUserNotificationCenter.h>
-```
-Then, add the 'UNUserNotificationCenterDelegate' to protocols:
-```
-@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, UNUserNotificationCenterDelegate>
-```
-
-3. Update AppDelegate.m, At the top of the file:
-
-```
-#import <UserNotifications/UserNotifications.h>
-#import <RNCPushNotificationIOS.h>
-```
-Then, add the following lines:
-
-```
-// Required for the register event.
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
- [RNCPushNotificationIOS didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-// Required for the notification event. You must call the completion handler after handling the remote notification.
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-  [RNCPushNotificationIOS didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
-}
-// Required for the registrationError event.
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
- [RNCPushNotificationIOS didFailToRegisterForRemoteNotificationsWithError:error];
-}
-// Required for localNotification event
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center
-didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)(void))completionHandler
-{
-  [RNCPushNotificationIOS didReceiveNotificationResponse:response];
-}
-```
-
-4. And then in your AppDelegate implementation, add the following:
-
-```
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  ...
-  // Define UNUserNotificationCenter
-  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-  center.delegate = self;
-
-  return YES;
-}
-
-//Called when a notification is delivered to a foreground app.
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
-{
-  completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
-}
-```
-
-
-5. In ios/Podfile, At the top add:
-
-```
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
-require_relative '../node_modules/react-native/scripts/react_native_pods' 
-```
-and then add the following lines:
-
-```
-
-  pod 'Firebase/Core'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Analytics'
-
-  pod 'RNFBAuth', :path => '../node_modules/@react-native-firebase/auth'
-  
-```
-
-
-## Global Configs
-
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this:
 
 ```
 export const globalOptions = {
@@ -191,15 +30,175 @@ export const globalOptions = {
 }
 ```
 
-## Local Configs
-in modules/fcm/options.js update the senderId and authToken
+### Local Configs
 
+In modules/fcm/options.js update the authToken:
 ```
 const authToken = "Your Authorization token";
-const senderID = "FCM Sender ID ";
+const userID = 1;
 ```
 
+## Configurations for Android
+1. On the Firebase console, add a new Android application and enter your projects details. The "Android package name" must match your local projects package name which can be found inside of the manifest tag within the /android/app/src/main/AndroidManifest.xml file within your project.
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+
+2. Download the google-services.json file and place it inside of your project at the following location: /android/app/google-services.json.
+
+
+3. Add the google-services plugin inside of your /android/build.gradle file:
+```gradle
+buildscript {
+    repositories {
+
+    google()  // Google's Maven repository
+  }
+  dependencies {
+    classpath 'com.google.gms:google-services:4.3.10'
+
+  }
+}
+  allprojects {
+  repositories {
+    google()  // Google's Maven repository
+  }
+}
+```
+
+4. Execute the plugin by adding the following line of code to your /android/app/build.gradle file:
+
+```gradle
+apply plugin: 'com.google.gms.google-services'
+```
+
+## Configurations for IOS
+
+1.  On the Firebase console, add a new IOS application and enter your projects details. Download `GoogleService-Info.plist`  file from firebase google console and move your file into the root of your Xcode project.
+
+2. ### Enable Push Notifications
+
+Next the "Push Notifications" capability needs to be added to the project. This can be done via the "Capability" option on the "Signing & Capabilities" tab:
+
+ Click on the "+ Capabilities" button.<br />
+ Search for "Push Notifications".
+
+3. ### Enable Background Modes
+
+Next the "Background Modes" capability needs to be enabled, along with both the "Background fetch" and "Remote notifications" sub-modes. This can be added via the "Capability" option on the "Signing & Capabilities" tab:
+
+Click on the "+ Capabilities" button. <br />
+Search for "Background Modes".
+
+4. ### Configure Firebase with iOS credentials
+
+To allow Firebase on iOS to use the credentials, the Firebase iOS SDK must be configured during the bootstrap phase of your application.
+
+To do this, open your `/ios/{projectName}/AppDelegate.mm` file (or `AppDelegate.m`if on older react-native), and add the following:
+
+At the top of the file, import the Firebase SDK right after `'#import "AppDelegate.h"'`:
+
+```c
+#import <Firebase.h>
+```
+
+Within your existing didFinishLaunchingWithOptions method, add the following to the top of the method:
+
+```c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  // Add me --- \/
+  if ([FIRApp defaultApp] == nil) { [FIRApp configure]; }
+  // Add me --- /\
+  // ...
+}
+```
+
+### Podfile
+ Add these two lines under ` config = use_native_modules!`
+
+ ```powershell
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
+ ```
+
+ disable this line<br/> `# :flipper_configuration => flipper_config,`
+
+Now add this line above `target 'RNFBTests' do`
+
+```powershell
+ $FirebaseSDKVersion = '10.4.0'
+```
+
+At last add all the below code at the bottom
+
+```powershell
+  installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["GCC_WARN_INHIBIT_ALL_WARNINGS"] = "YES"
+      end
+    end
+
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["CC"] = "clang"
+        config.build_settings["LD"] = "clang"
+        config.build_settings["CXX"] = "clang++"
+        config.build_settings["LDPLUSPLUS"] = "clang++"
+      end
+    end
+
+    installer.aggregate_targets.each do |aggregate_target|
+      aggregate_target.user_project.native_targets.each do |target|
+        target.build_configurations.each do |config|
+          config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
+          config.build_settings['EXCLUDED_ARCHS'] = 'i386'
+        end
+      end
+      aggregate_target.user_project.save
+    end
+    installer.pods_project.targets.each do |target|
+      if (target.name.eql?('FBReactNativeSpec'))
+        target.build_phases.each do |build_phase|
+          if (build_phase.respond_to?(:name) && build_phase.name.eql?('[CP-User] Generate Specs'))
+            target.build_phases.move(build_phase, 0)
+          end
+        end
+      end
+    end
+
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings["ENABLE_BITCODE"] = "NO"
+      end
+    end
+  end
+end
+```
+
+## Manual Setup
+1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+```javascript
+import PushNotifications from "@modules/firebase-push-notifications";
+
+const { title, navigator } = PushNotifications;
+```
+2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
+
+```javascript
+import { modules } from '@modules';
+
+const PushNotifications = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+
+<PushNotifications />;
+```
+
+## API Details
+
+All the api calling methods reside in `api.js` file.
+
+* **registerDeviceInfoAPI**
+`registerDeviceInfoAPI` method takes an object containing `userID`,`authToken`, `registration_id`, `type`, `name`, `active`, `device_id`, `cloud_message_type` and adds device in the database.
+
+* **fetchNotifications**
+`fetchNotifications` method takes user's `authToken` and returns list of notifications against that user.
+
+## Module Specifications
+Here is the [Module Specification Document](https://docs.google.com/document/d/1DI90lngd8ZnKauMngxZQZHaUDNY_2ZKS0IVT91K0XcE/edit?usp=sharing), which provides more information about the module's features.

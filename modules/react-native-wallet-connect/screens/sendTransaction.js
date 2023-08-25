@@ -1,18 +1,18 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid, Image } from "react-native";
-// @ts-ignore
+
 import { RNCamera } from "react-native-camera";
-// @ts-ignore
+
 import QRCodeScanner from "react-native-qrcode-scanner";
 import { globalConnector, parseAddress, walletProvider, fundTransfer, getBalance } from "../utils";
 import Input from "../components/TextInput";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
-// @ts-ignore
+
 import LinearGradient from "react-native-linear-gradient";
-// @ts-ignore
+
 import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
-// @ts-ignore
+
 import qrIcon from "../assets/qr.png";
 
 const SendTransaction = (props) => {
