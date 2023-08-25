@@ -109,7 +109,7 @@ const ShippingAddressScreen = (params) => {
           <View style={styles.inputContainer}>
             <Text style={styles.inputText}>Confirmation</Text>
             <View style={[styles.input, styles.confirmationBox]}>
-              <Text style={styles.placeholderText}>Confitmation</Text>
+              <Text style={styles.placeholderText}>Confirmation</Text>
               <Image source={require("./assets/checkbox.png")} />
             </View>
           </View>

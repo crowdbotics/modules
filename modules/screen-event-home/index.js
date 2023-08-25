@@ -88,7 +88,7 @@ const EventHome = () => {
             <Input
               text="Search"
               value={search}
-              onChange={text => setSearch(text)}
+              onChange={(text) => setSearch(text)}
               containerStyle={styles.inputContainer}
             />
             <View style={styles.listHeader}>
@@ -98,21 +98,21 @@ const EventHome = () => {
             <FlatList
               data={upcomingEvents}
               renderItem={({ item }) => <UpcomingEvent event={item} />}
-              keyExtractor={item => item.id.toString()}
+              keyExtractor={(item) => item.id.toString()}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             />
             <TabView
               tabTitles={["Event", "Event", "Event", "Event"]}
               selected={selectedTab}
-              onPress={index => setSelectedTab(index)}
+              onPress={(index) => setSelectedTab(index)}
               style={styles.tabView}
             />
           </View>
         )}
         data={events}
         renderItem={({ item }) => <Event event={item} />}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
       />
       <Footer
@@ -122,7 +122,7 @@ const EventHome = () => {
           require("./assets/taskIcon.png"),
           require("./assets/mapIcon.png")
         ]}
-        titles={["Home", "Spnsors", "Tasks", "Map"]}
+        titles={["Home", "Sponsors", "Tasks", "Map"]}
         active={0}
         activeColor="#7C7C7C"
       />
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
 
 export default EventHome;
 
-const Footer = props => {
+const Footer = (props) => {
   const generator = props.hideTitle ? props.images : props.titles;
   const bgColor = {
     backgroundColor: props.backgroundColor ? props.backgroundColor : "#C4C4C4"
@@ -202,7 +202,8 @@ const Footer = props => {
                 titleColor,
                 footerStyles.footerItemText,
                 index === props.active ? activeColor : null
-              ]}>
+              ]}
+            >
               {title}
             </Text>
               )}
@@ -242,7 +243,7 @@ const footerStyles = StyleSheet.create({
   }
 });
 
-const Input = props => {
+const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
       {props.text
@@ -259,7 +260,7 @@ const Input = props => {
         ]}
         placeholder={props.placeholder ? props.placeholder : "Enter"}
         value={props.value}
-        onChangeText={text => props.onChange(text)}
+        onChangeText={(text) => props.onChange(text)}
         placeholderTextColor={
           props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
         }
@@ -348,7 +349,8 @@ const TabView = ({
   const propStyle = style || {};
   return (
     <View
-      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}>
+      style={[tabViewStyles.paletteContainer, backgroundColorStyle, propStyle]}
+    >
       {tabTitles.map((title, index) => (
         <Pressable
           onPress={() => onPress(index)}
@@ -357,7 +359,8 @@ const TabView = ({
               ? [tabViewStyles.selected, tabColorStyle]
               : [tabViewStyles.unSelected, backgroundColorStyle]
           }
-          key={index}>
+          key={index}
+        >
           <Text>{title}</Text>
         </Pressable>
       ))}

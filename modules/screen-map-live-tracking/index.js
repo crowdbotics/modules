@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View, Image } from "react-native";
 
-const MapLiveTrackingScreen = params => {
+const MapLiveTrackingScreen = (params) => {
   const [order, setOrder] = useState({});
   useEffect(() => {
     setOrder({
@@ -21,7 +21,7 @@ const MapLiveTrackingScreen = params => {
           <Text style={styles.grey}>{order.shipping}</Text>
           <Image source={require("./assets/Score.png")} />
         </View>
-        <View style={styles.detailPallete}>
+        <View style={styles.detailPallet}>
           <View style={styles.orderDetails}>
             <Text style={styles.mainText}>{order.orderName}</Text>
             <Text style={styles.subText}>Additional info</Text>
@@ -31,7 +31,7 @@ const MapLiveTrackingScreen = params => {
             <Text style={styles.subText}>/Kg</Text>
           </View>
         </View>
-        <View style={styles.detailPallete}>
+        <View style={styles.detailPallet}>
           <View style={styles.orderDetails}>
             <Text style={styles.mainText}>{order.customerName}</Text>
             <Text style={styles.subText}>Additional info</Text>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     alignSelf: "center"
   },
-  detailPallete: {
+  detailPallet: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 10,

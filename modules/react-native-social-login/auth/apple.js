@@ -70,14 +70,14 @@ export async function appleForiOS() {
       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME]
     });
     // make response return an id_token to match the android version.
-    const response = ({
+    const {
       user: newUser,
       email,
       nonce,
       id_token: identityToken,
       code: authorizationCode
-    } = appleAuthRequestResponse);
-    return response;
+    } = appleAuthRequestResponse;
+    return { newUser, email, nonce, identityToken, authorizationCode };
   } catch (error) {
     if (error && error.code === appleAuth.Error.CANCELED) {
       // Error message will displayed if user stops the authorization process willingly

@@ -1,4 +1,4 @@
-// @ts-ignore
+
 import analytics, { firebase } from "@react-native-firebase/analytics";
 import { StyleSheet } from "react-native";
 
