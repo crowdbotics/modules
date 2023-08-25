@@ -4,10 +4,9 @@ from .models import TwoFactorAuth, Verify
 
 @admin.register(TwoFactorAuth)
 class AdminPhoneNumber(admin.ModelAdmin):
-    list_display = ['id', 'phone_number', 'email']
+    list_display = ["id", "phone_number", "email"]
 
 
 @admin.register(Verify)
 class AdminPhoneNumber(admin.ModelAdmin):
-    list_display = ['id', 'phone_number', 'email', 'code']
-
+    list_display = ["id", "phone_number", "email", "code"]

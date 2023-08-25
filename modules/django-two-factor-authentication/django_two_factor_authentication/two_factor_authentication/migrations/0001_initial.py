@@ -6,30 +6,57 @@ import phonenumber_field.modelfields
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='TwoFactorAuth',
+            name="TwoFactorAuth",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('phone_number', phonenumber_field.modelfields.PhoneNumberField(blank=True, max_length=128, null=True, region=None)),
-                ('email', models.EmailField(blank=True, max_length=255, null=True)),
-                ('secret', models.CharField(blank=True, max_length=16, null=True)),
-                ('method', models.CharField(blank=True, max_length=20, null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "phone_number",
+                    phonenumber_field.modelfields.PhoneNumberField(
+                        blank=True, max_length=128, null=True, region=None
+                    ),
+                ),
+                ("email", models.EmailField(blank=True, max_length=255, null=True)),
+                ("secret", models.CharField(blank=True, max_length=16, null=True)),
+                ("method", models.CharField(blank=True, max_length=20, null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Verify',
+            name="Verify",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(blank=True, max_length=255, null=True)),
-                ('code', models.IntegerField(blank=True, null=True)),
-                ('phone_number', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='two_factor_authentication.TwoFactorAuth')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("email", models.EmailField(blank=True, max_length=255, null=True)),
+                ("code", models.IntegerField(blank=True, null=True)),
+                (
+                    "phone_number",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="two_factor_authentication.TwoFactorAuth",
+                    ),
+                ),
             ],
         ),
     ]

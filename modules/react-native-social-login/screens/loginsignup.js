@@ -32,6 +32,7 @@ import {
   appleLogin
 } from "../auth";
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useNavigation } from "@react-navigation/native";
 
 // Custom Text Input
 export const TextInputField = (props) => (
@@ -109,7 +110,8 @@ const SocialButtonsView = (props) => (
   </View>
 );
 
-const onFacebookConnect = async (dispatch, navigation) => {
+const onFacebookConnect = async (dispatch) => {
+  const navigation = useNavigation();
   try {
     const fbResult = await LoginManager.logInWithPermissions([
       "public_profile",
@@ -128,7 +130,8 @@ const onFacebookConnect = async (dispatch, navigation) => {
   }
 };
 
-const onGoogleConnect = async (dispatch, navigation) => {
+const onGoogleConnect = async (dispatch) => {
+  const navigation = useNavigation();
   GoogleSignin.configure({
     webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
@@ -151,7 +154,8 @@ const onGoogleConnect = async (dispatch, navigation) => {
   }
 };
 
-const onAppleConnect = async (dispatch, navigation) => {
+const onAppleConnect = async (dispatch) => {
+  const navigation = useNavigation();
   try {
     const signinFunction = Platform.select({
       ios: appleForiOS,
@@ -170,7 +174,8 @@ const onAppleConnect = async (dispatch, navigation) => {
   }
 };
 
-export const SignupTab = ({ navigation }) => {
+export const SignupTab = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -260,7 +265,8 @@ export const SignupTab = ({ navigation }) => {
   );
 };
 
-export const SignInTab = ({ navigation }) => {
+export const SignInTab = () => {
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [validationError, setValidationError] = useState({

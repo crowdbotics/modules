@@ -1,5 +1,5 @@
 import React from "react";
-// @ts-ignore
+
 import { createStackNavigator } from "@react-navigation/stack";
 import AuthTypes from "../screens/authTypes";
 import Verification from "../screens/verification";
