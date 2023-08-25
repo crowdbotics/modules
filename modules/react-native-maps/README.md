@@ -8,7 +8,7 @@ Maps module is a react-native based module. Helps user to search and navigate to
  - Set the custom markers
  - Add custom annotations on the map
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/9dfcfec0-d64f-4e7c-8b49-958791a1c6bb)
 
 ## ## Features
 
