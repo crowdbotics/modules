@@ -10,7 +10,8 @@ This is React Native module for social login feature. For this feature to be ful
  - Login/signup using a simple email.
  - Password recovery through forgot password.
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/050f83cd-63fc-4046-ba5f-da439a934101)
+
 
 ## ## Features
 
