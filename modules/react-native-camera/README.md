@@ -9,7 +9,7 @@ Camera module is a React Native based module, which allows users to capture, upl
 - Capture image using device camera
 - Access images from device gallery
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/120275623/30fadb1a-46ef-4874-9665-c1feeac31817)
 
 ## ## Features
 
