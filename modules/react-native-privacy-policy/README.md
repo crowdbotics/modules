@@ -1,62 +1,35 @@
-# Privacy Policy Screen
+# Privacy Policy React native specs
 
-The Privacy Policy Screen is a React Native based screen that renders plaintext privacy policy with a simple header.
+## Module description
 
-## Features
+The Privacy Policy module is a React Native based module which recieves html content from backend and simply renders it.
 
-1. Retrieve privacy policy from database and display for the app user.
+- Retrieve privacy policy content from backend and display for the app user.
 
+Include preview screenshots or videos here.
 
-## Required Dependencies
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
-Keep the below packages in project's package.json file.
-```
-  "react-native-render-html": "^5.1.0"
-```
-RUn the command to install dependencies:
-  ```
-  yarn install
-  ```
+## ## Features
 
+ - [ ] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
 
-## Manual Setup
+## ## 3rd party setup
 
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+No 3rd party account required.
 
-```javascript
-import PrivacyPolicy from "@modules/privacy-policy";
+## Dependencies
 
-const { title, navigator } = PrivacyPolicy;
-```
+Dependencies used:
+- react-native-render-html  -  https://www.npmjs.com/package/react-native-render-html
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+## ## Module Options
 
-```javascript
+### Global Configs
 
-import { modules } from '@modules';
-
-const PrivacyPolicy = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-
-<PrivacyPolicy  />
-
-```
-
-## Params
-
-Below is the list of all params that can be passed to the module.
-
-| Name                  | Type       | Description                                                    |
-| --------------------- |:----------:|:---------------------------------------------------------------|
-| headingContainerStyle | `object`   | Set style for the heading container|
-| headingTextStyle       | `object` |  Set style for the heading text.             |
-| contentContainerStyle | `object`   | Set style for the privacy policy content container.                 |
-
-
-## Global Configs
-### Update api url in options/options.js
-
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
-
+Update the ``options/options.js`` file with your app's backend url. 
 ```
 export const globalOptions = {
     ...
@@ -65,13 +38,15 @@ export const globalOptions = {
 }
 ```
 
-Additional url configuration is possible by changing your main urls.py (not the privacy urls.py) and/or changing privacy/urls.py
+### Local Configs
 
-## Contributing
+No local configs required
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+### Android setup
 
-## License
+No android setup required.
 
-[MIT](https://choosealicense.com/licenses/mit/)
+
+### iOS setup
+
+No iOS setup required.
