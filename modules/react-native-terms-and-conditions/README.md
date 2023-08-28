@@ -6,7 +6,8 @@ The Terms and Conditions module is a React Native based module which recieves HT
 
 - Retrieve terms and conditions content from database and display for the app user.
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/120275623/57413328-ca2b-43f0-b816-61ce0b09e564)
+
 
 ## ## Features
 
