@@ -6,7 +6,7 @@ Privacy Policy WebView is a React Native based Module, which displays Privacy Po
 
 - Ability to load the privacy policy content from a URL.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/e9e9e9a0-454c-4ccc-9bf6-9e342169ebd5)
 
 ## ## Features
 
