@@ -1,241 +1,186 @@
-import pyotp
+from django.db.models import Q
 from rest_framework import status
-from rest_framework.decorators import action
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 
-from django.conf import settings
-from .models import TwoFactorAuth, Verify
-from .serializers import PhoneNumberSerializer, VerifySerializer
-import os
-from twilio.rest import Client
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
-import random
+from .models import EnableTwoFactorAuthentication, TwoFactorAuth
+from .serializers import OTPVerificationSerializer, TwoFactorAuthValidationSerializer, \
+    EnableTwoFactorAuthenticationUserSerializer
+from .service.TwoFactorAuthenticationService import TwoFactorAuthenticationService
 
 
-def generate_opt():
-    otp = random.randint(111111, 999999)
+class TwoFactorAuthViewSet(APIView):
     """
-    generate_opt generates otp code between 111111 to 999999.
+    TwoFactorAuthViewSet utilizes Twilio and SendGrid services to send OTPs via email
+    and SMS if the user have enabled 2FA service.
     """
-    return otp
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-
-class PhoneNumberViewset(ModelViewSet):
-    queryset = TwoFactorAuth.objects.all()
-    serializer_class = PhoneNumberSerializer
-
-    @action(methods=["post"], detail=False)
-    def send_otp(self, request):
+    def post(self, request, *args, **kwargs):
         """
-        send_otp Sends otp code to the given phone number or email address. Verifies wether your email or phone number is registered or not.
-        :param request: Contains an object named 'data' which has email and phone number on which otp will be sent.
+        Sends otp code to the given phone number or email address if the user has enabled two-factor authentication (2FA).
+        Verifies wether your email or phone number is registered or not.
+        :param request: Contains an object which have field "method" (email, phone_number).
         """
-        phone = request.data.get("phone_number")
-        email = request.data.get("email")
-        otp_code = generate_opt()
-        if phone and phone != "":
+        try:
+            data = self.request.data
+            user = request.user
+            validate_data = {
+                "user": user.id,
+                "method": data.get("method")
+            }
+            serializer = TwoFactorAuthValidationSerializer(data=validate_data)
+            serializer.is_valid(raise_exception=True)
             try:
-                account_sid = settings.ACCOUNT_SID
-                auth_token = settings.AUTH_TOKEN
-                client = Client(account_sid, auth_token)
-                registered_phone_num = TwoFactorAuth.objects.get(phone_number=phone)
-                if registered_phone_num:
-                    message = client.messages.create(
-                        body="Your private code is {} don't share with anyone".format(
-                            otp_code
-                        ),
-                        from_=settings.PHONE,
-                        to=phone,
-                    )
-                    if Verify.objects.filter(
-                        phone_number=registered_phone_num
-                    ).exists():
-                        t = Verify.objects.get(phone_number=registered_phone_num)
-                        t.code = otp_code
-                        t.save()
-                    else:
-                        Verify.objects.create(
-                            phone_number=registered_phone_num, code=otp_code
-                        )
-                    return Response(
-                        {
-                            "message": "Verification code has been sent to your phone number",
-                            "status": status.HTTP_200_OK,
-                        },
-                        status=status.HTTP_200_OK,
-                    )
-
+                if user.enable_user and user.enable_user.method == data.get('method'):
+                    response = TwoFactorAuthenticationService.send_otp(user=request.user,
+                                                                       method=validate_data["method"])
+                    return Response(**response)
+                return Response(
+                    {"message": "You have not selected valid method"},
+                    status=status.HTTP_400_BAD_REQUEST)
             except:
                 return Response(
-                    {
-                        "message": "Your phone number is not registered",
-                        "status": status.HTTP_404_NOT_FOUND,
-                    },
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-
-        elif email and email != "":
-            try:
-                registered_email = TwoFactorAuth.objects.get(email=email)
-                if registered_email:
-                    message = Mail(
-                        from_email=settings.EMAIL,
-                        to_emails=email,
-                        subject="Crowdbotics 2FA code",
-                        html_content='<strong>"Your OTP code is {}. Do not share with anyone"</strong>'.format(
-                            otp_code
-                        ),
-                    )
-                    if Verify.objects.filter(email=registered_email).exists():
-                        t = Verify.objects.get(email=registered_email)
-                        t.code = otp_code
-                        t.save()
-                    else:
-                        Verify.objects.create(
-                            email=registered_email.email, code=otp_code
-                        )
-                    try:
-                        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
-                        response = sg.send(message)
-                    except Exception as e:
-                        print(e)
-                    return Response(
-                        {
-                            "message": "Verification code has been sent to your Email Address",
-                            "status": status.HTTP_200_OK,
-                        },
-                        status=status.HTTP_200_OK,
-                    )
-            except:
-                return Response(
-                    {
-                        "message": "Your Email is not registered",
-                        "status": status.HTTP_404_NOT_FOUND,
-                    },
-                    status=status.HTTP_404_NOT_FOUND,
-                )
+                    {"message": "Two factor authentication is not enabled"},
+                    status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class VerifyViewSet(ModelViewSet):
-    queryset = Verify.objects.all()
-    serializer_class = VerifySerializer
-    http_method_names = ["delete"]
+class GoogleAuthenticatorViewSet(APIView):
+    """
+    GoogleAuthenticatorViewSet generates a QR code link for Google Authenticator
+    and provides a verification code for OTP verification.
+    """
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    def destroy(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         """
-        destroy verifies the otp and phone number or email match the opt code sent to the phone number or email. Deletes record after verifying.
-        :param request: Contains an object named 'data' which has otp, email and phone number on which otp code was sent.
+        Google Authenticator will return the QR code link if the user has enabled two-factor authentication (2FA).
+        which you can use to register on Google Authenticator App.
         """
-        phone_num = request.data.get("phone_number")
-        email = request.data.get("email")
-        code = request.data.get("code")
-        if phone_num:
-            try:
-                result = Verify.objects.get(
-                    phone_number__phone_number=phone_num, code=code
-                )
-                if result:
-                    result.delete()
-                    return Response(
-                        {"message": "Verified", "status": status.HTTP_200_OK},
-                        status=status.HTTP_200_OK,
-                    )
-                else:
-                    return Response(
-                        {
-                            "message": "Invalid verification code",
-                            "status": status.HTTP_404_NOT_FOUND,
-                        },
-                        status=status.HTTP_404_NOT_FOUND,
-                    )
-            except:
-                return Response(
-                    {
-                        "message": "Something went wrong.",
-                        "status": status.HTTP_404_NOT_FOUND,
-                    },
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-
-        elif email:
-            try:
-                result = Verify.objects.get(email=email, code=code)
-                if result:
-                    result.delete()
-                    return Response(
-                        {"message": "Verified", "status": status.HTTP_200_OK},
-                        status=status.HTTP_200_OK,
-                    )
-                else:
-                    return Response(
-                        {
-                            "message": "Invalid verification code",
-                            "status": status.HTTP_404_NOT_FOUND,
-                        },
-                        status=status.HTTP_404_NOT_FOUND,
-                    )
-            except:
-                return Response(
-                    {
-                        "message": "Something went wrong.",
-                        "status": status.HTTP_404_NOT_FOUND,
-                    },
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-
-
-class Google_AUTH(APIView):
-    def get(self, request):
-        userId = request.GET.get("id", None)
-        if userId:
-            try:
-                user = TwoFactorAuth.objects.get(pk=userId)
-                secret = user.secret
-                name = user.email
-                link = pyotp.TOTP(secret).provisioning_uri(name=name, issuer_name="2FA")
-                return Response(
-                    {
-                        "secret": secret,
-                        "name": name,
-                        "link": link,
-                        "status": status.HTTP_200_OK,
-                    },
-                    status=status.HTTP_200_OK,
-                )
-            except:
-                return Response(
-                    {
-                        "message": "Enter a Valid user id.",
-                        "status": status.HTTP_404_NOT_FOUND,
-                    },
-                    status=status.HTTP_404_NOT_FOUND,
-                )
-
-        else:
+        try:
+            user = self.request.user
+            if user.enable_user and user.enable_user.method == TwoFactorAuth.GOOGLE_AUTHENTICATOR:
+                response = TwoFactorAuthenticationService.google_authenticator(user=user)
+                return Response(**response)
             return Response(
-                {
-                    "message": "User Does not exist.",
-                    "status": status.HTTP_404_NOT_FOUND,
-                },
-                status=status.HTTP_404_NOT_FOUND,
-            )
+                {"message": "You have not selected valid method"},
+                status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({"message": "Two factor authentication is not enabled"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class OTPVerificationViewSet(APIView):
+    """
+    OTPVerificationViewSet is used to validate OTP within the specified expiration time.
+    It returns a validation result indicating whether the user's code has expired or if they have not enabled 2FA.
+    """
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        """
+        Verifies the user, otp code and expiration time. Deletes record after verifying.
+        :param request: Contains an object, contains method(email, phone_number, google_authenticator) and code.
+        """
+        try:
+            data = self.request.data
+            user = request.user
+            validate_data = {
+                "code": data.get("code"),
+                "method": data.get("method")
+            }
+            serializer = OTPVerificationSerializer(data=validate_data)
+            serializer.is_valid(raise_exception=True)
+            try:
+                if (validate_data['method'] == TwoFactorAuth.GOOGLE_AUTHENTICATOR) or (
+                        user.user_two_factor and user.user_two_factor.method == validate_data['method']):
+                    response = TwoFactorAuthenticationService.otp_verification(
+                        user=user, otp=validate_data['code'],
+                        method=validate_data['method'])
+                    if kwargs.get('enable'):
+                        if response.get('status') == status.HTTP_200_OK:
+                            EnableTwoFactorAuthentication.objects.update_or_create(user=user, method=data.get("method"))
+                    return Response(**response)
+                return Response(
+                    {"message": "You have not selected valid method"},
+                    status=status.HTTP_400_BAD_REQUEST)
+            except:
+                return Response({"message": "Two factor authentication is not enabled"},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class EnableTwoFactorAuthViewSet(APIView):
+    """
+    EnableTwoFactorAuthViewSet used to enable and disable 2FA services.
+    """
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        """
+        The get method retrieves information about whether the user has .enabled two-factor authentication (2FA) or not
+        """
+        try:
+            user = self.request.user
+            if user.enable_user:
+                return Response({"user": user.username, "method": user.enable_user.method}, status=status.HTTP_200_OK)
+        except:
+            return Response({"message": "Two factor authentication is not enabled"}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
-        otp = request.data["otp"]
-        userId = request.data["id"]
-        user = TwoFactorAuth.objects.get(pk=userId)
-        secret = user.secret
-        verification_code = pyotp.TOTP(secret).now()
-        if verification_code == otp:
-            return Response(
-                {"message": "Verified", "status": status.HTTP_200_OK},
-                status=status.HTTP_200_OK,
+        """
+           Enable two-factor authentication by using email or phone number.
+           Sends otp code to the given phone number or email address.
+           :param request: Contains an object, contains method(email, phone_number, google_authenticator) and code.
+        """
+        try:
+            data = self.request.data
+            user = self.request.user
+            validate_data = {
+                "user": user.id,
+                "method": data.get("method")
+            }
+            serializer = EnableTwoFactorAuthenticationUserSerializer(data=validate_data)
+            serializer.is_valid(raise_exception=True)
+
+            if EnableTwoFactorAuthentication.objects.filter(~Q(method=validate_data['method']), user=user).exists():
+                EnableTwoFactorAuthentication.objects.update(method=validate_data['method'], user=user)
+
+            if validate_data['method'] == TwoFactorAuth.GOOGLE_AUTHENTICATOR:
+                response = TwoFactorAuthenticationService.google_authenticator(
+                    user=self.request.user
+                )
+                return Response(**response)
+
+            response = TwoFactorAuthenticationService.send_otp(
+                user=self.request.user, method=validate_data['method']
             )
-        else:
+            return Response(**response)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        """
+           Disable two-factor authentication by user id.
+           :param request: Contains a method and user authorization token.
+        """
+        try:
+            user = self.request.user
+            EnableTwoFactorAuthentication.objects.get(
+                user=user.id
+            ).delete()
             return Response(
-                {"message": "Not Verified", "status": status.HTTP_400_BAD_REQUEST},
-                status=status.HTTP_400_BAD_REQUEST,
+                {"message": "Two Factor Authentication disable Successfully"},
+                status=status.HTTP_202_ACCEPTED
             )
+        except:
+            return Response({"message": "Two factor authentication is not enabled"}, status=status.HTTP_400_BAD_REQUEST)
