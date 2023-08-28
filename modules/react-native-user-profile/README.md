@@ -1,103 +1,54 @@
-# User Profile
+# User Profile React native specs
 
-The user Profile Screen is a React Native-based screen that allows the user to view other users' profiles and edit its own profile information.
+## Module description
 
-## Scope Features
-The following are the key features in scope for this module. 
+The user Profile Module is a React Native-based module that allows the user to view other users' profiles and edit its own profile information.
 
-1. Ability to get details of a specific user
-2. Ability to update the user profile
+- Ability to get details of a specific user
+- Ability to update the user profile
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
-Here are the required packages for the module:
+Include preview screenshots or videos here.
+
+## ## Features
+
+ - [ ] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+No 3rd party account required.
+
+## Dependencies
+
+Dependencies used:
+ - react-native-elements  - https://www.npmjs.com/package/react-native-elements
+ - @react-navigation/native  - https://www.npmjs.com/package/@react-navigation/native
+
+## ## Module Options
+
+### Global Configs
+
+Update the `options/options.js` file with your app's backend url. 
 ```
-  "react-native-elements": "^2.3.2",
-  "@react-navigation/native": "^5.9.2"
-```
-and run this command.
-  ```
-  yarn install
-  ```
-
-## Requirements
-
-For this module to be fully functional, we recommend first installing and configuring the `Login` or `Social Login` modules available in the storyboard's list of verified modules.
-
-### Update the file modules/user-profile/store/api.js
-
-Update this file by replacing the `SERVICE_URL` url value with your apps' own backend url. For example, for a Crowdbotics app deployed at `https://my-app.botics.co/`, the change would look like:
-
-```js
-SERVICE_URL = "https://my-app.botics.co/";
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+}
 ```
 
-### Update Data Models
+### Local Configs
 
-Go to your Crowdbotics' app dashboard and navigate to the `Data Models` page. You will see a `User` model. Click on the user model, then click on `Edit Selected` to update the user model and edit the following:
+No local configs required.
 
-1. Check the box for `API` and add the following fields:
+### Android setup
 
-- `first_name`: type as `CharField`
-- `last_name`: type as `CharField`
-- `bio`: type as `CharField`
+No android setup required.
 
-In the end, your data model should look like this:
 
-![model builder](https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/Screenshot_from_2021-01-05_16-05-28.png)
+### iOS setup
 
-After all the changes, click `save` for all the changes to be applied to your project.
-
-If you choose, you can add other fields to the user model, just make sure to update this module so the new fields are rendered correctly.
-
-[Visit our knowledge base](https://knowledge.crowdbotics.com/what-is-the-model-editor-and-what-is-it-for) if you need help understanding Data Models.
-
-## Module Usage
-
-There are two ways of using this module. First, as a logged in user profile page, where the user can view, edit and update their profile information. This module will behave like this by default (you must be logged in using one of the login modules available). If you use a custom login method and reducer store, you might need to edit the code in `useSelector` for both `index.js` and `edit.js` files to match where both the `state.login.user` and user `state.login.token` is stored at.
-
-The second use case is for displaying **other** users' information. For example, if you have a screen that lists all the users available in the platform, and when you click in a user name, you would like to view that specific user details. For that, you need to add a navigation to the User Profile screen, and pass the user id as a parameter in the navigation call. In the code example below, whenever the button is clicked, it will navigate to the User Profile screen and load the information of the user which their id equals to `123`.
-
-```js
-<Button
-  title="Go to User Profile"
-  onPress={() => navigation.navigate("userProfile", { id: 123 })}
-/>
-```
-## API Calling Methods
-All the api calling methods reside in `store/api.js` file.
-
-* **getUserById**
-`getUserById` method used to retrieve the specific user details.
-
-* **updateUserById**
-`updateUserById` method is used for update the user details.
-
-* **getUsers**
-`getUsers` method is used for a list of users.
-
-## Manual Setup
-
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-```javascript
-import UserProfile from "@modules/user-profile";
-
-const { title, navigator, slice } = UserProfile;
-```
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
-
-```javascript
-import { modules } from '@modules';
-const UserProfile = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<UserProfile />;
-```
-## View responses
-User can view responses
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+No iOS setup required.
