@@ -7,7 +7,7 @@ The user Profile Module is a React Native-based module that allows the user to v
 - Ability to get details of a specific user
 - Ability to update the user profile
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/120275623/9f92777d-4fd1-4757-9a4f-69db6ca82c70)
 
 ## ## Features
 
