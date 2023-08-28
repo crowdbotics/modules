@@ -1,14 +1,32 @@
 import { StyleSheet, Dimensions } from "react-native";
 
+// Web OAuth client id obtained from google developer console
+const GOOGLE_WEB_CLIENT_ID = "XXXXXX.apps.googleusercontent.com";
+// iOS OAuth client id obtained from google developer console
+const GOOGLE_IOS_CLIENT_ID = "YYYYYY.apps.googleusercontent.com";
+// Apple service id obtained from apple developer account.
+const APPLE_SERVICE_ID = "com.crowdbotics.APP_NAME";
+
+// URL to redirect to once login is successfull
+const APPLE_REDIRECT_CALLBACK =
+  "https://your-app-here.com/accounts/apple/login/callback/";
+
+// Source link for foreground image
+const LOGO_URL =
+  "https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/cb-icon.png";
+// Source link for background image
+const BACKGROUND_URL =
+  "https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/halfbg.png";
+
 const { width, height } = Dimensions.get("window");
 
 const guidelineBaseWidth = 350;
 const guidelineBaseHeight = 680;
 
-const scale = size => (width / guidelineBaseWidth) * size;
-const scaleVertical = size => (height / guidelineBaseHeight) * size;
+const scale = (size) => (width / guidelineBaseWidth) * size;
+const scaleVertical = (size) => (height / guidelineBaseHeight) * size;
 
-export const Color = {
+const Color = {
   malibu: "#46E1FD",
   white: "#fff",
   whiteOff: "#F4F5F9",
@@ -19,7 +37,7 @@ export const Color = {
   red: "red"
 };
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   screen: {
     flexDirection: "column",
     backgroundColor: "white",
@@ -69,7 +87,6 @@ export const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: "white",
-    // marginLeft: scale(10), marginRight: scale(10),
     marginTop: scaleVertical(5),
     marginBottom: scaleVertical(5),
     borderRadius: 5,
@@ -152,7 +169,11 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Color.whiteOff
   },
-  imageContainer: { marginTop: -20, width: width, height: height / 2 },
+  imageContainer: {
+    marginTop: -20,
+    width: width,
+    height: height / 2
+  },
   cardView: {
     marginTop: -90,
     marginBottom: 20,
@@ -199,10 +220,7 @@ export const styles = StyleSheet.create({
     fontStyle: "italic",
     fontSize: 12,
     paddingLeft: 50
-  }
-});
-
-export const buttonStyles = {
+  },
   viewStyle: {
     backgroundColor: Color.malibu,
     borderRadius: 5,
@@ -218,10 +236,7 @@ export const buttonStyles = {
     color: Color.white,
     marginHorizontal: 20,
     marginVertical: 10
-  }
-};
-
-export const textInputStyles = {
+  },
   textInput: {
     borderColor: Color.steel,
     borderWidth: 0.5,
@@ -232,6 +247,24 @@ export const textInputStyles = {
     paddingVertical: 7,
     color: Color.black
   },
-  label: { color: "#6A6A6A", fontSize: 12 },
-  error: { color: Color.red, fontSize: 9, marginLeft: 12 }
+  inputLabel: {
+    color: "#6A6A6A",
+    fontSize: 12
+  },
+  inputError: {
+    color: Color.red,
+    fontSize: 9,
+    marginLeft: 12
+  }
+});
+
+export default {
+  styles: styles,
+  Color: Color,
+  GOOGLE_WEB_CLIENT_ID: GOOGLE_WEB_CLIENT_ID,
+  GOOGLE_IOS_CLIENT_ID: GOOGLE_IOS_CLIENT_ID,
+  APPLE_SERVICE_ID: APPLE_SERVICE_ID,
+  APPLE_REDIRECT_CALLBACK: APPLE_REDIRECT_CALLBACK,
+  BACKGROUND_URL: BACKGROUND_URL,
+  LOGO_URL: LOGO_URL
 };
