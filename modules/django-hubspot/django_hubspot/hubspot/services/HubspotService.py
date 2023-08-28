@@ -1,5 +1,3 @@
-import json
-
 import requests
 
 
@@ -16,186 +14,152 @@ class HubspotBase:
 
     def get_header(self):
         headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {self.ACCESS_TOKEN}",
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {self.ACCESS_TOKEN}',
         }
         return headers
 
-    def _api_call(self, request_type, url, headers=None, payload=None, data=None):
+    def _api_call(self, request_type, url, headers=None, payload=None, params=None, data=None):
+
         try:
-            response = requests.request(
-                request_type, url, headers=headers, json=payload, data=data
-            )
+            response = requests.request(request_type, url, headers=headers, json=payload, params=params, data=data)
             response.raise_for_status()
             if response.status_code == 204:
-                return {
-                    "data": {"message": "Item deleted successfully."},
-                    "status_code": response.status_code,
-                }
+                return {"data": {"message": "Item deleted successfully."}, "status_code": response.status_code}
             return {"data": response.json(), "status_code": response.status_code}
         except requests.exceptions.RequestException as e:
             if e.response.status_code == 404:
-                return {
-                    "data": {"message": "Resource not found"},
-                    "status_code": e.response.status_code,
-                }
+                return {"data": {"message": "Resource not found"}, "status_code": e.response.status_code}
             return {"data": e.response.json(), "status_code": e.response.status_code}
+        except Exception as e:
+            return {"data": [], "message": str(e), "status_code": 400}
 
 
 class HubspotService(HubspotBase):
-    def auth_token(self, code):
+
+    def auth_token(self, payload):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/oauth/v1/token"
-            payload = {
+            url = f'{self.HUBSPOT_BASE_URL}/oauth/v1/token'
+            data = {
                 "grant_type": self.HUBSPOT_GRANT_TYPE,
                 "redirect_uri": self.HUBSPOT_REDIRECT_URL,
                 "client_id": self.HUBSPOT_CLIENT_ID,
                 "client_secret": self.HUBSPOT_CLIENT_SECRET,
-                "code": code,
+                "code": payload['code']
             }
-            response = self._api_call(request_type="POST", url=url, data=payload)
+            response = self._api_call(request_type="POST", url=url, data=data)
             return response
         except Exception as e:
             return e
 
-    def deals_list(self):
+    def deals_list(self, query_params):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/"
-            response = self._api_call(
-                request_type="GET", url=url, headers=self.get_header()
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
     def create_deal(self, payload):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/"
-            response = self._api_call(
-                request_type="POST",
-                url=url,
-                headers=self.get_header(),
-                payload={"properties": payload},
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/'
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(),
+                                      payload={
+                                          "properties": payload
+                                      })
             return response
         except Exception as e:
             return e
 
     def remove_deal(self, dealId):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{dealId}"
-            response = self._api_call(
-                request_type="DELETE", url=url, headers=self.get_header()
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{dealId}'
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e
 
-    def single_deal(self, dealId):
+    def single_deal(self, dealId, query_params):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{dealId}"
-            response = self._api_call(
-                request_type="GET", url=url, headers=self.get_header()
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{dealId}'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def ticket_list(self):
+    def ticket_list(self, query_params):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/"
-            response = self._api_call(
-                request_type="GET", url=url, headers=self.get_header()
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
     def create_ticket(self, payload):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/"
-            response = self._api_call(
-                request_type="POST", url=url, headers=self.get_header(), payload=payload
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/'
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(),
+                                      payload={
+                                          "properties": payload
+                                      })
             return response
         except Exception as e:
             return e
 
     def remove_ticket(self, ticketId):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{ticketId}"
-            response = self._api_call(
-                request_type="DELETE", url=url, headers=self.get_header()
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{ticketId}'
+            response = self._api_call(request_type="DELETE", url=url, headers=self.get_header())
             return response
         except Exception as e:
             return e
 
-    def single_ticket(self, ticketId):
+    def single_ticket(self, ticketId, query_params):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{ticketId}"
-            response = self._api_call(
-                request_type="GET", url=url, headers=self.get_header()
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{ticketId}'
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def create_ticket_association(self, payload):
+    def create_ticket_association(self, ticketId, toObjectType, toObjectId, payload):
         try:
-            url = (
-                f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{payload['ticketId']}/associations/"
-                f"{payload['toObjectType']}/{payload['toObjectId']}/"
-            )
-            response = self._api_call(
-                request_type="PUT",
-                url=url,
-                headers=self.get_header(),
-                payload=payload["param"],
-            )
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{ticketId}/associations/" \
+                  f"{toObjectType}/{toObjectId}/"
+            response = self._api_call(request_type="PUT", url=url, headers=self.get_header(), payload=payload)
             return response
         except Exception as e:
             return e
 
-    def ticket_association_list(self, params):
+    def ticket_association_list(self, ticketId, toObjectType, query_params):
         try:
-            url = (
-                f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{params['ticketId']}/associations/"
-                f"{params['toObjectType']}/"
-            )
-            response = self._api_call(
-                request_type="GET", url=url, headers=self.get_header()
-            )
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/tickets/{ticketId}/associations/" \
+                  f"{toObjectType}/"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def contact_deals_association_list(self, params):
+    def contact_deals_association_list(self, contactId, query_params):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/contacts/{params['contactId']}/associations/deals"
-            response = self._api_call(
-                request_type="GET", url=url, headers=self.get_header()
-            )
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/contacts/{contactId}/associations/deals"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
-    def meeting_contact_association_list(self, params):
+    def meeting_contact_association_list(self, meetingId, query_params):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/meetings/{params['meetingId']}/associations/contacts/"
-            response = self._api_call(
-                request_type="GET", url=url, headers=self.get_header()
-            )
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/meetings/{meetingId}/associations/contacts/"
+            response = self._api_call(request_type="GET", url=url, headers=self.get_header(), params=query_params)
             return response
         except Exception as e:
             return e
 
     def create_event(self, payload):
         try:
-            url = f"{self.HUBSPOT_BASE_URL}/marketing/v3/marketing-events/events/"
-            response = self._api_call(
-                request_type="POST", url=url, headers=self.get_header(), payload=payload
-            )
+            url = f'{self.HUBSPOT_BASE_URL}/marketing/v3/marketing-events/events/'
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=payload)
             return response
         except Exception as e:
             return e
@@ -213,14 +177,16 @@ class HubspotService(HubspotBase):
                 "filterGroups": [
                     {
                         "filters": [
-                            {"value": email, "propertyName": "email", "operator": "EQ"}
+                            {
+                                "value": email,
+                                "propertyName": "email",
+                                "operator": "EQ"
+                            }
                         ]
                     }
                 ]
             }
-            response = self._api_call(
-                request_type="POST", url=url, headers=self.get_header(), payload=data
-            )
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(), payload=data)
             return response
         except Exception as e:
             return e
@@ -233,9 +199,8 @@ class HubspotService(HubspotBase):
                     "email": email,
                 }
             }
-            response = self._api_call(
-                request_type="POST", url=url, headers=self.get_header(), payload=payload
-            )
+            response = self._api_call(request_type="POST", url=url, headers=self.get_header(),
+                                      payload=payload)
             return response
         except Exception as e:
             return e
@@ -243,44 +208,41 @@ class HubspotService(HubspotBase):
     def get_or_create_contact_by_email(self, email):
         try:
             contact = self.get_contact_by_email(email)
-            status = contact.get("status_code")
+            status = contact.get('status_code')
             if not status or status == 404:
                 contact = self.create_contact(email)
-                return contact.get("data")
+                return contact.get('data')
             else:
-                return contact.get("data").get("results")[0]
+                return contact.get('data').get('results')[0]
         except Exception as e:
             return e
 
-    def create_deal_contact_association(self, emails, dealId):
+    def create_deal_contact_association(self, payload):
         try:
-            for email in emails:
+            for email in payload['emails']:
                 contact = self.get_or_create_contact_by_email(email)
                 if contact:
-                    payload = {
-                        "dealId": dealId,
+                    params = {
+                        "dealId": payload['dealId'],
                         "toObjectType": "contacts",
-                        "toObjectId": contact.get("id"),
+                        "toObjectId": contact.get('id')
                     }
-                    self.create_deal_association(payload)
+                    self.create_deal_association(params)
             return True
         except Exception as e:
             return False
 
-    def create_deal_association(self, payload):
+    def create_deal_association(self, params):
         try:
-            url = (
-                f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{payload['dealId']}/associations/"
-                f"{payload['toObjectType']}/{payload['toObjectId']}/"
-            )
+            url = f"{self.HUBSPOT_BASE_URL}/crm/v4/objects/deals/{params['dealId']}/associations/" \
+                  f"{params['toObjectType']}/{params['toObjectId']}/"
             response = self._api_call(
-                request_type="PUT",
-                url=url,
-                headers=self.get_header(),
-                payload=[
-                    {"associationCategory": "USER_DEFINED", "associationTypeId": 1}
-                ],
-            )
+                request_type="PUT", url=url, headers=self.get_header(), payload=[
+                    {
+                        "associationCategory": "USER_DEFINED",
+                        "associationTypeId": 1
+                    }
+                ])
             return response
         except Exception as e:
             return e
