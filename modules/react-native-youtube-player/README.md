@@ -11,7 +11,8 @@ The Youtube Player Module is a React Native-based module which embeds a youtube 
 - Previous and Next options.
 - Share the video.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/49126e0d-80ea-462a-8f04-45c42aeff901)
+
 
 ## ## Features
 
