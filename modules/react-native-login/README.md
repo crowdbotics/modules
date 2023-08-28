@@ -7,7 +7,7 @@ The Login Module is a React Native-based module that enables users to convenient
 - Ability to log in/signup using a valid email and password.
 - Ability to reset/forgot password - a recovery email link is generated on the registered email address.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/ef8c9fce-8e05-4dbe-9b19-c89aa94c598c)
 
 ## ## Features
 
