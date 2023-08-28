@@ -11,10 +11,10 @@ const Stack = createStackNavigator();
 const Navigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen options={{ headerShown: false }} name="Verification" component={Verification} />
       <Stack.Screen name="AuthTypes" component={AuthTypes} />
       <Stack.Screen name="GoogleAuth" component={GoogleAuth} />
-      <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
+      <Stack.Screen name="Verification" component={Verification} />
+      <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
   );
 };
