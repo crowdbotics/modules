@@ -6,7 +6,7 @@ The Privacy Policy module is a React Native based module which recieves html con
 
 - Retrieve privacy policy content from backend and display for the app user.
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/120275623/22efa891-8a18-4aea-9f5d-b9ea5d6b29ee)
 
 ## ## Features
 
