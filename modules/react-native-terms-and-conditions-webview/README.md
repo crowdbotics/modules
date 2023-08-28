@@ -6,7 +6,7 @@ The Terms And Conditions Webview is a React Native based Module which renders a 
 
 - Ability to load and display terms and conditions from a url.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/2100cd90-1e72-4f6a-8899-18a9ba585bb6)
 
 ## ## Features
 
