@@ -1,0 +1,5 @@
+{
+  "title": "OpenAI (Django)",
+  "description": "Backend for the OpenAI module.",
+  "root": "/backend/modules"
+}
