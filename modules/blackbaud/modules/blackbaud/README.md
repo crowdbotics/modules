@@ -1,35 +1,59 @@
-# Blackbaud SKY
+# Blackbaud SKY React native specs
 
-Blackbaud SKY enables your entire organization to be on one cloud software solution. Module allows user to access to open, industry-standard REST APIs for Blackbaud solutions.
+## Module description
 
-# Scope Features
+This is a react native based module which allows users to authorize their blackbaud accounts with your app and get access to open, industry-standard REST APIs for Blackbaud solutions.
 
-The following are the key features in scope for this module.
+- Ability to authorize the user for access token.
+- Ability to retrieve the access token
+- Ability to retrieve the list of events.
 
-1. Ability to authorize the user for access token.
-2. Ability to retrieve the access token
-3. Ability to retrieve the list of events.
+Include preview screenshots or videos here.
 
-## Install Required Dependencies/Packages
+## ## Features
 
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
-Here are the required packages for the module:
+ - [X] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [x] This module requires manual iOS setup.
 
+## ## 3rd party setup
+
+In order to configure the module, the first thing you need to do is to create an app on Blackbaud. Here's the steps detailing that process:
+1. Sign up for a Blackbaud Developer account.
+2. Go to `settings`, from My applications, select Add.
+3. Provide the details about your application, including the name, details, organization name, publisher name, logo, and website. This information appears to Blackbaud customer admins when they connect your application, as well as to users during the authorization process.
+4. Select Save. After this your `BLACKBAUD_CLIENT_ID` and `BLACKBAUD_CLIENT_SECRET` will appear.
+5. To generate a subscription key, go to  "My subscriptions".
+6. For each subscription if you have, you can select to generate your primary or secondary access key.
+7. After that your `Bb-Api-Subscription-Key` will appear.
+
+## Dependencies
+
+Dependencies used:
+
+- react-native-app-auth - https://www.npmjs.com/package/react-native-app-auth
+
+## ## Module Options
+
+### Global Configs
+
+Update the `options/options.js` file with your app's backend url.
 ```
-"react-native-app-auth": "^6.4.3"
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+}
 ```
 
-and run this command.
+### Local Configs
 
-```
-yarn install
-```
+In **modules/blackbaud/options.js** update `redirectUrl`, `client_id`, with your blackbaud's developer account app's redirectUrl and client_id.
 
-## Local Configs
+### Android setup
 
-In **modules/blackbaud/options.js** update `redirectUrl`, `client_id`, with your blackbaud's developers account app's redirectUrl and client_id.
-
-## Android Configurations
 
 Add following lines in `android/app/src/main/AndroidManifest.xml`
 
@@ -54,11 +78,11 @@ Then, add these lines in `android/app/build.gradle` under `defaultConfig`
 
 Replace `com.demo` with the package name of your app.
 
-## IOS Configurations
+### iOS setup
 
 Add following lines in your `info.plist`
 
-```
+```xml
 <key>CFBundleURLTypes</key>
 <array>
   <dict>
@@ -78,14 +102,14 @@ Add your bundle identifier instead of `CFBundleURLSchemes` & `io.identityserver.
 
 Then, add these lines on top of `AppDelegate.h`
 
-```
+```c
 #import "RNAppAuthAuthorizationFlowManager.h"
 #import <React/RCTLinkingManager.h>
 ```
 
 Then, Replace this line
 
-```
+```diff
 - @interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate>
 + @interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, RNAppAuthAuthorizationFlowManager>
 
@@ -93,13 +117,13 @@ Then, Replace this line
 
 Also add this property before `@end`
 
-```
+```c
  @property(nonatomic, weak)id<RNAppAuthAuthorizationFlowManagerDelegate>authorizationFlowManagerDelegate;
 ```
 
 At last, add these line in `AppDelegate.m`
 
-```
+```c
  - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *, id> *) options {
   if ([self.authorizationFlowManagerDelegate resumeExternalUserAgentFlowWithURL:url]) {
     return YES;
@@ -107,31 +131,3 @@ At last, add these line in `AppDelegate.m`
   return [RCTLinkingManager application:app openURL:url options:options];
  }
 ```
-
-## Manual Setup
-
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-```javascript
-import BlackbaudSky from "@modules/blackbaud-sky";
-const { title, hook } = BlackbaudSky;
-```
-
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
-
-```javascript
-import { modules } from "@modules";
-const BlackbaudSky = modules[module_index].value.navigator; //module_index : position of the module in modules folder
-<BlackbaudSky />;
-```
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
