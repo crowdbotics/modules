@@ -13,15 +13,18 @@ class ReadOnly(BasePermission):
         """
         return request.method in SAFE_METHODS
 
+
 class TermAndConditionViewSet(viewsets.ModelViewSet):
     serializer_class = TermAndConditionSerializer
-    permission_classes = [IsAdminUser|ReadOnly] #Makes it Read-only unless admin
+    permission_classes = [IsAdminUser | ReadOnly]  # Makes it Read-only unless admin
     authentication_classes = (
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
 
-    # This query will only return a single (if it exists) T&C string, and that will be 
+    # This query will only return a single (if it exists) T&C string, and that will be
     # the most recently updated one that *also* has an active flag. You must set at least
     # one T&C object to active for this to work.
-    queryset = TermAndCondition.objects.filter(is_active=True).order_by('-updated_at')[0:1]
+    queryset = TermAndCondition.objects.filter(is_active=True).order_by("-updated_at")[
+        0:1
+    ]

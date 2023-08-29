@@ -1,4 +1,4 @@
-// @ts-ignore
+
 import { Dimensions, StyleSheet } from "react-native";
 
 const YOUTUBE_API_KEY = "";

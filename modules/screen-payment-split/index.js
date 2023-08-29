@@ -11,37 +11,37 @@ const PaymentSplitScreen = (params) => {
         id: 1,
         name: "Cody Fisher",
         profileImage: require("./assets/profile.png"),
-        ammount: "126.90"
+        amount: "126.90"
       },
       {
         id: 2,
         name: "Johnny Watson",
         profileImage: require("./assets/profile.png"),
-        ammount: "126.90"
+        amount: "126.90"
       },
       {
         id: 3,
         name: "Jenny Wilson",
         profileImage: require("./assets/profile.png"),
-        ammount: "126.90"
+        amount: "126.90"
       },
       {
         id: 4,
         name: "Cody Fisher",
         profileImage: require("./assets/profile.png"),
-        ammount: "126.90"
+        amount: "126.90"
       },
       {
         id: 5,
         name: "Johnny Watson",
         profileImage: require("./assets/profile.png"),
-        ammount: "126.90"
+        amount: "126.90"
       },
       {
         id: 6,
         name: "Jenny Wilson",
         profileImage: require("./assets/profile.png"),
-        ammount: "126.90"
+        amount: "126.90"
       }
     ]);
     setAccountBalance("761.40");
@@ -73,7 +73,7 @@ const User = ({ user }) => {
         <Image source={user.profileImage} style={styles.profileImage} />
         <Text style={styles.username}>{user.name}</Text>
       </View>
-      <Text style={styles.ammountText}>-${user.ammount}</Text>
+      <Text style={styles.amountText}>-${user.amount}</Text>
     </View>
   );
 };
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     color: "#111112"
   },
-  ammountText: {
+  amountText: {
     fontSize: 17,
     color: "#EA4335",
     fontWeight: "bold"

@@ -1,7 +1,7 @@
-// @ts-ignore
+
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-// @ts-ignore
+
 import { Surface } from "gl-react-native";
 import Button from "../../Components/Button";
 import ShadowBlurs from "../../Components/ShadowBlur";
@@ -13,8 +13,10 @@ import { reSizeImage } from "../../Utils/common";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
 import Header from "../../Components/Header";
+import { useNavigation } from "@react-navigation/native";
 
-const Shadows = ({ navigation }) => {
+const Shadows = () => {
+  const navigation = useNavigation();
   const options = useContext(OptionsContext);
   const dispatch = useDispatch();
   const state = useSelector(state => state.uri);
