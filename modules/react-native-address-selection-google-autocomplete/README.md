@@ -8,7 +8,7 @@ Address Selection Autocomplete module reflects real searches to determine what p
 - Search address form the map
 - Search and select address by moving map
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/120275623/8690387c-11ec-4dd7-8f35-84a83cc7a3fb)
 
 ## ## Features
 
