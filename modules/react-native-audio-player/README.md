@@ -1,28 +1,58 @@
-# Audio Player Module
-This is a react-native module for audio player. This module provides simple player functionalities for both android and ios platforms.
+# Audio Player React native specs
 
-## Features
-1. Play audios with smoothness
-2. Download playing audio
-3. Select audio to play from playlist
-4. Playing of the previous/next song
+## Module description
 
+This react-native based module provides simple audio player functionalities i.e play, pause, download, next, previous and etc for both android and ios platforms.
 
-## Required Dependencies
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
-Keep the below packages in project's package.json file.
+- Play audios.
+- Download the audio being played.
+- Select audio to play from playlist.
+- Play previous/next audio.
+
+Include preview screenshots or videos here.
+
+## ## Features
+
+ - [ ] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+No 3rd party account required.
+
+## Dependencies
+
+Dependencies used:
+- react-native-audio-recorder-player - https://www.npmjs.com/package/react-native-audio-recorder-player
+- react-native-slider - https://www.npmjs.com/package/react-native-slider
+- rn-fetch-blob - https://www.npmjs.com/package/rn-fetch-blob
+
+## ## Module Options
+
+### Global Configs
+
+No global config required.
+
+### Local Configs
+
+In `modules/audio-player/options.js` you can update the list of audios to play:
+
+```js
+
+export const tracks = [
+  {
+      id: '', //Unique id for each track
+      path: '', //URL of the audio
+      title: '', //Title of the audio
+      artwork: '', //Url of the image
+      album: '', //Title for album
+  },
 ```
-  "react-native-audio-recorder-player": "2.6.2",
-  "react-native-slider": "^0.11.0",
-  "rn-fetch-blob": "0.12.0"
-```
-RUn the command to install dependencies:
-  ```
-  yarn install
-  ```
+### Android setup
 
-## Installation
-### Android
 1. In the `android/settings.gradle` add the following line.
 
 ```java
@@ -66,63 +96,6 @@ dependencies {
 ```
 
 
-### IOS
-1. Using React Native >= 0.61
+### iOS setup
 
-```
-npx pod-install
-```
-
-
-## Manual Setup
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-```javascript
-import AudioPlayer from "@modules/audio-player";
-
-const { title, navigator } = AudioPlayer;
-```
-
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
-
-```javascript
-import { modules } from '@modules';
-const AudioPlayer = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<AudioPlayer />;
-```
-## Local Configs
-in modules/audio-player/options.js you can update following options:
-
-```javascript
-
-export const tracks = [
-  {
-      id: '', //Unique id for each track
-      path: '', //URL of the audio
-      title: '', //Title of the audio
-      artwork: '', //Url of the image
-      album: '', //Title for album
-  },
-```
-
-## Params
-
-Below is the list of all Params with their data types that are considered primitive or the basic ones needed for our module to work.
-
-| Params              | Data Types         | Description                                                       |
-| --------------------|:------------------:|:---------------------------------------------------------------|
-| onPlay              | `function` | Called when an audio start playing.                     |
-| onPause             | `function` | Called when the audio is stopped.   |
-| onBackwardCall      | `function` | Called when backward button of the player is clicked.    |
-| onForwardCall       | `function` | Called when forward button of the player is clicked.   |
-| onTrackItemSelect   | `function` | Called when user clicks on an audio in the audio list. Returns an object containing the details about the selected audio track. |
-
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+No manual setup for iOS required.
