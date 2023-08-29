@@ -13,13 +13,13 @@ const OnboardingAddCertificateScreen = (params) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Image
-          source={require(// @ts-ignore
+          source={require(
             "./assets/back.png")}
           style={styles.back}
         />
         <Text style={styles.heading}>Add Certificates</Text>
         <Image
-          source={require(// @ts-ignore
+          source={require(
             "./assets/image.png")}
           style={styles.image}
         />
@@ -40,7 +40,7 @@ const OnboardingAddCertificateScreen = (params) => {
 
       <View style={styles.checkboxContainer}>
         <Image
-          source={require(// @ts-ignore
+          source={require(
             "./assets/checkbox.png")}
           style={styles.checkbox}
         />
@@ -51,7 +51,7 @@ const OnboardingAddCertificateScreen = (params) => {
       <View style={styles.chooseContainer}>
         <Text>Choose certificate</Text>
         <Image
-          source={require(// @ts-ignore
+          source={require(
             "./assets/upload.png")}
           style={styles.chooseImg}
         />

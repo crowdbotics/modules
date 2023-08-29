@@ -22,7 +22,7 @@ const TransactionsDetails = () => {
       <View style={styles.borderDiv}></View>
       <View style={styles.imgContainer2}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/edit.png")} style={styles.editImg} />
       </View>
       <View style={styles.infoContainer}>

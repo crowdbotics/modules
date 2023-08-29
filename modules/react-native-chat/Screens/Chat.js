@@ -1,11 +1,11 @@
 import React, { useLayoutEffect, useEffect, useState } from "react";
 import { user, useStore } from "../Store";
-// @ts-ignore
+
 import { GiftedChat, InputToolbar } from "react-native-gifted-chat";
-// @ts-ignore
+
 import { usePubNub } from "pubnub-react";
 import { cloneArray, getUrl, loadHistory, sendMessage, sortArray } from "../utils";
-// @ts-ignore
+
 import { launchImageLibrary } from "react-native-image-picker";
 import { StyleSheet, Image, View, Text } from "react-native";
 import {
@@ -16,7 +16,7 @@ import {
 } from "react-native-popup-menu";
 
 import Video from "react-native-video";
-// @ts-ignore
+
 import EmojiSelector from "react-native-emoji-selector";
 
 const Chat = ({ route, navigation }) => {

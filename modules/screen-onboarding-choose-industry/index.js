@@ -12,7 +12,7 @@ const OnboardingChooseIndustryScreen = (params) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Image
-          source={require(// @ts-ignore
+          source={require(
             "./assets/back.png")}
           style={styles.back}
         />
