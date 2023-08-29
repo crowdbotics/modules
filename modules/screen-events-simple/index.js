@@ -25,7 +25,7 @@ const EventsAdvancedScreen = () => {
               <View style={styles.walletInner}>
                 <View style={styles.imgContainer}>
                   <Image
-                    source={require(// @ts-ignore
+                    source={require(
                       "./assets/edit.png")}
                     style={styles.image}
                   />

@@ -24,14 +24,16 @@ const NewRideBooking = () => {
   return (
     <ImageBackground
       style={styles.container}
-      source={require("./assets/mapBackground.png")}>
+      source={require("./assets/mapBackground.png")}
+    >
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);
-        }}>
+        }}
+      >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <View style={styles.roundIconContainer}>
@@ -43,7 +45,7 @@ const NewRideBooking = () => {
             <Text style={styles.heading}>New Booking</Text>
             <View style={styles.orderContainer}>
               <Text style={styles.bold}>Order details</Text>
-              <View style={styles.detailPallete}>
+              <View style={styles.detailPallet}>
                 <View style={styles.orderDetails}>
                   <Text style={styles.mainText}>Price</Text>
                   <Text style={styles.subText}>Total</Text>
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
   fnt16: {
     fontSize: 16
   },
-  detailPallete: {
+  detailPallet: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -237,7 +239,7 @@ const styles = StyleSheet.create({
 });
 
 export default NewRideBooking;
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -253,7 +255,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

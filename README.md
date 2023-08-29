@@ -1,59 +1,77 @@
-# Crowdbotics Modules
+<h1 align="center">
+  <a href="https://crowdbotics.com">
+    Crowdbotics Modules
+  </a>
+</h1>
 
-[![Lint](https://github.com/crowdbotics/modules/actions/workflows/lint.yml/badge.svg)](https://github.com/crowdbotics/modules/actions/workflows/lint.yml) [![Parse and validate modules](https://github.com/crowdbotics/modules/actions/workflows/parse.yml/badge.svg)](https://github.com/crowdbotics/modules/actions/workflows/parse.yml)
+<p align="center">
+  A customized React Native scaffold and a library of Django & React Native modules.
+</p>
 
-This is a monorepo which holds the source code for the various modules we built,
-for tracking purposes and to ease the creation of new ones. There's a complete React Native custom template in [scaffold](/scaffold). It also includes utilities for modules installation and removal.
+<p align="center">
+  <a href="https://github.com/crowdbotics/modules/actions/workflows/lint.yml">
+    <img src="https://github.com/crowdbotics/modules/actions/workflows/lint.yml/badge.svg" alt="Source Code linter" />
+  </a>
+  <a href="https://github.com/crowdbotics/modules/actions/workflows/parse.yml">
+    <img src="https://github.com/crowdbotics/modules/actions/workflows/parse.yml/badge.svg" alt="Modules validation" />
+  </a>
+  <a href="https://github.com/crowdbotics/modules/actions/workflows/release.yml">
+    <img src="https://github.com/crowdbotics/modules/actions/workflows/release.yml/badge.svg" alt="Production Release" />
+  </a>
+</p>
 
-## Requirements
+## Contents
 
-### Node.js
+- [Modules library](/modules)
+- [Custom React Native template](/scaffold/template/custom)
+- [Documentation](https://crowdbotics.github.io/modules/)
+- [Changelog](/CHANGELOG.md)
+- [Scaffold Changelog](/scaffold/CHANGELOG.md)
 
-Node.js `v14.17.1` (LTS) is required, we depend on relatively new `fs` calls.
+## Requirements for contributing
 
-Our template is on the latest React Native and React versions.
-[scaffold/template/package.json](/scaffold/template/package.json)
+The following must be available in your system:
 
-```json
-  "dependencies": {
-    "react": "17.0.1",
-    "react-native": "0.64.2"
-  },
-```
+- [node](https://nodejs.org/en)
+- [yarn](https://yarnpkg.com/)
+- [python](https://www.python.org/)
+- [pipenv](https://pypi.org/project/pipenv/)
+- [urllib3](https://urllib3.readthedocs.io/en/stable/) without this the project will not run in ```macOS``` environments
 
-[Yarn](https://yarnpkg.com/) is required:
+Node `v18.16.0` (LTS) recommended.
+
+## Getting started
+
+Install node modules:
 
 ```sh
-npm install -g yarn
+yarn install
 ```
 
-### Python dependencies
-
-The `demo` command depends on the Python library [cookiecutter](https://github.com/cookiecutter/cookiecutter).
+Install python packages:
 
 ```sh
 pipenv install
 ```
 
-## Getting started
-
-Generate a new app based on the scaffold:
+Spin a demo app using the customized React Native template:
 
 ```sh
 yarn run demo
 ```
 
-Install the `App Menu` module:
+Install modules to your demo app:
 
 ```sh
 yarn run add react-native-app-menu
 ```
 
-## Documentation
+Create new modules and test/validate your work locally before submitting a PR:
 
-- [Commands](/docs/commands.md)
-- [Modules available](/docs/modules.md)
-- [Autoloading modules](/docs/autoloading.md)
-- [Authoring new modules](/docs/authoring.md)
-- [Resources](/docs/resources.md)
-- [@store module](/docs/store.md)
+```sh
+yarn run parse
+```
+
+
+### macOS config
+- make sure to have a compatible version of urllib3 with openssl. urllib3 v2.0 or higher is compatible with OpenSSL 1.1.1 or higher

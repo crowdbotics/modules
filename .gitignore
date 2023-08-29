@@ -107,6 +107,8 @@ demo
 
 notebooks
 
+.idea
+
 ## Python template
 
 # Byte-compiled / optimized / DLL files
@@ -197,3 +199,9 @@ celerybeat-schedule
 venv/
 ENV/
 myvenv/
+
+# VScode
+.DS_Store
+
+# dist files
+dist/raw

@@ -1,50 +1,33 @@
-# Django Privacy Policy
-Module saves privacy policy as HTML code in database against a user and retrieves it to the frontend.
+## Django Privacy Policy backend configuration and information
+
+## Module description
+
+This module used to create and manages the privacy policy for app users.
 
 ## Features
-1. Store privacy policy instructions for the app users.
 
+- [x] This module includes migrations.
+- [ ] This module includes environment variables.
+- [ ] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
-## Install:
+## Environment variables
 
-1. No additional packages should be required for v1. 
-2. If your app is already up and running, after adding this modules via the `npm run add` command, you need to make migrations and run them. In docker: 
-	```
-	python manage.py makemigrations
-   	python manage.py migrate
-	python manage.py runserver 
-	```
-   You should see something about the first privacy migration running and adding the PrivacyPolicy model to the db.
-3. Set the url the frontend calls. In /privacy-policy/modules/index.js, change the URL in the fetch call, where it says <APP_URL_HERE>, to your app's url.
-4. In the admin panel, make sure you add a `PrivacyPolicy` object and set it to active in the admin panel. Then you should should be up and running.
+No environment variables are required.
 
+## 3rd party setup
 
-## Usage:
-1. Go to your admin panel to add a new `PrivacyPolicy` object: `<site-url>.botics.co/admin/` and click on PrivacyPolicy. Make sure you save it.
-2. Make sure to set the active flag. Without at least 1 `PrivacyPolicy` object with an active flag, nothing will be returned by the backend. If there are multiple PP objects with active flags, the most recently updated one will be returned.
-3. Your privacy policy will be available at the following endpoint:
-GET: `<site-url>.botics.co/modules/privacy-policy/`
+No 3rd party setup is required.
 
-Example Response: 
-```
+## Dependencies
 
-{
-	ID: 1,
-	body: "Privacy Policy ......",
-	author: 1,
-	is_active: true,
-	"created_at": "2021-04-27T18:02:42.491496Z",
-	"updated_at": "2021-04-27T18:02:42.491539Z"
-}
+No dependencies are required.
 
+## API details
 
-```
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+| Api Name                                  |                             Param                              | Description                                                   |
+|-------------------------------------------|:--------------------------------------------------------------:|:--------------------------------------------------------------|
+| `/modules/privacy-policy/` `POST`         | body_params `{'author': 'user_foreign_key', 'body': "string"}` | This will used to create a privacy policy.                    |
+| `/modules/privacy-policy/` `GET`          |                               -                                | This will used to return a list of privacy policies.          |
+| `/modules/privacy-policy/<pk>/ ` `GET`    |               path_params `{privacy_policy_id}`                | This will used to return a detail of specific privacy policy. |
+| `/modules/privacy-policy/<pk>/ ` `DELETE` |               path_params `{privacy_policy_id}`                | This will used to delete a privacy policy.                    |
