@@ -38,7 +38,7 @@ const LinkedBankCredentials = () => {
             <Image source={bank.image} style={styles.bankImage} />
           </View>
         </View>
-        <Button buttonText="Request withdrawl" style={styles.button} />
+        <Button buttonText="Request withdrawal" style={styles.button} />
       </ScrollView>
     </View>
   );
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
 
 export default LinkedBankCredentials;
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -139,7 +139,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
@@ -181,7 +182,7 @@ const buttonStyles = StyleSheet.create({
   }
 });
 
-const Input = props => {
+const Input = (props) => {
   return (
     <View style={[inputStyles.inputContainer, props.containerStyle]}>
       {props.text
@@ -198,7 +199,7 @@ const Input = props => {
         ]}
         placeholder={props.placeholder ? props.placeholder : "Enter"}
         value={props.value}
-        onChangeText={text => props.onChange(text)}
+        onChangeText={(text) => props.onChange(text)}
         placeholderTextColor={
           props.placeholderTextColor ? props.placeholderTextColor : "#9B9B9B"
         }

@@ -1,6 +1,6 @@
-// @ts-ignore
+
 import WalletConnectProvider from "@walletconnect/web3-provider";
-// @ts-ignore
+
 import Web3 from "web3";
 
 export let globalConnector;

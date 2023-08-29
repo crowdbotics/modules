@@ -1,6 +1,7 @@
 from setuptools import setup
 from setuptools.command.build import build
 
+
 # Override build command
 class BuildCommand(build):
     def initialize_options(self):

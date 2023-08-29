@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { ChannelType, useStore } from "../Store";
 import Circle from "../Components/Circle";
-// @ts-ignore
+
 import CheckBox from "@react-native-community/checkbox";
 import { cloneArray, createGroupChannel } from "../utils";
-// @ts-ignore
+
 import { usePubNub } from "pubnub-react";
 import Loader from "../Components/loader";
 

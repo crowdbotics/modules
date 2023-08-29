@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Text, View, ScrollView, Switch, TouchableOpacity } from "react-native";
-// @ts-ignore
+
 import { OptionsContext } from "@options";
 
 const App = () => {

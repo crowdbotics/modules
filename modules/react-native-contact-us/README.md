@@ -1,12 +1,43 @@
-# Contact Us
+# Contact Us React native specs
+
+## Module description
+
 This module will be used by users for contacting the customer support or app owner
 
-# Global Configs
-## Update api url in options/options.js
+- User can contact the admin by filling the contact form.
+- User can also send an email directly to admin through device's mail app.
 
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/919a7871-511c-4e81-9b54-5e5d4a67781c)
 
-```
+
+
+## ## Features
+
+ - [x] This module includes environment variables.
+ - [ ] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+No 3rd party account setup required.
+
+## Dependencies
+
+
+Dependencies used:
+- @react-navigation/native  -  https://www.npmjs.com/package/@react-navigation/native
+
+- @react-navigation/native-stack  -  https://www.npmjs.com/package/@react-navigation/native-stack
+
+## ## Module Options
+
+### Global Configs
+
+Update the options/options.js file with your app's backend url. 
+
+```javascript
 export const globalOptions = {
     ...
   url: "https://my-app.botics.co",
@@ -14,32 +45,22 @@ export const globalOptions = {
 }
 ```
 
-# Local Configs
-## Update local options  in modules/contact-us/options.js
-```
+### Local Configs
+
+Update local options in `modules/contact-us/options.js`
+
+```javascript
 export default {
   email: "admin@admin.com",
   textMessage: "textMessage"
 };
 ```
-## Manual Setup
 
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+### Android setup
 
-```javascript
-import ContactUs from "@modules/contact-us";
+No android setup required.
 
-const { title, navigator } = ContactUs;
-```
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+### iOS setup
 
-```javascript
-import { modules } from '@modules';
-const ContactUs = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<ContactUs />
-```
-# Features
-User can contact the admin
-
-User can write email to the admin directly 
+No iOS setup required
