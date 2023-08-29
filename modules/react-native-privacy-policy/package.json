@@ -1,0 +1,12 @@
+{
+  "name": "@modules/privacy-policy",
+  "version": "1.0.1",
+  "description": "Privacy Policy Screen",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-render-html": "^5.1.0"
+  }
+}

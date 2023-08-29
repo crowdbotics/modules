@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { globalConnector, walletProvider } from "../utils";
-// @ts-ignore
+
 import Web3 from "web3";
 import { Text, SectionList, View, StyleSheet, Image } from "react-native";
 import Loader from "../components/Loader";
-// @ts-ignore
+
 import walletIcon from "../assets/wallet.png";
 
 const TransactionHistory = () => {

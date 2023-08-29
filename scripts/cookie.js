@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import fse from "fs-extra";
-import config from "./config.js";
+import config from "../config.js";
 // https://github.com/react-native-community/cli/blob/22a3c2558c2e03cc61f088807d2b09d1567c07ca/packages/cli/src/commands/init/editTemplate.ts#L77
 import edit from "../node_modules/@react-native-community/cli/build/commands/init/editTemplate.js";
 const replace = edit.changePlaceholderInTemplate;
@@ -10,7 +10,7 @@ const source = path.join(process.cwd(), config.dist.builds.raw.directory);
 const target = path.join(process.cwd(), config.dist.builds.cookie.directory);
 
 if (fs.existsSync(target)) {
-  fs.rmdirSync(target, { recursive: true });
+  fs.rmSync(target, { recursive: true });
 }
 
 const rawNodeModules = path.join(
@@ -20,7 +20,7 @@ const rawNodeModules = path.join(
 );
 
 if (fs.existsSync(rawNodeModules)) {
-  fs.rmdirSync(rawNodeModules, { recursive: true });
+  fs.rmSync(rawNodeModules, { recursive: true });
 }
 
 fse.copySync(source, target);

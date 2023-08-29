@@ -1,42 +1,51 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet, Text, ScrollView, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useState, useContext, useMemo } from "react";
+import {
+  View,
+  Text,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity
+} from "react-native";
 import { CalendarList } from "react-native-calendars";
 import { OptionsContext } from "@options";
 import DropDownPicker from "react-native-dropdown-picker";
 import Button from "../components/Button";
+import { appointmentDurations, timeSlots } from "../utils";
 
+/**
+ * Component to display a calendar with time slots and a duration picker.
+ * Allows users to select a date, time slot, and duration for an appointment.
+ * @param {Object} navigation - Navigation object provided by React Navigation.
+ * @returns {JSX.Element} - The rendered Calendar component.
+ */
 const Calendar = ({ navigation }) => {
-  const options = useContext(OptionsContext);
+  const { styles } = useContext(OptionsContext);
   const today = new Date();
   const [open, setOpen] = useState(false);
   const [duration, setDuration] = useState("00:30:00");
   const [markedDates, setMarkedDates] = useState({
-    selectedDate: today.toDateString(),
+    selectedDate: null,
     markedDates: {
-      [today.toDateString()]: { selected: true, color: "#00B0BF", textColor: "#FFFFFF" }
+      [today.toDateString()]: {
+        selected: true,
+        color: "#00B0BF",
+        textColor: "#FFFFFF"
+      }
     }
   });
-  const [timeSlot, setTimeSlot] = useState("");
-  const [items, setItems] = useState([
-    { label: "30 min", value: "00:30:00" },
-    { label: "1 hour", value: "01:00:00" },
-    { label: "1 hour 30 min", value: "01:30:00" },
-    { label: "2 hour", value: "02:00:00" },
-    { label: "2 hour 30 min", value: "02.30:00" },
-    { label: "3 hour", value: "03:00:00" }
-  ]);
+  const [timeSlot, setTimeSlot] = useState(null);
 
-  const daySelector = (day) => {
+  // Function to update the selected date when a day is pressed in the calendar.
+  const selectDay = (day) => {
     const markedDates = {};
-    markedDates[day.dateString] = { selected: true, selectedColor: "#000" };
+    markedDates[day.dateString] = {
+      selected: true,
+      selectedColor: "#000"
+    };
     setMarkedDates({
       selectedDate: day.dateString,
       markedDates: markedDates
     });
-  };
-
-  const selectTimeSlot = (item) => {
-    setTimeSlot(item);
   };
 
   return (
@@ -48,84 +57,64 @@ const Calendar = ({ navigation }) => {
             horizontal={true}
             pagingEnabled={true}
             calendarWidth={370}
-            onDayPress={daySelector}
+            onDayPress={selectDay}
             markedDates={markedDates.markedDates}
-
           />
           <Text style={styles.timeSlot}>Time Slot</Text>
-          <View style={styles.list}>
-            { options.timeSlots.map((item, index) => (
-              <TouchableOpacity style={[styles.items, {
-                backgroundColor: (timeSlot === item ? "#000" : "#FFF")
-              }]} onPress={() => selectTimeSlot(item)} key={index}>
-                <Text style={{
-                  color: (timeSlot === item ? "#FFF" : "#000")
-                }}>{item}</Text>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.timeSlotList}>
+            {useMemo(() => {
+              return timeSlots.map((item, index) => (
+                <TouchableOpacity
+                  style={[
+                    styles.slotItems,
+                    {
+                      backgroundColor: timeSlot === item ? "#000" : "#FFF"
+                    }
+                  ]}
+                  onPress={() => setTimeSlot(item)}
+                  key={index}
+                >
+                  <Text
+                    style={{
+                      color: timeSlot === item ? "#FFF" : "#000"
+                    }}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ));
+            }, [timeSlot])}
           </View>
           <View style={styles.mt15}>
             <Text style={styles.mb10}>Duration</Text>
             <DropDownPicker
               open={open}
               value={duration}
-              items={items}
+              items={appointmentDurations}
               setOpen={setOpen}
               setValue={setDuration}
-              setItems={setItems}
-              style={styles.dropdown}
+              style={styles.durationDropdown}
             />
           </View>
-          <View style={styles.button}>
-            <Button onPress={() => navigation.navigate("AppointmentForm", {
-              duration: duration,
-              timeSlot: timeSlot,
-              selectedDate: markedDates.selectedDate
-            })}>Next</Button>
+          <View style={styles.nextButton}>
+            <Button
+              // Disable the button if either the time slot or date is not selected.
+              disabled={!!(!timeSlot || !markedDates.selectedDate)}
+              onPress={() =>
+                navigation.navigate("AppointmentForm", {
+                  duration: duration,
+                  timeSlot: timeSlot,
+                  selectedDate: markedDates.selectedDate
+                })
+              }
+            >
+              Next
+            </Button>
           </View>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 };
-const styles = StyleSheet.create({
-  items: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#D8D8D8",
-    width: 90,
-    height: 30,
-    margin: 7,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  list: {
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap"
-  },
-  mt15: {
-    marginTop: 15
-  },
-  mb10: {
-    marginBottom: 10,
-    fontSize: 14,
-    marginLeft: 10
-  },
-  button: {
-    padding: 30
-  },
-  ph10: {
-    paddingHorizontal: 15
-  },
-  timeSlot: {
-    marginVertical: 10,
-    fontSize: 14,
-    marginLeft: 10
-  },
-  dropdown: {
-    borderColor: "#C4C4C4",
-    height: 53
-  }
-});
+
 export default Calendar;
