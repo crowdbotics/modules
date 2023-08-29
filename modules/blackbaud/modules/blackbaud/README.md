@@ -8,7 +8,7 @@ This is a react native based module which allows users to authorize their blackb
 - Ability to retrieve the access token
 - Ability to retrieve the list of events.
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/6bdfddb0-cdfd-4496-8d44-ec677cc53cb4)
 
 ## ## Features
 
