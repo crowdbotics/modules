@@ -10,7 +10,7 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_terms_and_conditions",
+    name="cb_django_terms_and_conditions",
     version="0.1",
     packages=["terms_and_conditions"],
     install_requires=[],
