@@ -47,6 +47,8 @@ detailing that process:
 - To generate a subscription key, go to  `My subscriptions`.
 - For each subscription if you have, you can select to generate your primary or secondary access key.
 - After that your `Bb-Api-Subscription-Key` will appear.
+  ![blackbaudnew](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/cdc5c1a4-ba7c-42b1-a639-2287b8d37d39)
+  ![Screenshot from 2023-08-29 18-56-57](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/ef1a9562-c48a-4f3c-948d-7e5d9a2e24b9)
 
 ## Dependencies
 
