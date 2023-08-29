@@ -32,7 +32,7 @@ const HotelFilter = () => {
       {
         name: "Hotel room",
         description:
-          "Have a priate or shared room in a botique hotel, hostel, and more."
+          "Have a private or shared room in a boutique hotel, hostel, and more."
       }
     ]);
     setAmenities([
@@ -55,14 +55,14 @@ const HotelFilter = () => {
         list: ["Bread and breakfast"]
       },
       {
-        name: "Botique Hotels",
-        list: ["Bptique Hotels", "Serviced apartment"]
+        name: "Boutique Hotels",
+        list: ["Boutique Hotels", "Serviced apartment"]
       }
     ]);
   }, []);
-  const handleSelect = item => {
+  const handleSelect = (item) => {
     if (selected.includes(item)) {
-      setSelected(selected.filter(i => i !== item));
+      setSelected(selected.filter((i) => i !== item));
     } else {
       setSelected([...selected, item]);
     }
@@ -84,7 +84,7 @@ const HotelFilter = () => {
               maximumValue={500}
               step={1}
               value={sliderValue}
-              onValueChange={value => setSliderValue(value)}
+              onValueChange={(value) => setSliderValue(value)}
               minimumTrackTintColor="#40BA00"
               maximumTrackTintColor="#eee"
               thumbTintColor="red"
@@ -113,17 +113,17 @@ const HotelFilter = () => {
           <Counter
             name="Beds"
             value={numBeds}
-            onValueChange={x => setNumBeds(x)}
+            onValueChange={(x) => setNumBeds(x)}
           />
           <Counter
             name="Bedrooms"
             value={numBedrooms}
-            onValueChange={x => setNumBedrooms(x)}
+            onValueChange={(x) => setNumBedrooms(x)}
           />
           <Counter
             name="Bathrooms"
             value={numBaths}
-            onValueChange={x => setNumBaths(x)}
+            onValueChange={(x) => setNumBaths(x)}
           />
         </View>
         <View style={styles.sectionContainer}>
@@ -249,13 +249,14 @@ const styles = StyleSheet.create({
 
 export default HotelFilter;
 
-const Checkbox = props => {
+const Checkbox = (props) => {
   return (
     <Pressable
       onPress={() => {
         props.setValue(!props.value);
       }}
-      style={[checkboxStyles.container, props.style]}>
+      style={[checkboxStyles.container, props.style]}
+    >
       <Image
         source={
           props.value
@@ -279,11 +280,11 @@ const checkboxStyles = StyleSheet.create({
   }
 });
 
-const Counter = props => {
-  const increment = x => {
+const Counter = (props) => {
+  const increment = (x) => {
     return x + 1;
   };
-  const decrement = x => {
+  const decrement = (x) => {
     if (x > 0) {
       return x - 1;
     } else {
@@ -339,7 +340,7 @@ const counterStyles = StyleSheet.create({
   }
 });
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color ? params.color : "#000";
   const textColor = params.textColor ? params.textColor : "#fff";
   const btnStyle = {
@@ -355,7 +356,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle, params.style]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>

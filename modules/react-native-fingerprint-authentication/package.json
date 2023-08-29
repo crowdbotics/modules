@@ -1,0 +1,13 @@
+{
+	"name": "@modules/fingerprint-authentication",
+	"version": "1.0.0",
+	"description": "Module helps user to verify a person's identity based on one or more of their fingerprints",
+	"private": true,
+	"main": "index.js",
+	"author": "Crowdbotics",
+	"license": "ISC",
+	"x-dependencies": {
+		"react-native-touch-id": "4.4.1"
+	},
+	"dependencies": {}
+}

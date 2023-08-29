@@ -1,0 +1,5 @@
+{
+  "title": "Slack (Django)",
+  "description": "Slack backend",
+  "root": "/backend/modules"
+}

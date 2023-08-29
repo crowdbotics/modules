@@ -70,14 +70,13 @@ export const pickFromGallery = async () => {
     return false;
   } else {
     try {
-      const res = await ImagePicker.openPicker({
+      return await ImagePicker.openPicker({
         width: 300,
         height: 300,
         cropping: true,
         mediaType: "photo",
         includeBase64: true
       });
-      return res;
     } catch (err) {
       console.log("pickFromGallery err", err);
       return false;
@@ -92,14 +91,13 @@ export const pickFromCamera = async () => {
     return false;
   } else {
     try {
-      const res = await ImagePicker.openCamera({
+      return await ImagePicker.openCamera({
         width: 300,
         height: 300,
         cropping: true,
         mediaType: "photo",
         includeBase64: true
       });
-      return res;
     } catch (err) {
       console.log("pickFromCamera err", err);
       return false;

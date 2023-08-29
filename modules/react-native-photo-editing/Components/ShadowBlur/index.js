@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
-// @ts-ignore
+
 import Slider from "@react-native-community/slider";
 
 const ShadowBlurs = (props) => {
