@@ -9,12 +9,12 @@ import {
   SectionList,
   StyleSheet
 } from "react-native";
-// @ts-ignore
+
 import { usePubNub } from "pubnub-react";
 import { fetchChannels, getByValue, makeChannelsList, timeSince } from "../utils";
 import Circle from "../Components/Circle";
 import SearchBar from "../Components/SearchBar";
-// @ts-ignore
+
 import { useFocusEffect } from "@react-navigation/native";
 
 const Conversations = ({ navigation }) => {
