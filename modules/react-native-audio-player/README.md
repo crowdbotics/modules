@@ -9,7 +9,7 @@ This react-native based module provides simple audio player functionalities i.e 
 - Select audio to play from playlist.
 - Play previous/next audio.
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/a5dca02b-31d4-449c-9173-1b7465383848)
 
 ## ## Features
 
