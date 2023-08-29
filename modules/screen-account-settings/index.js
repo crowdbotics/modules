@@ -22,7 +22,7 @@ const AccountSettingsScreen = (params) => {
       <ScrollView>
         <View style={styles.subContainer}>
           <Text style={styles.subText}>Subscription</Text>
-          <View style={styles.subPallete}>
+          <View style={styles.subPallet}>
             <View style={styles.planDes}>
               <Text style={[styles.fnt25, styles.boldText]}>Plan</Text>
               <Text style={styles.fnt16}>Description</Text>
@@ -34,7 +34,7 @@ const AccountSettingsScreen = (params) => {
           </View>
         </View>
         <View style={styles.billingContainer}>
-          <Text style={styles.billingText}>Billing informations</Text>
+          <Text style={styles.billingText}>Billing information</Text>
           <View style={styles.nameInput}>
             <Text style={styles.inputText}>Full Name</Text>
             <TextInput
@@ -48,10 +48,10 @@ const AccountSettingsScreen = (params) => {
             />
           </View>
           <View style={styles.nameInput}>
-            <Text style={styles.inputText}>Email Adress</Text>
+            <Text style={styles.inputText}>Email Address</Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter your Email Adress"
+              placeholder="Enter your Email Address"
               placeholderTextColor="#9B9B9B"
               autoCapitalize="none"
               autoCorrect={false}
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     marginLeft: 20
   },
-  subPallete: {
+  subPallet: {
     backgroundColor: "#fff",
     borderRadius: 10,
     borderWidth: 1,

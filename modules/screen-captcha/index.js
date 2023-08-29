@@ -83,7 +83,7 @@ const CaptchaScreen = (params) => {
 
 const Post = ({ post }) => {
   return (
-    <View style={styles.postContianer}>
+    <View style={styles.postContainer}>
       <Image source={post.imageSrc} style={styles.image} />
     </View>
   );
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%"
   },
-  postContianer: {
+  postContainer: {
     height: 125,
     width: 125,
     borderRadius: 10,

@@ -6,7 +6,7 @@ const DocumentsDetails = (params) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>Details</Text>
         <Text />
@@ -34,7 +34,7 @@ const DocumentsDetails = (params) => {
       <View style={styles.chooseContainer}>
         <Text>Download file</Text>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/upload.png")} style={styles.filterImg} />
       </View>
         <View style={styles.buttonBottom}>

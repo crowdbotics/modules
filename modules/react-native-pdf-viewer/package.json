@@ -1,0 +1,14 @@
+{
+	"name": "@modules/pdfviewer",
+	"version": "1.0.0",
+	"description": "PDF Viewer is a React Native based module that allows both Android and iOS users to display or preview PDF files.",
+	"private": true,
+	"main": "index.js",
+	"x-dependencies": {
+		"prop-types": "15.8.1",
+		"react-native-view-pdf": "0.14.0"
+	},
+	"author": "Crowdbotics",
+	"license": "ISC",
+	"dependencies": {}
+}

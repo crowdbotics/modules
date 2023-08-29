@@ -1,5 +1,11 @@
 import * as React from "react";
-import { Text, View, StyleSheet, TextInput, TouchableHighlight } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TextInput,
+  TouchableHighlight
+} from "react-native";
 
 const pressed = () => {
   console.log("pressed");
@@ -13,20 +19,24 @@ const ForgotPassword = () => {
       </View>
 
       <View style={styles.inputSection}>
-      <View style={styles.newPassword}>
-        <Text style={styles.newpasswordText}>Set new password for your account.</Text>
-      </View>
-      <View style={styles.passwordInput}>
-        <Text style={styles.newpasswordLabel}>Password</Text>
-        <Input placeholder="Enter"></Input>
-      </View>
-      <View style={styles.confirmInput}>
-        <Text style={styles.newpasswordLabel}>Confirm Password</Text>
-        <Input placeholder="Enter"></Input>
-      </View>
+        <View style={styles.newPassword}>
+          <Text style={styles.newPassword}>
+            Set new password for your account.
+          </Text>
+        </View>
+        <View style={styles.passwordInput}>
+          <Text style={styles.newPasswordLabel}>Password</Text>
+          <Input placeholder="Enter"></Input>
+        </View>
+        <View style={styles.confirmInput}>
+          <Text style={styles.newPasswordLabel}>Confirm Password</Text>
+          <Input placeholder="Enter"></Input>
+        </View>
       </View>
       <View style={styles.resetButton}>
-        <Button onPress={pressed} style={styles.resetBtn}>Reset password</Button>
+        <Button onPress={pressed} style={styles.resetBtn}>
+          Reset password
+        </Button>
       </View>
       <View style={styles.back}>
         <Text style={styles.backText}>Back</Text>
@@ -60,12 +70,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center"
-
   },
   passwordInput: {
     marginTop: 50
   },
-  newpasswordLabel: {
+  newPasswordLabel: {
     paddingLeft: 15,
     paddingBottom: 7
   },
@@ -93,14 +102,28 @@ export default ForgotPassword;
 
 const Button = (props) => {
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
-      <View style={[btnStyles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-        height: props.height ? props.height : 49,
-        borderWidth: props.borderWidth ? props.borderWidth : 0,
-        borderColor: props.borderColor ? props.borderColor : "#000000"
-      }]}>
-        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+    <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">
+      <View
+        style={[
+          btnStyles.button,
+          {
+            backgroundColor: props.backgroundColor
+              ? props.backgroundColor
+              : "#000000",
+            height: props.height ? props.height : 49,
+            borderWidth: props.borderWidth ? props.borderWidth : 0,
+            borderColor: props.borderColor ? props.borderColor : "#000000"
+          }
+        ]}
+      >
+        <Text
+          style={[
+            btnStyles.text,
+            { color: props.color ? props.color : "#ffffff" }
+          ]}
+        >
+          {props.children}
+        </Text>
       </View>
     </TouchableHighlight>
   );
@@ -127,10 +150,14 @@ const Input = (props) => {
         placeholder={props.placeholder}
         value={props.value}
         onChangeText={(num) => props.setValue(num)}
-        placeholderTextColor='#ddd'
+        placeholderTextColor="#ddd"
         editable={props.editable !== false}
       />
-      {props.errorText ? <Text style={inputStyles.error}>{props.errorText}</Text> : null}
+      {props.errorText
+        ? (
+        <Text style={inputStyles.error}>{props.errorText}</Text>
+          )
+        : null}
     </View>
   );
 };
