@@ -7,7 +7,7 @@ This is a React Native based module that renders a navigation drawer which can b
 - Navigation between screens
 - Open and close drawer with gestures.
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/120275623/dae04e08-c117-4b0c-b075-224967b247dd)
 
 ## ## Features
 
