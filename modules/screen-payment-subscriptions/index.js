@@ -17,8 +17,8 @@ const PaymentSubscriptionScreen = (params) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <TabView tabTitles={["Beginer", "Intermediate", "VIP"]} selected={0} />
-        <View style={styles.subPallete}>
+        <TabView tabTitles={["Beginner", "Intermediate", "VIP"]} selected={0} />
+        <View style={styles.subPallet}>
           <View style={styles.planDes}>
             <Text style={[styles.fnt25, styles.boldText]}>Beginner</Text>
             <Text style={styles.fnt16}>Description</Text>
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  subPallete: {
+  subPallet: {
     marginHorizontal: 20,
     backgroundColor: "#fff",
     borderRadius: 10,

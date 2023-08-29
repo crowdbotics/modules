@@ -1,0 +1,24 @@
+{
+  "name": "@modules/appointment",
+  "version": "1.0.0",
+  "description": "Appointment Module",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-calendar-strip": "2.2.5",
+    "react-native-dropdown-picker": "5.3.0",
+    "@react-navigation/native-stack": "6.5.0",
+    "react-native-screens": "3.10.2",
+    "react-native-calendars": "1.1282.0",
+    "moment": "2.29.3"
+  },
+  "x-dependencies": {
+    "react-native-pager-view": "5.4.15",
+    "react-native-tab-view": "3.1.1",
+    "react-native-calendar-strip": "2.2.5",
+    "react-native-calendars": "1.1282.0",
+    "@react-native-google-signin/google-signin": "7.2.2"
+  }
+}

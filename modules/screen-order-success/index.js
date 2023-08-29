@@ -11,7 +11,7 @@ const OrderSuccess = () => {
             style={styles.check}
           />
         </View>
-        <Text style={styles.heading}>Order Sucessful</Text>
+        <Text style={styles.heading}>Order Successful</Text>
         <Text style={styles.subHeading}>Your order has been processed.</Text>
       </View>
 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 
 export default OrderSuccess;
 
-const Button = params => {
+const Button = (params) => {
   const backgroundColor = params.color || "#000";
   const textColor = params.textColor || "#fff";
   const btnStyle = {
@@ -86,7 +86,8 @@ const Button = params => {
       <View style={!params.hideShadow ? buttonStyles.shadowContainer : null}>
         <Pressable
           style={[buttonStyles.btn, btnStyle]}
-          onPress={params.onPress}>
+          onPress={params.onPress}
+        >
           <Text style={[buttonStyles.btnText, btnText]}>
             {params.buttonText}
           </Text>
