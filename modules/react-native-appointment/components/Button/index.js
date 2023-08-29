@@ -1,29 +1,46 @@
-import React from "react";
-import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
+import React, { useContext } from "react";
+import { View, Text, TouchableHighlight } from "react-native";
+import { OptionsContext } from "@options";
+/**
+ * A custom button component with customizable appearance and behavior.
+ * @param {function} onPress - The function to be called when the button is pressed.
+ * @param {boolean} disabled - Determines if the button is disabled or not (default: false).
+ * @param {string} backgroundColor - The background color of the button (default: "#000000" when enabled, "#cccccc" when disabled).
+ * @param {number} height - The height of the button in pixels (default: 49).
+ * @param {string} color - The text color of the button (default: "#ffffff").
+ * @param {ReactNode} children - The content to be displayed inside the button.
+ * @returns {JSX.Element} - The Button component.
+ */
+const Button = ({
+  onPress,
+  disabled = false,
+  backgroundColor = disabled ? "#cccccc" : "#000000",
+  height = 49,
+  color = "#ffffff",
+  children
+}) => {
+  const { styles } = useContext(OptionsContext);
 
-const Button = (props) => {
+  const buttonStyle = {
+    backgroundColor: backgroundColor,
+    height: height
+  };
+
+  const textStyle = {
+    color: color
+  };
+
   return (
-    <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
-      <View style={[styles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-        height: props.height ? props.height : 49
-      }]}>
-        <Text style={[styles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+    <TouchableHighlight
+      onPress={onPress}
+      disabled={disabled}
+      underlayColor="#DDDDDD"
+    >
+      <View style={[styles.buttonView, buttonStyle]}>
+        <Text style={[styles.buttonTitle, textStyle]}>{children}</Text>
       </View>
     </TouchableHighlight>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 10
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 15
-  }
-});
 export default Button;

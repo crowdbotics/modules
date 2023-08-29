@@ -1,7 +1,7 @@
 import fs, { existsSync } from "fs";
 import fse from "fs-extra";
 import path from "path";
-import config from "./config.js";
+import config from "../config.js";
 import find from "find";
 import { execSync } from "child_process";
 
@@ -39,12 +39,12 @@ modules.forEach((module) => {
 
   // cleanup node_modules
   if (existsSync(path.join(originModuleDir, "node_modules"))) {
-    fs.rmdirSync(path.join(originModuleDir, "node_modules"), {
+    fs.rmSync(path.join(originModuleDir, "node_modules"), {
       recursive: true
     });
   }
   if (existsSync(path.join(originModuleDir, "yarn.lock"))) {
-    fs.rmdirSync(path.join(originModuleDir, "yarn.lock"), { recursive: true });
+    fs.rmSync(path.join(originModuleDir, "yarn.lock"));
   }
 
   copy(originModuleDir, targetModuleDir);

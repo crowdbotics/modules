@@ -1,0 +1,12 @@
+{
+  "name": "@modules/terms-and-conditions",
+  "version": "1.0.1",
+  "description": "Terms and Conditions screen",
+  "private": true,
+  "main": "index.js",
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-render-html": "^5.1.0"
+  }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   ImageBackground,
@@ -16,14 +16,25 @@ import {
 } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { createStackNavigator } from "@react-navigation/stack";
-import { BACKGROUND_URL, LOGO_URL } from "./screens/constants.js";
 import { slice } from "./auth";
-import { styles } from "./screens/styles";
+import { OptionsContext } from "@options";
+
+// Screens
 import { SignInTab, SignupTab } from "./screens/loginsignup";
 import PasswordReset from "./screens/reset";
 
+/**
+ * Function used to render the tab bar
+ * @param  {Function} navigation Navigation method to navigate through screens
+ * @param  {Object} state Object containing routes to map
+ * @param  {Object} descriptors Object containing name and key of the tab
+ * @return {React.ReactNode}
+ */
 const LoginTabBar = ({ navigation, state, descriptors }) => {
   const currentTab = state.routes[state.index];
+  const options = useContext(OptionsContext);
+  const { styles } = options;
+
   return (
     <View style={styles.tabStyle}>
       {state.routes.map((route) => (
@@ -56,12 +67,21 @@ const LoginTabBar = ({ navigation, state, descriptors }) => {
   );
 };
 
+/**
+ * Display login and signup tab bar component
+ * @param  {String} initialRouteName Name of the tab which will be rendered at the first place
+ * @param  {Array} children Tab components which will be rendered
+ * @param  {Object} screenOptions Options for tab components
+ * @return {React.ReactNode}
+ */
 function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
   const { state, navigation, descriptors } = useNavigationBuilder(TabRouter, {
     children,
     screenOptions,
     initialRouteName
   });
+  const options = useContext(OptionsContext);
+  const { styles, BACKGROUND_URL, LOGO_URL } = options;
 
   return (
     <NavigationHelpersContext.Provider value={navigation}>
@@ -73,24 +93,13 @@ function LoginSignupTabs({ initialRouteName, children, screenOptions }) {
                 source={{
                   uri: BACKGROUND_URL
                 }}
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  resizeMode: "cover",
-                  height: "100%",
-                  width: "100%"
-                }}
+                style={styles.backgroundImageStyles}
               >
                 <Image
                   source={{
                     uri: LOGO_URL
                   }}
-                  style={{
-                    width: 155,
-                    height: 155,
-                    alignSelf: "center",
-                    resizeMode: "contain"
-                  }}
+                  style={styles.foregroundImage}
                 />
               </ImageBackground>
             </View>
