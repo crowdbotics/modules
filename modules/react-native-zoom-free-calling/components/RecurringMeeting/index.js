@@ -1,11 +1,11 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { View, StyleSheet, Text, Pressable } from "react-native";
-// @ts-ignore
+
 import { RadioButton } from "react-native-paper";
 import DropDownPicker from "react-native-dropdown-picker";
-// @ts-ignore
+
 import DatePicker from "react-native-date-picker";
-// @ts-ignore
+
 import CheckBox from "@react-native-community/checkbox";
 import Input from "../Input";
 import options from "../../options";

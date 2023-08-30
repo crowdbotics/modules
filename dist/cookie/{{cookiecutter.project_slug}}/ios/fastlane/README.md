@@ -1,20 +1,14 @@
-# fastlane documentation
+## fastlane documentation
 
 # Installation
 
 Make sure you have the latest version of the Xcode command line tools installed:
 
-```
+```sh
 xcode-select --install
 ```
 
-Install _fastlane_ using
-
-```
-[sudo] gem install fastlane -NV
-```
-
-or alternatively using `brew install fastlane`
+For _fastlane_ installation instructions, see [Installing _fastlane_](https://docs.fastlane.tools/#installing-fastlane)
 
 # Available Actions
 
@@ -22,54 +16,64 @@ or alternatively using `brew install fastlane`
 
 ### ios tests
 
-```
-fastlane ios tests
+```sh
+[bundle exec] fastlane ios tests
 ```
 
 Runs all the tests
 
 ### ios init_app
 
-```
-fastlane ios init_app
+```sh
+[bundle exec] fastlane ios init_app
 ```
 
 Create app in app store connect
 
 ### ios build_setup
 
-```
-fastlane ios build_setup
+```sh
+[bundle exec] fastlane ios build_setup
 ```
 
 Pre-build setup
 
 ### ios create_build
 
-```
-fastlane ios create_build
+```sh
+[bundle exec] fastlane ios create_build
 ```
 
 Create a new beta build to TestFlight
 
 ### ios beta
 
-```
-fastlane ios beta
+```sh
+[bundle exec] fastlane ios beta
 ```
 
 Push a new beta build to TestFlight
 
+### ios upload_release
+
+```sh
+[bundle exec] fastlane ios upload_release
+```
+
+Upload Release to App Store
+
 ### ios deploy_appetize
 
-```
-fastlane ios deploy_appetize
+```sh
+[bundle exec] fastlane ios deploy_appetize
 ```
 
 Deployment to Appetize
 
 ---
 
-This README.md is auto-generated and will be re-generated every time [fastlane](https://fastlane.tools) is run.
-More information about fastlane can be found on [fastlane.tools](https://fastlane.tools).
-The documentation of fastlane can be found on [docs.fastlane.tools](https://docs.fastlane.tools).
+This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
+
+More information about _fastlane_ can be found on [fastlane.tools](https://fastlane.tools).
+
+The documentation of _fastlane_ can be found on [docs.fastlane.tools](https://docs.fastlane.tools).
