@@ -10,41 +10,15 @@ _Related PRs:_
 - [ ] New feature
 - [ ] Minor changes
 
-## Running the demo
+Did you make changes to the scaffold?
 
-In order to run the included demo app, run `yarn run bootstrap` and then `cd demo` and run both `npx react-native run-android` and `npx react-native start` in parallel.
+- [ ] Yes, and I have read the [scaffold checklist](https://crowdbotics.github.io/modules/scaffold-checklist.html) document and followed the instructions.
+- [ ] No.
 
-## Review checklist for new or updated modules
+Did you make changes to modules or created a new module?
 
-Please go through the following checks:
-
-- [ ] I have made no modules changes - ignore this section questions in that case
-- [ ] I have included a `meta.json` file in the module's root directory
-- [ ] I have included a `preview.png` image in the module's root directory
-- [ ] `yarn run parse` checks pass
-- [ ] I updated the modules build (`/dist` directory) with `yarn run dist`
-
-React Native modules specific checks:
-
-- [ ] `yarn run demo` and `yarn run add app-menu <your-module>` runs correctly
-- [ ] **"Running the demo"** app shows the App Menu screen with an entry for your module
-- [ ] Clicking your module entry in the menu loads your module's initial screen correctly
-
-Django modules specific checks:
-
-- [ ] `python manage.py show_urls` shows that the module's urls are resolved correctly
-- [ ] I have checked that the migrations are detected and run correctly
-- [ ] I have checked that the admin is working correctly for the module
-
-If your module is a "supermodule" and therefore contains both React Native and Django code, then please go through all of the checks above.
-
-## Review checklist for scaffold changes
-
-- [ ] I have made no scaffold changes - ignore this section questions in that case
-- [ ] `yarn run template` produces no changes
-- [ ] `yarn run raw && yarn run cookie` produces no changes, except for `yarn.lock`
-- [ ] `yarn run demo` finishes successfully, `demo` directory gets created locally
-- [ ] **"Running the demo"** opens the app correctly in the welcome screen
+- [ ] Yes, and have read the [modules checklist](https://crowdbotics.github.io/modules/modules-checklist.html) document and followed the instructions.
+- [ ] No.
 
 ## Changes introduced
 

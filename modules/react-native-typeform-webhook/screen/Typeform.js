@@ -1,5 +1,5 @@
 import React from "react";
-// @ts-ignore
+
 import TypeformEmbed from "react-native-typeform-embed";
 
 const TypeForm = ({ route }) => {

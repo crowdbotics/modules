@@ -1,102 +1,47 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Text, StyleSheet, View, Linking } from "react-native";
-import Loader from "../../components/Loader";
-import { getCode } from "../../api";
-// @ts-ignore
+import React, { useEffect, useState, useContext } from "react";
+import { Linking, View } from "react-native";
+import { useRoute } from "@react-navigation/native";
 import QRCode from "react-native-qrcode-svg";
-import { OptionsContext } from "@options";
 import Button from "../../components/Button";
+import { OptionsContext } from "@options";
 
-const GoogleAuth = (props) => {
+/**
+ * Google Authentication Component.
+ * @returns {React.ReactNode} - The Google authentication component.
+ */
+const GoogleAuth = () => {
   const options = useContext(OptionsContext);
-  const [isLoading, setIsLoading] = useState(true);
-  const [name, setName] = useState(false);
-  const [key, setKey] = useState(false);
-  const [link, setLink] = useState("");
+  const { styles } = options;
 
+  const [link, setLink] = useState(null);
+  const route = useRoute();
+
+  /**
+   * Open the provided link using Linking API if supported.
+   */
   const openLink = () => {
-    const supported = Linking.canOpenURL(link);
-    if (supported) {
-      Linking.openURL(link);
+    if (link) {
+      const supported = Linking.canOpenURL(link);
+      if (supported) {
+        Linking.openURL(link);
+      }
     }
   };
 
   useEffect(() => {
-    getCode(options.user.id).then(res => {
-      setKey(res.secret);
-      setLink(res.link);
-      setName(res.name);
-      setIsLoading(false);
-    }).catch(err => err);
-  }, []);
+    setLink(route.params.link);
+  }, [route.params.link]);
 
   return (
-    <View style={styles.main}>
-      {isLoading
-        ? <Loader />
-        : <>
-        <View>
-          <View style={styles.sameDevice}>
-            <Button onPress={openLink}>
-              Set up on same device
-            </Button>
-          </View>
-        </View>
-        <View style={styles.pt30}>
-          <QRCode value={link} size={150}/>
-        </View>
-        <View style={styles.pt30}>
-          <Text style={[styles.text, styles.description]}>Please enter the below credentials in the Google authenticator app to get a code and verify.</Text>
-        </View>
-
-        <View style={styles.credentials}>
-          <Text style={ styles.auth}>Authenticator Credential</Text>
-          <Text style={styles.text}>Account Name: {name} </Text>
-          <Text style={styles.text}>Account Key: {key} </Text>
-        </View>
-      </>}
+    <View style={styles.qrCodeMain}>
+      <View style={styles.qrCodeContainer}>
+        {link && <QRCode value={link} size={150} />}
+      </View>
+      <View style={styles.sameDeviceContainer}>
+        <Button onPress={openLink}>Set up on same device</Button>
+      </View>
     </View>
   );
 };
-export default GoogleAuth;
 
-const styles = StyleSheet.create({
-  main: {
-    padding: 10,
-    width: "100%",
-    height: "100%",
-    display: "flex",
-    flexDirection: "column"
-  },
-  text: {
-    fontWeight: "bold"
-  },
-  credentials: {
-    paddingTop: 12,
-    marginBottom: 50,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  auth: {
-    color: "#2E5984",
-    fontSize: 15
-  },
-  description: {
-    fontSize: 15,
-    color: "#2E5984",
-    fontWeight: "bold"
-  },
-  sameDevice: {
-    paddingTop: 15,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  pt30: {
-    paddingTop: 30,
-    alignSelf: "center"
-  }
-});
+export default GoogleAuth;
