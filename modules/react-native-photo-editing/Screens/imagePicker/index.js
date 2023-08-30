@@ -1,13 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Button from "../../Components/Button";
-// @ts-ignore
+
 import { launchImageLibrary } from "react-native-image-picker";
 import { useDispatch } from "react-redux";
 import { setImageUri } from "../../Store";
 import { reSizeImage } from "../../Utils/common";
+import { useNavigation } from "@react-navigation/native";
 
-const ImagePicker = ({ navigation }) => {
+const ImagePicker = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const handImagePicker = () => {
     launchImageLibrary({ mediaType: "photo" }).then((res) => {

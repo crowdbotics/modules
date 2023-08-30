@@ -13,6 +13,10 @@ setup(
     name="cb_django_drive",
     version="0.1",
     packages=["drive"],
-    install_requires=["google-api-python-client", "google-auth-httplib2", "google-auth-oauthlib"],
+    install_requires=[
+        "google-api-python-client",
+        "google-auth-httplib2",
+        "google-auth-oauthlib",
+    ],
     cmdclass={"build": BuildCommand},
 )

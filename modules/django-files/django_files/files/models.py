@@ -7,7 +7,6 @@ MEDIA_UPLOAD_PATH = get_options("files", "MEDIA_UPLOAD_PATH")
 
 
 class FileUpload(models.Model):
-    "Generated Model"
     title = models.CharField(
         max_length=256,
     )
@@ -27,7 +26,8 @@ class FileUpload(models.Model):
 
     @property
     def size(self):
-        return self.file.size
+        if self.file:
+            return self.file.size
 
     class Meta:
         verbose_name = "File Upload"
