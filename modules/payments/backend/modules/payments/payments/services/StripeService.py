@@ -20,7 +20,7 @@ class StripeService:
         """
         ephemeralKey = stripe.EphemeralKey.create(
             customer=cus_id,
-            stripe_version=env.str("STRIPE_VERSION", '2020-08-27'),
+            stripe_version=env.str("STRIPE_VERSION", "2020-08-27"),
         )
         if connected_stripe_account_id and application_fee_amount > 0:
             paymentIntent = stripe.PaymentIntent.create(
@@ -42,7 +42,7 @@ class StripeService:
         return {
             "paymentIntent": paymentIntent.client_secret,
             "ephemeralKey": ephemeralKey.secret,
-            "customer": cus_id
+            "customer": cus_id,
         }
 
     @classmethod

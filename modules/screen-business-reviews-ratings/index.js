@@ -1,21 +1,21 @@
 import React from "react";
-// @ts-ignore
+
 import ImgBackUrl from "./assets/back.png";
-// @ts-ignore
+
 import ImgChessUrl from "./assets/chess.png";
-// @ts-ignore
+
 import ImgDownUrl from "./assets/down.png";
-// @ts-ignore
+
 import ImgGrayStarUrl from "./assets/gray-star.png";
-// @ts-ignore
+
 import ImgMiniStarUrl from "./assets/mini-star.png";
-// @ts-ignore
+
 import ImgNotiUrl from "./assets/noti.png";
-// @ts-ignore
+
 import ImgStarUrl from "./assets/star.png";
-// @ts-ignore
+
 import ImgTimerUrl from "./assets/timer.png";
-// @ts-ignore
+
 import ImgUserUrl from "./assets/user.png";
 
 import { Text, StyleSheet, View, Image, ScrollView, TextInput } from "react-native";
