@@ -26,7 +26,7 @@ const Button = (params) => {
     style,
     onPress,
     buttonText,
-    children,
+    children
   } = params;
 
   // Determine the background color and text color based on the provided props
@@ -37,12 +37,12 @@ const Button = (params) => {
   const btnStyle = {
     backgroundColor: outline ? "#fff" : backgroundColor,
     borderColor: outline ? backgroundColor : null,
-    borderWidth: outline ? 1 : 0,
+    borderWidth: outline ? 1 : 0
   };
 
   // Create the style object for the button text based on the outline prop
   const btnText = {
-    color: outline ? "#000" : buttonTextColor,
+    color: outline ? "#000" : buttonTextColor
   };
 
   return (

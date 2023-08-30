@@ -61,12 +61,14 @@ const Input = (props) => {
       {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
 
       {/* Display an icon if provided */}
-      {icon ? (
+      {icon
+        ? (
         <Image
           source={icon}
           style={text ? styles.iconWithText : styles.iconWithoutText}
         />
-      ) : null}
+          )
+        : null}
 
       {/* Render any additional components provided as children */}
       <View style={styles.children}>{children}</View>
