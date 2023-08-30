@@ -1,26 +1,31 @@
 {
   "name": "crowdbotics-modules",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "# React Native Scaffold",
   "main": "index.js",
+  "bin": {
+    "crowdbotics-modules": "./index.js"
+  },
   "type": "module",
   "engines": {
-    "node": ">14.0"
+    "node": ">16.0"
   },
   "scripts": {
     "demo": "node scripts/demo.js",
     "add": "node scripts/add.js",
     "remove": "node scripts/remove.js",
     "parse": "node scripts/parse.js",
+    "semver": "node scripts/semver.js",
     "dist": "node scripts/parse.js --write",
     "info": "node scripts/info.js",
     "cookie": "node scripts/cookie.js",
     "raw": "node scripts/raw.js",
     "template": "node scripts/template.js",
-    "bootstrap": "npm run demo; npm run raw; npm run cookie; npm run parse",
+    "bootstrap": "npm run raw; npm run cookie; npm run parse;",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "yarn run eslint modules scripts",
-    "commit-module": "node scripts/commit-module.js"
+    "commit-module": "node scripts/commit-module.js",
+    "manifest": "node scripts/manifest.js"
   },
   "repository": {
     "type": "git",
@@ -42,8 +47,11 @@
     "@babel/types": "^7.18.8",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
+    "fast-xml-parser": "^4.2.2",
     "find": "^0.3.0",
     "fs-extra": "^10.1.0",
+    "inquirer": "^9.2.0",
+    "js-yaml": "^4.1.0",
     "prettier": "^2.6.2"
   },
   "devDependencies": {
@@ -54,6 +62,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-react": "^7.30.0",
-    "react-native": "0.64.2"
+    "react-native": "0.71.7"
   }
 }
