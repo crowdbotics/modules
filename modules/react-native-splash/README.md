@@ -6,7 +6,7 @@ This is a react native based module which integrates a splash screen into your a
 
 - Add splash screen to app with your custom component.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/c07a3414-21d9-49cc-98bb-f53d9bad143f)
 
 ## ## Features
 
