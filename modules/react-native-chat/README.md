@@ -12,8 +12,8 @@ This react-native based module allows user to see their current chats, create gr
 - Change chat icon.
 - Block user
 - Search channels
-
-Include preview screenshots or videos here.
+  
+![image](https://github.com/cbshoaib/modules/assets/120275623/a68bc9dd-3a97-4189-8586-021cbc545f96)
 
 ## ## Features
 
