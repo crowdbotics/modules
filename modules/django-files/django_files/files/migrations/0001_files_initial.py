@@ -9,7 +9,6 @@ MEDIA_UPLOAD_PATH = get_options("files", "MEDIA_UPLOAD_PATH")
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

@@ -1,9 +1,9 @@
-// @ts-ignore
+
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-// @ts-ignore
+
 import { Surface } from "gl-react-native";
-// @ts-ignore
+
 import ImageFilters from "react-native-gl-image-filters";
 import Tabs from "../../Components/Tabs";
 import { OptionsContext } from "@options";
@@ -13,8 +13,10 @@ import EditSliders from "../../Components/EditSliders";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
 import Header from "../../Components/Header";
+import { useNavigation } from "@react-navigation/native";
 
-const Edits = ({ navigation }) => {
+const Edits = () => {
+  const navigation = useNavigation();
   const options = useContext(OptionsContext);
   const dispatch = useDispatch();
   const state = useSelector(state => state.uri);

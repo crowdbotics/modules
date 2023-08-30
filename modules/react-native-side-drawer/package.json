@@ -1,0 +1,14 @@
+{
+	"name": "@modules/side-drawer",
+	"version": "1.0.0",
+	"description": "Side Drawer module",
+	"private": true,
+	"main": "index.js",
+	"author": "Crowdbotics",
+	"license": "ISC",
+    "dependencies": {},
+	"x-dependencies": {
+		"@react-navigation/drawer": "^5.12.9",
+		"prop-types" : "15.8.1"
+	}
+}

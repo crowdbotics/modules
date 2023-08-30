@@ -9,7 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "@react-native-google-signin/google-signin": "^6.0.0",
-    "react-native-fbsdk": "1.1.2",
+    "react-native-fbsdk-next":"11.2.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "@invertase/react-native-apple-authentication": "^2.1.0",
     "@react-navigation/native": "^5.9.2",

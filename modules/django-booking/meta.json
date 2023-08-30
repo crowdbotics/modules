@@ -1,0 +1,5 @@
+{
+  "title": "Booking (Django)",
+  "description": "Backend for the Booking module.",
+  "root": "/backend/modules"
+}
