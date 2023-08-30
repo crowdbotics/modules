@@ -7,7 +7,7 @@ slide screens with content and expansion detailed in the file.
 
 - Educate the user about the functions and benefits of the app
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/120275623/51a3b33c-f09e-4293-9129-d05e3f44176a)
 
 ## ## Features
 
