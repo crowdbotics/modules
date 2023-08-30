@@ -1,8 +1,11 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
-gem "fastlane", "~>2.205.0"
-gem "httparty"
-gem "cocoapods"
+# You may use http://rbenv.org/ or https://rvm.io/ to install and use this version
+ruby '>= 2.6.10'
+
+gem 'cocoapods', '>= 1.11.3'
+gem 'httpparty', '~> 0.2.0'
+gem 'fastlane', '~> 2.212'
 
 android_plugins_path = File.join(
   File.dirname(__FILE__), 'android', 'fastlane', 'Pluginfile'
