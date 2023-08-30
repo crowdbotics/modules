@@ -1,4 +1,23 @@
-### App Registration
+# Azure Ad React native specs
+
+## Module description
+
+This react native module allows users to authenticate with Azure Ad.
+
+- Authorization with user interaction
+- Silent authorization
+
+![image](https://github.com/shahraizali/modules/assets/76822297/8fdcd075-0812-4c90-888c-b587a62dbacc)
+
+## ## Features
+
+ - [x] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [X] This module requires manual iOS setup.
+
+## ## 3rd party setup
 
 First, you will need to register your application with Microsoft Azure Portal. This will give you an Application ID for your application, as well as enable it to receive tokens.
 
@@ -28,15 +47,34 @@ First, you will need to register your application with Microsoft Azure Portal. T
     2. Set both properties to `true`.
     3. Click `Save` button.
 
-#### Callback URL(s)
+## Dependencies
 
-Callback URLs are the URIs that Azure AD invokes after the authentication process. Azure routes your application back to this URI and appends additional parameters to it, including a token. Since callback URLs can be manipulated, you will need to add your application's URL to your apps's registered **Redirect-URIs**. This will enable Azure to recognize these URLs as valid. If omitted, authentication will not be successful.
 
-##### iOS - default redirect URI structure
+Dependencies used:
+- @react-native-async-storage/async-storage  -  https://www.npmjs.com/package/@react-native-async-storage/async-storage
+- react-native-azure-auth  -  https://www.npmjs.com/package/react-native-azure-auth
 
-```text
-{YOUR_BUNDLE_IDENTIFIER}://{YOUR_BUNDLE_IDENTIFIER}/ios/callback
+## ## Module Options
+
+### Global Configs
+
+No global configs required.
+
+### Local Configs
+
+Update these values in `options.js` file
+
 ```
+  AZURE_AUTH_TENANT_OPTIONS: "",
+  AZURE_AUTH_CLIENT_ID_OPTIONS: "",
+  AZURE_AUTH_REDIRECT_URI_OPTIONS: "",
+  AUTHORIZE_PROMPT_OPTIONS: "login",
+  AUTHORIZE_SCOPE_OPTIONS: "openid profile User.Read"
+```
+
+
+### Android setup
+
 
 ##### Android - default redirect URI structure
 
@@ -54,9 +92,7 @@ scheme = alpha *( alpha | digit | "+" | "-" | "." )
 
 As you can see, allowed in identifier and package name underscore (`_`) character is NOT allowed in the URI scheme!
 
-### App Configuration
 
-#### Android config
 
 In the file `android/app/src/main/AndroidManifest.xml` you must make sure the **MainActivity** of the app has a **launchMode** value of `singleTask` and that it has the following intent filter:
 
@@ -98,8 +134,15 @@ android:windowSoftInputMode="adjustResize">
 </activity>
 ```
 
-> For more info please read [react native docs](https://facebook.github.io/react-native/docs/linking.html)
-#### iOS config
+
+### iOS setup
+
+##### iOS - default redirect URI structure
+
+```text
+{YOUR_BUNDLE_IDENTIFIER}://{YOUR_BUNDLE_IDENTIFIER}/ios/callback
+```
+
 
 Inside the `ios` folder find the file `AppDelegate.[swift|m]` add the following to it
 
@@ -156,47 +199,3 @@ and then register a URL type entry using the value of `CFBundleIdentifier` as th
 ```
 
 >**Attention:** The `<string>` value for `CFBundleURLSchemes` key MUST be the literal value of the Bundle Identifier with NO $-variables. In the example above the string `com.my-domain.native-app` represents _your_ Bundle Identifier.
-For more info please read [react native docs](https://facebook.github.io/react-native/docs/linking.html)
-
-## Usage
-
-```js
-import AzureAuth from 'react-native-azure-auth';
-const azureAuth = new AzureAuth({
-    clientId: 'YOUR_CLIENT_ID'
-});
-```
-
-### Authorization with user interaction
-
-```js
-    try {
-      let tokens = await azureAuth.webAuth.authorize({scope: 'openid profile User.Read Mail.Read' })
-      this.setState({ accessToken: tokens.accessToken });
-      let info = await azureAuth.auth.msGraphRequest({token: tokens.accessToken, path: '/me'})
-      this.setState({ user: info.displayName, userId: tokens.userId })
-    } catch (error) {
-      console.log(error)
-    }
-```
-
-### Silent authorization
-
-```js
-    try {
-        // Try to get cached token or refresh an expired ones
-        let tokens = await azureAuth.auth.acquireTokenSilent({scope: 'Mail.Read', userId: this.state.userId})
-        if (!tokens) {
-            // No cached tokens or the requested scope defines new not yet consented permissions
-            // Open a window for user interaction
-            tokens = await azureAuth.webAuth.authorize({scope: 'Mail.Read'})
-        }
-        let mails = await azureAuth.auth.msGraphRequest({token: tokens.accessToken, path: '/me/mailFolders/Inbox/messages'})
-    } catch (error) {
-      console.log(error)
-    }
-```
-
-### Usage example
-
-You can consult a tiny sample project [react-native-azure-auth-sample](https://github.com/vmurin/react-native-azure-auth-sample) for usage example
