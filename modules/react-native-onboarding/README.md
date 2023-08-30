@@ -1,96 +1,43 @@
-# Onboarding Tutorial Screen
+# Onboarding React native specs
 
-The Onboarding Tutorial Screen is a ReactNative based onboarding screen. It can be configured to have 1 or many
+## Module description
+
+This is a ReactNative based module which can be configured to have one or multiple
 slide screens with content and expansion detailed in the file.
 
-## Scope Features
-The following are the critical features in scope for this module.
-1. Educate the user about the functions and benefits of the app
-2. Allow the user to register their login details
-3. Collect profile information that can be used to deliver personalized content and notifications
+- Educate the user about the functions and benefits of the app
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
-Here are the required packages for the module:
-```
-  "react-native-app-intro-slider": "^4.0.4",
-  "prop-types" : "^15.8.1"
-```
-and run this command.
-  ```
-  yarn install
-  ```
+Include preview screenshots or videos here.
 
-## Manual Setup
+## ## Features
 
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+ - [ ] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
 
-```javascript
+## ## 3rd party setup
 
-import Onboarding from "@modules/onboarding";
+No 3rd party account required.
 
-const { title, navigator } = Onboarding;
+## Dependencies
 
-```
+Dependencies used:
+ - react-native-app-intro-slider - https://www.npmjs.com/package/react-native-app-intro-slider
+ - prop-types - https://www.npmjs.com/package/prop-types
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+## ## Module Options
 
-```javascript
+### Global Configs
 
-import { modules } from '@modules';
+No global configs required.
 
-const Onboarding = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+### Local Configs
 
-<Onboarding slidesData={Array} onDone = {Func} />
-
-```
-
-## Params
-
-Below is the list of all params that can be passed to the module.
-
-| Name            | Type       | Description                                                    |
-| --------------- |:----------:|:---------------------------------------------------------------|
-| slidesData `required` | `array`    | An array of objects, Each object contains properties ( `key`, `title`, `description`, `imageURL`, `backgroundColor` )|
-| onDone          | `function` | Called once the onboarding process is completed             |
-| onSkip          | `function` | Called when user presses the skip button                   |
-| onSlideChange   | `function` | Called when user goes changes slide (by swiping or pressing next/prev).|
-| bottomButton    | `boolean`  | Enable to show a full-width button under pagination                       |
-| dotStyle        | `object`   | Style of inactive pagination dots                       |
-| activeDotStyle  | `object`   | Style of inactive pagination dot                       |
-| skipLabel       | `string`   | Custom label for Skip button                       |
-| doneLabel       | `string`   | Custom label for Done button                       |
-| nextLabel       | `string`   | Custom label for Next button                       |
-| prevLabel       | `string`   | Custom label for Prev button                       |
-| showSkipButton  | `boolean`  | Enable to show a skip button to the left of pagination dots.          |
-| showPrevButton  | `boolean`  | Enable to show a previous button.                        |
-| showNextButton  | `boolean`  | Enable to show a next button.                        |
-| showDoneButton  | `boolean`  | Enable to show a done button.                        |
-| renderNextButton| `function` | Use to supply your own next button.                      |
-| renderPrevButton| `function` | Use to supply your own prev button.                        |
-| renderDoneButton| `function` | Use to supply your own done button                        |
-| renderSkipButton| `function` | Use to supply your own skip button                        |
-| mainContainerStyle      | `object`   | Style main container wrapping your all content on the onboarding screen.                        |
-| imageStyle      | `object`   | Style image displaying on the onboarding screen.                        |
-| titleStyle      | `object`   | Style title on the onboarding screen.                        |
-| descriptionStyle| `object`   | Style the description on the onboarding screen.                        |
-
-### Param `slidesData` array of objects
-
-The first param `slidesData` is an array of objects. Each object in `slidesData ` array will have following properties inside it.
-
-| Name               | Type                     | Description                                                    |
-| ------------------ |:------------------------:|:---------------------------------------------------------------|
-| key                | `number`                 | A unique number for each object                                |
-| title              | `string`                 | Title for your onboarding screen                               |
-| description        | `string`                 | Description for onboarding screen                              |
-| imageURL           | `string`                 | URL of th image to be displayed on the onboarding screen       |
-| backgroundColor    | `string`(`#f1f1`, `blue`)| Background color for onboarding screen                         |
-
-Your finale `slidesData` array will look something like this.
+Your `slidesData` array should look something like this.
 
 ```javascript
-
 const slidesData = [
   {
     key : 1,
@@ -101,14 +48,13 @@ const slidesData = [
   },
   ...
 ]
-
 ```
 
-## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+### Android setup
 
-## License
+No android setup required.
 
-[MIT](https://choosealicense.com/licenses/mit/)
+### iOS setup
+
+No iOS setup required.
