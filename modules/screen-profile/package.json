@@ -1,7 +1,7 @@
 {
     "name": "@screens/profile",
     "version": "1.0.0",
-    "description": "",
+    "description": "This screen displays basic user details",
     "private": true,
     "main": "index.js",
     "files": ["*"],

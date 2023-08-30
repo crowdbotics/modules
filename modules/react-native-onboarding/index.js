@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import PropTypes from "prop-types";
-// @ts-ignore
+
 import AppIntroSlider from "react-native-app-intro-slider";
 
 const Onboarding = ({

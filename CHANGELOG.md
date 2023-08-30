@@ -2,6 +2,18 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 1.2.0 - 2023-07-04
+
+### Added
+
+Added a check that builds the Android app and iOS app for every PR. This pipeline runs
+in CircleCI, it has three basic steps. First the modules repo is cloned and its dependencies are installed, in the same job a scaffold will be generated with the current modules code.
+Then both Android and iOS jobs will run simultaneously, each running a dev build of the scaffold. If the builds
+finish succesfully we can assume there are no major dependency issues.
+
+- Added config.yml file that defines pipeline for CircleCI
+- Bumped Python version from '3.8.13' to '3.8.17'.
+
 ## 1.1.2 - 2023-06-23
 
 ### Fixed

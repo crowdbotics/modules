@@ -1,7 +1,7 @@
 {
   "scaffold": {
     "type": "react-native",
-    "version": "2.2.0",
+    "version": "2.4.0",
     "cookiecutter_context": {
       "project_name": "{{cookiecutter.project_name}}",
       "project_slug": "{{cookiecutter.project_slug}}",
