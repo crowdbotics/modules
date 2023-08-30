@@ -1,26 +1,47 @@
-# Splash Module
-The Splash Module is a React Native based splash Module, by that means, it truly isn't executed until after the app
-is fully loaded. If it's desired to appear during load, you will need to build a native screen in both Android and iOS directories of the project.
+# Splash React native specs
 
-## Scope Features
-The following are the key features in scope for this module:
-1. Sets the tone for the rest of the user experience
-2. Smooths out loading delays
-3. Ensures that each user has early experience is a positive one
+## Module description
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
-Here are the required packages for the module:
+This is a react native based module which integrates a splash screen into your app.
+
+- Add splash screen to app with your custom component.
+
+Include preview screenshots or videos here.
+
+## ## Features
+
+ - [ ] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [x] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+No 3rd party account required.
+
+## Dependencies
+
+Dependencies used:
+- react-native-splash-screen - https://www.npmjs.com/package/react-native-splash-screen
+- prop-types - https://www.npmjs.com/package/prop-types
+## ## Module Options
+
+### Global Configs
+
+No global configs required.
+
+### Local Configs
+
+In modules/splash.options.js you can update following options:
+
+```js
+const duration = null; // In milliseconds
+const onDurationEnd = null;// Callback function will be called as your duration ends and splash screen disappears.
 ```
-"react-native-splash-screen" : "3.3.0",
-"prop-types" : "15.8.1"
-```
-and run this command.
-  ```
-  yarn install
-  ```
-## Installation
-### Android
+
+### Android setup
+
 1. Update the `MainActivity.java` to use react-native-splash-screen via the following changes:
 
 ```java
@@ -65,7 +86,10 @@ public class MainActivity extends ReactActivity {
 </resources>
 ```
 
-### IOS
+
+
+### iOS setup
+
 1. cd ios
 
 2. run pod install
@@ -102,46 +126,3 @@ public class MainActivity extends ReactActivity {
   return didFinish; // Return didFinish instead of [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 ```
-
-## Manual Setup
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-```javascript
-import Splash from "@modules/splash";
-
-const { title, navigator } = Splash;
-```
-
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
-
-```javascript
-import { modules } from '@modules';
-const Splash = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<Splash duration = {millisecs} onDurationEnd = {Func}/>;
-```
-## Local Configs
-in modules/splash.options.js you can update following options:
-
-```javascript
-
-const duration = null; // In milliseconds
-const onDurationEnd = null;// Callback function will be called as your duration ends and splash screen disappears.
-
-```
-## Params
-
-Below is the list of all Params with their data types that are considered primitive or the basic ones needed for our module to work.
-
-| Params              | Data Types         | Description                                                       |
-| -----------------------|:------------------:|:---------------------------------------------------------------|
-| duration (milliseconds)| Number             | Duration for Splash screen to be displayed                     |
-| onDurationEnd          | Callback Function()| A Function to navigate to other screen as the duration ends.   |
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
