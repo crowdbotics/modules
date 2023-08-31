@@ -1,0 +1,12 @@
+{
+    "title": "Blackbaud",
+    "description": "Blackbaud Module",
+    "root": "/",
+    "schema": {
+      "buttonText": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+  

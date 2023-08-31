@@ -27,6 +27,46 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 26,
     alignItems: "center"
   },
+  googleLoginButton: {
+    width: "99%",
+    height: 48,
+    marginHorizontal: 2
+  },
+  foregroundImage: {
+    width: 155,
+    height: 155,
+    alignSelf: "center",
+    resizeMode: "contain"
+  },
+  forgotPasswordView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10
+  },
+  backgroundImageStyles: {
+    flex: 1,
+    justifyContent: "center",
+    resizeMode: "cover",
+    height: "100%",
+    width: "100%"
+  },
+  orText: {
+    textAlign: "center",
+    width: "100%",
+    marginVertical: 5
+  },
+  appleButton: {
+    width: "97%", // You must specify a width
+    height: 44, // You must specify a height
+    marginHorizontal: 5,
+    marginTop: 2
+  },
+  facebookButton: {
+    backgroundColor: Color.facebook,
+    borderColor: Color.facebook,
+    marginHorizontal: 5,
+    marginBottom: 2
+  },
   input: {
     backgroundColor: "white",
     // marginLeft: scale(10), marginRight: scale(10),
@@ -146,6 +186,19 @@ export const styles = StyleSheet.create({
     justifyContent: "space-around",
     margin: 10,
     fontSize: 18
+  },
+  error1: {
+    color: "#f77474",
+    fontStyle: "italic",
+    fontSize: 14,
+    paddingTop: 10,
+    alignSelf: "center"
+  },
+  error: {
+    color: "#f77474",
+    fontStyle: "italic",
+    fontSize: 12,
+    paddingLeft: 50
   }
 });
 

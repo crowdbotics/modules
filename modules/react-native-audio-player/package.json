@@ -1,0 +1,15 @@
+{
+	"name": "@modules/audio-player",
+	"version": "1.0.0",
+	"description": "This module provides simple player functionalities for both android and ios platforms.",
+	"private": true,
+	"main": "index.js",
+	"x-dependencies": {
+		"react-native-audio-recorder-player": "3.5.3",
+		"react-native-slider": "^0.11.0",
+		"rn-fetch-blob": "0.12.0"
+	},
+	"author": "Crowdbotics",
+	"license": "ISC",
+	"dependencies": {}
+}
