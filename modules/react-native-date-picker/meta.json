@@ -1,0 +1,5 @@
+{
+  "title": "Date Picker",
+  "description": "Date picker component compatible with both web and mobile platforms.",
+  "root": "/modules/date-picker"
+}

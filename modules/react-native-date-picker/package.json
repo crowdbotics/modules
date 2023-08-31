@@ -1,0 +1,13 @@
+{
+  "name": "@modules/date-picker",
+  "version": "1.0.0",
+  "description": "Date picker component compatible with both web and mobile platforms.",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "react-datepicker": "^4.16.0",
+    "react-native-date-picker": "^4.2.14"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC"
+}
