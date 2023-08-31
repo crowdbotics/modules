@@ -1,22 +1,23 @@
-// @ts-ignore
+
 import React, { Fragment, useState, useContext } from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
-// @ts-ignore
-// @ts-ignore
+
 import { Surface } from "gl-react-native";
-// @ts-ignore
+
 import ImageFilters from "react-native-gl-image-filters";
 import Filter from "../../Components/Filters";
 import Tabs from "../../Components/Tabs";
 import { OptionsContext } from "@options";
 import { reSizeImage } from "../../Utils/common";
-// @ts-ignore
+
 import Button from "../../Components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { setImageUri } from "../../Store";
 import Header from "../../Components/Header";
+import { useNavigation } from "@react-navigation/native";
 
-const Filters = ({ navigation }) => {
+const Filters = () => {
+  const navigation = useNavigation();
   const options = useContext(OptionsContext);
   const dispatch = useDispatch();
   const state = useSelector(state => state.uri);

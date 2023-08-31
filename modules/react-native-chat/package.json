@@ -11,15 +11,15 @@
     "zustand": "^3.5.13",
     "pubnub-react": "^2.1.0",
     "is-url": "^1.2.4",
-    "react-native-gifted-chat": "^0.16.3",
+    "react-native-gifted-chat": "^2.1.0",
     "uuid": "^8.3.2",
     "react-native-popup-menu": "0.15.12",
-    "react-native-video": "5.2.0",
+    "react-native-video": "5.2.1",
     "react-native-fs": "2.19.0",
     "react-native-emoji-selector": "0.2.0"
   },
   "x-dependencies": {
-    "react-native-image-picker": "4.7.3",
+    "react-native-image-picker": "5.4.0",
     "react-native-image-crop-picker": "^0.36.2",
     "@react-native-community/checkbox": "0.5.10",
     "react-native-linear-gradient": "^2.4.0",
