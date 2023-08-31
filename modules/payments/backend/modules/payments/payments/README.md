@@ -1,57 +1,51 @@
-# Django Payments
+## Django Payments backend configuration and information
+
+## Module description
+
 Django payments module allow user to pay through the stripe payment. It helps user to accept payments and send payouts globally. Module Creates PaymentIntent that encapsulates details about the transaction, such as the supported payment methods. Creates and stores stripe profile for each stripe user. 
 
+The following are the scope features of this module:
+
+- Save payment details
+- Creates stripe user details
+- Get Payments history
+- Get Payments methods
+- Create payment intent sheet
+
 ## Features
-1. Save payment details
-2. Creates stripe user details
-3. Get Payments history
-4. Get Payments methods
-5. Create payment intent sheet
 
-## Required Dependencies/Packages
-* **stripe**
+- [x] This module includes migrations.
+- [x] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
-The Stripe is a python package to use Stripe REST API .
-Install it by running the command:
-```console
-pip install stripe==2.60.0
-```
+## Environment variables
 
-## Setting up a Stripe Account
-1. Sign up for Stripe at https://dashboard.stripe.com/register.
-2. After successful sign up, on the dashboard click `Home` tab.
-3. Copy the stripe `Secrete Key` and `Publish Key` for later use. 
-
-![stripe](https://user-images.githubusercontent.com/76822297/227866954-e3fd72a4-e8c5-46e2-84d8-d0e59bc91a5c.png)
-
-## Installations
-
-1. Make migrations
-```
-python manage.py makemigrations
-```
-pip install sendgrid
-
-2. Run migrations
-```
-python manage.py migrate
-```
-
-3. Run the server
-```
-python manage.py runserver
-```
-
-## Configurations Keys
-Keep your stripe secrete key in `.env` file.
-```console
+```dotenv
 STRIPE_SECRET_KEY='sk_test_xxxxxxx'
 CONNECTED_STRIPE_ACCOUNT_ID='acct_xxxxx'
 ```
 
 
-## Api Table
-List of api's endpoints with params needed for these apis.
+## 3rd party setup
+
+Create `Stripe` developer account:
+
+- Sign up for Stripe at https://dashboard.stripe.com/register.
+- After successful sign up, on the dashboard click `Home` tab.
+- Copy the stripe `Secrete Key` and `Publish Key` for later use.
+  ![stripe](https://user-images.githubusercontent.com/76822297/227866954-e3fd72a4-e8c5-46e2-84d8-d0e59bc91a5c.png)
+
+## Dependencies
+
+[Stripe](https://github.com/stripe/stripe-python/blob/master/README.md)
+
+Dependencies used:
+
+- [stripe==2.60.0](https://pypi.org/project/stripe/)
+
+
+## API details
 
 | Api Name                       |           Param           | Description                                                                                                           |
 | ------------------------------ |:-------------------------:|:----------------------------------------------------------------------------------------------------------------------|
@@ -62,11 +56,3 @@ List of api's endpoints with params needed for these apis.
 ### Module Specifications
 Here is the [Module Specification Document](https://docs.google.com/document/d/1dYIXsSBkNeicBd30648KukkU58tH_kSloPf2vf9x1nM/edit?usp=sharing), which provides more information about the module's actual intentions.
 
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
