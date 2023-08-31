@@ -1,0 +1,15 @@
+{
+  "name": "@modules/navigation-tabs",
+  "version": "1.0.0",
+  "description": "Use dynamic tabs, set the position of tabs, and customize styling.",
+  "private": true,
+  "main": "index.js",
+  "x-dependencies": {
+    "@react-navigation/bottom-tabs": "6.3.2",
+    "react-native-vector-icons": "9.2.0",
+    "prop-types": "15.8.1"
+  },
+  "author": "Crowdbotics",
+  "license": "ISC",
+  "dependencies": {}
+}

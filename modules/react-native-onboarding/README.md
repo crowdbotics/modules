@@ -1,23 +1,60 @@
-# Onboarding Tutorial Screen
+# Onboarding React native specs
 
-The Onboarding Tutorial Screen is a ReactNative based onboarding screen. It can be configured to have 1 or many
+## Module description
+
+This is a ReactNative based module which can be configured to have one or multiple
 slide screens with content and expansion detailed in the file.
 
-## Manual Setup
+- Educate the user about the functions and benefits of the app
 
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+![image](https://github.com/cbshoaib/modules/assets/120275623/51a3b33c-f09e-4293-9129-d05e3f44176a)
+
+## ## Features
+
+ - [ ] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+No 3rd party account required.
+
+## Dependencies
+
+Dependencies used:
+ - react-native-app-intro-slider - https://www.npmjs.com/package/react-native-app-intro-slider
+ - prop-types - https://www.npmjs.com/package/prop-types
+
+## ## Module Options
+
+### Global Configs
+
+No global configs required.
+
+### Local Configs
+
+Your `slidesData` array should look something like this.
 
 ```javascript
-import Onboarding from "@modules/onboarding";
-
-const { title, navigator } = Maps;
+const slidesData = [
+  {
+    key : 1,
+    title: "Title 1",
+    description: "Description.\nSay something cool",
+    imageURL: "https://crowdbotics-slack-dev.s3.amazonaws.com/media/project_component_resources/cb-icon.png",
+    backgroundColor: "#59b2ab"
+  },
+  ...
+]
 ```
 
-## Contributing
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+### Android setup
 
-## License
+No android setup required.
 
-[MIT](https://choosealicense.com/licenses/mit/)
+### iOS setup
+
+No iOS setup required.
