@@ -1,0 +1,5 @@
+{
+  "title": "Attendee form",
+  "description": "Attendee form for blackbaud events",
+  "root": "/screens/blackbaud-attendee-form"
+}
