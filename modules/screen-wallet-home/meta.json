@@ -1,0 +1,5 @@
+{
+  "title": "WalletHome",
+  "description": "Wallet screen",
+  "root": "/screens/wallet-home"
+}

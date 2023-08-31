@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, Image, TouchableHighlight, TextInput, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  TouchableHighlight,
+  TextInput,
+  StyleSheet
+} from "react-native";
 
 const Login2 = () => {
   const [selected, setSelected] = useState(false);
@@ -14,20 +22,19 @@ const Login2 = () => {
       <View>
         <View style={styles.emailContainer}>
           <Text style={styles.mr10}>Email address</Text>
-          <Input
-            placeholder='Email'
-          />
+          <Input placeholder="Email" />
         </View>
         <View style={styles.mb20}>
           <Text style={styles.mr10}>Password</Text>
-          <Input
-            placeholder='Password'
-          />
+          <Input placeholder="Password" />
         </View>
         <View style={styles.forgotPassword}>
           <View>
-            <CheckBox onPress={onPress} selected={selected} text='Remember me' />
-
+            <CheckBox
+              onPress={onPress}
+              selected={selected}
+              text="Remember me"
+            />
           </View>
           <TouchableOpacity>
             <Text>Forgot Password?</Text>
@@ -63,7 +70,7 @@ const Login2 = () => {
         </View>
       </View>
       <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>Dont have an account?</Text>
+        <Text style={styles.footerText}>Do not have an account?</Text>
         <TouchableOpacity>
           <Text>Sign Up</Text>
         </TouchableOpacity>
@@ -160,14 +167,28 @@ export default Login2;
 
 const Button = (props) => {
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
-      <View style={[btnStyles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-        height: props.height ? props.height : 49,
-        borderWidth: props.borderWidth ? props.borderWidth : 0,
-        borderColor: props.borderColor ? props.borderColor : "#000000"
-      }]}>
-        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+    <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">
+      <View
+        style={[
+          btnStyles.button,
+          {
+            backgroundColor: props.backgroundColor
+              ? props.backgroundColor
+              : "#000000",
+            height: props.height ? props.height : 49,
+            borderWidth: props.borderWidth ? props.borderWidth : 0,
+            borderColor: props.borderColor ? props.borderColor : "#000000"
+          }
+        ]}
+      >
+        <Text
+          style={[
+            btnStyles.text,
+            { color: props.color ? props.color : "#ffffff" }
+          ]}
+        >
+          {props.children}
+        </Text>
       </View>
     </TouchableHighlight>
   );
@@ -194,8 +215,8 @@ const CheckBox = ({ selected, onPress, text }) => (
           <Image
             source={require("./assets/checkbox.png")}
             style={checkBoxStyles.icon}
-          />)}
-
+          />
+        )}
       </View>
       <Text style={checkBoxStyles.iconText}>{text}</Text>
     </View>
@@ -204,7 +225,16 @@ const CheckBox = ({ selected, onPress, text }) => (
 
 const checkBoxStyles = StyleSheet.create({
   checkBoxContainer: { display: "flex", flexDirection: "row" },
-  iconContainer: { height: 18, width: 18, borderColor: "#000000", borderWidth: 2, borderRadius: 5, display: "flex", justifyContent: "center", alignItems: "center" },
+  iconContainer: {
+    height: 18,
+    width: 18,
+    borderColor: "#000000",
+    borderWidth: 2,
+    borderRadius: 5,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   icon: { height: 16, width: 16 },
   iconText: { marginLeft: 10 }
 });
@@ -217,10 +247,14 @@ const Input = (props) => {
         placeholder={props.placeholder}
         value={props.value}
         onChangeText={(num) => props.setValue(num)}
-        placeholderTextColor='#ddd'
+        placeholderTextColor="#ddd"
         editable={props.editable !== false}
       />
-      {props.errorText ? <Text style={textStyles.error}>{props.errorText}</Text> : null}
+      {props.errorText
+        ? (
+        <Text style={textStyles.error}>{props.errorText}</Text>
+          )
+        : null}
     </View>
   );
 };

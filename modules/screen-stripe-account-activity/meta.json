@@ -1,0 +1,6 @@
+{
+    "title": "Stripe Account Activity",
+    "description": "Stripe Account Activity Screen Module",
+    "root": "/screens/stripe-account-activity"
+}
+  

@@ -1,5 +1,5 @@
 {
   "title": "Login",
-  "description": "A simple login and signup screen with email and password.",
+  "description": "A simple login and signup module with email and password.",
   "root": "/modules/login"
 }

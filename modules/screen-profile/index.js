@@ -1,5 +1,13 @@
 import React from "react";
-import { ScrollView, Text, View, StyleSheet, TouchableHighlight, Image, TextInput } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableHighlight,
+  Image,
+  TextInput,
+  ScrollView
+} from "react-native";
 
 const pressed = () => {
   console.log("pressed");
@@ -7,52 +15,70 @@ const pressed = () => {
 
 const Profile = () => {
   return (
-    <ScrollView>
-      <View style={styles.mainContainer}>
-        <View>
-          <View style={styles.headerContainer}>
-            <ProfileImage />
-            <Text style={styles.headerText}>Jay Mahanga</Text>
-            <Text style={styles.headerSubText}>jay@gmail.com</Text>
-          </View>
-          <View style={styles.subheaderContainer}>
-            <Text style={styles.subheaderDetailText}>Details</Text>
-            <Text style={styles.subheaderRemoveText}>Delete Account</Text>
-          </View>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      style={styles.mainContainer}
+      contentContainerStyle={styles.contentContainerStyle}
+    >
+      <View style={styles.mainHeader}>
+        <Image source={require("./assets/back.png")} style={styles.backIcon} />
+      </View>
+      <View>
+        <View style={styles.headerContainer}>
+          <ProfileImage />
+          <Text style={styles.headerText}>User Name</Text>
+          <Text style={styles.headerSubText}>user@example.com</Text>
         </View>
-        <View style={styles.mainBody}>
-          <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Name</Text>
-            <Input placeholder="Name" />
-          </View>
-          <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Email address</Text>
-            <Input placeholder="Email address" />
-          </View>
-          <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Gender</Text>
-            <Input placeholder="Gender" />
-          </View>
-          <View style={styles.mt15}>
-            <Text style={styles.lextLabel}>Password</Text>
-            <Input placeholder="Password" />
-          </View>
+        <View style={styles.subheaderContainer}>
+          <Text style={styles.subheaderDetailText}>Edit Account</Text>
+          <Text style={styles.subheaderRemoveText}>Delete Account</Text>
         </View>
-        <View style={styles.btnSave}>
-          <Button onPress={pressed} height={49}>Save</Button>
+      </View>
+      <View style={styles.mainBody}>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Name</Text>
+          <Input placeholder="Name" />
         </View>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Email address</Text>
+          <Input placeholder="Email address" />
+        </View>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Gender</Text>
+          <Input placeholder="Gender" />
+        </View>
+        <View style={styles.mt15}>
+          <Text style={styles.textLabel}>Password</Text>
+          <Input placeholder="Password" />
+        </View>
+      </View>
+      <View style={styles.btnSave}>
+        <Button onPress={pressed} height={49}>
+          Save
+        </Button>
       </View>
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   mainContainer: {
     padding: 10,
     display: "flex",
     flexDirection: "column",
-    justifyContent: "space-between",
     height: "100%",
     backgroundColor: "#FFF"
+  },
+  contentContainerStyle: {
+    justifyContent: "space-between"
+  },
+  mainHeader: {
+    marginTop: 25
+  },
+  backIcon: {
+    height: 20,
+    width: 11.5,
+    marginLeft: 15
   },
   mt15: {
     marginTop: 15
@@ -66,6 +92,7 @@ const styles = StyleSheet.create({
   headerText: {
     marginTop: 15,
     fontSize: 20,
+    color: "#000000",
     fontWeight: "bold"
   },
   headerSubText: {
@@ -76,51 +103,78 @@ const styles = StyleSheet.create({
   },
   subheaderContainer: {
     marginTop: 15,
-    marginBottom: 30,
-    padding: 10,
+    marginBottom: 0,
+    paddingTop: 10,
+    marginHorizontal: 20,
+    paddingBottom: 20,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: "#C4C4C4"
   },
   subheaderDetailText: {
-    fontSize: 16,
-    fontWeight: "bold"
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#4DE1AB"
   },
   subheaderRemoveText: {
     fontSize: 14,
+    fontWeight: "500",
     color: "#FF6848"
   },
-  lextLabel: {
+  textLabel: {
     fontSize: 14,
     marginLeft: 15,
     marginBottom: 5,
-    fontWeight: "bold"
+    color: "#1F1F1F"
   },
   mainBody: {
-    // height: '60%'
+    marginHorizontal: 10
   },
   btnSave: {
     display: "flex",
+    marginTop: 20,
     alignSelf: "center",
-    marginTop: 50,
-    width: "80%"
+    width: "80%",
+    marginBottom: 30
   }
 });
-
 export default Profile;
 
 const Button = (props) => {
+  const {
+    onPress,
+    borderWidth,
+    borderColor,
+    height,
+    color,
+    backgroundColor,
+    children
+  } = props;
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
-      <View style={[btnStyles.button, {
-        backgroundColor: props.backgroundColor ? props.backgroundColor : "#000000",
-        height: props.height ? props.height : 49,
-        borderWidth: props.borderWidth ? props.borderWidth : 0,
-        borderColor: props.borderColor ? props.borderColor : "#000000"
-      }]}>
-        <Text style={[btnStyles.text, { color: props.color ? props.color : "#ffffff" }]}>{props.children}</Text>
+    <TouchableHighlight onPress={onPress} underlayColor="#DDDDDD">
+      <View
+        style={[
+          btnStyles.button,
+          {
+            backgroundColor: backgroundColor || "#000000",
+            height: height || 49,
+            borderWidth: borderWidth || 0,
+            borderColor: borderColor || "#000000"
+          }
+        ]}
+      >
+        <Text
+          style={[
+            btnStyles.text,
+            {
+              color: color || "#ffffff"
+            }
+          ]}
+        >
+          {children}
+        </Text>
       </View>
     </TouchableHighlight>
   );
@@ -141,9 +195,13 @@ const btnStyles = StyleSheet.create({
 
 const ProfileImage = (props) => {
   return (
-    <TouchableHighlight onPress={props.onPress} underlayColor='#DDDDDD'>
+    <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">
       <View style={profileStyles.container}>
-        <Image style={profileStyles.image} resizeMode="contain" source={require("./assets/edit.png")} />
+        <Image
+          style={profileStyles.image}
+          resizeMode="contain"
+          source={require("./assets/edit.png")}
+        />
       </View>
     </TouchableHighlight>
   );
@@ -164,17 +222,18 @@ const profileStyles = StyleSheet.create({
 });
 
 const Input = (props) => {
+  const { placeholder, value, setValue, errorText, editable } = props;
   return (
     <View>
       <TextInput
         style={inputStyles.input}
-        placeholder={props.placeholder}
-        value={props.value}
-        onChangeText={(num) => props.setValue(num)}
-        placeholderTextColor='#ddd'
-        editable={props.editable !== false}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={(num) => setValue(num)}
+        placeholderTextColor="#ddd"
+        editable={editable !== false}
       />
-      {props.errorText ? <Text style={inputStyles.error}>{props.errorText}</Text> : null}
+      {errorText ? <Text style={inputStyles.error}>{errorText}</Text> : null}
     </View>
   );
 };

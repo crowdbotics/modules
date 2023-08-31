@@ -1,38 +1,43 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import React, { useEffect, useContext } from "react";
+import { View } from "react-native";
+import PropTypes from "prop-types";
+import { OptionsContext } from "@options";
 
-const NEXT_SCREEN_NAME = "TermsAndConditions";
+const Splash = ({ duration, onDurationEnd }) => {
+  const options = useContext(OptionsContext);
 
-const Splash = ({ navigation }) => {
+  const handleDurationEnd = () => {
+    options.hide();
+    if (onDurationEnd) {
+      onDurationEnd();
+    }
+    if (options.onDurationEnd) {
+      options.onDurationEnd();
+    }
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate(NEXT_SCREEN_NAME);
-    }, 3000);
+    if (duration || options.duration) {
+      setTimeout(() => {
+        handleDurationEnd();
+      }, duration || options.duration);
+    } else {
+      handleDurationEnd();
+    }
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Image
-        resizeMode="cover"
-        style={styles.image}
-        source={{
-          uri:
-            "https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/20577/3d82cb85-9133-48e4-bb4a-a1c8dd140bc4.png"
-        }}
-      />
+    <View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFF"
-  },
-  image: { width: "100%", height: "100%" }
-});
+Splash.propTypes = {
+  duration: PropTypes.number,
+  onDurationEnd: PropTypes.func
+};
 
 export default {
-  title: "SplashScreen",
+  title: "Splash",
   navigator: Splash
 };

@@ -240,7 +240,7 @@ const ReserveSeatScreen = (params) => {
   return (
     <View style={styles.container}>
       <TabView tabTitles={["New", "Booked"]} selected={0} />
-      <View style={styles.subPallete}>
+      <View style={styles.subPallet}>
         <View style={styles.planDes}>
           <Text style={[styles.fnt25, styles.boldText]}>24/03/2022</Text>
           <Text style={styles.fnt16}>Hours: 17:55 PM</Text>
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff"
   },
-  subPallete: {
+  subPallet: {
     marginHorizontal: 20,
     backgroundColor: "#fff",
     borderRadius: 10,

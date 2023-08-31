@@ -20,7 +20,7 @@ const AdvanceSearchScreen = (params) => {
   useEffect(() => {
     setData([
       {
-        name: "Resturants",
+        name: "Restaurants",
         selected: true
       },
       {

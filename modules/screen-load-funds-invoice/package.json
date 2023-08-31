@@ -1,0 +1,10 @@
+{
+    "name": "@screens/load-funds-invoice",
+    "version": "1.0.0",
+    "description": "This screen can be used to load some amount in a specific currency to your wallet",
+    "private": true,
+    "main": "index.js",
+    "files": ["*"],
+    "author": "Crowdbotics",
+    "license": "ISC"
+}
