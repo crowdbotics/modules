@@ -1,12 +1,12 @@
-import React from "react"
+import React from "react";
 import {
   SafeAreaView,
   ScrollView,
   Text,
   Platform,
   StyleSheet
-} from "react-native"
-import { DatePickerComponent } from "./datepicker"
+} from "react-native";
+import { DatePickerComponent } from "./datepicker";
 
 const DatePicker = () => {
   return (
@@ -16,8 +16,8 @@ const DatePicker = () => {
         <DatePickerComponent />
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     padding: 20
   }
-})
+});
 
 export default {
   title: "Date Picker",
   navigator: DatePicker
-}
+};
