@@ -108,6 +108,11 @@ const urlLoaderConfiguration = {
   include: path.resolve(__dirname, "node_modules/react-native-vector-icons")
 }
 
+const styleLoaderConfiguration = {
+  test: /\.css$/i,
+  use: ["style-loader", "css-loader"]
+}
+
 module.exports = {
   entry: [
     // load any web API polyfills
@@ -132,7 +137,8 @@ module.exports = {
       imageLoaderConfiguration,
       typescriptLoaderConfiguration,
       babelExclusionConfiguration,
-      urlLoaderConfiguration
+      urlLoaderConfiguration,
+      styleLoaderConfiguration
     ]
   },
   plugins: [HTMLWebpackPluginConfig, DevEnvPlugin, JestWorkerPlugin],

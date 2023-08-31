@@ -108,6 +108,11 @@ const urlLoaderConfiguration = {
   include: path.resolve(__dirname, "node_modules/react-native-vector-icons")
 }
 
+const styleLoaderConfiguration = {
+  test: /\.css$/i,
+  use: ["style-loader", "css-loader"]
+}
+
 module.exports = {
   entry: [
     // load any web API polyfills
@@ -132,7 +137,8 @@ module.exports = {
       imageLoaderConfiguration,
       typescriptLoaderConfiguration,
       babelExclusionConfiguration,
-      urlLoaderConfiguration
+      urlLoaderConfiguration,
+      styleLoaderConfiguration
     ]
   },
   plugins: [HTMLWebpackPluginConfig, DevEnvPlugin, JestWorkerPlugin],
@@ -147,6 +153,15 @@ module.exports = {
     // If you're working on a multi-platform React Native app, web-specific
     // module implementations should be written in files using the extension
     // `.web.js`.
-    extensions: [".web.js", ".js", ".ts", ".jsx", ".tsx"]
+    extensions: [
+      ".web.js",
+      ".web.ts",
+      ".web.jsx",
+      ".web.tsx",
+      ".js",
+      ".ts",
+      ".jsx",
+      ".tsx"
+    ]
   }
 }
