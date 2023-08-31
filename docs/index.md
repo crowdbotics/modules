@@ -28,6 +28,7 @@
 - [Modules Checklist](modules-checklist.md)
 - [Scaffold Checklist](scaffold-checklist.md)
 - [Further Reading](further-reading.md)
+- [Platform specific code](platform-specific.md)
 
 ## Changelog
 
