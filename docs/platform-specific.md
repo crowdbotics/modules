@@ -130,7 +130,6 @@ That's a property returns a string of the current OS at runtime. With this you c
 
 ## Date Picker preview
 
-Here's how that [Date Picker](https://github.com/crowdbotics/modules/blob/docs/react-native-web/modules/react-native-date-picker/README.md) module looks like in action.
+Here's how that [Date Picker](https://github.com/crowdbotics/modules/blob/master/modules/react-native-date-picker/README.md) module looks like in action.
 
-![Date Picker module preview image showing both platforms](https://github.com/crowdbotics/modules/blob/docs/react-native-web/docs/examples/date-picker.png?raw=true)
-![alt text](https://github.com/[username]/[reponame]/blob/[branch]/image.jpg?raw=true)
+![Date Picker module preview image showing both platforms](https://github.com/crowdbotics/modules/blob/master/docs/examples/date-picker.png?raw=true)
