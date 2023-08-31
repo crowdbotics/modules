@@ -25,11 +25,6 @@ SECRET_KEY='YOUR DJANGO SECRETKEY'
 STRIPE_WEBHOOK_SECRET='whsec_xxxxxxx'
 ```
 
-if config
-OR from your network settings this is your local IP of computer.
-
-Add the IP above e.g. 192.168.1.11:8000 to options/options.js for mobile to connect to your local server
-
 ## 3rd party setup
 
 Create `Stripe` developer account:
