@@ -8,7 +8,7 @@ It is related to WordPress.com not WordPress.org The main difference between the
 hosted. WordPress.com is a hosting platform that provides you with a turnkey solution, while WordPress.org is a
 self-hosted solution (you take care of it yourself).
 
-The following are scope features for this module:
+The following are the scope features for this module:
 
 - Generate Access Token
 - Return the list of users of a site and other functionality related to user like (get, update detail of a user, remove
@@ -34,7 +34,7 @@ WORDPRESS_BASE_URL=""
 WORDPRESS_CLIENT_ID=""
 PAYPAL_CLIENT_SECRETS=""
 WORDPRESS_REDIRECT_URL=""
-WORDPRESS DOMAIN=""
+WORDPRESS_DOMAIN=""
 ```
 
 ## 3rd party setup
@@ -45,9 +45,9 @@ Create `Wordpress` Developer account setup:
   and click on Create Account.
 - You will be asked to complete a few steps by entering your details. Once you have completed the process you will be
   directed to your dashboard. Then Go to My Apps.
-- After that you have to click on Create New Application.
-- To create new application enter your details such as name, redirect_uri(important) and type etc.
-- When you click on the create button your client id, client secret and redirect uri will appear.
+- After that you have to click on `Create New Application`.
+- To create new application enter your details such as `name`, `redirect_uri`(important) and `type` etc.
+- When you click on the create button your `Client ID`, `Client Secret` and `Redirect URLs` will appear.
 - Copy your client id, client secret and redirect uri and paste it in .env file.
   ![screenshot-developer wordpress com-2023 03 24-14_33_46](https://user-images.githubusercontent.com/120275623/227482252-4b579e05-34af-4c5e-bc02-a289dd6ecdb4.png)
 
