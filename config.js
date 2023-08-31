@@ -123,6 +123,18 @@ export default {
           "ios/fastlane/metadata/review_information/review_demo_user.txt"
         ],
         upgradeManifestImport: "./manifest/230-to-240.json"
+      },
+      {
+        text: "Upgrade my scaffold (2.4.0 -> 2.5.0)",
+        previousVersion: "2.4.0",
+        previousVersionSHA: "54727ce225986c9473b0c188cbd6a1ea737d43a0",
+        nextVersion: "2.4.0",
+        nextVersionSHA: "docs/react-native-web",
+        ignoreTemplatize: [
+          "ios/fastlane/metadata/review_information/review_demo_password.txt",
+          "ios/fastlane/metadata/review_information/review_demo_user.txt"
+        ],
+        upgradeManifestImport: "./manifest/240-to-250.json"
       }
     ],
     manifest: {

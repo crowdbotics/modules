@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.5.0 - 2023-08-31
+
+### Added
+
+- added support for importing css files on web builds (`css-loader` and `style-loader` webpack loaders)
+
 ## 2.4.0 - 2023-07-17
 
 ### Changed
