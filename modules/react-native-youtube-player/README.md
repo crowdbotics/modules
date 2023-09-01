@@ -1,59 +1,72 @@
-# Youtube Player Module
-The Youtube Player Module is a React Native-based module which will allow user to watch a video.
+# Youtube Player React native specs
+
+## Module description
+
+The Youtube Player Module is a React Native-based module which embeds a youtube video into your react native app.
+
+- Change the quality of video.
+- Pause the video.
+- Fullscreen mode.
+- Play video on loop.
+- Previous and Next options.
+- Share the video.
+
+![image](https://github.com/cbshoaib/modules/assets/76822297/49126e0d-80ea-462a-8f04-45c42aeff901)
 
 
-## Configurations for react-native-youtube
-After installation linking is automatically done. You must have your YouTube developer API Key.
+## ## Features
 
-## Update your YOUTUBE_API key and VIDEOS_IDS set.
-Move into the options file and update your youtube api key. And replace the given VIDEOS_IDS array with your own.
+ - [x] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+For keys and credientials setup the following steps are given:
+1. Signup or login into `Google Console account`.
+2. From your dashboard, on the top left side, click on `menubar` then go to `api & services` => `library`.
+3. After that click on `search menubar` and search for "youtube data api" and enable it.
+![console cloud google](https://user-images.githubusercontent.com/120275623/228167168-7c7d9091-2f0c-4390-9037-278efc0b77be.png)
+4. Generate a `key` and save it.
+
+
+## Dependencies
+
+Dependencies used:
+ - react-native-youtube  -  https://www.npmjs.com/package/react-native-youtube
+ - react-native-vector-icons  -  https://www.npmjs.com/package/react-native-vector-icons
+ - prop-types  -  https://www.npmjs.com/package/prop-types
+
+## ## Module Options
+
+### Global Configs
+
+No global configs required.
+
+### Local Configs
+
+Move into the options file and update your youtube api key and replace the given VIDEOS_IDS array with your own.
 ```javascript
 
 const YOUTUBE_API_KEY = "Your youtube api key";
 const VIDEOS_IDS = ["uMK0prafzw0"];
 
 ```
-## Manual Setup
 
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+### Android setup
 
-```javascript
-import YouTubePlayer from "@modules/youtube-player";
+#### For `Android 11` and above
 
-const { title, navigator } = YouTubePlayer;
+Add these lines in `AndroidManifest.xml`
+
+```xml
+<queries>
+<package android:name="com.google.android.youtube" />
+</queries>
 ```
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+### iOS setup
 
-```javascript
-import { modules } from '@modules';
-const YouTubePlayer = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<YouTubePlayer />
-```
-
-## Params
-
-Below is the list of all params that can be passed to the module.
-
-| Name                         | Type       | Description                                                    |
-| -----------------------------|:----------:|:---------------------------------------------------------------|
-| youtubeApiKey                | `string`   | Your youtube api key.                                          |
-| playerSetting                | `object`   | Player configrutations {isReady: false, status: null, quality: null, error: null, isPlaying: true, isLooping: true, currentTime: 0, videosIndex: 0, fullscreen: false, playerWidth: Dimensions.get("window").width }             |
-| videoIds                     | `array`    | List of videos.                                                |
-| forwordTimeDurationInSeconds | `number`   | Seconds to forword video time                                  |
-| backwordTimeDurationInSeconds| `number`   | Seconds to backword video time                                 |
-| isForwordTimeDuration        | `bool`     | Show forword time button                                       |
-| isBackwordTimeDuration       | `bool`     | Show backword time button                                      |
-
-## Features
-The following are the key features of this module:
-* Quality options for video
-* Pause video option
-* Fullscreen option
-* Play video on loop option
-* Back and Next options
-* Video sharing option
-
-
-https://user-images.githubusercontent.com/76822297/176699752-8f994563-6dab-4da7-8d7c-b781dbee8f35.mp4
-
+No iOS setup required.

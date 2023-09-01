@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Text, View, Image, TouchableOpacity, StyleSheet } from "react-native";
-// @ts-ignore
+
 import emailIcon from "../emailIcon.png";
 import { OptionsContext } from "@options";
 
