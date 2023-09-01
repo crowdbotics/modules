@@ -1,13 +1,12 @@
 import React from "react";
 import { Text, StyleSheet, View, Image, TextInput, ScrollView, TouchableHighlight } from "react-native";
 
-// @ts-ignore
 const Minting2Screen = (params) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>NFT</Text>
         <Text />
@@ -30,7 +29,7 @@ const Minting2Screen = (params) => {
         <View style={styles.walletCard}>
           <View style={styles.walletInner}>
             <Image
-              source={require(// @ts-ignore
+              source={require(
                 "./assets/pen.png")}
               style={styles.image}
             />
@@ -40,7 +39,7 @@ const Minting2Screen = (params) => {
             </View>
           </View>
           <Image
-            source={require(// @ts-ignore
+            source={require(
               "./assets/war.png")}
             style={styles.war}
           />
@@ -50,24 +49,24 @@ const Minting2Screen = (params) => {
         <View style={styles.box}>
           <View style={styles.imageBox}>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/edit.png")} style={styles.edit} />
           </View>
           <Image source={require(
-            // @ts-ignore
+
             "./assets/fullscreen.png")} style={styles.vector} />
         </View>
       </View>
       <View style={styles.ratingContainer}>
         <View style={styles.subRatings}>
           <Image source={require(
-            // @ts-ignore
+
             "./assets/heart.png")} style={styles.heart} />
           <Text style={styles.ratingText}>2216</Text>
         </View>
         <View style={styles.subRatings}>
           <Image source={require(
-            // @ts-ignore
+
             "./assets/copy.png")} style={styles.copy} />
           <Text style={styles.ratingText}>2216</Text>
         </View>
@@ -81,7 +80,7 @@ const Minting2Screen = (params) => {
           <View style={styles.typeSection}>
             <Text style={[styles.cost, { color: "#ADB1B2" }]}>$ vs ETH</Text>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/eth.png")} style={styles.eth} />
           </View>
           <Text style={styles.ethCost}>2.75 ETH</Text>
@@ -96,11 +95,11 @@ const Minting2Screen = (params) => {
       <Text style={styles.mt10}>Amount of bid</Text>
       <View style={[styles.chooseContainer, { justifyContent: "space-evenly" }]}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/minus.png")} style={styles.priceImg} />
         <TextInput placeholder='2.75 ETH' placeholderTextColor="#000" style={styles.inputPrice} />
         <Image source={require(
-          // @ts-ignore
+
           "./assets/plus.png")} style={styles.priceImg} />
       </View>
       <View style={styles.bidContainer}>
@@ -110,7 +109,7 @@ const Minting2Screen = (params) => {
         <View style={[styles.walletCard, { backgroundColor: "#D9D9D9" }]}>
           <View style={styles.walletInner}>
             <Image
-              source={require(// @ts-ignore
+              source={require(
                 "./assets/pen.png")}
               style={styles.image}
             />
@@ -123,7 +122,7 @@ const Minting2Screen = (params) => {
             <Text style={[styles.userText, { marginLeft: 0 }]}>Highest bid</Text>
             <View style={[styles.typeSection, { width: 50 }]}>
               <Image
-                source={require(// @ts-ignore
+                source={require(
                   "./assets/eth.png")}
                 style={styles.eth}
               />
@@ -140,7 +139,7 @@ const Minting2Screen = (params) => {
         <View style={[styles.walletCard, { backgroundColor: "#D9D9D9" }]}>
           <View style={styles.walletInner}>
             <Image
-              source={require(// @ts-ignore
+              source={require(
                 "./assets/pen.png")}
               style={styles.image}
             />
@@ -153,7 +152,7 @@ const Minting2Screen = (params) => {
             <Text style={[styles.userText, { marginRight: -5 }]}>Bid</Text>
             <View style={[styles.typeSection]}>
               <Image
-                source={require(// @ts-ignore
+                source={require(
                   "./assets/eth.png")}
                 style={styles.eth}
               />
@@ -166,7 +165,7 @@ const Minting2Screen = (params) => {
         <View style={[styles.walletCard, { backgroundColor: "#D9D9D9" }]}>
           <View style={styles.walletInner}>
             <Image
-              source={require(// @ts-ignore
+              source={require(
                 "./assets/pen.png")}
               style={styles.image}
             />
@@ -179,7 +178,7 @@ const Minting2Screen = (params) => {
             <Text style={[styles.userText, { marginRight: -5 }]}>Bid</Text>
             <View style={[styles.typeSection]}>
               <Image
-                source={require(// @ts-ignore
+                source={require(
                   "./assets/eth.png")}
                 style={styles.eth}
               />
@@ -192,7 +191,7 @@ const Minting2Screen = (params) => {
         <View style={[styles.walletCard, { backgroundColor: "#D9D9D9" }]}>
           <View style={styles.walletInner}>
             <Image
-              source={require(// @ts-ignore
+              source={require(
                 "./assets/pen.png")}
               style={styles.image}
             />
@@ -205,7 +204,7 @@ const Minting2Screen = (params) => {
             <Text style={[styles.userText, { marginRight: -5 }]}>Bid</Text>
             <View style={[styles.typeSection]}>
               <Image
-                source={require(// @ts-ignore
+                source={require(
                   "./assets/eth.png")}
                 style={styles.eth}
               />
@@ -217,7 +216,7 @@ const Minting2Screen = (params) => {
       <View style={styles.lineContainer}>
         <View style={styles.line} />
         <Image
-          source={require(// @ts-ignore
+          source={require(
             "./assets/down.png")}
           style={styles.down}
         />
@@ -377,7 +376,6 @@ const styles = StyleSheet.create({
   }
 });
 
-// @ts-ignore
 const Button = (props) => {
   return (
     <TouchableHighlight onPress={props.onPress} underlayColor="#DDDDDD">

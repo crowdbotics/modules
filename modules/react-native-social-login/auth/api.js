@@ -1,6 +1,9 @@
 import axios from "axios";
+import { getGlobalOptions } from "@options";
 
-const BASE_URL = "https://your-app-backend.botics.co"; // your app back-end url
+const globalOptions = getGlobalOptions();
+// Update the BASE_URL in options.js file of your app
+const BASE_URL = globalOptions.url;
 
 const authAPI = axios.create({
   baseURL: BASE_URL,

@@ -1,4 +1,4 @@
-// @ts-ignore
+
 import RNFS from "react-native-fs";
 
 export const cloneArray = (data) => {
@@ -26,7 +26,6 @@ export const fetchChannels = (pubnub, userId) => {
 };
 
 export const timeSince = (date) => {
-  // @ts-ignore
   const seconds = Math.floor((new Date() - date) / 1000);
   let interval = seconds / 31536000;
   if (interval > 1) {

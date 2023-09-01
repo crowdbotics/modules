@@ -1,8 +1,7 @@
 import React from "react";
-// @ts-ignore
+
 import { createStackNavigator } from "@react-navigation/stack";
 
-// @ts-ignore
 import TypeForm from "../screen/Typeform.js";
 import TypeformWebhook from "../screen/TypeformWebhook";
 import Responses from "../screen/Responses.js";
