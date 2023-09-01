@@ -7,7 +7,7 @@ This module allows user to see a list of articles and read full details about a 
 - Get a list of the articles
 - Read a complete article
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/764a5166-6686-4fda-a116-62ef6f7ca818)
 
 ## ## Features
 
