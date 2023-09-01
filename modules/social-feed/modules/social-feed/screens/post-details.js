@@ -48,7 +48,7 @@ export default function PostDetailScreen(props) {
       style={{ height: Dimensions.get('window').height }}
       
     >
-      <ActionSheet
+      {/* <ActionSheet
         ref={actionSheet}
         title={"Take Action"}
         options={PostOptions}
@@ -64,7 +64,7 @@ export default function PostDetailScreen(props) {
               break;
           }
         }}
-      />
+      /> */}
       <PostComponent postDetails={postDetails} setLoading={setLoading} 
       navigation={navigation} actionSheet={actionSheet}
       baseOptions={baseOptions} setPostOptions={setPostOptions}

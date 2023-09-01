@@ -10,7 +10,9 @@ import { OptionsContext, GlobalOptionsContext } from "@options";
 import { userToken } from "../api";
 import {userPostStyles} from "../components/post";
 
+
 const likeComment = (id, url, setLoading) => {
+  console.log("Working-----")
     setLoading(true)
     fetch(`${url}/modules/social-feed/like-comment/`, {
       method: 'POST',

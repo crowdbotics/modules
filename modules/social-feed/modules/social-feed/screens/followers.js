@@ -1,182 +1,173 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Text, StyleSheet, View, TextInput, Image, ScrollView } from "react-native";
+import { Text, View, TextInput, Image, ScrollView, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {getFollowers, followUser} from '../api';
-import { GlobalOptionsContext } from "@options";
+import { OptionsContext } from "@options";
+import { useDispatch } from "react-redux";
+import { getFollowers, followUser } from "../store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { toggleFollowById } from "../utils";
 
+const FollowersList = () => {
+  const dispatch = useDispatch();
 
-const FollowersList = (params) => {
   const [followers, setFollowers] = useState([]);
-  const [allFollowers, setAllFollowers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searchedFollowers, setSearchedFollowers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const gOptions = useContext(GlobalOptionsContext);
-  const BASE_URL = gOptions.url
+  const { styles } = useContext(OptionsContext);
+
+  // Fetch followers on from backend
   useEffect(() => {
-    getFollowers(BASE_URL, setLoading).then((data) => {
-      console.log("---------sss", data)
-      setFollowers(data?.results);
-      setAllFollowers(data?.results);
-    })
-  }, [loading]);
+    dispatch(getFollowers())
+      .then(unwrapResult)
+      .then((response) => {
+        setFollowers(response?.results);
+        setSearchedFollowers(response?.results);
+      })
+      .catch((error) => __DEV__ && console.log(error));
+  }, []);
+
+  // Generate an array of alphabets for grouping followers
   const alpha = Array.from(Array(26)).map((e, i) => i + 65);
   const alphabets = alpha.map((x) => String.fromCharCode(x));
 
+  // Filter followers based on search query
   useEffect(() => {
     if (searchQuery.length > 0) {
-      setFollowers(allFollowers.filter((follower) => follower.name.toLowerCase().includes(searchQuery.toLowerCase())));
-    }else{
-      setFollowers(allFollowers);
+      setFollowers(
+        searchedFollowers.filter((follower) =>
+          follower.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    } else {
+      setFollowers(searchedFollowers);
     }
-  }
-  , [searchQuery]);
+  }, [searchQuery]);
 
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View style={styles.followersContainer}>
         <View style={styles.searchBar}>
           <Text style={styles.searchText}>Search</Text>
-          <View style={{ borderWidth: 1, borderRadius: 10, borderColor: "#C4C4C4", flexDirection: "row", alignItems: "center" }}>
+          <View style={styles.searchView}>
             <View style={{ width: "90%" }}>
-              <Input placeholder="Enter" setValue={setSearchQuery}/>
+              <Input placeholder="Enter" setValue={setSearchQuery} />
             </View>
-            <Image source={require("../assets/search.png")}/>
+            <Image source={require("../assets/search.png")} />
           </View>
         </View>
         <View>
-          <Text style={styles.text}>{followers.length} Followers</Text>
+          <Text style={styles.followersAmount}>
+            {followers?.length} Followers
+          </Text>
         </View>
         {alphabets.map((alpha) => {
           return (
             <>
-              {followers.filter((follower) => follower.name.charAt(0).toUpperCase() === alpha).length > 0 && (
+              {followers?.filter(
+                (follower) => follower.name.charAt(0).toUpperCase() === alpha
+              ).length > 0 && (
                 <View style={styles.frequently}>
                   <Text style={styles.frequentlyText}>{alpha}</Text>
                 </View>
               )}
               <View>
-                {followers.filter((follower) => follower.name.charAt(0).toUpperCase() === alpha).map((follower) => {
-                  return (
-                    <Follower id={follower.id} name={follower.name} bgcolor={follower.bgcolor} 
-                    follow={follower.follow} setLoading={setLoading}/>
+                {followers
+                  ?.filter(
+                    (follower) =>
+                      follower.name.charAt(0).toUpperCase() === alpha
                   )
-                }
-                )}
+                  .map((follower) => {
+                    return (
+                      <Follower
+                        id={follower.id}
+                        name={follower.name}
+                        bgcolor={follower.bgcolor}
+                        follow={follower.follow}
+                        setFollowers={setFollowers}
+                        followers={followers}
+                      />
+                    );
+                  })}
               </View>
             </>
-          )
-        }
-        )}
+          );
+        })}
       </View>
     </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff"
-  },
-  searchBar: {
-    padding: 20
-  },
-  searchText: {
-    marginLeft: 10,
-    marginBottom: 10
-  },
-  text: {
-    marginLeft: 30,
-    marginBottom: 10
-  },
-  frequently: {
-    height: 50,
-    width: "100%",
-    backgroundColor: "#DADADA",
-    flexDirection: "column",
-    justifyContent: "center"
-  },
-  frequentlyText: {
-    marginLeft: 30,
-    color: "#8F8D86"
-  }
-
-});
-
 export default FollowersList;
 
+/**
+ * A component to display a follower and allow following.
+ *
+ * @param {object} props - Component props.
+ * @param {number} props.id - The ID of the follower.
+ * @param {string} props.name - The name of the follower.
+ * @param {boolean} props.follow - Indicates whether the user is followed.
+ * @param {function} props.setFollowers - A function to update the followers list.
+ * @param {array} props.followers - The list of followers.
+ */
 const Follower = (props) => {
-  const { id, name, bgcolor, follow, setLoading } = props;
+  const { id, name, follow, setFollowers, followers } = props;
+  const dispatch = useDispatch();
+  const { styles } = useContext(OptionsContext);
+
+  const onFollowBack = () => {
+    dispatch(followUser(id))
+      .then(unwrapResult)
+      .then(() => {
+        Alert.alert("Success", "Follow request sent!");
+        setFollowers(toggleFollowById(followers, id));
+      })
+      .catch((error) => __DEV__ && console.log(error));
+  };
+
   return (
-    <View style={FollowerStyles.follower}>
-      <View style={FollowerStyles.main}>
-        <View style={[FollowerStyles.image, { backgroundColor: props.bgcolor }]}>
-          <Image source={require("../assets/edit.png")}/>
+    <View style={styles.follower}>
+      <View style={styles.followerMainView}>
+        <View
+          style={[styles.followerImageView, { backgroundColor: props.bgcolor }]}
+        >
+          <Image source={require("../assets/edit.png")} />
         </View>
         <Text>{name}</Text>
       </View>
-      {!follow && 
-      <TouchableOpacity onPress={()=>{followUser(id, setLoading)}}>
-        <Text>Follow Back</Text>
-      </TouchableOpacity>
-      }
+      {!follow && (
+        <TouchableOpacity onPress={onFollowBack}>
+          <Text>Follow Back</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
-const FollowerStyles = StyleSheet.create({
-  follower: {
-    marginHorizontal: 20,
 
-    borderBottomWidth: 0.5,
-    borderBottomColor: "rgba(0,0,0,0.5)",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    justifyContent: "space-between"
-
-  },
-  main: {
-    flexDirection: "row",
-    alignItems: "center"
-  },
-  image: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    marginRight: 15,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
-
+/**
+ * A reusable input component.
+ *
+ * @param {object} props - Component props.
+ * @param {string} props.placeholder - Placeholder text for the input.
+ * @param {string} props.value - The value of the input.
+ * @param {function} props.setValue - A function to set the input value.
+ */
 const Input = (props) => {
+  const { placeholder, value, setValue, editable, errorText } = props;
+  const { styles } = useContext(OptionsContext);
+
   return (
     <View>
       <TextInput
-        style={textStyles.input}
-        placeholder={props.placeholder}
-        value={props.value}
-        onChangeText={(num) => props.setValue(num)}
-        placeholderTextColor='#ddd'
-        editable={props.editable !== false}
+        style={styles.followerSearchInput}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={(num) => setValue(num)}
+        placeholderTextColor="#ddd"
+        editable={editable !== false}
       />
-      {props.errorText ? <Text style={textStyles.error}>{props.errorText}</Text> : null}
+      {errorText ? (
+        <Text style={styles.searchFollowerEnd}>{errorText}</Text>
+      ) : null}
     </View>
   );
 };
-
-const textStyles = StyleSheet.create({
-  input: {
-    backgroundColor: "#fff",
-    height: 53,
-    color: "#000",
-    borderRadius: 10,
-    fontSize: 14,
-    paddingHorizontal: 10
-  },
-  error: {
-    fontSize: 13,
-    color: "#FA060D",
-    paddingTop: 8
-  }
-});

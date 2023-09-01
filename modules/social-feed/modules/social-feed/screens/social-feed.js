@@ -21,7 +21,9 @@ const SocialFeedScreen = (props) => {
       }
     })
     .then((response) => response.json())
-    .then((json) => setPosts(json))
+    .then((json) => {
+      console.log(json)
+      setPosts(json)})
     .catch((error) => console.log(error))
     .finally(() => setLoading(false));
   }

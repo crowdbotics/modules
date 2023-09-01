@@ -10,6 +10,7 @@ import FollowersList from "./screens/followers";
 import {getMyFeed} from "./api";
 
 import Navigator from "./navigator";
+import { slice } from "./store";
 
 const SocialFeed = (props) => {
   const options = useContext(OptionsContext);
@@ -21,5 +22,6 @@ const SocialFeed = (props) => {
 
 export default {
   title: "Social Feed",
-  navigator: Navigator
+  navigator: Navigator,
+  slice
 };

@@ -26,7 +26,7 @@ const SocialProfileScreen = ({navigation, route}) => {
           'Authorization': `Token ${userToken}`
         }
       }).then((response) => response.json())
-        .then((json) => setUserProfile(json))
+        .then((json) => {setUserProfile(json), console.log("Profile", json)})
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
   }
