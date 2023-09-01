@@ -1,53 +1,44 @@
-# Article Module Frontend
-In this module users can view the articles list and read a specific article.
+# Articles React native specs
 
-## Scope Features
-The following are the key features in scope for this module.
-2. Ability to get a list of the articles
-3. Ability to get a specific article
+## Module description
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
-  ```
-  yarn install
-  ```
-## API Calling Methods
-All the api calling methods reside in `store/api.js` file.
+This module allows user to see a list of articles and read full details about a specific one.
 
-* **articleList**
-`articleList` method used to retrieve the list of articles.
+- Get a list of the articles
+- Read a complete article
 
-* **articleRead**
-`articleRead` method is used return a specific article details.
+Include preview screenshots or videos here.
 
-## Setup Installation
+## ## Features
 
-Open `modules/articles/store/api.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint (ie. demo0122202101-24002.botics.com/modules/articles). The initial piece is your project name and the numeric piece is your project number.
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
+- [ ] This module requires manual Android setup.
+- [ ] This module requires manual iOS setup.
 
-## Manual Setup
+## ## 3rd party setup
 
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+No 3rd party account required.
 
-```javascript
-import Articles from "@modules/articles";
+## Dependencies
 
-const { title, navigator, slice } = Articles;
-```
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
+No dependencies used.
 
-```javascript
-import { modules } from '@modules';
-const Articles = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<Articles />;
-```
-## View responses
-User can view responses
+## ## Module Options
 
-## Contributing
+### Global Configs
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+No global configs required.
 
-## License
+### Local Configs
 
-[MIT](https://choosealicense.com/licenses/mit/)
+Open `modules/articles/store/api.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
+
+### Android setup
+
+No android setup required.
+
+### iOS setup
+
+No iOS setup required.
