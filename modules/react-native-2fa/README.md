@@ -1,12 +1,45 @@
-# Two Factor Authentication
- Two Factor Authentication module, will implement a two-factor authentication flow, which will prompt for username/email and password and then a time-based generated code. 
-## Documentation
+# Two Factor Authentication React native specs
 
-## Global Configs
-### Update api url in options/options.js
+## Module description
 
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+Two Factor Authentication module, will implement a two-factor authentication flow, which will prompt for username/email and password and then a time-based generated code. 
 
+ - Send OTP
+ - Verify by email
+ - Verify by sms
+ - Verification by 2fa
+ - Setup Google authenticator on same device
+ - Scan google authenticator qr code.
+ - Resend code.
+
+![image](https://github.com/cbshoaib/modules/assets/76822297/90d09b9d-5ff5-456f-bcab-902b745bdc78)
+
+
+## ## Features
+
+ - [ ] This module includes environment variables.
+ - [ ] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+No 3rd party account setup required.
+
+## Dependencies
+
+Dependencies used:
+   - react-native-qrcode-svg  -    https://www.npmjs.com/package/react-native-qrcode-svg
+   - react-native-svg  - https://www.npmjs.com/package/react-native-svg
+   - react-native-country-picker-modal  - https://www.npmjs.com/package/react-native-country-picker-modal
+   - react-native-dropdown-picker  -  https://www.npmjs.com/package/react-native-dropdown-picker
+
+## ## Module Options
+
+### Global Configs
+
+Update the ``options/options.js`` file with your app's backend url. 
 ```
 export const globalOptions = {
     ...
@@ -15,47 +48,14 @@ export const globalOptions = {
 }
 ```
 
-## Manual Setup
+### Local Configs
 
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+No local config required.
 
-```javascript
-import TwoFactorAuthentication from "@modules/2fa";
+### Android setup
 
-const { title, navigator } = TwoFactorAuthentication;
-```
+No android config required.
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+### iOS setup
 
-```javascript
-import { modules } from '@modules';
-const TwoFactorAuthentication = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<TwoFactorAuthentication />
-```
-
-## Features
-
-### Verify code 
-By clicking "Verify", the code provided is verified against the code sent to phone number or email
-### Select verification method
-By clicking 'choose verification method', verification method can be selected for authentication
-
-### Verification by email
-By clicking the "Email" button, verification code is sent to user email.
-
-### Verification by sms
-By clicking the "sms" button, verification code is sent to user phone number.
-
-### Verification by 2FA
-By clicking the "2FA" button, authentication through google Authenticator generated token can be achieved.
-
-### Set up 2FA on same device
-By clicking "set up on same device", Google Authenticator account sets up automatically
-
-### QR code 
-By scanning the QR code, Google Authenticator account sets up automatically.
-
-### Resend code
-By clicking "Resend", the code is resent to Phone number or email
-
-
+No iOS config required.

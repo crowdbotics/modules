@@ -4,7 +4,6 @@ import secrets
 
 from django.core.files.base import ContentFile
 from django.utils.text import slugify
-
 from rest_framework import serializers, exceptions
 
 from .models import FileUpload

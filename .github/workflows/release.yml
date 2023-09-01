@@ -44,3 +44,13 @@ jobs:
         run: |
           heroku config:set REACT_NATIVE_SCAFFOLD_REPO_BRANCH=$GITHUB_REF_NAME -a ${{ secrets.HEROKU_APP }}
           heroku run 'python manage.py update_crowdbotics_modules' -a ${{ secrets.HEROKU_APP }}
+
+      - name: Add JIRA label
+        run: |
+          git log --oneline --no-decorate HEAD...$(git tag -l '202[0-9]????.*' --sort=-v:refname | head -n 1) | grep -Eo '([A-Z]{3,}-)([0-9]+)' | uniq > jira_ticket.txt
+          if [ $GITHUB_REF_NAME == master ]; then
+            for i in $(cat jira_ticket.txt); do curl -X PUT -H "Content-Type: application/json" -H "Authorization: Basic ${{ secrets.JIRA_TOKEN }}" --data '{"update":{"labels":[{"add":"staging"}]}}' https://crowdbotics.atlassian.net/rest/api/3/issue/$i ; done
+          fi
+          if [[ $GITHUB_REF_NAME =~ ^[0-9]+\.[0-9]+$ ]]; then
+            for i in $(cat jira_ticket.txt); do curl -X PUT -H "Content-Type: application/json" -H "Authorization: Basic ${{ secrets.JIRA_TOKEN }}" --data '{"update":{"labels":[{"add":"released"}]}}' https://crowdbotics.atlassian.net/rest/api/3/issue/$i ; done
+          fi
