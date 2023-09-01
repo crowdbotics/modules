@@ -8,7 +8,7 @@ This is a react native based module which allows user to do payments using strip
 - Pay through google pay
 - Pay through apple pay
 
-Include preview screenshots or videos here.
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/24f43bc0-46f3-475d-b4ad-52b19a525dd2)
 
 ## ## Features
 
