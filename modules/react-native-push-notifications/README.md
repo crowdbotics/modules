@@ -10,7 +10,7 @@ This react native based module allows user to deliver personalized customer noti
 - Use highly visible push alerts to remind users
 - Engage your users with updates and new content.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/56a58ecd-f78a-45ac-a9c6-e8f49f48ecee)
 
 ## ## Features
 
