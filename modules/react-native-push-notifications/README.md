@@ -1,26 +1,27 @@
-# Push Notifications
-Push notification are implemented using onSignal. Module allows user to deliver Personalized Customer notifications.
+# Push Notifications React native specs
 
-## Scope Features 
-The following are the key features in scope for this module.
-1. Recieve notifications from one signal.
-2. Increase Message Visibility
-3. Create a Connected User Experience
-4. Use highly visible push alerts to remind users
-5. Engage your users with updates and new content.
+## Module description
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
-Here are the required packages for the module:
-```
- "react-native-onesignal": "^4.0.3"
-```
-and run this command.
-  ```
-  yarn install
-  ```
-  
-## Keys And Credientials Setup
+This react native based module allows user to deliver personalized customer notifications using OneSignal.
+
+- Recieve notifications from one signal.
+- Increase Message Visibility
+- Create a Connected User Experience
+- Use highly visible push alerts to remind users
+- Engage your users with updates and new content.
+
+Include preview screenshots or videos here.
+
+## ## Features
+
+ - [x] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [x] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
 Following are the steps to get the keys & credientials:
 1. Sign in to [oneSignal](https://onesignal.com/).
 2. Create new app by clicking `New App/Website` button.
@@ -34,13 +35,23 @@ Following are the steps to get the keys & credientials:
 ![oneSignal](https://user-images.githubusercontent.com/76822297/228469507-71366b43-0ad2-43a5-9924-2723c7a29dd5.png)
 
 
-## Introduction
+## Dependencies
 
-This modules uses the [OneSignal](https://onesignal.com) service to provide push notifications capabilities to your Android or iOS app.
+Dependencies used:
+- react-native-onesignal - https://www.npmjs.com/package/react-native-onesignal
 
-It includes the OneSignal SDK for React Native: [`react-native-onesignal`](https://www.npmjs.com/package/react-native-onesignal).
+## ## Module Options
 
-## Gradle setup
+### Global Configs
+
+No global configs required.
+
+### Local Configs
+
+Add `ONE_SIGNAL_APP_ID` in your `@env`
+
+### Android setup
+
 
 Add the following buildscript at the top of `android/app/build.gradle` file:
 
@@ -57,50 +68,6 @@ buildscript {
 apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 ```
 
-## Setup
+### iOS setup
 
-[Requirements](https://documentation.onesignal.com/docs/react-native-sdk-setup#step-1---requirements) overview:
-
-- OneSignal account
-- iOS Push Certificate - for iOS
-- Firebase project - for Android
-
-Setup steps:
-
-1. Create a [OneSignal account](https://onesignal.com) and create a new [One Signal application](https://app.onesignal.com/apps/new).
-
-2. Follow and complete the [Step 4 of the OneSignal documentation](https://documentation.onesignal.com/docs/react-native-sdk-setup#step-4---install-for-ios-using-cocoapods-for-ios-apps). Don't forget to commit and push the changes.
-
-3. Generate an [iOS Push Certificate](https://documentation.onesignal.com/docs/generate-an-ios-push-certificate).
-
-4. Generate a [Firebase Server Key](https://documentation.onesignal.com/docs/generate-a-google-server-api-key).
-
-5. Issue a new test push notification, with immediate delivery, from the [OneSignal Dashboard](https://app.onesignal.com/apps/). Verify it works on your running Android simulator or on a real iOS Device (iOS push notifications can't be tested in a simulator). You will have to provide the `ONE_SIGNAL_APP_ID` env var in your `.env` file with the App ID key obtained from [Keys & IDs](https://documentation.onesignal.com/docs/accounts-and-keys#section-app-id) if you're testing locally in the Android simulator.
-
-6. Add the `ONE_SIGNAL_APP_ID` env var value in your App's [Crowdbotics Dashboard](https://app.crowdbotics.com/dashboard/).
-
-7. Deploy your app.
-
-## Manual Setup
-
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-```javascript
-import PushNotifications from "@modules/push-notifications";
-
-const { title, hook } = PushNotifications;
-```
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
-```javascript
-import { modules } from '@modules';
-const PushNotifications = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<PushNotifications/>
-```
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+Follow and complete the [Step 4 of the OneSignal documentation](https://documentation.onesignal.com/docs/react-native-sdk-setup#step-4---install-for-ios-using-cocoapods-for-ios-apps).
