@@ -1,26 +1,46 @@
-# ecommerce backend configuration and Info
+## Django Ecommerce backend configuration and information
 
-Before starting the server run:
+## Module description
 
-```sh
-python manage.py migrate
-```
+This module consist of ecommerce shopping criteria which manages by including the address, analytics, baskets, catalogs.
+checkouts, communications, customers, dashboard, offers, orders, partners, payments, shipping, vouchers, and wishlists
+services.
 
-======================
-Building your own shop
-======================
+## Features
+
+- [x] This module includes migrations.
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
+
+## Environment variables
+
+No environment variables are required.
+
+## Dependencies
+
+[Django-Oscar](https://github.com/django-oscar/django-oscar/blob/master/README.rst)\
+[Django-Oscar-API](https://github.com/django-oscar/django-oscar-api/blob/main/README.rst)\
+[Django-Oscar-Accounts](https://github.com/django-oscar/django-oscar-accounts/blob/master/README.rst)\
+[Sorl-Thumbnail](https://github.com/jazzband/sorl-thumbnail/blob/master/README.rst)
+
+Dependencies used:
+
+- [django-oscar==3.1](https://pypi.org/project/django-oscar/)
+- [django-oscar-accounts==3.0.1](https://pypi.org/project/django-oscar-accounts/)
+- [django-oscar-api==3.1.0](https://pypi.org/project/django-oscar-api/)
+- [sorl-thumbnail==12.8.0](https://pypi.org/project/sorl-thumbnail/)
+
+## Manual Configurations Details
+
+### Django settings
 
 
-
-Django settings
-===============
-
-First, edit your settings file ``frobshop/frobshop/settings.py`` to import all of Oscar's default settings.
+First, edit your settings file ``settings.py`` to import all of Oscar's default settings.
 
 .. code-block:: django
 
     from oscar.defaults import *
-
 
 Now add Oscar's context processors to the template settings, listed below:
 
@@ -66,11 +86,11 @@ depends on. Also set ``SITE_ID``:
         'sorl.thumbnail',   # Default thumbnail backend, can be replaced
         'django_tables2',
     ]
-    OSCARAPI_OVERRIDE_MODULES = ["modules.ecommerce.api_extensions"]
+    OSCARAPI_OVERRIDE_MODULES = ["modules.django_ecommerce.ecommerce.api_extensions"]
 
     MODULES_APPS = get_modules()
 
-    INSTALLED_APPS += THIRD_PARTY_APPS + MODULES_APPS + OSCAR_APPS + LOCAL_APPS
+    INSTALLED_APPS += THIRD_PARTY_APPS + MODULES_APPS + LOCAL_APPS
 
     SITE_ID = 1
 
@@ -122,8 +142,8 @@ files from a remote storage (e.g. Amazon S3), you must manually copy a
 .. _sandbox settings: https://github.com/django-oscar/django-oscar/blob/master/sandbox/settings.py#L102
 
 
-Search backend
-==============
+### Search backend
+
 If you're happy with basic search for now, you can just add Haystack's simple
 backend to the ``HAYSTACK_CONNECTIONS`` option in your Django settings:
 
@@ -153,9 +173,9 @@ Haystack config could look something like this:
 Oscar includes a sample schema to get started with Solr. More information can
 be found in the
 :doc:`recipe on getting Solr up and running</howto/how_to_setup_solr>`.
+Installation: `pip install pysolr`
 
-Database
-========
+### Database
 
 Check your database settings. A quick way to get started is to use SQLite:
 
@@ -165,8 +185,8 @@ Check your database settings. A quick way to get started is to use SQLite:
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'db.sqlite3',
-            'USER': '',
-            'PASSWORD': '',
+            'USER': 'admin',
+            'PASSWORD': '112233',
             'HOST': '',
             'PORT': '',
             'ATOMIC_REQUESTS': True,
@@ -176,8 +196,7 @@ Check your database settings. A quick way to get started is to use SQLite:
 Note that we recommend using ``ATOMIC_REQUESTS`` to tie transactions to
 requests.
 
-URLs
-====
+### URLs
 
 Alter your ``frobshop/urls.py`` to include Oscar's URLs. You can also include
 the Django admin for debugging purposes. But please note that Oscar makes no
@@ -204,9 +223,7 @@ you will also need to include Django's i18n URLs:
         path('', include(apps.get_app_config('oscar').urls[0])),
     ]
 
-
-Create database
----------------
+### Create database
 
 Oscar ships with migrations. Django's migration framework will detect them
 automatically and will do the right thing.
@@ -221,10 +238,9 @@ You should now have an empty, but running Oscar install that you can browse at
 http://localhost:8000.
 
 
-Initial data
-============
+### Initial data
 
-The default checkout process requires a shipping address with a country.  Oscar
+The default checkout process requires a shipping address with a country. Oscar
 uses a model for countries with flags that indicate which are valid shipping
 countries and so the ``country`` database table must be populated before
 a customer can check out.
@@ -245,8 +261,7 @@ manually mark at least one country as a shipping country.
 .. _pycountry: https://pypi.python.org/pypi/pycountry
 
 
-Creating product classes and fulfilment partners
-=================================================
+### Creating product classes and fulfilment partners
 
 Every Oscar deployment needs at least one
 :class:`product class <oscar.apps.catalogue.abstract_models.AbstractProductClass>`
@@ -268,8 +283,7 @@ as `data migration`_.
 
 .. _`data migration`: http://codeinthehole.com/writing/prefer-data-migrations-to-initial-data/
 
-Defining the order pipeline
-===========================
+### Defining the order pipeline
 
 The order management in Oscar relies on the order pipeline that
 defines all the statuses an order can have and the possible transitions
@@ -305,8 +319,7 @@ end point in the pipeline.
 With these three settings defined in your project you'll be able to see
 the different statuses in the order management dashboard.
 
-Next steps
-==========
+### Next steps
 
 The next step is to implement the business logic of your domain on top of
 Oscar. The fun part.
