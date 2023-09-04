@@ -1,5 +1,7 @@
 ## Django QR Code backend configuration and information
 
+## Module description
+
 This module is used to generate a QR code at the backend. It has ability to scan Qrcode at the frontend from the provided string.
 
 Features included:
