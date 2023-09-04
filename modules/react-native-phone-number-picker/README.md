@@ -1,37 +1,43 @@
-# Phone Number Picker Module
-Module allows user to select the country code and enter the country phone number. 
+# Phone Number Picker React native specs
 
-## Scope Features
-The key features in scope for this module is that it has ability to select country code of any phone number.
+## Module description
 
-## Manual Setup
+This module allows user to select the country code and enter the country phone number. 
 
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+- Ability to input phone number according to different country codes.
 
-```javascript
+Include preview screenshots or videos here.
 
-import PhoneNumberPicker from "@modules/phone-number-picker";
+## ## Features
 
-const { title, navigator } = PhoneNumberPicker;
+- [ ] This module includes environment variables.
+- [ ] This module requires manual configurations.
+- [ ] This module can be configured with module options.
+- [ ] This module requires manual Android setup.
+- [ ] This module requires manual iOS setup.
 
-```
+## ## 3rd party setup
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+No 3rd party account required.
 
-```javascript
+## Dependencies
 
-import { modules } from '@modules';
+No dependencies used.
 
-const PhoneNumberPicker = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
+## ## Module Options
 
-<PhoneNumberPicker  />
+### Global Configs
 
-```
-## Contributing
+No global configs required.
+### Local Configs
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+No local configs required.
 
-## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+### Android setup
+
+No android setup required
+
+### iOS setup
+
+No iOS setup required
