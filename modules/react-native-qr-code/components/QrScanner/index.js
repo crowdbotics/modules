@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { StyleSheet, Text } from "react-native";
-// @ts-ignore
+
 import QRCodeScanner from "react-native-qrcode-scanner";
-// @ts-ignore
+
 import { RNCamera } from "react-native-camera";
 import QrModal from "../Modal";
 

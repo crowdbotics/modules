@@ -3,25 +3,37 @@ import { api } from "./api";
 
 export const getUserById = createAsyncThunk(
   "userProfile/getUserById",
-  async (id) => {
-    const response = await api.getUserById(id);
-    return response.data;
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.getUserById(id);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 export const getUsers = createAsyncThunk(
   "userProfile/getUsers",
-  async (payload) => {
-    const response = await api.getUsers(payload);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.getUsers(payload);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 export const updateUserById = createAsyncThunk(
   "userProfile/updateUserById",
-  async ({ data, token }) => {
-    const response = await api.updateUserById(data, token);
-    return response.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await api.updateUserById(payload);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 

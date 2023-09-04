@@ -1,37 +1,31 @@
-import React from "react";
-import { StyleSheet, View, Text, TouchableHighlight } from "react-native";
+import React, { useContext } from "react";
+import { View, Text, TouchableHighlight } from "react-native";
+import { OptionsContext } from "@options";
 
-const Button = (props) => {
+/**
+ * Custom Button Component.
+ * @param {Object} props - Component props.
+ * @param {Function} props.onPress - Function to be called when the button is pressed.
+ * @param {boolean} props.disabled - Indicates whether the button is disabled or not.
+ * @param {boolean} props.clicked - Indicates whether the button is in the clicked state or not.
+ * @param {React.ReactNode} props.children - Components to render inside the button.
+ * @returns {React.ReactNode} - The custom button component.
+ */
+const Button = ({ onPress, disabled, children, clicked }) => {
+  const options = useContext(OptionsContext);
+  const { styles } = options;
+
   return (
-    <TouchableHighlight onPress={props.onPress} disabled={props.disabled} underlayColor='#DDDDDD'>
-      <View style={!props.clicked ? styles.button : styles.clicked}>
-        <Text style={styles.text}>{props.children}</Text>
+    <TouchableHighlight
+      onPress={onPress}
+      disabled={disabled}
+      underlayColor="#DDDDDD"
+    >
+      <View style={!clicked ? styles.button : styles.clicked}>
+        <Text style={styles.buttonText}>{children}</Text>
       </View>
     </TouchableHighlight>
   );
 };
 
-const styles = StyleSheet.create({
-  button: {
-    padding: 10,
-    backgroundColor: "#73A5C6",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 3
-  },
-  clicked: {
-    padding: 10,
-    backgroundColor: "#2E5984",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 3
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 15,
-    color: "white"
-  }
-});
 export default Button;
