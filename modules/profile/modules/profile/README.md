@@ -1,68 +1,56 @@
-# Profile Module
+## Profile React native specs
+
+## Module description
+
 The Profile Module is a React Native based Module, module allows the user to view, delete and edit its own profile information.
 
-## Scope Features
-The following are the key features in scope for this module. 
-1. Ability to create and update the user profile with details.
-2. Ability to get the specific profile details.
-3. Ability to delete the profile.
+The following scope features for this module:
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` and `x-dependencies` section and past them in your project's main `package.json` file.
-Here are the required packages for the module:
-```
-    "react-native-document-picker": "8.1.3"
-```
-and run this command.
-  ```
-  yarn install
-  ```
+- Create and update the user profile with details.
+- Get the specific profile details.
+- Delete the profile.
 
-## API Calling Methods
-All the api calling methods reside in `api/index.js` file.
+## Features
 
-* **updateProfile**
-`addProfile` method used to update the profile details.
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [x] This module can be configured with module options.
+- [ ] This module requires manual Android setup.
+- [ ] This module requires manual iOS setup.
 
-* **getProfile**
-`getProfile` method is used return a specific user profile details.
+## 3rd party setup
 
-* **deleteProfile**
-`deleteProfile` method used to delete the profile details.
+No 3rd party account required.
 
-## Manual Setup
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+## Dependencies
 
-```javascript
-import Profile from "@modules/profile";
+Dependencies used:
+- react-native-document-picker - https://www.npmjs.com/package/react-native-document-picker
 
-const { title, navigator } = Profile;
+##  Module Options
+
+### Global Configs
+Update the ``options/options.js`` file with your app's backend url.
+```js
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+}
 ```
 
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
+### Local Configs
+Update the value of the option in `options.js`:
 
-```javascript
-import { modules } from '@modules';
-const Profile = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<Profile />;
-```
-## Local Configs
-in modules/profile/options.js you can update following options:
-
-```javascript
-
-const userToken = "";
-
+```js
+const userToken = "user_token";
 
 ```
-## View responses
-User can view responses
 
-## Contributing
+### Android setup
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+No android setup required
 
-## License
+### iOS setup
 
-[MIT](https://choosealicense.com/licenses/mit/)
+No iOS setup required
