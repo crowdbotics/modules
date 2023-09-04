@@ -1,52 +1,38 @@
-# Signature 
-Signature module is React Native based module allows user to create signature. 
+# Signature React native specs
 
+## Module description
 
-## Features
+Signature module is React Native based module allows user to create its signature. 
 
-### In app signature
-User is able to sign on the canvas 
+- Create signature through canvas.
+- Upload signature to backend.
 
-### upload sigature
-User is able to upload signature to database
+Include preview screenshots or videos here.
 
-## Install Required Dependencies/Packages
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. Copy all the packages from the `dependencies` section and past them in your project's main `package.json` file, and run this command.
-  ```
-  yarn install
-  ```
+## ## Features
 
-## API Calling Methods
-All the api calling methods reside in `api/index.js` file.
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
+- [ ] This module requires manual Android setup.
+- [ ] This module requires manual iOS setup.
 
-* **saveSignature**
-`saveSignature` method takes an object containing `image`, and upload to database.
+## ## 3rd party setup
 
+No 3rd party account required.
 
+## Dependencies
 
+Dependencies used:
+- react-native-signature-canvas - https://www.npmjs.com/package/react-native-signature-canvas
+- react-native-webview - https://www.npmjs.com/package/react-native-webview
 
-## Manual Setup
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+## ## Module Options
 
-```javascript
-import Signature from "@modules/signature";
-const { title, navigator } = Signature;
-```
+### Global Configs
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
-
-```javascript
-import { modules } from '@modules';
-const Signature = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<Signature  />
-```
-
-## Global Configs
-### Update api url in options/options.js
-
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
-
-```
+Update the ``options/options.js`` file with your app's backend url. 
+```js
 export const globalOptions = {
     ...
   url: "https://my-app.botics.co",
@@ -54,23 +40,18 @@ export const globalOptions = {
 }
 ```
 
-## local Configs
-Update text in modules/signature/options.js
+### Local Configs
 
-```
+Update text in `modules/signature/options.js`
+
+```js
 const text = "I understand ...";
 ```
 
+### Android setup
 
+No android setup required.
 
+### iOS setup
 
-
-### Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-### License
-
-[MIT](https://choosealicense.com/licenses/mit/)
-
+No iOS setup required.
