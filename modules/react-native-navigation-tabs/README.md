@@ -11,7 +11,7 @@ The Navigation tabs module is a React Native based module, helps the user to use
 - Add icons on tabs icon.
 - Change tab layout
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/71cb62f8-ad2c-4817-8b63-1318a7daf3dd)
 
 ## ## Features
 
