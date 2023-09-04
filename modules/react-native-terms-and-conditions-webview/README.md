@@ -1,7 +1,45 @@
-# Terms And Conditions Webview Module
-The Terms And Conditions Webview Module is a React Native based Module, by that means, a component that allows users to render a Terms And Conditions page through the url.
+# Terms And Conditions Webview React native specs
 
-## Local Configs
+## Module description
+
+The Terms And Conditions Webview is a React Native based Module which renders a Terms And Conditions page through a url.
+
+- Ability to load and display terms and conditions from a url.
+
+![image](https://github.com/cbshoaib/modules/assets/76822297/2100cd90-1e72-4f6a-8899-18a9ba585bb6)
+
+## ## Features
+
+ - [x] This module includes environment variables.
+ - [ ] This module requires manual configurations.
+ - [x] This module can be configured with module options.
+ - [ ] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+No 3rd party account required.
+
+## Dependencies
+
+Dependencies used:
+- react-native-webview  -  https://www.npmjs.com/package/react-native-webview
+
+## ## Module Options
+
+### Global Configs
+
+Update the ``options/options.js`` file with your app's backend url.
+```
+export const globalOptions = {
+    ...
+  url: "https://my-app.botics.co",
+   ...
+}
+```
+
+### Local Configs
+
 In **modules/terms-and-conditions-webview/options.js** update `termsUrl` with your terms and conditions page url.
 
 ```javascript
@@ -10,43 +48,10 @@ const termsUrl = "";
 
 ```
 
-## Params
+### Android setup
 
-Below is the list of all Params with their data types that are considered primitive or the basic ones needed for our module to work.
+No android setup required
 
-| Params      | Data Types         | Description                                                       |
-| ------------|:------------------:|:---------------------------------------------------------------|
-| url         | String             | URL of the Terms And Conditions page need to be displayed in web view.  |
+### iOS setup
 
-
-
-## Manual Setup
-
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-```javascript
-import TermsAndConditionsWebview from "@modules/terms-and-conditions-webview";
-
-const { title, navigator } = TermsAndConditionsWebview;
-
-```
-
-2. You can call a module directly by importing navigator without going through any routing. You can also pass props to that module as well.
-
-```javascript
-import { modules } from '@modules';
-
-const TermsAndConditionsWebview = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-
-<TermsAndConditionsWebview url={"Your terms and conditions page url"} />;
-
-```
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+No iOS setup required

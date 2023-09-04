@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useState } from "react";
 import { WebView } from "react-native-webview";
 import { OptionsContext } from "@options";
 
-const PrivacyPolicyWebview = ({ navigation, url }) => {
+const PrivacyPolicyWebview = ({ url }) => {
   const [uri, setUri] = useState("");
   const options = useContext(OptionsContext);
 

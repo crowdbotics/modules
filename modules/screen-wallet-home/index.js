@@ -8,10 +8,10 @@ const walletHomeScreen = () => {
       <View style={styles.header}>
         <View style={styles.headerIcons}>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/back.png")} />
              <Image source={require(
-               // @ts-ignore
+
                "./assets/bell.png")} />
         </View>
         <View>
@@ -23,7 +23,7 @@ const walletHomeScreen = () => {
         </View>
         <View style={styles.slider}>
           <Image style={styles.sliderImg} source={require(
-            // @ts-ignore
+
             "./assets/slider.png")} />
         </View>
         <View style={styles.tabSection}>
@@ -62,7 +62,7 @@ const walletHomeScreen = () => {
         <View style={styles.innerView}>
             <View style={styles.innerHalfView}>
               <Image style={styles.sliderImg} source={require(
-                // @ts-ignore
+
                 "./assets/ethereum.png")} />
             <View>
               <Text style={styles.coinText}>Ethereum</Text>
@@ -79,7 +79,7 @@ const walletHomeScreen = () => {
         <View style={styles.innerView}>
             <View style={styles.innerHalfView}>
               <Image style={styles.sliderImg} source={require(
-                // @ts-ignore
+
                 "./assets/bitcoin.png")} />
             <View>
               <Text style={styles.coinText}>Bitcoin</Text>
@@ -96,7 +96,7 @@ const walletHomeScreen = () => {
         <View style={styles.innerView}>
             <View style={styles.innerHalfView}>
               <Image style={styles.sliderImg} source={require(
-                // @ts-ignore
+
                 "./assets/ripple.png")} />
             <View>
               <Text style={styles.coinText}>Ripple</Text>
@@ -112,12 +112,12 @@ const walletHomeScreen = () => {
         <View style={styles.walletAreaSection}>
             <Text style={styles.mainHeading}>Currency chat</Text>
             <Image style={styles.sliderImg} source={require(
-              // @ts-ignore
+
               "./assets/dropdown.png")} />
         </View>
         <View style={styles.imageGraph}>
           <Image style={styles.graphImg} source={require(
-            // @ts-ignore
+
             "./assets/card.png")} />
         </View>
 

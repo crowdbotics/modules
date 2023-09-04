@@ -1,8 +1,49 @@
-# Maps
+# Maps React native specs
+
+## Module description
+
 Maps module is a react-native based module. Helps user to search and navigate to the required locations.
 
-## Android
-### Add Google Maps Key
+ - Display the map
+ - Set the custom markers
+ - Add custom annotations on the map
+
+![image](https://github.com/cbshoaib/modules/assets/76822297/9dfcfec0-d64f-4e7c-8b49-958791a1c6bb)
+
+## ## Features
+
+ - [ ] This module includes environment variables.
+ - [ ] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [x] This module requires manual iOS setup.
+
+## ## 3rd party setup
+
+You need to get google maps api key from google cloud console account.
+
+Follow these [instructions](https://developers.google.com/maps/documentation/javascript/get-api-key#create-api-keys)
+
+
+## Dependencies
+
+Dependencies used:
+ - react-native-maps  -  https://www.npmjs.com/package/react-native-maps
+ - react-native-maps-directions  -  https://www.npmjs.com/package/react-native-maps-directions
+ - react-native-google-places-autocomplete  -  https://www.npmjs.com/package/react-native-google-places-autocomplete
+ - prop-types -  https://www.npmjs.com/package/prop-types
+
+## ## Module Options
+
+### Global Configs
+
+No global configs required.
+
+### Local Configs
+
+No local configs required.
+
+### Android setup
 
 Update `android/app/src/main/AndroidManifest.xml` with the following XML meta tags:
 
@@ -16,80 +57,42 @@ Update `android/app/src/main/AndroidManifest.xml` with the following XML meta ta
     </application>
 ```
 
-## iOS
 
-### Build configuration on iOS
+### iOS setup
 
-```sh
-cd ios
-pod install
+If you want to enable Google Maps on iOS, obtain the Google API key and edit your `AppDelegate.m(m)` as follows:
+
+```diff
++ #import <GoogleMaps/GoogleMaps.h>
+
+@implementation AppDelegate
+...
+
+(BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
++  [GMSServices provideAPIKey:@"_YOUR_API_KEY_"]; // add this line using the api key obtained from Google Console
+...
 ```
 
-### App Store Submission
+The `[GMSServices provideAPIKey]` should be the **first call** of the method.
 
-> The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission.
+Google Maps SDK for iOS requires iOS 13, so make sure that your deployment target is >= 13.0 in your iOS project settings.
 
-### Enabling Google Maps on iOS
+Also make sure that your Podfile deployment target is set to >= 13.0 at the top of your Podfile, eg:
 
-https://github.com/react-native-maps/react-native-maps/blob/master/docs/installation.md#enabling-google-maps-on-ios-react-native-all-versions
-
-## Manual Setup
-
-1. If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
-
-```javascript
-import Maps from "@modules/maps";
-
-const { title, navigator } = Maps;
+```ruby
+platform :ios, '13.0'
 ```
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+Add the following to your Podfile above the `use_native_modules!` function and run `pod install` in the ios folder:
 
-```javascript
+```ruby
+# React Native Maps dependencies
+# The following line is only needed if building on an Apple silicon Mac without rosetta.
+pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
 
-import { modules } from '@modules';
-
-const Maps = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-
-<Maps origin={obj} originTitle = {''} apiKey={GOOGLE_MAPS_APIKEY} onNavigationStart={func} .../>
-
+rn_maps_path = '../node_modules/react-native-maps'
+pod 'react-native-google-maps', :path => rn_maps_path
 ```
 
-## Params
-
-Below is the list of all params that can be passed to the module.
-
-| Name              | Type       | Description                                                    |
-| ---------------   |:----------:|:---------------------------------------------------------------|
-| origin `required` | `object`   | The origin location `{latitude: , longitude: }`to start routing from.|
-| originTitle       | `string`   | Title of the origin             |
-| originDescription | `string`   | Description of the provided origin.                 |
-| apiKey `required` | `string`   | Your Google Maps API Key. Make sure you've enabled the Google Maps Directions API for that key using the Google API Console. |
-| enableDirections  | `boolean`  |Set `enableDirections=true` if you want to choose destination and start navigation between origin and destination.|
-| onNavigationStart | `function` | Called in case the navigation has started between origin to destination|
-| onNavigationError | `function` | Called in case the navigation has failed.           |
-| onLatLngChange | `function` | Called in case the marker has moved to new location.           |
-| getDistance (km)  | `function` | Returns the distance(as function param) between origin and destination.  |
-| getDuration (minutes)| `function` | Returns estimated time(as function param), needed to get from origin to destination|
-| markerColor       | `string`   | Custom color for the marker.                     |
-| markerImage       | `string`   | URL of the image to be displayed as marker.                     |
-| markerImageStyle  | `object`   | Set style for the marker image. e.g (`height`, `width`, `resizeMode`) etc. |
-| getDestinationAddress| `function` | Returns  `{latitude: 37.78825, longitude: -122.4324}` of the destination.       |
-| strokeColor       | `string`   | Color for the line connecting origin and destination.          |
-| strokeWidth       | `number`   | Width of the line connecting origin and destination.                        |
-| showSearchInput   | `boolean`  | Set `showSearchInput={true}` to show search bar on map to search location. It's default value is `false`. |
-| mainContainerStyle| `object`   | Set style for the maps main container.  |
-| markedLocations   | `array` | Array of objects. Each object should have latitude, longitude, title and description for the location to be marked on the map. e.g `{latitude: 37.78825, longitude: -122.4324, title: '', description: ''}`|
-| onDragStart         | `function` | Callback that is called when the user initiates a drag on this marker.|
-| onDrag         | `function` | Callback called continuously as the marker is dragged.|
-| onDragEnd         | `function` | Callback that is called when a drag on this marker finishes. Returns locations longitude and latitude as function param.|
-
-
-## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+The app's Info.plist file must contain a NSLocationWhenInUseUsageDescription with a user-facing purpose string explaining clearly and completely why your app needs the location, otherwise Apple will reject your app submission. This is required whether or not you are accessing the users location, as Google Maps iOS SDK contains the code required to access the users location.

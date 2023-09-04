@@ -34,7 +34,7 @@ Your module's `main` key should always point to `index.js`. We also suggest that
 
 Your module can include its own dependencies, more on that in the following sections.
 
-[react-native/maps/package.json](/modules/react-native/maps/package.json)
+[react-native/maps/package.json](https://github.com/crowdbotics/modules/blob/master/modules/react-native/maps/package.json)
 
 ```json
 {
@@ -194,7 +194,7 @@ const global = getGlobalOptions();
 
 ### Writing your options file
 
-This is an example of an [options file](/modules/react-native-app-menu/options.js) for our App Menu module:
+This is an example of an [options file](https://github.com/crowdbotics/modules/blob/master/modules/react-native-app-menu/options.js) for our App Menu module:
 
 ```javascript
 import { StyleSheet } from "react-native";
