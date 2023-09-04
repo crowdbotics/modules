@@ -7,7 +7,7 @@ Signature module is React Native based module allows user to create its signatur
 - Create signature through canvas.
 - Upload signature to backend.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/0981ffe8-dcac-4052-9757-889325e1f040)
 
 ## ## Features
 
