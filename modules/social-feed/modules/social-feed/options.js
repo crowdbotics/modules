@@ -583,9 +583,9 @@ const styles = StyleSheet.create({
 });
 
 // API Authentication token
-const USER_TOKEN = "d73f809b5ba4b09d2d5b64a81045c8fe2aceae53";
+const USER_TOKEN = "";
 // APP's backend url
-const BASE_URL = "https://b644-119-154-213-73.ngrok-free.app";
+const BASE_URL = "";
 
 export default {
   title: "App Menu",
