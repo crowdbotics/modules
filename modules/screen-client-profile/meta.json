@@ -1,0 +1,5 @@
+{
+  "title": "Client Profile",
+  "description": "Client Profile Screen Module",
+  "root": "/screens/client-profile"
+}

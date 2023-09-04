@@ -9,21 +9,21 @@ const DirectMessageForGroupChat = () => {
       <View style={styles.chatHeader}>
           <View style={styles.groupName}>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/back.png")}/>
             <View style={styles.logoContainer}>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/logo.png")}/>
             </View>
             <Text style={styles.headerName}>Group name</Text>
           </View>
           <View style={styles.icons}>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/call.png")}/>
               <Image style={styles.cameraIcon} source={require(
-                // @ts-ignore
+
                 "./assets/camera.png")}/>
           </View>
       </View>
@@ -37,10 +37,10 @@ const DirectMessageForGroupChat = () => {
           </View>
           <View style={styles.userBox}>
             <Image style={styles.logoChatIcon} source={require(
-              // @ts-ignore
+
               "./assets/logo.png")}/>
             <Image style={styles.onlineIcon} source={require(
-              // @ts-ignore
+
               "./assets/Oval.png")}/>
           </View>
       </View>
@@ -48,10 +48,10 @@ const DirectMessageForGroupChat = () => {
       <View style={styles.receiveMessage}>
           <View style={styles.userBoxGray}>
             <Image style={styles.logoChatIcon} source={require(
-              // @ts-ignore
+
               "./assets/logo.png")}/>
             <Image style={styles.onlineIcon} source={require(
-              // @ts-ignore
+
               "./assets/Oval.png")}/>
           </View>
         <View style={styles.messageBox}>
@@ -70,10 +70,10 @@ const DirectMessageForGroupChat = () => {
           </View>
           <View style={styles.userBox}>
             <Image style={styles.logoChatIcon} source={require(
-              // @ts-ignore
+
               "./assets/logo.png")}/>
             <Image style={styles.onlineIcon} source={require(
-              // @ts-ignore
+
               "./assets/Oval.png")}/>
           </View>
       </View>
@@ -86,20 +86,20 @@ const DirectMessageForGroupChat = () => {
           </View>
           <View style={styles.userBox}>
             <Image style={styles.logoChatIcon} source={require(
-              // @ts-ignore
+
               "./assets/logo.png")}/>
             <Image style={styles.onlineIcon} source={require(
-              // @ts-ignore
+
               "./assets/Oval.png")}/>
           </View>
       </View>
       <View style={styles.receiveMessage}>
           <View style={styles.userBoxGray}>
             <Image style={styles.logoChatIcon} source={require(
-              // @ts-ignore
+
               "./assets/logo.png")}/>
             <Image style={styles.onlineIcon} source={require(
-              // @ts-ignore
+
               "./assets/Oval.png")}/>
           </View>
         <View style={styles.messageBox}>
@@ -113,21 +113,21 @@ const DirectMessageForGroupChat = () => {
       <View style={styles.chatSection}>
           <View style={styles.center}>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/cam.png")}/>
             <View style={styles.circle}></View>
           </View>
           <View style={styles.inputIcons}>
             <Input placeholder="Enter"/>
             <Image style={styles.smileyIcon} source={require(
-              // @ts-ignore
+
               "./assets/smiley.png")}/>
             <Image source={require(
-              // @ts-ignore
+
               "./assets/mic.png")}/>
           </View>
           <Image style={styles.sendIcon} source={require(
-            // @ts-ignore
+
             "./assets/send.png")}/>
       </View>
       </ScrollView>

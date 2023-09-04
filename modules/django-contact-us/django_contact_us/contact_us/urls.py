@@ -4,5 +4,5 @@ from .viewsets import ContactUs
 
 
 urlpatterns = [
-    path('contact_us/', ContactUs.as_view()),
+    path("contact_us/", ContactUs.as_view()),
 ]

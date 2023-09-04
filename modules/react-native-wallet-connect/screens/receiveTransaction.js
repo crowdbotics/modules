@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// @ts-ignore
+
 import QRCode from "react-native-qrcode-svg";
 import { View, Text, StyleSheet } from "react-native";
 import { walletProvider } from "../utils";

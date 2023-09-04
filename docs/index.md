@@ -1,12 +1,39 @@
-# Modules
+<h1 align="center">
+  <a href="https://crowdbotics.com">
+    Crowdbotics Modules
+  </a>
+</h1>
 
-This is a monorepo which holds the source code for the various modules we built, for tracking purposes and to ease the creation of new ones. There's a complete React Native custom template in [scaffold](/scaffold). It also includes utilities for modules installation and removal.
+<p align="center">
+  A customized React Native scaffold and a library of Django & React Native modules.
+</p>
+
+<p align="center">
+  <a href="https://github.com/crowdbotics/modules/actions/workflows/lint.yml">
+    <img src="https://github.com/crowdbotics/modules/actions/workflows/lint.yml/badge.svg" alt="Source Code linter" />
+  </a>
+  <a href="https://github.com/crowdbotics/modules/actions/workflows/parse.yml">
+    <img src="https://github.com/crowdbotics/modules/actions/workflows/parse.yml/badge.svg" alt="Modules validation" />
+  </a>
+  <a href="https://github.com/crowdbotics/modules/actions/workflows/release.yml">
+    <img src="https://github.com/crowdbotics/modules/actions/workflows/release.yml/badge.svg" alt="Production Release" />
+  </a>
+</p>
 
 ## Documentation
 
-- [Commands](commands.md)
-- [Modules available](modules.md)
-- [Autoloading modules](autoloading.md)
-- [Authoring new modules](authoring.md)
-- [Resources](resources.md)
-- [@store module](store.md)
+- [Upgrading your React Native scaffold](scaffold-upgrade.md)
+- [Authoring Modules](authoring-modules.md)
+- [Maintainers Commands](commands.md)
+- [Modules Checklist](modules-checklist.md)
+- [Scaffold Checklist](scaffold-checklist.md)
+- [Further Reading](further-reading.md)
+
+## Changelog
+
+- [Changelog](https://github.com/crowdbotics/modules/blob/master/CHANGELOG.md)
+- [React Native Scaffold Changelog](https://github.com/crowdbotics/modules/blob/master/scaffold/CHANGELOG.md)
+
+## Other links
+
+- [Github Repository](https://github.com/crowdbotics/modules)
