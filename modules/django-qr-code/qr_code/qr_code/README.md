@@ -1,49 +1,38 @@
-# Django QRCode
-Django QrCode module is a backend support for the React Native Qrcode module which will generate a QR code at the backend, and integrate QR code scanning at the frontend. The module has ability to scan Qrcode at the frontend from the provided string.
+## Django QR Code backend configuration and information
 
+## Module description
+
+This module is used to generate a QR code at the backend. It has ability to scan Qrcode at the frontend from the provided string.
+
+Features included:
+
+- Ability to generate Qrcode at backend
 
 ## Features
-1. Ability togenerate Qrcode at backend
 
-## Required Packages/Dependencies
-* **qrcode**
-`qrcode` python package that generates qrcode as png images.
-Install using the following command:
+- [ ] This module includes migrations.
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
 
-```console
-pip install qrcode
-```
-***Note***: Keep the packages/dependencies in `Pipfile`. So that when backend is deployed our module requirements are complete.
+## Environment variables
 
+No environment variables are required.
 
-## Setup
-Install the required dependency for the module.
-```
-pip install qrcode
-```
-Start the server by running the following command :
+## 3rd party setup
 
-```
-python manage.py migrate
-python manage.py runserver
-```
+No 3rd party setup is required for this module.
 
-## Api Table
-List of api's endpoints with params needed for these apis.
+## Dependencies
 
-| Api Name                       | Param        | Description                                                    |
-| ------------------------------ |:------------:|:---------------------------------------------------------------|
-| `/modules/qr-code/qrcode/` | object `{text: 'string'}` | Takes object containing text property inside it, and returns image converted in base64 against that text. |
+[QR-Code](https://github.com/lincolnloop/python-qrcode/blob/main/README.rst)
 
+Dependencies used:
 
-### Module Specifications
-Here is the [Module Specification Document](https://docs.google.com/document/d/1gAIZIbwjafGHy-jzjMHVckhzud-kS-DswQ0UT4Zk9JM/edit?usp=sharing), which provides more information about the module's actual intentions.
+- [qrcode](https://pypi.org/project/qrcode/)
 
-## Contributing
+## API details
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
+| Api Name                           |           Param           | Description                                                                                               |
+|------------------------------------|:-------------------------:|:----------------------------------------------------------------------------------------------------------|
+| `/modules/qr-code/qrcode/`  `POST` | object `{text: 'string'}` | Takes object containing text property inside it, and returns image converted in base64 against that text. |
