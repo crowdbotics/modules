@@ -2,13 +2,16 @@
 
 ## Module description
 
-The Profile Module is a React Native based Module, module allows the user to view, delete and edit its own profile information.
+The Profile Module is a React Native-based module allowing the user to view, delete, and edit his profile information.
 
 The following scope features for this module:
 
 - Create and update the user profile with details.
 - Get the specific profile details.
 - Delete the profile.
+
+![image](https://github.com/cbshoaib/modules/assets/76822297/e0d10e82-42f2-4485-9f1c-5b7f0558e157)
+
 
 ## Features
 
