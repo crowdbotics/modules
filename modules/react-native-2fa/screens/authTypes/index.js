@@ -1,98 +1,150 @@
-import React, { useState, useContext } from "react";
-import { Text, StyleSheet, View } from "react-native";
-import { set2faMethod } from "../../api";
+import React, { Fragment, useContext, useState, useEffect } from "react";
+import { Text, View, Alert } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import DropDownPicker from "react-native-dropdown-picker";
+import { useIsFocused } from "@react-navigation/native";
+
 import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import { OptionsContext } from "@options";
-const AuthTypes = (props) => {
+import {
+  checkAuthenticationStatus,
+  disableAuthenticationStatus,
+  enableAuthentication,
+  getGoogleAuthenticatorQR,
+  sendVerification
+} from "../../store";
+
+/**
+ * Authentication Types Component.
+ * @param {Object} navigation - React Navigation prop.
+ * @returns {React.ReactNode} - The authentication types component.
+ */
+const AuthTypes = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const options = useContext(OptionsContext);
-  const [isLoading, setIsLoading] = useState(false);
+  const { styles } = options;
 
-  const onSMS = async () => {
-    setIsLoading(true);
-    await set2faMethod({
-      id: options.user.id,
-      method: "SMS"
-    }).then((res) => {
-      setIsLoading(false);
-      props.navigation.navigate("Verification");
-    }).catch((err) => {
-      setIsLoading(false);
-      console.log("Error: ", err);
+  const [isVerified, setIsVerified] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("None");
+
+  const isLoading = useSelector((state) => {
+    const loadingStates = [
+      state?.Authentication?.sendVerification?.api?.loading,
+      state?.Authentication?.getGoogleAuthenticatorQR?.api?.loading,
+      state?.Authentication?.enableAuthentication?.api?.loading,
+      state?.Authentication?.checkAuthenticationStatus?.api?.loading,
+      state?.Authentication?.disableAuthentication?.api?.loading
+    ];
+    return loadingStates.some((loading) => loading === "pending");
+  });
+
+  const items = [
+    { label: "SMS", value: "phone_number" },
+    { label: "Email", value: "email" },
+    { label: "Google Authenticator", value: "google_authenticator" },
+    { label: "None", value: "None" }
+  ];
+
+  useEffect(() => {
+    if (isFocused) {
+      // This action dispatches checkAuthenticationStatus Api.
+      dispatch(checkAuthenticationStatus())
+        .then(unwrapResult)
+        .then((res) => {
+          setValue(res?.method);
+          setIsVerified(true);
+        })
+        .catch(() => setValue("None"));
+    }
+  }, [isFocused]);
+
+  const onApiSuccess = (res, value, type) => {
+    navigation.navigate("Verification", {
+      method: value,
+      link: res?.link,
+      authenticationType: type ? "enable" : null
     });
   };
 
-  const onEmail = async () => {
-    setIsLoading(true);
-    await set2faMethod({
-      id: options.user.id,
-      method: "EMAIL"
-    }).then((res) => {
-      setIsLoading(false);
-      props.navigation.navigate("Verification");
-    }).catch((err) => {
-      setIsLoading(false);
-      console.log("Error: ", err);
-    });
+  const onValueChange = ({ value }) => {
+    if (value === "None" && isVerified) {
+      // This action dispatches disableAuthenticationStatus Api
+      dispatch(disableAuthenticationStatus())
+        .then(unwrapResult)
+        .then((res) => {
+          setIsVerified(false);
+          Alert.alert("Success", "Two Factor Authentication is disabled");
+        })
+        .catch((err) => console.log("NOT WORKING", err));
+    } else if (value !== "None") {
+      // This action dispatches enableAuthentication Apis
+      dispatch(enableAuthentication({ method: value }))
+        .then(unwrapResult)
+        .then((res) => {
+          onApiSuccess(res, value, true);
+        })
+        .catch((err) => console.log("NOT WORKING", err));
+    }
   };
 
-  const on2FA = async () => {
-    setIsLoading(true);
-    await set2faMethod({
-      id: options.user.id,
-      method: "2FA"
-    }).then((res) => {
-      setIsLoading(false);
-      props.navigation.navigate("GoogleAuth");
-    }).catch((err) => {
-      setIsLoading(false);
-      console.log("Error: ", err);
-    });
+  const onHandleMethod = async (method) => {
+    if (method === "google_authenticator") {
+      // This action dispatches api to get google authenticator qr code link.
+      dispatch(getGoogleAuthenticatorQR())
+        .then(unwrapResult)
+        .then((res) => {
+          onApiSuccess(res, method, false);
+        })
+        .catch((err) => console.log("NOT WORKING", err));
+    } else {
+      // This action dispatches api to get code. It takes verification method as params
+      dispatch(sendVerification({ method }))
+        .then(unwrapResult)
+        .then((res) => {
+          onApiSuccess(res, method, false);
+        })
+        .catch((err) => console.log("NOT WORKING", err));
+    }
   };
 
   return (
-    <>
-      {isLoading && <Loader/>}
+    <Fragment>
+      {isLoading && <Loader />}
       <View style={styles.main}>
-        <Text style={styles.text}>Verification methods</Text>
-        <Text style={styles.text13}>Please select an option for verification from the following:</Text>
-        <View style={options.styles.FlexRowSpaceBetween}>
-          <View style={[options.styles.wp50, options.styles.p5]}>
-            <Button onPress={onSMS} clicked={options.user.method === "SMS"}>
-              SMS
-            </Button>
-          </View>
-          <View style={[options.styles.wp50, options.styles.p5]}>
-            <Button onPress={onEmail} clicked={options.user.method === "EMAIL"}>
-              Email
-            </Button>
-          </View>
+        <Text style={styles.verificationText}>Verification methods</Text>
+        <Text style={styles.text13}>
+          Please select an option for verification from the following:
+        </Text>
+
+        <View style={styles.dropdownContainer} zIndex={1}>
+          {!isVerified && !isLoading && (
+            <Text style={styles.authenticationText}>
+              Two Factor Authentication is disabled, please enable it through
+              one of the methods below
+            </Text>
+          )}
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            onSelectItem={onValueChange}
+          />
         </View>
-        <View style={[options.styles.wp100, options.styles.p5]}>
-          <Button onPress={on2FA} clicked={options.user.method === "2FA"}>
-            2FA
-          </Button>
-        </View>
+
+        {isVerified && (
+          <View style={[styles.wp90, styles.p5]}>
+            <Button onPress={() => onHandleMethod(value)}>Send OTP</Button>
+          </View>
+        )}
       </View>
-    </>
+    </Fragment>
   );
 };
-
-const styles = StyleSheet.create({
-  main: {
-    padding: 10
-  },
-  text: {
-    marginBottom: 5,
-    marginTop: 12,
-    fontWeight: "bold",
-    fontSize: 18
-  },
-  text13: {
-    fontSize: 13,
-    marginBottom: 12
-  }
-
-});
 
 export default AuthTypes;
