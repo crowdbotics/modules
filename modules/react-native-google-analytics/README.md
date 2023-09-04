@@ -13,7 +13,8 @@ The Google Analytics(firebase) Module is a React Native-based module that allows
 - Ability to signifies the start/completion of the on-boarding process in app.
 - Ability to identify the screen user is currently viewing.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/f4702775-0b7b-4685-b5da-45774719348b)
+
 
 ## ## Features
 
@@ -92,6 +93,16 @@ dependencies {
 ```
 ### iOS setup
 
+On the Firebase console, add a new iOS application and enter your projects details. The "iOS bundle ID" must match your local project bundle ID. The bundle ID can be found within the "General" tab when opening the project with Xcode.
+Download the `GoogleService-Info.plist` file.
+
+1. Using Xcode, open the projects /ios/{projectName}.xcodeproj file (or /ios/{projectName}.xcworkspace if using Pods).
+
+   Right click on the project name and "Add files" to the project, as demonstrated below:
+   ![image](https://github.com/cbshoaib/modules/assets/76822297/d9e5db27-4279-4c96-bbe8-c27b79691e68)
+
+Select the downloaded GoogleService-Info.plist file from your computer, and ensure the "Copy items if needed" checkbox is enabled.
+![image](https://github.com/cbshoaib/modules/assets/76822297/8f9c8db2-9d3a-4b51-825d-8f36bc112099)
 
 2. Then in appDelegate.mm file import this on top.
 ```c
