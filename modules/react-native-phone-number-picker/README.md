@@ -6,7 +6,7 @@ This module allows user to select the country code and enter the country phone n
 
 - Ability to input phone number according to different country codes.
 
-Include preview screenshots or videos here.
+![image](https://github.com/cbshoaib/modules/assets/76822297/a3ebb533-4c4c-4eba-9b1e-88c86fff23f4)
 
 ## ## Features
 
