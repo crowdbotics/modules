@@ -1,50 +1,37 @@
 import React, { useEffect, useState, useContext } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  Image,
-  ScrollView,
-  Alert,
-} from "react-native";
-import { GlobalOptionsContext } from "@options";
+import { Text, View, TextInput, Image, ScrollView, Alert } from "react-native";
+import { OptionsContext } from "@options";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { getFollowing, unFollowUser } from "../store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 
+/**
+ * Component to display a list of following users.
+ */
 const FollowingList = () => {
   const dispatch = useDispatch();
   const [followingUsers, setFollowing] = useState([]);
   const [allFollowing, setAllFollowing] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const gOptions = useContext(GlobalOptionsContext);
-  const BASE_URL = gOptions.url;
+  const { styles } = useContext(OptionsContext);
 
-  // useEffect(() => {
-  //   getFollowing(BASE_URL, setLoading).then((data) => {
-  //     console.log("---------sss", data)
-  //     setFollowing(data?.results);
-  //     setAllFollowing(data?.results);
-  //   })
-  // }, [loading]);
-
+  // Fetch following users when the component mounts
   useEffect(() => {
     dispatch(getFollowing())
       .then(unwrapResult)
       .then((response) => {
         setFollowing(response?.results);
         setAllFollowing(response?.results);
-        console.log("response---Following", response);
       })
       .catch((error) => __DEV__ && console.log(error));
   }, []);
 
+  // Alphabet array for filtering users
   const alpha = Array.from(Array(26)).map((e, i) => i + 65);
   const alphabets = alpha.map((x) => String.fromCharCode(x));
 
+  // Filter users based on searchQuery
   useEffect(() => {
     if (searchQuery.length > 0) {
       setFollowing(
@@ -59,9 +46,9 @@ const FollowingList = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.searchBar}>
-          <Text style={styles.searchText}>Search</Text>
+      <View style={styles.followingContainer}>
+        <View style={styles.followingSearchBar}>
+          <Text style={styles.followingSearchText}>Search</Text>
           <View style={styles.followingSearchView}>
             <View style={{ width: "90%" }}>
               <Input placeholder="Enter" setValue={setSearchQuery} />
@@ -70,7 +57,9 @@ const FollowingList = () => {
           </View>
         </View>
         <View>
-          <Text style={styles.text}>{followingUsers.length} Following</Text>
+          <Text style={styles.followingSubheading}>
+            {followingUsers.length} Following
+          </Text>
         </View>
         {alphabets.map((alpha) => {
           return (
@@ -78,8 +67,8 @@ const FollowingList = () => {
               {followingUsers.filter(
                 (following) => following.name.charAt(0).toUpperCase() === alpha
               ).length > 0 && (
-                <View style={styles.frequently}>
-                  <Text style={styles.frequentlyText}>{alpha}</Text>
+                <View style={styles.frequentAlphabets}>
+                  <Text style={styles.frequentLetters}>{alpha}</Text>
                 </View>
               )}
               <View>
@@ -88,15 +77,15 @@ const FollowingList = () => {
                     (following) =>
                       following.name.charAt(0).toUpperCase() === alpha
                   )
-                  .map((following) => {
+                  .map((following, index) => {
                     return (
                       <Follower
                         id={following.id}
-                        setLoading={setLoading}
                         name={following.name}
                         bgcolor={following.bgcolor}
                         following={followingUsers}
                         setFollowing={setFollowing}
+                        key={index}
                       />
                     );
                   })}
@@ -109,47 +98,20 @@ const FollowingList = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  followingSearchView: {
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: "#C4C4C4",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  searchBar: {
-    padding: 20,
-  },
-  searchText: {
-    marginLeft: 10,
-    marginBottom: 10,
-  },
-  text: {
-    marginLeft: 30,
-    marginBottom: 10,
-  },
-  frequently: {
-    height: 50,
-    width: "100%",
-    backgroundColor: "#DADADA",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  frequentlyText: {
-    marginLeft: 30,
-    color: "#8F8D86",
-  },
-});
-
 export default FollowingList;
 
+/**
+ * Follower component displays user information and allows unfollowing.
+ * @param {Object} props - The component's properties.
+ * @param {number} props.id - The unique identifier of the user.
+ * @param {string} props.name - The name of the user.
+ * @param {Array} props.following - An array of users being followed.
+ * @param {Function} props.setFollowing - Function to update the list of followed users.
+ */
 const Follower = (props) => {
-  const { id, name, setLoading, following, setFollowing } = props;
-  const dispatch = useDispatch()
+  const { styles } = useContext(OptionsContext);
+  const { id, name, following, setFollowing } = props;
+  const dispatch = useDispatch();
   const onUnFollow = () => {
     dispatch(unFollowUser(id))
       .then(unwrapResult)
@@ -160,10 +122,13 @@ const Follower = (props) => {
       .catch((error) => __DEV__ && console.log(error));
   };
   return (
-    <View style={FollowerStyles.follower}>
-      <View style={FollowerStyles.main}>
+    <View style={styles.followingUser}>
+      <View style={styles.followingUserMain}>
         <View
-          style={[FollowerStyles.image, { backgroundColor: props.bgcolor }]}
+          style={[
+            styles.followingUserImage,
+            { backgroundColor: props.bgcolor }
+          ]}
         >
           <Image source={require("../assets/edit.png")} />
         </View>
@@ -171,7 +136,6 @@ const Follower = (props) => {
       </View>
       <TouchableOpacity
         onPress={() => {
-          // unFollowUser(id, setLoading);
           onUnFollow();
         }}
       >
@@ -180,62 +144,32 @@ const Follower = (props) => {
     </View>
   );
 };
-const FollowerStyles = StyleSheet.create({
-  follower: {
-    marginHorizontal: 20,
 
-    borderBottomWidth: 0.5,
-    borderBottomColor: "rgba(0,0,0,0.5)",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    justifyContent: "space-between",
-  },
-  main: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  image: {
-    height: 60,
-    width: 60,
-    borderRadius: 30,
-    marginRight: 15,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
-
+/**
+ * A reusable input component.
+ *
+ * @param {object} props - Component props.
+ * @param {string} props.placeholder - Placeholder text for the input.
+ * @param {string} props.value - The value of the input.
+ * @param {function} props.setValue - A function to set the input value.
+ */
 const Input = (props) => {
+  const { styles } = useContext(OptionsContext);
   return (
     <View>
       <TextInput
-        style={textStyles.input}
+        style={styles.followingSearchInput}
         placeholder={props.placeholder}
         value={props.value}
         onChangeText={(num) => props.setValue(num)}
         placeholderTextColor="#ddd"
         editable={props.editable !== false}
       />
-      {props.errorText ? (
-        <Text style={textStyles.error}>{props.errorText}</Text>
-      ) : null}
+      {props.errorText
+        ? (
+        <Text style={styles.followingError}>{props.errorText}</Text>
+          )
+        : null}
     </View>
   );
 };
-
-const textStyles = StyleSheet.create({
-  input: {
-    backgroundColor: "#fff",
-    height: 53,
-    color: "#000",
-    borderRadius: 10,
-    fontSize: 14,
-    paddingHorizontal: 10,
-  },
-  error: {
-    fontSize: 13,
-    color: "#FA060D",
-    paddingTop: 8,
-  },
-});

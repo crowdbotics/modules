@@ -21,10 +21,8 @@ export const getFollowers = createAsyncThunk(
   async () => {
     try {
       const response = await api.getFollowers();
-      console.log(response);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -36,10 +34,8 @@ export const getFollowing = createAsyncThunk(
   async () => {
     try {
       const response = await api.getFollowing();
-      console.log(response);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error.response);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -49,63 +45,179 @@ export const getFollowing = createAsyncThunk(
 export const followUser = createAsyncThunk("social/followUser", async (id) => {
   try {
     const response = await api.followUser(id);
-    console.log(response);
     return response.data;
   } catch (error) {
-    console.log("ERROR", error.response);
     Alert.alert("Error", mapErrors(error));
     throw new Error();
   }
 });
 
-export const unFollowUser = createAsyncThunk("social/unFollowUser", async (id) => {
+export const unFollowUser = createAsyncThunk(
+  "social/unFollowUser",
+  async (id) => {
+    try {
+      const response = await api.unFollowUser(id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", mapErrors(error));
+      throw new Error();
+    }
+  }
+);
+
+export const getPostDetails = createAsyncThunk(
+  "social/getPostDetails",
+  async (id) => {
+    try {
+      const response = await api.getPostDetails(id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", mapErrors(error));
+      throw new Error();
+    }
+  }
+);
+
+export const getMyFeed = createAsyncThunk("social/getMyFeed", async () => {
   try {
-    const response = await api.unFollowUser(id);
-    console.log(response);
+    const response = await api.getMyFeed();
     return response.data;
   } catch (error) {
-    console.log("ERROR", error.response);
     Alert.alert("Error", mapErrors(error));
     throw new Error();
   }
 });
+
+export const likePost = createAsyncThunk("social/likePost", async (id) => {
+  try {
+    const response = await api.likePost(id);
+    return response.data;
+  } catch (error) {
+    Alert.alert("Error", mapErrors(error));
+    throw new Error();
+  }
+});
+
+export const unLikePost = createAsyncThunk("social/unLikePost", async (id) => {
+  try {
+    const response = await api.unLikePost(id);
+    return response.data;
+  } catch (error) {
+    Alert.alert("Error", mapErrors(error));
+    throw new Error();
+  }
+});
+
+export const getUserProfile = createAsyncThunk(
+  "social/getUserProfile",
+  async (id) => {
+    try {
+      const response = await api.getUserProfile(id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", mapErrors(error));
+      throw new Error();
+    }
+  }
+);
+
+export const likeComment = createAsyncThunk(
+  "social/likeComment",
+  async (id) => {
+    try {
+      const response = await api.likeComment(id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", mapErrors(error));
+      throw new Error();
+    }
+  }
+);
+
+export const unLikeComment = createAsyncThunk(
+  "social/unLikeComment",
+  async (id) => {
+    try {
+      const response = await api.unLikeComment(id);
+      return response.data;
+    } catch (error) {
+      Alert.alert("Error", mapErrors(error));
+      throw new Error();
+    }
+  }
+);
+
+export const addComment = createAsyncThunk(
+  "social/addComment",
+  async (payload) => {
+    try {
+      const response = await api.addComment(payload);
+      return response.data;
+    } catch (error) {
+      console.log("ERROR", error);
+      Alert.alert("Error", mapErrors(error));
+      throw new Error();
+    }
+  }
+);
 
 const initialState = {
   createPost: {
     entities: [],
     api: {
       loading: "idle",
-      error: null,
-    },
+      error: null
+    }
   },
   getFollowers: {
     entities: [],
     api: {
       loading: "idle",
-      error: null,
-    },
+      error: null
+    }
   },
   getFollowing: {
     entities: [],
     api: {
       loading: "idle",
-      error: null,
-    },
+      error: null
+    }
   },
   followUser: {
     entities: [],
     api: {
       loading: "idle",
-      error: null,
-    },
+      error: null
+    }
   },
   unFollowUser: {
     entities: [],
     api: {
       loading: "idle",
-      error: null,
-    },
+      error: null
+    }
   },
+  getPostDetails: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getMyFeed: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  },
+  getUserProfile: {
+    entities: [],
+    api: {
+      loading: "idle",
+      error: null
+    }
+  }
 };
 
 export const slice = createSlice({
@@ -185,7 +297,6 @@ export const slice = createSlice({
         state.followUser.api.loading = "idle";
       }
     },
-
     [unFollowUser.pending]: (state) => {
       if (state.unFollowUser.api.loading === "idle") {
         state.unFollowUser.api.loading = "pending";
@@ -204,5 +315,61 @@ export const slice = createSlice({
         state.unFollowUser.api.loading = "idle";
       }
     },
-  },
+    [getPostDetails.pending]: (state) => {
+      if (state.getPostDetails.api.loading === "idle") {
+        state.getPostDetails.api.loading = "pending";
+        state.getPostDetails.api.error = null;
+      }
+    },
+    [getPostDetails.fulfilled]: (state, action) => {
+      if (state.getPostDetails.api.loading === "pending") {
+        state.getPostDetails.entities = action.payload;
+        state.getPostDetails.api.loading = "idle";
+      }
+    },
+    [getPostDetails.rejected]: (state, action) => {
+      if (state.getPostDetails.api.loading === "pending") {
+        state.getPostDetails.api.error = action.error;
+        state.getPostDetails.api.loading = "idle";
+      }
+    },
+    [getMyFeed.pending]: (state) => {
+      if (state.getMyFeed.api.loading === "idle") {
+        state.getMyFeed.api.loading = "pending";
+        state.getMyFeed.api.error = null;
+      }
+    },
+    [getMyFeed.fulfilled]: (state, action) => {
+      if (state.getMyFeed.api.loading === "pending") {
+        state.getMyFeed.entities = action.payload;
+        state.getMyFeed.api.loading = "idle";
+      }
+    },
+    [getMyFeed.rejected]: (state, action) => {
+      if (state.getMyFeed.api.loading === "pending") {
+        state.getMyFeed.api.error = action.error;
+        state.getMyFeed.api.loading = "idle";
+      }
+    },
+
+    [getUserProfile.pending]: (state) => {
+      state.getUserProfile.entities = [];
+      if (state.getUserProfile.api.loading === "idle") {
+        state.getUserProfile.api.loading = "pending";
+        state.getUserProfile.api.error = null;
+      }
+    },
+    [getUserProfile.fulfilled]: (state, action) => {
+      if (state.getUserProfile.api.loading === "pending") {
+        state.getUserProfile.entities = action.payload;
+        state.getUserProfile.api.loading = "idle";
+      }
+    },
+    [getUserProfile.rejected]: (state, action) => {
+      if (state.getUserProfile.api.loading === "pending") {
+        state.getUserProfile.api.error = action.error;
+        state.getUserProfile.api.loading = "idle";
+      }
+    }
+  }
 });

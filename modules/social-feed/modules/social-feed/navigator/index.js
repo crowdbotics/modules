@@ -1,9 +1,8 @@
 import React from "react";
- // @ts-ignore
+// @ts-ignore
 import { createStackNavigator } from "@react-navigation/stack";
 
 // @ts-ignore
-import { OptionsContext, GlobalOptionsContext } from "@options";
 import SocialFeedScreen from "../screens/social-feed.js";
 import SocialProfileScreen from "../screens/social-profile.js";
 import PostDetailsScreen from "../screens/post-details.js";
@@ -14,7 +13,7 @@ import CreatePostScreen from "../screens/create-post.js";
 const Stack = createStackNavigator();
 
 const Navigator = () => {
-return <Stack.Navigator  headerMode="screen" screenOptions={{ headerStyle: { elevation: 0 }, cardStyle: { backgroundColor: "#fff" } }}>
+  return <Stack.Navigator headerMode="screen" screenOptions={{ headerStyle: { elevation: 0 }, cardStyle: { backgroundColor: "#fff" } }}>
     <Stack.Screen options={{ headerShown: false }} name="Home" component={SocialFeedScreen} />
     <Stack.Screen name="SocialProfileScreen" component={SocialProfileScreen} />
     <Stack.Screen name="PostDetailsScreen" component={PostDetailsScreen} />

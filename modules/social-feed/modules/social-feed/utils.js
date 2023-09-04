@@ -22,7 +22,7 @@ export const mapErrors = (error) => {
 };
 
 export const toggleFollowById = (followers, targetId) => {
-  console.log("FOLLOOOOOOOOOOOOOOOOOOOOOOOOO", followers)
+  console.log("FOLLOOOOOOOOOOOOOOOOOOOOOOOOO", followers);
   // Find the index of the object with the targetId
   const index = followers.findIndex((obj) => obj.id === targetId);
 
@@ -33,7 +33,7 @@ export const toggleFollowById = (followers, targetId) => {
     // Toggle the "follow" value
     updatedObjects[index] = {
       ...updatedObjects[index],
-      follow: !updatedObjects[index].follow,
+      follow: !updatedObjects[index].follow
     };
     return updatedObjects;
   }

@@ -76,7 +76,7 @@ const FollowersList = () => {
                     (follower) =>
                       follower.name.charAt(0).toUpperCase() === alpha
                   )
-                  .map((follower) => {
+                  .map((follower, index) => {
                     return (
                       <Follower
                         id={follower.id}
@@ -85,6 +85,7 @@ const FollowersList = () => {
                         follow={follower.follow}
                         setFollowers={setFollowers}
                         followers={followers}
+                        key={index}
                       />
                     );
                   })}
@@ -165,9 +166,11 @@ const Input = (props) => {
         placeholderTextColor="#ddd"
         editable={editable !== false}
       />
-      {errorText ? (
+      {errorText
+        ? (
         <Text style={styles.searchFollowerEnd}>{errorText}</Text>
-      ) : null}
+          )
+        : null}
     </View>
   );
 };

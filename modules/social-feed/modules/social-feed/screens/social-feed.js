@@ -1,51 +1,55 @@
-import React, { useContext, useState, useEffect} from "react"
-import { View, ScrollView, Image, Text, StyleSheet, FlatList, Touchable } from "react-native"
-import { OptionsContext, GlobalOptionsContext } from "@options";
+import React, { useContext, useState, useEffect } from "react";
+import { View, Image, Text, FlatList } from "react-native";
+import { OptionsContext } from "@options";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
-import { likePost, unLikePost, userToken } from '../api';
-
+import { useDispatch, useSelector } from "react-redux";
+import { getMyFeed, likePost, unLikePost } from "../store";
 
 const SocialFeedScreen = (props) => {
-  const { navigation, params } = props;
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const gOptions = useContext(GlobalOptionsContext);
-  const BASE_URL = gOptions.url
-  const get_posts = () => {
-    fetch(`${BASE_URL}/modules/social-feed/my-feed/`, 
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
-      }
-    })
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json)
-      setPosts(json)})
-    .catch((error) => console.log(error))
-    .finally(() => setLoading(false));
-  }
-  useEffect(async () => {
-    get_posts();
-  }, []);
+  const dispatch = useDispatch();
+  const { navigation } = props;
+  const [callbackVariable, setCallbackVariable] = useState(false);
+  const { styles } = useContext(OptionsContext);
 
-  // More info on all the options is below in the API Reference... just some common use cases shown here
-  useEffect(async () => {
-    get_posts();
-  }, [loading]);
+  // Get feed from store.
+  const { entities } = useSelector((state) => state.Social.getMyFeed);
+
+  // Fetch feed data from backend
+  const fetchFeed = () => {
+    dispatch(getMyFeed());
+  };
+
+  useEffect(() => {
+    fetchFeed();
+  }, [callbackVariable]);
+
+  const renderItem = ({ item }) => (
+    <PostComponent
+      post={item}
+      navigationObject={navigation}
+      setCallbackVariable={setCallbackVariable}
+    />
+  );
+
   return (
-    <View style={{marginTop: 60}}>
-      <View style={styles.container}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+    <View style={{ marginTop: 60 }}>
+      <View style={styles.feedContainer}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           {/* search bar */}
-          <View style={styles.searchBar}>
-            <TextInput style={styles.searchBarInput} placeholder="Search" />
-            <Image source={require('../assets/search.png')} style={styles.searchIcon} />
+          <View style={styles.feedSearchBar}>
+            <TextInput style={styles.feedSearchInput} placeholder="Search" />
+            <Image
+              source={require("../assets/search.png")}
+              style={styles.searchIcon}
+            />
           </View>
           {/* end search bar */}
-          <TouchableOpacity style={styles.headerContainer} onPress={()=>{navigation.navigate('Create Post')}}>
+          <TouchableOpacity
+            style={styles.createPostHeader}
+            onPress={() => {
+              navigation.navigate("Create Post");
+            }}
+          >
             <Image
               source={require("../assets/plus.png")}
               style={styles.headerImage}
@@ -53,20 +57,11 @@ const SocialFeedScreen = (props) => {
           </TouchableOpacity>
         </View>
         <FlatList
-          data={posts}
-          renderItem={({ item }) => (
-            <PostComponent
-              key={item.id}
-              post = {item}
-              nav={navigation}
-              setLoading={setLoading}
-          />
-          )}
+          data={entities}
+          renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          onRefresh={() => {
-            get_posts();
-          }}
-          refreshing={loading}
+          onRefresh={fetchFeed}
+          refreshing={callbackVariable}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         />
@@ -77,159 +72,96 @@ const SocialFeedScreen = (props) => {
 
 export default SocialFeedScreen;
 
-const styles = StyleSheet.create({
-  container: { padding: 10, height: "100%", backgroundColor: "#FFF" },
-  headerContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: 10,
-  },
-  headerImage: { height: 20, width: 20 },
-  searchBar: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e6e6e6',
-    backgroundColor: '#FFF',
-    flex: 1
-  },
-  searchBarInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#000',
-    paddingLeft: 10,
-    textAlign: 'center'
-  },
-});
+/**
+ * PostComponent displays a single post and handles post-related actions.
+ * @param {Object} props - The component's properties.
+ * @param {Object} props.post - The post data to display.
+ * @param {Object} props.navigationObject - React Navigation navigation object.
+ * @param {Function} props.setCallbackVariable - Function to set callbackVariable state.
+ */
+const PostComponent = ({ post, navigationObject, setCallbackVariable }) => {
+  const { styles } = useContext(OptionsContext);
+  const dispatch = useDispatch();
+  const { id, caption, upvotes, media, user, liked } = post;
 
-const PostComponent = ({post, nav, setLoading }) => {
-  const gOptions = useContext(GlobalOptionsContext);
-  const BASE_URL = gOptions.url
-  const {id, caption, upvotes, comments, comments_count, media, user, liked } = post;
+  const likeCurrentPost = () => {
+    setCallbackVariable(true);
+    dispatch(likePost(id)).then(() => {
+      setCallbackVariable(false);
+    });
+  };
+
+  const unLikeCurrentPost = () => {
+    setCallbackVariable(true);
+    dispatch(unLikePost(id)).then(() => {
+      setCallbackVariable(false);
+    });
+  };
   return (
-    <TouchableOpacity style={{margin: 10}} onPress={()=>{nav.navigate("PostDetailsScreen", {id: id})}}>
-      <TouchableOpacity style={userPostStyles.usernameContainer} onPress={()=>{nav.navigate("SocialProfileScreen", {id: user?.id})}}>
-        <View style={userPostStyles.userImageContainer}>
+    <TouchableOpacity
+      style={{ margin: 10 }}
+      onPress={() => {
+        navigationObject.navigate("PostDetailsScreen", { id: id });
+      }}
+    >
+      <TouchableOpacity
+        style={styles.usernameContainer}
+        onPress={() => {
+          navigationObject.navigate("SocialProfileScreen", { id: user?.id });
+        }}
+      >
+        <View style={styles.userImageContainer}>
           <Image
-            source={user?.image ? {uri: user.image} : require("../assets/user.png")}
-            style={userPostStyles.userImage}
+            source={
+              user?.image ? { uri: user.image } : require("../assets/user.png")
+            }
+            style={styles.userImage}
           />
         </View>
-        <Text style={userPostStyles.userText}>{user?.name}</Text>
+        <Text style={styles.userText}>{user?.name}</Text>
       </TouchableOpacity>
       <View
-        style={[userPostStyles.userPostImage, 
-          { backgroundColor: media?.[0]?.background ? 'rgb'+media?.[0]?.background : "#acacac" }]}
+        style={[
+          styles.userPostImage,
+          {
+            backgroundColor: media?.[0]?.background
+              ? "rgb" + media?.[0]?.background
+              : "#acacac"
+          }
+        ]}
       >
-        <Image
-          source={{ uri: media?.[0]?.image }}
-          style={userPostStyles.postImage}
-        />
+        <Image source={{ uri: media?.[0]?.image }} style={styles.postImage} />
       </View>
-      <View style={userPostStyles.postcontainer}>
-        <View style={userPostStyles.leftContainer}>
-          <TouchableOpacity style={{flexDirection: 'row'}} 
-            onPress={()=>{
-              liked ? 
-              unLikePost(id, BASE_URL, setLoading)
-              : 
-              likePost(id, BASE_URL, setLoading)
+      <View style={styles.postcontainer}>
+        <View style={styles.leftContainer}>
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={() => {
+              liked ? unLikeCurrentPost(id) : likeCurrentPost(id);
             }}
           >
             <Image
-              source={liked ? require('../assets/unlike.png'): require('../assets/like.png')}
-              style={userPostStyles.imageIcons}
+              source={
+                liked
+                  ? require("../assets/unlike.png")
+                  : require("../assets/like.png")
+              }
+              style={styles.imageIcons}
             />
-            <Text style={userPostStyles.mh10}>{upvotes}</Text>
+            <Text style={styles.mh10}>{upvotes}</Text>
           </TouchableOpacity>
           <Image
             source={require("../assets/comment.png")}
-            style={userPostStyles.imageIcons}
+            style={styles.imageIcons}
           />
-          <Text style={userPostStyles.mh10}>{comments_count}</Text>
+          <Text style={styles.mh10}>{post?.comments_count}</Text>
         </View>
         <Image
           source={require("../assets/group.png")}
-          style={[userPostStyles.imageIcons, userPostStyles.mr10]}
+          style={[styles.imageIcons, styles.mr10]}
         />
       </View>
-      <Text style={userPostStyles.postText}>{caption}</Text>
+      <Text style={styles.postText}>{caption}</Text>
     </TouchableOpacity>
   );
 };
-const userPostStyles = StyleSheet.create({
-  usernameContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    paddingVertical: 10
-  },
-  userImageContainer: {
-    height: 30,
-    width: 30,
-    borderRadius: 15,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 10
-  },
-  userImage: {
-    height: 15,
-    width: 15,
-  },
-  userText: {
-    color: "#3B566E"
-  },
-  userPostImage: {
-    height: 200,
-    width: '100%',
-    borderRadius: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 10,
-  },
-  postImage: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    resizeMode: 'contain',
-    overflow: 'hidden',
-    borderRadius: 10,
-  },
-  postcontainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  leftContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center"
-  },
-  imageIcons: {
-    height: 12,
-    width: 12
-  },
-  mh10: {
-    marginHorizontal: 10
-  },
-  postText: {
-    display: "flex",
-    justifyContent: "center",
-    color: "#6F8BA4",
-    marginVertical: 10
-  },
-  mr10: {
-    marginRight: 10
-  }
-});

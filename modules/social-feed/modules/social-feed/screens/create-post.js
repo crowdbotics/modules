@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert,
+  Alert
 } from "react-native";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { OptionsContext } from "@options";
@@ -23,7 +23,7 @@ const CreatePostScreen = (props) => {
 
   // Fetch API status from store.
   const { api } = useSelector((state) => state.Social.createPost);
-  
+
   // Reference for bottomSheet.
   const actionSheet = useRef(null);
   const { styles } = useContext(OptionsContext);
@@ -42,7 +42,7 @@ const CreatePostScreen = (props) => {
       data.append("media", {
         name: `rnd-${imageObject?.path}`,
         type: imageObject.mime,
-        uri: imageObject.path,
+        uri: imageObject.path
       });
       dispatch(createPost(data))
         .then(unwrapResult)
@@ -65,7 +65,7 @@ const CreatePostScreen = (props) => {
     const imageOptions = {
       width: 300,
       height: 400,
-      cropping: true,
+      cropping: true
     };
     switch (index) {
       case 0:
@@ -121,11 +121,13 @@ const CreatePostScreen = (props) => {
           style={styles.SubmitPostButton}
           onPress={onCreatePost}
         >
-          {api?.loading !== "idle" ? (
+          {api?.loading !== "idle"
+            ? (
             <ActivityIndicator color={"#fff"} size={"small"} />
-          ) : (
+              )
+            : (
             <Text style={styles.SubmitPostButtonText}>Create Post</Text>
-          )}
+              )}
         </TouchableOpacity>
       </View>
     </ScrollView>

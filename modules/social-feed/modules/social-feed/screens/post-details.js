@@ -1,74 +1,65 @@
-import React, { useEffect, useContext, useState, useRef } from "react"
-import {
-  View,
-  Text,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Dimensions,
-  TextInput, TouchableOpacity, Alert
-} from 'react-native'
-import { OptionsContext, GlobalOptionsContext } from "@options";
-import { likePost, unLikePost, userToken } from "../api";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { useEffect, useState, useRef } from "react";
+import { ScrollView, Dimensions } from "react-native";
 import ActionSheet from "react-native-actionsheet";
-import {PostComponent} from "../components/post";
+import { PostComponent } from "../components/post";
+import { useDispatch, useSelector } from "react-redux";
+import { getPostDetails } from "../store";
 
 export default function PostDetailScreen(props) {
+  const dispatch = useDispatch();
   const { navigation, route } = props;
-  const actionSheet = useRef(null);
+  // Extract the 'id' parameter from the route params
   const { id } = route.params;
-  const [postDetails, setPostDetails] = React.useState({});
-  const gOptions = useContext(GlobalOptionsContext);
-  const BASE_URL = gOptions.url
-  const [loading, setLoading] = React.useState(true);
-  const [PostOptions, setPostOptions] = React.useState(["Report Post", "Cancel"]);
-  const baseOptions = ["Report Post", "Cancel",];
+  const actionSheet = useRef(null);
 
+  const [callbackVariable, setCallbackVariable] = useState(true);
+  const [postOptions, setPostOptions] = useState(["Report Post", "Cancel"]);
+  const actionSheetOptions = ["Report Post", "Cancel"];
+
+  // Fetch post details from store.
+  const { entities } = useSelector((state) => state.Social.getPostDetails);
+
+  // Fetch post details when 'callbackVariable' changes
   useEffect(() => {
-    fetch(`${BASE_URL}/modules/social-feed/post/${id}/`,{
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
-      }
-    })
-      .then((response) => response.json())
-      .then((json) => setPostDetails(json))
-      .catch((error) => console.log(error))
-      .finally(() => setLoading(false));
- 
-  }, [loading]);
-  
+    dispatch(getPostDetails(id));
+  }, [callbackVariable]);
+
+  /**
+   * Handle action selection in the ActionSheet.
+   * @param {number} index - The index of the selected action.
+   */
+  const handleActionSelection = async (index) => {
+    switch (index) {
+      case 0:
+        // Handle 'Report Post' action
+        break;
+      case 1:
+        // Handle 'Cancel' action
+        break;
+    }
+  };
 
   return (
     <ScrollView
       bounces={false}
       showsVerticalScrollIndicator={false}
-      style={{ height: Dimensions.get('window').height }}
-      
+      style={{ height: Dimensions.get("window").height }}
     >
-      {/* <ActionSheet
+      <ActionSheet
         ref={actionSheet}
         title={"Take Action"}
-        options={PostOptions}
+        options={postOptions}
         cancelButtonIndex={1}
-        onPress={async (index) => {
-          let res;
-          switch (index) {
-            case 0:
-              res = await pickFromCamera();
-              break;
-            case 1:
-              res = await pickFromGallery(cropWidth=400, cropHeight=230);
-              break;
-          }
-        }}
-      /> */}
-      <PostComponent postDetails={postDetails} setLoading={setLoading} 
-      navigation={navigation} actionSheet={actionSheet}
-      baseOptions={baseOptions} setPostOptions={setPostOptions}
+        onPress={handleActionSelection}
+      />
+      <PostComponent
+        postDetails={entities}
+        setCallbackVariable={setCallbackVariable}
+        navigation={navigation}
+        actionSheet={actionSheet}
+        baseOptions={actionSheetOptions}
+        setPostOptions={setPostOptions}
       />
     </ScrollView>
-  )
+  );
 }
