@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useStore } from "../Store";
-// @ts-ignore
+
 import { usePubNub } from "pubnub-react";
 import {
   View,

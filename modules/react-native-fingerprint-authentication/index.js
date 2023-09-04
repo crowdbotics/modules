@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { View, Alert, Platform, AlertIOS } from "react-native";
-import FingerprintScanner from "react-native-fingerprint-scanner";
+import TouchID from "react-native-touch-id";
 
 const FingerprintAuthentication = ({ onAuthentication, onAuthenticationError }) => {
   const authCurrent = () => {
-    FingerprintScanner
-      .authenticate({ title: "Log in with Biometrics" })
+    TouchID
+      .authenticate()
       .then((res) => {
         if (onAuthentication) {
           onAuthentication();
@@ -19,7 +19,6 @@ const FingerprintAuthentication = ({ onAuthentication, onAuthenticationError }) 
           AlertIOS.alert("Authenticated Successfully!",
             "Fingerprints have been matched and verified successfully");
         }
-        FingerprintScanner.release();
       }).catch((err) => {
         if (onAuthenticationError) {
           onAuthenticationError();
@@ -35,7 +34,6 @@ const FingerprintAuthentication = ({ onAuthentication, onAuthenticationError }) 
           AlertIOS.alert(arr[0],
             arr[1]);
         }
-        FingerprintScanner.release();
       });
   };
 

@@ -47,6 +47,13 @@ const HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
   inject: false
 })
 
+const DevEnvPlugin = new webpack.DefinePlugin({
+  __DEV__: process.env.NODE_ENV !== "production" || true,
+  "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development")
+})
+
+const JestWorkerPlugin = new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null })
+
 // This is needed for webpack to compile JavaScript.
 // Many OSS React Native packages are not compiled to ES5 before being
 // published. If you depend on uncompiled packages they may cause webpack build
@@ -62,9 +69,8 @@ const babelLoaderConfiguration = {
     path.resolve(appDirectory, "screens"),
     path.resolve(appDirectory, "options"),
     path.resolve(appDirectory, "store"),
-    path.resolve(appDirectory, "node_modules")
+    path.resolve(appDirectory, "node_modules/react-native-reanimated")
   ],
-  exclude: [path.resolve(appDirectory, "node_modules/@babel")],
   use: {
     loader: "babel-loader",
     options: babelOptions
@@ -83,11 +89,31 @@ const imageLoaderConfiguration = {
   }
 }
 
+const typescriptLoaderConfiguration = {
+  test: /\.tsx?$/,
+  use: "ts-loader",
+  exclude: /node_modules/
+}
+
+const babelExclusionConfiguration = {
+  test: /\.js$/,
+  exclude:
+    /node_modules\/(?!(react-native-elements|react-native-vector-icons)\/).*/,
+  loader: "babel-loader"
+}
+
+const urlLoaderConfiguration = {
+  test: /\.ttf$/,
+  loader: "url-loader",
+  include: path.resolve(__dirname, "node_modules/react-native-vector-icons")
+}
+
 module.exports = {
   entry: [
     // load any web API polyfills
     // path.resolve(appDirectory, 'polyfills-web.js'),
     // your web-specific entry file
+    "@babel/polyfill",
     path.resolve(appDirectory, "index.js")
   ],
 
@@ -101,9 +127,15 @@ module.exports = {
   // ...the rest of your config
 
   module: {
-    rules: [babelLoaderConfiguration, imageLoaderConfiguration]
+    rules: [
+      babelLoaderConfiguration,
+      imageLoaderConfiguration,
+      typescriptLoaderConfiguration,
+      babelExclusionConfiguration,
+      urlLoaderConfiguration
+    ]
   },
-  plugins: [HTMLWebpackPluginConfig],
+  plugins: [HTMLWebpackPluginConfig, DevEnvPlugin, JestWorkerPlugin],
   resolve: {
     alias: {
       "react-native$": "react-native-web",
@@ -115,6 +147,6 @@ module.exports = {
     // If you're working on a multi-platform React Native app, web-specific
     // module implementations should be written in files using the extension
     // `.web.js`.
-    extensions: [".web.js", ".js"]
+    extensions: [".web.js", ".js", ".ts", ".jsx", ".tsx"]
   }
 }

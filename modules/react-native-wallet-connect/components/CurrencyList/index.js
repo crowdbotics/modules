@@ -1,7 +1,6 @@
 import React from "react";
 import { Pressable, View, Text, StyleSheet } from "react-native";
 
-// @ts-ignore
 import { utils } from "ethers";
 const CurrencyList = ({ data, setModalVisible, modalVisible, onItemPress }) => {
   const pressHandler = async () => {
