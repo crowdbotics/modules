@@ -6,7 +6,7 @@ const PostEditJobScreen = (params) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/back.png")} style={styles.back} />
         <Text style={styles.heading}>Jobs</Text>
         <Text />
@@ -37,11 +37,11 @@ const PostEditJobScreen = (params) => {
       <Text style={styles.mr10}>Number of Hours</Text>
       <View style={styles.chooseContainer}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/minus.png")} style={styles.priceImg} />
         <TextInput placeholder="8" placeholderTextColor="#000" style={styles.inputPrice} />
         <Image source={require(
-          // @ts-ignore
+
           "./assets/plus.png")} style={styles.priceImg} />
       </View>
       <View style={styles.bidContainer}>
@@ -54,7 +54,7 @@ const PostEditJobScreen = (params) => {
       <Text style={styles.mr10}>Salary</Text>
       <View style={styles.sliderCOntainer}>
         <Image source={require(
-          // @ts-ignore
+
           "./assets/slider.png")} style={styles.sliderImg} />
       </View>
       <View style={styles.sliderTextContainer}>
@@ -70,7 +70,7 @@ const PostEditJobScreen = (params) => {
       <View style={styles.sectionContainer}>
         <View style={styles.checkboxContainer}>
           <Image
-            source={require(// @ts-ignore
+            source={require(
               "./assets/checkbox.png")}
             style={styles.checkbox}
           />
@@ -78,7 +78,7 @@ const PostEditJobScreen = (params) => {
         </View>
         <View style={styles.checkboxContainer}>
           <Image
-            source={require(// @ts-ignore
+            source={require(
               "./assets/box.png")}
             style={styles.checkbox}
           />

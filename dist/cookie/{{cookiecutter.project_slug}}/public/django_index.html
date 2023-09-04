@@ -16,6 +16,7 @@
         </noscript>
         <div id="root"></div>
         <script defer="defer" src="{% static '<%= htmlWebpackPlugin.files.js %>' %}"></script>
+        {% csrf_token %}
     </body>
 
 </html> 

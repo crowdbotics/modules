@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
-// @ts-ignore
+
 import { createStackNavigator } from "@react-navigation/stack";
 import Conversation from "../Screens/Conversation";
 import CreateChannel from "../Screens/CreateChannel";

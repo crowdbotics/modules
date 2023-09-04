@@ -1,0 +1,5 @@
+{
+  "title": "Core (Django)",
+  "description": "Backend for the Core module.",
+  "root": "/backend/modules"
+}
