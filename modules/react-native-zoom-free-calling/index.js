@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text, Image, NativeEventEmitter, StyleSheet } from "react-native";
-// @ts-ignore
+
 import ZoomUs, { ZoomEmitter } from "react-native-zoom-us";
-// @ts-ignore
+
 import { WebView } from "react-native-webview";
 import { API_URL, createMeeting, deleteMeeting, getCurrentUser, getMeetingList, getOauthToken, makeId, parseQueryString, parseStartDate } from "./utils";
-// @ts-ignore
+
 import DialogInput from "react-native-dialog-input";
 import Button from "./components/Button";
 import MeetingScheduleModal from "./components/MeetingScheduleModal";
-// @ts-ignore
+
 import CookieManager from "@react-native-cookies/cookies";
 import ScheduleMeetingList from "./components/ScheduleMeetingList";
-// @ts-ignore
+
 import { sha256 } from "react-native-sha256";
-import options from "./options";
+import { OptionsContext } from "@options";
 
 const ZoomCalling = () => {
+  const options = useContext(OptionsContext);
   const [sha256CodeChallenge, setSha256CodeChallenge] = useState("");
   const userAgent = "Mozilla/5.0 (Linux; Android) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/98.0.4758.87 Mobile Safari/537.36";
   const [isFirst, setIsFirst] = useState(true);

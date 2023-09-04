@@ -1,4 +1,4 @@
-// @ts-ignore
+
 import create from "zustand";
 import options from "../options";
 export const uuid = options.user._id;
