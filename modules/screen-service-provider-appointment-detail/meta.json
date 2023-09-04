@@ -1,0 +1,5 @@
+{
+  "title": "Service Provider Appointment ",
+  "description": "Service Provider Appointment screen module",
+  "root": "/screens/service-provider-appointment-detail"
+}

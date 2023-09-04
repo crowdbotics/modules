@@ -1,0 +1,10 @@
+{
+  "name": "@screens/pricing",
+  "version": "1.0.0",
+  "description": "Pricing screen with feature overview, price and call to action buttons.",
+  "private": true,
+  "main": "index.js",
+  "files": ["*"],
+  "author": "Crowdbotics",
+  "license": "ISC"
+}

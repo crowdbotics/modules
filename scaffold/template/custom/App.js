@@ -3,6 +3,7 @@ import { Provider } from "react-redux"
 import "react-native-gesture-handler"
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
+import { Provider as PaperProvider } from "react-native-paper";
 import {
   configureStore,
   createReducer,
@@ -87,7 +88,9 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <Navigation />
+      <PaperProvider>
+        <Navigation />
+      </PaperProvider>
     </Provider>
   )
 }
