@@ -10,9 +10,6 @@ The following are the scope features for this module:
 - Ability to get the specific profile.
 - Ability to update the profile.
 - Ability to delete the profile.
-  
-![image](https://github.com/cbshoaib/modules/assets/76822297/f3b433ec-3007-42c0-a132-ee0e5f68ca52)
-
 
 ## Features
 
