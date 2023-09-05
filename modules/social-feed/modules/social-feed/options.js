@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     height: "100%",
-    resizeMode: "contain",
     overflow: "hidden",
     borderRadius: 10
   },

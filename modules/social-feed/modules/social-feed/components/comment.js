@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
 import { OptionsContext } from "@options";
 import { useDispatch } from "react-redux";
 import { addComment, likeComment, unLikeComment } from "../store";
@@ -37,18 +37,22 @@ export const CommentComponent = ({
 
   // Submit a new comment to backend
   const submitComment = () => {
-    setCallbackVariable(true);
-    dispatch(
-      addComment({
-        comment: comment,
-        ref_comment: refComment,
-        post_id: postId
-      })
-    ).then(() => {
-      setCallbackVariable(false);
-      setComment("");
-      setRefComment("");
-    });
+    if (comment.trim().length !== 0) {
+      setCallbackVariable(true);
+      dispatch(
+        addComment({
+          comment: comment,
+          ref_comment: refComment,
+          post_id: postId
+        })
+      ).then(() => {
+        setCallbackVariable(false);
+        setComment("");
+        setRefComment("");
+      });
+    } else {
+      Alert.alert("Error", "Please input some text.");
+    }
   };
 
   return (
@@ -210,7 +214,7 @@ export const CommentComponent = ({
         />
         <TouchableOpacity
           onPress={() => {
-            comment && submitComment();
+            submitComment();
           }}
           style={[
             styles.commentSubmitButton,

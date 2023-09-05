@@ -89,7 +89,7 @@ export const PostComponent = ({
           }
         ]}
       >
-        <Image source={{ uri: media?.[0]?.image }} style={styles.postImage} />
+        <Image source={{ uri: media?.[0]?.image }} style={styles.postImage} resizeMode="contain"/>
       </View>
       {/* Post description */}
       <Text style={styles.postText}>{description}</Text>

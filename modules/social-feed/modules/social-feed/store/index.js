@@ -154,7 +154,6 @@ export const addComment = createAsyncThunk(
       const response = await api.addComment(payload);
       return response.data;
     } catch (error) {
-      console.log("ERROR", error);
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }

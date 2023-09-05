@@ -36,7 +36,7 @@ const CreatePostScreen = (props) => {
    * Handles the creation of a new post through API
    */
   const onCreatePost = () => {
-    if (imageObject && caption) {
+    if (imageObject && caption.trim().length !== 0) {
       const data = new FormData();
       data.append("caption", caption);
       data.append("media", {
@@ -63,8 +63,8 @@ const CreatePostScreen = (props) => {
    */
   const onImageSelect = (index) => {
     const imageOptions = {
-      width: 300,
-      height: 400,
+      width: 400,
+      height: 250,
       cropping: true
     };
     switch (index) {

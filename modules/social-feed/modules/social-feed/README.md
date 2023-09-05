@@ -39,15 +39,7 @@ Dependencies used:
 
 ### Global Configs
 
-Update the `options/options.js` file with your app's backend url.
-
-```
-export const globalOptions = {
-    ...
-  url: "https://my-app.botics.co",
-   ...
-}
-```
+No global configs required.
 
 ### Local Configs
 
@@ -83,6 +75,16 @@ android {
     }
     ...
 }
+```
+
+At last add these in your `AndroidManifest.xml`
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+//Photos permission for android 13.
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 ```
 
 

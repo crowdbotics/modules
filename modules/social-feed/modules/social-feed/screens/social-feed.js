@@ -4,9 +4,11 @@ import { OptionsContext } from "@options";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyFeed, likePost, unLikePost } from "../store";
+import { useIsFocused } from "@react-navigation/native";
 
 const SocialFeedScreen = (props) => {
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
   const { navigation } = props;
   const [callbackVariable, setCallbackVariable] = useState(false);
   const { styles } = useContext(OptionsContext);
@@ -20,8 +22,10 @@ const SocialFeedScreen = (props) => {
   };
 
   useEffect(() => {
-    fetchFeed();
-  }, [callbackVariable]);
+    if (isFocused) {
+      fetchFeed();
+    }
+  }, [callbackVariable, isFocused]);
 
   const renderItem = ({ item }) => (
     <PostComponent
@@ -130,7 +134,11 @@ const PostComponent = ({ post, navigationObject, setCallbackVariable }) => {
           }
         ]}
       >
-        <Image source={{ uri: media?.[0]?.image }} style={styles.postImage} />
+        <Image
+          source={{ uri: media?.[0]?.image }}
+          style={styles.postImage}
+          resizeMode="contain"
+        />
       </View>
       <View style={styles.postcontainer}>
         <View style={styles.leftContainer}>
