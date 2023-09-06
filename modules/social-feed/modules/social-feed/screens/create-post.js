@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   TextInput,
   ActivityIndicator,
-  Alert
+  Alert,
+  Platform
 } from "react-native";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { OptionsContext } from "@options";
@@ -63,7 +64,7 @@ const CreatePostScreen = (props) => {
    */
   const onImageSelect = (index) => {
     const imageOptions = {
-      width: 400,
+      width: Platform.OS === "ios" ? 450 : 400,
       height: 250,
       cropping: true
     };
@@ -112,7 +113,6 @@ const CreatePostScreen = (props) => {
           <TextInput
             style={styles.captionInput}
             placeholder="What's on your mind?"
-            multiline={true}
             onChangeText={(text) => setCaption(text)}
             value={caption}
           />

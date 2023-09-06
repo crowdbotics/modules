@@ -65,7 +65,7 @@ const SocialFeedScreen = (props) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
           onRefresh={fetchFeed}
-          refreshing={callbackVariable}
+          refreshing={false}
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
         />
