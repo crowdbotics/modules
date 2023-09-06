@@ -1,8 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from .viewsets import *
 from .views import *
+from .viewsets import *
 
 router = DefaultRouter()
 router.register("post", PostViewSet)
@@ -12,7 +12,7 @@ router.register("followrequest", FollowRequestViewSet)
 router.register("postcomment", PostCommentViewSet)
 router.register("likecomment", LikeCommentViewSet)
 router.register("upvotepost", UpvotePostViewSet)
-router.register("downvotepost", DownvotePostViewSet)
+router.register("downvotepost", DownVotePostViewSet)
 router.register("chat", ChatViewSet)
 urlpatterns = [
     path("", include(router.urls)),
@@ -32,4 +32,3 @@ urlpatterns = [
     path("post-comment/", PostCommentView.as_view()),
     path("delete-comment/", DeleteCommentView.as_view()),
 ]
-

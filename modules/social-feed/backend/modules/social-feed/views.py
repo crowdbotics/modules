@@ -1,53 +1,55 @@
-from email.mime import image
-from re import T
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.contrib.auth import get_user_model
+from rest_framework import status
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.pagination import PageNumberPagination
-from yaml import serialize
 from rest_framework.parsers import FileUploadParser
-from home.api.v1.serializers import UserSerializer
-from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-User =  get_user_model()
-
-from .models import Post, Follow, ReportPost, FollowRequest, PostComment, LikeComment, UpvotePost, DownvotePost, Chat
+from .models import Post, Follow, ReportPost, PostComment, LikeComment, UpvotePost
 from .serializers import (
-    ChatSerializer,
-    DownvotePostSerializer,
-    FollowRequestSerializer,
-    LikeCommentSerializer,
     PostSerializer,
-    PostCommentSerializer,
     PostMediaSerializer,
-    ReportPostSerializer,
-    UpvotePostSerializer,
     PostDetailSerializer,
     ProfileSerializer,
     FollowingSerializer,
-    FollowersSerializer,
+    FollowersSerializer, ReportPostsSerializer, UnlikeCommentsSerializer, likeCommentsSerializer, PostUnlikeSerializer,
+    CommentDeleteSerializer,
 )
+
+User = get_user_model()
 
 
 class CreatePostView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     parser_class = (FileUploadParser,)
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        caption = request.data.get('caption')
-        user = request.user
-        post = Post.objects.create(caption=caption, description=caption, user=user)
-        media = request.data.get('media')
-        if media:
-            data = request.data.copy()
-            data['post'] = post.pk
-            data['image'] = data.get('media')
-            p = PostMediaSerializer(data=data, partial=True)
-            p.is_valid(raise_exception=True)
-            p.save()
-        serializer = PostSerializer(post)
-        return Response(serializer.data, status=200)
-        
+        """
+        create_post: Creates a post
+        :Authorization: user_token
+        :body_params: form-data(caption, media(image-field))
+        :return : Post ID and details
+        """
+        try:
+            caption = request.data.get('caption')
+            user = self.request.user
+            post = Post.objects.create(caption=caption, description=caption, user=user)
+            media = request.data.get('media')
+            if media:
+                data = request.data.copy()
+                data['post'] = post.pk
+                data['image'] = data.get('media')
+                p = PostMediaSerializer(data=data, partial=True)
+                p.is_valid(raise_exception=True)
+                p.save()
+            serializer = PostSerializer(post, context={"request": request})
+            return Response(serializer.data, status=200)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class MyFeedView(APIView):
     authentication_classes = (
@@ -56,8 +58,13 @@ class MyFeedView(APIView):
     )
 
     def get(self, request):
-        posts = Post.objects.all()
-        serializer = PostDetailSerializer(posts, many=True, context={'request': request})
+        """
+        list_feed: list a posts
+        :Authorization: user_token
+        :return : List of all posts
+        """
+        posts = Post.objects.all().order_by('-id')
+        serializer = PostDetailSerializer(posts, many=True, context={'request': self.request})
         return Response(serializer.data)
 
 
@@ -66,11 +73,18 @@ class MyProfile(APIView):
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        user = request.user
-        serializer = ProfileSerializer(user)
+        """
+        My-profile: get a post with complete details.
+        :Authorization: user_token
+        :return : List of all user's posts containing it details (follower, following and owner).
+        """
+        user = self.request.user
+        serializer = ProfileSerializer(user, context={'request': request})
         return Response(serializer.data)
+
 
 class GetProfile(APIView):
     authentication_classes = (
@@ -79,20 +93,38 @@ class GetProfile(APIView):
     )
 
     def get(self, request, pk):
-        from django.contrib.auth import get_user_model
-        User = get_user_model()
-        user = User.objects.get(pk=pk)
-        serializer = ProfileSerializer(user, context={'request': request})
-        return Response(serializer.data)
+        """
+        Get-profile: get a user with posts detail.
+        :Authorization: user_token
+        :return : User's detail with its posts.
+        """
+        try:
+            user = User.objects.get(pk=pk)
+            serializer = ProfileSerializer(user, context={'request': self.request})
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class MyFollowersView(APIView, PageNumberPagination):
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class MyFollowersView(APIView, LargeResultsSetPagination):
     authentication_classes = (
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
+    def get(self, request):
+        """
+        My-followers: get user's followers detail.
+        :Authorization: user_token
+        :return : User's detail with its followers.
+        """
         user = request.user
         followers = [follow.user for follow in user.user_followers.all()]
         results = self.paginate_queryset(followers, request, view=self)
@@ -100,13 +132,19 @@ class MyFollowersView(APIView, PageNumberPagination):
         return self.get_paginated_response(serializer.data)
 
 
-class MyFollowingView(APIView, PageNumberPagination):
+class MyFollowingView(APIView, LargeResultsSetPagination):
     authentication_classes = (
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
+        """
+        My-Following: get user's following detail.
+        :Authorization: user_token
+        :return : User's following list detail.
+        """
         user = request.user
         following = [follow.follow for follow in user.user_following.all()]
         results = self.paginate_queryset(following, request, view=self)
@@ -118,23 +156,44 @@ class LikePostView(APIView):
     authentication_classes = (
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        post_id = request.data.get('post_id')
-        user = request.user
-        UpvotePost.objects.get_or_create(post_id=post_id, upvote_by=user)
-        return Response(status=200)
+        """
+        LikePostView: Like the users posts.
+        :Authorization: user_token
+        :body_params: "post_id"
+        :return : Like the post and return 200 status code.
+        """
+        try:
+            serializer = PostUnlikeSerializer(data=self.request.data)
+            serializer.is_valid(raise_exception=True)
+            UpvotePost.objects.get_or_create(post_id=serializer.data.get('post_id'), upvote_by=self.request.user)
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UnlikePostView(APIView):
     authentication_classes = (
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        post_id = request.data.get('post_id')
-        user = request.user
-        UpvotePost.objects.filter(post_id=post_id, upvote_by=user).delete()
-        return Response(status=200)
+        """
+        UnLikePostView: UnLike the users posts.
+        :Authorization: user_token
+        :body_params: "post_id"
+        :return : UnLike the post and return 200 status code.
+        """
+        try:
+            serializer = PostUnlikeSerializer(data=self.request.data)
+            serializer.is_valid(raise_exception=True)
+            UpvotePost.objects.get(post_id=serializer.data.get('post_id'), upvote_by=self.request.user).delete()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"message": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LikeCommentView(APIView):
@@ -142,23 +201,44 @@ class LikeCommentView(APIView):
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        comment_id = request.data.get('comment_id')
-        user = request.user
-        LikeComment.objects.get_or_create(comment_id=comment_id, liked_by=user)
-        return Response(status=200)
+        """
+          LikeComment: Like the comment on posts.
+          :Authorization: user_token
+          :body_params: "comment_id"
+          :return : Like the comment and return 200 status code.
+          """
+        try:
+            serializer = likeCommentsSerializer(data=self.request.data)
+            serializer.is_valid(raise_exception=True)
+            LikeComment.objects.get_or_create(comment_id=serializer.data.get('comment_id'), liked_by=self.request.user)
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"message": e.args}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class UnlikeCommentView(APIView):
     authentication_classes = (
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        comment_id = request.data.get('comment_id')
-        user = request.user
-        LikeComment.objects.filter(comment_id=comment_id, liked_by=user).delete()
-        return Response(status=200)
+        """
+        UnLikeComment: UnLike the comment on posts.
+        :Authorization: user_token
+        :body_params: "comment_id"
+        :return : UnLike the comment and return 200 status code.
+        """
+        try:
+            serializer = UnlikeCommentsSerializer(data=self.request.data)
+            serializer.is_valid(raise_exception=True)
+            LikeComment.objects.get(comment_id=serializer.data.get('comment_id'), liked_by=self.request.user).delete()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"message": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReportPostView(APIView):
@@ -166,15 +246,25 @@ class ReportPostView(APIView):
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        post_id = request.data.get('post_id')
-        reason = request.data.get('reason')
-        user = request.user
-        ReportPost.objects.create(
-            post_id=post_id, reported_by=user, reason=reason
-        )
-        return Response(status=200)
+        """
+          ReportPost: report the posts.
+          :Authorization: user_token
+          :body_params: "post_id", "reason"
+          :return : Report the post and return 200 status code.
+          """
+        try:
+            serializer = ReportPostsSerializer(data=self.request.data)
+            serializer.is_valid(raise_exception=True)
+            ReportPost.objects.create(
+                post_id=serializer.data.get('post_id'), reported_by=self.request.user,
+                reason=serializer.data.get('reason')
+            )
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"message": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PostCommentView(APIView):
@@ -182,41 +272,62 @@ class PostCommentView(APIView):
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        post_id = request.data.get('post_id')
-        comment = request.data.get('comment')
-        ref_comment = request.data.get('ref_comment')
-        if ref_comment:
-            ref = PostComment.objects.get(id=ref_comment)
-            if ref.ref_comment:
-                ref = ref.ref_comment
-        else:
-            ref = None
+        """
+        PostComment: Comment on posts.
+        :Authorization: user_token
+        :body_params: "post_id", "comment"
+        :return : Create a comment on post and return comment_id with 200 status code.
+        """
+        try:
+            post_id = request.data.get('post_id')
+            comment = request.data.get('comment')
+            ref_comment = request.data.get('ref_comment')
+            if ref_comment:
+                ref = PostComment.objects.get(id=ref_comment)
+                if ref.ref_comment:
+                    ref = ref.ref_comment
+            else:
+                ref = None
 
-        user_id = request.user.id
-        kwargs = {
-            'post_id': post_id,
-            'comment': comment,
-            'user_id': user_id,
-        }
-        if ref :
-            kwargs['ref_comment'] = ref
-        PostComment.objects.create(
-            **kwargs
-        )
-        return Response(status=200)
+            user_id = self.request.user.id
+            kwargs = {
+                'post_id': post_id,
+                'comment': comment,
+                'user_id': user_id,
+            }
+            if ref:
+                kwargs['ref_comment'] = ref
+            response = PostComment.objects.create(
+                **kwargs
+            )
+            return Response({"comment_id": response.id}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteCommentView(APIView):
     authentication_classes = (
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        comment_id = request.data.get('comment_id')
-        PostComment.objects.filter(id=comment_id).delete()
-        return Response(status=200)
+        """
+        PostComment: Comment on posts.
+        :Authorization: user_token
+        :body_params: "comment_id"
+        :return : Delete a comment on post and return 200 status code.
+        """
+        try:
+            serializer = CommentDeleteSerializer(data=self.request.data)
+            serializer.is_valid(raise_exception=True)
+            PostComment.objects.get(id=serializer.data.get('comment_id')).delete()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": e.args}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FollowView(APIView):
@@ -224,14 +335,21 @@ class FollowView(APIView):
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
+        """
+        FollowView: For following the user.
+        :Authorization: user_token
+        :path_params: user-id
+        :return : Follow the user and return 200 status code.
+        """
         try:
             user = User.objects.get(pk=pk)
         except User.DoesNotExist:
-            return Response(status=404)
-        Follow.objects.get_or_create(user=request.user, follow=user)
-        return Response(status=200)
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        Follow.objects.get_or_create(user=self.request.user, follow=user)
+        return Response(status=status.HTTP_200_OK)
 
 
 class UnFollowView(APIView):
@@ -239,8 +357,18 @@ class UnFollowView(APIView):
         SessionAuthentication,
         TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        user = request.user
-        Follow.objects.filter(user=user, follow_id=pk).delete()
-        return Response(status=200)
+        """
+        UnFollowView: For unfollow the user.
+        :Authorization: user_token
+        :path_params: user-id
+        :return : UnFollow the user and return 200 status code.
+        """
+        try:
+            User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        Follow.objects.filter(user=self.request.user, follow_id=pk).delete()
+        return Response(status=status.HTTP_200_OK)

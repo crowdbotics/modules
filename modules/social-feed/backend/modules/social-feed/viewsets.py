@@ -1,5 +1,8 @@
-from multiprocessing import context
+from rest_framework import authentication
 from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FileUploadParser
+from rest_framework.response import Response
+
 from .models import (
     Chat,
     DownvotePost,
@@ -23,11 +26,7 @@ from .serializers import (
     UpvotePostSerializer,
     PostDetailSerializer
 )
-from rest_framework import authentication
-from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.viewsets import ModelViewSet, ViewSet
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
+
 
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostDetailSerializer
@@ -37,6 +36,8 @@ class PostViewSet(viewsets.ModelViewSet):
     )
     queryset = Post.objects.all()
 
+    def get_queryset(self):
+        return self.queryset
 
     # override serializer_class to filter by user
     def get_serializer_class(self):
@@ -46,11 +47,12 @@ class PostViewSet(viewsets.ModelViewSet):
             return PostDetailSerializer
 
     # detail view
-    def retrieve(self, request, pk=None):
+    def retrieve(self, request, pk=None, **kwargs):
         queryset = self.get_queryset()
         post = queryset.get(pk=pk)
         serializer = self.get_serializer(post, context={'request': request})
         return Response(serializer.data)
+
 
 class PostMediaViewSet(viewsets.ModelViewSet):
     serializer_class = PostMediaSerializer
@@ -59,6 +61,7 @@ class PostMediaViewSet(viewsets.ModelViewSet):
         authentication.TokenAuthentication,
     )
     queryset = PostMedia.objects.all()
+    parser_classes = [MultiPartParser, FileUploadParser]
 
 
 class ReportPostViewSet(viewsets.ModelViewSet):
@@ -106,7 +109,7 @@ class UpvotePostViewSet(viewsets.ModelViewSet):
     queryset = UpvotePost.objects.all()
 
 
-class DownvotePostViewSet(viewsets.ModelViewSet):
+class DownVotePostViewSet(viewsets.ModelViewSet):
     serializer_class = DownvotePostSerializer
     authentication_classes = (
         authentication.SessionAuthentication,

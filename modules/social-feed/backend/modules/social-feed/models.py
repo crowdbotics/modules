@@ -1,8 +1,10 @@
 import random
+
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 
 class Follow(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_following')
@@ -13,7 +15,7 @@ class Follow(models.Model):
 
 
 class Post(models.Model):
-    "Generated Model"
+    """Generated Model"""
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
@@ -29,7 +31,7 @@ class Post(models.Model):
 
 
 class PostMedia(models.Model):
-    "Generated Model"
+    """Generated Model"""
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -57,24 +59,24 @@ class PostMedia(models.Model):
 def get_bg(sender, instance, **kwargs):
     from PIL import Image
     if not getattr(instance, 'background', False):
-        width, height = 150,150
+        width, height = 150, 150
         image = Image.open(instance.image)
-        image = image.resize((width, height),resample = 0)
-        #Get colors from image object
+        image = image.resize((width, height), resample=0)
+        # Get colors from image object
         pixels = image.getcolors(width * height)
-        #Sort them by count number(first element of tuple)
+        # Sort them by count number(first element of tuple)
         sorted_pixels = sorted(pixels, key=lambda t: t[0])
-        #Get the most frequent color
+        # Get the most frequent color
         dominant_color = sorted_pixels[-1][1]
         # return dominant_color
-        r = lambda: random.randint(0,255)
+        r = lambda: random.randint(0, 255)
         # instance.background = '#80%02X%02X%02X' % (r(),r(),r())
-        instance.background = 'rgb'+str(dominant_color)
+        instance.background = 'rgb' + str(dominant_color)
         instance.save()
 
 
 class ReportPost(models.Model):
-    "Generated Model"
+    """Generated Model"""
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -92,7 +94,7 @@ class ReportPost(models.Model):
 
 
 class FollowRequest(models.Model):
-    "Generated Model"
+    """Generated Model"""
     generated_by = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
@@ -109,7 +111,7 @@ class FollowRequest(models.Model):
 
 
 class PostComment(models.Model):
-    "Generated Model"
+    """Generated Model"""
     user = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
@@ -138,7 +140,7 @@ class PostComment(models.Model):
         blank=True,
         on_delete=models.CASCADE,
         related_name="postcomment_post",
-    ) 
+    )
 
     def as_dict(self, logged_user=None):
         """
@@ -152,7 +154,8 @@ class PostComment(models.Model):
             'ref_comment': self.ref_comment.id if self.ref_comment else None,
             'post': self.post.id if self.post else None,
             'likes': self.likecomment_comment.count(),
-            'liked': True if logged_user and logged_user.id and logged_user.likecomment_liked_by.filter(comment=self).exists() else False,
+            'liked': True if logged_user and logged_user.id and logged_user.likecomment_liked_by.filter(
+                comment=self).exists() else False,
             'user': {
                 'id': self.user.id,
                 'username': self.user.username,
@@ -164,7 +167,7 @@ class PostComment(models.Model):
 
 
 class LikeComment(models.Model):
-    "Generated Model"
+    """Generated Model"""
     liked_by = models.ForeignKey(
         "users.User",
         on_delete=models.CASCADE,
@@ -181,7 +184,7 @@ class LikeComment(models.Model):
 
 
 class UpvotePost(models.Model):
-    "Generated Model"
+    """Generated Model"""
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
@@ -198,7 +201,7 @@ class UpvotePost(models.Model):
 
 
 class DownvotePost(models.Model):
-    "Generated Model"
+    """Generated Model"""
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
