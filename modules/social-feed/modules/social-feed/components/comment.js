@@ -1,23 +1,35 @@
-import React, { useContext, useState } from "react";
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from "react-native";
+import React, { useContext, useState, useRef } from "react";
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  Alert
+} from "react-native";
 import { OptionsContext } from "@options";
 import { useDispatch } from "react-redux";
 import { addComment, likeComment, unLikeComment } from "../store";
 
 /**
- * CommentComponent displays comments for a post and handles comment-related actions.
+ * Displays comments for a post and handles comment-related actions.
  * @param {Object} props - The component's properties.
  * @param {Array} props.comments - The comments to display.
  * @param {Function} props.setCallbackVariable - Function to set loading state.
  * @param {number} props.postId - The ID of the post.
  * @param {Object} props.navigation - React Navigation navigation object.
  */
-export const CommentComponent = ({
+export const Comment = ({
   comments,
   setCallbackVariable,
   postId,
   navigation
 }) => {
+  const [comment, setComment] = useState("");
+
+  // Save the comment reference for reply
+  const refComment = useRef(null);
+
   const { styles } = useContext(OptionsContext);
   const dispatch = useDispatch();
 
@@ -31,24 +43,20 @@ export const CommentComponent = ({
     dispatch(likeComment(id)).then(() => setCallbackVariable(false));
   };
 
-  const [comment, setComment] = useState("");
-  // Save the comment reference for reply
-  const [refComment, setRefComment] = useState("");
-
   // Submit a new comment to backend
   const submitComment = () => {
     if (comment.trim().length !== 0) {
       setCallbackVariable(true);
       dispatch(
         addComment({
-          comment: comment,
-          ref_comment: refComment,
+          comment,
+          ref_comment: refComment.current,
           post_id: postId
         })
       ).then(() => {
         setCallbackVariable(false);
         setComment("");
-        setRefComment("");
+        refComment.current = "";
       });
     } else {
       Alert.alert("Error", "Please input some text.");
@@ -116,7 +124,7 @@ export const CommentComponent = ({
                 <TouchableOpacity
                   style={styles.commentReplyButton}
                   onPress={() => {
-                    setRefComment(item.id);
+                    refComment.current = item?.id;
                     setComment("@" + item.user.name);
                   }}
                 >
@@ -187,7 +195,8 @@ export const CommentComponent = ({
                         <TouchableOpacity
                           style={{ borderWidth: 0, padding: 5 }}
                           onPress={() => {
-                            setRefComment(item.id);
+                            refComment.current = item?.id;
+
                             setComment("@" + item.user.name);
                           }}
                         >

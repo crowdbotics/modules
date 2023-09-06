@@ -5,7 +5,7 @@ import { OptionsContext } from "@options";
 import { useDispatch } from "react-redux";
 import { getFollowers, followUser } from "../store";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { toggleFollowById } from "../utils";
+import { getAlphabets, toggleFollowById } from "../utils";
 
 const FollowersList = () => {
   const dispatch = useDispatch();
@@ -25,10 +25,6 @@ const FollowersList = () => {
       })
       .catch((error) => __DEV__ && console.log(error));
   }, []);
-
-  // Generate an array of alphabets for grouping followers
-  const alpha = Array.from(Array(26)).map((e, i) => i + 65);
-  const alphabets = alpha.map((x) => String.fromCharCode(x));
 
   // Filter followers based on search query
   useEffect(() => {
@@ -60,39 +56,37 @@ const FollowersList = () => {
             {followers?.length} Followers
           </Text>
         </View>
-        {alphabets.map((alpha) => {
-          return (
-            <>
-              {followers?.filter(
-                (follower) => follower.name.charAt(0).toUpperCase() === alpha
-              ).length > 0 && (
-                <View style={styles.frequently}>
-                  <Text style={styles.frequentlyText}>{alpha}</Text>
-                </View>
-              )}
-              <View>
-                {followers
-                  ?.filter(
-                    (follower) =>
-                      follower.name.charAt(0).toUpperCase() === alpha
-                  )
-                  .map((follower, index) => {
-                    return (
-                      <Follower
-                        id={follower.id}
-                        name={follower.name}
-                        bgcolor={follower.bgcolor}
-                        follow={follower.follow}
-                        setFollowers={setFollowers}
-                        followers={followers}
-                        key={index}
-                      />
-                    );
-                  })}
+        {getAlphabets()?.map((alpha) => (
+          <>
+            {followers?.filter(
+              (follower) => follower?.name?.charAt(0).toUpperCase() === alpha
+            ).length > 0 && (
+              <View style={styles.frequently}>
+                <Text style={styles.frequentlyText}>{alpha}</Text>
               </View>
-            </>
-          );
-        })}
+            )}
+            <View>
+              {followers
+                ?.filter(
+                  (follower) =>
+                    follower?.name?.charAt(0)?.toUpperCase() === alpha
+                )
+                .map((follower, index) => {
+                  return (
+                    <Follower
+                      id={follower.id}
+                      name={follower.name}
+                      bgcolor={follower.bgcolor}
+                      follow={follower.follow}
+                      setFollowers={setFollowers}
+                      followers={followers}
+                      key={index}
+                    />
+                  );
+                })}
+            </View>
+          </>
+        ))}
       </View>
     </ScrollView>
   );

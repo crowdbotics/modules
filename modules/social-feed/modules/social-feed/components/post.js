@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { OptionsContext } from "@options";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { CommentComponent } from "./comment";
+import { Comment } from "./comment";
 import { useDispatch } from "react-redux";
 import { likePost, unLikePost } from "../store";
 
@@ -38,6 +38,7 @@ export const PostComponent = ({
     setCallbackVariable(true);
     dispatch(unLikePost(id)).then(() => setCallbackVariable(false));
   };
+
   return (
     <KeyboardAwareScrollView style={{ margin: 10 }}>
       <View style={styles.postDetailsContainer}>
@@ -124,7 +125,7 @@ export const PostComponent = ({
           style={[styles.imageIcons, styles.mr10]}
         />
       </View>
-      <CommentComponent
+      <Comment
         comments={comments || []}
         setCallbackVariable={setCallbackVariable}
         postId={id}

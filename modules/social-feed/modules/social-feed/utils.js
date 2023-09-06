@@ -22,7 +22,6 @@ export const mapErrors = (error) => {
 };
 
 export const toggleFollowById = (followers, targetId) => {
-  console.log("FOLLOOOOOOOOOOOOOOOOOOOOOOOOO", followers);
   // Find the index of the object with the targetId
   const index = followers.findIndex((obj) => obj.id === targetId);
 
@@ -39,4 +38,13 @@ export const toggleFollowById = (followers, targetId) => {
   }
   // If the object with the targetId is not found, return the original array
   return followers;
+};
+
+// This function generates an array which contains the uppercase English alphabet letters from 'A' to 'Z' as strings.
+export const getAlphabets = () => {
+  const alphabets = [];
+  for (let i = 65; i <= 90; i++) {
+    alphabets.push(String.fromCharCode(i));
+  }
+  return alphabets;
 };

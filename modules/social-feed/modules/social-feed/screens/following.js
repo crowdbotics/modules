@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { getFollowing, unFollowUser } from "../store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
+import { getAlphabets } from "../utils";
 
 /**
  * Component to display a list of following users.
@@ -26,10 +27,6 @@ const FollowingList = () => {
       })
       .catch((error) => __DEV__ && console.log(error));
   }, []);
-
-  // Alphabet array for filtering users
-  const alpha = Array.from(Array(26)).map((e, i) => i + 65);
-  const alphabets = alpha.map((x) => String.fromCharCode(x));
 
   // Filter users based on searchQuery
   useEffect(() => {
@@ -61,38 +58,36 @@ const FollowingList = () => {
             {followingUsers.length} Following
           </Text>
         </View>
-        {alphabets.map((alpha) => {
-          return (
-            <>
-              {followingUsers.filter(
-                (following) => following.name.charAt(0).toUpperCase() === alpha
-              ).length > 0 && (
-                <View style={styles.frequentAlphabets}>
-                  <Text style={styles.frequentLetters}>{alpha}</Text>
-                </View>
-              )}
-              <View>
-                {followingUsers
-                  .filter(
-                    (following) =>
-                      following.name.charAt(0).toUpperCase() === alpha
-                  )
-                  .map((following, index) => {
-                    return (
-                      <Follower
-                        id={following.id}
-                        name={following.name}
-                        bgcolor={following.bgcolor}
-                        following={followingUsers}
-                        setFollowing={setFollowing}
-                        key={index}
-                      />
-                    );
-                  })}
+        {getAlphabets()?.map((alpha) => (
+          <>
+            {followingUsers.filter(
+              (following) => following.name.charAt(0).toUpperCase() === alpha
+            ).length > 0 && (
+              <View style={styles.frequentAlphabets}>
+                <Text style={styles.frequentLetters}>{alpha}</Text>
               </View>
-            </>
-          );
-        })}
+            )}
+            <View>
+              {followingUsers
+                .filter(
+                  (following) =>
+                    following.name.charAt(0).toUpperCase() === alpha
+                )
+                .map((following, index) => {
+                  return (
+                    <Follower
+                      id={following.id}
+                      name={following.name}
+                      bgcolor={following.bgcolor}
+                      following={followingUsers}
+                      setFollowing={setFollowing}
+                      key={index}
+                    />
+                  );
+                })}
+            </View>
+          </>
+        ))}
       </View>
     </ScrollView>
   );
