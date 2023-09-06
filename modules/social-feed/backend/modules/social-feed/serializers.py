@@ -1,5 +1,6 @@
-import re
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
 from .models import (
     Chat,
     DownvotePost,
@@ -11,8 +12,6 @@ from .models import (
     ReportPost,
     UpvotePost,
 )
-from django.utils.translation import ugettext_lazy as _
-from rest_framework import serializers
 
 
 class PostMediaSerializer(serializers.ModelSerializer):
@@ -20,12 +19,14 @@ class PostMediaSerializer(serializers.ModelSerializer):
         model = PostMedia
         fields = "__all__"
 
+
 class CreatePostSerializer(serializers.ModelSerializer):
     media = PostMediaSerializer(many=True)
-    
+
     class Meta:
         model = Post
         fields = "__all__"
+
 
 class PostSerializer(serializers.ModelSerializer):
     media = PostMediaSerializer(many=True, source='postmedia_post')
@@ -66,7 +67,6 @@ class FollowRequestSerializer(serializers.ModelSerializer):
 
 
 class PostCommentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = PostComment
         fields = "__all__"
@@ -95,7 +95,9 @@ class ChatSerializer(serializers.ModelSerializer):
         model = Chat
         fields = "__all__"
 
+
 from home.api.v1.serializers import UserSerializer
+
 
 class PostDetailSerializer(serializers.ModelSerializer):
     media = PostMediaSerializer(many=True, source='postmedia_post')
@@ -147,7 +149,6 @@ class PostDetailSerializer(serializers.ModelSerializer):
             all_comments.append(root)
         return all_comments
 
-
     def get_comments_count(self, obj):
         return obj.postcomment_post.count()
 
@@ -168,12 +169,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_following(self, obj):
         return obj.user_following.count()
-        
+
     def get_followers(self, obj):
         return obj.user_followers.count()
-        
+
     def get_posts(self, obj):
-        return PostSerializer(obj.post_user, many=True).data
+        return PostSerializer(obj.post_user, many=True, context={'request': self.context['request']}).data
 
     def get_i_follow(self, obj):
         try:
@@ -183,7 +184,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             return False
         except KeyError:
             return False
-    
+
     def get_is_owner(self, obj):
         try:
             user = self.context['request'].user
@@ -193,13 +194,13 @@ class ProfileSerializer(serializers.ModelSerializer):
         except KeyError:
             return False
 
-
     class Meta:
         model = get_user_model()
         fields = (
             "id", "username", "first_name", "last_name",
-             "email",  "posts", "followers", "following", "i_follow", "is_owner"
+            "email", "posts", "followers", "following", "i_follow", "is_owner"
         )
+
 
 class FollowingSerializer(serializers.ModelSerializer):
     follow = serializers.SerializerMethodField()
@@ -212,7 +213,6 @@ class FollowingSerializer(serializers.ModelSerializer):
             return False
         except KeyError:
             return False
-
 
     class Meta:
         model = get_user_model()
@@ -234,3 +234,33 @@ class FollowersSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ("id", "username", "name", 'follow')
+
+
+class ReportPostsSerializer(serializers.Serializer):
+    post_id = serializers.IntegerField(required=True)
+    reason = serializers.CharField(required=True)
+
+
+class CreatePostsSerializer(serializers.Serializer):
+    media = serializers.FileField(required=True)
+    caption = serializers.CharField(required=True)
+
+
+class UnlikeCommentsSerializer(serializers.Serializer):
+    comment_id = serializers.IntegerField(required=True)
+
+
+class likeCommentsSerializer(serializers.Serializer):
+    comment_id = serializers.IntegerField(required=True)
+
+
+class CommentDeleteSerializer(serializers.Serializer):
+    comment_id = serializers.IntegerField(required=True)
+
+
+class PostLikeSerializer(serializers.Serializer):
+    post_id = serializers.IntegerField(required=True)
+
+
+class PostUnlikeSerializer(serializers.Serializer):
+    post_id = serializers.IntegerField(required=True)
