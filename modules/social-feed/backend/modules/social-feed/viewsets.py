@@ -1,6 +1,7 @@
 from rest_framework import authentication
 from rest_framework import viewsets
 from rest_framework.parsers import MultiPartParser, FileUploadParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import (
@@ -34,6 +35,7 @@ class PostViewSet(viewsets.ModelViewSet):
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
 
     def get_queryset(self):
@@ -60,6 +62,7 @@ class PostMediaViewSet(viewsets.ModelViewSet):
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
     queryset = PostMedia.objects.all()
     parser_classes = [MultiPartParser, FileUploadParser]
 
@@ -70,6 +73,7 @@ class ReportPostViewSet(viewsets.ModelViewSet):
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
     queryset = ReportPost.objects.all()
 
 
@@ -79,6 +83,7 @@ class FollowRequestViewSet(viewsets.ModelViewSet):
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
     queryset = FollowRequest.objects.all()
 
 
@@ -88,6 +93,7 @@ class PostCommentViewSet(viewsets.ModelViewSet):
         authentication.SessionAuthentication,
         authentication.TokenAuthentication,
     )
+    permission_classes = [IsAuthenticated]
     queryset = PostComment.objects.all()
 
 

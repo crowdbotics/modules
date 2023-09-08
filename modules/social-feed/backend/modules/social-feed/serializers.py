@@ -1,6 +1,9 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+User = get_user_model()
+
+from home.api.v1.serializers import UserSerializer
 from .models import (
     Chat,
     DownvotePost,
@@ -28,11 +31,34 @@ class CreatePostSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class LikeCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LikeComment
+        fields = "__all__"
+
+
+class PostCommentSerializer(serializers.ModelSerializer):
+    likes = serializers.SerializerMethodField()
+
+    def get_likes(self, obj):
+        return obj.likecomment_comment.count()
+
+    class Meta:
+        model = PostComment
+        fields = "__all__"
+        extra_kwargs = {'user': {'default': serializers.CurrentUserDefault()}}
+
+
 class PostSerializer(serializers.ModelSerializer):
-    media = PostMediaSerializer(many=True, source='postmedia_post')
+    media = PostMediaSerializer(many=True, source='postmedia_post', required=False)
+    comments = PostCommentSerializer(many=True, source='postcomment_post', required=False)
     upvotes = serializers.SerializerMethodField()
     downvotes = serializers.SerializerMethodField()
     liked = serializers.SerializerMethodField()
+    reported = serializers.SerializerMethodField()
+
+    def get_reported(self, obj):
+        return obj.reportpost_post.count()
 
     def get_upvotes(self, obj):
         return obj.upvotepost_post.count()
@@ -52,29 +78,19 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = "__all__"
+        extra_kwargs = {'user': {'default': serializers.CurrentUserDefault()}}
 
 
 class ReportPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReportPost
         fields = "__all__"
+        extra_kwargs = {'reported_by': {'default': serializers.CurrentUserDefault()}}
 
 
 class FollowRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FollowRequest
-        fields = "__all__"
-
-
-class PostCommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PostComment
-        fields = "__all__"
-
-
-class LikeCommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LikeComment
         fields = "__all__"
 
 
@@ -94,9 +110,6 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = "__all__"
-
-
-from home.api.v1.serializers import UserSerializer
 
 
 class PostDetailSerializer(serializers.ModelSerializer):
@@ -236,31 +249,21 @@ class FollowersSerializer(serializers.ModelSerializer):
         fields = ("id", "username", "name", 'follow')
 
 
-class ReportPostsSerializer(serializers.Serializer):
-    post_id = serializers.IntegerField(required=True)
-    reason = serializers.CharField(required=True)
-
-
-class CreatePostsSerializer(serializers.Serializer):
-    media = serializers.FileField(required=True)
-    caption = serializers.CharField(required=True)
-
-
 class UnlikeCommentsSerializer(serializers.Serializer):
-    comment_id = serializers.IntegerField(required=True)
+    comment_id = serializers.PrimaryKeyRelatedField(queryset=PostComment.objects.all(), required=True)
 
 
 class likeCommentsSerializer(serializers.Serializer):
-    comment_id = serializers.IntegerField(required=True)
+    comment_id = serializers.PrimaryKeyRelatedField(queryset=PostComment.objects.all(), required=True)
 
 
 class CommentDeleteSerializer(serializers.Serializer):
-    comment_id = serializers.IntegerField(required=True)
+    comment_id = serializers.PrimaryKeyRelatedField(queryset=PostComment.objects.all(), required=True)
 
 
 class PostLikeSerializer(serializers.Serializer):
-    post_id = serializers.IntegerField(required=True)
+    post_id = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), required=True)
 
 
 class PostUnlikeSerializer(serializers.Serializer):
-    post_id = serializers.IntegerField(required=True)
+    post_id = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), required=True)

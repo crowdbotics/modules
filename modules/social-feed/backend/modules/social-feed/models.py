@@ -23,8 +23,10 @@ class Post(models.Model):
     )
     caption = models.CharField(
         max_length=256,
+        null=True,
+        blank=True
     )
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
@@ -136,8 +138,6 @@ class PostComment(models.Model):
     )
     post = models.ForeignKey(
         Post,
-        null=True,
-        blank=True,
         on_delete=models.CASCADE,
         related_name="postcomment_post",
     )
