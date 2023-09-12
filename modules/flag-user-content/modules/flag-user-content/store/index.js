@@ -8,11 +8,9 @@ export const createReport = createAsyncThunk(
   async (payload) => {
     try {
       const response = await api.createReport(payload);
-      console.log("adskjvnskjdvn", response);
+      Alert.alert("Successfully reported!");
       return response.data;
     } catch (error) {
-      console.log("adskjvnskjdvn", error);
-
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }
@@ -37,11 +35,8 @@ export const getReportedList = createAsyncThunk(
   async () => {
     try {
       const response = await api.getReportedList();
-      console.log("response", response);
       return response.data;
     } catch (error) {
-      console.log("errrr", error);
-
       Alert.alert("Error", mapErrors(error));
       throw new Error();
     }

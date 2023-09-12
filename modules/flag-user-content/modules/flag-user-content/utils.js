@@ -1,3 +1,8 @@
+/**
+ * Maps an error object to a user-friendly error message.
+ * @param {Error} error - The error object to be mapped.
+ * @returns {string} The user-friendly error message.
+ */
 export const mapErrors = (error) => {
   let errorMessage = null;
   const errorsList = error.response.data;
@@ -13,7 +18,6 @@ export const mapErrors = (error) => {
         return `${element}: ${errorsList[element]}`;
       }
     });
-
     errorMessage = message.join("\n");
   } else {
     errorMessage = error.message;

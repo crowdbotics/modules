@@ -8,7 +8,6 @@ const Navigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={Home} />
-
       <Stack.Screen name="BlockedUser" component={BlockedUsers} />
     </Stack.Navigator>
   );

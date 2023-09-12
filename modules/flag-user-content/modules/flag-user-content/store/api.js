@@ -1,10 +1,7 @@
 import axios from "axios";
-import { getGlobalOptions } from "@options";
+import localOptions from "../options";
 
-const global = getGlobalOptions();
-const BASE_URL = "https://3a61-119-154-219-193.ngrok-free.app"; // change your BASE_URL in `options/options.js` to edit this value
-
-const accessToken = "91e188303334617e2d464589f6d0751f99810480";
+const { BASE_URL, ACCESS_TOKEN } = localOptions;
 
 export const createReport = (payload) => {
   const config = {
@@ -12,7 +9,7 @@ export const createReport = (payload) => {
     maxBodyLength: Infinity,
     url: `${BASE_URL}/modules/flag-user-content/create-report/`,
     headers: {
-      Authorization: `Token ${accessToken}`
+      Authorization: `Token ${ACCESS_TOKEN}`
     },
     data: payload
   };
@@ -23,9 +20,9 @@ export const getChoices = () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/modules/flag-user-content/choice_list/`,
+    url: `${BASE_URL}/modules/flag-user-content/choice-list/`,
     headers: {
-      Authorization: `Token ${accessToken}`
+      Authorization: `Token ${ACCESS_TOKEN}`
     }
   };
   return axios.request(config);
@@ -35,9 +32,9 @@ export const getReportedList = () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/modules/flag-user-content/reported_list/`,
+    url: `${BASE_URL}/modules/flag-user-content/reported-list/`,
     headers: {
-      Authorization: `Token ${accessToken}`
+      Authorization: `Token ${ACCESS_TOKEN}`
     }
   };
   return axios.request(config);

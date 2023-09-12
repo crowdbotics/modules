@@ -2,77 +2,127 @@ import React, { useContext, useState, Fragment, useEffect } from "react";
 import {
   Image,
   SafeAreaView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
   Modal,
   FlatList,
-  TextInput
+  TextInput,
+  Alert
 } from "react-native";
 import { OptionsContext } from "@options";
-
 import { useDispatch, useSelector } from "react-redux";
 import { createReport, getChoices } from "../../store";
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const dispatch = useDispatch();
-  // const { FLAG_TYPES } = useContext(OptionsContext);
-  const [modalVisible, setModalVisible] = useState(false);
+  const { IMAGE_LINK, POST_ID, USER_ID, POST_TITLE, styles } =
+    useContext(OptionsContext);
+  const [reportModal, setReportModal] = useState(false);
   const [modalState, setModalState] = useState(1);
   const [reason, setReason] = useState("");
+  const [blockUserModal, setBlockUserModal] = useState(false);
 
+  // Get report choices from Redux store
   const { entities } = useSelector(
     (state) => state?.FlagUserContent?.getChoices
   );
-  console.log(entities);
 
+  // Fetch report choices from backend when the component mounts
+  useEffect(() => {
+    dispatch(getChoices());
+  }, []);
+
+  // Report the post with predefined choices
   const onItemPress = (value, key) => {
-    console.log("KEYYYY", key)
     if (value === "Others") {
       setModalState(2);
     } else {
       dispatch(
         createReport({
           model_name: "user",
-          reported_id: 2,
+          reported_id: POST_ID,
           reason: key,
           other: ""
         })
-      );
+      ).then(() => {
+        setReportModal(false);
+        setModalState(1);
+        setBlockUserModal(true);
+      });
     }
   };
 
-  useEffect(() => {
-    dispatch(getChoices());
-  }, []);
+  // Report post with other reason
+  const onOtherReasonSubmit = () => {
+    if (reason) {
+      dispatch(
+        createReport({
+          model_name: "user",
+          reported_id: POST_ID,
+          reason: 10,
+          other: reason
+        })
+      ).then(() => {
+        setReportModal(false);
+        setModalState(1);
+        setReason("");
+        setBlockUserModal(true);
+      });
+    } else {
+      Alert.alert("Error", "Please write a reason to report this post.");
+    }
+  };
+
+  // Block the report owner
+  const onBlockUser = () => {
+    dispatch(
+      createReport({
+        model_name: "user",
+        reported_id: USER_ID,
+        reason: 10,
+        other: ""
+      })
+    ).then(() => {
+      setBlockUserModal(false);
+    });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainView}>
         <View style={styles.postHeader}>
-          <Text style={styles.postTitle}>Image title</Text>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Text style={styles.postTitle}>{POST_TITLE}</Text>
+          <TouchableOpacity onPress={() => setReportModal(true)}>
             <Text style={styles.reportPostText}>Report Post</Text>
           </TouchableOpacity>
         </View>
 
         <Image
           source={{
-            uri: "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg"
+            uri: IMAGE_LINK
           }}
           style={styles.postImage}
         />
       </View>
 
+      <TouchableOpacity
+        style={[styles.closeButton, { marginHorizontal: 25, marginTop: 20 }]}
+        onPress={() => navigation.navigate("BlockedUser")}
+      >
+        <Text style={styles.closeButtonText}>Reported List</Text>
+      </TouchableOpacity>
+
+      {/* Report Modal */}
       <Modal
-        visible={modalVisible}
-        backdropOpacity={0.7}
+        visible={reportModal}
+        backdropOpacity={0.8}
         transparent={true}
         animationType="slide"
       >
         <View style={styles.modalContainer}>
-          {modalState === 1 ? (
+          {modalState === 1
+            ? (
             <Fragment>
               <Text style={styles.modalTitle}>Select a Reason</Text>
               <FlatList
@@ -88,85 +138,63 @@ const Home = () => {
                 )}
               />
             </Fragment>
-          ) : (
+              )
+            : (
             <View>
-              <TextInput value={reason} onChangeText={setReason} style={{}} />
+              <Text style={styles.modalTitle}>Write your reason</Text>
+              <TextInput
+                value={reason}
+                onChangeText={setReason}
+                textAlignVertical="top"
+                multiline
+                style={styles.reasonInput}
+              />
             </View>
-          )}
+              )}
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={onOtherReasonSubmit}
+          >
+            <Text style={styles.submitButtonText}>Submit</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.closeButton}
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              setReportModal(false);
+              setModalState(1);
+            }}
           >
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
       </Modal>
+
+      {/* Block User Modal */}
+      <Modal
+        visible={blockUserModal}
+        backdropOpacity={0.8}
+        transparent={true}
+        animationType="slide"
+      >
+        <View style={styles.modalContainer}>
+          <Text style={styles.modalTitle}>Block post owner?</Text>
+
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.yesButton} onPress={onBlockUser}>
+              <Text style={styles.yesButtonText}>YES</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.noButton}
+              onPress={() => setBlockUserModal(false)}
+            >
+              <Text style={styles.noButtonText}>NO</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  reportPostText: { textDecorationLine: "underline" },
-  postImage: { height: 350, width: 357, borderRadius: 10 },
-  postTitle: { fontSize: 18, color: "#000" },
-  postHeader: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: 80,
-    borderRadius: 10,
-    alignItems: "center",
-    paddingHorizontal: 20
-  },
-  mainView: {
-    alignItems: "center",
-    marginHorizontal: 20,
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-      shadowOpacity: 0.29,
-      shadowRadius: 4.65
-    },
-    elevation: 7
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    justifyContent: "center"
-  },
-
-  modalContainer: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    marginTop: 150,
-    borderWidth: 3,
-    marginHorizontal: 10
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10
-  },
-  reportItem: {
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc"
-  },
-  closeButton: {
-    marginTop: 10,
-    paddingVertical: 10,
-    alignItems: "center",
-    backgroundColor: "#333",
-    borderRadius: 5
-  },
-  closeButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold"
-  }
-});
 
 export default Home;
