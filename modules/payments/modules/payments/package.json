@@ -9,7 +9,7 @@
     "dependencies": {
     },
     "x-dependencies": {
-        "@stripe/stripe-react-native": "^0.2.2",
+        "@stripe/stripe-react-native": "^0.27.2",
         "babel-plugin-import-glob": "^2.0.0",
         "babel-plugin-import-glob-meta": "github:crowdbotics/babel-plugin-import-glob-meta"
     }
