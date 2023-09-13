@@ -11,7 +11,7 @@ This react-native based module provides user a full social experience. Through t
 - View other users profile.
 - View own profile and uploaded posts.
 
-![image](https://github.com/shahraizali/modules/assets/120275623/e9164f7c-727b-4904-a1b3-6ca8aa75a3d0)
+![image](../../preview.png)
 
 ## ## Features
 
