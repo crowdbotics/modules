@@ -1,11 +1,19 @@
 import os
 
-from slack_sdk.errors import SlackApiError
-from slack_sdk import WebClient
 from django.utils.text import slugify
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+
+
+class DotDict(dict):
+    """dot.notation access to dictionary attributes"""
+    __getattr__ = dict.get
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
 
 
 class SlackService:
+
     def __init__(self, slack_bot_token=None, slack_admin_token=None):
         self.conversation_record_limit = 100
         if not slack_bot_token:
@@ -19,18 +27,14 @@ class SlackService:
 
     def send_message(self, message, channel_name):
         try:
-            response = self.slack_bot_client.chat_postMessage(
-                text=message, channel=channel_name
-            )
+            response = self.slack_bot_client.chat_postMessage(text=message, channel=channel_name)
             return response
         except SlackApiError as e:
             return e.response
 
     def upload_file(self, file, message, channel_names):
         try:
-            response = self.slack_bot_client.files_upload(
-                file=file, initial_comment=message, channels=channel_names
-            )
+            response = self.slack_bot_client.files_upload(file=file, initial_comment=message, channels=channel_names)
             return response
         except SlackApiError as e:
             return e.response
@@ -38,9 +42,7 @@ class SlackService:
     def create_channel(self, channel_name):
         try:
             channel_name_slug = slugify(channel_name)
-            response = self.slack_bot_client.conversations_create(
-                name=channel_name_slug
-            )
+            response = self.slack_bot_client.conversations_create(name=channel_name_slug)
             return response
         except SlackApiError as e:
             return e.response
@@ -51,11 +53,12 @@ class SlackService:
             conv_response = self.slack_bot_client.conversations_create(
                 name=channel_name_slug
             )
+            response = None
             if conv_response.status_code == 200:
-                channel_id = conv_response.data.get("channel", {}).get("id", None)
-                if channel_id:
+                if channel_id := conv_response.data.get('channel', {}).get('id', None):
                     response = self.invite_user_to_channel(
-                        channel_id=channel_id, emails=emails.split(",")
+                        channel_id=channel_id,
+                        emails=emails.split(',')
                     )
             return response
         except SlackApiError as e:
@@ -66,16 +69,14 @@ class SlackService:
             if channel_id is None and channel_name is not None:
                 channel_id, status_code = self.get_channel_id(channel_name)
                 if status_code == 404:
-                    return channel_id
+                    return DotDict({"data": {"channel_id": channel_id}, "status_code": status_code})
+            response = None
             if self.iterative_invites:
                 for email in emails:
-                    response = self.slack_bot_client.conversations_inviteShared(
-                        channel=channel_id, emails=email
-                    )
+                    response = self.slack_bot_client.conversations_inviteShared(channel=channel_id, emails=email)
             else:
-                response = self.slack_bot_client.conversations_inviteShared(
-                    channel=channel_id, emails=emails[: self.invite_limit]
-                )
+                response = self.slack_bot_client.conversations_inviteShared(channel=channel_id,
+                                                                            emails=emails[:self.invite_limit])
             return response
         except SlackApiError as e:
             return e.response
@@ -83,19 +84,16 @@ class SlackService:
     def get_channel_id(self, channel_name):
         try:
             response = self.slack_bot_client.conversations_list()
-            for channel in response.data["channels"]:
-                if channel["name"] == channel_name:
-                    return channel["id"], response.status_code
+            for channel in response.data['channels']:
+                if channel['name'] == channel_name:
+                    return channel['id'], response.status_code
             return None, 404
         except SlackApiError as e:
             return e.response, None
 
     def get_channel_history(self, channel_id, limit, cursor):
         try:
-            payload = {
-                "channel": channel_id,
-                "limit": limit or self.conversation_record_limit,
-            }
+            payload = {"channel": channel_id, "limit": limit or self.conversation_record_limit}
             if cursor:
                 payload["cursor"] = cursor
             response = self.slack_bot_client.conversations_history(**payload)
