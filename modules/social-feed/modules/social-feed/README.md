@@ -11,7 +11,7 @@ This react-native based module provides user a full social experience. Through t
 - View other users profile.
 - View own profile and uploaded posts.
 
-![image](../../preview.png)
+![image](https://raw.githubusercontent.com/crowdbotics/modules/a895d3a9241637125ea20c708306df6e05b02685/modules/social-feed/preview.png)
 
 ## ## Features
 
