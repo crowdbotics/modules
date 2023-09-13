@@ -1,12 +1,16 @@
 import { StyleSheet } from "react-native";
 
+// Post to be reported
 const POST_ID = 0;
+// User to be blocked
 const USER_ID = 0;
+const POST_TITLE = "Post title";
+
+// Post image
 const IMAGE_LINK =
   "https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_1280.jpg";
-const POST_TITLE = "Post title";
+// For API authentication
 const ACCESS_TOKEN = "";
-const BASE_URL = "https://demo-flag-user-43359.botics.co";
 
 const styles = StyleSheet.create({
   // Home
@@ -140,7 +144,6 @@ export default {
   USER_ID: USER_ID,
   IMAGE_LINK: IMAGE_LINK,
   POST_TITLE: POST_TITLE,
-  BASE_URL: BASE_URL,
   ACCESS_TOKEN: ACCESS_TOKEN,
   styles
 };

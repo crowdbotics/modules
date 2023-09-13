@@ -74,13 +74,16 @@ const Home = ({ navigation }) => {
     }
   };
 
+  // Find the reason id for block user
+  const blockId = entities?.findIndex((item) => item?.value === "Block User");
+
   // Block the report owner
   const onBlockUser = () => {
     dispatch(
       createReport({
         model_name: "user",
         reported_id: USER_ID,
-        reason: 10,
+        reason: entities[blockId]?.id,
         other: ""
       })
     ).then(() => {
@@ -126,7 +129,7 @@ const Home = ({ navigation }) => {
             <Fragment>
               <Text style={styles.modalTitle}>Select a Reason</Text>
               <FlatList
-                data={entities}
+                data={entities.filter((item) => item.value !== "Block User")}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <TouchableOpacity
