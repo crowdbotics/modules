@@ -1,47 +1,42 @@
+# Payments React native specs
 
+## Module description
 
-# iOS
-making sure the minimal iOS platform is set to 11 in `ios/Podfile` file
+This is a react native based module which allows user to do payments using stripe, google pay and apple pay.
 
-if you see this error
-Undefined symbols for architecture x86_64 on iOS
-While building your iOS project, you may see a Undefined symbols for architecture x86_64 error. This is caused by react-native init template configuration that is not fully compatible with Swift 5.1.
+- Pay through stripe
+- Pay through google pay
+- Pay through apple pay
 
-Undefined symbols for architecture x86_64:
-  "(extension in Foundation):__C.NSScanner.scanUpToString(Swift.String) -> Swift.String?", referenced from:
-      static Stripe.STPPhoneNumberValidator.formattedRedactedPhoneNumber(for: Swift.String, forCountryCode: Swift.String?) -> Swift.String in libStripe.a(STPPhoneNumberValidator.o)
-  "__swift_FORCE_LOAD_$_swiftUniformTypeIdentifiers", referenced from:
-      __swift_FORCE_LOAD_$_swiftUniformTypeIdentifiers_$_Stripe in libStripe.a(PKPaymentAuthorizationViewController+Stripe_Blocks.o)
-Follow these steps to resolve this:
+![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/24f43bc0-46f3-475d-b4ad-52b19a525dd2)
 
-### Solution
-Open your project via Xcode, go to project -> build settings, find library search paths and remove all swift related entries such as: $(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME) and $(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME).
-Create a new Swift file to the project (File > New > File > Swift), give it any name (e.g. Fix.swift) and create a bridging header when prompted by Xcode.
+## ## Features
 
+ - [x] This module includes environment variables.
+ - [x] This module requires manual configurations.
+ - [ ] This module can be configured with module options.
+ - [x] This module requires manual Android setup.
+ - [ ] This module requires manual iOS setup.
 
-# Android
-AndroidManifest.xml
-<application>
-...
-<meta-data
-        android:name="com.google.android.gms.wallet.api.enabled"
-        android:value="true" />
-...
-</application>
+## ## 3rd party setup
 
+Create `Stripe` developer account:
 
-app/build.gradle
+- Sign up for Stripe at https://dashboard.stripe.com/register.
+- After successful sign up, on the dashboard click `Home` tab.
+- Copy the stripe `Secrete Key` and `Publish Key` for later use.
+  ![stripe](https://user-images.githubusercontent.com/76822297/227866954-e3fd72a4-e8c5-46e2-84d8-d0e59bc91a5c.png)
 
-dependencies {
-    ....
-    
-    implementation 'com.stripe:stripe-android:18.2.0'
+## Dependencies
 
-}
+Dependencies used:
+- @stripe/stripe-react-native - https://www.npmjs.com/package/@stripe/stripe-react-native
 
+## ## Module Options
 
-# Global configs
-in options/options.js
+### Global Configs
+
+In `options/options.js`
 
 configue your server endpoints like this
 
@@ -52,32 +47,52 @@ export const globalOptions = {
   stripe_secret_key: "sk_test_xxxxxxxx"
 }
 
-# Local configs
+
+### Local Configs
+
 1. in modules/payments/options.js
 
-configure your local options like this
+configure your options like this
 
-```
-export const localOptions = {
-  merchantName: "Example Inc.",
-  enableGooglePay: true,
-  enableApplePay: true,
-  merchantIdentifier: "merchant.com.crowdbotics.inaday",
-  merchantCountryCode: "US",
-  merchantCurrency: "USD",
-  stripeTestEnv: true,
-  stripePublishKey: "pk_test_xxxxxxxxxx"
-};
+```js
+const STRIPE_SECRET_KEY = "sk_test_xxxxxxxxxxx";
+const MERCHANT_NAME = "Example Inc.";
+const ENABLE_GOOGLE_PAY = true;
+const ENABLE_APPLE_PAY = true;
+const MERCHANT_IDENTIFIER = "merchant.com.crowdbotics.inaday";
+const MERCHANT_COUNTRY_CODE = "US";
+const MERCHANT_CURRENCY = "USD";
+const STRIPE_TEST_ENV = true;
+const STRIPE_PUBLISH_KEY = "pk_test_xxxxxxxxxx";
 ```
 
-2. in modules/payments/api.js
+2. in `modules/payments/api.js`
 
 Update the token to make the api call with Authorization
-```
-const token = "Token 676364403988909cde7f501aa2efeaf9ca30d18c";
-```
-# Server
 
-python manage.py runserver 192.168.100.7:8000
+```js
+const token = "Token ****************************";
+```
 
-here ip is local ip (can get it from ifconfig of your network settings)
+### Android setup
+
+`AndroidManifest.xml`
+
+```xml
+<application>
+<meta-data
+        android:name="com.google.android.gms.wallet.api.enabled"
+        android:value="true" />
+</application>
+```
+
+app/build.gradle
+
+```powershell
+dependencies { 
+    implementation 'com.stripe:stripe-android:18.2.0'
+}
+```
+### iOS setup
+
+No iOS setup required.

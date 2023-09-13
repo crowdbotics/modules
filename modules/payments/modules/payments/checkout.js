@@ -5,8 +5,7 @@ import {
   Alert,
   TextInput,
   Platform,
-  TouchableOpacity,
-  Dimensions
+  TouchableOpacity
 } from "react-native";
 import { OptionsContext, getGlobalOptions } from "@options";
 import {
@@ -17,61 +16,106 @@ import {
   ApplePayButton,
   GooglePayButton
 } from "@stripe/stripe-react-native";
-import { fetchPaymentSheetParams } from "./api";
-const deviceWidth = Dimensions.get("window").width;
+import { fetchPaymentSheetParams } from "./store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+import { validateConfig } from "./utils";
 
-const global = getGlobalOptions();
-
-export const CheckoutScreen = (params) => {
-  // continued from above
+/**
+ * CheckoutScreen component for processing payments
+ * @returns {React.ReactNode}
+ */
+export const CheckoutScreen = () => {
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
-  const { styles, localOptions } = options;
   const {
-    merchantName,
-    enableGooglePay,
-    enableApplePay,
-    merchantCountryCode,
-    stripeTestEnv,
-    merchantCurrency
-  } = localOptions;
-  const [value, setValue] = useState({
+    styles,
+    MERCHANT_NAME,
+    ENABLE_GOOGLE_PAY,
+    ENABLE_APPLE_PAY,
+    MERCHANT_COUNTRY_CODE,
+    STRIPE_TEST_ENV,
+    MERCHANT_CURRENCY
+  } = options;
+
+  /**
+   * State for transaction amount
+   */
+  const [transactionAmount, setTransactionAmount] = useState({
     amount: "1"
   });
-  const [gPayinitialized, setGPayInitialized] = useState(false);
-  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+
+  /**
+   * State to track Google Pay initialization status
+   */
+  const [googlePayInitialized, setGooglePayInitialized] = useState(false);
+
+  /**
+   * State to handle loading
+   */
   const [loading, setLoading] = useState(false);
 
-  const clientSecret = global.stripeSecretKey;
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const clientSecret = getGlobalOptions().stripeSecretKey;
 
+  /**
+   * Display an error alert for amount validation
+   */
+  const showAmountError = () => {
+    Alert.alert("Error", "Please enter some amount");
+  };
+
+  /**
+   * Initialize the payment sheet with paymentIntent, ephemeralKey, and customer data from the backend
+   */
   const initializePaymentSheet = async () => {
-    const { paymentIntent, ephemeralKey, customer } =
-      await fetchPaymentSheetParams(value.amount);
-
-    const { error } = await initPaymentSheet({
-      customerId: customer,
-      customerEphemeralKeySecret: ephemeralKey,
-      paymentIntentClientSecret: paymentIntent,
-      merchantDisplayName: merchantName,
-      applePay: false,
-      googlePay: enableGooglePay,
-      merchantCountryCode: merchantCountryCode,
-      testEnv: stripeTestEnv // use test environment
-    });
-    __DEV__ && console.log(error);
-    if (!error) {
+    const errors = validateConfig(
+      MERCHANT_NAME,
+      ENABLE_GOOGLE_PAY,
+      MERCHANT_COUNTRY_CODE,
+      STRIPE_TEST_ENV
+    );
+    if (!errors.length) {
       setLoading(true);
+      try {
+        const res = await dispatch(fetchPaymentSheetParams(transactionAmount.amount));
+        const { paymentIntent, ephemeralKey, customer } = unwrapResult(res);
+        const { error } = await initPaymentSheet({
+          customerId: customer,
+          customerEphemeralKeySecret: ephemeralKey,
+          paymentIntentClientSecret: paymentIntent,
+          merchantDisplayName: MERCHANT_NAME,
+          applePay: false,
+          googlePay: ENABLE_GOOGLE_PAY,
+          merchantCountryCode: MERCHANT_COUNTRY_CODE,
+          testEnv: STRIPE_TEST_ENV // use test environment
+        });
+        if (!error) {
+          setLoading(false);
+        }
+      } catch (error) {
+        setLoading(false);
+      }
     }
   };
 
-  // Pay Through Credit Card
+  /**
+   * Handle the payment process through Credit Card
+   */
   const openPaymentSheet = async () => {
-    await initializePaymentSheet();
-    const { error } = await presentPaymentSheet({ clientSecret });
+    if (transactionAmount.amount) {
+      await initializePaymentSheet();
+      const { error } = await presentPaymentSheet({ clientSecret });
 
-    if (error) {
-      Alert.alert(`Error code: ${error.code}`, error.message);
+      if (error) {
+        setLoading(false);
+        Alert.alert(`Error code: ${error.code}`, error.message);
+      } else {
+        setLoading(false);
+        Alert.alert("Success", "Your payment is successful!");
+      }
     } else {
-      Alert.alert("Success", "Your order is confirmed!");
+      showAmountError();
     }
   };
 
@@ -89,110 +133,147 @@ export const CheckoutScreen = (params) => {
       }
     });
 
+  /**
+   * Handle the payment process through Apple Pay
+   */
   const payApple = async () => {
-    const { error, paymentMethod } = await presentApplePay({
-      cartItems: [{ label: merchantName, amount: value.amount }],
-      country: merchantCountryCode,
-      currency: merchantCurrency,
-      requiredShippingAddressFields: ["emailAddress", "phoneNumber", "name"],
-      requiredBillingContactFields: ["phoneNumber", "name"],
-      jcbEnabled: true
-    });
-
-    if (error) {
-      Alert.alert(error.code, error.message);
-    } else {
-      __DEV__ && console.log(JSON.stringify(paymentMethod, null, 2));
-      const { paymentIntent } = await fetchPaymentSheetParams(value.amount);
-
-      const { error: confirmApplePayError } = await confirmApplePayPayment(
-        paymentIntent
-      );
-
-      if (confirmApplePayError) {
-        Alert.alert(confirmApplePayError.code, confirmApplePayError.message);
-      } else {
-        Alert.alert("Success", "The payment was confirmed successfully!");
-      }
-    }
-  };
-  if (enableGooglePay) {
-    // Google Pay related config
-    const { initGooglePay } = useGooglePay();
-
-    useEffect(() => {
-      async function initialize() {
-        const { error } = await initGooglePay({
-          testEnv: stripeTestEnv,
-          merchantName: merchantName,
-          countryCode: merchantCountryCode,
-          billingAddressConfig: {
-            format: "FULL",
-            isPhoneNumberRequired: true,
-            isRequired: false
-          },
-          existingPaymentMethodRequired: false,
-          isEmailRequired: true
+    if (transactionAmount.amount) {
+      const errors = validateConfig(MERCHANT_COUNTRY_CODE, MERCHANT_CURRENCY);
+      if (!errors.length) {
+        const { error } = await presentApplePay({
+          cartItems: [
+            { label: MERCHANT_NAME, amount: transactionAmount.amount }
+          ],
+          country: MERCHANT_COUNTRY_CODE,
+          currency: MERCHANT_CURRENCY,
+          requiredShippingAddressFields: [
+            "emailAddress",
+            "phoneNumber",
+            "name"
+          ],
+          requiredBillingContactFields: ["phoneNumber", "name"],
+          jcbEnabled: true
         });
 
         if (error) {
           Alert.alert(error.code, error.message);
-          return;
+        } else {
+          /**
+           * This action dispatches the API which fetches the paymentIntent for apple pay
+           * @param  {String} amount Transaction amount
+           */
+          try {
+            const res = await dispatch(fetchPaymentSheetParams(transactionAmount.amount));
+            const { paymentIntent } = unwrapResult(res);
+            const { error: confirmApplePayError } = await confirmApplePayPayment(paymentIntent);
+            if (confirmApplePayError) {
+              Alert.alert(confirmApplePayError.code, confirmApplePayError.message);
+            } else {
+              Alert.alert("Success", "Your payment is successful!");
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
-        setGPayInitialized(true);
       }
+    } else {
+      showAmountError();
+    }
+  };
+  if (ENABLE_GOOGLE_PAY) {
+    // Google Pay related config
+    const { initGooglePay } = useGooglePay();
+
+    /**
+     * Initialize Google Pay with provided credentials
+     */
+    const initializeGooglePay = async () => {
+      const { error } = await initGooglePay({
+        testEnv: STRIPE_TEST_ENV,
+        merchantName: MERCHANT_NAME,
+        countryCode: MERCHANT_COUNTRY_CODE,
+        billingAddressConfig: {
+          format: "FULL",
+          isPhoneNumberRequired: true,
+          isRequired: false
+        },
+        existingPaymentMethodRequired: false,
+        isEmailRequired: true
+      });
+      if (error) {
+        Alert.alert(error.code, error.message);
+      }
+      setGooglePayInitialized(true);
+    };
+
+    useEffect(() => {
       if (Platform.OS === "android") {
-        initialize();
+        initializeGooglePay();
       }
     }, [initGooglePay]);
   }
 
+  /**
+   * Handle the payment process through Google Pay
+   */
   const payGoogle = async () => {
-    const { paymentIntent } = await fetchPaymentSheetParams(value.amount);
-    const { error } = await presentGooglePay({
-      clientSecret: paymentIntent,
-      currencyCode: merchantCurrency
-    });
+    if (transactionAmount.amount) {
+      const errors = validateConfig(MERCHANT_CURRENCY);
+      if (!errors.length) {
+        setLoading(true);
+        try {
+          const res = await dispatch(fetchPaymentSheetParams(transactionAmount.amount));
+          setLoading(false);
+          const { paymentIntent } = unwrapResult(res);
+          const { error } = await presentGooglePay({
+            clientSecret: paymentIntent,
+            currencyCode: MERCHANT_CURRENCY
+          });
 
-    if (error) {
-      Alert.alert(error.code, error.message);
-      return;
+          if (error) {
+            Alert.alert(error.code, error.message);
+            return;
+          }
+          Alert.alert("Success", "The SetupIntent was confirmed successfully.");
+        } catch (error) {
+          setLoading(false);
+          console.log(error);
+        }
+      }
+    } else {
+      showAmountError();
     }
-    Alert.alert("Success", "The SetupIntent was confirmed successfully.");
   };
 
   return (
     <View>
-      <View style={{ paddingHorizontal: 15, margin: 20 }}>
-        <Text style={{}}>Amount</Text>
-        <TextInput
+      <View style={styles.checkoutView}>
+        <Text>Amount</Text>
+        <Input
           placeholder={"Enter Amount"}
-          value={value.amount}
-          onChangeText={(text) => setValue({ ...value, amount: text })}
-          style={styles.inputField}
-        ></TextInput>
+          value={transactionAmount}
+          setValue={setTransactionAmount}
+        />
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
+      <View style={styles.buttonRow}>
         <TouchableOpacity
           style={[styles.button, styles.payNow]}
           onPress={openPaymentSheet}
+          disabled={loading}
         >
           <Text style={styles.buttonText}>Pay Now</Text>
         </TouchableOpacity>
 
-        {Platform.OS === "android" && enableGooglePay && (
+        {Platform.OS === "android" && ENABLE_GOOGLE_PAY && (
           <GooglePayButton
-            disabled={!gPayinitialized || loading}
-            style={[
-              styles.payButton,
-              { width: deviceWidth / 2.5, height: 52, marginTop: 5 }
-            ]}
+            disabled={!googlePayInitialized || loading}
+            style={styles.payButton}
             type="pay"
             onPress={payGoogle}
           />
         )}
 
-        {enableApplePay && isApplePaySupported && (
+        {ENABLE_APPLE_PAY && isApplePaySupported && (
           <ApplePayButton
             onPress={payApple}
             type="plain"
@@ -202,5 +283,25 @@ export const CheckoutScreen = (params) => {
         )}
       </View>
     </View>
+  );
+};
+
+/**
+ * Custom Text Input component
+ * @param  {String} placeholder Placeholder string for the input
+ * @param  {Object} value current value of the input
+ * @param  {Function} setValue Function used to update the current value of the input
+ * @returns {React.ReactNode}
+ */
+const Input = ({ placeholder, value, setValue }) => {
+  const options = useContext(OptionsContext);
+  const { styles } = options;
+  return (
+    <TextInput
+      placeholder={placeholder}
+      value={value.amount}
+      onChangeText={(text) => setValue({ ...value, amount: text })}
+      style={styles.inputField}
+    />
   );
 };
