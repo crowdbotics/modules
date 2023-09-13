@@ -8,7 +8,11 @@ export const createReport = createAsyncThunk(
   async (payload) => {
     try {
       const response = await api.createReport(payload);
-      Alert.alert("Successfully reported!");
+      if (payload.reason === 10) {
+        Alert.alert("Success", "User successfully blocked!");
+      } else {
+        Alert.alert("Successfully reported!");
+      }
       return response.data;
     } catch (error) {
       Alert.alert("Error", mapErrors(error));

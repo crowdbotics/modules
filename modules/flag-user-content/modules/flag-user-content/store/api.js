@@ -1,7 +1,11 @@
+import { getGlobalOptions } from "@options";
 import axios from "axios";
 import localOptions from "../options";
 
-const { BASE_URL, ACCESS_TOKEN } = localOptions;
+const global = getGlobalOptions();
+const BASE_URL = global.url; // change your BASE_URL in `options/options.js` to edit this value
+
+const { ACCESS_TOKEN } = localOptions;
 
 export const createReport = (payload) => {
   const config = {
