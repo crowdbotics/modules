@@ -13,7 +13,7 @@ This module can be used to do crash reporting in a react native app.
 - Record error
 - Check Unsent reports
 
-Include preview screenshots or videos here.
+![image](preview.png)
 
 ## ## Features
 
