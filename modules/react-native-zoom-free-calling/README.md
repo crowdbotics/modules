@@ -10,7 +10,7 @@ This react native based module can be used by users for managing, creating, and 
 - Get Schedule List  
 - Delete the Meeting
 
-![image](https://github.com/cbshoaib/modules/assets/76822297/c528bf82-bf08-4ab7-84c3-fc382088da76)
+![image](preview.png)
 
 ## ## Features
 
