@@ -7,7 +7,7 @@ This react native module allows users to authenticate with Azure Ad.
 - Authorization with user interaction
 - Silent authorization
 
-![image](https://github.com/shahraizali/modules/assets/76822297/8fdcd075-0812-4c90-888c-b587a62dbacc)
+![image](preview.png)
 
 ## ## Features
 
