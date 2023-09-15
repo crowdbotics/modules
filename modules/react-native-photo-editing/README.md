@@ -9,7 +9,7 @@ The module allows users to edit photo, by applying filters, contrast, opacity, r
 - Edits
 - Shadows
 
-![image](https://github.com/cbshoaib/modules/assets/76822297/34e2a5dc-d7da-49ca-9cf7-191c943e72f3)
+![image](preview.png)
 
 ## ## Features
 
