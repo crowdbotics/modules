@@ -13,7 +13,7 @@ The Google Analytics(firebase) Module is a React Native-based module that allows
 - Ability to signifies the start/completion of the on-boarding process in app.
 - Ability to identify the screen user is currently viewing.
 
-![image](https://github.com/cbshoaib/modules/assets/76822297/f4702775-0b7b-4685-b5da-45774719348b)
+![image](preview.png)
 
 
 ## ## Features
