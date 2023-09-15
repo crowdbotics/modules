@@ -17,7 +17,7 @@ Using this module users will implement a dynamic, highly customized, and optimiz
 - Get the routes according to the walking, cycling, and driving mode.
 - Ability to get the other possible route to the destination
 
-![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/a1c58719-174e-4e21-927e-08d69fa0852f)
+![image](preview.png)
 
 ## ## Features
 
