@@ -7,40 +7,7 @@ This module allows the user to generate qr-code by entering text and read a qr-c
 - Generate a qr code by entering custom text
 - Scan qr code through camera.
 
-![image](https://github.com/saad-abid-crowdbotics/modules/assets/76822297/7605b2a5-8ec5-46d2-99b8-dba56ff39e92)
-
-## Feature
-
-### Qr code scanner
-user can scan a qr code
-
-### Qr code generator
-user can generate a qr code via backend
-
-## Required Dependencies
-All the required packages are given in the `package.json` file. Make sure all the dependencies are installed before using this module. 
-Keep the below packages in project's `package.json` file.
-```
-    "react-native-camera": "4.2.1",
-    "react-native-pager-view": "5.4.15",
-    "react-native-tab-view": "3.1.1",
-    "@react-navigation/native-stack": "6.5.0",
-    "react-native-screens": "3.10.2",
-    "react-native-qrcode-scanner": "1.5.5",
-    "react-native-permissions": "^2.0.10"
-```
-RUn the command to install dependencies:
-  ```
-  yarn install
-  ```
-
-## API Calling Methods
-All the api calling methods reside in `api/index.js` file.
-
-* **getQr**
-`getQr` method takes an object containing `text` and sends it to backend to generate qrcode. Returns generated qrcode in image form.
-
-
+![image](preview.png)
 
 ## ## Features
 
