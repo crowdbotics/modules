@@ -8,7 +8,7 @@ This module enables subscription options, including one-time and recurring, as w
 - Ability to get the details of subscription plans
 - Ability to cancel the subscribed plans 
 
-![image](https://github.com/shahraizali/modules/assets/76822297/1d3d4282-0b5c-4571-bb89-9879fcd7227b)
+![image](preview.png)
 
 
 ## Features
