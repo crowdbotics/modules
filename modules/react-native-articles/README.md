@@ -1,24 +1,44 @@
-# Article List and Detail
+# Articles React native specs
 
-## Setup
+## Module description
 
-Open `modules/articles/store/api.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint (ie. demo0122202101-24002.botics.com/modules/articles). The initial piece is your project name and the numeric piece is your project number.
+This module allows user to see a list of articles and read full details about a specific one.
 
-## Manual Setup
+- Get a list of the articles
+- Read a complete article
 
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+![image](preview.png)
 
-```javascript
-import Articles from "@modules/articles";
+## ## Features
 
-const { title, navigator, slice } = Articles;
-```
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
+- [ ] This module requires manual Android setup.
+- [ ] This module requires manual iOS setup.
 
-## Contributing
+## ## 3rd party setup
 
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-Please make sure to update tests as appropriate.
+No 3rd party account required.
 
-## License
+## Dependencies
 
-[MIT](https://choosealicense.com/licenses/mit/)
+No dependencies used.
+
+## ## Module Options
+
+### Global Configs
+
+No global configs required.
+
+### Local Configs
+
+Open `modules/articles/store/api.js` and update the `baseURL` with your application's URL followed by `/modules/articles` which is the endpoint.
+
+### Android setup
+
+No android setup required.
+
+### iOS setup
+
+No iOS setup required.
