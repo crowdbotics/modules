@@ -12,6 +12,9 @@ user_app_setting_signal = django.dispatch.Signal()
 
 @receiver(post_save, sender=User)
 def create_user_settings(sender, instance, created, **kwargs):
+    """
+    On user sign-up signal will be called and all app settings will be assigned to user.
+    """
     if created:
         settings = Settings.objects.all().values('id', 'default_choice')
         user_setting_data = []
@@ -24,12 +27,20 @@ def create_user_settings(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Settings)
 def delete_user_settings(sender, instance, *args, **kwargs):
+    """
+    App owner can delete the setting.
+    on deletion signal will be called and setting will be deleted for all users.
+    """
     if instance:
         UserAppSetting.objects.filter(setting=instance).delete()
 
 
 @receiver(user_app_setting_signal)
 def user_app_setting_update(current, previous, **kwargs):
+    """
+    App owner can add new/Update settings.
+    New setting will be assigned to all users automatically.
+    """
     if not previous and current.default_choice and not current.settings.default_choice:
         setting_users = User.objects.all()
         for user in setting_users:

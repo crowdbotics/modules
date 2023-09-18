@@ -17,12 +17,12 @@ class GetUserAppSettingsViewTestCase(APITestCase):
 
     def test_get_settings(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        url = '/modules/settings-features/get_settings/'
+        url = '/modules/settings/get_settings/'
         response = self.client.get(url, format='json')
         self.assertEquals(response.status_code, status.HTTP_200_OK)
 
     def test_get_settings_without_authorization(self):
-        url = '/modules/settings-features/get_settings/'
+        url = '/modules/settings/get_settings/'
         response = self.client.get(url, format='json')
         self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -40,7 +40,7 @@ class UpdateUserSettingsViewTestCases(APITestCase):
 
     def test_update_user_settings(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        url = '/modules/settings-features/update_settings/'
+        url = '/modules/settings/update_settings/'
         data = {
             "setting": self.settings.id,
             "current_choices": [self.state_choices.id]
@@ -51,7 +51,7 @@ class UpdateUserSettingsViewTestCases(APITestCase):
 
     def test_update_user_settings_invalid_data(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        url = '/modules/settings-features/update_settings/'
+        url = '/modules/settings/update_settings/'
         data = {
             "setting": self.settings.id,
             "current_choices": [self.state_choices.id, self.state_choice.id]
@@ -61,7 +61,7 @@ class UpdateUserSettingsViewTestCases(APITestCase):
         self.assertEquals(response.data['error'], "Can't send multiple selected_state id's for selected setting")
 
     def test_update_user_settings_without_authorization(self):
-        url = '/modules/settings-features/update_settings/'
+        url = '/modules/settings/update_settings/'
         data = {
             "setting": self.settings.id,
             "current_choices": [self.state_choices.id]

@@ -41,6 +41,9 @@ class StateChoices(models.Model):
     @transaction.atomic()
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
+        """
+        Save method override to set the default or updated choice of settings.
+        """
         prev_obj = None
         if not self.settings.default_choice:
             self.default_choice = True

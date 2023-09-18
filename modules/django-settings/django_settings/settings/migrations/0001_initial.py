@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('choice', models.CharField(max_length=256)),
                 ('default_choice', models.BooleanField(default=False)),
-                ('settings', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choice_settings', to='settings_features.settings')),
+                ('settings', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='choice_settings', to='settings.settings')),
             ],
             options={
                 'verbose_name_plural': 'Settings Choices',
@@ -42,14 +42,14 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='settings',
             name='default_choice',
-            field=models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='settings_default_state', to='settings_features.statechoices'),
+            field=models.ForeignKey(blank=True, editable=False, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='settings_default_state', to='settings.statechoices'),
         ),
         migrations.CreateModel(
             name='UserAppSetting',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('current_choices', models.ManyToManyField(to='settings_features.StateChoices')),
-                ('setting', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_app_setting', to='settings_features.settings')),
+                ('current_choices', models.ManyToManyField(to='settings.StateChoices')),
+                ('setting', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='user_app_setting', to='settings.settings')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='setting_user', to=settings.AUTH_USER_MODEL)),
             ],
             options={

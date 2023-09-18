@@ -2,7 +2,7 @@ from django.apps import AppConfig
 
 
 class SettingsFeaturesConfig(AppConfig):
-    name = "modules.settings-features.settings_features"
+    name = "modules.django_settings.settings"
     verbose_name = "SettingsFeatures"
 
     def ready(self):

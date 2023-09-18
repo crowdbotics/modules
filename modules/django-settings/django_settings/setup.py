@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_settings-features",
+    name="cb_django-settings",
     version="0.1",
-    packages=["settings-features"],
+    packages=["django_settings"],
     install_requires=[],
     cmdclass={"build": BuildCommand},
 )
