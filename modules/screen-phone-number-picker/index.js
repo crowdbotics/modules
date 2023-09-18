@@ -1,4 +1,16 @@
-export const countryCodes = [
+import React, { useState } from "react";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  FlatList,
+  Modal
+} from "react-native";
+import { Input } from "react-native-elements";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
+const countryCodes = [
   { id: 1, name: "Afghanistan", flag: "🇦🇫", code: "AF", dial_code: "+93" },
   { id: 2, name: "Åland Islands", flag: "🇦🇽", code: "AX", dial_code: "+358" },
   { id: 3, name: "Albania", flag: "🇦🇱", code: "AL", dial_code: "+355" },
@@ -8,7 +20,13 @@ export const countryCodes = [
   { id: 7, name: "Angola", flag: "🇦🇴", code: "AO", dial_code: "+244" },
   { id: 8, name: "Anguilla", flag: "🇦🇮", code: "AI", dial_code: "+1264" },
   { id: 9, name: "Antarctica", flag: "🇦🇶", code: "AQ", dial_code: "+672" },
-  { id: 10, name: "Antigua and Barbuda", flag: "🇦🇬", code: "AG", dial_code: "+1268" },
+  {
+    id: 10,
+    name: "Antigua and Barbuda",
+    flag: "🇦🇬",
+    code: "AG",
+    dial_code: "+1268"
+  },
   { id: 11, name: "Argentina", flag: "🇦🇷", code: "AR", dial_code: "+54" },
   { id: 12, name: "Armenia", flag: "🇦🇲", code: "AM", dial_code: "+374" },
   { id: 13, name: "Aruba", flag: "🇦🇼", code: "AW", dial_code: "+297" },
@@ -32,7 +50,13 @@ export const countryCodes = [
     code: "BO",
     dial_code: "+591"
   },
-  { id: 28, name: "Bosnia and Herzegovina", flag: "🇧🇦", code: "BA", dial_code: "+387" },
+  {
+    id: 28,
+    name: "Bosnia and Herzegovina",
+    flag: "🇧🇦",
+    code: "BA",
+    dial_code: "+387"
+  },
   { id: 29, name: "Botswana", flag: "🇧🇼", code: "BW", dial_code: "+267" },
   { id: 30, name: "Bouvet Island", flag: "🇧🇻", code: "BV", dial_code: "+47" },
   { id: 31, name: "Brazil", flag: "🇧🇷", code: "BR", dial_code: "+55" },
@@ -43,7 +67,13 @@ export const countryCodes = [
     code: "IO",
     dial_code: "+246"
   },
-  { id: 33, name: "Brunei Darussalam", flag: "🇧🇳", code: "BN", dial_code: "+673" },
+  {
+    id: 33,
+    name: "Brunei Darussalam",
+    flag: "🇧🇳",
+    code: "BN",
+    dial_code: "+673"
+  },
   { id: 34, name: "Bulgaria", flag: "🇧🇬", code: "BG", dial_code: "+359" },
   { id: 35, name: "Burkina Faso", flag: "🇧🇫", code: "BF", dial_code: "+226" },
   { id: 36, name: "Burundi", flag: "🇧🇮", code: "BI", dial_code: "+257" },
@@ -62,8 +92,20 @@ export const countryCodes = [
   { id: 43, name: "Chad", flag: "🇹🇩", code: "TD", dial_code: "+235" },
   { id: 44, name: "Chile", flag: "🇨🇱", code: "CL", dial_code: "+56" },
   { id: 45, name: "China", flag: "🇨🇳", code: "CN", dial_code: "+86" },
-  { id: 46, name: "Christmas Island", flag: "🇨🇽", code: "CX", dial_code: "+61" },
-  { id: 47, name: "Cocos (Keeling) Islands", flag: "🇨🇨", code: "CC", dial_code: "+61" },
+  {
+    id: 46,
+    name: "Christmas Island",
+    flag: "🇨🇽",
+    code: "CX",
+    dial_code: "+61"
+  },
+  {
+    id: 47,
+    name: "Cocos (Keeling) Islands",
+    flag: "🇨🇨",
+    code: "CC",
+    dial_code: "+61"
+  },
   { id: 48, name: "Colombia", flag: "🇨🇴", code: "CO", dial_code: "+57" },
   { id: 49, name: "Comoros", flag: "🇰🇲", code: "KM", dial_code: "+269" },
   { id: 50, name: "Congo", flag: "🇨🇬", code: "CG", dial_code: "+242" },
@@ -85,11 +127,23 @@ export const countryCodes = [
   { id: 60, name: "Denmark", flag: "🇩🇰", code: "DK", dial_code: "+45" },
   { id: 61, name: "Djibouti", flag: "🇩🇯", code: "DJ", dial_code: "+253" },
   { id: 62, name: "Dominica", flag: "🇩🇲", code: "DM", dial_code: "+1767" },
-  { id: 63, name: "Dominican Republic", flag: "🇩🇴", code: "DO", dial_code: "+1849" },
+  {
+    id: 63,
+    name: "Dominican Republic",
+    flag: "🇩🇴",
+    code: "DO",
+    dial_code: "+1849"
+  },
   { id: 64, name: "Ecuador", flag: "🇪🇨", code: "EC", dial_code: "+593" },
   { id: 65, name: "Egypt", flag: "🇪🇬", code: "EG", dial_code: "+20" },
   { id: 66, name: "El Salvador", flag: "🇸🇻", code: "SV", dial_code: "+503" },
-  { id: 67, name: "Equatorial Guinea", flag: "🇬🇶", code: "GQ", dial_code: "+240" },
+  {
+    id: 67,
+    name: "Equatorial Guinea",
+    flag: "🇬🇶",
+    code: "GQ",
+    dial_code: "+240"
+  },
   { id: 68, name: "Eritrea", flag: "🇪🇷", code: "ER", dial_code: "+291" },
   { id: 69, name: "Estonia", flag: "🇪🇪", code: "EE", dial_code: "+372" },
   { id: 70, name: "Ethiopia", flag: "🇪🇹", code: "ET", dial_code: "+251" },
@@ -105,7 +159,13 @@ export const countryCodes = [
   { id: 74, name: "Finland", flag: "🇫🇮", code: "FI", dial_code: "+358" },
   { id: 75, name: "France", flag: "🇫🇷", code: "FR", dial_code: "+33" },
   { id: 76, name: "French Guiana", flag: "🇬🇫", code: "GF", dial_code: "+594" },
-  { id: 77, name: "French Polynesia", flag: "🇵🇫", code: "PF", dial_code: "+689" },
+  {
+    id: 77,
+    name: "French Polynesia",
+    flag: "🇵🇫",
+    code: "PF",
+    dial_code: "+689"
+  },
   {
     id: 78,
     name: "French Southern Territories",
@@ -177,7 +237,13 @@ export const countryCodes = [
   { id: 124, name: "Lebanon", flag: "🇱🇧", code: "LB", dial_code: "+961" },
   { id: 125, name: "Lesotho", flag: "🇱🇸", code: "LS", dial_code: "+266" },
   { id: 126, name: "Liberia", flag: "🇱🇷", code: "LR", dial_code: "+231" },
-  { id: 127, name: "Libyan Arab Jamahiriya", flag: "🇱🇾", code: "LY", dial_code: "+218" },
+  {
+    id: 127,
+    name: "Libyan Arab Jamahiriya",
+    flag: "🇱🇾",
+    code: "LY",
+    dial_code: "+218"
+  },
   { id: 128, name: "Liechtenstein", flag: "🇱🇮", code: "LI", dial_code: "+423" },
   { id: 129, name: "Lithuania", flag: "🇱🇹", code: "LT", dial_code: "+370" },
   { id: 130, name: "Luxembourg", flag: "🇱🇺", code: "LU", dial_code: "+352" },
@@ -189,7 +255,13 @@ export const countryCodes = [
   { id: 136, name: "Maldives", flag: "🇲🇻", code: "MV", dial_code: "+960" },
   { id: 137, name: "Mali", flag: "🇲🇱", code: "ML", dial_code: "+223" },
   { id: 138, name: "Malta", flag: "🇲🇹", code: "MT", dial_code: "+356" },
-  { id: 139, name: "Marshall Islands", flag: "🇲🇭", code: "MH", dial_code: "+692" },
+  {
+    id: 139,
+    name: "Marshall Islands",
+    flag: "🇲🇭",
+    code: "MH",
+    dial_code: "+692"
+  },
   { id: 140, name: "Martinique", flag: "🇲🇶", code: "MQ", dial_code: "+596" },
   { id: 141, name: "Mauritania", flag: "🇲🇷", code: "MR", dial_code: "+222" },
   { id: 142, name: "Mauritius", flag: "🇲🇺", code: "MU", dial_code: "+230" },
@@ -216,14 +288,26 @@ export const countryCodes = [
   { id: 157, name: "Netherlands", flag: "🇳🇱", code: "NL", dial_code: "+31" },
   { id: 158, name: "Netherlands", flag: "🇳🇱", code: "NL", dial_code: "+31" },
   { id: 159, name: "Netherlands", flag: "🇳🇱", code: "NL", dial_code: "+31" },
-  { id: 160, name: "Netherlands Antilles", flag: "", code: "AN", dial_code: "+599" },
+  {
+    id: 160,
+    name: "Netherlands Antilles",
+    flag: "",
+    code: "AN",
+    dial_code: "+599"
+  },
   { id: 161, name: "New Caledonia", flag: "🇳🇨", code: "NC", dial_code: "+687" },
   { id: 162, name: "New Zealand", flag: "🇳🇿", code: "NZ", dial_code: "+64" },
   { id: 163, name: "Nicaragua", flag: "🇳🇮", code: "NI", dial_code: "+505" },
   { id: 164, name: "Niger", flag: "🇳🇪", code: "NE", dial_code: "+227" },
   { id: 165, name: "Nigeria", flag: "🇳🇬", code: "NG", dial_code: "+234" },
   { id: 166, name: "Niue", flag: "🇳🇺", code: "NU", dial_code: "+683" },
-  { id: 167, name: "Norfolk Island", flag: "🇳🇫", code: "NF", dial_code: "+672" },
+  {
+    id: 167,
+    name: "Norfolk Island",
+    flag: "🇳🇫",
+    code: "NF",
+    dial_code: "+672"
+  },
   {
     id: 168,
     name: "Northern Mariana Islands",
@@ -243,7 +327,13 @@ export const countryCodes = [
     dial_code: "+970"
   },
   { id: 174, name: "Panama", flag: "🇵🇦", code: "PA", dial_code: "+507" },
-  { id: 175, name: "Papua New Guinea", flag: "🇵🇬", code: "PG", dial_code: "+675" },
+  {
+    id: 175,
+    name: "Papua New Guinea",
+    flag: "🇵🇬",
+    code: "PG",
+    dial_code: "+675"
+  },
   { id: 176, name: "Paraguay", flag: "🇵🇾", code: "PY", dial_code: "+595" },
   { id: 177, name: "Peru", flag: "🇵🇪", code: "PE", dial_code: "+51" },
   { id: 178, name: "Philippines", flag: "🇵🇭", code: "PH", dial_code: "+63" },
@@ -256,7 +346,13 @@ export const countryCodes = [
   { id: 185, name: "Russia", flag: "🇷🇺", code: "RU", dial_code: "+7" },
   { id: 186, name: "Rwanda", flag: "🇷🇼", code: "RW", dial_code: "+250" },
   { id: 187, name: "Reunion", flag: "🇷🇪", code: "RE", dial_code: "+262" },
-  { id: 188, name: "Saint Barthelemy", flag: "🇧🇱", code: "BL", dial_code: "+590" },
+  {
+    id: 188,
+    name: "Saint Barthelemy",
+    flag: "🇧🇱",
+    code: "BL",
+    dial_code: "+590"
+  },
   {
     id: 189,
     name: "Saint Helena",
@@ -264,7 +360,13 @@ export const countryCodes = [
     code: "SH",
     dial_code: "+290"
   },
-  { id: 190, name: "Saint Kitts and Nevis", flag: "🇰🇳", code: "KN", dial_code: "+1869" },
+  {
+    id: 190,
+    name: "Saint Kitts and Nevis",
+    flag: "🇰🇳",
+    code: "KN",
+    dial_code: "+1869"
+  },
   { id: 191, name: "Saint Lucia", flag: "🇱🇨", code: "LC", dial_code: "+1758" },
   { id: 192, name: "Saint Martin", flag: "🇲🇫", code: "MF", dial_code: "+590" },
   {
@@ -283,7 +385,13 @@ export const countryCodes = [
   },
   { id: 195, name: "Samoa", flag: "🇼🇸", code: "WS", dial_code: "+685" },
   { id: 196, name: "San Marino", flag: "🇸🇲", code: "SM", dial_code: "+378" },
-  { id: 197, name: "Sao Tome and Principe", flag: "🇸🇹", code: "ST", dial_code: "+239" },
+  {
+    id: 197,
+    name: "Sao Tome and Principe",
+    flag: "🇸🇹",
+    code: "ST",
+    dial_code: "+239"
+  },
   { id: 198, name: "Saudi Arabia", flag: "🇸🇦", code: "SA", dial_code: "+966" },
   { id: 199, name: "Senegal", flag: "🇸🇳", code: "SN", dial_code: "+221" },
   { id: 200, name: "Serbia", flag: "🇷🇸", code: "RS", dial_code: "+381" },
@@ -292,7 +400,13 @@ export const countryCodes = [
   { id: 203, name: "Singapore", flag: "🇸🇬", code: "SG", dial_code: "+65" },
   { id: 204, name: "Slovakia", flag: "🇸🇰", code: "SK", dial_code: "+421" },
   { id: 205, name: "Slovenia", flag: "🇸🇮", code: "SI", dial_code: "+386" },
-  { id: 206, name: "Solomon Islands", flag: "🇸🇧", code: "SB", dial_code: "+677" },
+  {
+    id: 206,
+    name: "Solomon Islands",
+    flag: "🇸🇧",
+    code: "SB",
+    dial_code: "+677"
+  },
   { id: 207, name: "Somalia", flag: "🇸🇴", code: "SO", dial_code: "+252" },
   { id: 208, name: "South Africa", flag: "🇿🇦", code: "ZA", dial_code: "+27" },
   { id: 209, name: "South Sudan", flag: "🇸🇸", code: "SS", dial_code: "+211" },
@@ -307,11 +421,23 @@ export const countryCodes = [
   { id: 212, name: "Sri Lanka", flag: "🇱🇰", code: "LK", dial_code: "+94" },
   { id: 213, name: "Sudan", flag: "🇸🇩", code: "SD", dial_code: "+249" },
   { id: 214, name: "Suriname", flag: "🇸🇷", code: "SR", dial_code: "+597" },
-  { id: 215, name: "Svalbard and Jan Mayen", flag: "🇸🇯", code: "SJ", dial_code: "+47" },
+  {
+    id: 215,
+    name: "Svalbard and Jan Mayen",
+    flag: "🇸🇯",
+    code: "SJ",
+    dial_code: "+47"
+  },
   { id: 216, name: "Eswatini", flag: "🇸🇿", code: "SZ", dial_code: "+268" },
   { id: 217, name: "Sweden", flag: "🇸🇪", code: "SE", dial_code: "+46" },
   { id: 218, name: "Switzerland", flag: "🇨🇭", code: "CH", dial_code: "+41" },
-  { id: 219, name: "Syrian Arab Republic", flag: "🇸🇾", code: "SY", dial_code: "+963" },
+  {
+    id: 219,
+    name: "Syrian Arab Republic",
+    flag: "🇸🇾",
+    code: "SY",
+    dial_code: "+963"
+  },
   { id: 220, name: "Taiwan", flag: "🇹🇼", code: "TW", dial_code: "+886" },
   { id: 221, name: "Tajikistan", flag: "🇹🇯", code: "TJ", dial_code: "+992" },
   {
@@ -326,7 +452,13 @@ export const countryCodes = [
   { id: 226, name: "Togo", flag: "🇹🇬", code: "TG", dial_code: "+228" },
   { id: 227, name: "Tokelau", flag: "🇹🇰", code: "TK", dial_code: "+690" },
   { id: 228, name: "Tonga", flag: "🇹🇴", code: "TO", dial_code: "+676" },
-  { id: 229, name: "Trinidad and Tobago", flag: "🇹🇹", code: "TT", dial_code: "+1868" },
+  {
+    id: 229,
+    name: "Trinidad and Tobago",
+    flag: "🇹🇹",
+    code: "TT",
+    dial_code: "+1868"
+  },
   { id: 230, name: "Tunisia", flag: "🇹🇳", code: "TN", dial_code: "+216" },
   { id: 231, name: "Turkey", flag: "🇹🇷", code: "TR", dial_code: "+90" },
   { id: 232, name: "Turkmenistan", flag: "🇹🇲", code: "TM", dial_code: "+993" },
@@ -340,7 +472,13 @@ export const countryCodes = [
   { id: 234, name: "Tuvalu", flag: "🇹🇻", code: "TV", dial_code: "+688" },
   { id: 235, name: "Uganda", flag: "🇺🇬", code: "UG", dial_code: "+256" },
   { id: 236, name: "Ukraine", flag: "🇺🇦", code: "UA", dial_code: "+380" },
-  { id: 237, name: "United Arab Emirates", flag: "🇦🇪", code: "AE", dial_code: "+971" },
+  {
+    id: 237,
+    name: "United Arab Emirates",
+    flag: "🇦🇪",
+    code: "AE",
+    dial_code: "+971"
+  },
   { id: 238, name: "United Kingdom", flag: "🇬🇧", code: "GB", dial_code: "+44" },
   { id: 239, name: "United States", flag: "🇺🇸", code: "US", dial_code: "+1" },
   { id: 240, name: "Uruguay", flag: "🇺🇾", code: "UY", dial_code: "+598" },
@@ -361,9 +499,179 @@ export const countryCodes = [
     code: "VG",
     dial_code: "+1284"
   },
-  { id: 246, name: "Virgin Islands, U.S.", flag: "🇻🇮", code: "VI", dial_code: "+1340" },
-  { id: 247, name: "Wallis and Futuna", flag: "🇼🇫", code: "WF", dial_code: "+681" },
+  {
+    id: 246,
+    name: "Virgin Islands, U.S.",
+    flag: "🇻🇮",
+    code: "VI",
+    dial_code: "+1340"
+  },
+  {
+    id: 247,
+    name: "Wallis and Futuna",
+    flag: "🇼🇫",
+    code: "WF",
+    dial_code: "+681"
+  },
   { id: 248, name: "Yemen", flag: "🇾🇪", code: "YE", dial_code: "+967" },
   { id: 249, name: "Zambia", flag: "🇿🇲", code: "ZM", dial_code: "+260" },
   { id: 250, name: "Zimbabwe", flag: "🇿🇼", code: "ZW", dial_code: "+263" }
 ];
+
+const PhoneNumberPicker = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [dialCode, setDialCode] = useState("+376");
+  const [flag, setFlag] = useState("🇦🇩");
+
+  const handleUpdate = (item) => {
+    setDialCode(item.dial_code);
+    setFlag(item.flag);
+    setModalVisible(false);
+  };
+  return (
+    <View style={styles.container}>
+      <View style={styles.InputContainer}>
+        <TouchableOpacity
+          style={styles.InputContainer}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.dialCode}>
+            {flag} <Text>{dialCode}</Text>
+          </Text>
+        </TouchableOpacity>
+        <PhoneInput
+          placeholder={"Enter Number"}
+          phoneNumber={phoneNumber}
+          setValue={setPhoneNumber}
+        />
+      </View>
+      <CoutriesListModal
+        setModalVisible={setModalVisible}
+        modalVisible={modalVisible}
+        handleUpdate={handleUpdate}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    paddingHorizontal: 10
+  },
+  InputContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  dialCode: {
+    fontSize: 16,
+    marginBottom: 10,
+    backgroundColor: "#c0c0c0",
+    padding: 15,
+    borderRadius: 5
+  }
+});
+
+export default PhoneNumberPicker;
+
+const PhoneInput = ({ placeholder, setValue, phoneNumber }) => {
+  return (
+    <Input
+      placeholder={placeholder}
+      onChangeText={(val) => setValue(val)}
+      value={phoneNumber}
+      containerStyle={inputStyles.searchBarContainerStyle}
+      inputContainerStyle={inputStyles.searchBarInputContainerStyle}
+      inputStyle={inputStyles.searchBarInputStyle}
+    />
+  );
+};
+
+const inputStyles = StyleSheet.create({
+  searchBarContainerStyle: {
+    width: "75%",
+    backgroundColor: "white",
+    borderBottomColor: "white",
+    borderTopColor: "white",
+    marginTop: 15
+  },
+
+  searchBarInputContainerStyle: {
+    backgroundColor: "white"
+  },
+
+  searchBarInputStyle: {
+    color: "black",
+    fontSize: 16
+  }
+});
+
+const CoutriesListModal = ({ setModalVisible, modalVisible, handleUpdate }) => {
+  const renderItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        onPress={() => handleUpdate(item)}
+        style={[modalStyles.item]}
+        key={item.id}
+      >
+        <Text style={modalStyles.flag}>{item.flag}</Text>
+        <Text style={[modalStyles.title]}>
+          {item.name} <Text>({item.dial_code})</Text>
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View>
+      <Modal
+        animationType="slide"
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <TouchableOpacity
+          style={modalStyles.mainIconView}
+          onPress={() => setModalVisible(false)}
+        >
+          <MaterialCommunityIcons name="close-thick" color="black" size={30} />
+        </TouchableOpacity>
+        <FlatList
+          data={countryCodes}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={modalStyles.flatList}
+        />
+      </Modal>
+    </View>
+  );
+};
+
+const modalStyles = StyleSheet.create({
+  item: {
+    padding: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center"
+  },
+  title: {
+    fontSize: 18
+  },
+  flag: {
+    marginRight: 10
+  },
+  flatList: {
+    marginTop: 10
+  },
+  mainIconView: {
+    alignSelf: "flex-end",
+    paddingTop: 20,
+    paddingRight: 20
+  }
+});
