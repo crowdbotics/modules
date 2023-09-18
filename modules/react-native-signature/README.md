@@ -1,29 +1,38 @@
-# Signature 
-Signature module is React Native based module allows user to create signature. 
+# Signature React native specs
 
-## Manual Setup
+## Module description
 
-If you want to use the module directly, or in other modules, you can do so by importing it and using the following properties.
+Signature module is React Native based module allows user to create its signature. 
 
-```javascript
-import Signature from "@modules/signature";
-const { title, navigator } = Signature;
-```
+- Create signature through canvas.
+- Upload signature to backend.
 
-2. You can call module directly by importing navigator without going through any routing. And pass the params to the module.
+![image](preview.png)
 
-```javascript
-import { modules } from '@modules';
-const Signature = modules[module_index].value.navigator;  //module_index : position of the module in modules folder
-<Signature  />
-```
+## ## Features
 
-## Global Configs
-### Update api url in options/options.js
+- [ ] This module includes environment variables.
+- [x] This module requires manual configurations.
+- [ ] This module can be configured with module options.
+- [ ] This module requires manual Android setup.
+- [ ] This module requires manual iOS setup.
 
-Update the options/options.js file with your app's backend url. For example, if your app is called `my-app` and has a url of `https://my-app.botics.co`, your options.js file should look like this: 
+## ## 3rd party setup
 
-```
+No 3rd party account required.
+
+## Dependencies
+
+Dependencies used:
+- react-native-signature-canvas - https://www.npmjs.com/package/react-native-signature-canvas
+- react-native-webview - https://www.npmjs.com/package/react-native-webview
+
+## ## Module Options
+
+### Global Configs
+
+Update the ``options/options.js`` file with your app's backend url. 
+```js
 export const globalOptions = {
     ...
   url: "https://my-app.botics.co",
@@ -31,14 +40,18 @@ export const globalOptions = {
 }
 ```
 
-## local Configs
-Update text in modules/signature/options.js
+### Local Configs
 
-```
+Update text in `modules/signature/options.js`
+
+```js
 const text = "I understand ...";
 ```
-## Features
 
-## In app signature
-User is able to sign on the canvas
+### Android setup
 
+No android setup required.
+
+### iOS setup
+
+No iOS setup required.

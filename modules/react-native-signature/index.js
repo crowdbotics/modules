@@ -2,11 +2,15 @@ import React, { useRef, useState, useContext } from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 
 import SignatureScreen from "react-native-signature-canvas";
-import { saveSignature } from "./api";
+import { saveSignature, slice } from "./store";
 import Button from "./components/Button";
 import Loader from "./components/Loader";
 import { OptionsContext } from "@options";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useDispatch } from "react-redux";
+
 const Signature = () => {
+  const dispatch = useDispatch();
   const options = useContext(OptionsContext);
   const ref = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,16 +21,19 @@ const Signature = () => {
               body,html {
               width: ${350}px; height: ${150}px;}`;
 
-  const handleOK = (signature) => {
+  const handleOK = async (signature) => {
     setIsLoading(true);
-    saveSignature({ image: signature }).then((res) => {
-      setIsLoading(false);
-      handleClear();
-      Alert.alert("Info", "Signature uploaded successfully.");
-    }).catch((error) => {
-      setIsLoading(false);
-      console.log("Error: ", error);
-    });
+    await dispatch(saveSignature({ image: signature }))
+      .then(unwrapResult)
+      .then(res => {
+        setIsLoading(false);
+        handleClear();
+        Alert.alert("Info", "Signature uploaded successfully.");
+      })
+      .catch(error => {
+        setIsLoading(false);
+        console.log("Error: ", error);
+      });
   };
 
   const handleClear = () => {
@@ -99,5 +106,6 @@ const styles = StyleSheet.create({
 
 export default {
   title: "Signature",
-  navigator: Signature
+  navigator: Signature,
+  slice
 };
