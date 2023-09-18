@@ -7,8 +7,7 @@
 	"x-dependencies": {
 		"@rnmapbox/maps": "rnmapbox/maps#main",
 		"@turf/helpers": "^6.5.0",
-		"react-native-switch-toggle": "^2.2.1",
-		"react-native-vector-icons": "^8.1.0"
+		"react-native-switch-toggle": "^2.2.1"
 	},
 	"author": "Crowdbotics",
 	"license": "ISC"
