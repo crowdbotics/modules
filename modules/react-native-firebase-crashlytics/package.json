@@ -1,0 +1,14 @@
+{
+    "name": "@modules/firebase-crashlytics",
+    "version": "1.0.0",
+    "description": "Firebase crashlytics module for react native",
+    "private": true,
+    "main": "index.js",
+    "x-dependencies": {
+        "@react-native-firebase/app": "^14.12.0",
+        "@react-native-firebase/crashlytics": "^14.12.0"
+    },
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {}
+}
