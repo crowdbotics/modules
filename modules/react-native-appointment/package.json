@@ -12,7 +12,7 @@
     "@react-navigation/native-stack": "6.5.0",
     "react-native-screens": "3.10.2",
     "react-native-calendars": "1.1282.0",
-    "moment": "2.29.3"
+    "moment": "2.29.4"
   },
   "x-dependencies": {
     "react-native-pager-view": "5.4.15",
