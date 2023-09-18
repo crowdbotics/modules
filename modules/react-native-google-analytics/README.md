@@ -99,10 +99,10 @@ Download the `GoogleService-Info.plist` file.
 1. Using Xcode, open the projects /ios/{projectName}.xcodeproj file (or /ios/{projectName}.xcworkspace if using Pods).
 
    Right click on the project name and "Add files" to the project, as demonstrated below:
-   ![image](https://github.com/cbshoaib/modules/assets/76822297/d9e5db27-4279-4c96-bbe8-c27b79691e68)
+   ![image](https://images.prismic.io/invertase/717983c0-63ca-4b6b-adc5-31318422ab47_add-files-via-xcode.png?auto=format)
 
 Select the downloaded GoogleService-Info.plist file from your computer, and ensure the "Copy items if needed" checkbox is enabled.
-![image](https://github.com/cbshoaib/modules/assets/76822297/8f9c8db2-9d3a-4b51-825d-8f36bc112099)
+![image](https://prismic-io.s3.amazonaws.com/invertase%2F7d37e0ce-3e79-468d-930c-b7dc7bc2e291_unknown+%282%29.png)
 
 2. Then in appDelegate.mm file import this on top.
 ```c
