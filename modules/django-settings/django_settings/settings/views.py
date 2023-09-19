@@ -32,8 +32,8 @@ class UpdateUserSettingsView(APIView):
     def patch(self, request):
         """
         Update user requested app settings.
-        params setting: setting id that have to be updated
-        params selected_state: selected_state that have to b select
+        body_param: "setting" : setting_id that have to be updated
+        body_param: "selected_state" : state_id that have to be select
         Authentication: (Token) Required.
         Return: Return Updated setting object related to user.
         """

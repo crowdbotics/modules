@@ -70,7 +70,7 @@ class UpdateUserSettingsViewTestCases(APITestCase):
         self.assertEquals(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-class ModelSteReturnTestCases(TestCase):
+class ModelStrReturnTestCases(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="david", email="david12@gmail.com", password="pass@123")
         self.settings = Settings.objects.create(title="notification", type="BOOLEAN")
@@ -86,7 +86,7 @@ class ModelSteReturnTestCases(TestCase):
         state_choices = StateChoices.objects.get(pk=1)
         self.assertEqual(str(state_choices), f"{state_choices.settings.title} - {state_choices.choice}")
 
-    def test_user_app_setting_str_is_equal_to_title_and_choice(self):
+    def test_user_app_setting_str_is_equal_to_title_and_username(self):
         user_app_settings = UserAppSetting.objects.get(pk=1)
         self.assertEqual(str(user_app_settings), f"{user_app_settings.user.name} - {user_app_settings.setting.title}")
 
