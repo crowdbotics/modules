@@ -1,0 +1,66 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env: 
+      working-directory: ./modules
+
+    steps:
+      - name: Initialize packages
+        run: |
+          sudo apt update
+          sudo apt install jo git -y
+
+      - name: Repo Clone 
+        run: |
+          git clone https://${{ secrets.GIT_TOKEN }}@github.com/crowdbotics/modules.git
+      
+      - name: Checkout branch
+        working-directory: ${{ env.working-directory }}
+        run: | 
+          echo "branch: ${GITHUB_REF_NAME}"
+          git checkout ${GITHUB_REF_NAME}
+
+      - name: Generate Json data
+        id: data
+        working-directory: ${{ env.working-directory }}
+        run: |
+          r_version="$(curl -s  -H "Authorization:token ${{ secrets.GIT_TOKEN }}" https://api.github.com/repos/$GITHUB_REPOSITORY/tags |jq -r '.[].name' |sort |head -1))"
+          minor=$(echo $r_version | cut -d'.' -f2)
+          major=$(echo $r_version | cut -d'.' -f1)
+          if [ $major == $(date '+%Y%m%d') ]; then
+            tag_version="$(date '+%Y%m%d').$minor"
+            echo "release version: $tag_version"
+            until [ $tag_version != $r_version ]; do
+              let minor++
+              tag_version="$(date '+%Y%m%d').$minor"
+              echo "final release tag: $tag_version"
+            done
+          else
+           tag_version=$(date '+%Y%m%d').1
+           echo "final release tag: $tag_version"
+          fi
+          jo -p -- -s tag_name="$tag_version" name="Production Release" body="$(git log --oneline --no-decorate HEAD...$(git tag -l '202[0-9]????.*' --sort=-v:refname | head -n 1))" > data.json
+        continue-on-error: true
+
+      - name: Json Data Status
+        if: steps.data.outcome == 'failure'
+        run: exit 1
+
+      - name: Add Release Notes
+        working-directory: ${{ env.working-directory }}
+        run: |
+          cat data.json
+          curl  -i -X POST -H "Content-Type:application/json" -H "Authorization:token ${{ secrets.GIT_TOKEN }} " https://api.github.com/repos/$GITHUB_REPOSITORY/releases -d @data.json
+      
+      - name: Add JIRA Label
+        working-directory: ${{ env.working-directory }}
+        run: |
+          git log --oneline --no-decorate HEAD...$(git tag -l '202[0-9]????.*' --sort=-v:refname | head -n 1) | grep -Eo '([A-Z]{3,}-)([0-9]+)' | uniq > jira_ticket.txt
+          cat jira_ticket.txt
+          for i in $(cat jira_ticket.txt); do curl -s -X PUT -H "Content-Type: application/json" -H "Authorization: Basic ${{ secrets.JIRA_TOKEN }}" --data '{"update":{"labels":[{"add":"released"}]}}' https://crowdbotics.atlassian.net/rest/api/3/issue/$i ; done
