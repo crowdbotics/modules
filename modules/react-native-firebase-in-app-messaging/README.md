@@ -48,7 +48,18 @@ No global configs required.
 
 No local configs required.
 
+### Testing Scenarios
+
 You can install `@react-native-firebase/installations` library to get a firebase installation id and test it through the console.
+
+
+Firebase In-App messages can be triggered based on predefined events or custom events that you define while creating a campaign
+
+In your Firebase In-App Messaging campaign, you can set up custom event triggers. These triggers determine when the in-app message should be displayed to users based on custom events you define in your app.
+
+In your app's code, implement event tracking logic for the custom event you've defined. When the event occurs, you should log it using the Firebase Analytics SDK.
+
+Now when the custom event is triggered, your In-App message should be displayed shortly after.
 
 ### Android setup
 
