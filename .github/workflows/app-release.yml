@@ -18,7 +18,7 @@ jobs:
 
       - name: Repo Clone 
         run: |
-          git clone https://${{ secrets.GIT_TOKEN }}@github.com/crowdbotics/vue-dash-5104.git
+          git clone https://${{ secrets.GIT_TOKEN }}@github.com/crowdbotics/modules.git
       
       - name: Checkout branch
         working-directory: ${{ env.working-directory }}
