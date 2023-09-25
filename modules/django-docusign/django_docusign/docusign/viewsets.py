@@ -54,7 +54,7 @@ def get_authorize_client(access_token):
     Return authorized api client using access token
     """
     api_client = ApiClient()
-    api_client.host = settings.HOST
+    api_client.host = settings.ACCOUNT_BASE_URL
     api_client.set_default_header(header_name="Authorization", header_value=access_token)
     return api_client
 
