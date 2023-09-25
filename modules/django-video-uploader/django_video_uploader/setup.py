@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_django_video_uploader",
     version="0.1",
-    packages=[videouploader],
+    packages=["videouploader"],
     install_requires=[],
     cmdclass={"build": BuildCommand},
 )
