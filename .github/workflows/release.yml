@@ -50,7 +50,7 @@ jobs:
 
       - name: Add JIRA label
         run: |
-          git pull --tags
+          git fetch --tags
           git log --oneline --no-decorate HEAD...$(git tag -l '202[0-9]????.*' --sort=-v:refname | head -n 1) | grep -Eo '([A-Z]{3,}-)([0-9]+)' | uniq > jira_ticket.txt
           cat jira_ticket.txt
           if [ $GITHUB_REF_NAME == master ]; then
