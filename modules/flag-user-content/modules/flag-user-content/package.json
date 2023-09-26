@@ -1,0 +1,13 @@
+{
+    "name": "@modules/flag-user-content",
+    "version": "1.0.1",
+    "description": "Flag User Content Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+    },
+    "x-dependencies": {
+    }
+}
