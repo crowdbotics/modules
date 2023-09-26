@@ -42,7 +42,7 @@ class AppleLogin(SocialLoginView):
     adapter_class = AppleOAuth2Adapter
     client_class = AppleOAuth2Client
     serializer_class = CustomAppleSocialLoginSerializer
-    callback_url = f"https://{APP_DOMAIN}/accounts/apple/login/callback/"
+    callback_url = f"{APP_DOMAIN}/accounts/apple/login/callback/"
 
 
 class FacebookConnect(SocialConnectView):

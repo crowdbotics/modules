@@ -131,7 +131,7 @@ Service Identifier, make sure to update your identifier with `Signin with Apple`
     - There, you will be asked to select your primary App ID (select the one created earlier). Then, add your app's
       domain to the `Website Urls` section available. Your domain should be the same that you use to access your web
       app (
-      as was described before). For this tutorial, we have `social-login-1234.botics.co`. Also add a url that looks
+      as was described before). For this tutorial, we have `social-login-1234.botics.co`. Also add an url that looks
       like `<your_app_domain_url>/accounts/apple/login/callback/`. In the tutorial, we
       have `https://social-login-1234.botics.co/accounts/apple/login/callback/`.
     - Save everything
@@ -152,7 +152,7 @@ Service Identifier, make sure to update your identifier with `Signin with Apple`
         "apple": {
             "APP": {
                 # Your service identifier.
-                "client_id": "com.crowdbotics.social-login-1234,
+                "client_id": "com.crowdbotics.social-login-1234",
     
                 # The Key ID (visible in the "View Key Details" page).
                 "secret": "sociallogintest1234",
@@ -172,8 +172,9 @@ Service Identifier, make sure to update your identifier with `Signin with Apple`
         }
     }
     ```
-
-- Save the settings.py file and commit everything to Github
+- If adding multiple `client_id` then web or android for ios should be first then ios client id.
+- client ids should be comma separated like that `"<client_id>,<client_id>"`.
+- Save the settings.py file and commit everything to GitHub
 - On your apps admin panel, go to Social applications and create a new application for apple, adding the following
   values:
     - Provider: Apple
@@ -183,7 +184,7 @@ Service Identifier, make sure to update your identifier with `Signin with Apple`
     - Key: Your app ID prefix, usually your team ID (e.g. ABCDEFG)
     - Sites: your website links
 - Save everything and redeploy your app. Your backend is now ready to receive Apple Authentication.
-The project must have `django-allauth` with version 0.43.0 or higher in order to support Apple provider.
+  The project must have `django-allauth` with version 0.43.0 or higher in order to support Apple provider.
 
 The following endpoints are available to be used:
 ![](https://crowdbotics-slack-dev.s3.amazonaws.com/media/resources/project/13307/a76bcdc2-320f-4c17-a47b-594551a2f24f.png)
