@@ -1,0 +1,12 @@
+{
+    "title": "Flag User Content",
+    "description": "Flag User Content Module",
+    "root": "/",
+    "schema": {
+      "buttonText": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+  
