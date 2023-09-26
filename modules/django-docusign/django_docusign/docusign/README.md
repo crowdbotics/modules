@@ -26,7 +26,7 @@ The following are the scope features for this module:
 CLIENT_ID="Integration key of your app"
 USER_ID="Your account USER_ID"
 ACCOUNT_ID="API Account ID"
-HOST="host_url{Account Base URL}/restapi/"
+ACCOUNT_BASE_URL="host_url{Account Base URL}/restapi/"
 OAUTH_HOST_NAME="account-d.docusign.com"
 PRIVATE_KEY_FILE_PATH="./demo/private.key" -> while creating app in your Google service's developer account, go to service integration and CLICK ON [GENERATE RSA] then copy your private key and paste it in [private.key] file
 EXPIRES_IN=28800
@@ -51,10 +51,12 @@ Create `Docusign Developer ACCOUNT`
 ## Dependencies
 
 [Docusign-esign](https://github.com/docusign/docusign-esign-python-client/blob/master/README.md)
+[AttrDict](https://github.com/bcj/AttrDict/blob/master/README.rst)
 
 Dependencies used:
 
 - [docusign-esign==3.19.0](https://pypi.org/project/docusign-esign/)
+- [attrdict](https://pypi.org/project/attrdict/)
 
 ## API details
 
