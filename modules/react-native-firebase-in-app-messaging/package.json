@@ -1,0 +1,15 @@
+{
+    "name": "@modules/qr-code",
+    "version": "1.0.0",
+    "description": "QR code Module",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {},
+    "x-dependencies": {
+        "@react-native-firebase/app": "^14.12.0",
+        "@react-native-firebase/in-app-messaging": "^14.12.0",
+        "@react-native-firebase/analytics": "^14.12.0"
+    }
+}
