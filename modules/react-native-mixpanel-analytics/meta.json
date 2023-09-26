@@ -1,0 +1,5 @@
+{
+    "title": "Mixpanel Analytics",
+    "description": "Mixpanel Analytics for react native",
+    "root": "/modules/mixpanel-analytics"
+}
