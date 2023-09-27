@@ -16,7 +16,6 @@
     "remove": "node scripts/remove.js",
     "parse": "node scripts/parse.js",
     "dist": "node scripts/parse.js --write",
-    "info": "node scripts/info.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "yarn run eslint modules scripts",
     "commit-module": "node scripts/commit-module.js"
