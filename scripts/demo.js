@@ -13,7 +13,9 @@ if (fs.existsSync(demoDir)) {
 
 const rnCookieCutterCommand = generateCommand([
   "pipenv run cookiecutter",
-  "./dist/cookie",
+  "gh:crowdbotics/react-native-scaffold",
+  "--checkout master",
+  "--directory dist/cookie",
   "--config-file cookiecutter.yaml",
   "--no-input"
 ]);

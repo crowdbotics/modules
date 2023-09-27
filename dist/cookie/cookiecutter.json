@@ -1,8 +1,0 @@
-{
-  "project_name": "{{cookiecutter.project_name}}",
-  "project_slug": "{{cookiecutter.project_name|lower|replace(' ', '')|replace('-', '_')}}",
-  "project_dash_slug": "{{cookiecutter.project_slug|replace('_', '-')}}",
-  "project_description": "",
-  "owner_email": "",
-  "ssh_key_fingerprint": ""
-}
