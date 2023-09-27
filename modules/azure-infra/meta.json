@@ -1,6 +1,6 @@
 {
   "title": "Azure Infra",
   "description": "Terraform module for vanilla stack deployment on azure",
-  "root": "/",
+  "root": "/azure",
   "schema": {}
 }
