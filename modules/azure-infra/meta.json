@@ -1,10 +1,6 @@
 {
   "title": "Azure Infra",
   "description": "Terraform module for vanilla stack deployment on azure",
-<<<<<<< HEAD
   "root": "/azure",
-=======
-  "root": "/",
->>>>>>> f44d426 (azure-infra: add meta.json)
   "schema": {}
 }
