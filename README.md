@@ -5,15 +5,12 @@
 </h1>
 
 <p align="center">
-  A customized React Native scaffold and a library of Django & React Native modules.
+  A library of Django & React Native modules.
 </p>
 
 <p align="center">
   <a href="https://github.com/crowdbotics/modules/actions/workflows/lint.yml">
     <img src="https://github.com/crowdbotics/modules/actions/workflows/lint.yml/badge.svg" alt="Source Code linter" />
-  </a>
-  <a href="https://github.com/crowdbotics/modules/actions/workflows/parse.yml">
-    <img src="https://github.com/crowdbotics/modules/actions/workflows/parse.yml/badge.svg" alt="Modules validation" />
   </a>
   <a href="https://github.com/crowdbotics/modules/actions/workflows/release.yml">
     <img src="https://github.com/crowdbotics/modules/actions/workflows/release.yml/badge.svg" alt="Production Release" />
@@ -23,10 +20,8 @@
 ## Contents
 
 - [Modules library](/modules)
-- [Custom React Native template](/scaffold/template/custom)
-- [Documentation](https://crowdbotics.github.io/modules/)
+- [Documentation](https://docs.crowdbotics.com)
 - [Changelog](/CHANGELOG.md)
-- [Scaffold Changelog](/scaffold/CHANGELOG.md)
 
 ## Requirements for contributing
 
