@@ -9,8 +9,5 @@
     "dependencies": {
     },
     "x-dependencies": {
-    },
-    "scripts": {
-        "postinstall": "cd ../../../../ && yarn run add payments && yarn run add react-native-login"
     }
 }
