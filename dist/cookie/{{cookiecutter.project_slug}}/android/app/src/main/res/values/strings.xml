@@ -1,4 +1,0 @@
-<resources>
-    <string name="app_name">{{cookiecutter.project_dash_slug}}</string>
-    <string name="original_app_name">{{cookiecutter.project_name}}</string>
-</resources>
