@@ -1,4 +1,13 @@
-<!-- BEGIN_TF_DOCS -->
+## Azure Infra (Terraform)
+
+## Module description
+
+Terraform module for vanilla stack deployment on azure.
+
+## Features
+
+[x] This module requires manual configurations.
+
 ## Requirements
 
 | Name | Version |
@@ -64,4 +73,3 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_azurerm_container_app_url"></a> [azurerm\_container\_app\_url](#output\_azurerm\_container\_app\_url) | n/a |
-<!-- END_TF_DOCS -->
