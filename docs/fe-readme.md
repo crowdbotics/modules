@@ -1,4 +1,4 @@
-# {{cookiecutter.project_name}} React native specs
+# Module Name
 
 ## Module description
 
