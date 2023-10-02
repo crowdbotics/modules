@@ -1,4 +1,4 @@
-##  {{cookiecutter.project_name}} backend configuration and information
+## Module Name
 
 ## Module description
 
