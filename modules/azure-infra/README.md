@@ -106,7 +106,4 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_azurerm_container_app_url"></a> [azurerm\_container\_app\_url](#output\_azurerm\_container\_app\_url) | n/a |
-<<<<<<< HEAD
-=======
 <!-- END_TF_DOCS -->
->>>>>>> 385028d (PLAT-12373 azure module)
