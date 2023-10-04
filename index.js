@@ -6,14 +6,14 @@
  *
  * Commands available:
  * - parse
+ * - demo
  */
 import arg from "arg";
 import fs from "node:fs";
 import path from "node:path";
 import { parseModules } from "./scripts/parse.js";
+import { createDemo } from "./scripts/demo.js";
 import { valid, invalid, section } from "./scripts/utils.js";
-
-//import { parseModules } from "./scripts/parse.js";
 
 const userdir = process.cwd();
 
@@ -28,6 +28,16 @@ function dispatcher() {
 }
 
 const commands = {
+  demo: () => {
+    createDemo(
+      "demo",
+      path.join(
+        path.dirname(path.dirname(process.argv[1])),
+        "modules",
+        "cookiecutter.yaml"
+      )
+    );
+  },
   parse: () => {
     const args = arg({
       "--source": String,
