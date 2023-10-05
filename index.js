@@ -14,6 +14,7 @@ import path from "node:path";
 import { parseModules } from "./scripts/parse.js";
 import { createDemo } from "./scripts/demo.js";
 import { addModules } from "./scripts/add.js";
+import { removeModules } from "./scripts/remove.js";
 import { valid, invalid, section } from "./scripts/utils.js";
 
 const userdir = process.cwd();
@@ -36,6 +37,14 @@ const commands = {
       invalid("please provide the name of the modules to be installed");
     }
     addModules(modules, "demo");
+  },
+  remove: () => {
+    const args = arg({});
+    const modules = args._.slice(1);
+    if (!modules.length) {
+      invalid("please provide the name of the modules to be removed");
+    }
+    removeModules(modules, "demo");
   },
   demo: () => {
     createDemo(
