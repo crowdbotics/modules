@@ -13,6 +13,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { parseModules } from "./scripts/parse.js";
 import { createDemo } from "./scripts/demo.js";
+import { addModules } from "./scripts/add.js";
 import { valid, invalid, section } from "./scripts/utils.js";
 
 const userdir = process.cwd();
@@ -21,13 +22,21 @@ function dispatcher() {
   const command = process.argv[2];
 
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
-    throw new Error(`command doesn't exist: ${command}`);
+    invalid(`command doesn't exist: ${command}`);
   }
 
   commands[command]();
 }
 
 const commands = {
+  add: () => {
+    const args = arg({});
+    const modules = args._.slice(1);
+    if (!modules.length) {
+      invalid("please provide the name of the modules to be installed");
+    }
+    addModules(modules, "demo");
+  },
   demo: () => {
     createDemo(
       "demo",
@@ -37,17 +46,18 @@ const commands = {
         "cookiecutter.yaml"
       )
     );
+    valid("demo app successfully generated");
   },
   parse: () => {
     const args = arg({
       "--source": String,
       "--write": String
     });
+
     if (!args["--source"]) {
-      throw new Error("missing required argument: --source");
+      invalid("missing required argument: --source");
     }
-    if (!args["--out"]) {
-    }
+
     const data = parseModules(path.join(args["--source"]));
     if (args["--write"] && process.exitCode !== 1) {
       fs.writeFileSync(
