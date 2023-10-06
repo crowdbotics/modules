@@ -16,9 +16,7 @@ import { createDemo } from "./scripts/demo.js";
 import { addModules } from "./scripts/add.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
-import { valid, invalid, section } from "./scripts/utils.js";
-
-const userdir = process.cwd();
+import { valid, invalid } from "./utils.js";
 
 function dispatcher() {
   const command = process.argv[2];
@@ -84,7 +82,8 @@ const commands = {
         "utf8"
       );
     }
-  }
+  },
+  init: () => {}
 };
 
 try {
