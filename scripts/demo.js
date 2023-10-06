@@ -31,7 +31,7 @@ export function createDemo(dir, yaml) {
   section("Installing dependencies");
   execSync("yarn install", {
     cwd: demoDir,
-    enconding: "utf8",
+    encoding: "utf8",
     stdio: "inherit"
   });
 
