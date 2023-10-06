@@ -7,6 +7,10 @@
  * Commands available:
  * - parse
  * - demo
+ * - add
+ * - remove
+ * - commit
+ * - help
  */
 import arg from "arg";
 import fs from "node:fs";
@@ -83,7 +87,22 @@ const commands = {
       );
     }
   },
-  init: () => {}
+  help: () => {
+    console.log(`usage: npx crowdbotics/modules <command>
+
+Commands available:
+  parse    Parse and validate your modules
+  demo     Generate a local React Native and Django demo app
+  add      Install a module in the demo app
+  remove   Remove a module from the demo app
+  commit   Update an existing module from the demo source code
+
+Parsing modules:
+  npx crowdbotics/modules parse [--source <path>]
+
+Parsing modules and writing to a json file:
+  npx crowdbotics/modules parse [--source <path>] [--write <path>]`);
+  }
 };
 
 try {
