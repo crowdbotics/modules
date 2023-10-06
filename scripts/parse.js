@@ -3,7 +3,7 @@ import path from "path";
 import crypto from "crypto";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
-import { valid, invalid, section } from "./utils.js";
+import { valid, invalid, section } from "../utils.js";
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);

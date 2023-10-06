@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import fse from "fs-extra";
-import { section, generateCommand } from "./utils.js";
+import { section, generateCommand } from "../utils.js";
 import { execSync } from "child_process";
 
 export function createDemo(dir, yaml) {
