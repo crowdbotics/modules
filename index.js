@@ -10,6 +10,7 @@
  * - add
  * - remove
  * - commit
+ * - upgrade
  * - help
  */
 import arg from "arg";
@@ -20,6 +21,7 @@ import { createDemo } from "./scripts/demo.js";
 import { addModules } from "./scripts/add.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
+import { upgradeScaffold } from "./scripts/upgrade.js";
 import { valid, invalid } from "./utils.js";
 
 function dispatcher() {
@@ -33,30 +35,6 @@ function dispatcher() {
 }
 
 const commands = {
-  add: () => {
-    const args = arg({});
-    const modules = args._.slice(1);
-    if (!modules.length) {
-      invalid("please provide the name of the modules to be installed");
-    }
-    addModules(modules, "demo");
-  },
-  remove: () => {
-    const args = arg({});
-    const modules = args._.slice(1);
-    if (!modules.length) {
-      invalid("please provide the name of the modules to be removed");
-    }
-    removeModules(modules, "demo");
-  },
-  commit: () => {
-    const args = arg({});
-    const modules = args._.slice(1);
-    if (!modules.length) {
-      invalid("please provide the name of the modules to be commited");
-    }
-    commitModules(modules, "demo");
-  },
   demo: () => {
     createDemo(
       "demo",
@@ -87,6 +65,33 @@ const commands = {
       );
     }
   },
+  add: () => {
+    const args = arg({});
+    const modules = args._.slice(1);
+    if (!modules.length) {
+      invalid("please provide the name of the modules to be installed");
+    }
+    addModules(modules, "demo");
+  },
+  remove: () => {
+    const args = arg({});
+    const modules = args._.slice(1);
+    if (!modules.length) {
+      invalid("please provide the name of the modules to be removed");
+    }
+    removeModules(modules, "demo");
+  },
+  commit: () => {
+    const args = arg({});
+    const modules = args._.slice(1);
+    if (!modules.length) {
+      invalid("please provide the name of the modules to be commited");
+    }
+    commitModules(modules, "demo");
+  },
+  upgrade: () => {
+    upgradeScaffold();
+  },
   help: () => {
     console.log(`usage: npx crowdbotics/modules <command>
 
@@ -96,6 +101,7 @@ Commands available:
   add      Install a module in the demo app
   remove   Remove a module from the demo app
   commit   Update an existing module from the demo source code
+  upgrade  Upgrade your existing app's scaffold to the latest version
 
 Parsing modules:
   npx crowdbotics/modules parse [--source <path>]
