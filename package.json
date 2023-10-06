@@ -11,14 +11,13 @@
     "node": ">16.0"
   },
   "scripts": {
-    "demo": "node scripts/demo.js",
-    "add": "node scripts/add.js",
-    "remove": "node scripts/remove.js",
-    "parse": "node scripts/parse.js",
-    "dist": "node scripts/parse.js --write",
+    "demo": "npx . demo",
+    "add": "npx . add",
+    "remove": "npx . remove",
+    "parse": "npx . parse --source modules",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "yarn run eslint modules scripts",
-    "commit-module": "node scripts/commit-module.js"
+    "commit-module": "npx . commit"
   },
   "repository": {
     "type": "git",
