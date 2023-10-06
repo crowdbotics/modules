@@ -17,7 +17,7 @@ export const warn = (...args) => {
   console.log(WARNING_MARK, ...args);
 };
 
-export const section = (msg) => {
+export const section = (...args) => {
   console.log("");
-  console.log(">", msg);
+  console.log(">", ...args);
 };
