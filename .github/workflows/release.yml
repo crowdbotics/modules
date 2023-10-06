@@ -43,7 +43,7 @@ jobs:
       - name: release modules
         run: |
           heroku config:set REACT_NATIVE_SCAFFOLD_REPO_BRANCH=$GITHUB_REF_NAME -a ${{ secrets.HEROKU_APP }}
-          heroku run 'python manage.py update_crowdbotics_modules' -a ${{ secrets.HEROKU_APP }}
+          heroku run 'python manage.py update_crowdbotics_components --quiet --no-input --no-log-file --public' -a ${{ secrets.HEROKU_APP }}
       
       - name: Checkout
         uses: actions/checkout@v3.3.0
