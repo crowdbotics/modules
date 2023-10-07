@@ -104,10 +104,10 @@ Commands available:
   upgrade  Upgrade your existing app's scaffold to the latest version
 
 Parsing modules:
-  npx crowdbotics/modules parse [--source <path>]
+  npx crowdbotics/modules parse --source <path>
 
 Parsing modules and writing to a json file:
-  npx crowdbotics/modules parse [--source <path>] [--write <path>]`);
+  npx crowdbotics/modules parse --source <path> --write <path>`);
   }
 };
 
