@@ -94,7 +94,7 @@ function setupLocalScaffoldRepo(target) {
       cwd: userdir
     }
   );
-  if (target != "master") {
+  if (target !== "master") {
     spawnSync("git", ["checkout", target], {
       cwd: path.join(config.upgrade.build.scaffoldRepoDir)
     });
