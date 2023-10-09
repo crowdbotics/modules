@@ -22,6 +22,7 @@ export function createDemo(dir, yaml) {
   const rnCookieCutterCommand = generateCommand([
     "pipenv run cookiecutter",
     "gh:crowdbotics/react-native-scaffold",
+    "--directory dist/cookie",
     "--checkout master",
     `--config-file ${yaml}`,
     "--no-input"
