@@ -11,12 +11,14 @@
  * - remove
  * - create
  * - commit
+ * - init
  * - upgrade
  * - help
  */
 import arg from "arg";
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 import { parseModules } from "./scripts/parse.js";
 import { createDemo } from "./scripts/demo.js";
 import { addModules } from "./scripts/add.js";
@@ -113,6 +115,43 @@ const commands = {
     }
     commitModules(modules, "demo");
   },
+  init: () => {
+    const args = arg({
+      "--name": String
+    });
+    if (!args["--name"]) {
+      invalid("missing required argument: --name");
+    }
+    const baseDir = path.join(process.cwd(), args["--name"]);
+    const git = spawnSync("git init", [args["--name"]], {
+      cwd: process.cwd(),
+      shell: true
+    });
+    if (git.error) {
+      invalid("git init failed", git.stderr);
+    }
+    const gitignore = `logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+node_modules/
+.npm
+.DS_Store
+.idea
+demo`;
+    fs.mkdirSync(path.join(baseDir, "modules"));
+    fs.writeFileSync(path.join(baseDir, ".gitignore"), gitignore, "utf8");
+    fs.writeFileSync(path.join(baseDir, "modules", ".keep"), "", "utf8");
+    spawnSync("git add .gitignore modules", [], {
+      cwd: baseDir,
+      shell: true
+    });
+    spawnSync("git commit -m 'Initial commit'", [], {
+      cwd: baseDir,
+      shell: true
+    });
+  },
   upgrade: () => {
     const args = arg({
       "--version": String
@@ -129,6 +168,7 @@ Commands available:
   remove   Remove a module from the demo app
   create   Create a new module of a given type
   commit   Update an existing module from the demo source code
+  init     Initialize a blank modules repository
   upgrade  Upgrade your existing app's scaffold to the latest version
 
 Parsing modules:
@@ -139,6 +179,9 @@ Parsing modules and writing to a json file:
 
 Create a module of a given type:
   npx crowdbotics/modules create --name <module-name> --type <all/react-native/django>
+
+Initialize a modules repository:
+  npx crowdbotics/modules init --name <my-modules-repository-name>
 
 Upgrade your scaffold to the latest master:
   npx crowdbotics/modules upgrade
