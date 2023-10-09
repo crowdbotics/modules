@@ -32,7 +32,7 @@ function dispatcher() {
   const command = process.argv[2];
 
   if (!command) {
-    return commands["help"]();
+    return commands.help();
   }
 
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
