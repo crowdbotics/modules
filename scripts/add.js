@@ -13,13 +13,13 @@ const copy = (origin, target) => {
   fse.copySync(origin, target, { filter: filterFiles });
 };
 
-export function addModules(modules, dir) {
+export function addModules(modules, source = "modules", dir) {
   const cwd = process.cwd();
   const demoDir = path.join(cwd, dir);
 
   modules.forEach((module) => {
     process.chdir(cwd);
-    const originModuleDir = path.join(process.cwd(), "modules", module);
+    const originModuleDir = path.join(process.cwd(), source, module);
     const meta = JSON.parse(
       fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
     );
