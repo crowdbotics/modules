@@ -20,8 +20,9 @@ function shouldProcessDirectory(entry) {
 }
 
 function templatizePath(file) {
-  if (IGNORE_TEMPLATIZE.includes(file.substring(file.indexOf(path.sep) + 1)))
+  if (IGNORE_TEMPLATIZE.includes(file.substring(file.indexOf(path.sep) + 1))) {
     return file;
+  }
 
   return file.replace(
     config.demo.placeholderNameRegex,
