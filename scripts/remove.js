@@ -3,13 +3,13 @@ import path from "path";
 import find from "find";
 import { execSync } from "child_process";
 
-export function removeModules(modules, dir) {
+export function removeModules(modules, source = "modules", dir) {
   const cwd = process.cwd();
   const demoDir = path.join(process.cwd(), dir);
 
   modules.forEach((module) => {
     process.chdir(cwd);
-    const originModuleDir = path.join(process.cwd(), "modules", module);
+    const originModuleDir = path.join(process.cwd(), source, module);
     const meta = JSON.parse(
       fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
     );

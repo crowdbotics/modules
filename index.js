@@ -9,6 +9,7 @@
  * - demo
  * - add
  * - remove
+ * - create
  * - commit
  * - upgrade
  * - help
@@ -23,20 +24,20 @@ import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
 import { valid, invalid } from "./utils.js";
+import { createModule } from "./scripts/create.js";
 
 function dispatcher() {
   const command = process.argv[2];
 
   if (!command) {
-    commands["help"]();
-    return;
+    return commands["help"]();
   }
 
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
     invalid(`command doesn't exist: ${command}`);
   }
 
-  commands[command]();
+  return commands[command]();
 }
 
 const commands = {
@@ -71,20 +72,38 @@ const commands = {
     }
   },
   add: () => {
-    const args = arg({});
+    const args = arg({
+      "--source": String
+    });
     const modules = args._.slice(1);
     if (!modules.length) {
       invalid("please provide the name of the modules to be installed");
     }
-    addModules(modules, "demo");
+    addModules(modules, args["--source"], "demo");
   },
   remove: () => {
-    const args = arg({});
+    const args = arg({
+      "--source": String
+    });
     const modules = args._.slice(1);
     if (!modules.length) {
       invalid("please provide the name of the modules to be removed");
     }
-    removeModules(modules, "demo");
+    removeModules(modules, args["--source"], "demo");
+  },
+  create: () => {
+    const args = arg({
+      "--name": String,
+      "--type": String,
+      "--target": String
+    });
+    if (!args["--name"]) {
+      invalid("missing required argument: --name");
+    }
+    if (!args["--type"]) {
+      invalid("missing required argument: --type");
+    }
+    createModule(args["--name"], args["--type"], args["--target"]);
   },
   commit: () => {
     const args = arg({});
@@ -108,6 +127,7 @@ Commands available:
   demo     Generate a local React Native and Django demo app
   add      Install a module in the demo app
   remove   Remove a module from the demo app
+  create   Create a new module of a given type
   commit   Update an existing module from the demo source code
   upgrade  Upgrade your existing app's scaffold to the latest version
 
@@ -116,6 +136,9 @@ Parsing modules:
 
 Parsing modules and writing to a json file:
   npx crowdbotics/modules parse --source <path> --write <path>
+
+Create a module of a given type:
+  npx crowdbotics/modules create --name <module-name> --type <all/react-native/django>
 
 Upgrade your scaffold to the latest master:
   npx crowdbotics/modules upgrade
