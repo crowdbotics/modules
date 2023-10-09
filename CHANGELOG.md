@@ -7,7 +7,6 @@ Based on [Common Changelog](https://common-changelog.org/).
 ### Removed
 
 - Moved the React Native scaffold and it's tooling over to [github.com/crowdbotics/react-native-scaffold](https://github.com/crowdbotics/react-native-scaffold).
-- The upgrade tool can now be accessed from `npx crowdbotics/react-native-scaffold`.
 
 ## 1.2.0 - 2023-07-04
 
