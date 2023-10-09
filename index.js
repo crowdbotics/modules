@@ -27,6 +27,11 @@ import { valid, invalid } from "./utils.js";
 function dispatcher() {
   const command = process.argv[2];
 
+  if (!command) {
+    commands["help"]();
+    return;
+  }
+
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
     invalid(`command doesn't exist: ${command}`);
   }
