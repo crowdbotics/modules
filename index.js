@@ -90,7 +90,10 @@ const commands = {
     commitModules(modules, "demo");
   },
   upgrade: () => {
-    upgradeScaffold();
+    const args = arg({
+      "--version": String
+    });
+    upgradeScaffold(args["--version"]);
   },
   help: () => {
     console.log(`usage: npx crowdbotics/modules <command>
@@ -107,7 +110,14 @@ Parsing modules:
   npx crowdbotics/modules parse --source <path>
 
 Parsing modules and writing to a json file:
-  npx crowdbotics/modules parse --source <path> --write <path>`);
+  npx crowdbotics/modules parse --source <path> --write <path>
+
+Upgrade your scaffold to the latest master:
+  npx crowdbotics/modules upgrade
+
+Upgrade to a specific version (git tag, git commit or branch name):
+  npx crowdbotics/modules upgrade --version 2.3.0
+`);
   }
 };
 
