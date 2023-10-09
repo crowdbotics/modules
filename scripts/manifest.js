@@ -8,6 +8,11 @@ import fs from "node:fs";
 import path from "node:path";
 import config from "../config.js";
 
+const IGNORE_TEMPLATIZE = [
+  "ios/fastlane/metadata/review_information/review_demo_password.txt",
+  "ios/fastlane/metadata/review_information/review_demo_user.txt"
+];
+
 function shouldProcessDirectory(entry) {
   return !config.upgrade.manifest.ignoreDirectories.includes(
     path.relative(process.cwd(), entry)
@@ -15,7 +20,8 @@ function shouldProcessDirectory(entry) {
 }
 
 function templatizePath(file) {
-  if (latestUpgrade.ignoreTemplatize.includes(file)) return file;
+  if (IGNORE_TEMPLATIZE.includes(file.substring(file.indexOf(path.sep) + 1)))
+    return file;
 
   return file.replace(
     config.demo.placeholderNameRegex,
@@ -68,8 +74,8 @@ export function generateManifest(previous, next) {
     if (!filesOnPreviousVersion.find((f) => f.path === file.path)) {
       file.type = "addition";
     }
+    file.path = file.path.substring(file.path.indexOf(path.sep) + 1);
   });
 
-  const content = JSON.stringify(files, null, 2);
-  return content;
+  return files;
 }
