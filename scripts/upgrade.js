@@ -2,11 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { spawnSync, execSync } from "node:child_process";
 import inquirer from "inquirer";
-import { XMLParser } from "fast-xml-parser";
 import { dump } from "js-yaml";
 import config from "../config.js";
 import { valid, invalid, warn, section } from "../utils.js";
 import { generateManifest } from "./manifest.js";
+import { getProjectCookiecutterContext } from "./get-cookiecutter-context.js";
 
 const userdir = process.cwd();
 
@@ -42,36 +42,24 @@ function start() {
   }
 }
 
-function versionCheck() {
+function versionCheck(target) {
   section("Detecting your .crowdbotics.json version");
-  const version = {};
   try {
-    version.nextVersion = JSON.parse(
+    const version = JSON.parse(
       fs.readFileSync(
         path.join(userdir, config.constants.CROWDBOTICS_FILE),
         "utf8"
       )
     ).scaffold.version;
+
+    if (version === target) {
+      invalid("You are already at the target scaffold version");
+    } else {
+      valid("Upgradable version detected:", target);
+      return version;
+    }
   } catch (e) {
     invalid("Failed to parse your current scaffold version");
-  }
-
-  version.previousVersion = JSON.parse(
-    fs.readFileSync(
-      path.join(
-        userdir,
-        config.upgrade.build.scaffoldRepoDir,
-        ".crowdbotics.json"
-      ),
-      "utf8"
-    )
-  ).scaffold.version;
-
-  if (version.nextVersion === version) {
-    invalid("You are already at the latest scaffold version");
-  } else {
-    valid("Upgradable version detected:", version.nextVersion);
-    return version;
   }
 }
 
@@ -85,7 +73,7 @@ function stashSave() {
   if (saved) valid("Unsaved changes have been stashed");
 }
 
-function setupLocalScaffoldRepo() {
+function setupLocalScaffoldRepo(target) {
   if (fs.existsSync(path.join(userdir, config.upgrade.build.scaffoldRepoDir))) {
     spawnSync("rm", ["-rf"], {
       cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
@@ -106,6 +94,11 @@ function setupLocalScaffoldRepo() {
       cwd: userdir
     }
   );
+  if (target != "master") {
+    spawnSync("git", ["checkout", target], {
+      cwd: path.join(config.upgrade.build.scaffoldRepoDir)
+    });
+  }
   section("installing npm packages");
   spawnSync("yarn", ["install"], {
     cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
@@ -153,111 +146,8 @@ function setupLocalScaffoldRepo() {
   });
 }
 
-function getProjectCookiecutterContext(version) {
-  section("Detecting your project name, slug, and ssh key fingerprint");
-  let context = {};
-  if (version.previousVersion !== "1.1.0") {
-    context = JSON.parse(
-      fs.readFileSync(path.join(userdir, ".crowdbotics.json"), "utf8")
-    ).scaffold.cookiecutter_context;
-    return context;
-  }
-
-  const options = {
-    ignoreAttributes: false
-  };
-  const parser = new XMLParser(options);
-  let xml, obj;
-
-  xml = fs.readFileSync(
-    path.join(
-      userdir,
-      "android",
-      "app",
-      "src",
-      "main",
-      "res",
-      "values",
-      "strings.xml"
-    ),
-    "utf8"
-  );
-  obj = parser.parse(xml);
-  context.project_name = obj.resources.string.filter(
-    (str) => str["@_name"] === "original_app_name"
-  )[0]["#text"];
-
-  context.project_slug = [];
-
-  xml = fs.readFileSync(
-    path.join(userdir, "android", "app", "src", "main", "AndroidManifest.xml"),
-    "utf8"
-  );
-  obj = parser.parse(xml);
-  const slug = obj.manifest["@_package"].replace(/^(com\.)/g, "");
-  context.project_slug.push(slug);
-
-  try {
-    xml = fs.readFileSync(
-      path.join(userdir, "ios", slug, "LaunchScreen.storyboard"),
-      "utf8"
-    );
-    obj = parser.parse(xml);
-    context.project_slug.push(
-      obj.document.scenes.scene.objects.viewController.view.subviews.label[0][
-        "@_text"
-      ]
-    );
-    const json = JSON.parse(
-      fs.readFileSync(path.join(userdir, "app.json"), "utf8")
-    );
-    context.project_slug.push(json.name);
-    context.project_slug.push(json.displayName);
-
-    const freqArray = context.project_slug;
-    const freqMap = {};
-    let mostFrequent = context.project_slug[0];
-    let mostFrequentCount = 1;
-
-    for (let i = 0; i < freqArray.length; i++) {
-      const element = freqArray[i];
-
-      if (freqMap[element]) {
-        freqMap[element]++;
-      } else {
-        freqMap[element] = 1;
-      }
-
-      if (freqMap[element] > mostFrequentCount) {
-        mostFrequent = element;
-        mostFrequentCount = freqMap[element];
-      }
-    }
-
-    context.project_slug = mostFrequent;
-  } catch (err) {
-    context.project_slug = context.project_slug[0];
-    warn("project_slug extracted with low confidence:", err.message);
-  }
-
-  const txt = fs
-    .readFileSync(
-      path.join(userdir, ".circleci", "generate_mobile_ios_config.sh"),
-      "utf8"
-    )
-    .split("\n");
-
-  const index = txt.findIndex((line) => line.includes("fingerprints:")) + 1;
-  context.ssh_key_fingerprint = txt[index]
-    .trim()
-    .replace("- '", "")
-    .replace("'", "");
-
-  return context;
-}
-
-function setupCookiecutter(context, version) {
-  section(`Generating v${version.previousVersion} template with cookiecutter`);
+function setupCookiecutter(context, userVersion, target) {
+  section(`Generating ${userVersion} template with cookiecutter`);
   const yaml = dump({
     default_context: context
   });
@@ -275,48 +165,64 @@ function setupCookiecutter(context, version) {
     [
       "gh:crowdbotics/react-native-scaffold",
       "--directory dist/cookie",
-      `--checkout ${version.previousVersion}`,
-      `--config-file ${path.join(
+      "--checkout",
+      userVersion,
+      "--config-file",
+      path.join(
         userdir,
         config.upgrade.build.scaffoldRepoDir,
         config.upgrade.build.contextYaml
-      )}`,
-      "--no-input"
+      ),
+      "--output-dir",
+      path.join(
+        userdir,
+        config.upgrade.build.scaffoldRepoDir,
+        config.upgrade.build.templatePrevious
+      ),
+      "--no-input",
+      "--overwrite-if-exists"
     ],
     {
       cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
+      shell: true,
       encoding: "utf8"
     }
   );
   if (run.error) {
-    console.error(run.stdout);
-    console.error(run.stderr);
-    invalid("template creation failed");
+    invalid(`template for ${userVersion} creation failed`);
   }
 
-  section(`Generating v${version.nextVersion} template with cookiecutter`);
+  section(`Generating ${target} template with cookiecutter`);
   const run2 = spawnSync(
     "pipenv run cookiecutter",
     [
       "gh:crowdbotics/react-native-scaffold",
       "--directory dist/cookie",
-      `--checkout ${version.nextVersion}`,
-      `--config-file ${path.join(
+      "--checkout",
+      target,
+      "--config-file",
+      path.join(
         userdir,
         config.upgrade.build.scaffoldRepoDir,
         config.upgrade.build.contextYaml
-      )}`,
-      "--no-input"
+      ),
+      "--output-dir",
+      path.join(
+        userdir,
+        config.upgrade.build.scaffoldRepoDir,
+        config.upgrade.build.templateNext
+      ),
+      "--no-input",
+      "--overwrite-if-exists"
     ],
     {
       cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
+      shell: true,
       encoding: "utf8"
     }
   );
   if (run2.error) {
-    console.error(run2.stdout);
-    console.error(run2.stderr);
-    invalid("template creation failed");
+    invalid(`template for v${target} creation failed`);
   }
 }
 
@@ -655,12 +561,6 @@ function finish() {
   process.exit(0);
 }
 
-function parse() {
-  const context = getProjectCookiecutterContext();
-  console.log(context);
-  process.exit(0);
-}
-
 function removeCache() {
   fs.rmSync(path.join(userdir, config.upgrade.build.scaffoldRepoDir), {
     recursive: true
@@ -696,44 +596,47 @@ function removeDiffs() {
   });
 }
 
-function upgrade() {
-  start();
-  setupLocalScaffoldRepo();
-  const version = versionCheck();
-  stashSave();
-  const context = getProjectCookiecutterContext(version);
-  setupCookiecutter(context, version);
-  section("Check files integrity and upgrade to new versions");
-  const manifest = generateManifest(
-    path.join(
-      userdir,
-      config.upgrade.build.scaffoldRepoDir,
-      config.upgrade.build.templatePrevious
-    ),
-    path.join(
-      userdir,
-      config.upgrade.build.scaffoldRepoDir,
-      config.upgrade.build.templateNext
-    )
-  );
-  manifest.forEach((file) => {
-    file.path = file.path.replace(
-      config.upgrade.manifest.slugPlaceholderRegex,
-      context.project_slug
+function upgrade(target) {
+  function perform() {
+    start();
+    setupLocalScaffoldRepo(target);
+    const version = versionCheck(target);
+    stashSave();
+    const context = getProjectCookiecutterContext(userdir, version);
+    setupCookiecutter(context, version, target);
+    section("Check files integrity and upgrade to new versions");
+    const manifest = generateManifest(
+      path.join(
+        userdir,
+        config.upgrade.build.scaffoldRepoDir,
+        config.upgrade.build.templatePrevious
+      ),
+      path.join(
+        userdir,
+        config.upgrade.build.scaffoldRepoDir,
+        config.upgrade.build.templateNext
+      )
     );
-    updateFiles(context.project_slug, file.path, file.type);
-  });
-  finish();
+    manifest.forEach((file) => {
+      file.path = file.path.replace(
+        config.upgrade.manifest.slugPlaceholderRegex,
+        context.project_slug
+      );
+      updateFiles(context.project_slug, file.path, file.type);
+    });
+    finish();
+  }
+
+  return perform;
 }
 
-export function upgradeScaffold() {
+export function upgradeScaffold(target = "master") {
   const choices = {
-    "Upgrade your scaffold": upgrade,
+    "Upgrade your scaffold": upgrade(target),
     "Undo all changes": resetHEAD,
     "Remove all diff files": removeDiffs,
-    Quit: () => process.exit(0),
-    "Print cookiecutter context (debug)": parse,
-    "Clear local cache (debug)": removeCache
+    "Clear local cache (debug)": removeCache,
+    Quit: () => process.exit(0)
   };
 
   inquirer
