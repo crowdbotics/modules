@@ -12,7 +12,7 @@ _Related PRs:_
 
 Did you make changes to modules or created a new module?
 
-- [ ] Yes, and have read the [modules checklist](https://crowdbotics.github.io/modules/modules-checklist.html) document and followed the instructions.
+- [ ] Yes, and have read the [modules updates checklist](https://github.com/crowdbotics/modules/#modules-updates-checklist) documentation and followed the instructions.
 - [ ] No.
 
 ## Changes introduced
