@@ -170,12 +170,16 @@ Commands available:
   commit   Update an existing module from the demo source code
   init     Initialize a blank modules repository
   upgrade  Upgrade your existing app's scaffold to the latest version
+  help     Show this help page
 
-Parsing modules:
+Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>
 
-Parsing modules and writing to a json file:
+Parse modules and write the data to a json file:
   npx crowdbotics/modules parse --source <path> --write <path>
+
+Create a demo app:
+  npx crowdbotics/modules demo
 
 Create a module of a given type:
   npx crowdbotics/modules create --name <module-name> --type <all/react-native/django>
@@ -186,8 +190,23 @@ Initialize a modules repository:
 Upgrade your scaffold to the latest master:
   npx crowdbotics/modules upgrade
 
-Upgrade to a specific version (git tag, git commit or branch name):
+Upgrade your scaffold to a specific version (git tag, git commit or branch name):
   npx crowdbotics/modules upgrade --version 2.3.0
+
+Install one or modules to your demo app:
+  npx crowdbotics/modules add <module-name> <module-name-2>
+
+Remove one or modules from your demo app:
+  npx crowdbotics/modules remove <module-name> <module-name-2>
+
+Install modules from other directory:
+  npx crowdbotics/modules add --source ../other-repository <module-name>
+
+Update a module definition from the demo app:
+  npx crowdbotics/modules commit <module-name>
+
+Glossary:
+  <module-name> stands for the name of the directory where the module is defined.
 `);
   }
 };
