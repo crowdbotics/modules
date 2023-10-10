@@ -1,6 +1,7 @@
 import fs from "fs";
 import fse from "fs-extra";
 import path from "path";
+import { section, invalid } from "../utils.js";
 
 const IGNORED_ENTRIES = ["meta.json", "node_modules"];
 
@@ -55,17 +56,16 @@ export function commitModules(modules, dir) {
       "modules",
       backendeModuleName
     );
-    console.log("backend copying ...\n", sourceBackend, destBackend);
+    section("backend copying ...\n", sourceBackend, destBackend);
     copy(sourceBackend, destBackend);
 
-    console.log("\n");
     const sourceFrontend = path.join(demoDir, "modules", module, meta.root);
     const destFrontend = path.join(originModuleDir, "modules", module);
-    console.log("frontend copying ...\n", sourceFrontend, destFrontend);
+    section("frontend copying ...\n", sourceFrontend, destFrontend);
     copy(sourceFrontend, destFrontend);
   };
 
-  const copyBackendModule = (module, originModuleDir, meta) => {
+  const copyBackendModule = (module, originModuleDir) => {
     const backendeModuleName = module.replace(/-/g, "_");
     const sourceBackend = path.join(
       demoDir,
@@ -74,21 +74,14 @@ export function commitModules(modules, dir) {
       backendeModuleName
     );
     const destBackend = path.join(originModuleDir, backendeModuleName);
-    console.log("backend copying ...\n", sourceBackend, destBackend);
+    section("backend copying ...\n", sourceBackend, destBackend);
     copy(sourceBackend, destBackend);
   };
 
-  const copyFrontendModule = (module, originModuleDir, meta) => {
+  const copyFrontendModule = (originModuleDir, meta) => {
     const sourceFrontend = path.join(demoDir, meta.root);
     const destFrontend = path.join(originModuleDir);
-    console.log("frontend copying ...\n", sourceFrontend, destFrontend);
-    copy(sourceFrontend, destFrontend);
-  };
-
-  const copyScreenModule = (module, originModuleDir, meta) => {
-    const sourceFrontend = path.join(demoDir, meta.root);
-    const destFrontend = path.join(originModuleDir);
-    console.log("frontend copying ...\n", sourceFrontend, destFrontend);
+    section("frontend copying ...\n", sourceFrontend, destFrontend);
     copy(sourceFrontend, destFrontend);
   };
 
@@ -104,16 +97,16 @@ export function commitModules(modules, dir) {
         copyFullModule(module, originModuleDir, meta);
         break;
       case MODULE_TYPE.BACKEND:
-        copyBackendModule(module, originModuleDir, meta);
+        copyBackendModule(module, originModuleDir);
         break;
       case MODULE_TYPE.FRONTEND:
-        copyFrontendModule(module, originModuleDir, meta);
+        copyFrontendModule(originModuleDir, meta);
         break;
       case MODULE_TYPE.SCREEN:
-        copyScreenModule(module, originModuleDir, meta);
+        copyFrontendModule(originModuleDir, meta);
         break;
       default:
-        console.log("Module type not recognized");
+        invalid("Module type not recognized");
     }
   });
 }
