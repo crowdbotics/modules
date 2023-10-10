@@ -1,0 +1,5 @@
+{
+  "title": "Phone number picker",
+  "description": "Phone number picker screen module",
+  "root": "/screens/phone-number-picker"
+}
