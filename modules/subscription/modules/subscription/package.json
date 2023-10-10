@@ -1,0 +1,13 @@
+{
+    "name": "@modules/subscription",
+    "version": "1.0.1",
+    "description": "Allow subscriptions (one time, recurring). Allow subscriptions through in-App subscriptions for iOS",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+    },
+    "x-dependencies": {
+    }
+}
