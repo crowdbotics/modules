@@ -15,6 +15,7 @@ function start() {
   section("Checking environment compatibility");
   const yarn = spawnSync("yarn", ["--version"], {
     cwd: userdir,
+    shell: true,
     encoding: "utf8"
   });
   if (yarn.error) {
@@ -24,6 +25,7 @@ function start() {
   }
   const git = spawnSync("git", ["--version"], {
     cwd: userdir,
+    shell: true,
     encoding: "utf8"
   });
   if (git.error) {
@@ -33,6 +35,7 @@ function start() {
   }
   const pipenv = spawnSync("pipenv", ["--version"], {
     cwd: userdir,
+    shell: true,
     encoding: "utf8"
   });
   if (pipenv.error) {
@@ -67,6 +70,7 @@ function stashSave() {
   section("Checking for unsaved/untracked files here");
   const cmd = spawnSync("git", ["stash", "save", "-u"], {
     cwd: userdir,
+    shell: true,
     encoding: "utf8"
   });
   const saved = cmd.stdout.includes("Saved working directory and index state");
@@ -76,12 +80,14 @@ function stashSave() {
 function setupLocalScaffoldRepo(target) {
   if (fs.existsSync(path.join(userdir, config.upgrade.build.scaffoldRepoDir))) {
     spawnSync("rm", ["-rf"], {
-      cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
+      cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
+      shell: true
     });
   }
   section("Cloning scaffold repo");
   spawnSync("mkdir", ["-p", config.upgrade.build.dir], {
-    cwd: userdir
+    cwd: userdir,
+    shell: true
   });
   spawnSync(
     "git",
@@ -91,16 +97,19 @@ function setupLocalScaffoldRepo(target) {
       config.upgrade.build.scaffoldRepoDir
     ],
     {
+      shell: true,
       cwd: userdir
     }
   );
   if (target !== "master") {
     spawnSync("git", ["checkout", target], {
+      shell: true,
       cwd: path.join(config.upgrade.build.scaffoldRepoDir)
     });
   }
   section("installing npm packages");
   spawnSync("yarn", ["install"], {
+    shell: true,
     cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
   });
   spawnSync(
@@ -113,10 +122,12 @@ function setupLocalScaffoldRepo(target) {
       "prettier"
     ],
     {
+      shell: true,
       cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
     }
   );
   spawnSync("mkdir", ["-p", config.upgrade.build.diff], {
+    shell: true,
     cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
   });
   section("installing python packages");
@@ -124,6 +135,7 @@ function setupLocalScaffoldRepo(target) {
     "pipenv",
     ["install", config.constants.COOKIECUTTER_PACKAGE],
     {
+      shell: true,
       cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
       encoding: "utf8"
     }
@@ -138,10 +150,12 @@ function setupLocalScaffoldRepo(target) {
     "git",
     ["add", "Pipfile", "Pipfile.lock", "package.json", "yarn.lock"],
     {
+      shell: true,
       cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
     }
   );
   spawnSync("git", ["commit", "-m", '"update package manager files"'], {
+    shell: true,
     cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir)
   });
 }
@@ -234,7 +248,10 @@ function updateFiles(slug, file, type) {
   ) {
     const dir = path.dirname(file);
     if (dir !== ".") {
-      spawnSync("mkdir", ["-p", dir], { cwd: userdir });
+      spawnSync("mkdir", ["-p", dir], {
+        shell: true,
+        cwd: userdir
+      });
     }
     fs.copyFileSync(
       path.join(
@@ -248,6 +265,7 @@ function updateFiles(slug, file, type) {
     );
     spawnSync("git", ["add", path.join(userdir, file)], {
       cwd: userdir,
+      shell: true,
       stdio: "inherit"
     });
     valid(file);
@@ -285,7 +303,10 @@ function updateFiles(slug, file, type) {
     case "addition": {
       const dir = path.dirname(file);
       if (dir !== ".") {
-        spawnSync("mkdir", ["-p", dir], { cwd: userdir });
+        spawnSync("mkdir", ["-p", dir], {
+          shell: true,
+          cwd: userdir
+        });
       }
       fs.copyFileSync(
         path.join(
@@ -299,6 +320,7 @@ function updateFiles(slug, file, type) {
       );
       spawnSync("git", ["add", path.join(userdir, file)], {
         cwd: userdir,
+        shell: true,
         stdio: "inherit"
       });
       return;
@@ -319,6 +341,7 @@ function updateFiles(slug, file, type) {
         ],
         {
           cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
+          shell: true,
           encoding: "utf8"
         }
       );
@@ -347,6 +370,7 @@ function updateFiles(slug, file, type) {
         ],
         {
           cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
+          shell: true,
           encoding: "utf8"
         }
       );
@@ -376,6 +400,7 @@ function updateFiles(slug, file, type) {
         ],
         {
           cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
+          shell: true,
           encoding: "utf8"
         }
       );
@@ -476,6 +501,7 @@ function updateFiles(slug, file, type) {
     ],
     {
       cwd: path.join(userdir, config.upgrade.build.scaffoldRepoDir),
+      shell: true,
       encoding: "utf8"
     }
   );
@@ -487,7 +513,7 @@ function updateFiles(slug, file, type) {
     file
   );
 
-  if (git.error) {
+  if (git.status) {
     // Create a pristine file
     const pristine = `${path.basename(
       file,
@@ -517,6 +543,7 @@ function updateFiles(slug, file, type) {
       ],
       {
         cwd: path.join(userdir),
+        shell: true,
         encoding: "utf8"
       }
     );
@@ -546,6 +573,7 @@ function updateFiles(slug, file, type) {
     fs.copyFileSync(src, dest);
     spawnSync("git", ["add", dest], {
       cwd: userdir,
+      shell: true,
       stdio: "inherit"
     });
   }
@@ -556,6 +584,7 @@ function finish() {
   section("Running git status for review");
   spawnSync("git", ["status", "-u"], {
     cwd: path.join(userdir),
+    shell: true,
     stdio: "inherit"
   });
   process.exit(0);
@@ -570,10 +599,12 @@ function removeCache() {
 function resetHEAD() {
   spawnSync("git", ["reset", "--hard", "HEAD"], {
     cwd: path.join(userdir),
+    shell: true,
     stdio: "inherit"
   });
   const status = execSync("git status -u --porcelain=v1 | cut -c 4-", {
     cwd: path.join(userdir),
+    shell: true,
     encoding: "utf8"
   });
   if (status) {
@@ -583,6 +614,7 @@ function resetHEAD() {
       .forEach((stat) =>
         spawnSync("rm", [stat], {
           cwd: path.join(userdir),
+          shell: true,
           stdio: "inherit"
         })
       );
@@ -592,6 +624,7 @@ function resetHEAD() {
 function removeDiffs() {
   execSync('find . -type f -name "*.diff" -delete', {
     cwd: path.join(userdir),
+    shell: true,
     stdio: "inherit"
   });
 }
