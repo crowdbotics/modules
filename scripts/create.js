@@ -25,7 +25,7 @@ function generateRNFiles(base, name, relative = "/") {
   "version": "1.0.0",
   "description": "",
   "private": true,
-  "main": "index.js",
+  "main": "index.js"
 }`;
 
   const indexJs = `import React from "react";
