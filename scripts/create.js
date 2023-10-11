@@ -37,8 +37,7 @@ function ${name}() {
 
 export default {
   title: "${name}",
-  navigator: ${name},
-  slice
+  navigator: ${name}
 };`;
 
   if (relative !== "/") {
