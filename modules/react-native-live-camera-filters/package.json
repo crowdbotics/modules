@@ -7,13 +7,13 @@
   "x-dependencies": {
     "@react-native-camera-roll/camera-roll": "^5.7.2",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-filter-camera": "github:saad-abid-crowdbotics/react-native-filter-camera"
+    "react-native-filter-camera": "github:crowdbotics/react-native-filter-camera"
   },
   "author": "Crowdbotics",
   "license": "ISC",
   "dependencies": {
     "@react-native-camera-roll/camera-roll": "^5.7.2",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-filter-camera": "github:saad-abid-crowdbotics/react-native-filter-camera"
+    "react-native-filter-camera": "github:crowdbotics/react-native-filter-camera"
   }
 }

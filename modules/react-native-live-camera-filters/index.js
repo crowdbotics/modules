@@ -1,7 +1,7 @@
 import React, { createRef, useState, useContext } from "react";
 import { View, TouchableOpacity, Text, PermissionsAndroid, Platform, Alert } from "react-native";
 
-import CameraRoll from "@react-native-community/cameraroll";
+import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { FilterCameraView } from "react-native-filter-camera";
@@ -49,9 +49,6 @@ export const App = () => {
 
   const onPictureTaken = async (pic) => {
     const picUri = pic?.nativeEvent?.uri;
-    if (Platform.OS === "android" && !(await hasAndroidPermission())) {
-      return;
-    }
     await CameraRoll.save(picUri, { type: "photo" });
     setIsLoading(false);
     Alert.alert(

@@ -64,3 +64,8 @@ export const FILTERS = [
     name: "Sepia"
   }
 ];
+
+export default {
+  styles: styles,
+  FILTERS:FILTERS
+}
