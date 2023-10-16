@@ -1,45 +1,43 @@
-import React from "react";
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import React, { useContext } from "react";
+import { View, Text, TextInput } from "react-native";
+import { OptionsContext } from "@options";
 
+/**
+ * A custom input component for text entry.
+ * @param {Object} props - The props object containing various properties for customization.
+ * @param {Object} props.styles - Additional styles to be applied to the container view.
+ * @param {string} props.placeholder - The placeholder text to display when the input is empty.
+ * @param {string} props.value - The value of the input.
+ * @param {function} props.setValue - The function to be called when the input value changes.
+ * @param {string} props.errorText - The error message to display below the input (optional).
+ * @param {boolean} props.multiline - Determines if the input can have multiple lines (default: false).
+ * @param {boolean} props.editable - Determines if the input is editable (default: true).
+ * @returns {JSX.Element} - The Input component.
+ */
 const Input = (props) => {
+  const { styles } = useContext(OptionsContext);
+
+  const { placeholder, value, setValue, multiline, editable, errorText } =
+    props;
   return (
-    <View style={styles.container}>
+    <View style={[styles.textInputContainer, props.styles]}>
       <TextInput
-        style={styles.input}
-        placeholder={props.placeholder}
-        value={props.value}
-        onChangeText={(num) => props.setValue(num)}
-        placeholderTextColor='#ddd'
-        multiline={props.multiline}
-        numberOfLines={props.multiline ? 10 : null}
-        editable={props.editable !== false}
+        style={styles.inputStyles}
+        placeholder={placeholder}
+        value={value}
+        onChangeText={(num) => setValue(num)}
+        placeholderTextColor="#ddd"
+        multiline={multiline}
+        numberOfLines={multiline ? 10 : null}
+        editable={editable !== false}
       />
-      {props.errorText ? <Text style={styles.error}>{props.errorText}</Text> : null}
+      {errorText
+        ? (
+        <Text style={styles.textInputError}>{errorText}</Text>
+          )
+        : null}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    borderRadius: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    borderWidth: 1,
-    borderColor: "#C4C4C4",
-    backgroundColor: "#fff"
-  },
-  input: {
-    backgroundColor: "#fff",
-    height: 53,
-    color: "#000",
-    borderRadius: 10,
-    fontSize: 14
-  },
-  error: {
-    fontSize: 13,
-    color: "#FA060D",
-    paddingTop: 8
-  }
-});
 export default Input;

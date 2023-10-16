@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Image,
   Alert,
@@ -10,20 +10,25 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector, useDispatch } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
-import { styles, textInputStyles } from "./styles";
-import { validateEmail, LOGO_URL } from "./constants.js";
+import { validateEmail, LOGO_URL } from "../utils";
 import { resetPassword } from "../auth";
-import { useNavigation } from "@react-navigation/native";
+import { OptionsContext } from "@options";
 
-const PasswordRecover = () => {
-  const navigation = useNavigation();
+const PasswordRecover = ({ navigation }) => {
+  const options = useContext(OptionsContext);
+  const { styles } = options;
   const [email, setEmail] = useState("");
-  const { api } = useSelector(state => state.login);
+  // State for reset password Api errors
+  const [errorResponse, setErrorResponse] = useState([]);
+
+  // This variable fetches the loading and error status from the store
+  const { api } = useSelector(state => state.Login);
   const dispatch = useDispatch();
 
+  // Error message will be displayed if user has not entered a valid email
   const handlePasswordReset = () => {
     if (!validateEmail.test(email)) { return Alert.alert("Error", "Please enter a valid email address."); }
-
+    // This action dispatches the reset password api with email as params
     dispatch(resetPassword({ email }))
       .then(unwrapResult)
       .then(() => {
@@ -33,7 +38,7 @@ const PasswordRecover = () => {
         );
         navigation.goBack();
       })
-      .catch(err => console.log(err.message));
+      .catch(err => { setErrorResponse(errorResponse => [...errorResponse, err]); });
   };
 
   const renderImage = () => {
@@ -69,13 +74,6 @@ const PasswordRecover = () => {
             autoCapitalize="none"
           />
         </View>
-        {!!api.error && (
-          <Text
-            style={[textInputStyles.error, { marginBottom: 10, fontSize: 12 }]}
-          >
-            {api.error.message}
-          </Text>
-        )}
         <TouchableOpacity
           disabled={api.loading === "pending"}
           activeOpacity={0.7}
@@ -91,6 +89,13 @@ const PasswordRecover = () => {
             Reset Password
           </Text>
         </TouchableOpacity>
+        {
+        errorResponse.map((value, index) =>
+          <View key={index}>
+            <Text style={styles.error1}>{value[Object.keys(value)[index]].toString()}</Text>
+          </View>
+        )
+      }
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => {

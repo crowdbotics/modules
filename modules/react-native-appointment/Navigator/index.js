@@ -7,10 +7,20 @@ import Home from "../screens/home";
 const Stack = createStackNavigator();
 
 const Navigator = () => {
-  return <Stack.Navigator screenOptions={{ headerStyle: { elevation: 0 }, cardStyle: { backgroundColor: "#fff" } }}>
-    <Stack.Screen options={{ headerShown: false }} name="Home" component={Home} />
-    <Stack.Screen name="AppointmentForm" component={CreateAppointment}/>
-    <Stack.Screen name="Appointments" component={Appointments}/>
+  return <Stack.Navigator screenOptions={{
+    headerStyle: {
+      elevation: 0
+    },
+    cardStyle: {
+      backgroundColor: "#fff"
+    }
+  }}>
+    <Stack.Screen options={{
+      headerShown: false
+    }} name="Home" component={Home} />
+    <Stack.Screen name="AppointmentForm" component={CreateAppointment} />
+    <Stack.Screen name="Appointments" component={Appointments} />
   </Stack.Navigator>;
 };
+
 export default Navigator;

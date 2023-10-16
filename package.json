@@ -47,12 +47,15 @@
     "@babel/types": "^7.18.8",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
-    "fast-xml-parser": "^4.2.2",
+    "fast-xml-parser": "^4.2.5",
     "find": "^0.3.0",
     "fs-extra": "^10.1.0",
     "inquirer": "^9.2.0",
     "js-yaml": "^4.1.0",
     "prettier": "^2.6.2"
+  },
+  "resolutions": {
+    "shell-quote": "1.7.3"
   },
   "devDependencies": {
     "@react-native-community/cli": "5.0.1",

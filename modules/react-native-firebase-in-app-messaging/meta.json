@@ -1,0 +1,5 @@
+{
+  "title": "React native firebase in-app messaging",
+  "description": "React native based module for firebase in app messages",
+  "root": "/modules/firebase-in-app-messaging"
+}

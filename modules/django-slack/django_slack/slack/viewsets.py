@@ -1,17 +1,9 @@
-import os
-
-
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .services.SlackService import SlackService
-from .serializers import (
-    FileSerializer,
-    MessageSerializer,
-    ChannelSerializer,
-    InviteUserToChannelSerializer,
-)
+from .serializers import FileSerializer, MessageSerializer, ChannelSerializer, InviteUserToChannelSerializer
+from .services.Slack import SlackService
 
 
 class SlackViewSet(viewsets.GenericViewSet):
@@ -41,7 +33,13 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["post"], url_path="send-message")
     def send_message(self, request):
-        """Send Message to specific Slack Channel"""
+        """
+        Send Message to a specific Slack Channel
+
+        :body_params str message: content of your message  \n
+        :body_params channel_name str message: channel name where the message is being sent \n
+        :return: Message id with details
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -50,7 +48,14 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["post"], url_path="upload-file")
     def upload_file(self, request):
-        """upload_message: Send File with message to specific Slack Channel"""
+        """
+        Send File with a message content to a specific Slack Channel
+
+        :body_params  file: File to be uploaded    \n
+        :body_params  str message: A message content that sent in the channel    \n
+        :body_params  str channel_name: Name of the channel where the file will upload  \n
+        :return: An uploaded file id and details sent to that respective channel
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -63,7 +68,14 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["post"], url_path="create-channel")
     def create_channel(self, request):
-        """Create Slack channel"""
+        """
+        Create Slack channel with invite multiple users to channel
+        User Pass Multiple Emails in CharField using comma separation
+
+        :channel_name str message: Name of channel    \n
+        :body_params str emails: Multiple emails can pass using comma separation(,) to invite users to channel    \n
+        :return: Returns a created channel id and details
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -72,7 +84,14 @@ class SlackViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=["post"], url_path="invite-user-to-channel")
     def invite_user_to_channel(self, request):
-        """Invite user to specific Slack channel"""
+        """
+        Invite multiple users to specific Slack channel
+
+        body_params str channel_id: id of channel from invite
+        :body_params  str channel_name: name of channel from invite
+        :body_params str emails: An emails list separated with ',' to invite users to channel
+        :return: An invitation id with details of users that invited to respective channel
+        """
 
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -83,20 +102,23 @@ class SlackViewSet(viewsets.GenericViewSet):
     def get_channel_id(self, request, pk):
         """
         Returns channel id by passing channel name
-        :params str pk: Channel Name (Required)
+
+        :path_params str channel_name: Name of channel to get its ID \n
+        :return: Channel id of respective channel
         """
 
         response, status_code = self.slack_service.get_channel_id(pk)
         if status_code:
-            return Response(data={"channel_id": response}, status=status_code)
-        else:
-            return Response(data=response.data, status=response.status_code)
+            return Response(data={'channel_id': response}, status=status_code)
 
     @action(detail=True, methods=["get"], url_path="channel_history")
     def get_channel_history(self, request, pk):
         """
         Returns all the history and conversations done in specific channel
-        :params str pk: Channel ID (Required)
+
+        :path_params str channel_id: ID of the channel to get its history \n
+        :return: A channel History with complete details
+
         """
 
         next_cursor = request.query_params.get("next_cursor")
@@ -108,7 +130,10 @@ class SlackViewSet(viewsets.GenericViewSet):
     def archive_channel(self, request, pk):
         """
         Archive the specific channel
-        :params str pk: Channel ID (Required)
+
+        :path_params str channel_id: ID of the channel going to be archived  \n
+        :return: Return status 'ok' only
+
         """
 
         response = self.slack_service.archive_channel(pk)

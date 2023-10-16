@@ -1,0 +1,18 @@
+{
+  "title": "Azure AD Auth",
+  "description": "Module that allow you to authenticate users with Azure AD",
+  "root": "/modules/azure-ad-auth",
+  "schema": {
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 12,
+      "pattern": "^[A-Z]"
+    },
+    "copy": {
+      "type": "string",
+      "minLength": 4,
+      "pattern": "^[A-Z]"
+    }
+  }
+}
