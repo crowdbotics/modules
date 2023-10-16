@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { View, StyleSheet, FlatList, Text, TouchableNativeFeedback, Image } from "react-native";
 import { OptionsContext } from "@options";
 
@@ -19,7 +19,7 @@ import cool from "../../assets/cool1.jpg";
 import bright from "../../assets/bright1.jpg";
 
 export default function Filter({ selectFilter }) {
-  const {FILTERS} = useContext(OptionsContext)
+  const { FILTERS } = useContext(OptionsContext);
   const warmUri = Image.resolveAssetSource(Warm).uri;
   const classicUri = Image.resolveAssetSource(classic).uri;
   const sharpUri = Image.resolveAssetSource(sharp).uri;

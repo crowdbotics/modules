@@ -67,5 +67,5 @@ export const FILTERS = [
 
 export default {
   styles: styles,
-  FILTERS:FILTERS
-}
+  FILTERS: FILTERS
+};
