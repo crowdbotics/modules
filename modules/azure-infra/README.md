@@ -8,6 +8,39 @@ Terraform module for vanilla stack deployment on azure.
 
 [x] This module requires manual configurations.
 
+## Deployment
+
+### Prerequsites
+- [Terraform](https://developer.hashicorp.com/terraform/downloads)
+- [azure-cli](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli) 
+
+
+### Steps
+- Login to azure account using cli ([command](https://learn.microsoft.com/en-us/cli/azure/authenticate-azure-cli-interactively#sign-in-with-credentials-on-the-command-line))
+
+- Add `main.tf` in modules folder with below content in it.
+
+```
+module "azure_app" {
+  source       = "./azure"
+  project_name = "azuredemoproject"
+  site_config = {}
+}
+
+output "app_url" {
+  value = module.azure_app.azurerm_container_app_url
+}
+
+```
+- Run below commands
+```
+terraform plan -out webapp
+terraform apply webapp
+```
+- It takes around `20-30` minutes to finish provisioning all resources. 
+- Once complete, `app_url` will provide the hosted application url.
+
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -73,3 +106,4 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_azurerm_container_app_url"></a> [azurerm\_container\_app\_url](#output\_azurerm\_container\_app\_url) | n/a |
+<!-- END_TF_DOCS -->
