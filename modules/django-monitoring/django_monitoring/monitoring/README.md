@@ -6,12 +6,10 @@ This backend module enables automatic reporting of errors and exceptions as well
 
 The following are the scope features of this module:
 
-- Ability to capture:
-    - Errors
-    - Uncaught Exceptions
-    - Unhandled Rejections
-    - As well as other types of errors, depending on the platform.
-- Ability to watch error logs in Sentry/Issues dashboard. 
+- Ability to captures errors, uncaught exceptions, and unhandled rejections.
+- Ability to monitors various error types based on the platform.
+- Ability to provides real-time error log tracking on Sentry/Issues dashboard.
+ 
 
 ## Features
 
@@ -24,6 +22,9 @@ The following are the scope features of this module:
 
 ```dotenv
 SENTRY_DSN_URL="Your Sentry Project DSN Url"
+TRACES_SAMPLE_RATE=1.0
+SEND_DEFAULT_PII="True or False"
+SENTRY_DEBUG="True or False"
 ```
 ```settings.py
 from modules.django_monitoring.monitoring.sentry_configurations import *

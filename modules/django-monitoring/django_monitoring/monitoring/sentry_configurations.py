@@ -9,9 +9,15 @@ sentry_sdk.init(
     dsn=os.getenv("SENTRY_DSN_URL"),
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
-    traces_sample_rate=1.0,
-    send_default_pii=True,
-    debug=True,
+    # Recommend adjusting this value in production.
+    traces_sample_rate=os.getenv("TRACES_SAMPLE_RATE"),
+    # If you use django.contrib.auth and you've set "send_default_pii=True" so,
+    # user data (such as current user id, email address, username) will be attached to error events.
+    send_default_pii=os.getenv("SEND_DEFAULT_PII", False),
+    # if debug is (True) enabled  SDK will attempt to print out useful debugging information,
+    # if something goes wrong while sending the event.
+    # Not recommended to turn it on in production.
+    debug=os.getenv("SENTRY_DEBUG", False),
     integrations=[
         DjangoIntegration(),
         LoggingIntegration(
