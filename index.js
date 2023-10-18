@@ -66,6 +66,9 @@ const commands = {
 
     const data = parseModules(path.join(args["--source"]));
     if (args["--write"] && process.exitCode !== 1) {
+      fs.mkdirSync(path.dirname(path.join(args["--write"])), {
+        recursive: true
+      });
       fs.writeFileSync(
         path.join(args["--write"]),
         JSON.stringify(data, null, 2),
