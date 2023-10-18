@@ -1,0 +1,5 @@
+{
+  "title": "Monitoring (Django)",
+  "description": "Backend for the Django Monitoring (Sentry) module.",
+  "root": "/backend/modules"
+}
