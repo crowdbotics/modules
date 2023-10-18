@@ -1,14 +1,12 @@
 import fs, { existsSync } from "fs";
 import path from "path";
-import config from "../config.js";
 import crypto from "crypto";
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
+import { valid, invalid, section } from "../utils.js";
 
 const ajv = new Ajv({ allErrors: true, strict: false });
 addFormats(ajv);
-const MODULES_DIR = path.join("modules");
-const OUTPUT_FILE = path.join(config.dist.directory, "modules.json");
 const ACCEPTED_EXTENSIONS = [
   ".json",
   ".js",
@@ -23,16 +21,7 @@ const BASE_64_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 const META_FILE = ["meta.json"];
 const PREVIEW_FILE = ["preview.png"];
 
-const parseModules = (dir) => {
-  const valid = (mod) => {
-    console.log("\u2705", mod);
-  };
-
-  const invalid = (mod, message) => {
-    process.exitCode = 1;
-    console.log("\u274C", mod, "=>", message);
-  };
-
+export const parseModules = (dir) => {
   const accepted = (entry) => {
     return ACCEPTED_EXTENSIONS.includes(path.extname(entry));
   };
@@ -87,8 +76,7 @@ const parseModules = (dir) => {
 
   const data = {};
   const modules = fs.readdirSync(dir);
-  console.log("");
-  console.log("Parsing modules...", "\n");
+  section("Parsing modules...", "\n");
 
   modules.forEach((module) => {
     const modulePath = path.join(dir, module);
@@ -173,14 +161,6 @@ const parseModules = (dir) => {
 
     valid(module);
   });
-  console.log("");
-  console.log("Total of modules:", Object.keys(data).length);
+  section("Total of modules:", Object.keys(data).length);
   return data;
 };
-
-const data = parseModules(MODULES_DIR);
-
-// Write build files when --write argument is provided
-if (process.argv[2] === "--write" && process.exitCode !== 1) {
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(data, null, 2));
-}

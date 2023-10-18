@@ -1,8 +1,0 @@
-{
-  "name": "@screens/welcome",
-  "version": "1.0.0",
-  "description": "Crowdbotics new app welcome screen",
-  "private": true,
-  "main": "index.js",
-  "author": "Crowdbotics"
-}

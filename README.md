@@ -5,15 +5,12 @@
 </h1>
 
 <p align="center">
-  A customized React Native scaffold and a library of Django & React Native modules.
+  A library of Django & React Native modules.
 </p>
 
 <p align="center">
   <a href="https://github.com/crowdbotics/modules/actions/workflows/lint.yml">
     <img src="https://github.com/crowdbotics/modules/actions/workflows/lint.yml/badge.svg" alt="Source Code linter" />
-  </a>
-  <a href="https://github.com/crowdbotics/modules/actions/workflows/parse.yml">
-    <img src="https://github.com/crowdbotics/modules/actions/workflows/parse.yml/badge.svg" alt="Modules validation" />
   </a>
   <a href="https://github.com/crowdbotics/modules/actions/workflows/release.yml">
     <img src="https://github.com/crowdbotics/modules/actions/workflows/release.yml/badge.svg" alt="Production Release" />
@@ -23,10 +20,9 @@
 ## Contents
 
 - [Modules library](/modules)
-- [Custom React Native template](/scaffold/template/custom)
-- [Documentation](https://crowdbotics.github.io/modules/)
 - [Changelog](/CHANGELOG.md)
-- [Scaffold Changelog](/scaffold/CHANGELOG.md)
+- [Documentation](https://docs.crowdbotics.com)
+- [All commands](https://docs.crowdbotics.com/modules-commands)
 
 ## Requirements for contributing
 
@@ -75,3 +71,21 @@ yarn run parse
 
 ### macOS config
 - make sure to have a compatible version of urllib3 with openssl. urllib3 v2.0 or higher is compatible with OpenSSL 1.1.1 or higher
+
+## Modules updates checklist
+
+When adding a new module please make sure that:
+
+- it includes a `meta.json` file in the module's root directory.
+- it includes a `preview.png` image in the module's root directory.
+- `yarn run parse` checks pass.
+- you ran `yarn run dist` and added the changes.
+- you can open your module in the demo app (`yarn run demo`, `yarn run add <your-module-name-here>`, `cd demo; npx react-native-start`).
+
+When making changes to a module please make sure that:
+
+- `yarn run parse` checks pass.
+- you ran `yarn run dist` and added the changes.
+- you can open your module in the demo app (`yarn run demo`, `yarn run add <your-module-name-here>`, `cd demo; npx react-native-start`).
+
+Include as much documentation for your module as possible, and if you haven't seen it yet we created a style guide for [Authoring Modules](https://docs.crowdbotics.com/authoring-modules).
