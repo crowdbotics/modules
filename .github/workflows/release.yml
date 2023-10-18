@@ -43,7 +43,7 @@ jobs:
       - name: release modules
         run: |
           heroku config:set MODULES_REPO_BRANCH=$GITHUB_REF_NAME -a ${{ secrets.HEROKU_APP }}
-          heroku run 'python manage.py update_crowdbotics_components --quiet --no-input --no-log-file --public' -a ${{ secrets.HEROKU_APP }}
+          heroku run 'python manage.py update_crowdbotics_components --quiet --no-input --no-log-file --public' --size=standard-2x -a ${{ secrets.HEROKU_APP }}
       
       - name: Checkout
         uses: actions/checkout@v3.3.0
