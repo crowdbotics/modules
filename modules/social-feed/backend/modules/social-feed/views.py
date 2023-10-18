@@ -45,7 +45,7 @@ class CreatePostView(APIView):
             post_media.save()
             serializer = serializer.data
             serializer['media'] = post_media.data
-        return Response(serializer, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class MyFeedView(APIView):
