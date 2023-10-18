@@ -1,7 +1,7 @@
 {
-  "name": "crowdbotics-modules",
-  "version": "1.2.0",
-  "description": "# React Native Scaffold",
+  "name": "modules",
+  "version": "2.0.0",
+  "description": "Library of modules for React Native and Django apps",
   "main": "index.js",
   "bin": {
     "crowdbotics-modules": "./index.js"
@@ -11,28 +11,19 @@
     "node": ">16.0"
   },
   "scripts": {
-    "demo": "node scripts/demo.js",
-    "add": "node scripts/add.js",
-    "remove": "node scripts/remove.js",
-    "parse": "node scripts/parse.js",
-    "semver": "node scripts/semver.js",
-    "dist": "node scripts/parse.js --write",
-    "info": "node scripts/info.js",
-    "cookie": "node scripts/cookie.js",
-    "raw": "node scripts/raw.js",
-    "template": "node scripts/template.js",
-    "bootstrap": "npm run raw; npm run cookie; npm run parse;",
+    "demo": "npx . demo",
+    "add": "npx . add",
+    "remove": "npx . remove",
+    "parse": "npx . parse --source modules",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "yarn run eslint modules scripts",
-    "commit-module": "node scripts/commit-module.js",
-    "manifest": "node scripts/manifest.js"
+    "commit-module": "npx . commit"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/crowdbotics/modules.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "crowdbotics",
   "bugs": {
     "url": "https://github.com/crowdbotics/modules/issues"
   },
@@ -47,11 +38,12 @@
     "@babel/types": "^7.18.8",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
+    "arg": "^5.0.2",
     "fast-xml-parser": "^4.2.5",
     "find": "^0.3.0",
     "fs-extra": "^10.1.0",
-    "inquirer": "^9.2.0",
     "js-yaml": "^4.1.0",
+    "inquirer": "^9.2.0",
     "prettier": "^2.6.2"
   },
   "resolutions": {

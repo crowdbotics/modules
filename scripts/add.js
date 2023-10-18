@@ -1,13 +1,8 @@
 import fs, { existsSync } from "fs";
 import fse from "fs-extra";
 import path from "path";
-import config from "../config.js";
 import find from "find";
 import { execSync } from "child_process";
-
-const modules = process.argv.slice(2);
-const cwd = process.cwd();
-const demoDir = path.join(process.cwd(), config.demo.directory);
 
 const IGNORED_ENTRIES = ["meta.json", "node_modules"];
 
@@ -18,55 +13,60 @@ const copy = (origin, target) => {
   fse.copySync(origin, target, { filter: filterFiles });
 };
 
-modules.forEach((module) => {
-  process.chdir(cwd);
-  const originModuleDir = path.join(process.cwd(), "modules", module);
-  const meta = JSON.parse(
-    fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
-  );
-  const targetModuleDir = path.join(demoDir, meta.root);
+export function addModules(modules, source = "modules", dir) {
+  const cwd = process.cwd();
+  const demoDir = path.join(cwd, dir);
 
-  const getDeps = (packageJSON) => {
-    const packages = [];
-    if (Object.prototype.hasOwnProperty.call(packageJSON, "x-dependencies")) {
-      const deps = packageJSON["x-dependencies"];
-      for (const [key, value] of Object.entries(deps)) {
-        packages.push(`${key}@${value}`);
-      }
-    }
-    return packages;
-  };
+  modules.forEach((module) => {
+    process.chdir(cwd);
+    const originModuleDir = path.join(process.cwd(), source, module);
+    const meta = JSON.parse(
+      fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
+    );
+    const targetModuleDir = path.join(demoDir, meta.root);
 
-  // cleanup node_modules
-  if (existsSync(path.join(originModuleDir, "node_modules"))) {
-    fs.rmSync(path.join(originModuleDir, "node_modules"), {
-      recursive: true
-    });
-  }
-  if (existsSync(path.join(originModuleDir, "yarn.lock"))) {
-    fs.rmSync(path.join(originModuleDir, "yarn.lock"));
-  }
-
-  copy(originModuleDir, targetModuleDir);
-
-  find.file(originModuleDir, function (files) {
-    files.forEach((file) => {
-      if (path.basename(file) === "package.json") {
-        const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
-        const yarnPath = path.join(
-          "file:.",
-          meta.root,
-          path.dirname(file).replace(originModuleDir, "")
-        );
-        const packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
-
-        process.chdir(demoDir);
-        try {
-          execSync(`yarn add ${packages}`);
-        } catch (err) {
-          console.warn("Failed adding module. Is this module available?");
+    const getDeps = (packageJSON) => {
+      const packages = [];
+      if (Object.prototype.hasOwnProperty.call(packageJSON, "x-dependencies")) {
+        const deps = packageJSON["x-dependencies"];
+        for (const [key, value] of Object.entries(deps)) {
+          packages.push(`${key}@${value}`);
         }
       }
+      return packages;
+    };
+
+    // cleanup node_modules
+    if (existsSync(path.join(originModuleDir, "node_modules"))) {
+      fs.rmSync(path.join(originModuleDir, "node_modules"), {
+        recursive: true
+      });
+    }
+    if (existsSync(path.join(originModuleDir, "yarn.lock"))) {
+      fs.rmSync(path.join(originModuleDir, "yarn.lock"));
+    }
+
+    copy(originModuleDir, targetModuleDir);
+
+    find.file(originModuleDir, function (files) {
+      files.forEach((file) => {
+        if (path.basename(file) === "package.json") {
+          const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
+          const yarnPath = path.join(
+            "file:.",
+            meta.root,
+            path.dirname(file).replace(originModuleDir, "")
+          );
+          const packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
+
+          process.chdir(demoDir);
+          try {
+            execSync(`yarn add ${packages}`);
+          } catch (err) {
+            console.warn("Failed adding module. Is this module available?");
+          }
+        }
+      });
     });
   });
-});
+}

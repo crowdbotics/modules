@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.0.0 - 2023-09-27
+
+### Removed
+
+- Moved the React Native scaffold and it's tooling over to [github.com/crowdbotics/react-native-scaffold](https://github.com/crowdbotics/react-native-scaffold).
+
 ## 1.2.0 - 2023-07-04
 
 ### Added
