@@ -79,13 +79,13 @@ const commands = {
   add: () => {
     const args = arg({
       "--source": String,
-      "--proj": String
+      "--project": String
     });
     const modules = args._.slice(1);
     if (!modules.length) {
       invalid("please provide the name of the modules to be installed");
     }
-    addModules(modules, args["--source"], args["--proj"]);
+    addModules(modules, args["--source"], args["--project"]);
   },
   remove: () => {
     const args = arg({
