@@ -3,7 +3,7 @@ import path from "path";
 import find from "find";
 import { execSync } from "child_process";
 
-export function removeModules(modules, source = "modules", dir) {
+export function removeModules(modules, source = "modules", dir = "demo") {
   const cwd = process.cwd();
   const demoDir = path.join(process.cwd(), dir);
 

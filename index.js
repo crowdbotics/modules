@@ -78,23 +78,25 @@ const commands = {
   },
   add: () => {
     const args = arg({
-      "--source": String
+      "--source": String,
+      "--project": String
     });
     const modules = args._.slice(1);
     if (!modules.length) {
       invalid("please provide the name of the modules to be installed");
     }
-    addModules(modules, args["--source"], "demo");
+    addModules(modules, args["--source"], args["--project"]);
   },
   remove: () => {
     const args = arg({
-      "--source": String
+      "--source": String,
+      "--project": String
     });
     const modules = args._.slice(1);
     if (!modules.length) {
       invalid("please provide the name of the modules to be removed");
     }
-    removeModules(modules, args["--source"], "demo");
+    removeModules(modules, args["--source"], args["--project"]);
   },
   create: () => {
     const args = arg({
@@ -204,6 +206,12 @@ Remove one or modules from your demo app:
 
 Install modules from other directory:
   npx crowdbotics/modules add --source ../other-repository <module-name>
+
+Install modules to other app that is not "demo":
+  npx crowdbotics/modules add --project ../other-project <module-name>
+
+Remove modules from app that is not "demo":
+  npx crowdbotics/modules remove --project ../other-project <module-name>
 
 Update a module definition from the demo app:
   npx crowdbotics/modules commit <module-name>
