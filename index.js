@@ -211,7 +211,7 @@ Install modules to other app that is not "demo":
   npx crowdbotics/modules add --project ../other-project <module-name>
 
 Remove modules from app that is not "demo":
-  npx crowdbotics/modules remove --project ../other-repository <module-name>
+  npx crowdbotics/modules remove --project ../other-project <module-name>
 
 Update a module definition from the demo app:
   npx crowdbotics/modules commit <module-name>
