@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_firebase_push_notifications",
     version="0.1",
-    packages=[],
+    packages=["firebase_push_notifications"],
     install_requires=["fcm_django ~= 1.0.12", "firebase-admin ~= 5.4.0"],
     cmdclass={"build": BuildCommand},
 )
