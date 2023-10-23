@@ -1,5 +1,4 @@
 import { getGlobalOptions } from "@options";
-import { Platform } from "react-native";
 
 const global = getGlobalOptions();
 // Change your BASE_URL in `options/options.js` to edit this value
