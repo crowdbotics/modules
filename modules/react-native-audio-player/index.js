@@ -11,7 +11,7 @@ import RNFetchBlob from "rn-fetch-blob";
 const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackItemSelect }) => {
   const [isAlreadyPlay, setIsAlreadyPlay] = useState(false);
   const [duration, setDuration] = useState("00:00:00");
-  const [timeElapsed, setTimeElapsed] = useState("00:00:00");
+  const [timeElapsed, setTimeElapsed] = useState(0);
   const [percent, setPercent] = useState(0);
   const [inProgress, setInProgress] = useState(false);
   const [audioRecorderPlayer] = useState(new AudioRecorderPlayer());
@@ -38,13 +38,13 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
     });
   };
 
-  const onStartPress = async e => {
+  const onStartPress = async () => {
     setIsAlreadyPlay(true);
-    setInProgress(true);
     audioRecorderPlayer.startPlayer(selectedTrack?.path);
     audioRecorderPlayer.setVolume(1.0);
 
     audioRecorderPlayer.addPlayBackListener(async e => {
+      setInProgress(true);
       const currentTime = Math.max(0, e.currentPosition);
       const totalDuration = Math.max(0, e.duration);
 
@@ -55,8 +55,10 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
       const percentage = (currentTime / totalDuration) * 100;
       const roundedPercentage = Math.round(percentage * 100) / 100;
 
-      setTimeElapsed(e.current_position);
-      setPercent(roundedPercentage);
+      setTimeElapsed(currentTime);
+      if (!isNaN(roundedPercentage)) {
+        setPercent(roundedPercentage);
+      }
       setDuration(e.duration);
 
       if (onPlay) {
@@ -95,6 +97,9 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
   };
 
   const onTrackItemPress = (item) => {
+    setDuration("00:00:00");
+    setTimeElapsed("00:00:00");
+    setPercent(0);
     setSelectedTrack(item);
     onStopPress().then(async () => {
       await onStartPress();
@@ -176,8 +181,7 @@ const AudioPlayer = ({ onPlay, onPause, onBackwardCall, onForwardCall, onTrackIt
         </View>
       </View>
       <View style={styles.seekBar}>
-
-        <AudioSlider percent={percent} changeTime={changeTime}/>
+        <AudioSlider percent={percent} changeTime={changeTime} inProgress={inProgress} />
 
         <View style={styles.inProgress}>
           <Text style={[styles.textLight, styles.timeStamp]}>
@@ -285,7 +289,7 @@ export default {
   navigator: AudioPlayer
 };
 
-const AudioSlider = ({ percent, changeTime }) => {
+const AudioSlider = ({ percent, changeTime, inProgress }) => {
   return (
     <Slider
           minimumValue={0}
@@ -295,6 +299,7 @@ const AudioSlider = ({ percent, changeTime }) => {
           value={percent}
           minimumTrackTintColor="#93A8B3"
           onValueChange={(seconds) => changeTime(seconds)}
+          disabled={!inProgress}
         />
   );
 };
