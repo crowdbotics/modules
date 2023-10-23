@@ -6,7 +6,7 @@ const global = getGlobalOptions();
 const BASE_URL = global.url;
 
 export const registerDeviceInfoAPI = async (data, authToken) => {
-  const response = await fetch(`${BASE_URL}/modules/firebase-push-notifications/device/${Platform.OS === "ios" ? "apns" : "fcm"}/`, {
+  const response = await fetch(`${BASE_URL}/modules/firebase-push-notifications/user_fcm_device_add/`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: "Token " + authToken
