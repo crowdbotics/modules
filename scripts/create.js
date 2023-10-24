@@ -5,7 +5,7 @@ import { invalid, section } from "../utils.js";
 function generateMeta(name, type) {
   const rootMap = {
     all: "/",
-    "react-native": "/modules",
+    "react-native": `/modules/${name}`,
     django: "/backend/modules"
   };
 
@@ -124,7 +124,7 @@ export function createModule(name, type, target = "modules") {
   section(`generating ${name} module (${type})`);
   switch (type) {
     case "all":
-      generateDjangoFiles(dir, name, `/backend/modules/${name}`);
+      generateDjangoFiles(dir, name, "/backend/modules");
       generateRNFiles(dir, name, `/modules/${name}`);
       break;
     case "react-native":
