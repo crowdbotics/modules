@@ -1,0 +1,5 @@
+{
+  "title": "Inventory Management (Django)",
+  "description": "Backend for the Django Inventory Management module.",
+  "root": "/backend/modules"
+}
