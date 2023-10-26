@@ -31,12 +31,12 @@ class Supplier(TimeStamp):
 
 class Category(TimeStamp):
     CATEGORY_CHOICES = (
-        ('1', 'Active'),
-        ('2', 'Inactive')
+        (1, 'Active'),
+        (2, 'Inactive')
     )
     name = models.CharField(max_length=250)
     description = models.TextField(null=True, blank=True)
-    status = models.CharField(max_length=2, choices=CATEGORY_CHOICES, default=1)
+    status = models.PositiveIntegerField(choices=CATEGORY_CHOICES, default=1)
 
     def __str__(self):
         return self.name
@@ -47,15 +47,15 @@ class Category(TimeStamp):
 
 class Product(TimeStamp):
     PRODUCT_STATUS = (
-        ('1', 'Active'),
-        ('2', 'Inactive')
+        (1, 'Active'),
+        (2, 'Inactive')
     )
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="product_category")
     code = models.CharField(max_length=256, blank=True, null=True)
     name = models.CharField(max_length=256, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    status = models.CharField(max_length=2, choices=PRODUCT_STATUS, default=1)
+    status = models.PositiveIntegerField(choices=PRODUCT_STATUS, default=1)
 
     def __str__(self):
         return self.code + ' - ' + self.name
@@ -65,25 +65,21 @@ class Product(TimeStamp):
 
     @property
     def available_stock(self):
-        """
-        This method "available_stock" shows the remaining amount of available stocks
-        """
-        stocks = Stock.objects.filter(product=self)
-        stock_in = 0
-        stock_out = 0
-        for stock in stocks:
-            if stock.type == '1':
-                stock_in = int(stock_in) + int(stock.quantity)
-            else:
-                stock_out = int(stock_out) + int(stock.quantity)
+        stock_in = self.product_stock.filter(type=1).aggregate(total_stock_in=Sum('quantity'))['total_stock_in'] or 0
+        stock_out = self.product_stock.filter(type=2).aggregate(total_stock_out=Sum('quantity'))[
+                        'total_stock_out'] or 0
         available = stock_in - stock_out
         return available
 
 
 class Stock(TimeStamp):
+    STOCK_TYPE = (
+        (1, 'Stock-In'),
+        (2, 'Stock-Out')
+    )
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_stock")
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    type = models.CharField(max_length=2, choices=(('1', 'Stock-in'), ('2', 'Stock-Out')), default=1)
+    type = models.PositiveIntegerField(choices=STOCK_TYPE, default=1)
 
     def __str__(self):
         return self.product.code + ' - ' + self.product.name
@@ -92,21 +88,22 @@ class Stock(TimeStamp):
         verbose_name = "4 - Stock"
 
 
-class Invoices(TimeStamp):
-    PRODUCT_STATUS = (
-        ('1', 'Sales Invoice'),
-        ('2', 'Overdue Invoice'),
-        ('3', 'Interim Invoice'),
-        ('4', 'Final Invoice'),
+class Invoice(TimeStamp):
+    INVOICE_TYPE = (
+        (1, 'Sales Invoice'),
+        (2, 'Overdue Invoice'),
+        (3, 'Interim Invoice'),
+        (4, 'Final Invoice'),
     )
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='supplier_user')
-    invoice_type = models.CharField(max_length=2, choices=PRODUCT_STATUS)
-    transaction = models.CharField(max_length=250)
-    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    invoice_type = models.PositiveIntegerField(choices=INVOICE_TYPE, default=4)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    transaction = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    remaining_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     invoice_date = models.DateField(default=date.today)
 
     def __str__(self):
-        return self.transaction
+        return str(self.transaction)
 
     class Meta:
         verbose_name = "5 - Invoice"
@@ -116,23 +113,14 @@ class Invoices(TimeStamp):
 
 
 class InvoiceItem(TimeStamp):
-    invoice = models.ForeignKey(Invoices, on_delete=models.CASCADE, related_name='invoice_item')
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name='invoice_item')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='invoiceitem_product')
     stock = models.ForeignKey(Stock, on_delete=models.CASCADE, blank=True, null=True)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     quantity = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     def __str__(self):
-        return self.invoice.invoice_type
-
-    def sub_total(self):
-        """
-        This method calculates the total invoice amount by deducting the total unit prices of invoice items from the
-        invoice transaction amount, considering the remaining amount.
-        """
-        total = Decimal(self.unit_price) * Decimal(self.quantity)
-        value = Decimal(total) - Decimal(self.invoice.transaction)
-        return value
+        return str(self.product.name)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -140,7 +128,8 @@ class InvoiceItem(TimeStamp):
         This save method override to get the product price in unit_price and sub_total in invoice total.
         """
         self.unit_price = self.product.price
-        self.invoice.total = self.sub_total()
+        self.invoice.remaining_amount = (Decimal(self.unit_price) * Decimal(self.quantity)) - (Decimal(self.invoice.transaction))
+        self.invoice.total_amount = Decimal(self.unit_price) * Decimal(self.quantity)
         self.invoice.save()
         super(InvoiceItem, self).save(force_insert=False, force_update=False, using=None,
                                       update_fields=None)

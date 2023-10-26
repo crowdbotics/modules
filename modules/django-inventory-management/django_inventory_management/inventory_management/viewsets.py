@@ -72,7 +72,7 @@ class InvoiceViewSet(viewsets.ModelViewSet):
     serializer_class = InvoiceSerializer
     permission_classes = [IsAdminUser]
     authentication_classes = [TokenAuthentication, SessionAuthentication]
-    queryset = Invoices.objects.all()
+    queryset = Invoice.objects.all()
 
 
 class InvoiceItemViewSet(viewsets.ModelViewSet):
