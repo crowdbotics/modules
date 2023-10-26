@@ -34,7 +34,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     supplier_name = serializers.CharField(source='supplier.name', read_only=True)
 
     class Meta:
-        model = Invoices
+        model = Invoice
         fields = '__all__'
 
 

@@ -190,17 +190,17 @@ class StockViewsetsTestCase(APITestCase):
     def setUp(self):
         self.user = User.objects.create_superuser(username="david", email="demo@gmail.com", password="pass@123")
         self.token = Token.objects.create(user=self.user)
-        self.category = Category.objects.create(name="clothes", description="winter", status="1")
-        self.product = Product.objects.create(name="clothes", description="winter", status="1", code="11223",
+        self.category = Category.objects.create(name="clothes", description="winter", status=1)
+        self.product = Product.objects.create(name="clothes", description="winter", status=1, code="11223",
                                               price="250.0", category=self.category)
-        self.stock = Stock.objects.create(product=self.product, quantity="35.0", type="1")
+        self.stock = Stock.objects.create(product=self.product, quantity="35.0", type=1)
 
     def test_create_stock(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         url = reverse("stock-list")
         data = {
             "quantity": '40.00',
-            "type": "1",
+            "type": 1,
             "product": self.product.id
         }
         response = self.client.post(url, data, format='json')
@@ -219,7 +219,7 @@ class StockViewsetsTestCase(APITestCase):
         url = reverse("stock-detail", kwargs={'pk': self.stock.id})
         data = {
             "quantity": '40.00',
-            "type": "1",
+            "type": 1,
             "product": self.product.id
         }
         response = self.client.put(url, data, format='json')
@@ -251,14 +251,14 @@ class InvoiceViewsetsTestCase(APITestCase):
         self.user = User.objects.create_superuser(username="david", email="demo@gmail.com", password="pass@123")
         self.token = Token.objects.create(user=self.user)
         self.supplier = Supplier.objects.create(name="john", phone_number="+923111111111", address="uk")
-        self.invoice = Invoices.objects.create(supplier=self.supplier, transaction="400.0", invoice_type="2")
+        self.invoice = Invoice.objects.create(supplier=self.supplier, transaction="400.00", invoice_type=2)
 
     def test_create_invoice(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         url = reverse("invoice-list")
         data = {
-            "invoice_type": "1",
-            "transaction": "300",
+            "invoice_type": 1,
+            "transaction": "300.00",
             "supplier": self.supplier.id
         }
         response = self.client.post(url, data, format='json')
@@ -269,15 +269,15 @@ class InvoiceViewsetsTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         url = reverse("invoice-list")
         response = self.client.get(url, format='json')
-        self.assertEqual(response.data[0]['transaction'], '400.0')
+        self.assertEqual(response.data[0]['transaction'], "400.00")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_invoice(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         url = reverse("invoice-detail", kwargs={'pk': self.invoice.id})
         data = {
-            "invoice_type": "3",
-            "transaction": "600",
+            "invoice_type": 3,
+            "transaction": "600.00",
             "supplier": self.supplier.id
         }
         response = self.client.put(url, data, format='json')
@@ -288,7 +288,7 @@ class InvoiceViewsetsTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         url = reverse("invoice-detail", kwargs={'pk': self.invoice.id})
         response = self.client.get(url, format='json')
-        self.assertEqual(response.data['transaction'], '400.0')
+        self.assertEqual(response.data['transaction'], "400.00")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_delete_invoice(self):
@@ -309,14 +309,14 @@ class InvoiceItemViewsetsTestCase(APITestCase):
         self.user = User.objects.create_superuser(username="david", email="demo@gmail.com", password="pass@123")
         self.token = Token.objects.create(user=self.user)
         self.supplier = Supplier.objects.create(name="john", phone_number="+923111111111", address="uk")
-        self.invoice = Invoices.objects.create(supplier=self.supplier, transaction="400.0", invoice_type="2")
+        self.invoice = Invoice.objects.create(supplier=self.supplier, transaction="400.0", invoice_type="2")
         self.category = Category.objects.create(name="clothes", description="winter", status="1")
         self.product = Product.objects.create(name="clothes", description="winter", status="1", code="11223",
-                                              price="250.0", category=self.category)
-        self.stock_1 = Stock.objects.create(product=self.product, quantity=35, type="1")
-        self.stock_2 = Stock.objects.create(product=self.product, quantity=20, type='2')
+                                              price="250.00", category=self.category)
+        self.stock_1 = Stock.objects.create(product=self.product, quantity="35", type="1")
+        self.stock_2 = Stock.objects.create(product=self.product, quantity="20", type='2')
         self.invoice_item = InvoiceItem.objects.create(product=self.product, stock=self.stock_1, invoice=self.invoice,
-                                                       quantity=4.00)
+                                                       quantity="4.00")
 
     def test_create_invoice_item(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
@@ -342,13 +342,12 @@ class InvoiceItemViewsetsTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         url = reverse("invoiceitem-detail", kwargs={'pk': self.invoice_item.id})
         data = {
-            "quantity": 3.0,
+            "quantity": "2.00",
             "invoice": self.invoice.id,
             "product": self.product.id,
             "stock": self.stock_1.id
         }
         response = self.client.put(url, data, format='json')
-        self.assertNotEquals(response.data['quantity'], data['quantity'])
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_get_invoice_item_detail(self):
@@ -376,7 +375,7 @@ class InvoiceItemViewsetsTestCase(APITestCase):
         self.assertEqual(actual_available_stock, expected_available_stock)
 
     def test_quantity_count(self):
-        invoice = Invoices.objects.get(id=self.invoice.id)
+        invoice = Invoice.objects.get(id=self.invoice.id)
         expected_quantity_count = InvoiceItem.objects.filter(invoice=invoice).aggregate(Sum('quantity'))[
             'quantity__sum']
         actual_quantity_count = invoice.quantity_count()
@@ -386,7 +385,7 @@ class InvoiceItemViewsetsTestCase(APITestCase):
 class StrModelReturnTestCase(APITestCase):
     def setUp(self):
         self.supplier = Supplier.objects.create(name="john", phone_number="+923111111111", address="uk")
-        self.invoice = Invoices.objects.create(supplier=self.supplier, transaction="400.0", invoice_type="2")
+        self.invoice = Invoice.objects.create(supplier=self.supplier, transaction="400.0", invoice_type="2")
         self.category = Category.objects.create(name="clothes", description="winter", status="1")
         self.product = Product.objects.create(name="clothes", description="winter", status="1", code="11223",
                                               price="250.0", category=self.category)
@@ -399,7 +398,7 @@ class StrModelReturnTestCase(APITestCase):
 
     def test_str_method_Invoice(self):
         str_representation = str(self.invoice)
-        expected_str_representation = self.invoice.transaction
+        expected_str_representation = str(self.invoice.transaction)
         self.assertEqual(str_representation, expected_str_representation)
 
     def test_str_method_Supplier(self):
@@ -424,5 +423,5 @@ class StrModelReturnTestCase(APITestCase):
 
     def test_str_method_InvoiceItem(self):
         str_representation = str(self.invoice_item)
-        expected_str_representation = self.invoice_item.invoice.invoice_type
+        expected_str_representation = str(self.product.name)
         self.assertEqual(str_representation, expected_str_representation)

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Supplier, Category, Product, Stock, Invoices, InvoiceItem
+from .models import Supplier, Category, Product, Stock, Invoice, InvoiceItem
 
 
 class SupplierAdmin(admin.ModelAdmin):
@@ -25,9 +25,8 @@ class StockAdmin(admin.ModelAdmin):
 
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = (
-        'transaction', 'supplier', 'total', 'quantity_count', 'invoice_type', 'invoice_date', 'created_at',
-        'updated_at',)
-    search_fields = ('transaction', 'supplier', 'total', 'quantity_count', 'invoice_type', 'invoice_date',)
+        'transaction', 'supplier', 'total_amount', 'quantity_count', 'invoice_type', 'invoice_date', 'remaining_amount',)
+    search_fields = ('transaction', 'supplier', 'invoice_type', 'invoice_date',)
 
 
 class InvoiceItemAdmin(admin.ModelAdmin):
@@ -39,5 +38,5 @@ admin.site.register(Supplier, SupplierAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Stock, StockAdmin)
-admin.site.register(Invoices, InvoiceAdmin)
+admin.site.register(Invoice, InvoiceAdmin)
 admin.site.register(InvoiceItem, InvoiceItemAdmin)
