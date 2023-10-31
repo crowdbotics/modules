@@ -12,7 +12,7 @@ const copy = (origin, target) => {
   fse.copySync(origin, target, { filter: filterFiles });
 };
 
-export function commitModules(modules, dir) {
+export function commitModules(modules, dir = "demo") {
   const cwd = process.cwd();
   const demoDir = path.join(process.cwd(), dir);
 
