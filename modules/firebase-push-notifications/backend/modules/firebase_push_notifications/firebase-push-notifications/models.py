@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from fcm_django.models import FCMDevice
+
 
 User = get_user_model()
 
@@ -42,10 +44,14 @@ class UserNotification(models.Model):
         return str(self.user)
 
 
+class CustomAdminNotification(FCMDevice):
+    class Meta:
+        proxy = True
+
+
 @receiver(post_save, sender=Notification)
 def send_notification(sender, instance, created, **kwargs):
     if created:
-        from fcm_django.models import FCMDevice
         from firebase_admin.messaging import (
             Message,
             Notification,
