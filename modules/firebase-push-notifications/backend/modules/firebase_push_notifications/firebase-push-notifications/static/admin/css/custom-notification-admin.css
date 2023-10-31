@@ -1,0 +1,38 @@
+form {
+    position: relative;
+}
+
+#changelist .actions .style {
+    display: inline-flex;
+}
+
+#changelist .actions{
+    display: flex;
+    flex-direction: column;
+}
+
+#changelist .actions .button{
+    max-width: 200px;
+    margin-top: 8px;
+}
+
+#changelist label{
+    display: flex;
+    flex-direction: column;
+    max-width: 200px;
+}
+
+#changelist label:first-of-type{
+    margin-top: 10px;
+}
+
+
+#changelist .actions select{
+    margin-left: 0;
+}
+
+.action-counter{
+    position: absolute;
+    top: 0;
+    left: 3px;
+}
