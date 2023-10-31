@@ -1,8 +1,7 @@
 
 import { Dimensions, StyleSheet } from "react-native";
 
-const YOUTUBE_API_KEY = "";
-const VIDEOS_IDS = [];
+const VIDEOS_IDS = [""];
 
 export const styles = StyleSheet.create({
   container: {
@@ -29,7 +28,8 @@ export const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     marginVertical: 5,
-    borderRadius: 7
+    borderRadius: 7,
+    alignItems: "center"
   },
   text: {
     color: "white",
@@ -66,6 +66,5 @@ const playerDefaultSetting = {
 export default {
   styles: styles,
   playerDefaultSetting: playerDefaultSetting,
-  YOUTUBE_API_KEY: YOUTUBE_API_KEY,
   VIDEOS_IDS: VIDEOS_IDS
 };
