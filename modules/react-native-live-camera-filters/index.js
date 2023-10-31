@@ -1,7 +1,7 @@
 import React, { createRef, useState, useContext } from "react";
 import { View, TouchableOpacity, Text, PermissionsAndroid, Platform, Alert } from "react-native";
 
-import CameraRoll from "@react-native-community/cameraroll";
+import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { FilterCameraView } from "react-native-filter-camera";
@@ -37,15 +37,44 @@ export const App = () => {
     script.takePicture(cameraRef, [fileName]);
   };
 
-  const hasAndroidPermission = async () => {
-    const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
-    const hasPermission = await PermissionsAndroid.check(permission);
+  async function hasAndroidPermission() {
+    const getCheckPermissionPromise = () => {
+      if (Platform.Version >= 33) {
+        return Promise.all([
+          PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES),
+          PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO)
+        ]).then(
+          ([hasReadMediaImagesPermission, hasReadMediaVideoPermission]) =>
+            hasReadMediaImagesPermission && hasReadMediaVideoPermission
+        );
+      } else {
+        return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
+      }
+    };
+
+    const hasPermission = await getCheckPermissionPromise();
     if (hasPermission) {
       return true;
     }
-    const status = await PermissionsAndroid.request(permission);
-    return status === "granted";
-  };
+    const getRequestPermissionPromise = () => {
+      if (Platform.Version >= 33) {
+        return PermissionsAndroid.requestMultiple([
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+          PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO
+        ]).then(
+          (statuses) =>
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] ===
+              PermissionsAndroid.RESULTS.GRANTED &&
+            statuses[PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO] ===
+              PermissionsAndroid.RESULTS.GRANTED
+        );
+      } else {
+        return PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE).then((status) => status === PermissionsAndroid.RESULTS.GRANTED);
+      }
+    };
+
+    return await getRequestPermissionPromise();
+  }
 
   const onPictureTaken = async (pic) => {
     const picUri = pic?.nativeEvent?.uri;
