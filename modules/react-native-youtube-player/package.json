@@ -5,9 +5,10 @@
     "private": true,
     "main": "index.js",
     "x-dependencies": {
-        "react-native-youtube": "2.0.2",
+        "react-native-youtube-iframe": "2.3.0",
         "react-native-vector-icons": "9.1.0",
-        "prop-types": "15.8.1"
+        "prop-types": "15.8.1",
+        "react-native-webview": "11.26.1"
     },
     "author": "Crowdbotics",
     "license": "ISC",
