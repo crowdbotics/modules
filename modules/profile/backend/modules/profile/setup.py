@@ -12,7 +12,7 @@ class BuildCommand(build):
 setup(
     name="cb_profile",
     version="0.1",
-    packages=[],
+    packages=["profile"],
     install_requires=[
         "django-countries==7.5",
         "asgiref==3.6.0",
