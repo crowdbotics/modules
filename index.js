@@ -113,12 +113,14 @@ const commands = {
     createModule(args["--name"], args["--type"], args["--target"]);
   },
   commit: () => {
-    const args = arg({});
+    const args = arg({
+      "--source": String
+    });
     const modules = args._.slice(1);
     if (!modules.length) {
       invalid("please provide the name of the modules to be commited");
     }
-    commitModules(modules, "demo");
+    commitModules(modules, args["--source"]);
   },
   init: () => {
     const args = arg({
