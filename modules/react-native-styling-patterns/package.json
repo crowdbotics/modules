@@ -1,0 +1,7 @@
+{
+  "name": "@modules/styling-patterns",
+  "version": "1.0.0",
+  "description": "Module that showcases various styling patterns available in React Native.",
+  "private": true,
+  "main": "index.js"
+}
