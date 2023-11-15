@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "description": "Module that showcases various styling patterns available in React Native.",
   "private": true,
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {
+    "react-native-syntax-highlighter": "^2.1.0"
+  }
 }
