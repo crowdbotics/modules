@@ -1,6 +1,7 @@
 import fs, { existsSync } from "fs";
 import path from "path";
 import { invalid, section } from "../utils.js";
+import { execSync } from "child_process";
 
 function generateMeta(name, type) {
   const rootMap = {
@@ -54,6 +55,7 @@ export default {
 }
 
 function generateDjangoFiles(base, name, relative = "/") {
+  const sanitizedName = name.replaceAll("-", "_");
   const setupPy = `from setuptools import setup
 from setuptools.command.build import build
 
@@ -66,9 +68,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_${name}",
+    name="cb_django_${sanitizedName}",
     version="0.1",
-    packages=["${name}"],
+    packages=["${sanitizedName}"],
     install_requires=[],
     cmdclass={"build": BuildCommand},
 )`;
@@ -77,10 +79,10 @@ setup(
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"`;
 
-  const djangoName = `django_${name.replace("-", "_")}`;
-  fs.mkdirSync(path.join(base, relative, djangoName, name), {
-    recursive: true
-  });
+  const djangoName = `django_${sanitizedName}`;
+  const basePath = path.join(base, relative, djangoName);
+  fs.mkdirSync(basePath, { recursive: true });
+  execSync(`cd ${basePath} && django-admin startapp ${sanitizedName}`);
   fs.writeFileSync(
     path.join(base, relative, djangoName, "setup.py"),
     setupPy,
@@ -91,11 +93,6 @@ build-backend = "setuptools.build_meta"`;
     pyprojectToml,
     "utf8"
   );
-  fs.writeFileSync(
-    path.join(base, relative, djangoName, name, "__init__.py"),
-    "",
-    "utf8"
-  );
 }
 
 export function createModule(name, type, target = "modules") {
@@ -104,34 +101,40 @@ export function createModule(name, type, target = "modules") {
     "react-native": `react-native-${name}`,
     django: `django-${name}`
   };
-
-  if (!Object.prototype.hasOwnProperty.call(slugMap, type)) {
-    invalid(`invalid module type provided: ${type}`);
-  }
   const slug = slugMap[type];
   const dir = path.join(process.cwd(), target, slug);
-  if (existsSync(dir)) invalid(`module named "${slug}" already exists`);
+  try {
+    if (!Object.prototype.hasOwnProperty.call(slugMap, type)) {
+      invalid(`invalid module type provided: ${type}`);
+    }
+    if (existsSync(dir)) invalid(`module named "${slug}" already exists`);
 
-  const meta = generateMeta(name, type);
+    const meta = generateMeta(name, type);
 
-  fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(
-    path.join(dir, "meta.json"),
-    JSON.stringify(meta, null, 2),
-    "utf8"
-  );
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, "meta.json"),
+      JSON.stringify(meta, null, 2),
+      "utf8"
+    );
 
-  section(`generating ${name} module (${type})`);
-  switch (type) {
-    case "all":
-      generateDjangoFiles(dir, name, "/backend/modules");
-      generateRNFiles(dir, name, `/modules/${name}`);
-      break;
-    case "react-native":
-      generateRNFiles(dir, name);
-      break;
-    case "django":
-      generateDjangoFiles(dir, name);
-      break;
+    section(`generating ${name} module (${type})`);
+    switch (type) {
+      case "all":
+        generateDjangoFiles(dir, name, "/backend/modules");
+        generateRNFiles(dir, name, `/modules/${name}`);
+        break;
+      case "react-native":
+        generateRNFiles(dir, name);
+        break;
+      case "django":
+        generateDjangoFiles(dir, name);
+        break;
+    }
+  } catch (error) {
+    if (existsSync(dir)) {
+      fs.rmSync(dir, { recursive: true });
+    }
+    throw error;
   }
 }
