@@ -21,3 +21,8 @@ export const section = (...args) => {
   console.log("");
   console.log(">", ...args);
 };
+
+export const isNameValid = (name) => {
+  const pattern = /^[a-zA-Z][a-zA-Z0-9._-]*$/;
+  return pattern.test(name);
+};
