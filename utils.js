@@ -23,6 +23,6 @@ export const section = (...args) => {
 };
 
 export const isNameValid = (name) => {
-  const pattern = /^[a-zA-Z][a-zA-Z0-9._-]*$/;
+  const pattern = /^[a-zA-Z][a-zA-Z0-9_-]*$/;
   return pattern.test(name);
 };

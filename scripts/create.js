@@ -22,6 +22,15 @@ function generateMeta(name, type) {
   return meta;
 }
 
+function generateComponentName(input) {
+  return input
+    .replace(/[-_]/g, " ")
+    .replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    })
+    .replace(/\s/g, "");
+}
+
 function generateRNFiles(base, name, relative = "/") {
   const packageJson = `{
   "name": "@modules/${name}",
@@ -31,16 +40,22 @@ function generateRNFiles(base, name, relative = "/") {
   "main": "index.js"
 }`;
 
-  const indexJs = `import React from "react";
-import { View } from "react-native";
+  const componentName = generateComponentName(name);
 
-function ${name}() {
-  return <View>${name}</View>
+  const indexJs = `import React from "react";
+import { View, Text } from "react-native";
+
+function ${componentName}() {
+  return return (
+    <View>
+      <Text>${name}</Text>
+    </View>
+  )
 }
 
 export default {
   title: "${name}",
-  navigator: ${name}
+  navigator: ${componentName}
 };`;
 
   if (relative !== "/") {
