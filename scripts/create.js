@@ -64,7 +64,11 @@ function generateDjangoFiles(base, name, relative = "/") {
   fs.mkdirSync(basePath, { recursive: true });
   execSync(`cd ${basePath}`, execOptions);
   configurePython();
-  execSync(`pipenv run django-admin startapp ${sanitizedName}`, execOptions);
+  execSync("pipenv install django==3.2.23", execOptions);
+  execSync(
+    `pipenv run django-admin startapp ${sanitizedName} ${basePath}`,
+    execOptions
+  );
   fs.writeFileSync(
     path.join(base, relative, djangoName, "setup.py"),
     setupPy(sanitizedName),
