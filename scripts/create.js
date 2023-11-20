@@ -2,6 +2,8 @@ import fs, { existsSync } from "fs";
 import path from "path";
 import { invalid, section } from "../utils.js";
 import { execSync } from "child_process";
+import { pyprojectToml, setupPy } from "./utils/constants.js";
+import { execOptions, configurePython } from "./utils/environment.js";
 
 function generateMeta(name, type) {
   const rootMap = {
@@ -56,36 +58,16 @@ export default {
 
 function generateDjangoFiles(base, name, relative = "/") {
   const sanitizedName = name.replaceAll("-", "_");
-  const setupPy = `from setuptools import setup
-from setuptools.command.build import build
-
-
-# Override build command
-class BuildCommand(build):
-    def initialize_options(self):
-        build.initialize_options(self)
-        self.build_base = "/tmp"
-
-
-setup(
-    name="cb_django_${sanitizedName}",
-    version="0.1",
-    packages=["${sanitizedName}"],
-    install_requires=[],
-    cmdclass={"build": BuildCommand},
-)`;
-
-  const pyprojectToml = `[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"`;
-
   const djangoName = `django_${sanitizedName}`;
   const basePath = path.join(base, relative, djangoName);
+
   fs.mkdirSync(basePath, { recursive: true });
-  execSync(`cd ${basePath} && django-admin startapp ${sanitizedName}`);
+  execSync(`cd ${basePath}`, execOptions);
+  configurePython();
+  execSync(`pipenv run django-admin startapp ${sanitizedName}`, execOptions);
   fs.writeFileSync(
     path.join(base, relative, djangoName, "setup.py"),
-    setupPy,
+    setupPy(sanitizedName),
     "utf8"
   );
   fs.writeFileSync(
