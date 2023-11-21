@@ -3,10 +3,9 @@ import fs from "fs";
 import fse from "fs-extra";
 import { section, generateCommand } from "../utils.js";
 import { execSync } from "child_process";
+import { configurePython, execOptions } from "./utils/environment.js";
 
 export function createDemo(dir, yaml) {
-  const execOptions = { encoding: "utf8", stdio: "inherit" };
-
   const demoDir = path.join(process.cwd(), dir);
 
   if (fs.existsSync(demoDir)) {
@@ -15,7 +14,7 @@ export function createDemo(dir, yaml) {
   }
 
   section("Preparing environment");
-  execSync("pipenv --python 3.8.17", execOptions);
+  configurePython();
   execSync("pipenv install cookiecutter", execOptions);
 
   section("Generating React Native app from scaffold");
