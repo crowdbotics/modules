@@ -2,62 +2,16 @@ import fs, { existsSync } from "fs";
 import path from "path";
 import { invalid, section } from "../utils.js";
 import { execSync } from "child_process";
-import { pyprojectToml, setupPy } from "./utils/constants.js";
+import {
+  pyprojectToml,
+  setupPy,
+  packageJson,
+  indexJs,
+  generateMeta
+} from "./utils/templates.js";
 import { execOptions, configurePython } from "./utils/environment.js";
 
-function generateMeta(name, type) {
-  const rootMap = {
-    all: "/",
-    "react-native": `/modules/${name}`,
-    django: "/backend/modules"
-  };
-
-  const meta = {
-    title: name,
-    description: "",
-    root: rootMap[type],
-    schema: {}
-  };
-
-  return meta;
-}
-
-function generateComponentName(input) {
-  return input
-    .replace(/[-_]/g, " ")
-    .replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    })
-    .replace(/\s/g, "");
-}
-
 function generateRNFiles(base, name, relative = "/") {
-  const packageJson = `{
-  "name": "@modules/${name}",
-  "version": "1.0.0",
-  "description": "",
-  "private": true,
-  "main": "index.js"
-}`;
-
-  const componentName = generateComponentName(name);
-
-  const indexJs = `import React from "react";
-import { View, Text } from "react-native";
-
-function ${componentName}() {
-  return return (
-    <View>
-      <Text>${name}</Text>
-    </View>
-  )
-}
-
-export default {
-  title: "${name}",
-  navigator: ${componentName}
-};`;
-
   if (relative !== "/") {
     fs.mkdirSync(path.join(base, relative), {
       recursive: true
@@ -65,10 +19,14 @@ export default {
   }
   fs.writeFileSync(
     path.join(base, relative, "package.json"),
-    packageJson,
+    packageJson(name),
     "utf8"
   );
-  fs.writeFileSync(path.join(base, relative, "index.js"), indexJs, "utf8");
+  fs.writeFileSync(
+    path.join(base, relative, "index.js"),
+    indexJs(name),
+    "utf8"
+  );
 }
 
 function generateDjangoFiles(base, name, relative = "/") {
