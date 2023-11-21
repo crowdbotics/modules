@@ -1,6 +1,9 @@
 import fs, { existsSync } from "fs";
 import path from "path";
 import { invalid, section } from "../utils.js";
+import { execSync } from "child_process";
+import { pyprojectToml, setupPy } from "./utils/constants.js";
+import { execOptions, configurePython } from "./utils/environment.js";
 
 function generateMeta(name, type) {
   const rootMap = {
@@ -54,46 +57,26 @@ export default {
 }
 
 function generateDjangoFiles(base, name, relative = "/") {
-  const setupPy = `from setuptools import setup
-from setuptools.command.build import build
+  const sanitizedName = name.replaceAll("-", "_");
+  const djangoName = `django_${sanitizedName}`;
+  const basePath = path.join(base, relative, djangoName);
 
-
-# Override build command
-class BuildCommand(build):
-    def initialize_options(self):
-        build.initialize_options(self)
-        self.build_base = "/tmp"
-
-
-setup(
-    name="cb_django_${name}",
-    version="0.1",
-    packages=["${name}"],
-    install_requires=[],
-    cmdclass={"build": BuildCommand},
-)`;
-
-  const pyprojectToml = `[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"`;
-
-  const djangoName = `django_${name.replace("-", "_")}`;
-  fs.mkdirSync(path.join(base, relative, djangoName, name), {
-    recursive: true
-  });
+  fs.mkdirSync(basePath, { recursive: true });
+  execSync(`cd ${basePath}`, execOptions);
+  configurePython();
+  execSync("pipenv install django==3.2.23", execOptions);
+  execSync(
+    `pipenv run django-admin startapp ${sanitizedName} ${basePath}`,
+    execOptions
+  );
   fs.writeFileSync(
     path.join(base, relative, djangoName, "setup.py"),
-    setupPy,
+    setupPy(sanitizedName),
     "utf8"
   );
   fs.writeFileSync(
     path.join(base, relative, djangoName, "pyproject.toml"),
     pyprojectToml,
-    "utf8"
-  );
-  fs.writeFileSync(
-    path.join(base, relative, djangoName, name, "__init__.py"),
-    "",
     "utf8"
   );
 }
@@ -104,34 +87,40 @@ export function createModule(name, type, target = "modules") {
     "react-native": `react-native-${name}`,
     django: `django-${name}`
   };
-
-  if (!Object.prototype.hasOwnProperty.call(slugMap, type)) {
-    invalid(`invalid module type provided: ${type}`);
-  }
   const slug = slugMap[type];
   const dir = path.join(process.cwd(), target, slug);
-  if (existsSync(dir)) invalid(`module named "${slug}" already exists`);
+  try {
+    if (!Object.prototype.hasOwnProperty.call(slugMap, type)) {
+      invalid(`invalid module type provided: ${type}`);
+    }
+    if (existsSync(dir)) invalid(`module named "${slug}" already exists`);
 
-  const meta = generateMeta(name, type);
+    const meta = generateMeta(name, type);
 
-  fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(
-    path.join(dir, "meta.json"),
-    JSON.stringify(meta, null, 2),
-    "utf8"
-  );
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(
+      path.join(dir, "meta.json"),
+      JSON.stringify(meta, null, 2),
+      "utf8"
+    );
 
-  section(`generating ${name} module (${type})`);
-  switch (type) {
-    case "all":
-      generateDjangoFiles(dir, name, "/backend/modules");
-      generateRNFiles(dir, name, `/modules/${name}`);
-      break;
-    case "react-native":
-      generateRNFiles(dir, name);
-      break;
-    case "django":
-      generateDjangoFiles(dir, name);
-      break;
+    section(`generating ${name} module (${type})`);
+    switch (type) {
+      case "all":
+        generateDjangoFiles(dir, name, "/backend/modules");
+        generateRNFiles(dir, name, `/modules/${name}`);
+        break;
+      case "react-native":
+        generateRNFiles(dir, name);
+        break;
+      case "django":
+        generateDjangoFiles(dir, name);
+        break;
+    }
+  } catch (error) {
+    if (existsSync(dir)) {
+      fs.rmSync(dir, { recursive: true });
+    }
+    throw error;
   }
 }
