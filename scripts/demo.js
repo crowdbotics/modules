@@ -6,16 +6,18 @@ import { execSync } from "child_process";
 import { configurePython, execOptions } from "./utils/environment.js";
 
 export function createDemo(dir, yaml) {
-  const demoDir = path.join(process.cwd(), dir);
+  const options = Object.assign(execOptions, {
+    cwd: path.dirname(dir)
+  });
 
-  if (fs.existsSync(demoDir)) {
+  if (fs.existsSync(dir)) {
     section("Removing previous demo app");
-    fs.rmSync(demoDir, { recursive: true });
+    fs.rmSync(dir, { recursive: true });
   }
 
   section("Preparing environment");
   configurePython();
-  execSync("pipenv install cookiecutter", execOptions);
+  execSync("pipenv install cookiecutter", options);
 
   section("Generating React Native app from scaffold");
   const rnCookieCutterCommand = generateCommand([
@@ -26,11 +28,11 @@ export function createDemo(dir, yaml) {
     `--config-file ${yaml}`,
     "--no-input"
   ]);
-  execSync(rnCookieCutterCommand, execOptions);
+  execSync(rnCookieCutterCommand, options);
 
   section("Installing dependencies");
   execSync("yarn install", {
-    cwd: demoDir,
+    cwd: dir,
     encoding: "utf8",
     stdio: "inherit"
   });
@@ -41,10 +43,9 @@ export function createDemo(dir, yaml) {
     "gh:crowdbotics/django-scaffold",
     "--checkout master",
     `--config-file ${yaml}`,
-    `--output-dir ${dir}`,
+    `--output-dir ${path.basename(dir)}`,
     "--no-input"
   ]);
-
-  execSync(djangoCookieCutterCommand, execOptions);
-  fse.moveSync(path.join(demoDir, dir), path.join(demoDir, "backend"));
+  execSync(djangoCookieCutterCommand, options);
+  fse.moveSync(path.join(dir, path.basename(dir)), path.join(dir, "backend"));
 }
