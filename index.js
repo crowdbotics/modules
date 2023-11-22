@@ -62,12 +62,8 @@ function dispatcher() {
 const commands = {
   demo: () => {
     createDemo(
-      "demo",
-      path.join(
-        path.dirname(path.dirname(process.argv[1])),
-        "modules",
-        "cookiecutter.yaml"
-      )
+      path.join(gitRoot, "demo"),
+      path.join(sourceDir, "cookiecutter.yaml")
     );
     valid("demo app successfully generated");
   },
