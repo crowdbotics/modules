@@ -22,7 +22,7 @@ const BASE_64_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 const META_FILE = ["meta.json"];
 const PREVIEW_FILE = ["preview.png"];
 
-export const parseModules = (dir) => {
+export const parseModules = (dir, gitRoot) => {
   const accepted = (entry) => {
     return ACCEPTED_EXTENSIONS.includes(path.extname(entry));
   };
@@ -49,7 +49,7 @@ export const parseModules = (dir) => {
   };
 
   const ignoreRootDirs = (entry, num) => {
-    return path.join(...entry.split("/").splice(num));
+    return path.join(...path.relative(gitRoot, entry).split("/").splice(num));
   };
 
   const parseModule = (moduleDir, callback) => {
