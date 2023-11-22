@@ -25,7 +25,7 @@ import { addModules } from "./scripts/add.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
-import { valid, invalid } from "./utils.js";
+import { valid, invalid, isNameValid } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 
 function dispatcher() {
@@ -109,6 +109,11 @@ const commands = {
     }
     if (!args["--type"]) {
       invalid("missing required argument: --type");
+    }
+    if (!isNameValid(args["--name"])) {
+      invalid(
+        `invalid module name provided: '${args["--name"]}'. Use only alphanumeric characters, dashes and underscores.`
+      );
     }
     createModule(args["--name"], args["--type"], args["--target"]);
   },
