@@ -128,7 +128,7 @@ const commands = {
         `invalid module name provided: '${args["--name"]}'. Use only alphanumeric characters, dashes and underscores.`
       );
     }
-    createModule(args["--name"], args["--type"], args["--target"]);
+    createModule(args["--name"], args["--type"], args["--target"], gitRoot);
   },
   commit: () => {
     const args = arg({

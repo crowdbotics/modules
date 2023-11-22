@@ -54,22 +54,32 @@ function generateDjangoFiles(base, name, relative = "/") {
   );
 }
 
-export function createModule(name, type, target = "modules") {
+export function createModule(name, type, target, gitRoot) {
+  const cwd = process.cwd();
+
+  if (target) {
+    target = path.join(cwd, target);
+  } else {
+    target = path.join(gitRoot, "modules");
+  }
+
   const slugMap = {
     all: name,
     "react-native": `react-native-${name}`,
     django: `django-${name}`
   };
   const slug = slugMap[type];
-  const dir = path.join(process.cwd(), target, slug);
+
+  if (!Object.prototype.hasOwnProperty.call(slugMap, type)) {
+    invalid(`invalid module type provided: ${type}`);
+  }
+
+  const dir = path.join(target, slug);
+  if (existsSync(dir)) invalid(`module named "${slug}" already exists`);
+
+  const meta = generateMeta(name, type);
+
   try {
-    if (!Object.prototype.hasOwnProperty.call(slugMap, type)) {
-      invalid(`invalid module type provided: ${type}`);
-    }
-    if (existsSync(dir)) invalid(`module named "${slug}" already exists`);
-
-    const meta = generateMeta(name, type);
-
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(
       path.join(dir, "meta.json"),
