@@ -3078,6 +3078,11 @@ find-cache-dir@^2.0.0:
     make-dir "^2.0.0"
     pkg-dir "^3.0.0"
 
+find-git-root@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/find-git-root/-/find-git-root-1.0.4.tgz#8bc1e0897db783e06762bf050b0943288e5399fd"
+  integrity sha512-468fmirKKgcrqfZfPn0xIpwZUUsZQcYXfx0RC2/jX39GPz83TwutQNZZhDrI6HqjO8cRejxQVaUY8GQdXopFfA==
+
 find-up@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-3.0.0.tgz#49169f1d7993430646da61ecc5ae355c21c97b73"
