@@ -3,17 +3,28 @@ import path from "path";
 import find from "find";
 import { execSync } from "child_process";
 
-export function removeModules(modules, source = "modules", dir = "demo") {
+export function removeModules(modules, source, dir, gitRoot) {
   const cwd = process.cwd();
-  const demoDir = path.join(process.cwd(), dir);
+
+  if (source) {
+    source = path.join(cwd, source);
+  } else {
+    source = path.join(gitRoot, "modules");
+  }
+
+  if (dir) {
+    dir = path.join(cwd, dir);
+  } else {
+    dir = path.join(gitRoot, "demo");
+  }
 
   modules.forEach((module) => {
-    process.chdir(cwd);
-    const originModuleDir = path.join(process.cwd(), source, module);
+    process.chdir(gitRoot);
+    const originModuleDir = path.join(source, module);
     const meta = JSON.parse(
       fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
     );
-    const targetModuleDir = path.join(demoDir, meta.root);
+    const targetModuleDir = path.join(dir, meta.root);
 
     const filterPackageJSON = (src, _) => path.basename(src) === "package.json";
     const filterMeta = (src, _) => path.basename(src) !== "meta.json";
@@ -35,7 +46,7 @@ export function removeModules(modules, source = "modules", dir = "demo") {
       if (file) {
         const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
         const name = packageJSON.name;
-        process.chdir(demoDir);
+        process.chdir(dir);
 
         try {
           execSync(`yarn remove ${name}`);
