@@ -2,47 +2,16 @@ import fs, { existsSync } from "fs";
 import path from "path";
 import { invalid, section } from "../utils.js";
 import { execSync } from "child_process";
-import { pyprojectToml, setupPy } from "./utils/constants.js";
+import {
+  pyprojectToml,
+  setupPy,
+  packageJson,
+  indexJs,
+  generateMeta
+} from "./utils/templates.js";
 import { execOptions, configurePython } from "./utils/environment.js";
 
-function generateMeta(name, type) {
-  const rootMap = {
-    all: "/",
-    "react-native": `/modules/${name}`,
-    django: "/backend/modules"
-  };
-
-  const meta = {
-    title: name,
-    description: "",
-    root: rootMap[type],
-    schema: {}
-  };
-
-  return meta;
-}
-
 function generateRNFiles(base, name, relative = "/") {
-  const packageJson = `{
-  "name": "@modules/${name}",
-  "version": "1.0.0",
-  "description": "",
-  "private": true,
-  "main": "index.js"
-}`;
-
-  const indexJs = `import React from "react";
-import { View } from "react-native";
-
-function ${name}() {
-  return <View>${name}</View>
-}
-
-export default {
-  title: "${name}",
-  navigator: ${name}
-};`;
-
   if (relative !== "/") {
     fs.mkdirSync(path.join(base, relative), {
       recursive: true
@@ -50,10 +19,14 @@ export default {
   }
   fs.writeFileSync(
     path.join(base, relative, "package.json"),
-    packageJson,
+    packageJson(name),
     "utf8"
   );
-  fs.writeFileSync(path.join(base, relative, "index.js"), indexJs, "utf8");
+  fs.writeFileSync(
+    path.join(base, relative, "index.js"),
+    indexJs(name),
+    "utf8"
+  );
 }
 
 function generateDjangoFiles(base, name, relative = "/") {
