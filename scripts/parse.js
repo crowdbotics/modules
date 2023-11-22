@@ -15,7 +15,8 @@ const ACCEPTED_EXTENSIONS = [
   ".tsx",
   ".md",
   ".py",
-  ".toml"
+  ".toml",
+  ".tf"
 ];
 const BASE_64_EXTENSIONS = [".jpg", ".jpeg", ".png"];
 const META_FILE = ["meta.json"];
