@@ -98,7 +98,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be installed");
     }
-    addModules(modules, args["--source"], args["--project"]);
+    addModules(modules, args["--source"], args["--project"], gitRoot);
   },
   remove: () => {
     const args = arg({
