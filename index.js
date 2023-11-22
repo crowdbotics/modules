@@ -19,6 +19,8 @@ import arg from "arg";
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import findGitRoot from "find-git-root";
+
 import { parseModules } from "./scripts/parse.js";
 import { createDemo } from "./scripts/demo.js";
 import { addModules } from "./scripts/add.js";
@@ -40,6 +42,9 @@ if (fs.existsSync(path.join(sourceDir, pkg.name))) {
   // npm lib directory
   sourceDir = path.join(sourceDir, "lib", "node_modules", pkg.name);
 }
+
+const gitRoot = path.dirname(findGitRoot(process.cwd()));
+
 function dispatcher() {
   const command = process.argv[2];
 
