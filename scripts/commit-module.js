@@ -12,9 +12,14 @@ const copy = (origin, target) => {
   fse.copySync(origin, target, { filter: filterFiles });
 };
 
-export function commitModules(modules, dir = "demo") {
+export function commitModules(modules, dir, gitRoot) {
   const cwd = process.cwd();
-  const demoDir = path.join(process.cwd(), dir);
+
+  if (dir) {
+    dir = path.join(cwd, dir);
+  } else {
+    dir = path.join(gitRoot, "demo");
+  }
 
   // define ENUMS
   const MODULE_TYPE = {
@@ -44,7 +49,7 @@ export function commitModules(modules, dir = "demo") {
   const copyFullModule = (module, originModuleDir, meta) => {
     const backendeModuleName = module.replace(/-/g, "_");
     const sourceBackend = path.join(
-      demoDir,
+      dir,
       "backend",
       "modules",
       backendeModuleName,
@@ -59,7 +64,7 @@ export function commitModules(modules, dir = "demo") {
     section("backend copying ...\n", sourceBackend, destBackend);
     copy(sourceBackend, destBackend);
 
-    const sourceFrontend = path.join(demoDir, "modules", module, meta.root);
+    const sourceFrontend = path.join(dir, "modules", module, meta.root);
     const destFrontend = path.join(originModuleDir, "modules", module);
     section("frontend copying ...\n", sourceFrontend, destFrontend);
     copy(sourceFrontend, destFrontend);
@@ -68,7 +73,7 @@ export function commitModules(modules, dir = "demo") {
   const copyBackendModule = (module, originModuleDir) => {
     const backendeModuleName = module.replace(/-/g, "_");
     const sourceBackend = path.join(
-      demoDir,
+      dir,
       "backend",
       "modules",
       backendeModuleName
@@ -79,15 +84,14 @@ export function commitModules(modules, dir = "demo") {
   };
 
   const copyFrontendModule = (originModuleDir, meta) => {
-    const sourceFrontend = path.join(demoDir, meta.root);
+    const sourceFrontend = path.join(dir, meta.root);
     const destFrontend = path.join(originModuleDir);
     section("frontend copying ...\n", sourceFrontend, destFrontend);
     copy(sourceFrontend, destFrontend);
   };
 
   modules.forEach((module) => {
-    process.chdir(cwd);
-    const originModuleDir = path.join(process.cwd(), "modules", module);
+    const originModuleDir = path.join(gitRoot, "modules", module);
     const meta = JSON.parse(
       fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
     );
