@@ -138,7 +138,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be commited");
     }
-    commitModules(modules, args["--source"]);
+    commitModules(modules, args["--source"], gitRoot);
   },
   init: () => {
     const args = arg({
@@ -235,6 +235,9 @@ Remove modules from app that is not "demo":
 
 Update a module definition from the demo app:
   npx crowdbotics/modules commit <module-name>
+
+Update a module definition from other app:
+  npx crowdbotics/modules commit <module-name> --source <path>
 
 Glossary:
   <module-name> stands for the name of the directory where the module is defined.
