@@ -77,7 +77,7 @@ const commands = {
       invalid("missing required argument: --source");
     }
 
-    const data = parseModules(path.join(args["--source"]));
+    const data = parseModules(path.join(args["--source"]), gitRoot);
     if (args["--write"] && process.exitCode !== 1) {
       fs.mkdirSync(path.dirname(path.join(args["--write"])), {
         recursive: true
