@@ -13,17 +13,28 @@ const copy = (origin, target) => {
   fse.copySync(origin, target, { filter: filterFiles });
 };
 
-export function addModules(modules, source = "modules", dir = "demo") {
+export function addModules(modules, source, dir, gitRoot) {
   const cwd = process.cwd();
-  const demoDir = path.join(cwd, dir);
+
+  if (source) {
+    source = path.join(cwd, source);
+  } else {
+    source = path.join(gitRoot, "modules");
+  }
+
+  if (dir) {
+    dir = path.join(cwd, dir);
+  } else {
+    dir = path.join(gitRoot, "demo");
+  }
 
   modules.forEach((module) => {
-    process.chdir(cwd);
-    const originModuleDir = path.join(process.cwd(), source, module);
+    process.chdir(gitRoot);
+    const originModuleDir = path.join(source, module);
     const meta = JSON.parse(
       fs.readFileSync(path.join(originModuleDir, "meta.json"), "utf8")
     );
-    const targetModuleDir = path.join(demoDir, meta.root);
+    const targetModuleDir = path.join(dir, meta.root);
 
     const getDeps = (packageJSON) => {
       const packages = [];
@@ -59,7 +70,7 @@ export function addModules(modules, source = "modules", dir = "demo") {
           );
           const packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
 
-          process.chdir(demoDir);
+          process.chdir(dir);
           try {
             execSync(`yarn add ${packages}`);
           } catch (err) {
