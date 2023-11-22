@@ -28,6 +28,18 @@ import { upgradeScaffold } from "./scripts/upgrade.js";
 import { valid, invalid, isNameValid } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 
+const pkg = JSON.parse(
+  fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
+);
+
+let sourceDir = path.dirname(path.dirname(process.argv[1]));
+if (fs.existsSync(path.join(sourceDir, pkg.name))) {
+  // npx lib directory
+  sourceDir = path.join(sourceDir, pkg.name);
+} else {
+  // npm lib directory
+  sourceDir = path.join(sourceDir, "lib", "node_modules", pkg.name);
+}
 function dispatcher() {
   const command = process.argv[2];
 
