@@ -109,7 +109,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be removed");
     }
-    removeModules(modules, args["--source"], args["--project"]);
+    removeModules(modules, args["--source"], args["--project"], gitRoot);
   },
   create: () => {
     const args = arg({
