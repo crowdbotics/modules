@@ -245,5 +245,5 @@ Glossary:
 try {
   dispatcher();
 } catch (err) {
-  invalid(err.message);
+  invalid(err);
 }
