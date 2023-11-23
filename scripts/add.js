@@ -13,6 +13,49 @@ const copy = (origin, target) => {
   fse.copySync(origin, target, { filter: filterFiles });
 };
 
+const getPkgJsonDeps = (pkgJson) => {
+  const packages = [];
+  if (Object.prototype.hasOwnProperty.call(pkgJson, "x-dependencies")) {
+    const deps = pkgJson["x-dependencies"];
+    for (const [key, value] of Object.entries(deps)) {
+      packages.push(`${key}@${value}`);
+    }
+  }
+  return packages;
+};
+
+function installPipPackage(file, moduleDir, appDir, metaRoot) {
+  const packagePath = path
+    .join(metaRoot, path.dirname(file).replace(moduleDir, ""))
+    .replace(/^\/backend/, "");
+
+  process.chdir(path.join(appDir, "backend"));
+  const command = `pipenv install -e ./${packagePath}`;
+  try {
+    execSync(command);
+  } catch (err) {
+    console.warn("Failed installing module with:", command);
+  }
+}
+
+function installNpmPackage(file, moduleDir, appDir, metaRoot) {
+  const pkgJson = JSON.parse(fs.readFileSync(file, "utf8"));
+  const yarnPath = path.join(
+    "file:.",
+    metaRoot,
+    path.dirname(file).replace(moduleDir, "")
+  );
+  const packages = [yarnPath, ...getPkgJsonDeps(pkgJson)].join(" ");
+
+  process.chdir(appDir);
+  const command = `yarn add ${packages}`;
+  try {
+    execSync(command);
+  } catch (err) {
+    console.warn("Failed adding module with:", command);
+  }
+}
+
 export function addModules(modules, source, dir, gitRoot) {
   const cwd = process.cwd();
 
@@ -36,17 +79,6 @@ export function addModules(modules, source, dir, gitRoot) {
     );
     const targetModuleDir = path.join(dir, meta.root);
 
-    const getDeps = (packageJSON) => {
-      const packages = [];
-      if (Object.prototype.hasOwnProperty.call(packageJSON, "x-dependencies")) {
-        const deps = packageJSON["x-dependencies"];
-        for (const [key, value] of Object.entries(deps)) {
-          packages.push(`${key}@${value}`);
-        }
-      }
-      return packages;
-    };
-
     // cleanup node_modules
     if (existsSync(path.join(originModuleDir, "node_modules"))) {
       fs.rmSync(path.join(originModuleDir, "node_modules"), {
@@ -61,21 +93,14 @@ export function addModules(modules, source, dir, gitRoot) {
 
     find.file(originModuleDir, function (files) {
       files.forEach((file) => {
+        if (
+          path.basename(file) === "setup.py" &&
+          fs.existsSync(path.join(path.dirname(file), "pyproject.toml"))
+        ) {
+          installPipPackage(file, originModuleDir, dir, meta.root);
+        }
         if (path.basename(file) === "package.json") {
-          const packageJSON = JSON.parse(fs.readFileSync(file, "utf8"));
-          const yarnPath = path.join(
-            "file:.",
-            meta.root,
-            path.dirname(file).replace(originModuleDir, "")
-          );
-          const packages = [yarnPath, ...getDeps(packageJSON)].join(" ");
-
-          process.chdir(dir);
-          try {
-            execSync(`yarn add ${packages}`);
-          } catch (err) {
-            console.warn("Failed adding module. Is this module available?");
-          }
+          installNpmPackage(file, originModuleDir, dir, meta.root);
         }
       });
     });
