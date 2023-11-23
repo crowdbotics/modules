@@ -19,6 +19,8 @@ import arg from "arg";
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import findGitRoot from "find-git-root";
+
 import { parseModules } from "./scripts/parse.js";
 import { createDemo } from "./scripts/demo.js";
 import { addModules } from "./scripts/add.js";
@@ -27,6 +29,21 @@ import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
 import { valid, invalid, isNameValid } from "./utils.js";
 import { createModule } from "./scripts/create.js";
+
+const pkg = JSON.parse(
+  fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
+);
+
+let sourceDir = path.dirname(path.dirname(process.argv[1]));
+if (fs.existsSync(path.join(sourceDir, pkg.name))) {
+  // npx lib directory
+  sourceDir = path.join(sourceDir, pkg.name);
+} else {
+  // npm lib directory
+  sourceDir = path.join(sourceDir, "lib", "node_modules", pkg.name);
+}
+
+const gitRoot = path.dirname(findGitRoot(process.cwd()));
 
 function dispatcher() {
   const command = process.argv[2];
@@ -45,12 +62,8 @@ function dispatcher() {
 const commands = {
   demo: () => {
     createDemo(
-      "demo",
-      path.join(
-        path.dirname(path.dirname(process.argv[1])),
-        "modules",
-        "cookiecutter.yaml"
-      )
+      path.join(gitRoot, "demo"),
+      path.join(sourceDir, "cookiecutter.yaml")
     );
     valid("demo app successfully generated");
   },
@@ -64,7 +77,7 @@ const commands = {
       invalid("missing required argument: --source");
     }
 
-    const data = parseModules(path.join(args["--source"]));
+    const data = parseModules(path.join(args["--source"]), gitRoot);
     if (args["--write"] && process.exitCode !== 1) {
       fs.mkdirSync(path.dirname(path.join(args["--write"])), {
         recursive: true
@@ -85,7 +98,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be installed");
     }
-    addModules(modules, args["--source"], args["--project"]);
+    addModules(modules, args["--source"], args["--project"], gitRoot);
   },
   remove: () => {
     const args = arg({
@@ -96,7 +109,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be removed");
     }
-    removeModules(modules, args["--source"], args["--project"]);
+    removeModules(modules, args["--source"], args["--project"], gitRoot);
   },
   create: () => {
     const args = arg({
@@ -115,7 +128,7 @@ const commands = {
         `invalid module name provided: '${args["--name"]}'. Use only alphanumeric characters, dashes and underscores.`
       );
     }
-    createModule(args["--name"], args["--type"], args["--target"]);
+    createModule(args["--name"], args["--type"], args["--target"], gitRoot);
   },
   commit: () => {
     const args = arg({
@@ -125,7 +138,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be commited");
     }
-    commitModules(modules, args["--source"]);
+    commitModules(modules, args["--source"], gitRoot);
   },
   init: () => {
     const args = arg({
@@ -223,6 +236,9 @@ Remove modules from app that is not "demo":
 Update a module definition from the demo app:
   npx crowdbotics/modules commit <module-name>
 
+Update a module definition from other app:
+  npx crowdbotics/modules commit <module-name> --source <path>
+
 Glossary:
   <module-name> stands for the name of the directory where the module is defined.
 `);
@@ -232,5 +248,5 @@ Glossary:
 try {
   dispatcher();
 } catch (err) {
-  invalid(err.message);
+  invalid(err);
 }

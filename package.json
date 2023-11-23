@@ -1,6 +1,6 @@
 {
   "name": "modules",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Library of modules for React Native and Django apps",
   "main": "index.js",
   "bin": {
@@ -41,9 +41,10 @@
     "arg": "^5.0.2",
     "fast-xml-parser": "^4.2.5",
     "find": "^0.3.0",
+    "find-git-root": "^1.0.4",
     "fs-extra": "^10.1.0",
-    "js-yaml": "^4.1.0",
     "inquirer": "^9.2.0",
+    "js-yaml": "^4.1.0",
     "prettier": "^2.6.2"
   },
   "resolutions": {

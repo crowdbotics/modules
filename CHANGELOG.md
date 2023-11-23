@@ -2,6 +2,23 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.1.0 - 2023-11-22
+
+### Added
+
+- All commands now use the closest `.git` directory to compute relative paths. There is no longer a requirement to be in the root directory before issuing a command such as `npx crowdbotics/modules demo` or `add`/`remove`/`commit`.
+- Use `django-admin startapp <app-name>` behind the scenes on the `npx crowdbotics/modules create` command with `--type django`. This ensures that the generated files match what Django itself generates for new Django apps.
+- New module `react-native-styling-patterns` showcasing various responsive design techniques with `react-native` and `react-native-web`. Companion to the [docs](https://docs.crowdbotics.com/react-native-styling-patterns).
+
+### Changed
+
+- Added name validations and sanitizing on the `npx crowdbotics/modules create` command `--name` argument.
+- Tooling: Added new `--source` argument to the `npx crowdbotics/modules commit` command. With this argument you can now specify sources other than the demo app.
+
+### Fixes
+
+- Multiple bug fixes on the following modules: `react-native-live-camera-filters`, `react-native-youtube-player`, `social-feed`, `profile`, `firebase-push-notifications`, `react-native-chat`, `react-native-audio-player`, `django-inventory-management`
+
 ## 2.0.0 - 2023-09-27
 
 ### Removed
