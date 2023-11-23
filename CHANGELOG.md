@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.2.0 - 2023-11-23
+
+### Added
+
+- Run `pipenv install -e ./modules/${<module-directory-here>}` when installing Python modules.
+
 ## 2.1.0 - 2023-11-22
 
 ### Added
