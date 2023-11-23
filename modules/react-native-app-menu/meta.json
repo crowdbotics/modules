@@ -1,5 +1,5 @@
 {
-  "title": "App Menus",
+  "title": "Menu App",
   "description": "Module that shows available routes in a menu with links",
   "root": "/modules/app-menu",
   "schema": {
