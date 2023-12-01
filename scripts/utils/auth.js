@@ -35,9 +35,9 @@ const doEmailLogin = async () => {
     );
   }
 
-  const authBody = await response.json();
   let token;
 
+  const authBody = await response.json();
   if ("key" in authBody) {
     token = authBody.key;
   } else if ("login_with_otp" in authBody) {
@@ -69,7 +69,6 @@ const doEmailLogin = async () => {
     }
 
     const otpBody = await otpResponse.json();
-
     token = otpBody.key;
   }
 
@@ -79,6 +78,7 @@ const doEmailLogin = async () => {
 export const performLogin = async (type = "email/password") => {
   let token;
 
+  // Authentication methods here.
   if (type === "email/password") {
     token = await doEmailLogin();
   }
