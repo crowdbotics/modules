@@ -35,6 +35,7 @@ import { configFile } from "./scripts/utils/configFile.js";
 import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesGet, modulesList } from "./scripts/modules.js";
+import { publish } from "./scripts/publish.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -285,6 +286,17 @@ demo`;
       default:
         invalid(`Invalid action "${action}" for modules command`);
     }
+  },
+  publish: () => {
+    const args = arg({});
+
+    const moduleName = args._[1];
+
+    if (!moduleName || !moduleName.length) {
+      return invalid("Please provide a module name to publish");
+    }
+
+    publish(moduleName);
   },
 
   feedback: () => {
