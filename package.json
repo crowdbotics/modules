@@ -1,6 +1,6 @@
 {
   "name": "modules",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Library of modules for React Native and Django apps",
   "main": "index.js",
   "bin": {
