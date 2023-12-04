@@ -24,11 +24,13 @@ import findGitRoot from "find-git-root";
 import { parseModules } from "./scripts/parse.js";
 import { createDemo } from "./scripts/demo.js";
 import { addModules } from "./scripts/add.js";
+import { info } from "./scripts/info.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
 import { valid, invalid, isNameValid } from "./utils.js";
 import { createModule } from "./scripts/create.js";
+import { login } from "./scripts/login.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -183,6 +185,13 @@ demo`;
     });
     upgradeScaffold(args["--version"]);
   },
+  login: () => {
+    login();
+  },
+  info: () => {
+    info();
+  },
+
   help: () => {
     console.log(`usage: npx crowdbotics/modules <command>
 
