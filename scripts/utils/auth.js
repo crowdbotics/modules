@@ -20,7 +20,8 @@ const doEmailLogin = async () => {
 
   const response = await apiClient.post({
     path: "/v2/login/",
-    body: { email, password, anonymous: true }
+    body: { email, password },
+    anonymous: true
   });
 
   if (!response.ok) {

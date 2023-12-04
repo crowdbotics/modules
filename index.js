@@ -200,16 +200,16 @@ demo`;
     const value = args._[3];
 
     if (!action.length) {
-      return invalid("please provide the action to perform on the config");
+      return invalid("Please provide the action to perform on the config");
     }
 
     switch (action) {
       case "set":
         if (!key) {
-          return invalid("Please specific the config key to set.");
+          return invalid("Please specify the config key to set.");
         }
         if (!value) {
-          return invalid("Please specific the config value to set.");
+          return invalid("Please specify the config value to set.");
         }
 
         configFile.set(key, value);
@@ -218,14 +218,14 @@ demo`;
         break;
       case "get":
         if (!key) {
-          return invalid("Please specific the config key to get.");
+          return invalid("Please specify the config key to get.");
         }
 
         section(configFile.get(key));
 
         break;
       default:
-        invalid(`invalid action "${action}" for config command`);
+        invalid(`Invalid action "${action}" for config command`);
     }
   },
 
