@@ -1,5 +1,6 @@
 import { configFile } from "./configFile.js";
 import { HOST_CONFIG_NAME, TOKEN_CONFIG_NAME } from "./constants.js";
+import fetch from "node-fetch";
 
 const DEFAULT_HOST = "https://app.crowdbotics.com/api";
 
