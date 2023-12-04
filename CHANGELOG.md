@@ -2,6 +2,16 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.3.0 - 2023-12-04
+
+### Added
+
+Added the following commands that are still in development:
+
+- `npx crowdbotics/modules login`: Enables user login with email and password to access the Crowdbotics environment.
+- `npx crowdbotics/modules config`: Facilitates the management of configuration values within the Crowdbotics scripts.
+- `npx crowdbotics/modules info`: Displays essential information about the currently authenticated user.
+
 ## 2.2.0 - 2023-11-23
 
 ### Added
