@@ -2,6 +2,7 @@ import inquirer from "inquirer";
 import { invalid, section } from "../../utils.js";
 import { configFile } from "./configFile.js";
 import { TOKEN_CONFIG_NAME } from "./constants.js";
+import { apiClient } from "./apiClient.js";
 
 const doEmailLogin = async () => {
   const { email, password } = await inquirer.prompt([
@@ -17,17 +18,11 @@ const doEmailLogin = async () => {
     }
   ]);
 
-  const response = await fetch(
-    "https://crowdbotics-slack-dev.herokuapp.com/api/v2/login/",
-    {
-      body: JSON.stringify({ email, password }),
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json"
-      },
-      method: "POST"
-    }
-  );
+  const response = await apiClient.post({
+    path: "/v2/login/",
+    body: { email, password },
+    anonymous: true
+  });
 
   if (!response.ok) {
     return invalid(
@@ -52,17 +47,11 @@ const doEmailLogin = async () => {
       }
     ]);
 
-    const otpResponse = await fetch(
-      "https://crowdbotics-slack-dev.herokuapp.com/api/v2/totp-login/",
-      {
-        body: JSON.stringify({ email, password, token: otp }),
-        headers: {
-          accept: "application/json",
-          "content-type": "application/json"
-        },
-        method: "POST"
-      }
-    );
+    const otpResponse = await apiClient.post({
+      path: "/v2/totp-login/",
+      body: { email, password, token: otp },
+      anonymous: true
+    });
 
     if (!otpResponse.ok) {
       return invalid("Incorrect code, please try again.");

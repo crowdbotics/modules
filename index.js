@@ -28,9 +28,10 @@ import { info } from "./scripts/info.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
-import { valid, invalid, isNameValid } from "./utils.js";
+import { valid, invalid, isNameValid, section } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
+import { configFile } from "./scripts/utils/configFile.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -190,6 +191,42 @@ demo`;
   },
   info: () => {
     info();
+  },
+  config: () => {
+    const args = arg({});
+
+    const action = args._[1];
+    const key = args._[2];
+    const value = args._[3];
+
+    if (!action.length) {
+      return invalid("Please provide the action to perform on the config");
+    }
+
+    switch (action) {
+      case "set":
+        if (!key) {
+          return invalid("Please specify the config key to set.");
+        }
+        if (!value) {
+          return invalid("Please specify the config value to set.");
+        }
+
+        configFile.set(key, value);
+        configFile.save();
+
+        break;
+      case "get":
+        if (!key) {
+          return invalid("Please specify the config key to get.");
+        }
+
+        section(configFile.get(key));
+
+        break;
+      default:
+        invalid(`Invalid action "${action}" for config command`);
+    }
   },
 
   help: () => {
