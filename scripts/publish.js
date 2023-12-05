@@ -1,15 +1,53 @@
 /* eslint-disable camelcase */
 import inquirer from "inquirer";
-import { section } from "../utils.js";
+import { invalid, section } from "../utils.js";
 import ora from "ora";
+import { apiClient } from "./utils/apiClient.js";
 
-export const publish = async (moduleName) => {
-  section(`Publishing module ${moduleName}.`);
+export const publish = async () => {
+  section("Publishing modules.");
+  section(
+    "Please ensure Crowdbotics has permission to commit to your linked repository."
+  );
 
-  // TODO - where to find org id? Is it user?
-  const defaultOrgId = 123;
+  let defaultOrganization;
 
-  const { git_url, branch, org_id } = await inquirer.prompt([
+  const preparingSpinner = ora("Preparing").start();
+  try {
+    const response = await apiClient.get({
+      path: "/v2/user/"
+    });
+
+    const userBody = await response.json();
+
+    if (userBody.organization) {
+      defaultOrganization = userBody.organization;
+    }
+  } catch {
+    invalid("Unable to get current user. Please login and try again.");
+    return;
+  } finally {
+    preparingSpinner.stop();
+  }
+
+  if (!defaultOrganization) {
+    invalid(
+      "Current user does not belong to an organization. Please join an organization before publishing modules."
+    );
+  }
+
+  const { ok } = await inquirer.prompt({
+    message: `Modules will be published under organization '${defaultOrganization.name}'. Please confirm this is expected (y/n):`,
+    name: "ok",
+    type: "input"
+  });
+
+  if (ok.trim().toLowerCase() !== "y") {
+    invalid("Cancelling operation. No module has been published.");
+    return;
+  }
+
+  const { git_url, branch } = await inquirer.prompt([
     {
       message: "Git URL:",
       name: "git_url",
@@ -20,12 +58,6 @@ export const publish = async (moduleName) => {
       name: "branch",
       type: "input",
       default: "master"
-    },
-    {
-      message: "Org ID:",
-      name: "org_id",
-      type: "input",
-      default: defaultOrgId
     }
   ]);
 
@@ -40,10 +72,9 @@ export const publish = async (moduleName) => {
   spinner.stop();
 
   section(`
-Dummy publish module is complete..
-Module Name: ${moduleName}
+Dummy publish module is complete.
 Git URL: ${git_url}
 branch: ${branch}
-Org ID: ${org_id}
+Org ID: ${defaultOrganization.id}
   `);
 };

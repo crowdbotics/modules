@@ -288,15 +288,7 @@ demo`;
     }
   },
   publish: () => {
-    const args = arg({});
-
-    const moduleName = args._[1];
-
-    if (!moduleName || !moduleName.length) {
-      return invalid("Please provide a module name to publish");
-    }
-
-    publish(moduleName);
+    publish();
   },
 
   feedback: () => {
