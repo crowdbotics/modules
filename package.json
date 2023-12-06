@@ -46,6 +46,7 @@
     "inquirer": "^9.2.0",
     "js-yaml": "^4.1.0",
     "node-fetch": "^3.3.2",
+    "ora": "^7.0.1",
     "prettier": "^2.6.2"
   },
   "resolutions": {
