@@ -1,9 +1,14 @@
 import { invalid, section } from "../utils.js";
 import { apiClient } from "./utils/apiClient.js";
+import { getCurrentUserOrganization } from "./utils/organization.js";
+import Table from "cli-table";
+import ora from "ora";
 
 const MODULES_PAGE_LIMIT = 50;
 
 export const modulesList = async ({ search, visibility, page = 1 }) => {
+  const loadingSpinner = ora("Loading Modules").start();
+
   try {
     const params = { limit: MODULES_PAGE_LIMIT };
 
@@ -16,8 +21,15 @@ export const modulesList = async ({ search, visibility, page = 1 }) => {
     }
 
     if (visibility === "private") {
-      // TODO - fill with stored org id.
-      params.org_id = "12";
+      const organization = await getCurrentUserOrganization();
+
+      if (!organization) {
+        return invalid(
+          "User must be a part of an organization to use private catalog. Please join an organization, or remove the '--visibility private' flag."
+        );
+      }
+
+      params.org_id = organization.id;
     }
 
     const response = await apiClient.get({
@@ -25,15 +37,28 @@ export const modulesList = async ({ search, visibility, page = 1 }) => {
       params
     });
 
+    if (!response.ok) {
+      invalid("Failed to catalog modules. Please log in and try again.");
+    }
+
     const searchBody = await response.json();
 
-    if (searchBody.results) {
-      const printBody = searchBody.results.map((module) => ({
-        id: module.id,
-        title: module.title
-      }));
+    loadingSpinner.stop();
 
-      console.table(printBody);
+    if (searchBody.results) {
+      const printBody = searchBody.results.map((module) => [
+        module.id,
+        module.title,
+        module.description
+      ]);
+
+      const table = new Table({
+        head: ["id", "Title", "Description"],
+        colWidths: [10, 50, 80]
+      });
+
+      table.push(...printBody);
+      console.log(table.toString());
 
       if (searchBody.next) {
         // TODO - command should be built in a more robust way to support future flags easier.
@@ -56,6 +81,6 @@ export const modulesList = async ({ search, visibility, page = 1 }) => {
   } catch {
     invalid("Unable to get modules. Please login and try again.");
   } finally {
-    // preparingSpinner.stop();
+    loadingSpinner.stop();
   }
 };
