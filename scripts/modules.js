@@ -45,38 +45,41 @@ export const modulesList = async ({ search, visibility, page = 1 }) => {
 
     loadingSpinner.stop();
 
-    if (searchBody.results) {
-      const printBody = searchBody.results.map((module) => [
-        module.id,
-        module.title,
-        module.description
-      ]);
+    if (!searchBody || searchBody.results.length === 0) {
+      section("No results found. Please adjust your search criteria.");
+      return;
+    }
 
-      const table = new Table({
-        head: ["id", "Title", "Description"],
-        colWidths: [10, 50, 80]
-      });
+    const printBody = searchBody.results.map((module) => [
+      module.id,
+      module.title,
+      module.description
+    ]);
 
-      table.push(...printBody);
-      console.log(table.toString());
+    const table = new Table({
+      head: ["id", "Title", "Description"],
+      colWidths: [10, 50, 80]
+    });
 
-      if (searchBody.next) {
-        // TODO - command should be built in a more robust way to support future flags easier.
+    table.push(...printBody);
+    console.log(table.toString());
 
-        let suggestedCommand = `modules list --page ${page + 1}`;
+    if (searchBody.next) {
+      // TODO - command should be built in a more robust way to support future flags easier.
 
-        if (search) {
-          suggestedCommand += ` --search ${search}`;
-        }
+      let suggestedCommand = `modules list --page ${page + 1}`;
 
-        if (visibility) {
-          suggestedCommand += ` --visibility ${visibility}`;
-        }
-
-        section(
-          `More results exist. Run command \`${suggestedCommand}\` to retrieve the next page.`
-        );
+      if (search) {
+        suggestedCommand += ` --search ${search}`;
       }
+
+      if (visibility) {
+        suggestedCommand += ` --visibility ${visibility}`;
+      }
+
+      section(
+        `More results exist. Run command \`${suggestedCommand}\` to retrieve the next page.`
+      );
     }
   } catch {
     invalid("Unable to get modules. Please login and try again.");
