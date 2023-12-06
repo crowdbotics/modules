@@ -251,7 +251,7 @@ demo`;
         modulesList({
           search: args["--search"],
           visibility: args["--visibility"],
-          page: args["--page"]
+          page: Number(args["--page"])
         });
         break;
 

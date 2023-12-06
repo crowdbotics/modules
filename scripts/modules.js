@@ -36,18 +36,25 @@ export const modulesList = async ({ search, visibility, page = 1 }) => {
       console.table(printBody);
 
       if (searchBody.next) {
-        // TODO - this is just an example. This command will actually need to rebuild all the existing parameters.
+        // TODO - command should be built in a more robust way to support future flags easier.
+
+        let suggestedCommand = `modules list --page ${page + 1}`;
+
+        if (search) {
+          suggestedCommand += ` --search ${search}`;
+        }
+
+        if (visibility) {
+          suggestedCommand += ` --visibility ${visibility}`;
+        }
 
         section(
-          `More results exist. Run command \`modules list --page ${
-            page + 1
-          }\` to retrieve the next page.`
+          `More results exist. Run command \`${suggestedCommand}\` to retrieve the next page.`
         );
       }
     }
   } catch {
     invalid("Unable to get modules. Please login and try again.");
-    return;
   } finally {
     // preparingSpinner.stop();
   }
