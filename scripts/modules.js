@@ -6,7 +6,7 @@ import ora from "ora";
 
 const MODULES_PAGE_LIMIT = 50;
 
-export const modulesList = async ({ search, visibility, page = 1 }) => {
+export const modulesList = async ({ search, visibility = "", page = 1 }) => {
   const loadingSpinner = ora("Loading Modules").start();
 
   try {
@@ -20,16 +20,15 @@ export const modulesList = async ({ search, visibility, page = 1 }) => {
       params.search = search;
     }
 
-    if (visibility === "private") {
+    if (visibility.toLowerCase() === "private") {
       const organization = await getCurrentUserOrganization();
 
-      if (!organization) {
-        return invalid(
-          "User must be a part of an organization to use private catalog. Please join an organization, or remove the '--visibility private' flag."
-        );
-      }
-
       params.org_id = organization.id;
+      params.visibility = "Private";
+    }
+
+    if (visibility.toLowerCase() === "public") {
+      params.visibility = "Public";
     }
 
     const response = await apiClient.get({
