@@ -1,0 +1,15 @@
+{
+    "name": "@modules/corporate-event",
+    "version": "1.0.1",
+    "description": "corporate-event",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+       
+    },
+    "x-dependencies": {
+       
+    }
+}
