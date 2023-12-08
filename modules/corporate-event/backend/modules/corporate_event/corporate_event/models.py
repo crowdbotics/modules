@@ -90,23 +90,23 @@ class ConnectProfile(models.Model):
 
 
 class UserConnectRequest(models.Model):
-    # STATUS_CHOICES = (
-    #     ('Pending', 'Pending'),
-    #     ('Accepted', 'Accepted'),
-    #     ('Rejected', 'Rejected'),
-    # )
-    status = models.CharField(max_length=30, default='Pending')
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Accepted', 'Accepted'),
+        ('Rejected', 'Rejected'),
+    )
+    status = models.CharField(max_length=30, default='Pending', choices=STATUS_CHOICES)
     requester = models.ForeignKey(User, on_delete=models.CASCADE, related_name="requests_from")
     requestee = models.ForeignKey(ConnectProfile, on_delete=models.CASCADE, related_name="requests_to")
     created = models.DateTimeField(default=timezone.now)
 
 
 class AboutTeamAndBoardMember(models.Model):
-    # ABOUT_CHOICES = (
-    #     ('Team', 'Team'),
-    #     ('Board', 'Board'),
-    # )
-    select = models.CharField(max_length=5)
+    ABOUT_CHOICES = (
+        ('Team', 'Team'),
+        ('Board', 'Board'),
+    )
+    select = models.CharField(max_length=5, choices=ABOUT_CHOICES)
     connect_user = models.OneToOneField(ConnectProfile, on_delete=models.CASCADE, related_name='about_connect_user')
     sort = models.IntegerField(default=0)
 

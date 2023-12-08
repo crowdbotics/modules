@@ -11,10 +11,6 @@ const BoardDetails = ({ route, navigation }) => {
       <ScrollView style={styles.container}>
         <View style={styles.main}>
           <Pressable style={styles.sideTextMain} onPress={()=>{navigation.navigate("board")}}>
-            <Image
-              source={require("./assets/3SevenLogo.png")}
-              style={{ height: 25, width: 80, marginRight: 30 }}
-            />
             <Text allowFontScaling={false} style={styles.sideText}>BOARD</Text>
           </Pressable>
           <View>
@@ -26,7 +22,7 @@ const BoardDetails = ({ route, navigation }) => {
           <View style={styles.aboutMain}>
             <View style={styles.about}>
               <Text allowFontScaling={false} style={styles.nameTitle}>
-                {route?.params?.data?.connect_user?.user.name.toUpperCase()}
+                {route?.params?.data?.connect_user?.user?.name?.toUpperCase()}
               </Text>
               <Text allowFontScaling={false} style={styles.professional}
                 numberOfLines={2}
@@ -101,16 +97,14 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 40,
     flexDirection: "row",
-    left: -143,
+    left: -60,
     top: 249,
     transform: [{ rotate: "270deg" }],
-    alignItems: "flex-end"
   },
   sideText: {
     fontSize: 22,
     fontWeight: "600",
     color: "#ffffff",
-    marginRight: 60
   },
   about: {
     marginTop: 13,

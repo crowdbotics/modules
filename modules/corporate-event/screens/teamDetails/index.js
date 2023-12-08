@@ -10,11 +10,6 @@ const TeamDetails = ({ route, navigation }) => {
     <ScrollView style={styles.container}>
       <View style={styles.main}>
         <Pressable style={styles.sideTextMain} onPress={()=>{navigation.navigate("team")}}>
-          <Image
-            source={require("./assets/3SevenLogo.png")}
-            style={styles.companyLogo}
-          />
-
           <Text allowFontScaling={false} style={styles.sideText}>TEAM</Text>
         </Pressable>
         <View>
@@ -89,12 +84,12 @@ const styles = StyleSheet.create({
     position: "absolute",
     paddingVertical: 7,
     flexDirection: "row",
-    left: -100,
+    left: -70,
     top: 249,
-    width: 240,
+    width: 180,
     justifyContent: "flex-end",
     transform: [{ rotate: "270deg" }],
-    alignItems: "flex-end",
+    // alignItems: "flex-end",
   },
   sideText: {
     fontSize: 22,

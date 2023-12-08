@@ -91,6 +91,7 @@ class UserConnectViewSet(ModelViewSet):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     serializer_class = ConnectProfileSerializer
 
+
     def get_queryset(self):
         return ConnectProfile.objects.filter(
             show_profile=True
@@ -101,6 +102,9 @@ class UserConnectViewSet(ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def send_request(self, request):
+        ADMIN_EMAIL_RECEIVERS = [
+            
+        ]
         try:
             user = self.request.user
             requestee = request.data.get('email')
@@ -114,12 +118,7 @@ class UserConnectViewSet(ModelViewSet):
                     serializer.is_valid(raise_exception=True)
                     serializer.save()
                     send_invitation_email(
-                        recipient_email=[
-                            "executivesummit@3sevenconsulting.com",
-                            "shahraiz.ali@crowdbotics.com",
-                            "concierge@3sevenconsulting.com",
-                            "3Seven.Chris@gmail.com"
-                        ],
+                        recipient_email=ADMIN_EMAIL_RECEIVERS,
                         sender_email=user.email,
                         requestee_user=requestee_user.user,
                         sender=user,

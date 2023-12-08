@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import axios from "axios"
 
-const BASE_URL = "https://threesevenexecevent-42777.botics.co"
-// const BASE_URL = "http://10.48.106.2:8000"
+// const BASE_URL = "https://threesevenexecevent-42777.botics.co"
+const BASE_URL = "http://10.0.2.2:8000"
 
 export const login = payload => {
   const config = {
@@ -20,7 +20,7 @@ export const getHomeDetails = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/home/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/home/`,
     headers: {
       Authorization: `Token ${token}`
     }
@@ -33,7 +33,7 @@ export const getSessions = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/user-session/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/user-session/`,
     headers: {
       Authorization: `Token ${token}`
     }
@@ -46,7 +46,7 @@ export const getActivities = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/session/activity/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/session/activity/`,
     headers: {
       Authorization: `Token ${token}`
     }
@@ -59,7 +59,7 @@ export const getTeamMembers = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/board-team/team_members/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/board-team/team_members/`,
     headers: {
       Authorization: `Token ${token}`
     }
@@ -72,7 +72,7 @@ export const getBoardMembers = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/board-team/board_members/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/board-team/board_members/`,
     headers: {
       Authorization: `Token ${token}`
     }
@@ -85,7 +85,7 @@ export const getConnects = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/connect/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/connect/`,
     headers: {
       Authorization: `Token ${token}`
     }
@@ -98,7 +98,7 @@ export const connectionRequest = async payload => {
   const config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/connect/send_request/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/connect/send_request/`,
     headers: {
       Authorization: `Token ${token}`
     },
@@ -112,7 +112,7 @@ export const getOfferings = async () => {
   const config = {
     method: "get",
     maxBodyLength: Infinity,
-    url: `${BASE_URL}/api/v1/offerings/`,
+    url: `${BASE_URL}/modules/corporate-event/api/v1/offerings/`,
     headers: {
       Authorization: `Token ${token}`
     }

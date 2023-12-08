@@ -19,8 +19,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
   const [loading, setLoading] = useState(false)
-  const [userName, setUserName] = useState(__DEV__ ? "saad.abid" : "")
-  const [password, setPassword] = useState(__DEV__ ? "XmVv3SPTY2" : "")
+  const [userName, setUserName] = useState(__DEV__ ? "shahr" : "")
+  const [password, setPassword] = useState(__DEV__ ? "Admin123" : "")
 
   const dispatch = useDispatch()
 
