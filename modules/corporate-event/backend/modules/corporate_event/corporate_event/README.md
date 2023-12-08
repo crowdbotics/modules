@@ -2,7 +2,7 @@
 
 ## Module description
 
-Enter a module description here.
+This module is a complete corporate event app template.
 
 ## Features
 
