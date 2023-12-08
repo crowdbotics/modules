@@ -1,11 +1,12 @@
-import { createStackNavigator } from "@react-navigation/stack"
-import SessionDetails from "../../screens/sessionDetails"
-import Sessions from "../../screens/sessions"
-import Home from "../../screens/home"
-import ActivityDetails from "../../screens/activityDetails"
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import SessionDetails from "../../screens/sessionDetails";
+import Sessions from "../../screens/sessions";
+import Home from "../../screens/home";
+import ActivityDetails from "../../screens/activityDetails";
 
 const HomeNavigator = () => {
-  const Stack = createStackNavigator()
+  const Stack = createStackNavigator();
 
   return (
     <Stack.Navigator
@@ -19,7 +20,7 @@ const HomeNavigator = () => {
       <Stack.Screen name={"activityDetails"} component={ActivityDetails} />
       <Stack.Screen name={"sessionDetails"} component={SessionDetails} />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
-export default HomeNavigator
+export default HomeNavigator;

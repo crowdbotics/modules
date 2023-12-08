@@ -1,14 +1,13 @@
-import React from "react"
-import { View, StyleSheet, ScrollView, Pressable, SafeAreaView } from "react-native"
-import { Text, Image } from "react-native"
+import React from "react";
+import { View, StyleSheet, ScrollView, SafeAreaView, Text, Image } from "react-native";
 
 const OfferingDetails = ({ route, navigation }) => {
   navigation.setOptions({
     title: "Offerings",
     headerShown: true
-  })
-  const { data } = route?.params
-  console.log(data)
+  });
+  const { data } = route?.params;
+  console.log(data);
   return (
     <SafeAreaView style={styles.container}>
     <ScrollView>
@@ -34,8 +33,8 @@ const OfferingDetails = ({ route, navigation }) => {
     </View>
     </ScrollView>
   </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   descriptionStyle: {
@@ -46,20 +45,20 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir-Regular",
     color: "#000"
   },
-  descriptionContainer: { 
-    flex: 1, 
-    marginTop: 40, 
+  descriptionContainer: {
+    flex: 1,
+    marginTop: 40
   },
-  sideView: { 
-    width: 60, 
-    alignItems: "flex-start" 
+  sideView: {
+    width: 60,
+    alignItems: "flex-start"
   },
-  textContainer: { 
-    flexDirection: "row", 
-    flex: 1 
+  textContainer: {
+    flexDirection: "row",
+    flex: 1
   },
-  firstView: { 
-    marginHorizontal: 20 
+  firstView: {
+    marginHorizontal: 20
   },
   sessionTitle: {
     color: "#6C170B",
@@ -69,10 +68,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: 1
   },
-  verticleTitle: { 
-    color: "#6C170B", 
-    fontSize: 18, 
-    fontWeight: "700" 
+  verticleTitle: {
+    color: "#6C170B",
+    fontSize: 18,
+    fontWeight: "700"
   },
   verticleTitleView: {
     flexDirection: "column",
@@ -107,7 +106,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30
   },
   scrollView: {
-    flex: 1,
+    flex: 1
   },
   container: {
     flex: 1,
@@ -121,6 +120,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#d3d3d3"
   }
-})
+});
 
-export default OfferingDetails
+export default OfferingDetails;

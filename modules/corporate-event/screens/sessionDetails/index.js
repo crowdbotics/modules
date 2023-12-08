@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   View,
   Image,
@@ -8,8 +8,7 @@ import {
   ScrollView,
   Pressable,
   Linking
-} from "react-native"
-
+} from "react-native";
 
 const SessionDetails = ({ route, navigation }) => {
   return (
@@ -28,10 +27,10 @@ const SessionDetails = ({ route, navigation }) => {
 
         <View style={{ flexDirection: "row", flex: 1 }}>
           <View style={{
-              width: 60,
-              position: "absolute",
-            }}>
-            <Pressable style={styles.verticalView} onPress={()=>{navigation.navigate("session")}}>
+            width: 60,
+            position: "absolute"
+          }}>
+            <Pressable style={styles.verticalView} onPress={() => { navigation.navigate("session"); }}>
               <Text allowFontScaling={false} style={styles.verticleTitlePlain} numberOfLines={1}>
                 {route?.params?.data?.title}
               </Text>
@@ -39,11 +38,12 @@ const SessionDetails = ({ route, navigation }) => {
             </Pressable>
           </View>
 
-          <View style={{ 
+          <View style={{
             flex: 1,
-            marginTop: 40, 
+            marginTop: 40,
             marginHorizontal: 45,
-            justifyContent: "center", alignItems: "flex-start"
+            justifyContent: "center",
+            alignItems: "flex-start"
           }}>
             <Text allowFontScaling={false} style={styles.sessionTitle}>
               {route?.params?.data?.title.toUpperCase()}
@@ -56,32 +56,34 @@ const SessionDetails = ({ route, navigation }) => {
               </Text>
             </View>
             {route?.params?.data?.attachments && route?.params?.data?.attachments.length > 0 && (
-              <View style={{ width: "100%"}}>
+              <View style={{ width: "100%" }}>
                 <Text allowFontScaling={false} style={styles.verticleTitle}>Attachments</Text>
                 {route?.params?.data?.attachments?.map((item, index) => {
-                  const isPDF = item.attachment?.includes('.pdf')
+                  const isPDF = item.attachment?.includes(".pdf");
                   const openAttachment = () => {
-                    Linking.openURL(item.attachment)
-                  }
+                    Linking.openURL(item.attachment);
+                  };
                   return (
                     <Pressable style={styles.cardContainer}
                       onPress={openAttachment}
                       key={index}
                     >
-                      {isPDF ? (
+                      {isPDF
+                        ? (
                         <Image
-                          source={require('./assets/attachment.png')} // Placeholder image for PDF
+                          source={require("./assets/attachment.png")} // Placeholder image for PDF
                           style={styles.cardImage}
                         />
-                      ) : (
+                          )
+                        : (
                         <Image
                           source={{ uri: item.attachment }}
                           style={styles.cardImage}
                         />
-                      )}
+                          )}
                       <Text allowFontScaling={false} style={styles.cardTitle} numberOfLines={2} >{item.title}</Text>
                     </Pressable>
-                  )
+                  );
                 })}
               </View>
             )}
@@ -89,8 +91,8 @@ const SessionDetails = ({ route, navigation }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   sessionDescription: {
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     letterSpacing: 0.9,
-    alignSelf: "center",
+    alignSelf: "center"
   },
   verticleTitlePlain: {
     color: "#6C170B",
@@ -129,14 +131,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     letterSpacing: 0.9,
     marginLeft: 25,
-    minWidth: 180,
+    minWidth: 180
   },
   verticleTitleView: {
     flexDirection: "column",
     marginTop: 150,
     marginLeft: -90,
     padding: 10,
-    width: 220,
+    width: 220
 
   },
   verticalText: {
@@ -145,7 +147,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "GaramondPremrPro-It",
     paddingVertical: 7,
-    paddingHorizontal: 30,
+    paddingHorizontal: 30
   },
   logoImage: {
     position: "absolute",
@@ -161,7 +163,7 @@ const styles = StyleSheet.create({
     marginLeft: -70,
     transform: [{ rotate: "270deg" }],
     alignItems: "center",
-    width: 180,
+    width: 180
   },
   scrollView: {
     flex: 1
@@ -179,33 +181,33 @@ const styles = StyleSheet.create({
     backgroundColor: "#d3d3d3"
   },
   cardContainer: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     margin: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.1)',
+    shadowColor: "rgba(0, 0, 0, 0.1)",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 4,
     elevation: 5,
     borderRadius: 10,
-    overflow: 'hidden',
+    overflow: "hidden"
   },
   cardImage: {
-    width: '100%',
+    width: "100%",
     height: 180,
     borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderTopRightRadius: 10
   },
   attachmentLabel: {
-    color: 'white',
+    color: "white"
   },
   cardTitle: {
-    backgroundColor: '#000',
-    color: '#fff',
+    backgroundColor: "#000",
+    color: "#fff",
     padding: 5,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 18,
-    borderWidth: 1,
-  },
-})
+    borderWidth: 1
+  }
+});
 
-export default SessionDetails
+export default SessionDetails;

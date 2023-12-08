@@ -1,4 +1,4 @@
-import React, { useEffect, useState} from "react"
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -8,50 +8,50 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  Pressable,
-} from "react-native"
+  Pressable
+} from "react-native";
 
-import { useDispatch, useSelector } from "react-redux"
-import { getHomeDetails } from "../../store/custom/home.slice"
-import moment from "moment"
-import { useIsFocused } from "@react-navigation/native"
-import { ScrollView } from "react-native-gesture-handler"
+import { useDispatch, useSelector } from "react-redux";
+import { getHomeDetails } from "../../store/custom/home.slice";
+import moment from "moment";
+import { useIsFocused } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
-const Home = ({navigation}) => {
-  const { entities } = useSelector(state => state.Home.getHomeDetails)
-  const [loading, setLoading] = useState(false)
-  const isFocused = useIsFocused()
-  const dispatch = useDispatch()
+const Home = ({ navigation }) => {
+  const { entities } = useSelector(state => state.Home.getHomeDetails);
+  const [loading] = useState(false);
+  const isFocused = useIsFocused();
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
-    await dispatch(getHomeDetails())
-  }
+    await dispatch(getHomeDetails());
+  };
   useEffect(() => {
     if (isFocused) {
-      fetchData()
+      fetchData();
     }
-  }, [isFocused])
+  }, [isFocused]);
 
   const renderItem = ({ item }) => {
     return (
       <View style={{
-        marginBottom: 12, borderBottomWidth:1, borderBottomColor: "#f9f9f9", paddingBottom: 10
+        marginBottom: 12, borderBottomWidth: 1, borderBottomColor: "#f9f9f9", paddingBottom: 10
       }}>
         <Text allowFontScaling={false} style={styles.dateText}>
           {moment(item.date).format("dddd MMM DD").toUpperCase()}
         </Text>
         <FlatList data={item?.session_data} renderItem={renderSubItem} />
       </View>
-    )
-  }
+    );
+  };
 
   const renderSubItem = ({ item }) => {
     return (
-      <Pressable style={styles.eventNameViews} onPress={()=>{
-        if(item?.type === "session"){
-          navigation.navigate("sessionDetails", {data: item})
-        }else {
-          navigation.navigate("activityDetails", {data: item})
+      <Pressable style={styles.eventNameViews} onPress={() => {
+        if (item?.type === "session") {
+          navigation.navigate("sessionDetails", { data: item });
+        } else {
+          navigation.navigate("activityDetails", { data: item });
         }
       }}>
         <Text allowFontScaling={false} style={styles.eventTime}>
@@ -59,8 +59,8 @@ const Home = ({navigation}) => {
         </Text>
         <Text allowFontScaling={false} style={styles.eventName}>{item?.title}</Text>
       </Pressable>
-    )
-  }
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -92,17 +92,19 @@ const Home = ({navigation}) => {
           onPress={() => navigation.navigate("concierge")}
           disabled={loading}
         >
-          {loading ? (
+          {loading
+            ? (
             <ActivityIndicator size={"small"} color={"#fff"} />
-          ) : (
+              )
+            : (
             <Text allowFontScaling={false} style={styles.buttonTitle}>Concierge</Text>
-          )}
+              )}
         </TouchableOpacity>
 
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   dateText: {
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
   eventNameViews: {
     flexDirection: "row",
     marginLeft: 30,
-    marginTop: 8,
+    marginTop: 8
   },
   eventList: {
     marginHorizontal: 40,
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
   includesText: {
     color: "#000",
     fontFamily: "Avenir-Regular",
-    marginTop: 8,
+    marginTop: 8
   },
   container: {
     backgroundColor: "#FFF",
@@ -164,9 +166,9 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   buttonTitle: {
-    color: "#fff", 
-    fontSize: 16, 
-    fontWeight: "700" 
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "700"
   },
   connectButton: {
     backgroundColor: "#000",
@@ -178,6 +180,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20
   }
-})
+});
 
-export default Home
+export default Home;

@@ -1,10 +1,10 @@
-import { React } from "react"
-import { Text } from "react-native"
+import { React } from "react";
+import { Text } from "react-native";
 
-const Webview = ({uri}) => {
+const Webview = ({ uri }) => {
   return (
     <Text>Web</Text>
-  )
-}
+  );
+};
 
-export default Webview
+export default Webview;

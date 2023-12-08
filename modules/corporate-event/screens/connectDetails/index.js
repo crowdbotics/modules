@@ -1,42 +1,39 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Alert,
   ActivityIndicator,
   Pressable,
   Dimensions,
-  Linking,
-} from "react-native"
-import { Text, Image } from "react-native"
+  Linking, Text, Image
+} from "react-native";
 
-import { useDispatch } from "react-redux"
-import { connectionRequest } from "../../store/custom/connect.slice"
+import { useDispatch } from "react-redux";
+import { connectionRequest } from "../../store/custom/connect.slice";
 
-const WIDTH = Dimensions.get("window").width
-const HEIGHT = Dimensions.get("window").height
+const WIDTH = Dimensions.get("window").width;
 
 const ConnectDetails = ({ route, navigation }) => {
-  const [loading, setLoading] = useState(false)
-  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
   const onConnect = () => {
-    setLoading(true)
+    setLoading(true);
     dispatch(
       connectionRequest({
         email: route?.params?.data?.user?.email
       })
     ).then(() => {
-      setLoading(false)
-    })
-  }
+      setLoading(false);
+    });
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.main}>
-        <Pressable style={styles.sideTextMain} onPress={()=>{navigation.navigate("connect")}}>
+        <Pressable style={styles.sideTextMain} onPress={() => { navigation.navigate("connect"); }}>
           <Text allowFontScaling={false} style={styles.sideText}>Connect</Text>
         </Pressable>
         <View>
@@ -57,7 +54,7 @@ const ConnectDetails = ({ route, navigation }) => {
             </Text>
             <Pressable style={styles.emailMain}
               onPress={() => {
-                Linking.openURL(`mailto:${route?.params?.data?.user?.email}`)
+                Linking.openURL(`mailto:${route?.params?.data?.user?.email}`);
               }}
             >
               <Image
@@ -72,7 +69,7 @@ const ConnectDetails = ({ route, navigation }) => {
             </Pressable>
             <Pressable style={styles.siteMain}
               onPress={() => {
-                Linking.openURL(route?.params?.data?.website)
+                Linking.openURL(route?.params?.data?.website);
               }}
             >
               <Image
@@ -94,21 +91,23 @@ const ConnectDetails = ({ route, navigation }) => {
           onPress={onConnect}
           disabled={loading}
         >
-          {loading ? (
+          {loading
+            ? (
             <ActivityIndicator size={"small"} color={"#fff"} />
-          ) : (
+              )
+            : (
             <Text allowFontScaling={false} style={styles.buttonTitle}>Connect</Text>
-          )}
+              )}
         </TouchableOpacity>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  scrollStyles: { 
-    marginHorizontal: 50, 
-    marginBottom: 20,
+  scrollStyles: {
+    marginHorizontal: 50,
+    marginBottom: 20
   },
   profileIconStyles: { height: 20, width: 20 },
   buttonTitle: { color: "#fff", fontSize: 16, fontWeight: "700" },
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
     transform: [{ rotate: "270deg" }],
     borderLeftWidth: 1,
     width: 140,
-    alignItems: "center",
+    alignItems: "center"
   },
   sideText: {
     fontSize: 22,
@@ -205,6 +204,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontFamily: "Avenir-Regular"
   }
-})
+});
 
-export default ConnectDetails
+export default ConnectDetails;

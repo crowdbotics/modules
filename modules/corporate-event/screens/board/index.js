@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -8,22 +8,22 @@ import {
   FlatList,
   Pressable,
   SafeAreaView
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { getBoardMembers } from "../../store/custom/board.slice"
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { getBoardMembers } from "../../store/custom/board.slice";
 
 const Board = ({ navigation }) => {
-  const { entities } = useSelector(state => state.Board.getBoardMembers)
+  const { entities } = useSelector(state => state.Board.getBoardMembers);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
-    await dispatch(getBoardMembers())
-  }
+    await dispatch(getBoardMembers());
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const renderItem = ({ item }) => {
     return (
@@ -43,8 +43,8 @@ const Board = ({ navigation }) => {
           <Text allowFontScaling={false} style={styles.post}>{item?.connect_user?.company}</Text>
         </View>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.main}>
@@ -60,14 +60,14 @@ const Board = ({ navigation }) => {
           />
       </View>
       <FlatList data={entities?.data} renderItem={renderItem} showsVerticalScrollIndicator={false} />
-      <Pressable style={styles.toast} onPress={()=>{navigation.goBack()}}>
+      <Pressable style={styles.toast} onPress={() => { navigation.goBack(); }}>
         <Text allowFontScaling={false} style={styles.toastText} >BOARD</Text>
       </Pressable>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Board
+export default Board;
 
 const styles = StyleSheet.create({
   main: {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: "brown",
     fontWeight: "800",
-    maxWidth: 200,
+    maxWidth: 200
   },
   post: {
     color: "black",
@@ -131,4 +131,4 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0
   }
-})
+});

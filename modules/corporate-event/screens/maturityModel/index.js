@@ -1,6 +1,5 @@
-import React from "react"
-import { View, StyleSheet, ScrollView, Pressable, SafeAreaView } from "react-native"
-import { Text, Image } from "react-native"
+import React from "react";
+import { View, StyleSheet, ScrollView, SafeAreaView, Text, Image } from "react-native";
 
 const MaturityModel = ({ route, navigation }) => {
   navigation.setOptions({
@@ -8,7 +7,7 @@ const MaturityModel = ({ route, navigation }) => {
     // back title visible
     backTitle: "Back",
     headerShown: true
-  })
+  });
   return (
     <SafeAreaView style={styles.container}>
     <ScrollView>
@@ -27,14 +26,14 @@ const MaturityModel = ({ route, navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <Text allowFontScaling={false} style={styles.descriptionStyle}>
-          Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.          </Text>
+          Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. </Text>
         </View>
       </View>
     </View>
     </ScrollView>
   </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   descriptionStyle: {
@@ -45,20 +44,20 @@ const styles = StyleSheet.create({
     fontFamily: "Avenir-Regular",
     color: "#000"
   },
-  descriptionContainer: { 
-    flex: 1, 
-    marginTop: 40, 
+  descriptionContainer: {
+    flex: 1,
+    marginTop: 40
   },
-  sideView: { 
-    width: 60, 
-    alignItems: "flex-start" 
+  sideView: {
+    width: 60,
+    alignItems: "flex-start"
   },
-  textContainer: { 
-    flexDirection: "row", 
-    flex: 1 
+  textContainer: {
+    flexDirection: "row",
+    flex: 1
   },
-  firstView: { 
-    marginHorizontal: 20 
+  firstView: {
+    marginHorizontal: 20
   },
   sessionTitle: {
     color: "#6C170B",
@@ -68,10 +67,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: 1
   },
-  verticleTitle: { 
-    color: "#6C170B", 
-    fontSize: 18, 
-    fontWeight: "700" 
+  verticleTitle: {
+    color: "#6C170B",
+    fontSize: 18,
+    fontWeight: "700"
   },
   verticleTitleView: {
     flexDirection: "column",
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30
   },
   scrollView: {
-    flex: 1,
+    flex: 1
   },
   container: {
     flex: 1,
@@ -120,6 +119,6 @@ const styles = StyleSheet.create({
     marginTop: 40,
     backgroundColor: "#d3d3d3"
   }
-})
+});
 
-export default MaturityModel
+export default MaturityModel;

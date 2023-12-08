@@ -1,16 +1,13 @@
-import React from "react"
-import { View, StyleSheet, ScrollView, Pressable, Dimensions, Linking } from "react-native"
-import { Text, Image } from "react-native"
+import React from "react";
+import { View, StyleSheet, ScrollView, Pressable, Dimensions, Linking, Text, Image } from "react-native";
 
-
-const WIDTH = Dimensions.get("window").width
-const HEIGHT = Dimensions.get("window").height
+const WIDTH = Dimensions.get("window").width;
 
 const BoardDetails = ({ route, navigation }) => {
   return (
       <ScrollView style={styles.container}>
         <View style={styles.main}>
-          <Pressable style={styles.sideTextMain} onPress={()=>{navigation.navigate("board")}}>
+          <Pressable style={styles.sideTextMain} onPress={() => { navigation.navigate("board"); }}>
             <Text allowFontScaling={false} style={styles.sideText}>BOARD</Text>
           </Pressable>
           <View>
@@ -33,7 +30,7 @@ const BoardDetails = ({ route, navigation }) => {
                 onPress={() => {
                   Linking.openURL(
                     `mailto:${route?.params?.data?.connect_user?.user.email}`
-                  )
+                  );
                 }}
               >
                 <Image
@@ -50,7 +47,7 @@ const BoardDetails = ({ route, navigation }) => {
                 onPress={() => {
                   Linking.openURL(
                     `${route?.params?.data?.connect_user?.website}`
-                  )
+                  );
                 }}
               >
                 <Image
@@ -67,7 +64,7 @@ const BoardDetails = ({ route, navigation }) => {
           </View>
         </View>
         <View
-          style={{ marginHorizontal: 45, marginBottom: 20}}
+          style={{ marginHorizontal: 45, marginBottom: 20 }}
           showsVerticalScrollIndicator={false}
         >
           <Text allowFontScaling={false} style={styles.details}>
@@ -75,11 +72,11 @@ const BoardDetails = ({ route, navigation }) => {
           </Text>
         </View>
       </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-  userImage: { height: 210, width: 210 , backgroundColor:'#d3d3d3'},
+  userImage: { height: 210, width: 210, backgroundColor: "#d3d3d3" },
   container: {
     flex: 1,
     backgroundColor: "white"
@@ -89,7 +86,7 @@ const styles = StyleSheet.create({
     display: "flex",
     paddingTop: 40,
     paddingBottom: 20,
-    alignItems: "center",
+    alignItems: "center"
   },
   sideTextMain: {
     backgroundColor: "rgba(0,0,0,0.8)",
@@ -99,12 +96,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     left: -60,
     top: 249,
-    transform: [{ rotate: "270deg" }],
+    transform: [{ rotate: "270deg" }]
   },
   sideText: {
     fontSize: 22,
     fontWeight: "600",
-    color: "#ffffff",
+    color: "#ffffff"
   },
   about: {
     marginTop: 13,
@@ -162,6 +159,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontFamily: "Avenir-Regular"
   }
-})
+});
 
-export default BoardDetails
+export default BoardDetails;

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react"
+import React, { Fragment, useEffect } from "react";
 import {
   View,
   Image,
@@ -7,22 +7,22 @@ import {
   Text,
   TouchableOpacity,
   FlatList
-} from "react-native"
+} from "react-native";
 
-import { useDispatch, useSelector } from "react-redux"
-import { getActivities } from "../../store/custom/activity.slice"
+import { useDispatch, useSelector } from "react-redux";
+import { getActivities } from "../../store/custom/activity.slice";
 
 const Activities = ({ navigation }) => {
-  const dispatch = useDispatch()
-  const { entities } = useSelector(state => state.Activity.getActivities)
+  const dispatch = useDispatch();
+  const { entities } = useSelector(state => state.Activity.getActivities);
 
   const fetchData = async () => {
-    await dispatch(getActivities())
-  }
+    await dispatch(getActivities());
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const renderItem = ({ item, index }) => {
     return (
@@ -36,7 +36,7 @@ const Activities = ({ navigation }) => {
             style={[
               styles.activityNameView,
               {
-                alignSelf: index % 2 == 0 ? "flex-start" : "flex-end"
+                alignSelf: index % 2 === 0 ? "flex-start" : "flex-end"
               }
             ]}
           >
@@ -44,8 +44,8 @@ const Activities = ({ navigation }) => {
           </View>
         </TouchableOpacity>
       </Fragment>
-    )
-  }
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -70,8 +70,8 @@ const Activities = ({ navigation }) => {
         style={styles.parentView}
       />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   activityName: {
@@ -152,6 +152,6 @@ const styles = StyleSheet.create({
     position: "relative",
     marginTop: 40
   }
-})
+});
 
-export default Activities
+export default Activities;

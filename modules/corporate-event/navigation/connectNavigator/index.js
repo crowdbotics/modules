@@ -1,9 +1,10 @@
-import { createStackNavigator } from "@react-navigation/stack"
-import Connect from "../../screens/connect"
-import ConnectDetails from "../../screens/connectDetails"
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import Connect from "../../screens/connect";
+import ConnectDetails from "../../screens/connectDetails";
 
 const ConnectNavigator = () => {
-  const Stack = createStackNavigator()
+  const Stack = createStackNavigator();
 
   return (
     <Stack.Navigator
@@ -15,7 +16,7 @@ const ConnectNavigator = () => {
       <Stack.Screen name={"connect"} component={Connect} />
       <Stack.Screen name={"connectDetails"} component={ConnectDetails} />
     </Stack.Navigator>
-  )
-}
+  );
+};
 
-export default ConnectNavigator
+export default ConnectNavigator;

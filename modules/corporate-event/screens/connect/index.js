@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
@@ -7,43 +7,30 @@ import {
   Text,
   FlatList,
   TouchableOpacity
-} from "react-native"
+} from "react-native";
 
-import { useDispatch, useSelector } from "react-redux"
-import { getConnects } from "../../store/custom/connect.slice"
+import { useDispatch, useSelector } from "react-redux";
+import { getConnects } from "../../store/custom/connect.slice";
 
 const Connect = ({ navigation }) => {
-  const { entities } = useSelector(state => state.Connect.getConnects)
-  const [filteredDataSource, setFilteredDataSource] = useState([])
-  const dispatch = useDispatch()
+  const { entities } = useSelector(state => state.Connect.getConnects);
+  const [filteredDataSource, setFilteredDataSource] = useState([]);
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
-    await dispatch(getConnects())
-  }
+    await dispatch(getConnects());
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   useEffect(() => {
-    setFilteredDataSource(entities?.data)
-  }, [entities])
-
-  
-  // local search
-  const searchFilterFunction = text => {
-    const newData = entities?.data?.filter(item => {
-      const itemData = `${item?.user?.name?.toUpperCase()}
-      ${item?.designation?.toUpperCase()} ${item?.company?.toUpperCase()}`
-      const textData = text.toUpperCase()
-      return itemData.indexOf(textData) > -1
-    })
-    setFilteredDataSource(newData)
-  }
-
+    setFilteredDataSource(entities?.data);
+  }, [entities]);
 
   const renderItem = ({ item }) => {
-    const name = item?.user?.name && item?.user?.name?.split(" ")
+    const name = item?.user?.name && item?.user?.name?.split(" ");
     return (
       <TouchableOpacity
         style={styles.itemView}
@@ -66,8 +53,8 @@ const Connect = ({ navigation }) => {
           </Text>
         </View>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.firstView}>
@@ -93,8 +80,8 @@ const Connect = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   userTextContainer: { width: "50%" },
@@ -107,10 +94,10 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     fontFamily: "Avenir-Regular"
   },
-  itemView: {  
-    flexDirection: "row", 
+  itemView: {
+    flexDirection: "row",
     marginVertical: 5,
-    maxWidth: "50%",
+    maxWidth: "50%"
   },
   userImage: { width: 80, height: 100, backgroundColor: "#d3d3d3" },
   userName: {
@@ -189,6 +176,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 70
   }
-})
+});
 
-export default Connect
+export default Connect;

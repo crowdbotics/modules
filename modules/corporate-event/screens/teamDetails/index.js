@@ -1,15 +1,13 @@
-import React from "react"
-import { View, StyleSheet, ScrollView, Pressable, Dimensions } from "react-native"
-import { Text, Image } from "react-native"
+import React from "react";
+import { View, StyleSheet, ScrollView, Pressable, Dimensions, Text, Image } from "react-native";
 
-const WIDTH = Dimensions.get("window").width
-const HEIGHT = Dimensions.get("window").height
+const WIDTH = Dimensions.get("window").width;
 
 const TeamDetails = ({ route, navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.main}>
-        <Pressable style={styles.sideTextMain} onPress={()=>{navigation.navigate("team")}}>
+        <Pressable style={styles.sideTextMain} onPress={() => { navigation.navigate("team"); }}>
           <Text allowFontScaling={false} style={styles.sideText}>TEAM</Text>
         </Pressable>
         <View>
@@ -62,12 +60,12 @@ const TeamDetails = ({ route, navigation }) => {
         </Text>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   companyLogo: { height: 25, width: 80, marginRight: 30 },
-  userImage: { height: 210, width: 210, backgroundColor:'#d3d3d3' },
+  userImage: { height: 210, width: 210, backgroundColor: "#d3d3d3" },
   container: {
     flex: 1,
     backgroundColor: "white"
@@ -77,7 +75,7 @@ const styles = StyleSheet.create({
     display: "flex",
     paddingTop: 60,
     paddingBottom: 20,
-    alignItems: "center",
+    alignItems: "center"
   },
   sideTextMain: {
     backgroundColor: "rgba(0,0,0,0.8)",
@@ -88,7 +86,7 @@ const styles = StyleSheet.create({
     top: 249,
     width: 180,
     justifyContent: "flex-end",
-    transform: [{ rotate: "270deg" }],
+    transform: [{ rotate: "270deg" }]
     // alignItems: "flex-end",
   },
   sideText: {
@@ -101,8 +99,8 @@ const styles = StyleSheet.create({
     marginTop: 13,
     borderLeftWidth: 2,
     borderLeftColor: "black",
-    paddingLeft: 20,
-    
+    paddingLeft: 20
+
   },
   nameTitle: {
     color: "#6C170B",
@@ -153,6 +151,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontFamily: "Avenir-Regular"
   }
-})
+});
 
-export default TeamDetails
+export default TeamDetails;

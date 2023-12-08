@@ -1,48 +1,45 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import {
   View,
   Image,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Alert, 
-  KeyboardAvoidingView, // Import KeyboardAvoidingView
-} from "react-native"
-import { useDispatch } from "react-redux"
-import { login } from "../../store/custom/auth.slice"
-import { unwrapResult } from "@reduxjs/toolkit"
-import EncryptedStorage from 'react-native-encrypted-storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+  Alert,
+  KeyboardAvoidingView // Import KeyboardAvoidingView
+} from "react-native";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/custom/auth.slice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import EncryptedStorage from "react-native-encrypted-storage";
 
 const Login = ({ navigation }) => {
-  const [loading, setLoading] = useState(false)
-  const [userName, setUserName] = useState(__DEV__ ? "shahr" : "")
-  const [password, setPassword] = useState(__DEV__ ? "Admin123" : "")
+  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState(__DEV__ ? "shahr" : "");
+  const [password, setPassword] = useState(__DEV__ ? "Admin123" : "");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    EncryptedStorage.getItem('authToken')
+    EncryptedStorage.getItem("authToken")
       .then((token) => {
-        console.log("token222", token)
+        console.log("token222", token);
         if (token) {
           navigation.reset({
             index: 0,
-            routes: [{ name: 'homeScreen' }],
+            routes: [{ name: "homeScreen" }]
           });
         }
       })
       .catch((error) => {
-        console.error('Token retrieval error:', error);
+        console.error("Token retrieval error:", error);
       });
   }, []);
 
-
   const onLoginPress = () => {
-    setLoading(true)
+    setLoading(true);
     if (userName && password) {
       dispatch(
         login({
@@ -50,36 +47,36 @@ const Login = ({ navigation }) => {
           password
         })
       ).then((resultAction) => {
-          const data = unwrapResult(resultAction);
-      
-          // Store the token securely using EncryptedStorage
-          if (data.token) {
-            EncryptedStorage.setItem('authToken', data.token)
-              .then(() => {
-                setLoading(false);
-                Alert.alert('Success', 'Login Successful!');
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: 'homeScreen' }],
-                });
-              })
-              .catch((storageError) => {
-                setLoading(false);
-                console.error('Token storage error:', storageError);
-                // Handle storage error here, e.g., show an error message
-                Alert.alert('Error', 'Failed to store token.');
+        const data = unwrapResult(resultAction);
+
+        // Store the token securely using EncryptedStorage
+        if (data.token) {
+          EncryptedStorage.setItem("authToken", data.token)
+            .then(() => {
+              setLoading(false);
+              Alert.alert("Success", "Login Successful!");
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "homeScreen" }]
               });
-          } else {
-            setLoading(false);
-            Alert.alert('Error', 'Token not found in login response.');
-          }
-        })
-        .catch(() => setLoading(false))
+            })
+            .catch((storageError) => {
+              setLoading(false);
+              console.error("Token storage error:", storageError);
+              // Handle storage error here, e.g., show an error message
+              Alert.alert("Error", "Failed to store token.");
+            });
+        } else {
+          setLoading(false);
+          Alert.alert("Error", "Token not found in login response.");
+        }
+      })
+        .catch(() => setLoading(false));
     } else {
-      setLoading(false)
-      Alert.alert("Error", "Please enter the required details.")
+      setLoading(false);
+      Alert.alert("Error", "Please enter the required details.");
     }
-  }
+  };
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -119,11 +116,13 @@ const Login = ({ navigation }) => {
           onPress={onLoginPress}
           disabled={loading}
         >
-          {loading ? (
+          {loading
+            ? (
             <ActivityIndicator size={"small"} color={"#fff"} />
-          ) : (
+              )
+            : (
             <Text allowFontScaling={false} style={styles.buttonText}>LOGIN</Text>
-          )}
+              )}
         </TouchableOpacity>
 
         <View style={{ alignItems: "center", marginTop: 40 }}>
@@ -137,8 +136,8 @@ const Login = ({ navigation }) => {
           />
         </View>
     </KeyboardAvoidingView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -186,6 +185,6 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 225
   }
-})
+});
 
-export default Login
+export default Login;

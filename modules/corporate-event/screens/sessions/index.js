@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from "react";
 import {
   View,
   Image,
@@ -7,21 +7,21 @@ import {
   Text,
   TouchableOpacity,
   FlatList
-} from "react-native"
-import { getSessions } from "../../store/custom/sessions.slice"
-import { useDispatch, useSelector } from "react-redux"
+} from "react-native";
+import { getSessions } from "../../store/custom/sessions.slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Sessions = ({ navigation }) => {
-  const { entities } = useSelector(state => state.Session.getSessions)
-  const dispatch = useDispatch()
+  const { entities } = useSelector(state => state.Session.getSessions);
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
-    await dispatch(getSessions())
-  }
+    await dispatch(getSessions());
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const renderItem = ({ item }) => {
     return (
@@ -41,8 +41,8 @@ const Sessions = ({ navigation }) => {
           </Text>
         </View>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -72,8 +72,8 @@ const Sessions = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   sessionDescription: {
@@ -159,6 +159,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 40
   }
-})
+});
 
-export default Sessions
+export default Sessions;

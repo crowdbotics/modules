@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import {
   View,
   Image,
@@ -8,13 +8,13 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView
-} from "react-native"
-import { useDispatch } from "react-redux"
-import { logout } from "../../store/custom/auth.slice"
+} from "react-native";
+import { useDispatch } from "react-redux";
+import { logout } from "../../store/custom/auth.slice";
 
 const About = ({ navigation }) => {
-  const buttonNames = ["TEAM", "BOARD", "OFFERINGS", "MATURITY MODEL"]
-  const dispatch = useDispatch()
+  const buttonNames = ["TEAM", "BOARD", "OFFERINGS", "MATURITY MODEL"];
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -27,16 +27,18 @@ const About = ({ navigation }) => {
           <View style={styles.buttonsParentView}>
             {buttonNames.map(item => (
               <TouchableOpacity
+                key={item}
                 style={styles.itemView}
                 onPress={() => {
-                  if (item == "LOGOUT") {
+                  if (item === "LOGOUT") {
                     dispatch(logout()).then(() => {
                       navigation.reset({
                         index: 0,
                         routes: [{ name: "login" }]
-                      })})
-                  }else{
-                    navigation.navigate(item.toLowerCase())
+                      });
+                    });
+                  } else {
+                    navigation.navigate(item.toLowerCase());
                   }
                 }}
               >
@@ -56,7 +58,7 @@ const About = ({ navigation }) => {
             height: 40,
             justifyContent: "center",
             alignItems: "center",
-            alignSelf: "center",
+            alignSelf: "center"
 
           }}
           onPress={() => {
@@ -64,13 +66,12 @@ const About = ({ navigation }) => {
               navigation.reset({
                 index: 0,
                 routes: [{ name: "login" }]
-              })
-            })
+              });
+            });
           }}
         >
           <Text allowFontScaling={false} style={styles.buttonTitle}>LOGOUT</Text>
         </TouchableOpacity>
-
 
         <Image
           source={require("./assets/SummitGraphic.jpg")}
@@ -79,8 +80,8 @@ const About = ({ navigation }) => {
         />
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   logoImage: { position: "absolute", height: 100, width: 200, opacity: 0.6 },
@@ -106,13 +107,13 @@ const styles = StyleSheet.create({
     position: "relative",
     marginHorizontal: 40,
     paddingVertical: 20,
-    marginTop: 40,
+    marginTop: 40
   },
   container: {
     backgroundColor: "#FFF",
     flex: 1,
     justifyContent: "center"
   }
-})
+});
 
-export default About
+export default About;

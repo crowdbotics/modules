@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -8,30 +8,30 @@ import {
   Pressable,
   Linking,
   Platform
-} from "react-native"
+} from "react-native";
 
 const AboutCB = params => {
   if (Platform.OS === "ios" || Platform.OS === "android") {
     params.navigation.setOptions({
       title: "About Crowdbotics",
-      headerShown: true,
-    })
+      headerShown: true
+    });
   }
 
-  const [ImageSource, setImageSource] = useState()
-  const [text1, setText1] = useState("")
-  const [text2, setText2] = useState("")
+  const [ImageSource, setImageSource] = useState();
+  const [text1, setText1] = useState("");
+  const [text2, setText2] = useState("");
   useEffect(() => {
     setText1(
       "Crowdbotics makes it faster than ever to build complete, scalable apps for business. With Crowdbotics, professionals can turn ideas into real code using a matched library of components and a network of on-call experts."
-    )
+    );
     setText2(
       "Crowdbotics references a library of millions of production-grade software packages to identify the most effective components and workflows for a given project. Crowdbotics then handles infrastructure, implementation, maintenance, operations, monitoring, and security for the life of the project."
-    )
+    );
     setImageSource(
       "https://assets.website-files.com/5b5cd6b75bb9b0dce50e212f/603437298e88e642f6a92964_EstimateCalcBGimage.png"
-    )
-  }, [])
+    );
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imgScroller}>
@@ -49,7 +49,7 @@ const AboutCB = params => {
 
         <Pressable
           onPress={() => {
-            Linking.openURL("https://hubs.la/Q01rJl390")
+            Linking.openURL("https://hubs.la/Q01rJl390");
           }}
         >
           <Text allowFontScaling={false} style={styles.kRCtpSOC}>LEARN MORE</Text>
@@ -64,8 +64,8 @@ const AboutCB = params => {
         />
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -126,5 +126,5 @@ const styles = StyleSheet.create({
     color: "blue",
     textDecorationLine: "underline"
   }
-})
-export default AboutCB
+});
+export default AboutCB;

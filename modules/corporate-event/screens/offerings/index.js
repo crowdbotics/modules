@@ -1,36 +1,34 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from "react";
 import {
   View,
   Image,
   SafeAreaView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  ImageBackground
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { ScrollView } from "react-native-gesture-handler"
-import { getOfferings } from "../../store/custom/offering.slice"
+  TouchableOpacity
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { ScrollView } from "react-native-gesture-handler";
+import { getOfferings } from "../../store/custom/offering.slice";
 
 const Offerings = ({ navigation }) => {
   navigation.setOptions({
     title: "Offerings",
     headerShown: true
-   })
-  const buttonNames = ["DISCOVERY", "PROGRAMS", "TRANSFORMATIONS", "M&A"]
-  const { entities } = useSelector(state => state.Offering.getOfferings)
-  const dispatch = useDispatch()
+  });
+  const { entities } = useSelector(state => state.Offering.getOfferings);
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
-    await dispatch(getOfferings())
-  }
+    await dispatch(getOfferings());
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
   useEffect(() => {
-    console.log(entities)
-  }, [entities]) 
+    console.log(entities);
+  }, [entities]);
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.parentView}>
@@ -42,6 +40,7 @@ const Offerings = ({ navigation }) => {
           <View style={styles.buttonsParentView}>
             {entities?.data?.map(item => (
               <TouchableOpacity
+                key={item?.id}
                 style={styles.itemView}
                 onPress={() => navigation.navigate("offeringDetails", { data: item })}
               >
@@ -49,11 +48,11 @@ const Offerings = ({ navigation }) => {
               </TouchableOpacity>
             ))}
           </View>
-        
+
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   logoImage: { height: 250, width: 250, alignSelf: "center" },
@@ -87,6 +86,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center"
   }
-})
+});
 
-export default Offerings
+export default Offerings;

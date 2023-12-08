@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -8,26 +8,24 @@ import {
   FlatList,
   Pressable,
   SafeAreaView
-} from "react-native"
-import { useDispatch, useSelector } from "react-redux"
-import { getTeamMembers } from "../../store/custom/team.slice"
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { getTeamMembers } from "../../store/custom/team.slice";
 
 const Team = ({ navigation }) => {
-  
-  const { entities } = useSelector(state => state.Team.getTeamMembers)
+  const { entities } = useSelector(state => state.Team.getTeamMembers);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
-    await dispatch(getTeamMembers())
-  }
+    await dispatch(getTeamMembers());
+  };
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const renderItem = ({ item }) => {
-    
     return (
       <TouchableOpacity
         style={styles.personWrapper}
@@ -43,8 +41,8 @@ const Team = ({ navigation }) => {
           <Text allowFontScaling={false} style={styles.post}>{item?.connect_user?.company}</Text>
         </View>
       </TouchableOpacity>
-    )
-  }
+    );
+  };
   return (
     <SafeAreaView style={styles.main}>
       <View>
@@ -65,14 +63,14 @@ const Team = ({ navigation }) => {
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
-      <Pressable style={styles.toast} onPress={()=>{navigation.goBack()}}>
+      <Pressable style={styles.toast} onPress={() => { navigation.goBack(); }}>
         <Text allowFontScaling={false} style={styles.toastText}>TEAM</Text>
       </Pressable>
-    </SafeAreaView> 
-  )
-}
+    </SafeAreaView>
+  );
+};
 
-export default Team
+export default Team;
 
 const styles = StyleSheet.create({
   main: {
@@ -134,4 +132,4 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0
   }
-})
+});

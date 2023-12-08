@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import axios from "axios"
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 // const BASE_URL = "https://threesevenexecevent-42777.botics.co"
-const BASE_URL = "http://10.0.2.2:8000"
+const BASE_URL = "http://10.0.2.2:8000";
 
 export const login = payload => {
   const config = {
@@ -11,12 +11,12 @@ export const login = payload => {
     url: `${BASE_URL}/api/v1/login/`,
     headers: {},
     data: payload
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const getHomeDetails = async () => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -24,12 +24,12 @@ export const getHomeDetails = async () => {
     headers: {
       Authorization: `Token ${token}`
     }
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const getSessions = async () => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -37,12 +37,12 @@ export const getSessions = async () => {
     headers: {
       Authorization: `Token ${token}`
     }
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const getActivities = async () => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -50,12 +50,12 @@ export const getActivities = async () => {
     headers: {
       Authorization: `Token ${token}`
     }
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const getTeamMembers = async () => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -63,12 +63,12 @@ export const getTeamMembers = async () => {
     headers: {
       Authorization: `Token ${token}`
     }
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const getBoardMembers = async () => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -76,12 +76,12 @@ export const getBoardMembers = async () => {
     headers: {
       Authorization: `Token ${token}`
     }
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const getConnects = async () => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -89,12 +89,12 @@ export const getConnects = async () => {
     headers: {
       Authorization: `Token ${token}`
     }
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const connectionRequest = async payload => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -103,12 +103,12 @@ export const connectionRequest = async payload => {
       Authorization: `Token ${token}`
     },
     data: payload
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const getOfferings = async () => {
-  const token = await AsyncStorage.getItem("accessToken")
+  const token = await AsyncStorage.getItem("accessToken");
   const config = {
     method: "get",
     maxBodyLength: Infinity,
@@ -116,9 +116,9 @@ export const getOfferings = async () => {
     headers: {
       Authorization: `Token ${token}`
     }
-  }
-  return axios.request(config)
-}
+  };
+  return axios.request(config);
+};
 
 export const api = {
   login,
@@ -130,4 +130,4 @@ export const api = {
   getConnects,
   connectionRequest,
   getOfferings
-}
+};
