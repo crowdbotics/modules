@@ -1,0 +1,11 @@
+{
+  "title": "open ai chat",
+  "description": "This is a simple chatbot like ChatGPT that uses the OpenAI API to generate responses.",
+  "root": "/",
+  "schema": {
+    "buttonText": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
