@@ -1,3 +1,4 @@
+import os
 from django.db.models import F
 from django.http import HttpResponseRedirect
 from rest_framework import status
@@ -13,6 +14,8 @@ from .serializers import (
 )
 from modules.corporate_event.corporate_event.models import UserSession, Activities, UserConnectRequest, ConnectProfile, AboutTeamAndBoardMember, \
     UserActivities, Session, OfferigsPage, SessionAttachment, ActivitiesAttachment, MetaLink
+
+from modules.corporate_event.corporate_event.utils import send_invitation_email
 
 
 
@@ -102,9 +105,8 @@ class UserConnectViewSet(ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def send_request(self, request):
-        ADMIN_EMAIL_RECEIVERS = [
-            
-        ]
+        ADMIN_EMAIL_RECEIVERS = os.environ.get('ADMIN_EMAIL_RECEIVERS', "")
+        ADMIN_EMAIL_RECEIVERS = ADMIN_EMAIL_RECEIVERS.split(',')
         try:
             user = self.request.user
             requestee = request.data.get('email')
