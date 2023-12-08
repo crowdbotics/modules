@@ -65,7 +65,6 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
 
     if (searchBody.next) {
       // TODO - command should be built in a more robust way to support future flags easier.
-
       let suggestedCommand = `modules list --page ${page + 1}`;
 
       if (search) {

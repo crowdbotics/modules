@@ -255,6 +255,16 @@ demo`;
         });
         break;
 
+      case "help":
+        section(
+          `Commands available:
+  list    List the current modules available to install
+          --search <query> Search for a module by given text
+          --visibility <private | public> Search for a module with a specific visibility (default all)
+          `
+        );
+        break;
+
       default:
         invalid(`Invalid action "${action}" for modules command`);
     }
