@@ -32,6 +32,7 @@ import { valid, invalid, isNameValid, section } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
+import { modulesList } from "./scripts/modules.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -226,6 +227,36 @@ demo`;
         break;
       default:
         invalid(`Invalid action "${action}" for config command`);
+    }
+  },
+
+  modules: () => {
+    const args = arg({
+      "--search": String,
+      "--visibility": String,
+      "--page": String
+    });
+
+    const action = args._[1];
+
+    if (!action.length) {
+      // TODO - Print help?
+      return invalid(
+        "Please provide the action to perform on the modules, i.e. modules list"
+      );
+    }
+
+    switch (action) {
+      case "list":
+        modulesList({
+          search: args["--search"],
+          visibility: args["--visibility"],
+          page: args["--page"] ? Number(args["--page"]) : undefined
+        });
+        break;
+
+      default:
+        invalid(`Invalid action "${action}" for modules command`);
     }
   },
 
