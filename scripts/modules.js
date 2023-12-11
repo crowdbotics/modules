@@ -85,3 +85,31 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
     loadingSpinner.stop();
   }
 };
+
+export const modulesGet = async (id) => {
+  const loadingSpinner = ora("Loading Module").start();
+
+  const response = await apiClient.get({
+    path: `/v1/catalog/module/${id}`
+  });
+
+  loadingSpinner.stop();
+
+  if (!response.ok) {
+    if (response.status === 404) {
+      invalid(`Cannot find requested module with id ${id}.`);
+    } else {
+      invalid("Unable to get module. Please login and try again.");
+    }
+
+    return;
+  }
+
+  const module = await response.json();
+
+  section(`Name: \n${module.title}`);
+  section(`Description: \n${module.description}`);
+  section(`ID: \n${module.id}`);
+  section(`Slug: \n${module.slug}`);
+  section(`Visibility: \n${module.visibility}`);
+};
