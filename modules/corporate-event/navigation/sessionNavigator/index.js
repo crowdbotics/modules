@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import SessionDetails from "../../screens/sessionDetails";
-import Sessions from "../../screens/sessions";
+import SessionDetails from "@screens/sessionDetails";
+import Sessions from "@screens/sessions";
 
 const SessionNavigator = () => {
   const Stack = createStackNavigator();

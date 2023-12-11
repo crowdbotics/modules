@@ -1,14 +1,14 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Board from "../../screens/board";
-import BoardDetails from "../../screens/boardDetails";
-import Team from "../../screens/team";
-import TeamDetails from "../../screens/teamDetails";
-import About from "../../screens/about";
-import Offerings from "../../screens/offerings";
-import Concierge from "../../screens/concierge";
-import OfferingDetails from "../../screens/offeringDetails";
-import MaturityModel from "../../screens/maturityModel";
+import Board from "@screens/board";
+import BoardDetails from "@screens/boardDetails";
+import Team from "@screens/team";
+import TeamDetails from "@screens/teamDetails";
+import About from "@screens/about";
+import Offerings from "@screens/offerings";
+import Concierge from "@screens/concierge";
+import OfferingDetails from "@screens/offeringDetails";
+import MaturityModel from "@screens/maturityModel";
 
 const AboutNavigator = () => {
   const Stack = createStackNavigator();

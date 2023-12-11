@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Connect from "../../screens/connect";
-import ConnectDetails from "../../screens/connectDetails";
+import Connect from "@screens/connect";
+import ConnectDetails from "@screens/connectDetails";
 
 const ConnectNavigator = () => {
   const Stack = createStackNavigator();

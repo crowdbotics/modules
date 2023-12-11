@@ -1,8 +1,9 @@
+import { getGlobalOptions } from "@options";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-// const BASE_URL = "https://threesevenexecevent-42777.botics.co"
-const BASE_URL = "http://10.0.2.2:8000";
+const global = getGlobalOptions();
+const BASE_URL = global.url; // change your BASE_URL in `options/options.js` to edit this value
 
 export const login = payload => {
   const config = {
