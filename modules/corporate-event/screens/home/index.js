@@ -12,7 +12,7 @@ import {
 } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getHomeDetails } from "../../store/custom/home.slice";
+import { getHomeDetails } from "@store/custom/home.slice";
 import moment from "moment";
 import { useIsFocused } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";

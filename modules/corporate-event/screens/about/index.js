@@ -10,7 +10,7 @@ import {
   ScrollView
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { logout } from "../../store/custom/auth.slice";
+import { logout } from "@store/custom/auth.slice";
 
 const About = ({ navigation }) => {
   const buttonNames = ["TEAM", "BOARD", "OFFERINGS", "MATURITY MODEL"];

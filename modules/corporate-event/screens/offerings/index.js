@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { ScrollView } from "react-native-gesture-handler";
-import { getOfferings } from "../../store/custom/offering.slice";
+import { getOfferings } from "@store/custom/offering.slice";
 
 const Offerings = ({ navigation }) => {
   navigation.setOptions({

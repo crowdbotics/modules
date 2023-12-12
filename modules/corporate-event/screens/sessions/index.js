@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   FlatList
 } from "react-native";
-import { getSessions } from "../../store/custom/sessions.slice";
+import { getSessions } from "@store/custom/sessions.slice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Sessions = ({ navigation }) => {

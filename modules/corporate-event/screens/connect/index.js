@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getConnects } from "../../store/custom/connect.slice";
+import { getConnects } from "@store/custom/connect.slice";
 
 const Connect = ({ navigation }) => {
   const { entities } = useSelector(state => state.Connect.getConnects);

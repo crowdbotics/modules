@@ -10,7 +10,7 @@ import {
   SafeAreaView
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getTeamMembers } from "../../store/custom/team.slice";
+import { getTeamMembers } from "@store/custom/team.slice";
 
 const Team = ({ navigation }) => {
   const { entities } = useSelector(state => state.Team.getTeamMembers);

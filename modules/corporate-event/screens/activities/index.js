@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import { useDispatch, useSelector } from "react-redux";
-import { getActivities } from "../../store/custom/activity.slice";
+import { getActivities } from "@store/custom/activity.slice";
 
 const Activities = ({ navigation }) => {
   const dispatch = useDispatch();

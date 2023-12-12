@@ -10,7 +10,7 @@ import {
   SafeAreaView
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getBoardMembers } from "../../store/custom/board.slice";
+import { getBoardMembers } from "@store/custom/board.slice";
 
 const Board = ({ navigation }) => {
   const { entities } = useSelector(state => state.Board.getBoardMembers);

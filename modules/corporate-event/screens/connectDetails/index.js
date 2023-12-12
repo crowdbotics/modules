@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 import { useDispatch } from "react-redux";
-import { connectionRequest } from "../../store/custom/connect.slice";
+import { connectionRequest } from "@store/custom/connect.slice";
 
 const WIDTH = Dimensions.get("window").width;
 

@@ -11,7 +11,7 @@ import {
   KeyboardAvoidingView // Import KeyboardAvoidingView
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/custom/auth.slice";
+import { login } from "@store/custom/auth.slice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import EncryptedStorage from "react-native-encrypted-storage";
 
