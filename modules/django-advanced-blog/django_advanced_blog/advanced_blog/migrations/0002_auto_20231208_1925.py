@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         ('wagtailcore', '0089_log_entry_data_json_null_to_object'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('taggit', '0005_auto_20220424_2025'),
-        ('basic_blog', '0001_initial'),
+        ('advanced_blog', '0001_initial'),
     ]
 
     operations = [
@@ -90,8 +90,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sort_order', models.IntegerField(blank=True, editable=False, null=True)),
-                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='blog_person_relationship', to='basic_blog.blogpage')),
-                ('person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='person_blog_relationship', to='basic_blog.person')),
+                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='blog_person_relationship', to='advanced_blog.blogpage')),
+                ('person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='person_blog_relationship', to='advanced_blog.person')),
             ],
             options={
                 'ordering': ['sort_order'],
@@ -102,8 +102,8 @@ class Migration(migrations.Migration):
             name='BlogPageTag',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content_object', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='tagged_items', to='basic_blog.blogpage')),
-                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='basic_blog_blogpagetag_items', to='taggit.tag')),
+                ('content_object', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='tagged_items', to='advanced_blog.blogpage')),
+                ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='advanced_blog_blogpagetag_items', to='taggit.tag')),
             ],
             options={
                 'abstract': False,
@@ -124,6 +124,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='blogpage',
             name='tags',
-            field=modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='basic_blog.BlogPageTag', to='taggit.Tag', verbose_name='Tags'),
+            field=modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='advanced_blog.BlogPageTag', to='taggit.Tag', verbose_name='Tags'),
         ),
     ]

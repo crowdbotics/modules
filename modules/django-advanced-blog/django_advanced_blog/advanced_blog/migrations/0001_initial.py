@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('sort_order', models.IntegerField(blank=True, editable=False, null=True)),
                 ('name', models.CharField(max_length=255)),
                 ('url', models.URLField()),
-                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='related_links', to='basic_blog.blogpage')),
+                ('page', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='related_links', to='advanced_blog.blogpage')),
             ],
             options={
                 'ordering': ['sort_order'],

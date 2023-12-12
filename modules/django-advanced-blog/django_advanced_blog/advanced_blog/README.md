@@ -79,7 +79,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [
             os.path.join(BASE_DIR, "web_build"),
-            os.path.join(BASE_DIR, "modules", "django_basic_blog", "basic_blog", "templates",),
+            os.path.join(BASE_DIR, "modules", "django_advanced_blog", "advanced_blog", "templates",),
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -101,7 +101,7 @@ and
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "web_build"),
-    os.path.join(BASE_DIR, "modules", "django_basic_blog", "basic_blog", "static"),
+    os.path.join(BASE_DIR, "modules", "django_advanced_blog", "advanced_blog", "static"),
 ]
 ```
 
