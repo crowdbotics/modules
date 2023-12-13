@@ -89,14 +89,22 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
 export const modulesGet = async (id) => {
   const loadingSpinner = ora("Loading Module").start();
 
-  const response = await apiClient.get({
-    path: `/v1/catalog/module/${id}`
-  });
+  const [moduleResponse, appListResponse] = await Promise.all([
+    apiClient.get({
+      path: `/v1/catalog/module/${id}`
+    }),
+    apiClient.get({
+      path: "/v2/apps",
+      params: {
+        limit: 1
+      }
+    })
+  ]);
 
   loadingSpinner.stop();
 
-  if (!response.ok) {
-    if (response.status === 404) {
+  if (!moduleResponse.ok) {
+    if (moduleResponse.status === 404) {
       invalid(`Cannot find requested module with id ${id}.`);
     } else {
       invalid("Unable to get module. Please login and try again.");
@@ -105,11 +113,28 @@ export const modulesGet = async (id) => {
     return;
   }
 
-  const module = await response.json();
+  let defaultAppId;
+
+  if (appListResponse.ok) {
+    const appList = await appListResponse.json();
+
+    defaultAppId =
+      appList.results && appList.results.length > 0
+        ? appList.results[0].id
+        : undefined;
+  }
+
+  const module = await moduleResponse.json();
 
   section(`Name: \n${module.title}`);
   section(`Description: \n${module.description}`);
   section(`ID: \n${module.id}`);
   section(`Slug: \n${module.slug}`);
   section(`Visibility: \n${module.visibility}`);
+
+  if (defaultAppId) {
+    section(
+      `Module Details: https://crowdbotics-slack-dev.herokuapp.com/dashboard/app/${defaultAppId}/modules/${module.id}`
+    );
+  }
 };
