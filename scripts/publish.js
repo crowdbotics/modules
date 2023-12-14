@@ -4,6 +4,8 @@ import { invalid, section } from "../utils.js";
 import ora from "ora";
 import { apiClient } from "./utils/apiClient.js";
 
+const POLL_INTERVAL = 2000;
+
 export const publish = async () => {
   section("Publishing modules.");
   section(
@@ -63,18 +65,40 @@ export const publish = async () => {
 
   const spinner = ora("Publishing Module").start();
 
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1500);
+  const createResult = await apiClient.post({
+    path: "/v2/publish-module-to-catalog/",
+    body: {
+      git_url,
+      branch,
+      org_id: defaultOrganization.id,
+      is_private: true
+    }
   });
+
+  if (!createResult.ok) {
+    invalid("Unable to publish module to catalog.");
+  }
+
+  const taskResult = (await createResult.json()).task_result;
+
+  while (true) {
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, POLL_INTERVAL);
+    });
+
+    const processingResult = await apiClient.get({
+      path: "/v2/status-of-published-module/" + taskResult.task_id
+    });
+
+    const processingResultBody = await processingResult.json();
+    if (!processingResultBody || processingResultBody.status !== "PENDING") {
+      break;
+    }
+  }
 
   spinner.stop();
 
-  section(`
-Dummy publish module is complete.
-Git URL: ${git_url}
-branch: ${branch}
-Org ID: ${defaultOrganization.id}
-  `);
+  // TODO - print publish success message.
 };
