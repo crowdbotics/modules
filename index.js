@@ -275,7 +275,7 @@ demo`;
     const args = arg({}, { permissive: true });
     const action = args._[1];
 
-    if (!action.length) {
+    if (!action) {
       return invalid("Please provide the message or action to perform for feedback");
     }
     switch (action) {

@@ -1,3 +1,4 @@
+import { invalid } from "../utils.js";
 import { apiClient } from "./utils/apiClient.js";
 
 export const sendFeedback = async (message) => {
@@ -9,7 +10,7 @@ export const sendFeedback = async (message) => {
     body: { message }
   });
   if (!response.ok) {
-    return console.log("Unable to send feedback at this time, please try again.");
+    return invalid("Unable to send feedback at this time, please try again.");
   }
   return console.log("👍 Thanks for the feedback!");
 };
