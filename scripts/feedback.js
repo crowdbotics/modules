@@ -10,7 +10,7 @@ export const sendFeedback = async (message) => {
     body: { message }
   });
   if (!response.ok) {
-    return invalid("Unable to send feedback at this time, please try again.");
+    return console.log("Unable to send feedback at this time, please try again.");
   }
-  return valid("👍 Thanks for the feedback!");
+  return console.log("👍 Thanks for the feedback!");
 };
