@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     branches:
-      - master
+      - develop
     tags:
       - "[0-9]+.[0-9]+"
 
@@ -15,7 +15,7 @@ jobs:
     steps:
       - id: setenv
         run: |
-          if [ $GITHUB_REF_NAME == master ]; then
+          if [ $GITHUB_REF_NAME == develop ]; then
           echo "my_env=staging" >> $GITHUB_OUTPUT
           fi
           if [[ $GITHUB_REF_NAME =~ ^[0-9]+\.[0-9]+$ ]]; then
@@ -53,7 +53,7 @@ jobs:
           git fetch --tags
           git log --oneline --no-decorate HEAD...$(git tag -l '202[0-9]????.*' --sort=-v:refname | head -n 1) | grep -Eo '([A-Z]{3,}-)([0-9]+)' | uniq > jira_ticket.txt
           cat jira_ticket.txt
-          if [ $GITHUB_REF_NAME == master ]; then
+          if [ $GITHUB_REF_NAME == develop ]; then
             for i in $(cat jira_ticket.txt); do curl -X PUT -H "Content-Type: application/json" -H "Authorization: Basic ${{ secrets.JIRA_TOKEN }}" --data '{"update":{"labels":[{"add":"staging"}]}}' https://crowdbotics.atlassian.net/rest/api/3/issue/$i ; done
           fi
           if [[ $GITHUB_REF_NAME =~ ^[0-9]+\.[0-9]+$ ]]; then
