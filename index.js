@@ -272,14 +272,14 @@ demo`;
   },
 
   feedback: () => {
-    const args = arg({}, { permissive: true });
+    const args = arg({});
     const action = args._[1];
 
     if (!action) {
       return invalid("Please provide the message or action to perform for feedback");
     }
     switch (action) {
-      case "--help":
+      case "help":
         console.log(`
         Influence how Crowdbotics shapes and grows its developer tools. Use the feedback
         command to send ideas and recommendations to our Product Team any time. We may
