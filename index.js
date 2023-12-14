@@ -33,6 +33,7 @@ import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
 import { modulesList } from "./scripts/modules.js";
+import { sendFeedback } from "./scripts/feedback.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -270,6 +271,31 @@ demo`;
     }
   },
 
+  feedback: () => {
+    const args = arg({});
+    const action = args._[1];
+
+    if (!action) {
+      return invalid("Please provide the message or action to perform for feedback");
+    }
+    switch (action) {
+      case "help":
+        console.log(`
+        Influence how Crowdbotics shapes and grows its developer tools. Use the feedback
+        command to send ideas and recommendations to our Product Team any time. We may
+        contact you to follow up.
+        
+        Please contact Support for help using Crowdbotics or to report errors, bugs, and 
+        other issues. 
+        https://crowdbotics-slack-dev.crowdbotics.com/dashboard/user/support
+        `);
+        break;
+
+      default:
+        sendFeedback(action);
+    }
+  },
+
   help: () => {
     console.log(`usage: npx crowdbotics/modules <command>
 
@@ -283,6 +309,7 @@ Commands available:
   init     Initialize a blank modules repository
   upgrade  Upgrade your existing app's scaffold to the latest version
   help     Show this help page
+  feedback Send feedback to Crowdbotics to let us know how we're doing
 
 Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>
