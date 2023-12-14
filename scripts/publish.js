@@ -12,9 +12,11 @@ export const publish = async () => {
     "Please ensure Crowdbotics has permission to commit to your linked repository."
   );
 
-  let defaultOrganization;
-
   const preparingSpinner = ora("Preparing").start();
+
+  // First, get the user's current organization. Modules must be published to one org id.
+  // If a user is not part of an organization, they cannot run this command right now
+  let defaultOrganization;
   try {
     const response = await apiClient.get({
       path: "/v2/user/"
@@ -38,6 +40,7 @@ export const publish = async () => {
     );
   }
 
+  // Verify that the user understands which organization the modules are being published to.
   const { ok } = await inquirer.prompt({
     message: `Modules will be published under organization '${defaultOrganization.name}'. Please confirm this is expected (y/n):`,
     name: "ok",
@@ -49,6 +52,7 @@ export const publish = async () => {
     return;
   }
 
+  // Begin collecting info related to the modules themselves.
   const { git_url, branch } = await inquirer.prompt([
     {
       message: "Git URL:",
@@ -65,6 +69,8 @@ export const publish = async () => {
 
   const spinner = ora("Publishing Module").start();
 
+  // Publishing to module is an async operation. The following API request adds a task to an async
+  // queue. We will perform the publish operation, and then poll for the operation to complete.
   const createResult = await apiClient.post({
     path: "/v2/publish-module-to-catalog/",
     body: {
@@ -81,7 +87,9 @@ export const publish = async () => {
 
   const taskResult = (await createResult.json()).task_result;
 
+  // Poll indefinitely until the task is resolved.
   while (true) {
+    // TODO - we should tell the user they can exit here and the task will still be processed
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -91,6 +99,11 @@ export const publish = async () => {
     const processingResult = await apiClient.get({
       path: "/v2/status-of-published-module/" + taskResult.task_id
     });
+
+    if (!processingResult.ok) {
+      // TODO print error here
+      break;
+    }
 
     const processingResultBody = await processingResult.json();
     if (!processingResultBody || processingResultBody.status !== "PENDING") {
