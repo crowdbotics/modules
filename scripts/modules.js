@@ -1,8 +1,11 @@
 import { invalid, section } from "../utils.js";
 import { apiClient } from "./utils/apiClient.js";
+import { configFile } from "./utils/configFile.js";
+import { DEFAULT_HOST, HOST_CONFIG_NAME } from "./utils/constants.js";
 import { getCurrentUserOrganization } from "./utils/organization.js";
 import Table from "cli-table";
 import ora from "ora";
+import { formatUrlPath } from "./utils/url.js";
 
 const MODULES_PAGE_LIMIT = 50;
 
@@ -133,8 +136,12 @@ export const modulesGet = async (id) => {
   section(`Visibility: \n${module.visibility}`);
 
   if (defaultAppId) {
+    const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
+
     section(
-      `Module Details: https://crowdbotics-slack-dev.herokuapp.com/dashboard/app/${defaultAppId}/modules/${module.id}`
+      `Module Details: ${formatUrlPath(
+        host
+      )}/dashboard/app/${defaultAppId}/modules/${module.id}`
     );
   }
 };
