@@ -1,8 +1,11 @@
 import { invalid, section } from "../utils.js";
 import { apiClient } from "./utils/apiClient.js";
+import { configFile } from "./utils/configFile.js";
+import { DEFAULT_HOST, HOST_CONFIG_NAME } from "./utils/constants.js";
 import { getCurrentUserOrganization } from "./utils/organization.js";
 import Table from "cli-table";
 import ora from "ora";
+import { formatUrlPath } from "./utils/url.js";
 
 const MODULES_PAGE_LIMIT = 50;
 
@@ -83,5 +86,62 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
     invalid("Unable to get modules. Please login and try again.");
   } finally {
     loadingSpinner.stop();
+  }
+};
+
+export const modulesGet = async (id) => {
+  const loadingSpinner = ora("Loading Module").start();
+
+  const [moduleResponse, appListResponse] = await Promise.all([
+    apiClient.get({
+      path: `/v1/catalog/module/${id}`
+    }),
+    apiClient.get({
+      path: "/v2/apps",
+      params: {
+        limit: 1
+      }
+    })
+  ]);
+
+  loadingSpinner.stop();
+
+  if (!moduleResponse.ok) {
+    if (moduleResponse.status === 404) {
+      invalid(`Cannot find requested module with id ${id}.`);
+    } else {
+      invalid("Unable to get module. Please login and try again.");
+    }
+
+    return;
+  }
+
+  let defaultAppId;
+
+  if (appListResponse.ok) {
+    const appList = await appListResponse.json();
+
+    defaultAppId =
+      appList.results && appList.results.length > 0
+        ? appList.results[0].id
+        : undefined;
+  }
+
+  const module = await moduleResponse.json();
+
+  section(`Name: \n${module.title}`);
+  section(`Description: \n${module.description}`);
+  section(`ID: \n${module.id}`);
+  section(`Slug: \n${module.slug}`);
+  section(`Visibility: \n${module.visibility}`);
+
+  if (defaultAppId) {
+    const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
+
+    section(
+      `Module Details: ${formatUrlPath(
+        host
+      )}/dashboard/app/${defaultAppId}/modules/${module.id}`
+    );
   }
 };

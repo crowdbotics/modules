@@ -32,9 +32,9 @@ import { valid, invalid, isNameValid, section } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
-import { modulesList } from "./scripts/modules.js";
 import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
+import { modulesGet, modulesList } from "./scripts/modules.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -242,6 +242,7 @@ demo`;
       "--page": String
     });
 
+    let id;
     const action = args._[1];
 
     if (!action.length) {
@@ -258,6 +259,17 @@ demo`;
           visibility: args["--visibility"],
           page: args["--page"] ? Number(args["--page"]) : undefined
         });
+        break;
+
+      case "get":
+        id = args._[2];
+        if (!id) {
+          return invalid(
+            "Please provide the id of the module to get, i.e. modules get <123>"
+          );
+        }
+
+        modulesGet(id);
         break;
 
       case "help":
@@ -280,7 +292,9 @@ demo`;
     const action = args._[1];
 
     if (!action) {
-      return invalid("Please provide the message or action to perform for feedback");
+      return invalid(
+        "Please provide the message or action to perform for feedback"
+      );
     }
     switch (action) {
       case "help":
