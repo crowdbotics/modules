@@ -85,7 +85,7 @@ export const publish = async () => {
     invalid("Unable to publish module to catalog.");
   }
 
-  const taskResult = (await createResult.json()).task_result;
+  const taskResult = await createResult.json();
 
   // Poll indefinitely until the task is resolved.
   while (true) {
@@ -101,7 +101,12 @@ export const publish = async () => {
     });
 
     if (!processingResult.ok) {
-      // TODO print error here
+      if (processingResult.status === 500) {
+        const result = await processingResult.json();
+        invalid("Error publishing module. Server responded with: " + result);
+      }
+
+      invalid("Error publishing module.");
       break;
     }
 
