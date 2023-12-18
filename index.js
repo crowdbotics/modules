@@ -314,6 +314,8 @@ Commands available:
   upgrade  Upgrade your existing app's scaffold to the latest version
   help     Show this help page
   feedback Send feedback to Crowdbotics to let us know how we're doing
+  login    Login to your Crowdbotics account. Requires 2FA authentication
+  logout   Logout of your Crowdbotics account
 
 Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>
