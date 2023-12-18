@@ -31,7 +31,7 @@ class ApiClient {
 
   _request({ path, body, method, params, anonymous }) {
     const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
-    let url = `${formatUrlPath(host)}/api/${formatUrlPath(path)}`;
+    let url = `${formatUrlPath(host)}/api/${formatUrlPath(path)}/`;
 
     if (params) {
       url += "?" + new URLSearchParams(params).toString();
