@@ -33,6 +33,7 @@ import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
 import { sendFeedback } from "./scripts/feedback.js";
+import { logout } from "./scripts/logout.js";
 import { modulesGet, modulesList } from "./scripts/modules.js";
 
 const pkg = JSON.parse(
@@ -191,6 +192,9 @@ demo`;
   login: () => {
     login();
   },
+  logout: () => {
+    logout();
+  },
   info: () => {
     info();
   },
@@ -324,6 +328,8 @@ Commands available:
   upgrade  Upgrade your existing app's scaffold to the latest version
   help     Show this help page
   feedback Send feedback to Crowdbotics to let us know how we're doing
+  login    Login to your Crowdbotics account. Requires 2FA authentication
+  logout   Logout of your Crowdbotics account
 
 Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>

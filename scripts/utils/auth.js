@@ -81,3 +81,23 @@ export const performLogin = async (type = "email/password") => {
 
   return true;
 };
+
+export const performLogout = async () => {
+  try {
+    const response = await apiClient.post({
+      path: "/v2/logout/",
+      body: {}
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    configFile.set(TOKEN_CONFIG_NAME, "");
+    configFile.save();
+
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
