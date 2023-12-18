@@ -34,6 +34,7 @@ import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
 import { modulesList } from "./scripts/modules.js";
 import { sendFeedback } from "./scripts/feedback.js";
+import { logout } from "./scripts/logout.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -190,6 +191,9 @@ demo`;
   },
   login: () => {
     login();
+  },
+  logout: () => {
+    logout();
   },
   info: () => {
     info();
