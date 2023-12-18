@@ -10,7 +10,7 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
   const loadingSpinner = ora("Loading Modules").start();
 
   try {
-    const params = { limit: MODULES_PAGE_LIMIT };
+    const params = { limit: MODULES_PAGE_LIMIT, code_included: true };
 
     if (page) {
       params.page = page;
