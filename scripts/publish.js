@@ -1,10 +1,12 @@
 /* eslint-disable camelcase */
 import inquirer from "inquirer";
-import { invalid, section } from "../utils.js";
+import { invalid, section, valid } from "../utils.js";
 import ora from "ora";
 import { apiClient } from "./utils/apiClient.js";
 
 const POLL_INTERVAL = 2000;
+
+const IN_PROGRESS_STATUSES = ["PENDING", "STARTED"];
 
 export const publish = async () => {
   section("Publishing modules.");
@@ -67,7 +69,7 @@ export const publish = async () => {
     }
   ]);
 
-  const spinner = ora("Publishing Module").start();
+  const publishSpinner = ora("Publishing Module").start();
 
   // Publishing to module is an async operation. The following API request adds a task to an async
   // queue. We will perform the publish operation, and then poll for the operation to complete.
@@ -81,15 +83,22 @@ export const publish = async () => {
     }
   });
 
+  publishSpinner.stop();
+
   if (!createResult.ok) {
     invalid("Unable to publish module to catalog.");
   }
 
+  const waitingSpinner = ora(
+    "Waiting for publish to complete. This may take a few minutes.\n\n Publishing will continue if you exit here (CTRL+C)."
+  ).start();
+
   const taskResult = await createResult.json();
+
+  let latestProcessingResultBody;
 
   // Poll indefinitely until the task is resolved.
   while (true) {
-    // TODO - we should tell the user they can exit here and the task will still be processed
     await new Promise((resolve) => {
       setTimeout(() => {
         resolve();
@@ -101,22 +110,53 @@ export const publish = async () => {
     });
 
     if (!processingResult.ok) {
+      waitingSpinner.stop();
+
+      // TODO - ask the BE to supply a 400 when there's a regular failure?
       if (processingResult.status === 500) {
-        const result = await processingResult.json();
-        invalid("Error publishing module. Server responded with: " + result);
+        const result = await processingResult.text();
+        invalid(`
+Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${taskResult.task_id}'
+Error details: ${result}
+`);
       }
 
-      invalid("Error publishing module.");
+      invalid(
+        `Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${taskResult.task_id}'`
+      );
       break;
     }
 
-    const processingResultBody = await processingResult.json();
-    if (!processingResultBody || processingResultBody.status !== "PENDING") {
+    latestProcessingResultBody = await processingResult.json();
+
+    // There were some instances while testing where status was coming back as undefined. This may not be an issue anymore.
+    if (!latestProcessingResultBody.status) {
+      waitingSpinner.stop();
+      invalid(
+        `Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${taskResult.task_id}'`
+      );
+    }
+
+    // If we've reached an end state for the polling, end the polling loop.
+    if (!IN_PROGRESS_STATUSES.includes(latestProcessingResultBody.status)) {
       break;
     }
   }
 
-  spinner.stop();
+  waitingSpinner.stop();
+
+  if (latestProcessingResultBody.status === "FAILURE") {
+    invalid(`
+    Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${
+      taskResult.task_id
+    }'
+    Error details: ${JSON.stringify(latestProcessingResultBody)}
+    `);
+  }
+
+  if (latestProcessingResultBody.status === "SUCCESS") {
+    valid(`Publish successful. Reference id ${taskResult.task_id}.`);
+  }
 
   // TODO - print publish success message.
 };
