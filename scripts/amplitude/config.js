@@ -1,7 +1,6 @@
 import { init, setOptOut } from "@amplitude/analytics-node";
 import { configFile } from "../utils/configFile";
 import { HOST_CONFIG_NAME } from "../utils/constants";
-
 export const HAS_ASKED_OPT_IN_NAME = "has-asked-optin";
 export const OPT_IN_NAME = "opt-in";
 
