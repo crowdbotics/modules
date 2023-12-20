@@ -39,6 +39,7 @@
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "arg": "^5.0.2",
+    "cli-table": "^0.3.11",
     "fast-xml-parser": "^4.2.5",
     "find": "^0.3.0",
     "find-git-root": "^1.0.4",
@@ -46,6 +47,7 @@
     "inquirer": "^9.2.0",
     "js-yaml": "^4.1.0",
     "node-fetch": "^3.3.2",
+    "ora": "^7.0.1",
     "prettier": "^2.6.2"
   },
   "resolutions": {

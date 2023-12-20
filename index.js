@@ -32,6 +32,10 @@ import { valid, invalid, isNameValid, section } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
+import { sendFeedback } from "./scripts/feedback.js";
+import { logout } from "./scripts/logout.js";
+import { modulesGet, modulesList } from "./scripts/modules.js";
+import { publish } from "./scripts/publish.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -189,6 +193,9 @@ demo`;
   login: () => {
     login();
   },
+  logout: () => {
+    logout();
+  },
   info: () => {
     info();
   },
@@ -229,6 +236,88 @@ demo`;
     }
   },
 
+  modules: () => {
+    const args = arg({
+      "--search": String,
+      "--visibility": String,
+      "--page": String
+    });
+
+    let id;
+    const action = args._[1];
+
+    if (!action.length) {
+      // TODO - Print help?
+      return invalid(
+        "Please provide the action to perform on the modules, i.e. modules list"
+      );
+    }
+
+    switch (action) {
+      case "list":
+        modulesList({
+          search: args["--search"],
+          visibility: args["--visibility"],
+          page: args["--page"] ? Number(args["--page"]) : undefined
+        });
+        break;
+
+      case "get":
+        id = args._[2];
+        if (!id) {
+          return invalid(
+            "Please provide the id of the module to get, i.e. modules get <123>"
+          );
+        }
+
+        modulesGet(id);
+        break;
+
+      case "help":
+        section(
+          `Commands available:
+  list    List the current modules available to install
+          --search <query> Search for a module by given text
+          --visibility <private | public> Search for a module with a specific visibility (default all)
+          `
+        );
+        break;
+
+      default:
+        invalid(`Invalid action "${action}" for modules command`);
+    }
+  },
+  publish: () => {
+    publish();
+  },
+
+  feedback: () => {
+    const args = arg({});
+    const action = args._[1];
+
+    if (!action) {
+      return invalid(
+        "Please provide the message or action to perform for feedback"
+      );
+    }
+    switch (action) {
+      case "help":
+        console.log(`
+        Influence how Crowdbotics shapes and grows its developer tools. Use the feedback
+        command to send ideas and recommendations to our Product Team any time. We may
+        contact you to follow up.
+        
+        Please contact Support for help using Crowdbotics or to report errors, bugs, and 
+        other issues. 
+        https://crowdbotics-slack-dev.crowdbotics.com/dashboard/user/support
+        `);
+        break;
+
+      default:
+        sendFeedback(action);
+    }
+  },
+
   help: () => {
     console.log(`usage: npx crowdbotics/modules <command>
 
@@ -242,6 +331,9 @@ Commands available:
   init     Initialize a blank modules repository
   upgrade  Upgrade your existing app's scaffold to the latest version
   help     Show this help page
+  feedback Send feedback to Crowdbotics to let us know how we're doing
+  login    Login to your Crowdbotics account. Requires 2FA authentication
+  logout   Logout of your Crowdbotics account
 
 Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>
