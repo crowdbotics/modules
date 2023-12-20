@@ -50,7 +50,16 @@ if (fs.existsSync(path.join(sourceDir, pkg.name))) {
   sourceDir = path.join(sourceDir, "lib", "node_modules", pkg.name);
 }
 
-const gitRoot = path.dirname(findGitRoot(process.cwd()));
+const gitRoot = () => {
+  try {
+    return path.dirname(findGitRoot(process.cwd()));
+  } catch {
+    invalid(
+      `This command must be executed inside a git repository.
+Visit our official documentation for more information and try again: https://docs.crowdbotics.com/creating-reusable-modules`
+    );
+  }
+};
 
 function dispatcher() {
   const command = process.argv[2];
@@ -69,7 +78,7 @@ function dispatcher() {
 const commands = {
   demo: () => {
     createDemo(
-      path.join(gitRoot, "demo"),
+      path.join(gitRoot(), "demo"),
       path.join(sourceDir, "cookiecutter.yaml")
     );
     valid("demo app successfully generated");
@@ -84,7 +93,7 @@ const commands = {
       invalid("missing required argument: --source");
     }
 
-    const data = parseModules(path.join(args["--source"]), gitRoot);
+    const data = parseModules(path.join(args["--source"]), gitRoot());
     if (args["--write"] && process.exitCode !== 1) {
       fs.mkdirSync(path.dirname(path.join(args["--write"])), {
         recursive: true
@@ -105,7 +114,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be installed");
     }
-    addModules(modules, args["--source"], args["--project"], gitRoot);
+    addModules(modules, args["--source"], args["--project"], gitRoot());
   },
   remove: () => {
     const args = arg({
@@ -116,7 +125,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be removed");
     }
-    removeModules(modules, args["--source"], args["--project"], gitRoot);
+    removeModules(modules, args["--source"], args["--project"], gitRoot());
   },
   create: () => {
     const args = arg({
@@ -135,7 +144,7 @@ const commands = {
         `invalid module name provided: '${args["--name"]}'. Use only alphanumeric characters, dashes and underscores.`
       );
     }
-    createModule(args["--name"], args["--type"], args["--target"], gitRoot);
+    createModule(args["--name"], args["--type"], args["--target"], gitRoot());
   },
   commit: () => {
     const args = arg({
@@ -145,7 +154,7 @@ const commands = {
     if (!modules.length) {
       invalid("please provide the name of the modules to be commited");
     }
-    commitModules(modules, args["--source"], gitRoot);
+    commitModules(modules, args["--source"], gitRoot());
   },
   init: () => {
     const args = arg({
