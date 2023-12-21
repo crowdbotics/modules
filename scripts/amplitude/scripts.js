@@ -1,7 +1,8 @@
 import inquirer from "inquirer";
 import { section } from "../../utils.js";
 import { configFile } from "../utils/configFile.js";
-import { HAS_ASKED_OPT_IN_NAME, OPT_IN_NAME } from "./config.js";
+import { AMPLITUDE_API_KEY, HAS_ASKED_OPT_IN_NAME, OPT_IN_NAME } from "./config.js";
+import { init, track } from "@amplitude/analytics-node";
 
 export const askOptIn = async () => {
   const { optInStatus } = await inquirer.prompt({
@@ -19,4 +20,19 @@ export const askOptIn = async () => {
   }
   configFile.set(HAS_ASKED_OPT_IN_NAME, true);
   configFile.save();
+};
+
+export const sendAmplitudeEvent = (eventProperties) => {
+  const username = configFile.get("email");
+  const isOptedIn = configFile.get(OPT_IN_NAME) || false;
+
+  // track only if email is available and user is opted In
+  if (username && isOptedIn) {
+    init(AMPLITUDE_API_KEY);
+
+    // track the event
+    track("Crowdbotics CLI", eventProperties, {
+      user_id: username
+    });
+  }
 };
