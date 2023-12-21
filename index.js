@@ -88,12 +88,6 @@ function dispatcher() {
 }
 
 const commands = {
-  // reset: () => {
-  //   // this is just for development purposes
-  //   configFile.set("has-asked-opt-in", undefined);
-  //   configFile.set("opt-in", undefined);
-  //   configFile.save();
-  // },
   demo: () => {
     createDemo(
       path.join(gitRoot, "demo"),
