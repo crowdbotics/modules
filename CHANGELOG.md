@@ -2,6 +2,22 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.4.0 - 2023-12-21
+
+### Added
+
+Added the following commands:
+
+- `npx crowdbotics/modules publish`: Allows user to publish modules to a private catalog inside Crowdbotics platform.
+- `npx crowdbotics/modules list`: Enables user to list all modules available in the Crowdbotics platform.
+- `npx crowdbotics/modules get`: Enables user to get a specific module from the Crowdbotics platform.
+- `npx crowdbotics/modules feedback`: Allows user to send feedback to Crowdbotics team.
+- `npx crowdbotics/modules logout`: Allows user to logout.
+
+### Fixes
+
+- Commands that do not require to be executed inside s GitHub repository no longer fail.
+
 ## 2.3.0 - 2023-12-04
 
 ### Added
