@@ -1,8 +1,12 @@
+import { setOptOut } from "@amplitude/analytics-node";
 import { valid, invalid, section } from "../utils.js";
-import { HAS_ASKED_OPT_IN_NAME, amplitudeInit } from "./amplitude/config.js";
+import { HAS_ASKED_OPT_IN_NAME } from "./amplitude/config.js";
 import { askOptIn } from "./amplitude/scripts.js";
+import { apiClient } from "./utils/apiClient.js";
 import { performLogin } from "./utils/auth.js";
 import { configFile } from "./utils/configFile.js";
+
+export const REQUIRED_USER_PROPS = ["email", "first_name", "last_name"];
 
 export const login = async () => {
   section("Login process started");
@@ -20,5 +24,25 @@ export const login = async () => {
     await askOptIn();
   }
 
-  amplitudeInit();
+  // set user properties to file
+  try {
+    const userResponse = await apiClient.get({
+      path: "/v2/user/"
+    });
+
+    const userData = await userResponse.json();
+
+    Object.entries(userData).forEach(([key, value]) => {
+      if (REQUIRED_USER_PROPS.includes(key)) {
+        configFile.set(key, value);
+      }
+    });
+
+    configFile.save();
+  } catch (error) {
+    invalid("An error occurred. Analytics will not be saved");
+    // if we can't get accurate user data then opt out? Or should we just put some anonymous data?
+    // in that case we should use identify.prepend() to have some base data properties
+    setOptOut(true);
+  }
 };

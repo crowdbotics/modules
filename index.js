@@ -36,6 +36,8 @@ import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
+import { init, track } from "@amplitude/analytics-node";
+import { AMPLITUDE_API_KEY, OPT_IN_NAME } from "./scripts/amplitude/config.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -63,10 +65,35 @@ function dispatcher() {
     invalid(`command doesn't exist: ${command}`);
   }
 
+  const username = configFile.get("email");
+  const isOptedIn = configFile.get(OPT_IN_NAME) || false;
+
+  // track only if email is available and user is opted In
+  if (isOptedIn && username) {
+    init(AMPLITUDE_API_KEY);
+
+    // define the properties to track
+    const eventProperties = {
+      full_command: process.argv.slice(2).join(" "), // all of the commands in the user input
+      action: command // Just the first command
+    };
+
+    // track the event
+    track("Crowdbotics CLI", eventProperties, {
+      user_id: username
+    });
+  }
+
   return commands[command]();
 }
 
 const commands = {
+  // reset: () => {
+  //   // this is just for development purposes
+  //   configFile.set("has-asked-opt-in", undefined);
+  //   configFile.set("opt-in", undefined);
+  //   configFile.save();
+  // },
   demo: () => {
     createDemo(
       path.join(gitRoot, "demo"),

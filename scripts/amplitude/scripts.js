@@ -1,8 +1,7 @@
 import inquirer from "inquirer";
-import { section } from "../../utils";
-import { configFile } from "../utils/configFile";
-import { HAS_ASKED_OPT_IN_NAME, OPT_IN_NAME } from "./config";
-import { track } from "@amplitude/analytics-node";
+import { section } from "../../utils.js";
+import { configFile } from "../utils/configFile.js";
+import { HAS_ASKED_OPT_IN_NAME, OPT_IN_NAME } from "./config.js";
 
 export const askOptIn = async () => {
   const { optInStatus } = await inquirer.prompt({
@@ -20,12 +19,4 @@ export const askOptIn = async () => {
   }
   configFile.set(HAS_ASKED_OPT_IN_NAME, true);
   configFile.save();
-};
-
-const userId = {
-  user_id: "user@amplitude.com"
-};
-
-export const sendAmplitudeData = async (event, data) => {
-  track(event, data, userId);
 };
