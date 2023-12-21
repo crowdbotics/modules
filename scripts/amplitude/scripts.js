@@ -25,13 +25,18 @@ export const askOptIn = async () => {
 export const sendAmplitudeEvent = (eventProperties) => {
   const username = configFile.get("email");
   const isOptedIn = configFile.get(OPT_IN_NAME) || false;
+  try {
+    // track only if email is available and user is opted In
+    if (username && isOptedIn) {
+      init(AMPLITUDE_API_KEY);
 
-  // track only if email is available and user is opted In
-  if (username && isOptedIn) {
-    init(AMPLITUDE_API_KEY);
-
-    // track the event
-    track("Crowdbotics CLI", eventProperties, {
+      // track the event
+      track("Crowdbotics CLI", eventProperties, {
+        user_id: username
+      });
+    }
+  } catch (error) {
+    track("Crowdbotics CLI", { ...eventProperties, amplitudeError: error }, {
       user_id: username
     });
   }
