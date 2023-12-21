@@ -1,4 +1,3 @@
-import { setOptOut } from "@amplitude/analytics-node";
 import { valid, invalid, section } from "../utils.js";
 import { HAS_ASKED_OPT_IN_NAME } from "./amplitude/config.js";
 import { askOptIn } from "./amplitude/scripts.js";
@@ -41,8 +40,5 @@ export const login = async () => {
     configFile.save();
   } catch (error) {
     invalid("An error occurred. Analytics will not be saved");
-    // if we can't get accurate user data then opt out? Or should we just put some anonymous data?
-    // in that case we should use identify.prepend() to have some base data properties
-    setOptOut(true);
   }
 };
