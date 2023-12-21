@@ -1,8 +1,11 @@
 import { configFile } from "./configFile.js";
-import { HOST_CONFIG_NAME, TOKEN_CONFIG_NAME } from "./constants.js";
+import {
+  DEFAULT_HOST,
+  HOST_CONFIG_NAME,
+  TOKEN_CONFIG_NAME
+} from "./constants.js";
 import fetch from "node-fetch";
-
-const DEFAULT_HOST = "https://app.crowdbotics.com/api";
+import { formatUrlPath } from "./url.js";
 
 class ApiClient {
   get(options) {
@@ -28,7 +31,7 @@ class ApiClient {
 
   _request({ path, body, method, params, anonymous }) {
     const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
-    let url = `${host}${path}`;
+    let url = `${formatUrlPath(host)}/api/${formatUrlPath(path)}/`;
 
     if (params) {
       url += "?" + new URLSearchParams(params).toString();
