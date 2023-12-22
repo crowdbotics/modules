@@ -1,7 +1,10 @@
-name: Create release notes and sync JIRA
+name: release-notes
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types:
+      - create-github-release
 
 jobs:
 
@@ -17,10 +20,16 @@ jobs:
       
       - name: Checkout branch
         working-directory: ${{ env.working-directory }}
-        run: | 
-          echo "branch: ${GITHUB_REF_NAME}"
-          git checkout ${GITHUB_REF_NAME}
-
+        run: |
+          if [ ${{ github.event.client_payload.release_branch }} == "master" ]; then
+            echo "branch: ${{ github.event.client_payload.release_branch }}"
+            git checkout ${{ github.event.client_payload.release_branch }}
+          else
+            echo "manual deployment"
+            echo "branch: ${GITHUB_REF_NAME}"
+            git checkout ${GITHUB_REF_NAME}
+          fi
+      
       - name: Run Release Workflow
         uses: crowdbotics/github-actions/create-github-release@master
         with:
