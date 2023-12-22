@@ -1,0 +1,38 @@
+name: release-notes
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - create-github-release
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    env: 
+      working-directory: ./modules
+
+    steps:
+      - name: Repo Clone 
+        run: |
+          git clone https://${{ secrets.GIT_TOKEN }}@github.com/crowdbotics/<repo-name>.git
+      
+      - name: Checkout branch
+        working-directory: ${{ env.working-directory }}
+        run: |
+          if [ ${{ github.event.client_payload.branch }} == "master" ]; then
+            echo "branch: ${{ github.event.client_payload.deployment_branch }}"
+            git checkout ${{ github.event.client_payload.deployment_branch }}
+          else
+            echo "manual deployment"
+            echo "branch: ${GITHUB_REF_NAME}"
+            git checkout ${GITHUB_REF_NAME}
+          fi
+      
+      - name: Run Release Workflow
+        uses: crowdbotics/github-actions/create-github-release@master
+        with:
+          working-directory: ${{ env.working-directory }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }
