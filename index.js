@@ -36,6 +36,7 @@ import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
+import { sendAmplitudeEvent } from "./scripts/amplitude/scripts.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -71,6 +72,14 @@ function dispatcher() {
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
     invalid(`command doesn't exist: ${command}`);
   }
+
+  // define the properties to track
+  const eventProperties = {
+    full_command: process.argv.slice(2).join(" "), // all of the commands in the user input
+    action: command // Just the first command
+  };
+
+  sendAmplitudeEvent(eventProperties);
 
   return commands[command]();
 }
