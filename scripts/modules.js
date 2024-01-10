@@ -92,11 +92,9 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
 export const modulesGet = async (id) => {
   const loadingSpinner = ora("Loading Module").start();
 
-  const [moduleResponse] = await Promise.all([
-    apiClient.get({
-      path: `/v1/catalog/module/${id}`
-    })
-  ]);
+  const moduleResponse = await apiClient.get({
+    path: `/v1/catalog/module/${id}`
+  });
 
   loadingSpinner.stop();
 
