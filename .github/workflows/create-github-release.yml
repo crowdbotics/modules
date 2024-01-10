@@ -1,4 +1,4 @@
-name: release-notes
+name: create-github-release
 
 on:
   workflow_dispatch:
@@ -36,3 +36,4 @@ jobs:
           working-directory: ${{ env.working-directory }}
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+          release_branch: ${{ github.event.client_payload.release_branch }}
