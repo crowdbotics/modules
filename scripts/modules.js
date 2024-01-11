@@ -37,7 +37,7 @@ export const modulesList = async ({
     }
 
     if (status) {
-      params.archived = status === "archived";
+      params.is_archived = status === "archived";
     }
 
     if (visibility.toLowerCase() === "public") {
@@ -194,11 +194,8 @@ export const modulesArchive = async (id, unarchive = false) => {
 
   const archivingSpinner = ora("Pending request").start();
 
-  const archiveResponse = await apiClient.patch({
-    path: `/v1/catalog/module/${id}`,
-    body: {
-      archived: !unarchive
-    }
+  const archiveResponse = await apiClient.post({
+    path: `/v1/catalog/module/${id}/${verb}`
   });
 
   archivingSpinner.stop();
