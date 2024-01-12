@@ -24,67 +24,11 @@ jobs:
         run: |
           git checkout ${{ env.pr-branch }}
 
-      - name: Check for differences
-        id: check-diff
-        working-directory: ${{ env.working-directory }}
-        run: |
-          git fetch origin ${{ env.base-branch }}:${{ env.base-branch }}
-          DIFF=$(git diff --name-only ${{ env.base-branch }} ${{ env.pr-branch }}) || true
-          if [ -z "$DIFF" ]; then
-            echo "No changes detected between branches ${{env.base-branch}} and ${{ env.pr-branch }}. Exiting workflow."
-            exit 1
-          fi
-
-      - name: Fetch all tags
-        working-directory: ${{ env.working-directory }}
-        run: git fetch --tags
-
-      - name: Generate tag name
-        id: tag-name
-        working-directory: ${{ env.working-directory }}
-        run: |
-          DATE_TAG=$(date +'%y%m%d')
-          PREFIX="qa-$DATE_TAG."
-          TAGS=$(git tag -l "$PREFIX*" | sort --version-sort | tail -n1)
-          if [[ "$TAGS" == "" ]]; then
-            NEW_TAG="${PREFIX}1"
-          else
-            LAST_NUMBER=$(echo $TAGS | grep -o -E '[0-9]+$')
-            NEXT_NUMBER=$((LAST_NUMBER + 1))
-            NEW_TAG="${PREFIX}${NEXT_NUMBER}"
-          fi
-          echo "TAG_NAME=$NEW_TAG" >> $GITHUB_ENV
-
-      - name: Create and push tag
-        working-directory: ${{ env.working-directory }}
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git tag ${{ env.TAG_NAME }}
-          git push origin ${{ env.TAG_NAME }}
-
-      - name: Create Pull Request
-        id: create-pr
-        run: |
-          PR_DATA='{"title":"Merge ${{ env.pr-branch }} into ${{ env.base-branch }}","head":"${{ env.pr-branch }}","base":"${{ env.base-branch }}", "body":"This PR merges changes from ${{ env.pr-branch }} into ${{ env.base-branch }}."}'
-          PR_RESPONSE=$(curl -s -X POST -H "Authorization: token ${{ secrets.GIT_TOKEN }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/pulls -d "$PR_DATA")
-          PR_NUMBER=$(echo $PR_RESPONSE | jq -r '.number')
-          echo "Pull Request Number: $PR_NUMBER"
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-
-      - name: Add Labels to Pull Request
-        id: add-label
-        if: env.PR_NUMBER != 'null'
-        run: |
-          LABELS_DATA='{"labels": ["${{ env.pr-label }}"]}'
-          curl -s -X POST -H "Authorization: token ${{ secrets.GIT_TOKEN }}" -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/${{ github.repository }}/issues/${{ env.PR_NUMBER }}/labels -d "$LABELS_DATA"
-
-      - name: Automerge PR
-        id: merge-pr
-        if: env.PR_NUMBER != 'null'
-        uses: pascalgn/automerge-action@v0.16.2
-        env:
-          GITHUB_TOKEN: "${{ secrets.GIT_TOKEN }}"
-          MERGE_LABELS: "${{ env.pr-label }}"
-          MERGE_METHOD: "merge"
-          PULL_REQUEST: "${{ env.PR_NUMBER }}"
+      - name: Run Release to QA Workflow
+        uses: crowdbotics/github-actions/release-to-qa@master
+        with:
+          working-directory: ${{ env.working-directory }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          base-branch: ${{ env.base-branch }}
+          pr-branch: ${{ env.pr-branch }}
+          pr-label: ${{ env.pr-label }}
