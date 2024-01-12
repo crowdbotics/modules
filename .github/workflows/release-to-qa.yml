@@ -1,0 +1,34 @@
+name: release-to-qa
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types:
+      - release-to-qa
+
+jobs:
+  tag-and-pr:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./modules
+      base-branch: qa
+      pr-branch: develop
+      pr-label: automerge
+    steps:
+      - name: Repo Clone
+        run: |
+          git clone https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git
+
+      - name: Checkout branch
+        working-directory: ${{ env.working-directory }}
+        run: |
+          git checkout ${{ env.pr-branch }}
+
+      - name: Run Release to QA Workflow
+        uses: crowdbotics/github-actions/release-to-qa@master
+        with:
+          working-directory: ${{ env.working-directory }}
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+          base-branch: ${{ env.base-branch }}
+          pr-branch: ${{ env.pr-branch }}
+          pr-label: ${{ env.pr-label }}
