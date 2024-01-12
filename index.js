@@ -371,6 +371,7 @@ Commands available:
   login    Login to your Crowdbotics account. Requires 2FA authentication
   logout   Logout of your Crowdbotics account
   publish  Publish your modules to your organization's private catalog
+  modules  Manage modules for your organization
 
 Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>
