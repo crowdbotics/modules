@@ -92,17 +92,9 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
 export const modulesGet = async (id) => {
   const loadingSpinner = ora("Loading Module").start();
 
-  const [moduleResponse, appListResponse] = await Promise.all([
-    apiClient.get({
-      path: `/v1/catalog/module/${id}`
-    }),
-    apiClient.get({
-      path: "/v2/apps",
-      params: {
-        limit: 1
-      }
-    })
-  ]);
+  const moduleResponse = await apiClient.get({
+    path: `/v1/catalog/module/${id}`
+  });
 
   loadingSpinner.stop();
 
@@ -116,17 +108,6 @@ export const modulesGet = async (id) => {
     return;
   }
 
-  let defaultAppId;
-
-  if (appListResponse.ok) {
-    const appList = await appListResponse.json();
-
-    defaultAppId =
-      appList.results && appList.results.length > 0
-        ? appList.results[0].id
-        : undefined;
-  }
-
   const module = await moduleResponse.json();
 
   section(`Name: \n${module.title}`);
@@ -135,13 +116,8 @@ export const modulesGet = async (id) => {
   section(`Slug: \n${module.slug}`);
   section(`Visibility: \n${module.visibility}`);
 
-  if (defaultAppId) {
-    const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
-
-    section(
-      `Module Details: ${formatUrlPath(
-        host
-      )}/dashboard/app/${defaultAppId}/modules/${module.id}`
-    );
-  }
+  const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
+  section(
+    `Module Details: ${formatUrlPath(host)}/dashboard/catalogs/${module.id}`
+  );
 };

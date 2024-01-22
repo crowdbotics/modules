@@ -324,9 +324,9 @@ demo`;
         Influence how Crowdbotics shapes and grows its developer tools. Use the feedback
         command to send ideas and recommendations to our Product Team any time. We may
         contact you to follow up.
-        
-        Please contact Support for help using Crowdbotics or to report errors, bugs, and 
-        other issues. 
+
+        Please contact Support for help using Crowdbotics or to report errors, bugs, and
+        other issues.
         https://crowdbotics-slack-dev.crowdbotics.com/dashboard/user/support
         `);
         break;
@@ -352,6 +352,7 @@ Commands available:
   feedback Send feedback to Crowdbotics to let us know how we're doing
   login    Login to your Crowdbotics account. Requires 2FA authentication
   logout   Logout of your Crowdbotics account
+  publish  Publish your modules to your organization's private catalog
 
 Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>
