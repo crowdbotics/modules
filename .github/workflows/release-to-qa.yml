@@ -19,13 +19,17 @@ jobs:
         run: |
           git clone https://${{ secrets.GIT_TOKEN }}@github.com/${{ github.repository }}.git
 
+      - name: Clone Reusable Actions Repo
+        run: |
+          git clone -b master https://${{ secrets.GIT_TOKEN }}@github.com/crowdbotics/github-actions.git
+
       - name: Checkout branch
         working-directory: ${{ env.working-directory }}
         run: |
           git checkout ${{ env.pr-branch }}
 
       - name: Run Release to QA Workflow
-        uses: crowdbotics/github-actions/release-to-qa@master
+        uses: ./github-actions/release-to-qa
         with:
           working-directory: ${{ env.working-directory }}
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
