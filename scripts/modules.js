@@ -1,4 +1,4 @@
-import { invalid, section } from "../utils.js";
+import { invalid, section, valid } from "../utils.js";
 import { apiClient } from "./utils/apiClient.js";
 import { configFile } from "./utils/configFile.js";
 import { DEFAULT_HOST, HOST_CONFIG_NAME } from "./utils/constants.js";
@@ -6,10 +6,16 @@ import { getCurrentUserOrganization } from "./utils/organization.js";
 import Table from "cli-table";
 import ora from "ora";
 import { formatUrlPath } from "./utils/url.js";
+import inquirer from "inquirer";
 
 const MODULES_PAGE_LIMIT = 50;
 
-export const modulesList = async ({ search, visibility = "", page = 1 }) => {
+export const modulesList = async ({
+  search,
+  status,
+  visibility = "",
+  page = 1
+}) => {
   const loadingSpinner = ora("Loading Modules").start();
 
   try {
@@ -28,6 +34,10 @@ export const modulesList = async ({ search, visibility = "", page = 1 }) => {
 
       params.org_id = organization.id;
       params.visibility = "Private";
+    }
+
+    if (status) {
+      params.is_archived = status === "archived";
     }
 
     if (visibility.toLowerCase() === "public") {
@@ -120,4 +130,55 @@ export const modulesGet = async (id) => {
   section(
     `Module Details: ${formatUrlPath(host)}/dashboard/catalogs/${module.id}`
   );
+};
+
+export const modulesArchive = async (id, unarchive = false) => {
+  const loadingSpinner = ora("Preparing request").start();
+
+  const moduleResponse = await apiClient.get({
+    path: `/v1/catalog/module/${id}`
+  });
+
+  loadingSpinner.stop();
+
+  if (!moduleResponse.ok) {
+    if (moduleResponse.status === 404) {
+      invalid(`Cannot find requested module with id ${id}.`);
+    } else {
+      invalid("Unable to get module. Please login and try again.");
+    }
+
+    return;
+  }
+
+  const verb = unarchive ? "unarchive" : "archive";
+
+  const module = await moduleResponse.json();
+
+  // Verify that the user understands which organization the modules are being published to.
+  const { ok } = await inquirer.prompt({
+    message: `Are you sure you want to ${verb} module: ${module.title}?`,
+    name: "ok",
+    type: "input",
+    default: "y/n"
+  });
+
+  if (ok.trim().toLowerCase() !== "y") {
+    invalid(`Cancelling operation. No module has been ${verb}d.`);
+    return;
+  }
+
+  const archivingSpinner = ora("Pending request").start();
+
+  const archiveResponse = await apiClient.post({
+    path: `/v1/catalog/module/${id}/${verb}`
+  });
+
+  archivingSpinner.stop();
+
+  if (archiveResponse.ok) {
+    valid(`Module: ${module.title} ${verb}d.`);
+  } else {
+    invalid(`Unable to ${verb} module: ${module.title}.`);
+  }
 };
