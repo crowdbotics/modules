@@ -12,6 +12,11 @@ export const info = async () => {
 
   const body = await response.json();
 
+  const organization = body.organization;
+  delete body.organization;
   section("Current User:");
   console.table(body);
+
+  section("Organization:");
+  console.table(organization);
 };

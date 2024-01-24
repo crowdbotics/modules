@@ -124,7 +124,10 @@ export const modulesGet = async (id) => {
   section(`Description: \n${module.description}`);
   section(`ID: \n${module.id}`);
   section(`Slug: \n${module.slug}`);
-  section(`Visibility: \n${module.visibility}`);
+  section(`Public/Private: \n${module.visibility}`);
+  section(
+    `Published/Archived: \n${!module.is_archived ? "Published" : "Archived"}`
+  );
 
   const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
   section(
