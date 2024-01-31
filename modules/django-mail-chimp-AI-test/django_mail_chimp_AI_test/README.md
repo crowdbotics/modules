@@ -12,10 +12,10 @@ This Django module fully integrates with Mailchimp, covering aspects such as sec
 
 ## Environment variables
 ```dotenv
-MAILCHIMP_API_KEY=\"<API_KEY>\"
-MAILCHIMP_SERVER_PREFIX=\"<SERVER_PREFIX>\"
-USER_DATA_SYNC_EVENTS=\"registration,profile_update\"
-DAILY_REPORT_SCHEDULER=\"0 0 * * *\"
+MAILCHIMP_API_KEY="<API_KEY>"
+MAILCHIMP_SERVER_PREFIX="<SERVER_PREFIX>"
+USER_DATA_SYNC_EVENTS="registration,profile_update"
+DAILY_REPORT_SCHEDULER="0 0 * * *"
 ```
 
 ## Dependencies

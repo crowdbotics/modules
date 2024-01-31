@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.build import build
 
 
@@ -10,9 +10,9 @@ class BuildCommand(build):
 
 
 setup(
-    name="cb_django_mail_chimp_AI_test",
-    version="0.1",
-    packages=["mail_chimp_AI_test"],
-    install_requires=[],
-    cmdclass={"build": BuildCommand},
+    name='django-mail_chimp_AI_test',
+    version='0.1',
+    packages=find_packages(),
+    install_requires=['mailchimp-marketing', 'celery'],
+    python_requires='>=3.8',
 )

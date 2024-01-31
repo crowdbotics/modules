@@ -1,6 +1,7 @@
 {
   "title": "mail-chimp-AI-test",
-  "description": "",
+  "description": "A comprehensive Django module for full integration with Mailchimp",
+  "slug":	"django-mailchimp-full-integration",
   "root": "/backend/modules",
   "schema": {}
 }
