@@ -1,0 +1,1 @@
+The file `my-django-app/myapp/migrations/__init__.py` is intentionally left blank. This is a standard practice in Python to indicate that the directory should be treated as a package.
