@@ -34,7 +34,7 @@ import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
 import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
-import { modulesGet, modulesList } from "./scripts/modules.js";
+import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
 import { sendAmplitudeEvent } from "./scripts/amplitude/scripts.js";
 
@@ -258,7 +258,9 @@ demo`;
     const args = arg({
       "--search": String,
       "--visibility": String,
-      "--page": String
+      "--status": String,
+      "--page": String,
+      "--unarchive": Boolean
     });
 
     let id;
@@ -275,6 +277,7 @@ demo`;
       case "list":
         modulesList({
           search: args["--search"],
+          status: args["--status"],
           visibility: args["--visibility"],
           page: args["--page"] ? Number(args["--page"]) : undefined
         });
@@ -291,12 +294,27 @@ demo`;
         modulesGet(id);
         break;
 
+      case "archive":
+        id = args._[2];
+        if (!id) {
+          return invalid(
+            "Please provide the id of the module to archive, i.e. modules archive <123>"
+          );
+        }
+
+        modulesArchive(id, !!args["--unarchive"]);
+        break;
+
       case "help":
         section(
           `Commands available:
-  list    List the current modules available to install
-          --search <query> Search for a module by given text
-          --visibility <private | public> Search for a module with a specific visibility (default all)
+  list          List the current modules available to install
+                --search <query> Search for a module by given text
+                --status <published | archived> Search for a module by either published or archived modules (default all)
+                --visibility <private | public> Search for a module with a specific visibility (default all)
+  get     <id>  Get the details for the specified module
+  archive <id> Archive the specified module to prevent future installation to a project
+                --unarchive Undo the archive of the module to set the status back to Published
           `
         );
         break;
@@ -353,6 +371,7 @@ Commands available:
   login    Login to your Crowdbotics account. Requires 2FA authentication
   logout   Logout of your Crowdbotics account
   publish  Publish your modules to your organization's private catalog
+  modules  Manage modules for your organization
 
 Parse and validate your modules:
   npx crowdbotics/modules parse --source <path>
