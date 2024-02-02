@@ -12,7 +12,9 @@ export const sendFeedback = async (message) => {
     });
 
     if (!response.ok) {
-      return invalid("Unable to send feedback at this time, please try again.");
+      return invalid(
+        "Unable to send feedback at this time, please try again later."
+      );
     }
   } catch (error) {
     return invalid(error);

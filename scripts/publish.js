@@ -97,7 +97,7 @@ export const publish = async () => {
       defaultOrganization = userBody.organization;
     }
   } catch {
-    invalid("Unable to get current user. Please login and try again.");
+    invalid("Unable to get current user. Please try again later.");
     return;
   } finally {
     preparingSpinner.stop();
