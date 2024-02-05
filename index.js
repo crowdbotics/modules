@@ -335,6 +335,9 @@ demo`;
     }
   },
   publish: () => {
+    Amplitude.sendEvent({
+      name: "Publish Modules"
+    });
     publish();
   },
 

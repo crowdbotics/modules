@@ -38,7 +38,7 @@ class AmplitudeWrapper {
 
   async loadAndIdentify(user) {
     await currentUser.setUser(user);
-    if (!currentUser.get("id")) return;
+    if (!currentUser.get("email")) return;
 
     const identifyEvent = new Identify();
     identifyEvent.set("Django Id", currentUser.get("id"));
