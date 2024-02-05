@@ -44,6 +44,10 @@ function generateDjangoFiles(base, name, relative = "/") {
     execOptions
   );
 
+  const appsFileData = fs.readFileSync(`${innerAppPath}/apps.py`, "utf8");
+  const result = appsFileData.replace(/name = '.*'/, `name = 'modules.django_${sanitizedName}.${sanitizedName}'`);
+  fs.writeFileSync(`${innerAppPath}/apps.py`, result, "utf8");
+
   fs.writeFileSync(
     path.join(base, relative, djangoName, "setup.py"),
     setupPy(sanitizedName),
