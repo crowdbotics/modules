@@ -21,7 +21,6 @@ class User {
   }
 
   async load() {
-    console.log("Loading user");
     try {
       const response = await apiClient.get({
         path: "/v2/user/"

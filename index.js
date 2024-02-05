@@ -73,9 +73,6 @@ function dispatcher() {
     invalid(`command doesn't exist: ${command}`);
   }
 
-  // TODO: move this inside the sendEvent
-  Amplitude.init();
-
   return commands[command]();
 }
 
@@ -288,16 +285,17 @@ demo`;
         break;
 
       case "get":
-        Amplitude.sendEvent({
-          name: "View Module Details",
-          properties: { "Module Id": id }
-        });
         id = args._[2];
         if (!id) {
           return invalid(
             "Please provide the id of the module to get, i.e. modules get <123>"
           );
         }
+
+        Amplitude.sendEvent({
+          name: "View Module Details",
+          properties: { "Module Id": id }
+        });
 
         modulesGet(id);
         break;
