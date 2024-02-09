@@ -68,6 +68,10 @@ Create new modules and test/validate your work locally before submitting a PR:
 yarn run parse
 ```
 
+Install modules globally to your system:
+```sh
+npm install -g cb
+```
 
 ### macOS config
 - make sure to have a compatible version of urllib3 with openssl. urllib3 v2.0 or higher is compatible with OpenSSL 1.1.1 or higher

@@ -2,7 +2,7 @@
 /**
  * Crowdbotics Modules tool
  *
- * Run it anywhere with: npx crowdbotics/modules
+ * Run it anywhere with: cb
  *
  * Commands available:
  * - parse
@@ -369,7 +369,7 @@ demo`;
   },
 
   help: () => {
-    console.log(`usage: npx crowdbotics/modules <command>
+    console.log(`usage: cb <command>
 
 Commands available:
   parse    Parse and validate your modules
@@ -388,46 +388,46 @@ Commands available:
   modules  Manage modules for your organization
 
 Parse and validate your modules:
-  npx crowdbotics/modules parse --source <path>
+  cb parse --source <path>
 
 Parse modules and write the data to a json file:
-  npx crowdbotics/modules parse --source <path> --write <path>
+  cb parse --source <path> --write <path>
 
 Create a demo app:
-  npx crowdbotics/modules demo
+  cb demo
 
 Create a module of a given type:
-  npx crowdbotics/modules create --name <module-name> --type <all/react-native/django>
+  cb create --name <module-name> --type <all/react-native/django>
 
 Initialize a modules repository:
-  npx crowdbotics/modules init --name <my-modules-repository-name>
+  cb init --name <my-modules-repository-name>
 
 Upgrade your scaffold to the latest master:
-  npx crowdbotics/modules upgrade
+  cb upgrade
 
 Upgrade your scaffold to a specific version (git tag, git commit or branch name):
-  npx crowdbotics/modules upgrade --version 2.3.0
+  cb upgrade --version 2.3.0
 
 Install one or modules to your demo app:
-  npx crowdbotics/modules add <module-name> <module-name-2>
+  cb add <module-name> <module-name-2>
 
 Remove one or modules from your demo app:
-  npx crowdbotics/modules remove <module-name> <module-name-2>
+  cb remove <module-name> <module-name-2>
 
 Install modules from other directory:
-  npx crowdbotics/modules add --source ../other-repository <module-name>
+  cb add --source ../other-repository <module-name>
 
 Install modules to other app that is not "demo":
-  npx crowdbotics/modules add --project ../other-project <module-name>
+  cb add --project ../other-project <module-name>
 
 Remove modules from app that is not "demo":
-  npx crowdbotics/modules remove --project ../other-project <module-name>
+  cb remove --project ../other-project <module-name>
 
 Update a module definition from the demo app:
-  npx crowdbotics/modules commit <module-name>
+  cb commit <module-name>
 
 Update a module definition from other app:
-  npx crowdbotics/modules commit <module-name> --source <path>
+  cb commit <module-name> --source <path>
 
 Glossary:
   <module-name> stands for the name of the directory where the module is defined.
