@@ -37,6 +37,7 @@ import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
 import { sendAmplitudeEvent } from "./scripts/amplitude/scripts.js";
+import { preExecuteChecks } from "./scripts/utils/environment.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -68,6 +69,8 @@ function dispatcher() {
   if (!command) {
     return commands.help();
   }
+
+  preExecuteChecks(true, true);
 
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
     invalid(`command doesn't exist: ${command}`);
