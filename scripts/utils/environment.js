@@ -13,25 +13,7 @@ export function configurePython(options = execOptions) {
   execSync("pipenv --python 3.8.17", options);
 }
 
-export function preExecuteChecks(cookiecutterCheck = false) {
-  // Check if Python 3.8.17 is installed
-  try {
-    section("Checking Python version");
-    // Fallback is for older versions of Python and is why we used spawnSync. We can use execSync if this distinction really doesn't matter.
-    const pythonVersion = spawnSync("python", ["--version"], {
-      cwd: userdir,
-      shell: true,
-      encoding: "utf8"
-    }).stdout || spawnSync("python", ["--version"], { shell: true, encoding: "utf8" }).stderr;
-    if (!pythonVersion.includes("3.8")) {
-      section(`Python 3.8 is not installed. Found version: ${pythonVersion}. Please install and try again.`);
-      process.exit(1);
-    }
-  } catch (error) {
-    section("Python 3.8 is not correctly installed. Please install and try again.");
-    process.exit(1);
-  }
-
+export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false) {
   // Check if Node.js v18.16.0 is installed
   try {
     section("Checking Node version");
@@ -47,6 +29,26 @@ export function preExecuteChecks(cookiecutterCheck = false) {
   } catch (error) {
     section("Node.js v18.16.0 is not installed. Please install Node.js v18.16.0 before running this script.");
     process.exit(1);
+  }
+
+  // Check if Python 3.8.17 is installed
+  if (pythonCheck) {
+    try {
+      section("Checking Python version");
+      // Fallback is for older versions of Python and is why we used spawnSync. We can use execSync if this distinction really doesn't matter.
+      const pythonVersion = spawnSync("python", ["--version"], {
+        cwd: userdir,
+        shell: true,
+        encoding: "utf8"
+      }).stdout || spawnSync("python", ["--version"], { shell: true, encoding: "utf8" }).stderr;
+      if (!pythonVersion.includes("3.8")) {
+        section(`Python 3.8 is not installed. Found version: ${pythonVersion}. Please install and try again.`);
+        process.exit(1);
+      }
+    } catch (error) {
+      section("Python 3.8 is not correctly installed. Please install and try again.");
+      process.exit(1);
+    }
   }
 
   if (cookiecutterCheck) {

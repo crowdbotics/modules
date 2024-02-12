@@ -79,7 +79,7 @@ function dispatcher() {
 
 const commands = {
   demo: () => {
-    preExecuteChecks(true);
+    preExecuteChecks(true, true);
     preExecuteDjangoCheck();
     createDemo(
       path.join(gitRoot(), "demo"),
@@ -111,7 +111,7 @@ const commands = {
     }
   },
   add: () => {
-    preExecuteChecks();
+    preExecuteChecks(true);
     const args = arg({
       "--source": String,
       "--project": String
@@ -135,7 +135,7 @@ const commands = {
     removeModules(modules, args["--source"], args["--project"], gitRoot());
   },
   create: () => {
-    preExecuteChecks(true);
+    preExecuteChecks(true, true);
     const args = arg({
       "--name": String,
       "--type": String,
@@ -173,6 +173,7 @@ const commands = {
     commitModules(modules, args["--source"], gitRoot());
   },
   init: () => {
+    preExecuteChecks();
     const args = arg({
       "--name": String
     });
@@ -217,15 +218,19 @@ demo`;
     upgradeScaffold(args["--version"]);
   },
   login: () => {
+    preExecuteChecks();
     login();
   },
   logout: () => {
+    preExecuteChecks();
     logout();
   },
   info: () => {
+    preExecuteChecks();
     info();
   },
   config: () => {
+    preExecuteChecks();
     const args = arg({});
 
     const action = args._[1];
@@ -344,6 +349,7 @@ demo`;
     }
   },
   publish: () => {
+    preExecuteChecks();
     Amplitude.sendEvent({
       name: "Publish Modules"
     });
