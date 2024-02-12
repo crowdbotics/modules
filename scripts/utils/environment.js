@@ -1,5 +1,6 @@
-import { spawnSync, execSync } from "node:child_process";
+import { execSync } from "node:child_process";
 import { section } from "../../utils.js";
+import fs from "node:fs";
 
 const userdir = process.cwd();
 
@@ -14,20 +15,18 @@ export function configurePython(options = execOptions) {
 }
 
 export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false) {
-  // Check if Node.js v18.16.0 is installed
+  // Check if Node.js v18.x is installed
   try {
     section("Checking Node version");
-    const nodeVersion = execSync("node --version", {
-      cwd: userdir,
-      shell: true,
-      encoding: "utf8"
-    }).trim();
-    if (!nodeVersion.includes("v18.16.0")) {
-      section(`Node.js v18.16.0 is not installed. Found version: ${nodeVersion}. Please install Node.js v18.16.0 before running this script.`);
+
+    const nvmrcPath = `${userdir}/.nvmrc`;
+    const currentNodeVersion = fs.readFileSync(nvmrcPath, "utf8").trim();
+    if (!currentNodeVersion.includes("v18")) {
+      section(`Node.js v18.x is not installed. Found version: ${currentNodeVersion}. Please install Node.js v18.16.0 before running this script.`);
       process.exit(1);
     }
   } catch (error) {
-    section("Node.js v18.16.0 is not installed. Please install Node.js v18.16.0 before running this script.");
+    section("Node.js v18.x is not installed. Please install Node.js v18.16.0 before running this script.");
     process.exit(1);
   }
 
@@ -35,18 +34,15 @@ export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false)
   if (pythonCheck) {
     try {
       section("Checking Python version");
-      // Fallback is for older versions of Python and is why we used spawnSync. We can use execSync if this distinction really doesn't matter.
-      const pythonVersion = spawnSync("python", ["--version"], {
-        cwd: userdir,
-        shell: true,
-        encoding: "utf8"
-      }).stdout || spawnSync("python", ["--version"], { shell: true, encoding: "utf8" }).stderr;
-      if (!pythonVersion.includes("3.8")) {
-        section(`Python 3.8 is not installed. Found version: ${pythonVersion}. Please install and try again.`);
+
+      const pythonPath = `${userdir}/.python-version`;
+      const currentPythonVersion = fs.readFileSync(pythonPath, "utf8").trim();
+      if (!currentPythonVersion.includes("3.8")) {
+        section(`Python 3.8.x is not installed. Found version: ${currentPythonVersion}. Please install and try again.`);
         process.exit(1);
       }
     } catch (error) {
-      section("Python 3.8 is not correctly installed. Please install and try again.");
+      section("Python 3.8.x is not correctly installed. Please install and try again.");
       process.exit(1);
     }
   }
@@ -60,7 +56,7 @@ export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false)
         encoding: "utf8"
       });
     } catch (error) {
-      console.error("Cookiecutter is not installed. Please install Cookiecutter before running this script.");
+      console.error("Cookiecutter is not installed. Please install Cookiecutter before running this command.");
       process.exit(1);
     }
   }
