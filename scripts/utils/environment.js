@@ -13,11 +13,11 @@ export function configurePython(options = execOptions) {
   execSync("pipenv --python 3.8.17", options);
 }
 
-export function preExecuteChecks(djangoCheck = false, cookiecutterCheck = false) {
+export function preExecuteChecks(cookiecutterCheck = false) {
   // Check if Python 3.8.17 is installed
   try {
     section("Checking Python version");
-    // Fallback is for older versions of Python
+    // Fallback is for older versions of Python and is why we used spawnSync. We can use execSync if this distinction really doesn't matter.
     const pythonVersion = spawnSync("python", ["--version"], {
       cwd: userdir,
       shell: true,
@@ -49,25 +49,6 @@ export function preExecuteChecks(djangoCheck = false, cookiecutterCheck = false)
     process.exit(1);
   }
 
-  // Check if Django 3.2.23 is installed
-  if (djangoCheck) {
-    try {
-      section("Checking Django version");
-      const djangoVersion = execSync("python -m django --version", {
-        cwd: userdir,
-        shell: true,
-        encoding: "utf8"
-      }).trim();
-      if (!djangoVersion.includes("3.2.23")) {
-        section(`Django 3.2.23 is not installed. Found version: ${djangoVersion}. Please install Django 3.2.23 before running this script.`);
-        process.exit(1);
-      }
-    } catch (error) {
-      section("Django 3.2.23 is not installed. Please install Django 3.2.23 before running this script.");
-      process.exit(1);
-    }
-  }
-
   if (cookiecutterCheck) {
   // Check if Cookiecutter is installed
     try {
@@ -80,5 +61,25 @@ export function preExecuteChecks(djangoCheck = false, cookiecutterCheck = false)
       console.error("Cookiecutter is not installed. Please install Cookiecutter before running this script.");
       process.exit(1);
     }
+  }
+}
+
+export function preExecuteDjangoCheck() {
+  // Check if Django 3.2.23 is installed
+
+  try {
+    section("Checking Django version");
+    const djangoVersion = execSync("python -m django --version", {
+      cwd: userdir,
+      shell: true,
+      encoding: "utf8"
+    }).trim();
+    if (!djangoVersion.includes("3.2.23")) {
+      section(`Django 3.2.23 is not installed. Found version: ${djangoVersion}. Please install Django 3.2.23 before running this script.`);
+      process.exit(1);
+    }
+  } catch (error) {
+    section("Django 3.2.23 is not installed. Please install Django 3.2.23 before running this script.");
+    process.exit(1);
   }
 }
