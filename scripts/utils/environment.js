@@ -1,6 +1,7 @@
-import { execSync } from "node:child_process";
-import { section } from "../../utils.js";
+import { execSync, spawnSync } from "node:child_process";
+import { invalid, section } from "../../utils.js";
 import fs from "node:fs";
+import { DJANGO_VERSION } from "./constants.js";
 
 const userdir = process.cwd();
 
@@ -17,33 +18,41 @@ export function configurePython(options = execOptions) {
 export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false) {
   // Check if Node.js v18.x is installed
   try {
-    section("Checking Node version");
+    invalid("Checking Node version");
+
+    const userNode = spawnSync("node", ["--version"], {
+      cwd: userdir,
+      shell: true,
+      encoding: "utf8"
+    });
 
     const nvmrcPath = `${userdir}/.nvmrc`;
-    const currentNodeVersion = fs.readFileSync(nvmrcPath, "utf8").trim();
-    if (!currentNodeVersion.includes("v18")) {
-      section(`Node.js v18.x is not installed. Found version: ${currentNodeVersion}. Please install Node.js v18.16.0 before running this script.`);
-      process.exit(1);
+    const systemNodeVersion = fs.readFileSync(nvmrcPath, "utf8").trim().split(".").slice(0, -2).join(".");
+    if (!systemNodeVersion.includes(userNode)) {
+      invalid(`Found Node version: ${userNode}. Please install Node ${systemNodeVersion} before running this command.`);
     }
   } catch (error) {
-    section("Node.js v18.x is not installed. Please install Node.js v18.16.0 before running this script.");
-    process.exit(1);
+    invalid("Error detecting node version, please check install and  try again.");
   }
 
-  // Check if Python 3.8.17 is installed
+  // Check if Python 3.8.x is installed
   if (pythonCheck) {
     try {
-      section("Checking Python version");
+      invalid("Checking Python version");
 
       const pythonPath = `${userdir}/.python-version`;
-      const currentPythonVersion = fs.readFileSync(pythonPath, "utf8").trim();
-      if (!currentPythonVersion.includes("3.8")) {
-        section(`Python 3.8.x is not installed. Found version: ${currentPythonVersion}. Please install and try again.`);
-        process.exit(1);
+      const systemPython = fs.readFileSync(pythonPath, "utf8").trim().split(".").slice(0, -1).join(".");
+
+      const userPython = spawnSync("node", ["--version"], {
+        cwd: userdir,
+        shell: true,
+        encoding: "utf8"
+      });
+      if (!userPython.includes(systemPython)) {
+        invalid(`Found Python version: ${userPython}. Please install ${systemPython} and try again.`);
       }
     } catch (error) {
-      section("Python 3.8.x is not correctly installed. Please install and try again.");
-      process.exit(1);
+      invalid("Error detecting python version, please check install and try again.");
     }
   }
 
@@ -56,8 +65,7 @@ export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false)
         encoding: "utf8"
       });
     } catch (error) {
-      console.error("Cookiecutter is not installed. Please install Cookiecutter before running this command.");
-      process.exit(1);
+      invalid("Cookiecutter is not installed. Please install Cookiecutter before running this command.");
     }
   }
 }
@@ -72,12 +80,10 @@ export function preExecuteDjangoCheck() {
       shell: true,
       encoding: "utf8"
     }).trim();
-    if (!djangoVersion.includes("3.2.23")) {
-      section(`Django 3.2.23 is not installed. Found version: ${djangoVersion}. Please install Django 3.2.23 before running this script.`);
-      process.exit(1);
+    if (!djangoVersion.includes(DJANGO_VERSION)) {
+      invalid(`Found Django version: ${djangoVersion}. Please install ${DJANGO_VERSION} before running this command.`);
     }
   } catch (error) {
-    section("Django 3.2.23 is not installed. Please install Django 3.2.23 before running this script.");
-    process.exit(1);
+    invalid("Error detecting Django version, please check install and try again.");
   }
 }
