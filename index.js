@@ -36,7 +36,6 @@ import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
-import { sendAmplitudeEvent } from "./scripts/amplitude/scripts.js";
 import { preExecuteChecks, preExecuteDjangoCheck } from "./scripts/utils/environment.js";
 
 const pkg = JSON.parse(
@@ -73,14 +72,6 @@ function dispatcher() {
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
     invalid(`command doesn't exist: ${command}`);
   }
-
-  // define the properties to track
-  const eventProperties = {
-    full_command: process.argv.slice(2).join(" "), // all of the commands in the user input
-    action: command // Just the first command
-  };
-
-  sendAmplitudeEvent(eventProperties);
 
   return commands[command]();
 }
@@ -149,6 +140,7 @@ const commands = {
       "--type": String,
       "--target": String
     });
+
     if (!args["--name"]) {
       invalid("missing required argument: --name");
     }
@@ -160,6 +152,12 @@ const commands = {
         `invalid module name provided: '${args["--name"]}'. Use only alphanumeric characters, dashes and underscores.`
       );
     }
+
+    Amplitude.sendEvent({
+      name: "Create Module",
+      properties: { Name: args["--name"] }
+    });
+
     createModule(args["--name"], args["--type"], args["--target"], gitRoot());
   },
   commit: () => {
@@ -214,6 +212,7 @@ demo`;
     const args = arg({
       "--version": String
     });
+    Amplitude.sendEvent({ name: "Upgrade Scaffold" });
     upgradeScaffold(args["--version"]);
   },
   login: () => {
@@ -284,6 +283,7 @@ demo`;
 
     switch (action) {
       case "list":
+        Amplitude.sendEvent({ name: "List Modules" });
         modulesList({
           search: args["--search"],
           status: args["--status"],
@@ -300,6 +300,11 @@ demo`;
           );
         }
 
+        Amplitude.sendEvent({
+          name: "View Module Details",
+          properties: { "Module Id": id }
+        });
+
         modulesGet(id);
         break;
 
@@ -310,6 +315,11 @@ demo`;
             "Please provide the id of the module to archive, i.e. modules archive <123>"
           );
         }
+
+        Amplitude.sendEvent({
+          name: args["--unarchive"] ? "Unarchive Module" : "Archive Module",
+          properties: { "Module Id": id }
+        });
 
         modulesArchive(id, !!args["--unarchive"]);
         break;
@@ -333,6 +343,9 @@ demo`;
     }
   },
   publish: () => {
+    Amplitude.sendEvent({
+      name: "Publish Modules"
+    });
     publish();
   },
 
