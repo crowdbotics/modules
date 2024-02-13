@@ -15,7 +15,9 @@ export const logout = async () => {
     });
     configFile.save();
   } catch (e) {
-    return invalid("An error occurred while logging out. Please try again");
+    return invalid(
+      "An error occurred while logging out. Please try again later."
+    );
   }
   valid("Logout successful");
 };

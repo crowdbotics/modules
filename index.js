@@ -2,7 +2,7 @@
 /**
  * Crowdbotics Modules tool
  *
- * Run it anywhere with: npx crowdbotics/modules
+ * Run it anywhere with: cb
  *
  * Commands available:
  * - parse
@@ -36,7 +36,7 @@ import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
-import { sendAmplitudeEvent } from "./scripts/amplitude/scripts.js";
+import { Amplitude } from "./scripts/amplitude/wrapper.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -72,14 +72,6 @@ function dispatcher() {
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
     invalid(`command doesn't exist: ${command}`);
   }
-
-  // define the properties to track
-  const eventProperties = {
-    full_command: process.argv.slice(2).join(" "), // all of the commands in the user input
-    action: command // Just the first command
-  };
-
-  sendAmplitudeEvent(eventProperties);
 
   return commands[command]();
 }
@@ -142,6 +134,7 @@ const commands = {
       "--type": String,
       "--target": String
     });
+
     if (!args["--name"]) {
       invalid("missing required argument: --name");
     }
@@ -153,6 +146,12 @@ const commands = {
         `invalid module name provided: '${args["--name"]}'. Use only alphanumeric characters, dashes and underscores.`
       );
     }
+
+    Amplitude.sendEvent({
+      name: "Create Module",
+      properties: { Name: args["--name"] }
+    });
+
     createModule(args["--name"], args["--type"], args["--target"], gitRoot());
   },
   commit: () => {
@@ -206,6 +205,7 @@ demo`;
     const args = arg({
       "--version": String
     });
+    Amplitude.sendEvent({ name: "Upgrade Scaffold" });
     upgradeScaffold(args["--version"]);
   },
   login: () => {
@@ -275,6 +275,7 @@ demo`;
 
     switch (action) {
       case "list":
+        Amplitude.sendEvent({ name: "List Modules" });
         modulesList({
           search: args["--search"],
           status: args["--status"],
@@ -291,6 +292,11 @@ demo`;
           );
         }
 
+        Amplitude.sendEvent({
+          name: "View Module Details",
+          properties: { "Module Id": id }
+        });
+
         modulesGet(id);
         break;
 
@@ -301,6 +307,11 @@ demo`;
             "Please provide the id of the module to archive, i.e. modules archive <123>"
           );
         }
+
+        Amplitude.sendEvent({
+          name: args["--unarchive"] ? "Unarchive Module" : "Archive Module",
+          properties: { "Module Id": id }
+        });
 
         modulesArchive(id, !!args["--unarchive"]);
         break;
@@ -324,6 +335,9 @@ demo`;
     }
   },
   publish: () => {
+    Amplitude.sendEvent({
+      name: "Publish Modules"
+    });
     publish();
   },
 
@@ -355,7 +369,7 @@ demo`;
   },
 
   help: () => {
-    console.log(`usage: npx crowdbotics/modules <command>
+    console.log(`usage: cb <command>
 
 Commands available:
   parse    Parse and validate your modules
@@ -374,46 +388,46 @@ Commands available:
   modules  Manage modules for your organization
 
 Parse and validate your modules:
-  npx crowdbotics/modules parse --source <path>
+  cb parse --source <path>
 
 Parse modules and write the data to a json file:
-  npx crowdbotics/modules parse --source <path> --write <path>
+  cb parse --source <path> --write <path>
 
 Create a demo app:
-  npx crowdbotics/modules demo
+  cb demo
 
 Create a module of a given type:
-  npx crowdbotics/modules create --name <module-name> --type <all/react-native/django>
+  cb create --name <module-name> --type <all/react-native/django>
 
 Initialize a modules repository:
-  npx crowdbotics/modules init --name <my-modules-repository-name>
+  cb init --name <my-modules-repository-name>
 
 Upgrade your scaffold to the latest master:
-  npx crowdbotics/modules upgrade
+  cb upgrade
 
 Upgrade your scaffold to a specific version (git tag, git commit or branch name):
-  npx crowdbotics/modules upgrade --version 2.3.0
+  cb upgrade --version 2.3.0
 
 Install one or modules to your demo app:
-  npx crowdbotics/modules add <module-name> <module-name-2>
+  cb add <module-name> <module-name-2>
 
 Remove one or modules from your demo app:
-  npx crowdbotics/modules remove <module-name> <module-name-2>
+  cb remove <module-name> <module-name-2>
 
 Install modules from other directory:
-  npx crowdbotics/modules add --source ../other-repository <module-name>
+  cb add --source ../other-repository <module-name>
 
 Install modules to other app that is not "demo":
-  npx crowdbotics/modules add --project ../other-project <module-name>
+  cb add --project ../other-project <module-name>
 
 Remove modules from app that is not "demo":
-  npx crowdbotics/modules remove --project ../other-project <module-name>
+  cb remove --project ../other-project <module-name>
 
 Update a module definition from the demo app:
-  npx crowdbotics/modules commit <module-name>
+  cb commit <module-name>
 
 Update a module definition from other app:
-  npx crowdbotics/modules commit <module-name> --source <path>
+  cb commit <module-name> --source <path>
 
 Glossary:
   <module-name> stands for the name of the directory where the module is defined.

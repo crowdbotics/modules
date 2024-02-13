@@ -50,7 +50,7 @@ export const modulesList = async ({
     });
 
     if (!response.ok) {
-      invalid("Failed to catalog modules. Please log in and try again.");
+      invalid("Failed to load catalog modules. Please try again later.");
     }
 
     const searchBody = await response.json();
@@ -93,7 +93,7 @@ export const modulesList = async ({
       );
     }
   } catch {
-    invalid("Unable to get modules. Please login and try again.");
+    invalid("Unable to get modules. Please try again later.");
   } finally {
     loadingSpinner.stop();
   }
@@ -112,7 +112,7 @@ export const modulesGet = async (id) => {
     if (moduleResponse.status === 404) {
       invalid(`Cannot find requested module with id ${id}.`);
     } else {
-      invalid("Unable to get module. Please login and try again.");
+      invalid("Unable to get module. Please try again later.");
     }
 
     return;
@@ -148,7 +148,7 @@ export const modulesArchive = async (id, unarchive = false) => {
     if (moduleResponse.status === 404) {
       invalid(`Cannot find requested module with id ${id}.`);
     } else {
-      invalid("Unable to get module. Please login and try again.");
+      invalid("Unable to get module. Please try again later.");
     }
 
     return;
