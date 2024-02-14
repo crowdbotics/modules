@@ -86,7 +86,6 @@ const commands = {
     valid("demo app successfully generated");
   },
   parse: () => {
-    preExecuteChecks();
     const args = arg({
       "--source": String,
       "--write": String
@@ -109,7 +108,7 @@ const commands = {
     }
   },
   add: () => {
-    preExecuteChecks(true);
+    preExecuteChecks();
     const args = arg({
       "--source": String,
       "--project": String
@@ -121,7 +120,6 @@ const commands = {
     addModules(modules, args["--source"], args["--project"], gitRoot());
   },
   remove: () => {
-    preExecuteChecks();
     const args = arg({
       "--source": String,
       "--project": String
@@ -133,7 +131,7 @@ const commands = {
     removeModules(modules, args["--source"], args["--project"], gitRoot());
   },
   create: () => {
-    preExecuteChecks(true, true);
+    preExecuteChecks(true);
     const args = arg({
       "--name": String,
       "--type": String,
@@ -160,7 +158,6 @@ const commands = {
     createModule(args["--name"], args["--type"], args["--target"], gitRoot());
   },
   commit: () => {
-    preExecuteChecks();
     const args = arg({
       "--source": String
     });
@@ -171,7 +168,6 @@ const commands = {
     commitModules(modules, args["--source"], gitRoot());
   },
   init: () => {
-    preExecuteChecks();
     const args = arg({
       "--name": String
     });
@@ -216,19 +212,15 @@ demo`;
     upgradeScaffold(args["--version"]);
   },
   login: () => {
-    preExecuteChecks();
     login();
   },
   logout: () => {
-    preExecuteChecks();
     logout();
   },
   info: () => {
-    preExecuteChecks();
     info();
   },
   config: () => {
-    preExecuteChecks();
     const args = arg({});
 
     const action = args._[1];
@@ -266,7 +258,6 @@ demo`;
   },
 
   modules: () => {
-    preExecuteChecks();
     const args = arg({
       "--search": String,
       "--visibility": String,
@@ -347,7 +338,6 @@ demo`;
     }
   },
   publish: () => {
-    preExecuteChecks();
     Amplitude.sendEvent({
       name: "Publish Modules"
     });
@@ -355,7 +345,6 @@ demo`;
   },
 
   feedback: () => {
-    preExecuteChecks();
     const args = arg({});
     const action = args._[1];
 
