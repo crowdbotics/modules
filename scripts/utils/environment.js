@@ -1,6 +1,5 @@
 import { execSync, spawnSync } from "node:child_process";
 import { invalid, section } from "../../utils.js";
-import fs from "node:fs";
 
 const userdir = process.cwd();
 
@@ -20,16 +19,16 @@ export function preExecuteChecks(cookiecutterCheck = false) {
   try {
     section("Checking Python version");
 
-    const pythonPath = `${userdir}/.python-version`;
-    const systemPython = fs.readFileSync(pythonPath, "utf8").trim().split(".").slice(0, -1).join(".");
+    const pythonVersionRegex = /Python 3\.[0-9]*/;
 
-    const userPython = spawnSync("node", ["--version"], {
+    const pythonCheck = spawnSync("python", ["--version"], {
       cwd: userdir,
       shell: true,
       encoding: "utf8"
     });
-    if (!userPython.includes(systemPython)) {
-      invalid(`Found Python version: ${userPython}. Please install ${systemPython} and try again.`);
+    const userPythonVersion = pythonCheck.stdout || pythonCheck.stderr;
+    if (!pythonVersionRegex.test(userPythonVersion)) {
+      invalid(`Found Python version: ${userPythonVersion}. Please install 3.x and try again.`);
     }
   } catch (error) {
     invalid("Error detecting python version, please check install and try again.");
