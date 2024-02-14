@@ -18,7 +18,7 @@ export function configurePython(options = execOptions) {
 export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false) {
   // Check if Node.js v18.x is installed
   try {
-    invalid("Checking Node version");
+    section("Checking Node version");
 
     const userNode = spawnSync("node", ["--version"], {
       cwd: userdir,
@@ -38,7 +38,7 @@ export function preExecuteChecks(pythonCheck = false, cookiecutterCheck = false)
   // Check if Python 3.8.x is installed
   if (pythonCheck) {
     try {
-      invalid("Checking Python version");
+      section("Checking Python version");
 
       const pythonPath = `${userdir}/.python-version`;
       const systemPython = fs.readFileSync(pythonPath, "utf8").trim().split(".").slice(0, -1).join(".");
