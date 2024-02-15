@@ -36,6 +36,7 @@ import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
+import { preExecuteChecks } from "./scripts/utils/environment.js";
 import { Amplitude } from "./scripts/amplitude/wrapper.js";
 
 const pkg = JSON.parse(
@@ -78,6 +79,7 @@ function dispatcher() {
 
 const commands = {
   demo: () => {
+    preExecuteChecks();
     createDemo(
       path.join(gitRoot(), "demo"),
       path.join(sourceDir, "cookiecutter.yaml")
@@ -107,6 +109,7 @@ const commands = {
     }
   },
   add: () => {
+    preExecuteChecks();
     const args = arg({
       "--source": String,
       "--project": String
@@ -129,6 +132,7 @@ const commands = {
     removeModules(modules, args["--source"], args["--project"], gitRoot());
   },
   create: () => {
+    preExecuteChecks(true);
     const args = arg({
       "--name": String,
       "--type": String,
