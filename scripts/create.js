@@ -33,15 +33,21 @@ function generateDjangoFiles(base, name, relative = "/") {
   const sanitizedName = name.replaceAll("-", "_");
   const djangoName = `django_${sanitizedName}`;
   const basePath = path.join(base, relative, djangoName);
+  const innerAppPath = path.join(basePath, sanitizedName);
 
-  fs.mkdirSync(basePath, { recursive: true });
-  execSync(`cd ${basePath}`, execOptions);
+  fs.mkdirSync(innerAppPath, { recursive: true });
+  execSync(`cd ${innerAppPath}`, execOptions);
   configurePython();
   execSync("pipenv install django==3.2.23", execOptions);
   execSync(
-    `pipenv run django-admin startapp ${sanitizedName} ${basePath}`,
+    `pipenv run django-admin startapp ${sanitizedName} ${innerAppPath}`,
     execOptions
   );
+
+  const appsFileData = fs.readFileSync(`${innerAppPath}/apps.py`, "utf8");
+  const result = appsFileData.replace(/name = '.*'/, `name = 'modules.django_${sanitizedName}.${sanitizedName}'`);
+  fs.writeFileSync(`${innerAppPath}/apps.py`, result, "utf8");
+
   fs.writeFileSync(
     path.join(base, relative, djangoName, "setup.py"),
     setupPy(sanitizedName),

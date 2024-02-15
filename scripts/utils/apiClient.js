@@ -6,6 +6,7 @@ import {
 } from "./constants.js";
 import fetch from "node-fetch";
 import { formatUrlPath } from "./url.js";
+import { invalid } from "../../utils.js";
 
 class ApiClient {
   get(options) {
@@ -29,7 +30,7 @@ class ApiClient {
     return `Token ${token}`;
   }
 
-  _request({ path, body, method, params, anonymous }) {
+  async _request({ path, body, method, params, anonymous }) {
     const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
     let url = `${formatUrlPath(host)}/api/${formatUrlPath(path)}/`;
 
@@ -37,7 +38,7 @@ class ApiClient {
       url += "?" + new URLSearchParams(params).toString();
     }
 
-    return fetch(url, {
+    const response = await fetch(url, {
       body: body ? JSON.stringify(body) : undefined,
       headers: {
         accept: "application/json",
@@ -46,6 +47,16 @@ class ApiClient {
       },
       method: method
     });
+
+    if (response.status === 401) {
+      // Flush newline before printing error in case console is in loading state.
+      console.log("");
+      invalid(
+        "Invalid token. Please login and try again.\nRun `cb login` to get started."
+      );
+    }
+
+    return response;
   }
 }
 

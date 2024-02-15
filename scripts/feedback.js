@@ -11,12 +11,10 @@ export const sendFeedback = async (message) => {
       body: { message }
     });
 
-    if (response.status === 401) {
-      return invalid("There was an error sending your feedback. Please ensure you have logged in with the 'login' command, then try again.");
-    }
-
     if (!response.ok) {
-      return invalid("Unable to send feedback at this time, please try again.");
+      return invalid(
+        "Unable to send feedback at this time, please try again later."
+      );
     }
   } catch (error) {
     return invalid(error);
