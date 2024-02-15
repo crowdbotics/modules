@@ -9,7 +9,7 @@ import {
   indexJs,
   generateMeta
 } from "./utils/templates.js";
-import { execOptions, configurePython, preExecuteDjangoCheck } from "./utils/environment.js";
+import { execOptions, configurePython } from "./utils/environment.js";
 
 function generateRNFiles(base, name, relative = "/") {
   if (relative !== "/") {
@@ -96,7 +96,6 @@ export function createModule(name, type, target, gitRoot) {
     section(`generating ${name} module (${type})`);
     switch (type) {
       case "all":
-        preExecuteDjangoCheck();
         generateDjangoFiles(dir, name, "/backend/modules");
         generateRNFiles(dir, name, `/modules/${name}`);
         break;
@@ -104,7 +103,6 @@ export function createModule(name, type, target, gitRoot) {
         generateRNFiles(dir, name);
         break;
       case "django":
-        preExecuteDjangoCheck();
         generateDjangoFiles(dir, name);
         break;
     }
