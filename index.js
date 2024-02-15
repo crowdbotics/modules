@@ -36,7 +36,6 @@ import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
-import { preExecuteChecks } from "./scripts/utils/environment.js";
 import { Amplitude } from "./scripts/amplitude/wrapper.js";
 
 const pkg = JSON.parse(
