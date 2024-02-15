@@ -79,6 +79,7 @@ function dispatcher() {
 
 const commands = {
   demo: () => {
+    preExecuteChecks();
     createDemo(
       path.join(gitRoot(), "demo"),
       path.join(sourceDir, "cookiecutter.yaml")
