@@ -40,3 +40,4 @@ jobs:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
           JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
           release_branch: ${{ github.event.client_payload.release_branch }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
