@@ -1,9 +1,13 @@
 import { configFile } from "../utils/configFile.js";
-import { AMPLITUDE_API_KEY, OPT_IN_NAME } from "./config.js";
-import { init, track, Identify, identify } from "@amplitude/analytics-node";
+import { SEGMENT_API_KEY, OPT_IN_NAME } from "./config.js";
 import { currentUser } from "../utils/user.js";
+import { Analytics } from "@segment/analytics-node";
 
-class AmplitudeWrapper {
+class AnalyticsWrapper {
+  constructor() {
+    this.analytics = null;
+  }
+
   get userType() {
     // TODO: Implement once we have the data available in the UserSerializer
     return undefined;
@@ -26,13 +30,15 @@ class AmplitudeWrapper {
     };
   }
 
-  async init({ token = AMPLITUDE_API_KEY, options = {} } = {}) {
+  async init({ token = SEGMENT_API_KEY, options = {} } = {}) {
     if (!this.optedIn || !token) return;
 
     try {
-      await init(token, { ...options, includeUtm: true }).promise;
+      this.analytics = new Analytics({
+        writeKey: token
+      });
     } catch {
-      // Ignore errors during initialization
+      // Ignore errors during initialization - TODO: log to sentry
     }
   }
 
@@ -40,9 +46,14 @@ class AmplitudeWrapper {
     await currentUser.setUser(user);
     if (!currentUser.get("email")) return;
 
-    const identifyEvent = new Identify();
-    identifyEvent.set("Django Id", currentUser.get("id"));
-    identify(identifyEvent, { user_id: currentUser.get("email") });
+    this.analytics.identify({
+      userId: currentUser.get("email"),
+      traits: {
+        name: currentUser.first_name,
+        email: currentUser.get("email"),
+        "Django Id": currentUser.get("id")
+      }
+    });
   }
 
   async sendEvent({ name, properties = {}, user }) {
@@ -60,7 +71,11 @@ class AmplitudeWrapper {
           ...this.userProps
         };
 
-        await track(name, updatedProps, { user_id: userEmail }).promise;
+        this.analytics.track({
+          userId: userEmail,
+          event: name,
+          properties: updatedProps
+        });
       }
     } catch (error) {
       console.warn("Error handling analytics - skipping");
@@ -68,4 +83,4 @@ class AmplitudeWrapper {
   }
 }
 
-export const Amplitude = new AmplitudeWrapper();
+export const analytics = new AnalyticsWrapper();

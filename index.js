@@ -37,7 +37,7 @@ import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
 import { preExecuteChecks } from "./scripts/utils/environment.js";
-import { Amplitude } from "./scripts/amplitude/wrapper.js";
+import { analytics } from "./scripts/analytics/wrapper.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -151,7 +151,7 @@ const commands = {
       );
     }
 
-    Amplitude.sendEvent({
+    analytics.sendEvent({
       name: "Create Module",
       properties: { Name: args["--name"] }
     });
@@ -209,7 +209,7 @@ demo`;
     const args = arg({
       "--version": String
     });
-    Amplitude.sendEvent({ name: "Upgrade Scaffold" });
+    analytics.sendEvent({ name: "Upgrade Scaffold" });
     upgradeScaffold(args["--version"]);
   },
   login: () => {
@@ -279,7 +279,7 @@ demo`;
 
     switch (action) {
       case "list":
-        Amplitude.sendEvent({ name: "List Modules" });
+        analytics.sendEvent({ name: "List Modules" });
         modulesList({
           search: args["--search"],
           status: args["--status"],
@@ -296,7 +296,7 @@ demo`;
           );
         }
 
-        Amplitude.sendEvent({
+        analytics.sendEvent({
           name: "View Module Details",
           properties: { "Module Id": id }
         });
@@ -312,7 +312,7 @@ demo`;
           );
         }
 
-        Amplitude.sendEvent({
+        analytics.sendEvent({
           name: args["--unarchive"] ? "Unarchive Module" : "Archive Module",
           properties: { "Module Id": id }
         });
@@ -339,7 +339,7 @@ demo`;
     }
   },
   publish: () => {
-    Amplitude.sendEvent({
+    analytics.sendEvent({
       name: "Publish Modules"
     });
     publish();
@@ -363,7 +363,7 @@ demo`;
 
         Please contact Support for help using Crowdbotics or to report errors, bugs, and
         other issues.
-        https://crowdbotics-slack-dev.crowdbotics.com/dashboard/user/support
+        https://app.crowdbotics.com/dashboard/user/support
         `);
         break;
 

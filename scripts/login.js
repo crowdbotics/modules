@@ -1,6 +1,6 @@
 import { valid, invalid, section } from "../utils.js";
-import { HAS_ASKED_OPT_IN_NAME } from "./amplitude/config.js";
-import { askOptIn } from "./amplitude/scripts.js";
+import { HAS_ASKED_OPT_IN_NAME } from "./analytics/config.js";
+import { askOptIn } from "./analytics/scripts.js";
 import { apiClient } from "./utils/apiClient.js";
 import { performLogin } from "./utils/auth.js";
 import { configFile } from "./utils/configFile.js";
