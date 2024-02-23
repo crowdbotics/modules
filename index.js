@@ -38,6 +38,8 @@ import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
 import { preExecuteChecks } from "./scripts/utils/environment.js";
 import { analytics } from "./scripts/analytics/wrapper.js";
+import { HAS_ASKED_OPT_IN_NAME } from "./scripts/analytics/config.js";
+import { askOptIn } from "./scripts/analytics/scripts.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -63,7 +65,13 @@ Visit our official documentation for more information and try again: https://doc
   }
 };
 
-function dispatcher() {
+async function dispatcher() {
+  // check config if they have been asked opted in or out of amplitude
+  const hasAskedOptIn = configFile.get(HAS_ASKED_OPT_IN_NAME) || false;
+  if (!hasAskedOptIn) {
+    await askOptIn();
+  }
+
   const command = process.argv[2];
 
   if (!command) {
@@ -74,7 +82,17 @@ function dispatcher() {
     invalid(`command doesn't exist: ${command}`);
   }
 
-  return commands[command]();
+  commands[command]();
+
+  if (!analytics.event.name) {
+    analytics.sendEvent({
+      name: "Other CLI Commands",
+      properties: {
+        command,
+        fullCommand: process.argv.slice(2, process.argv.length).join(" ")
+      }
+    });
+  }
 }
 
 const commands = {

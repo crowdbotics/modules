@@ -6,6 +6,7 @@ import { Analytics } from "@segment/analytics-node";
 class AnalyticsWrapper {
   constructor() {
     this.analytics = null;
+    this.event = { name: "", properties: {} };
   }
 
   get userType() {
@@ -64,19 +65,19 @@ class AnalyticsWrapper {
       await this.loadAndIdentify(user);
 
       const userEmail = currentUser.get("email");
-      if (userEmail) {
-        const updatedProps = {
-          ...properties,
-          ...this.appProps,
-          ...this.userProps
-        };
 
-        this.analytics.track({
-          userId: userEmail,
-          event: name,
-          properties: updatedProps
-        });
-      }
+      const updatedProps = {
+        ...properties,
+        ...this.appProps,
+        ...this.userProps
+      };
+
+      this.analytics.track({
+        userId: userEmail,
+        anonymousId: !userEmail ? `${new Date().valueOf()}` : undefined,
+        event: name,
+        properties: updatedProps
+      });
     } catch (error) {
       console.warn("Error handling analytics - skipping");
     }
