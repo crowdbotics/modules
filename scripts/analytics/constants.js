@@ -1,5 +1,5 @@
-export const PRODUCTION_SEGMENT_KEY = "b48a6aaef8d0ac8df1f2a78196473f06";
-export const DEVELOPMENT_SEGMENT_KEY = "8fa9ae919aaf5bbfb85f8275b734b11c";
+export const PRODUCTION_SEGMENT_KEY = "J7ScSXeIOb8KrCJT8HHcMr7yDRDdCsUw";
+export const DEVELOPMENT_SEGMENT_KEY = "WrYiRf1pEB74S4RhSDKC0rQ3db3uVHiE";
 
 export const CUSTOMER_TYPE = {
   SMB: "SMB",
