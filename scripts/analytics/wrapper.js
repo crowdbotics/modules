@@ -30,7 +30,7 @@ class AnalyticsWrapper {
     };
   }
 
-  async init({ token = SEGMENT_API_KEY, options = {} } = {}) {
+  init({ token = SEGMENT_API_KEY, options = {} } = {}) {
     if (!this.optedIn || !token) return;
 
     try {
@@ -60,7 +60,7 @@ class AnalyticsWrapper {
     if (!this.optedIn) return;
 
     try {
-      await this.init();
+      this.init();
       await this.loadAndIdentify(user);
 
       const userEmail = currentUser.get("email");
