@@ -296,11 +296,6 @@ demo`;
           );
         }
 
-        analytics.sendEvent({
-          name: "View Module Details",
-          properties: { "Module Id": id }
-        });
-
         modulesGet(id);
         break;
 
@@ -311,11 +306,6 @@ demo`;
             "Please provide the id of the module to archive, i.e. modules archive <123>"
           );
         }
-
-        analytics.sendEvent({
-          name: args["--unarchive"] ? "Unarchive Module" : "Archive Module",
-          properties: { "Module Id": id }
-        });
 
         modulesArchive(id, !!args["--unarchive"]);
         break;

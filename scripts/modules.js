@@ -6,7 +6,9 @@ import { getCurrentUserOrganization } from "./utils/organization.js";
 import Table from "cli-table";
 import ora from "ora";
 import { formatUrlPath } from "./utils/url.js";
+import { capitalize } from "./utils/strings.js";
 import inquirer from "inquirer";
+import { analytics } from "./analytics/wrapper.js";
 
 const MODULES_PAGE_LIMIT = 50;
 
@@ -120,6 +122,11 @@ export const modulesGet = async (id) => {
 
   const module = await moduleResponse.json();
 
+  analytics.sendEvent({
+    name: "View Module Details",
+    properties: { "Module Id": id, Name: module.title }
+  });
+
   section(`Name: \n${module.title}`);
   section(`Description: \n${module.description}`);
   section(`ID: \n${module.id}`);
@@ -157,6 +164,11 @@ export const modulesArchive = async (id, unarchive = false) => {
   const verb = unarchive ? "unarchive" : "archive";
 
   const module = await moduleResponse.json();
+
+  analytics.sendEvent({
+    name: `${capitalize(verb)} Module`,
+    properties: { "Module Id": id, Name: module.title }
+  });
 
   // Verify that the user understands which organization the modules are being published to.
   const { ok } = await inquirer.prompt({
