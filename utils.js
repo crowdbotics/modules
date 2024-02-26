@@ -27,4 +27,4 @@ export const isNameValid = (name) => {
   return pattern.test(name);
 };
 
-export const isUserEnvironment = () => !process?.env?.CI;
+export const isUserEnvironment = !process?.env?.CI && !process?.env?.CIRCLE_JOB;
