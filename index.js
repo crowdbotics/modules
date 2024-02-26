@@ -28,7 +28,7 @@ import { info } from "./scripts/info.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
-import { valid, invalid, isNameValid, section } from "./utils.js";
+import { valid, invalid, isNameValid, section, isUserEnvironment } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
@@ -39,6 +39,7 @@ import { publish } from "./scripts/publish.js";
 import { preExecuteChecks } from "./scripts/utils/environment.js";
 import { analytics } from "./scripts/analytics/wrapper.js";
 import { HAS_ASKED_OPT_IN_NAME } from "./scripts/analytics/config.js";
+import { EVENT } from "./scripts/analytics/constants.js";
 import { askOptIn } from "./scripts/analytics/scripts.js";
 
 const pkg = JSON.parse(
@@ -68,7 +69,7 @@ Visit our official documentation for more information and try again: https://doc
 async function dispatcher() {
   // check config if they have been asked opted in or out of amplitude
   const hasAskedOptIn = configFile.get(HAS_ASKED_OPT_IN_NAME) || false;
-  if (!hasAskedOptIn) {
+  if (!hasAskedOptIn && isUserEnvironment) {
     await askOptIn();
   }
 
@@ -82,11 +83,11 @@ async function dispatcher() {
     invalid(`command doesn't exist: ${command}`);
   }
 
-  commands[command]();
+  await commands[command]();
 
   if (!analytics.event.name) {
     analytics.sendEvent({
-      name: "Other CLI Commands",
+      name: EVENT.OTHER,
       properties: {
         command,
         fullCommand: process.argv.slice(2, process.argv.length).join(" ")
@@ -170,7 +171,7 @@ const commands = {
     }
 
     analytics.sendEvent({
-      name: "Create Module",
+      name: EVENT.CREATE_MODULE,
       properties: { Name: args["--name"] }
     });
 
@@ -227,7 +228,7 @@ demo`;
     const args = arg({
       "--version": String
     });
-    analytics.sendEvent({ name: "Upgrade Scaffold" });
+    analytics.sendEvent({ name: EVENT.UPGRADE });
     upgradeScaffold(args["--version"]);
   },
   login: () => {
@@ -276,7 +277,7 @@ demo`;
     }
   },
 
-  modules: () => {
+  modules: async () => {
     const args = arg({
       "--search": String,
       "--visibility": String,
@@ -297,8 +298,8 @@ demo`;
 
     switch (action) {
       case "list":
-        analytics.sendEvent({ name: "List Modules" });
-        modulesList({
+        analytics.sendEvent({ name: EVENT.LIST_MODULES });
+        await modulesList({
           search: args["--search"],
           status: args["--status"],
           visibility: args["--visibility"],
@@ -314,7 +315,7 @@ demo`;
           );
         }
 
-        modulesGet(id);
+        await modulesGet(id);
         break;
 
       case "archive":
@@ -325,7 +326,7 @@ demo`;
           );
         }
 
-        modulesArchive(id, !!args["--unarchive"]);
+        await modulesArchive(id, !!args["--unarchive"]);
         break;
 
       case "help":
@@ -348,7 +349,7 @@ demo`;
   },
   publish: () => {
     analytics.sendEvent({
-      name: "Publish Modules"
+      name: EVENT.PUBLISH_MODULES
     });
     publish();
   },

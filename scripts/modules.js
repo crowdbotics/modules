@@ -6,9 +6,9 @@ import { getCurrentUserOrganization } from "./utils/organization.js";
 import Table from "cli-table";
 import ora from "ora";
 import { formatUrlPath } from "./utils/url.js";
-import { capitalize } from "./utils/strings.js";
 import inquirer from "inquirer";
 import { analytics } from "./analytics/wrapper.js";
+import { EVENT } from "./analytics/constants.js";
 
 const MODULES_PAGE_LIMIT = 50;
 
@@ -123,7 +123,7 @@ export const modulesGet = async (id) => {
   const module = await moduleResponse.json();
 
   analytics.sendEvent({
-    name: "View Module Details",
+    name: EVENT.VIEW_MODULE,
     properties: { "Module Id": id, Name: module.title }
   });
 
@@ -166,7 +166,7 @@ export const modulesArchive = async (id, unarchive = false) => {
   const module = await moduleResponse.json();
 
   analytics.sendEvent({
-    name: `${capitalize(verb)} Module`,
+    name: EVENT[`${verb.toUpperCase()}_MODULE`],
     properties: { "Module Id": id, Name: module.title }
   });
 

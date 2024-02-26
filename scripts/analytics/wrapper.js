@@ -57,7 +57,9 @@ class AnalyticsWrapper {
     });
   }
 
-  async sendEvent({ name, properties = {}, user }) {
+  async sendEvent(event) {
+    this.event = event;
+    const { name, properties = {}, user } = this.event;
     if (!this.optedIn) return;
 
     try {
