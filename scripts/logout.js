@@ -1,6 +1,7 @@
 import { invalid, section, valid } from "../utils.js";
 import { REQUIRED_USER_PROPS } from "./login.js";
 import { performLogout } from "./utils/auth.js";
+import { TOKEN_CONFIG_NAME } from "./utils/constants.js";
 import { configFile } from "./utils/configFile.js";
 
 export const logout = async () => {
@@ -13,6 +14,7 @@ export const logout = async () => {
     REQUIRED_USER_PROPS.forEach((key) => {
       configFile.set(key, "");
     });
+    configFile.set(TOKEN_CONFIG_NAME, "");
     configFile.save();
   } catch (e) {
     return invalid(

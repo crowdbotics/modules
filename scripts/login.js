@@ -1,6 +1,4 @@
 import { valid, invalid, section } from "../utils.js";
-import { HAS_ASKED_OPT_IN_NAME } from "./amplitude/config.js";
-import { askOptIn } from "./amplitude/scripts.js";
 import { apiClient } from "./utils/apiClient.js";
 import { performLogin } from "./utils/auth.js";
 import { configFile } from "./utils/configFile.js";
@@ -16,12 +14,6 @@ export const login = async () => {
   }
 
   valid("Login Successful!");
-
-  // check config if they have been asked opted in or out of amplitude
-  const hasAskedOptIn = configFile.get(HAS_ASKED_OPT_IN_NAME) || false;
-  if (!hasAskedOptIn) {
-    await askOptIn();
-  }
 
   // set user properties to file
   try {

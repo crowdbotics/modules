@@ -1,4 +1,6 @@
 import { apiClient } from "./apiClient.js";
+import { TOKEN_CONFIG_NAME } from "./constants.js";
+import { configFile } from "./configFile.js";
 
 /**
  * A more generic approach to cache the current user information for a session.
@@ -21,19 +23,19 @@ class User {
   }
 
   async load() {
-    try {
-      const response = await apiClient.get({
-        path: "/v2/user/"
-      });
-      if (!response.ok) return {};
+    if (configFile.get(TOKEN_CONFIG_NAME)) {
+      try {
+        const response = await apiClient.get({
+          path: "/v2/user/"
+        });
+        if (!response.ok) return {};
 
-      const userBody = await response.json();
-
-      this.user = userBody;
-    } catch {
-      this.user = {};
+        return await response.json();
+      } catch {
+        return {};
+      }
     }
-    return this.user;
+    return {};
   }
 }
 

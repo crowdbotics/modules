@@ -28,7 +28,7 @@ import { info } from "./scripts/info.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
-import { valid, invalid, isNameValid, section } from "./utils.js";
+import { valid, invalid, isNameValid, section, isUserEnvironment } from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
@@ -37,7 +37,10 @@ import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
 import { preExecuteChecks } from "./scripts/utils/environment.js";
-import { Amplitude } from "./scripts/amplitude/wrapper.js";
+import { analytics } from "./scripts/analytics/wrapper.js";
+import { HAS_ASKED_OPT_IN_NAME } from "./scripts/analytics/config.js";
+import { EVENT } from "./scripts/analytics/constants.js";
+import { askOptIn } from "./scripts/analytics/scripts.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -63,7 +66,13 @@ Visit our official documentation for more information and try again: https://doc
   }
 };
 
-function dispatcher() {
+async function dispatcher() {
+  // check config if they have been asked opted in or out of amplitude
+  const hasAskedOptIn = configFile.get(HAS_ASKED_OPT_IN_NAME) || false;
+  if (!hasAskedOptIn && isUserEnvironment) {
+    await askOptIn();
+  }
+
   const command = process.argv[2];
 
   if (!command) {
@@ -74,7 +83,17 @@ function dispatcher() {
     invalid(`command doesn't exist: ${command}`);
   }
 
-  return commands[command]();
+  await commands[command]();
+
+  if (!analytics.event.name) {
+    analytics.sendEvent({
+      name: EVENT.OTHER,
+      properties: {
+        command,
+        fullCommand: process.argv.slice(2, process.argv.length).join(" ")
+      }
+    });
+  }
 }
 
 const commands = {
@@ -151,8 +170,8 @@ const commands = {
       );
     }
 
-    Amplitude.sendEvent({
-      name: "Create Module",
+    analytics.sendEvent({
+      name: EVENT.CREATE_MODULE,
       properties: { Name: args["--name"] }
     });
 
@@ -209,7 +228,7 @@ demo`;
     const args = arg({
       "--version": String
     });
-    Amplitude.sendEvent({ name: "Upgrade Scaffold" });
+    analytics.sendEvent({ name: EVENT.UPGRADE });
     upgradeScaffold(args["--version"]);
   },
   login: () => {
@@ -258,7 +277,7 @@ demo`;
     }
   },
 
-  modules: () => {
+  modules: async () => {
     const args = arg({
       "--search": String,
       "--visibility": String,
@@ -279,8 +298,8 @@ demo`;
 
     switch (action) {
       case "list":
-        Amplitude.sendEvent({ name: "List Modules" });
-        modulesList({
+        analytics.sendEvent({ name: EVENT.LIST_MODULES });
+        await modulesList({
           search: args["--search"],
           status: args["--status"],
           visibility: args["--visibility"],
@@ -296,12 +315,7 @@ demo`;
           );
         }
 
-        Amplitude.sendEvent({
-          name: "View Module Details",
-          properties: { "Module Id": id }
-        });
-
-        modulesGet(id);
+        await modulesGet(id);
         break;
 
       case "archive":
@@ -312,12 +326,7 @@ demo`;
           );
         }
 
-        Amplitude.sendEvent({
-          name: args["--unarchive"] ? "Unarchive Module" : "Archive Module",
-          properties: { "Module Id": id }
-        });
-
-        modulesArchive(id, !!args["--unarchive"]);
+        await modulesArchive(id, !!args["--unarchive"]);
         break;
 
       case "help":
@@ -339,8 +348,8 @@ demo`;
     }
   },
   publish: () => {
-    Amplitude.sendEvent({
-      name: "Publish Modules"
+    analytics.sendEvent({
+      name: EVENT.PUBLISH_MODULES
     });
     publish();
   },
@@ -363,7 +372,7 @@ demo`;
 
         Please contact Support for help using Crowdbotics or to report errors, bugs, and
         other issues.
-        https://crowdbotics-slack-dev.crowdbotics.com/dashboard/user/support
+        https://app.crowdbotics.com/dashboard/user/support
         `);
         break;
 
