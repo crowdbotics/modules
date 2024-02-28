@@ -67,9 +67,12 @@ Visit our official documentation for more information and try again: https://doc
 };
 
 async function dispatcher() {
+  const args = arg({
+    "--yes": Boolean
+  });
   // check config if they have been asked opted in or out of amplitude
   const hasAskedOptIn = configFile.get(HAS_ASKED_OPT_IN_NAME) || false;
-  if (!hasAskedOptIn && isUserEnvironment) {
+  if (!hasAskedOptIn && isUserEnvironment && !args["--yes"]) {
     await askOptIn();
   }
 
@@ -85,7 +88,7 @@ async function dispatcher() {
 
   await commands[command]();
 
-  if (!analytics.event.name) {
+  if (!analytics.event.name && !args["--yes"]) {
     analytics.sendEvent({
       name: EVENT.OTHER,
       properties: {
