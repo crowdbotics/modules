@@ -28,7 +28,13 @@ import { info } from "./scripts/info.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
-import { valid, invalid, isNameValid, section, isUserEnvironment } from "./utils.js";
+import {
+  valid,
+  invalid,
+  isNameValid,
+  section,
+  isUserEnvironment
+} from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
@@ -41,6 +47,7 @@ import { analytics } from "./scripts/analytics/wrapper.js";
 import { HAS_ASKED_OPT_IN_NAME } from "./scripts/analytics/config.js";
 import { EVENT } from "./scripts/analytics/constants.js";
 import { askOptIn } from "./scripts/analytics/scripts.js";
+import { sentryMonitoring } from "./scripts/utils/sentry.js";
 
 const pkg = JSON.parse(
   fs.readFileSync(new URL("package.json", import.meta.url), "utf8")
@@ -82,6 +89,8 @@ async function dispatcher() {
   if (!Object.prototype.hasOwnProperty.call(commands, command)) {
     invalid(`command doesn't exist: ${command}`);
   }
+
+  sentryMonitoring.registerCommandName(command);
 
   await commands[command]();
 
