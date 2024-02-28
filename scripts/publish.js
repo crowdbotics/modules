@@ -153,7 +153,18 @@ export const publish = async () => {
   publishSpinner.stop();
 
   if (!createResult.ok) {
-    invalid("Unable to publish module to catalog.");
+    let errorString = "";
+
+    if (createResult.status === 400) {
+      const response = await createResult.json();
+      errorString = " Server returned the following errors:\n";
+
+      response?.errors?.forEach((error) => {
+        errorString += `\t- ${error.field}: ${error.message} \n`;
+      });
+    }
+
+    invalid(`Unable to publish module to catalog.${errorString}`);
   }
 
   const taskResult = await createResult.json();
