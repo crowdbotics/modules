@@ -8,7 +8,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">16.0"
+    "node": ">18.0"
   },
   "scripts": {
     "demo": "npx . demo",
@@ -37,6 +37,7 @@
     "@babel/template": "^7.16.7",
     "@babel/types": "^7.18.8",
     "@segment/analytics-node": "^2.0.0",
+    "@sentry/node": "^7.103.0",
     "ajv": "^8.11.0",
     "ajv-formats": "^2.1.1",
     "arg": "^5.0.2",
