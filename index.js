@@ -28,7 +28,13 @@ import { info } from "./scripts/info.js";
 import { removeModules } from "./scripts/remove.js";
 import { commitModules } from "./scripts/commit-module.js";
 import { upgradeScaffold } from "./scripts/upgrade.js";
-import { valid, invalid, isNameValid, section, isUserEnvironment } from "./utils.js";
+import {
+  valid,
+  invalid,
+  isNameValid,
+  section,
+  isUserEnvironment
+} from "./utils.js";
 import { createModule } from "./scripts/create.js";
 import { login } from "./scripts/login.js";
 import { configFile } from "./scripts/utils/configFile.js";
@@ -67,9 +73,11 @@ Visit our official documentation for more information and try again: https://doc
 };
 
 async function dispatcher() {
+  const useDefaults = process.env.npm_config_yes;
+
   // check config if they have been asked opted in or out of amplitude
   const hasAskedOptIn = configFile.get(HAS_ASKED_OPT_IN_NAME) || false;
-  if (!hasAskedOptIn && isUserEnvironment) {
+  if (!hasAskedOptIn && isUserEnvironment && !useDefaults) {
     await askOptIn();
   }
 
@@ -85,7 +93,7 @@ async function dispatcher() {
 
   await commands[command]();
 
-  if (!analytics.event.name) {
+  if (!analytics.event.name && !useDefaults) {
     analytics.sendEvent({
       name: EVENT.OTHER,
       properties: {
