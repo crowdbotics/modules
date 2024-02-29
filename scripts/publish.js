@@ -3,6 +3,7 @@ import inquirer from "inquirer";
 import { invalid, section, valid } from "../utils.js";
 import ora from "ora";
 import { apiClient } from "./utils/apiClient.js";
+import { printServerValidationErrors } from "./utils/response.js";
 
 const POLL_INTERVAL = 2000;
 
@@ -153,18 +154,10 @@ export const publish = async () => {
   publishSpinner.stop();
 
   if (!createResult.ok) {
-    let errorString = "";
-
-    if (createResult.status === 400) {
-      const response = await createResult.json();
-      errorString = " Server returned the following errors:\n";
-
-      response?.errors?.forEach((error) => {
-        errorString += `\t- ${error.field}: ${error.message} \n`;
-      });
-    }
-
-    invalid(`Unable to publish module to catalog.${errorString}`);
+    await printServerValidationErrors(
+      createResult,
+      "Unable to publish module to catalog."
+    );
   }
 
   const taskResult = await createResult.json();
