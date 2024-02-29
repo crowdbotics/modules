@@ -3,7 +3,7 @@ import inquirer from "inquirer";
 import { invalid, section, valid } from "../utils.js";
 import ora from "ora";
 import { apiClient } from "./utils/apiClient.js";
-import { printServerValidationErrors } from "./utils/response.js";
+import { printServerFieldValidationErrors } from "./utils/response.js";
 
 const POLL_INTERVAL = 2000;
 
@@ -154,10 +154,27 @@ export const publish = async () => {
   publishSpinner.stop();
 
   if (!createResult.ok) {
-    await printServerValidationErrors(
-      createResult,
-      "Unable to publish module to catalog."
-    );
+    const errorActionString = "Unable to publish module to catalog.";
+
+    let errorBody;
+    try {
+      errorBody = await createResult.json();
+    } catch {
+      invalid(`${errorActionString} An unexpected error has occurred.`);
+      return;
+    }
+
+    if (createResult.status === 400) {
+      await printServerFieldValidationErrors(errorBody, errorActionString);
+    } else if (createResult.status === 403) {
+      invalid(
+        `${errorActionString} Current user is unauthorized to publish modules.`
+      );
+    } else if (createResult.status === 404 && errorBody.message) {
+      invalid(`${errorActionString} ${errorBody.message}`);
+    } else {
+      invalid(`${errorActionString} An unexpected error has occurred.`);
+    }
   }
 
   const taskResult = await createResult.json();
