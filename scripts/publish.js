@@ -7,7 +7,7 @@ import { printServerFieldValidationErrors } from "./utils/response.js";
 
 const POLL_INTERVAL = 2000;
 
-const IN_PROGRESS_STATUSES = ["PENDING", "STARTED"];
+const IN_PROGRESS_STATUSES = ["CREATED", "STARTED"];
 
 const waitForTaskToComplete = async (taskId) => {
   const waitingSpinner = ora(
@@ -31,15 +31,6 @@ const waitForTaskToComplete = async (taskId) => {
     if (!processingResult.ok) {
       waitingSpinner.stop();
 
-      // TODO - ask the BE to supply a 400 when there's a regular failure?
-      if (processingResult.status === 500) {
-        const result = await processingResult.text();
-        invalid(`
-Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${taskId}'
-Error details: ${result}
-`);
-      }
-
       invalid(
         `Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${taskId}'`
       );
@@ -47,14 +38,6 @@ Error details: ${result}
     }
 
     latestProcessingResultBody = await processingResult.json();
-
-    // There were some instances while testing where status was coming back as undefined. This may not be an issue anymore.
-    if (!latestProcessingResultBody.status) {
-      waitingSpinner.stop();
-      invalid(
-        `Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${taskId}'`
-      );
-    }
 
     // If we've reached an end state for the polling, end the polling loop.
     if (!IN_PROGRESS_STATUSES.includes(latestProcessingResultBody.status)) {
@@ -67,7 +50,7 @@ Error details: ${result}
   if (latestProcessingResultBody.status === "FAILURE") {
     invalid(`
     Crowdbotics CLI has encountered an error while waiting for the publish command to complete. Publishing may still finish successfully, however you may contact support with reference id: '${taskId}'
-    Error details: ${JSON.stringify(latestProcessingResultBody)}
+    Error details: ${latestProcessingResultBody.reason}
     `);
   }
 
