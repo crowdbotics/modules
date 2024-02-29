@@ -26,7 +26,8 @@ class User {
     if (configFile.get(TOKEN_CONFIG_NAME)) {
       try {
         const response = await apiClient.get({
-          path: "/v2/user/"
+          path: "/v2/user/",
+          shouldFailOnUnauthorized: false
         });
         if (!response.ok) return {};
 

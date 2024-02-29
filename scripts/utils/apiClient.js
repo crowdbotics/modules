@@ -30,7 +30,14 @@ class ApiClient {
     return `Token ${token}`;
   }
 
-  async _request({ path, body, method, params, anonymous }) {
+  async _request({
+    path,
+    body,
+    method,
+    params,
+    anonymous,
+    shouldFailOnUnauthorized = true
+  }) {
     const host = configFile.get(HOST_CONFIG_NAME) || DEFAULT_HOST;
     let url = `${formatUrlPath(host)}/api/${formatUrlPath(path)}/`;
 
@@ -48,7 +55,7 @@ class ApiClient {
       method: method
     });
 
-    if (response.status === 401) {
+    if (shouldFailOnUnauthorized && response.status === 401) {
       // Flush newline before printing error in case console is in loading state.
       console.log("");
       invalid(
