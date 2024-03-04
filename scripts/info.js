@@ -3,7 +3,7 @@ import { apiClient } from "./utils/apiClient.js";
 import { validateEnvironmentDependencies } from "./utils/environment.js";
 
 export const info = async () => {
-  validateEnvironmentDependencies();
+  validateEnvironmentDependencies(undefined, true);
 
   const response = await apiClient.get({
     path: "/v2/user/"

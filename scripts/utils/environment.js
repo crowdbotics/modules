@@ -1,6 +1,8 @@
 import { execSync, spawnSync } from "node:child_process";
 import { invalid, section, valid } from "../../utils.js";
+import { configFile } from "./configFile.js";
 
+const ENVIRONMENT_VERSIONS_CONFIG_NAME = "environment-versions";
 const PYTHON_VERSION_REGEX = /Python (3\.[0-9]*)/;
 
 const userdir = process.cwd();
@@ -146,12 +148,34 @@ export function validateEnvironmentDependencies(
     EnvironmentDependency.Python,
     EnvironmentDependency.PipEnv,
     EnvironmentDependency.CookieCutter
-  ]
+  ],
+  force = false
 ) {
-  const environmentVersions = getEnvironmentVersions(dependencies);
-
   section("Scaffold upgrade started");
   section("Checking environment compatibility");
+
+  const cachedEnvironmentVersions =
+    configFile.get(ENVIRONMENT_VERSIONS_CONFIG_NAME) || {};
+
+  let missingEnvironmentVersions = dependencies;
+
+  if (!force) {
+    missingEnvironmentVersions = dependencies.filter(
+      (dependency) => !cachedEnvironmentVersions[dependency]
+    );
+  }
+
+  const currentEnvironmentVersions = getEnvironmentVersions(
+    missingEnvironmentVersions
+  );
+
+  const environmentVersions = {
+    ...cachedEnvironmentVersions,
+    ...currentEnvironmentVersions
+  };
+
+  configFile.set(ENVIRONMENT_VERSIONS_CONFIG_NAME, environmentVersions);
+  configFile.save();
 
   if (dependencies.includes(EnvironmentDependency.Yarn)) {
     if (!environmentVersions.yarn) {
