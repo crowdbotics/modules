@@ -63,7 +63,7 @@ function formatStdout(stdout) {
   return stdout.replace(/\n/g, "");
 }
 
-const EnvironmentDependency = {
+export const EnvironmentDependency = {
   Yarn: "yarn",
   Git: "git",
   Python: "python",
