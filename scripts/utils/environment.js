@@ -111,8 +111,9 @@ export function validateEnvironmentDependencies(
 ) {
   section("Checking environment compatibility");
 
-  const cachedEnvironmentVersions =
-    configFile.get(ENVIRONMENT_VERSIONS_CONFIG_NAME) || {};
+  const configValues = configFile.get(ENVIRONMENT_VERSIONS_CONFIG_NAME);
+
+  const cachedEnvironmentVersions = !force && configValues ? configValues : {};
 
   let missingEnvironmentVersions = dependencies;
 
@@ -134,9 +135,14 @@ export function validateEnvironmentDependencies(
   configFile.set(ENVIRONMENT_VERSIONS_CONFIG_NAME, environmentVersions);
   configFile.save();
 
+  const printInvalidMessage = (message) =>
+    invalid(
+      `${message}\n\nVisit the following page for environment requirements https://github.com/crowdbotics/modules?tab=readme-ov-file#requirements-for-contributing`
+    );
+
   if (dependencies.includes(EnvironmentDependency.Yarn)) {
     if (!environmentVersions.yarn) {
-      invalid("yarn is not available in your system");
+      printInvalidMessage("yarn is not available in your system");
     } else {
       valid("yarn version", environmentVersions.yarn);
     }
@@ -144,7 +150,7 @@ export function validateEnvironmentDependencies(
 
   if (dependencies.includes(EnvironmentDependency.Git)) {
     if (!environmentVersions.git) {
-      invalid("git is not available in your system");
+      printInvalidMessage("git is not available in your system");
     } else {
       valid(environmentVersions.git);
     }
@@ -152,7 +158,7 @@ export function validateEnvironmentDependencies(
 
   if (dependencies.includes(EnvironmentDependency.Python)) {
     if (!environmentVersions.python) {
-      invalid("Python 3.x is not available in your system");
+      printInvalidMessage("Python 3.x is not available in your system");
     } else {
       valid(environmentVersions.python);
     }
@@ -160,7 +166,7 @@ export function validateEnvironmentDependencies(
 
   if (dependencies.includes(EnvironmentDependency.PipEnv)) {
     if (!environmentVersions.pipenv) {
-      invalid("pipenv is not available in your system");
+      printInvalidMessage("pipenv is not available in your system");
     } else {
       valid(environmentVersions.pipenv);
     }
@@ -168,7 +174,7 @@ export function validateEnvironmentDependencies(
 
   if (dependencies.includes(EnvironmentDependency.CookieCutter)) {
     if (!environmentVersions.cookiecutter) {
-      invalid("cookiecutter is not available in your system");
+      printInvalidMessage("cookiecutter is not available in your system");
     } else {
       valid(environmentVersions.cookiecutter);
     }
