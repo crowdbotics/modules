@@ -26,3 +26,5 @@ export const isNameValid = (name) => {
   const pattern = /^[a-zA-Z][a-zA-Z0-9_-]*$/;
   return pattern.test(name);
 };
+
+export const isUserEnvironment = !process?.env?.CI && !process?.env?.CIRCLE_JOB;

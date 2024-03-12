@@ -34,6 +34,7 @@ jobs:
     name: ${{ needs.set_environment.outputs.my_env }}-release
     steps:
       - name: Generate Heroku Config
+        id: heroku-config
         run: |
           cat <<EOF > ~/.netrc 
           machine api.heroku.com
@@ -44,6 +45,16 @@ jobs:
             password ${{ secrets.HEROKU_API_TOKEN }}
           EOF
       - name: release modules
+        id: release-modules
         run: |
           heroku config:set MODULES_REPO_BRANCH=$GITHUB_REF_NAME -a ${{ secrets.HEROKU_APP }}
           heroku run 'python manage.py update_crowdbotics_components --quiet --no-input --no-log-file --public' --size=standard-2x -a ${{ secrets.HEROKU_APP }}
+      
+      - uses: act10ns/slack@v2
+        if: ${{ needs.set_environment.outputs.my_env }} == 'production'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          status: ${{ job.status }}
+          steps: ${{ toJson(steps) }}
+        
