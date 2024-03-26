@@ -2564,6 +2564,34 @@ cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+crowdbotics@^3.0.0-canary:
+  version "3.0.0-canary"
+  resolved "https://registry.yarnpkg.com/crowdbotics/-/crowdbotics-3.0.0-canary.tgz#7ea9ab72dbdec7b5142eec5ca3bf77ed104f644f"
+  integrity sha512-Y9HaoGuMwAJuMgM5mtruXdhcPnQSujahKc1hpTyUtWtCUPgo/XomBxp6X0nKhgxBcT3X3wDtE8NwU7opYtpCwg==
+  dependencies:
+    "@babel/cli" "^7.17.10"
+    "@babel/core" "^7.18.5"
+    "@babel/generator" "^7.14.9"
+    "@babel/parser" "^7.18.8"
+    "@babel/preset-env" "^7.18.2"
+    "@babel/template" "^7.16.7"
+    "@babel/types" "^7.18.8"
+    "@segment/analytics-node" "^2.0.0"
+    "@sentry/node" "^7.103.0"
+    ajv "^8.11.0"
+    ajv-formats "^2.1.1"
+    arg "^5.0.2"
+    cli-table "^0.3.11"
+    fast-xml-parser "^4.2.5"
+    find "^0.3.0"
+    find-git-root "^1.0.4"
+    fs-extra "^10.1.0"
+    inquirer "^9.2.0"
+    js-yaml "^4.1.0"
+    node-fetch "^3.3.2"
+    ora "^7.0.1"
+    prettier "^2.6.2"
+
 data-uri-to-buffer@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-4.0.1.tgz#d8feb2b2881e6a4f58c2e08acfd0e2834e26222e"

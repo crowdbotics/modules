@@ -13,7 +13,6 @@ jobs:
             node --version
             yarn --version
       - run: yarn cache clean && yarn install
-      - run: npm install -g crowdbotics
       - run:
           name: Install Pipenv dependencies
           command: python --version && pipenv install
@@ -22,7 +21,7 @@ jobs:
           command: pwd && mkdir -p ~/build/demo
       - run:
           name: Create Demo App
-          command: cb demo
+          command: npx crowdbotics demo
       - persist_to_workspace:
           root: ~/build
           paths:
