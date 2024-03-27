@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@react-native-community/cli": "5.0.1",
-    "crowdbotics": "^3.0.0-canary",
+    "crowdbotics": "^3.0.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.26.0",
