@@ -42,7 +42,10 @@ import { sendFeedback } from "./scripts/feedback.js";
 import { logout } from "./scripts/logout.js";
 import { modulesArchive, modulesGet, modulesList } from "./scripts/modules.js";
 import { publish } from "./scripts/publish.js";
-import { preExecuteChecks } from "./scripts/utils/environment.js";
+import {
+  validateEnvironmentDependencies,
+  EnvironmentDependency
+} from "./scripts/utils/environment.js";
 import { analytics } from "./scripts/analytics/wrapper.js";
 import { HAS_ASKED_OPT_IN_NAME } from "./scripts/analytics/config.js";
 import { EVENT } from "./scripts/analytics/constants.js";
@@ -109,7 +112,10 @@ async function dispatcher() {
 
 const commands = {
   demo: () => {
-    preExecuteChecks();
+    validateEnvironmentDependencies([
+      EnvironmentDependency.Python,
+      EnvironmentDependency.PipEnv
+    ]);
     createDemo(
       path.join(gitRoot(), "demo"),
       path.join(sourceDir, "cookiecutter.yaml")
@@ -139,7 +145,11 @@ const commands = {
     }
   },
   add: () => {
-    preExecuteChecks();
+    validateEnvironmentDependencies([
+      EnvironmentDependency.Python,
+      EnvironmentDependency.Yarn
+    ]);
+
     const args = arg({
       "--source": String,
       "--project": String
@@ -151,6 +161,8 @@ const commands = {
     addModules(modules, args["--source"], args["--project"], gitRoot());
   },
   remove: () => {
+    validateEnvironmentDependencies([EnvironmentDependency.Yarn]);
+
     const args = arg({
       "--source": String,
       "--project": String
@@ -162,7 +174,11 @@ const commands = {
     removeModules(modules, args["--source"], args["--project"], gitRoot());
   },
   create: () => {
-    preExecuteChecks(true);
+    validateEnvironmentDependencies([
+      EnvironmentDependency.Python,
+      EnvironmentDependency.CookieCutter
+    ]);
+
     const args = arg({
       "--name": String,
       "--type": String,
@@ -199,6 +215,8 @@ const commands = {
     commitModules(modules, args["--source"], gitRoot());
   },
   init: () => {
+    validateEnvironmentDependencies([EnvironmentDependency.Git]);
+
     const args = arg({
       "--name": String
     });
