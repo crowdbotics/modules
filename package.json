@@ -3,21 +3,13 @@
   "version": "2.3.0",
   "description": "Library of modules for React Native and Django apps",
   "main": "index.js",
-  "bin": {
-    "cb": "./index.js"
-  },
   "type": "module",
   "engines": {
     "node": ">18.0"
   },
   "scripts": {
-    "demo": "npx . demo",
-    "add": "npx . add",
-    "remove": "npx . remove",
-    "parse": "npx . parse --source modules",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "yarn run eslint modules scripts",
-    "commit-module": "npx . commit"
+    "parse": "npx crowdbotics parse --source modules",
+    "lint": "yarn run eslint modules"
   },
   "repository": {
     "type": "git",
@@ -28,27 +20,13 @@
     "url": "https://github.com/crowdbotics/modules/issues"
   },
   "homepage": "https://github.com/crowdbotics/modules#readme",
-  "dependencies": {
-    "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.18.5",
-    "@babel/generator": "^7.14.9",
-    "@babel/parser": "^7.18.8",
-    "@babel/preset-env": "^7.18.2",
-    "@babel/template": "^7.16.7",
-    "@babel/types": "^7.18.8",
-    "prettier": "^2.6.2"
-  },
-  "resolutions": {
-    "shell-quote": "1.7.3"
-  },
   "devDependencies": {
-    "@react-native-community/cli": "5.0.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-react": "^7.30.0",
-    "react-native": "0.71.7"
+    "prettier": "^2.6.2"
   }
 }
