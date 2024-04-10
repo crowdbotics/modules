@@ -32,9 +32,11 @@ The following must be available in your system:
 - [yarn](https://yarnpkg.com/)
 - [python](https://www.python.org/)
 - [pipenv](https://pypi.org/project/pipenv/)
-- [urllib3](https://urllib3.readthedocs.io/en/stable/) without this the project will not run in ```macOS``` environments
+- [urllib3](https://urllib3.readthedocs.io/en/stable/) without this the project will not run in `macOS` environments
 
-Node `v18.16.0` (LTS) recommended.
+Node `v18.18.0` (LTS) recommended.
+
+Please see the [Crowdbotics documentation](https://docs.crowdbotics.com/docs/set-up-your-dev-env) for detailed instructions on how to setup your environment.
 
 ## Getting started
 
@@ -69,11 +71,13 @@ yarn run parse
 ```
 
 Install modules globally to your system:
+
 ```sh
-npm install -g cb
+npm install -g crowdbotics
 ```
 
 ### macOS config
+
 - make sure to have a compatible version of urllib3 with openssl. urllib3 v2.0 or higher is compatible with OpenSSL 1.1.1 or higher
 
 ## Modules updates checklist
