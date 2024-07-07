@@ -63,6 +63,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-react": "^7.30.0",
-    "react-native": "0.71.7"
+    "react-native": "0.74.3"
   }
 }
