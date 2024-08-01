@@ -11,18 +11,18 @@ jobs:
   set_environment:
     outputs:
       my_env: ${{ steps.setenv.outputs.my_env }}
+      tag: ${{ steps.setenv.outputs.tag }}
     runs-on: ubuntu-latest
     steps:
       - id: setenv
         run: |
           if [ $GITHUB_REF_NAME == develop ]; then
           echo "my_env=staging" >> $GITHUB_OUTPUT
-          fi
-          if [ "${{ github.event.client_payload.deployment_branch }}" == "master" ]; then
-          echo "my_env=Production" >> $GITHUB_OUTPUT
+          echo "tag=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
           fi
           if [[ $GITHUB_REF_NAME =~ ^[0-9]+\.[0-9]+$ ]]; then
           echo "release tag: $GITHUB_REF_NAME"
+          echo "tag=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
           echo "my_env=production" >> $GITHUB_OUTPUT
           fi
 
@@ -64,7 +64,7 @@ jobs:
           app_name: crowdbotics-app
           app_namespace: cb-core
           env_var: MODULES_REPO_BRANCH
-          env_value: $GITHUB_REF_NAME
+          env_value: ${{ needs.set_environment.outputs.tag }}
           token: ${{ secrets.GIT_TOKEN }}
           azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       
