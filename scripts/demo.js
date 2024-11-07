@@ -41,7 +41,7 @@ export function createDemo(dir, yaml) {
   const djangoCookieCutterCommand = generateCommand([
     "pipenv run cookiecutter",
     "gh:crowdbotics/django-scaffold",
-    "--checkout PI-405-package-upgrade",
+    "--checkout master",
     `--config-file ${yaml}`,
     `--output-dir ${path.basename(dir)}`,
     "--no-input"
