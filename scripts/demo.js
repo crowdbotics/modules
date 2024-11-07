@@ -24,7 +24,7 @@ export function createDemo(dir, yaml) {
     "pipenv run cookiecutter",
     "gh:crowdbotics/react-native-scaffold",
     "--directory dist/cookie",
-    "--checkout develop",
+    "--checkout master",
     `--config-file ${yaml}`,
     "--no-input"
   ]);
@@ -41,7 +41,7 @@ export function createDemo(dir, yaml) {
   const djangoCookieCutterCommand = generateCommand([
     "pipenv run cookiecutter",
     "gh:crowdbotics/django-scaffold",
-    "--checkout develop",
+    "--checkout master",
     `--config-file ${yaml}`,
     `--output-dir ${path.basename(dir)}`,
     "--no-input"
