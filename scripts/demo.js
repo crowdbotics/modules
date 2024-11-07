@@ -17,14 +17,14 @@ export function createDemo(dir, yaml) {
 
   section("Preparing environment");
   configurePython();
-  execSync("pipenv install cookiecutter==2.6.0", options);
+  execSync("pipenv install cookiecutter", options);
 
   section("Generating React Native app from scaffold");
   const rnCookieCutterCommand = generateCommand([
     "pipenv run cookiecutter",
     "gh:crowdbotics/react-native-scaffold",
     "--directory dist/cookie",
-    "--checkout master",
+    "--checkout develop",
     `--config-file ${yaml}`,
     "--no-input"
   ]);
@@ -41,7 +41,7 @@ export function createDemo(dir, yaml) {
   const djangoCookieCutterCommand = generateCommand([
     "pipenv run cookiecutter",
     "gh:crowdbotics/django-scaffold",
-    "--checkout master",
+    "--checkout develop",
     `--config-file ${yaml}`,
     `--output-dir ${path.basename(dir)}`,
     "--no-input"
