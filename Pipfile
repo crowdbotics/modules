@@ -4,9 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-cookiecutter = "==2.4.0"
-urllib3 = "==2.1.0"
-django = "==3.2.23"
+urllib3 = ">=2.2.2"
+django = ">=4.2.16"
+cookiecutter = "==2.6.0"
 
 [dev-packages]
 
