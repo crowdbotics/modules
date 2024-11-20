@@ -17,7 +17,7 @@ export function createDemo(dir, yaml) {
 
   section("Preparing environment");
   configurePython();
-  execSync("pipenv install cookiecutter", options);
+  execSync("pipenv install cookiecutter==2.6.0", options);
 
   section("Generating React Native app from scaffold");
   const rnCookieCutterCommand = generateCommand([
