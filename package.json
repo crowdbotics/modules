@@ -34,7 +34,7 @@
     "@babel/generator": "^7.14.9",
     "@babel/parser": "^7.18.8",
     "@babel/preset-env": "^7.18.2",
-    "@babel/template": "^7.16.7",
+    "@babel/template": "^7.25.9",
     "@babel/types": "^7.18.8",
     "@segment/analytics-node": "^2.0.0",
     "@sentry/node": "^7.103.0",
