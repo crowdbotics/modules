@@ -1,0 +1,5 @@
+{
+  "title": "Import Export CSV (Django)",
+  "description": "Backend for the Django Import Export CSV module.",
+  "root": "/backend/modules"
+}
