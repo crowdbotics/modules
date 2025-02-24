@@ -1,0 +1,11 @@
+{
+  "title": "corporate-event",
+  "description": "This is a complete template for a corporate event app",
+  "root": "/",
+  "schema": {
+    "buttonText": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}
