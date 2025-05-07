@@ -38,7 +38,7 @@ jobs:
           git clone -b master https://${{ secrets.GIT_TOKEN }}@github.com/crowdbotics/github-actions.git
 
       - name: Azure login
-        uses: azure/login@v2.2.0
+        uses: azure/login@v2.3.0
         with:
           creds: "${{ secrets.AZURE_CREDENTIALS }}"
 
