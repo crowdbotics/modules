@@ -8,7 +8,7 @@
     "node": ">18.0"
   },
   "scripts": {
-    "parse": "npx --yes crowdbotics parse --source modules",
+    "parse": "npx --yes crowdbotics parse --source modules --skip-login-check",
     "lint": "yarn run eslint modules"
   },
   "repository": {

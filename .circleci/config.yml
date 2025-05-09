@@ -21,7 +21,7 @@ jobs:
           command: pwd && mkdir -p ~/build/demo
       - run:
           name: Create Demo App
-          command: npx --yes crowdbotics demo
+          command: npx --yes crowdbotics demo --skip-login-check
       - persist_to_workspace:
           root: ~/build
           paths:
