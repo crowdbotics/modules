@@ -36,34 +36,28 @@ Install node modules:
 yarn install
 ```
 
-Install python packages:
+Also install the CLI:
 
 ```sh
-pipenv install
+npm install -g crowdbotics
 ```
 
 Spin a demo app using the customized React Native template:
 
 ```sh
-yarn run demo
+npx crowdbotics demo
 ```
 
 Install modules to your demo app:
 
 ```sh
-yarn run add react-native-app-menu
+npx crowdbotics add react-native-app-menu
 ```
 
 Create new modules and test/validate your work locally before submitting a PR:
 
 ```sh
-yarn run parse
-```
-
-Install modules globally to your system:
-
-```sh
-npm install -g crowdbotics
+npx crowdbotics parse
 ```
 
 ### macOS config
@@ -76,14 +70,12 @@ When adding a new module please make sure that:
 
 - it includes a `meta.json` file in the module's root directory.
 - it includes a `preview.png` image in the module's root directory.
-- `yarn run parse` checks pass.
-- you ran `yarn run dist` and added the changes.
-- you can open your module in the demo app (`yarn run demo`, `yarn run add <your-module-name-here>`, `cd demo; npx react-native-start`).
+- `npx crowdbotics parse` checks pass.
+- you can open your module in the demo app (`npx crowdbotics demo`, `npx crowdbotics add <your-module-name-here>`, `cd demo; npx react-native-start`).
 
 When making changes to a module please make sure that:
 
-- `yarn run parse` checks pass.
-- you ran `yarn run dist` and added the changes.
-- you can open your module in the demo app (`yarn run demo`, `yarn run add <your-module-name-here>`, `cd demo; npx react-native-start`).
+- `npx crowdbotics parse` checks pass.
+- you can open your module in the demo app (`npx crowdbotics demo`, `npx crowdbotics add <your-module-name-here>`, `cd demo; npx react-native-start`).
 
 Include as much documentation for your module as possible, and if you haven't seen it yet we created a style guide for [Authoring Modules](https://docs.crowdbotics.com/authoring-modules).
