@@ -11,18 +11,18 @@ jobs:
   set_environment:
     outputs:
       my_env: ${{ steps.setenv.outputs.my_env }}
+      tag: ${{ steps.setenv.outputs.tag }}
     runs-on: ubuntu-latest
     steps:
       - id: setenv
         run: |
           if [ $GITHUB_REF_NAME == develop ]; then
           echo "my_env=staging" >> $GITHUB_OUTPUT
-          fi
-          if [ "${{ github.event.client_payload.deployment_branch }}" == "master" ]; then
-          echo "my_env=Production" >> $GITHUB_OUTPUT
+          echo "tag=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
           fi
           if [[ $GITHUB_REF_NAME =~ ^[0-9]+\.[0-9]+$ ]]; then
           echo "release tag: $GITHUB_REF_NAME"
+          echo "tag=$GITHUB_REF_NAME" >> $GITHUB_OUTPUT
           echo "my_env=production" >> $GITHUB_OUTPUT
           fi
 
@@ -33,22 +33,40 @@ jobs:
       name: ${{ needs.set_environment.outputs.my_env }}
     name: ${{ needs.set_environment.outputs.my_env }}-release
     steps:
-      - name: Generate Heroku Config
-        id: heroku-config
+      - name: Clone Reusable Actions Repo
         run: |
-          cat <<EOF > ~/.netrc 
-          machine api.heroku.com
-            login ${{ secrets.HEROKU_EMAIL }}
-            password ${{ secrets.HEROKU_API_TOKEN }}
-          machine git.heroku.com
-            login  ${{ secrets.HEROKU_EMAIL }}
-            password ${{ secrets.HEROKU_API_TOKEN }}
-          EOF
-      - name: release modules
-        id: release-modules
-        run: |
-          heroku config:set MODULES_REPO_BRANCH=$GITHUB_REF_NAME -a ${{ secrets.HEROKU_APP }}
-          heroku run 'python manage.py update_crowdbotics_components --quiet --no-input --no-log-file --public' --size=standard-2x -a ${{ secrets.HEROKU_APP }}
+          git clone -b master https://${{ secrets.GIT_TOKEN }}@github.com/crowdbotics/github-actions.git
+
+      - name: Azure login
+        uses: azure/login@v2.3.0
+        with:
+          creds: "${{ secrets.AZURE_CREDENTIALS }}"
+
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: "v0.0.25"
+
+      - name: Get K8s context
+        uses: azure/aks-set-context@v4
+        with:
+          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AZURE_CLUSTER_NAME }}
+          admin: "false"
+          use-kubelogin: "true"
+
+      - name: Update MODULES_REPO_BRANCH Environment Variable
+        id: update-env-var
+        uses: ./github-actions/set-azure-env-var
+        with:
+          resource_group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          cluster_name: ${{ secrets.AZURE_CLUSTER_NAME }}
+          app_name: crowdbotics-app
+          app_namespace: cb-core
+          env_var: MODULES_REPO_BRANCH
+          env_value: ${{ needs.set_environment.outputs.tag }}
+          token: ${{ secrets.GIT_TOKEN }}
+          azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
       
       - uses: act10ns/slack@v2
         if: ${{ needs.set_environment.outputs.my_env }} == 'production'

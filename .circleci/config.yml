@@ -29,8 +29,8 @@ jobs:
 
   ios:
     macos:
-      xcode: "14.1.0"
-    resource_class: macos.x86.medium.gen2
+      xcode: "14.2.0"
+    resource_class: macos.m1.medium.gen1
     working_directory: ~/build/demo
 
     # use a --login shell so our "set Ruby version" command gets picked up for later steps
@@ -87,7 +87,6 @@ jobs:
     environment:
       - TERM: "dumb"
       - ADB_INSTALL_TIMEOUT: 10
-      - _JAVA_OPTIONS: "-XX:+UnlockExperimentalVMOptions -XX:+UseContainerSupport"
       - GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-XX:+HeapDumpOnOutOfMemoryError"'
       - BUILD_THREADS: 2
     steps:
