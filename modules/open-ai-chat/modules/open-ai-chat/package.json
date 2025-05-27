@@ -1,0 +1,15 @@
+{
+    "name": "@modules/open-ai-chat",
+    "version": "1.0.1",
+    "description": "open ai chat",
+    "private": true,
+    "main": "index.js",
+    "author": "Crowdbotics",
+    "license": "ISC",
+    "dependencies": {
+       
+    },
+    "x-dependencies": {
+       
+    }
+}
