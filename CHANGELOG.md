@@ -2,6 +2,12 @@
 
 Based on [Common Changelog](https://common-changelog.org/).
 
+## 2.5.0 - 2025-05-19
+
+### Added
+
+Removed CLI. Users should use https://github.com/crowdbotics/cli instead.
+
 ## 2.4.0 - 2023-12-21
 
 ### Added
