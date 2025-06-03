@@ -1,0 +1,5 @@
+{
+    "title": "Advanced Blog",
+    "description": "This is an advanced module backend which can be used as a CMS for many use cases like blogging and other type of content management.",
+    "root": "/backend/modules"
+}
